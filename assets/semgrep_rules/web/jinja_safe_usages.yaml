@@ -1,0 +1,21 @@
+rules:
+  - id: jinja-safe-usages
+    metadata:
+      author: Andrea Brancaleoni
+      references:
+        - https://cwe.mitre.org/data/definitions/546
+        - https://cwe.mitre.org/data/definitions/615
+        - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
+      confidence: LOW
+    message: The code contains new security hotspots which should be checked
+      manually by a security team member!
+    severity: INFO
+    languages:
+      - generic
+    paths:
+      include:
+        - "**/*.html"
+        - "**/*.js"
+    patterns:
+      - pattern-regex: \|\s*safe
+      - pattern-not-regex: clean\s*\|\s*safe

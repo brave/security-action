@@ -1,0 +1,27 @@
+name: loop
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  loop:
+    name: loop
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # CodeQL analyzed languages
+      matrix:
+        language: [ 'generic', 'javascript', 'python', 'ruby' ]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          pwd
+          tree -a
+        shell: bash
+      - uses: ./
+        with:
+          debug: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}

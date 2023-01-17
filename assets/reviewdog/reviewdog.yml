@@ -1,0 +1,31 @@
+runner:
+  semgrep:
+    name: semgrep
+    cmd: |
+      [ "$(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d 2>/dev/null)" != "" ] &&\
+      semgrep \
+        -c p/ci \
+        -c p/security-audit \
+        -c p/xss \
+        -c p/nginx \
+        -c p/docker \
+        -c p/terraform \
+        -c p/secrets \
+        $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' | sed 's/^/-c /g') \
+        --metrics=off \
+        --baseline-commit origin/${GITHUB_BASE_REF:-main} \
+        --json \
+        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)"' \
+        | sed "s/$/ (Cc @brave\/sec-team $ASSIGNEES)/g" | tee semgrep.log
+    errorformat:
+      - "%t:%f:%l %m"
+  safesvg:
+    name: safesvg
+    cmd: |
+      [ "$(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d 2>/dev/null)" != "" ] &&\
+      find \
+        $(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d 2>/dev/null) \
+        -name '*.svg' -exec $SCRIPTPATH/xmllint.sh {} \; \
+      | sed "s/$/ - Run SVGO on your assets (Cc @brave\/sec-team $ASSIGNEES)/g" | tee safesvg.log
+    errorformat:
+      - "%f:%l: %m"
