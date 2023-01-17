@@ -1,0 +1,21 @@
+rules:
+  - id: svelte-html-usages
+    metadata:
+      author: Andrea Brancaleoni
+      references:
+        - https://cwe.mitre.org/data/definitions/546
+        - https://cwe.mitre.org/data/definitions/615
+        - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
+      confidence: LOW
+    message: >-
+      The code contains new security hotspots ({@html expression}) which should be checked manually
+      by a security team member!
+    severity: INFO
+    languages:
+      - generic
+    paths:
+      include:
+        - "**/*.svelte"
+    patterns:
+      - pattern-regex: \{@html\s+[^A-Z]
+      - pattern-not-regex: \{@html\s+safeTranslate

@@ -1,0 +1,22 @@
+rules:
+  - id: path-travesal-by-string-interpolation
+    metadata:
+      author: Ben Caller
+      confidence: MEDIUM
+    message: The code contains new security hotspots which should be checked
+      manually by a security team member! Could a user perform path traversal
+      by setting a variable to include `../`?
+    severity: INFO
+    languages:
+      - ts
+      - js
+    paths:
+      include:
+        - "**/*.server.ts"
+        - "**/*.server.js"
+    patterns:
+      - pattern: fetch($URL, ...)
+      - metavariable-regex:
+          metavariable: $URL
+          # Trigger on /x/${v} but don't trigger on /x/?y=${v}
+          regex: (`.[^#?]+\$)
