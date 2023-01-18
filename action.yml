@@ -32,12 +32,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - id: assignees
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
+      id: assignees
       env:
         ASSIGNEES: ${{inputs.assignees}}
       run: echo "value=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
       shell: bash
-    - id: public
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
+      id: public
       shell: bash
       run: |
         set -x
@@ -45,22 +47,22 @@ runs:
           echo "value=true" >> $GITHUB_OUTPUT
         fi
 # REVIEWDOG Steps
-    - if: ${{ !matrix.language || matrix.language == 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
-    - if: ${{ !matrix.language || matrix.language == 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install scanners
       shell: bash
       run: |
         python3 -m pip install --ignore-installed semgrep
         sudo apt-get install -qy libxml2-utils
-    - if: ${{ (!matrix.language || matrix.language == 'generic') && inputs.debug}}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
       run: assets/debug.sh
       shell: bash
-    - if: ${{ !matrix.language || matrix.language == 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Run reviewdog
       shell: bash
       env:
@@ -68,17 +70,17 @@ runs:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       run: assets/reviewdog.sh
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
+      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
+      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
+      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
@@ -87,19 +89,19 @@ runs:
         color: green
         verbose: true
 # CodeQL Steps
-    - if: ${{ !steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && !steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       shell: bash
       run: echo "Not public, not running CodeQL here!"
-    - if: ${{ steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
         config-file: ${{ inputs.codeql_config }}
-    - if: ${{ steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       name: Autobuild
       uses: github/codeql-action/autobuild@v2
-    - if: ${{ steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
 #    - run: echo ${{ inputs.in-name }}
