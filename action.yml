@@ -21,7 +21,7 @@ inputs:
       bcaller
   debug:
     description: enables debug output for this action
-    default: false
+    required: false
   codeql_config:
     description: CodeQL configuration config config
     default: ./.github/codeql/codeql-config.yml
@@ -114,3 +114,4 @@ runs:
 #    - id: output-step-id
 #      run: echo "output-name=antani" >> $GITHUB_OUTPUT
 #      shell bash
+
