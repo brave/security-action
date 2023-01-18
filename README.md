@@ -31,7 +31,7 @@ jobs:
       - uses: brave/security-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          slack_toker: ${{ secrets.HOTSPOTS_SLACK_TOKEN }} # optional
+          slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }} # optional
           # by default assignees will be thypon and bcaller, modify accordingly
           assignees: |
             yoursecuritycontact
