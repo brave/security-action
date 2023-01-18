@@ -2,8 +2,10 @@ runner:
   semgrep:
     name: semgrep
     cmd: |
+      set -x
       [ "$(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d 2>/dev/null)" != "" ] &&\
       semgrep \
+        --verbose \
         -c p/ci \
         -c p/security-audit \
         -c p/xss \
@@ -22,6 +24,7 @@ runner:
   safesvg:
     name: safesvg
     cmd: |
+      set -x
       [ "$(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d 2>/dev/null)" != "" ] &&\
       find \
         $(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d 2>/dev/null) \
