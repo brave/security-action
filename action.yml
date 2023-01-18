@@ -60,7 +60,7 @@ runs:
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
-      run: assets/debug.sh
+      run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Run reviewdog
@@ -68,7 +68,7 @@ runs:
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
-      run: assets/reviewdog.sh
+      run: ${{ github.action_path }}/assets/reviewdog.sh
     - uses: actions-ecosystem/action-add-labels@v1
       if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
       with:
