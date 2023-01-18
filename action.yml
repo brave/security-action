@@ -92,12 +92,17 @@ runs:
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && !steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       shell: bash
       run: echo "Not public, not running CodeQL here!"
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' && hashFiles(inputs.codeql_config) }}
       name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
         config-file: ${{ inputs.codeql_config }}
+    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' && !hashFiles(inputs.codeql_config)}}
+      name: Initialize CodeQL (without config)
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       name: Autobuild
       uses: github/codeql-action/autobuild@v2
