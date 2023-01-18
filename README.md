@@ -2,8 +2,6 @@
 
 Composite GitHub CI Action[^1] containing the minimal viable security lint for brave repositories
 
-public test
-
 ## Usage
 
 Add an action under `.github/workflow/security-action.yml` with the following content:
