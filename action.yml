@@ -54,7 +54,7 @@ runs:
       shell: bash
       run: |
         V='${{ steps.changed-files.outputs.all_changed_files }}'
-        for file in ${V//$/\$}; do
+        for file in ${V//$/\\x24}; do
           printf "$file\0" >> ${{ github.action_path }}/assets/all_changed_files.txt
         done
 # REVIEWDOG Steps
