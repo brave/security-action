@@ -53,9 +53,10 @@ runs:
       id: write-changed-files
       shell: bash
       run: |
+        set -xe
         V='${{ steps.changed-files.outputs.all_changed_files }}'
         for file in ${V//$/\\x24}; do
-          printf "$file\0" >> ${{ github.action_path }}/assets/all_changed_files.txt
+          printf -- "$file\0" >> ${{ github.action_path }}/assets/all_changed_files.txt
         done
 # REVIEWDOG Steps
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
