@@ -10,8 +10,11 @@ Add an action under `.github/workflow/security-action.yml` with the following co
 name: security
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
 
 jobs:
   security:
