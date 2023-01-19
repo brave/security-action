@@ -1,21 +1,35 @@
 rules:
-  - id: jinja-safe-usages
+  - id: template-unescaped-with-safe-noclean
+    message: Detected a segment of a Flask template where autoescaping is explicitly
+      disabled with '| safe' filter. This allows rendering of raw HTML in this
+      segment. Ensure no user data is rendered here, otherwise this is a
+      cross-site scripting (XSS) vulnerability.
     metadata:
-      author: Andrea Brancaleoni
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation
+          ('Cross-site Scripting')"
+      owasp:
+        - A07:2017 - Cross-Site Scripting (XSS)
+        - A03:2021 - Injection
       references:
-        - https://cwe.mitre.org/data/definitions/546
-        - https://cwe.mitre.org/data/definitions/615
-        - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
+        - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+      category: security
+      technology:
+        - flask
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: MEDIUM
       confidence: LOW
-    message: The code contains new security hotspots which should be checked
-      manually by a security team member!
-    severity: INFO
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     languages:
-      - generic
+      - regex
     paths:
       include:
-        - "**/*.html"
-        - "**/*.js"
+        - "*.html"
+    severity: WARNING
     patterns:
-      - pattern-regex: \|\s*safe
-      - pattern-not-regex: clean\s*\|\s*safe
+      - pattern-regex: "{{.*?\\|\\s*safe(\\s*}})?"
+      - pattern-not-regex: "{{.*?clean\\s*\\|\\s*safe(\\s*}})?"
