@@ -6,5 +6,6 @@
     <hr>
     <div>
         {{article.body | safe}}
+        {{article.head | clean | safe}}
     </div>
 {% endblock %}

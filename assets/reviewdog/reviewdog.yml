@@ -17,8 +17,9 @@ runner:
         --metrics=off \
         --baseline-commit origin/${GITHUB_BASE_REF:-main} \
         --json \
-        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)"' \
-        | sed "s/$/ (Cc @brave\/sec-team $ASSIGNEES)/g" | tee semgrep.log
+        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>source: \(.extra.metadata.source?)<br><br>"' \
+        | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
+        | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" | tee semgrep.log
     errorformat:
       - "%t:%f:%l %m"
   safesvg:
@@ -27,6 +28,6 @@ runner:
       set -xe
       [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       xargs -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
-      | sed "s/$/ - Run SVGO on your assets (Cc @brave\/sec-team $ASSIGNEES)/g" | tee safesvg.log
+      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g" | tee safesvg.log
     errorformat:
       - "%f:%l: %m"

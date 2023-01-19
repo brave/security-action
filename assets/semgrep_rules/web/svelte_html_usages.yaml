@@ -15,7 +15,7 @@ rules:
       - generic
     paths:
       include:
-        - "**/*.svelte"
+        - "*.svelte"
     patterns:
       - pattern-regex: \{@html\s+[^A-Z]
       - pattern-not-regex: \{@html\s+safeTranslate

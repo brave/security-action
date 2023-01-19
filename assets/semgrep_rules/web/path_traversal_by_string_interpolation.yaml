@@ -12,8 +12,8 @@ rules:
       - js
     paths:
       include:
-        - "**/*.server.ts"
-        - "**/*.server.js"
+        - "*.server.ts"
+        - "*.server.js"
     patterns:
       - pattern: fetch($URL, ...)
       - metavariable-regex:
