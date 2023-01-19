@@ -73,7 +73,7 @@ runs:
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
-      run: DIFF_FILES="${{ steps.changed-files.outputs.all_changed_files }}" ${{ github.action_path }}/assets/reviewdog.sh
+      run: DIFF_FILES='${{ steps.changed-files.outputs.all_changed_files }}' ${{ github.action_path }}/assets/reviewdog.sh
     - uses: actions-ecosystem/action-add-labels@v1
       if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
       with:
