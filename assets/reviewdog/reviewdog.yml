@@ -3,7 +3,7 @@ runner:
     name: semgrep
     cmd: |
       set -xe
-      [ "$(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d)" != "" ] &&\
+      [ "$DIFF_FILES" != "" ] &&\
       semgrep \
         --verbose \
         -c p/ci \
@@ -25,9 +25,9 @@ runner:
     name: safesvg
     cmd: |
       set -xe
-      [ "$(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d)" != "" ] &&\
+      [ "$DIFF_FILES" != "" ] &&\
       find \
-        $(git --no-pager diff --name-only HEAD $(git merge-base HEAD origin/${GITHUB_BASE_REF:-main}) | xargs ls  -d) \
+        $DIFF_FILES \
         -name '*.svg' -exec $SCRIPTPATH/xmllint.sh {} \; \
       | sed "s/$/ - Run SVGO on your assets (Cc @brave\/sec-team $ASSIGNEES)/g" | tee safesvg.log
     errorformat:
