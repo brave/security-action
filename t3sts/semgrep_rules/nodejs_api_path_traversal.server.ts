@@ -1,1 +1,1 @@
-await fetch(`${env.API_HOSTNAME}/api/subscriptions/${subscriptionId}`, 1337)
+await fetch(`${env.API_HOSTNAME}/api/subscriptions/${subscriptionId}`, 1337);
