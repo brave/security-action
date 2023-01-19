@@ -53,7 +53,8 @@ runs:
       id: write-changed-files
       shell: bash
       run: |
-        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+        V='${{ steps.changed-files.outputs.all_changed_files }}'
+        for file in ${V//$/\$}; do
           printf "$file\0" >> ${{ github.action_path }}/assets/all_changed_files.txt
         done
 # REVIEWDOG Steps
