@@ -5,7 +5,6 @@ runner:
       set -xe
       [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       semgrep \
-        --verbose \
         -c p/ci \
         -c p/security-audit \
         -c p/xss \
