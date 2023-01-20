@@ -1,1 +1,3 @@
 https://semgrep.dev/r/python.flask.security.xss.audit.template-unescaped-with-safe.template-unescaped-with-safe
+https://semgrep.dev/r/python.flask.security.xss.audit.template-href-var.template-href-var
+https://semgrep.dev/r/generic.html-templates.security.var-in-href.var-in-href

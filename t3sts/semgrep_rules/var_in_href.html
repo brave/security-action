@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    safe
+    <a href="{{result.url | sanitize_url}}">Click</a>
+    <a href='{{result.url |sanitize_url  }}'>this</a>
+    less safe
+    <a href="{{ result.url }}">link</a>
+{% endblock %}
