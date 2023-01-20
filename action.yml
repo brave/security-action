@@ -90,15 +90,24 @@ runs:
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
+    - name: Findings LOG -> Variable
+      if: ${{ github.event.pull_request && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
+      id: findings
+      run: echo ::set-output "name=value::$(cat reviewdog.log)"
+      shell: bash
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
+      if: ${{ github.event.pull_request && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees.outputs.value}}
+          @${{ github.actor }} / ${{ github.event.pull_request.html_url}}
+          ${{ github.event_name }} triggered an hotspot on ${{ github.event.pull_request.repository.full_name }} .
+
+          ${{ steps.findings.outputs.value }}
+
+          Cc ${{steps.assignees.outputs.value}}
         channel: secops-hotspots
         color: green
-        verbose: true
 # CodeQL Steps
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && !steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
       shell: bash
