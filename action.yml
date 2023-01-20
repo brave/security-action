@@ -32,7 +32,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
+    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
       id: assignees
       env:
         ASSIGNEES: ${{inputs.assignees}}
@@ -47,33 +47,35 @@ runs:
           echo "value=true" >> $GITHUB_OUTPUT
         fi
     - name: Get changed files
+      if: ${{ github.event_name == 'pull_request' }}
       id: changed-files
       uses: tj-actions/changed-files@v35
       with:
         separator: '\\0'
     - name: Write changed files to file
+      if: ${{ github.event_name == 'pull_request' }}
       id: write-changed-files
       shell: bash
       run: |
         set -e
         printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
 # REVIEWDOG Steps
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install scanners
       shell: bash
       run: |
         python3 -m pip install --ignore-installed semgrep
         sudo apt-get install -qy libxml2-utils
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
+    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Run reviewdog
       shell: bash
       env:
@@ -81,17 +83,17 @@ runs:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
+      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
+      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
+      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
