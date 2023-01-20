@@ -18,7 +18,7 @@ runner:
         --json \
         | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>source: \(.extra.metadata.source)<br><br>"' \
         | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
-        | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" | tee semgrep.log
+        | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"
   safesvg:
@@ -26,7 +26,7 @@ runner:
     cmd: |
       set -xe
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
-      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g" | tee safesvg.log
+      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%f:%l: %m"
   tfsec:
@@ -37,6 +37,6 @@ runner:
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message)<br><br>source: \(.code.url)<br><br>"' \
-      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" |  tee tfsec.log
+      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"

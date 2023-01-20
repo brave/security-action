@@ -6,12 +6,20 @@ export SCRIPTPATH=`dirname $SCRIPT`
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
+RUNNERS="safesvg tfsec semgrep"
+
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
-    reviewdog -reporter=github-pr-review -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -tee
+    for runner in $RUNNERS; do
+        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log
+    done
+
+    for runner in $RUNNERS; do
+        cat $runner.log | reviewdog -reporter=github-pr-review -efm='%f:%l: %m'
+        cat $runner.log >> reviewdog.log
+    done
 else
     find $SCRIPTPATH/../t3sts/ | sed "s|$SCRIPTPATH/../||g" | tr '\n' '\0' > $SCRIPTPATH/all_changed_files.txt
     GITHUB_BASE_REF=initial-commit reviewdog  -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
 fi
 
-cat /dev/null semgrep.log safesvg.log > reviewdog.log
 find reviewdog.log -type f -empty -delete
