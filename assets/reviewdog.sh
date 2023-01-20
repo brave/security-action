@@ -7,10 +7,10 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
-    reviewdog -reporter=github-pr-review -runners=semgrep,safesvg,tfsec -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -tee
+    reviewdog -reporter=github-pr-review -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -tee
 else
     find $SCRIPTPATH/../t3sts/ | sed "s|$SCRIPTPATH/../||g" | tr '\n' '\0' > $SCRIPTPATH/all_changed_files.txt
-    GITHUB_BASE_REF=initial-commit reviewdog  -runners=semgrep,safesvg,tfsec -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
+    GITHUB_BASE_REF=initial-commit reviewdog  -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
 fi
 
 cat /dev/null semgrep.log safesvg.log tfsec.log > reviewdog.log
