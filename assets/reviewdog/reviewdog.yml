@@ -25,7 +25,6 @@ runner:
     name: safesvg
     cmd: |
       set -xe
-      [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
       | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g" | tee safesvg.log
     errorformat:

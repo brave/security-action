@@ -56,7 +56,7 @@ runs:
       shell: bash
       run: |
         set -e
-        printf -- '${{ steps.changed-files.outputs.all_changed_files }}\0' >> ${{ github.action_path }}/assets/all_changed_files.txt
+        printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
 # REVIEWDOG Steps
     - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       uses: reviewdog/action-setup@v1
