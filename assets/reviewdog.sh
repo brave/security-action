@@ -13,5 +13,5 @@ else
     GITHUB_BASE_REF=initial-commit reviewdog  -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
 fi
 
-cat /dev/null semgrep.log safesvg.log tfsec.log > reviewdog.log
+cat /dev/null semgrep.log safesvg.log > reviewdog.log
 find reviewdog.log -type f -empty -delete
