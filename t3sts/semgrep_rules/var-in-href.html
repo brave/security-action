@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    safe
+    <!-- ok: var-in-href -->
     <a href="{{result.url | sanitize_url}}">Click</a>
+    <!-- ok: var-in-href -->
     <a href='{{result.url |sanitize_url  }}'>this</a>
-    less safe
+    <!-- ruleid: var-in-href -->
     <a href="{{ result.url }}">link</a>
 {% endblock %}

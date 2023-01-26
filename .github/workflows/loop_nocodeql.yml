@@ -16,6 +16,12 @@ jobs:
           pwd
           tree -a
         shell: bash
+      - run: |
+          python3 -m pip --disable-pip-version-check install semgrep
+          semgrep --test --disable-version-check --strict --metrics=off --verbose \
+            --config assets/semgrep_rules/web/ \
+            t3sts/semgrep_rules/
+        shell: bash
       - uses: ./
         with:
           debug: true

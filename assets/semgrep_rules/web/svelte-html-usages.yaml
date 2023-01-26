@@ -8,7 +8,7 @@ rules:
         - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
       confidence: LOW
     message: >-
-      The code contains new security hotspots ({@html expression}) which should be checked manually
+      The code contains new security hotspots (`{@html expression}`) which should be checked manually
       by a security team member!
     severity: INFO
     languages:
