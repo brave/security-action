@@ -16,8 +16,9 @@ runner:
         --metrics=off \
         --baseline-commit origin/${GITHUB_BASE_REF:-main} \
         --json \
-        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>source: \(.extra.metadata.source)<br><br>"' \
+        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
         | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
+        | sed "s/>Source: null</>Source: Brave</g" \
         | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"
