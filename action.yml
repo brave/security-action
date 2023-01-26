@@ -68,7 +68,7 @@ runs:
       name: Install scanners
       shell: bash
       run: |
-        python3 -m pip install --ignore-installed semgrep
+        python3 -m pip install --disable-pip-version-check semgrep~=1.5.0
         sudo apt-get install -qy libxml2-utils
         go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
     - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
