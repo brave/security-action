@@ -32,100 +32,22 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
-      id: assignees
-      env:
-        ASSIGNEES: ${{inputs.assignees}}
-      run: echo "value=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
-      shell: bash
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
-      id: public
+    - name: Brakeman
+      id: brakeman
       shell: bash
       run: |
-        set -x
-        if curl --retry 5 -s -I ${{github.event.repository.url}} | head -n1 | grep 200 >/dev/null  ; then
-          echo "value=true" >> $GITHUB_OUTPUT
-        fi
-    - name: Get changed files
-      if: ${{ github.event_name == 'pull_request' }}
-      id: changed-files
-      uses: tj-actions/changed-files@v35
+        set -xe
+        GEM_HOME=../.gem gem install bundler
+        ../.gem/bin/bundle install
+        RUBY_DIRS=$(for f in $(find ./t3sts -name 'Gemfile*'); do dirname $f; done | sort -u)
+        mkdir ../sarifs
+        i=0
+        for RD in $(echo "$RUBY_DIRS")
+        do
+          ../.gem/bin/bundler exec brakeman --quiet -o ../sarifs/"$i".sarif --no-exit-on-warn --no-exit-on-error "$RD"
+          ((i=i+1))
+        done
+        ls -agh ../sarifs/
+    - uses: github/codeql-action/upload-sarif@v2
       with:
-        separator: '\\0'
-    - name: Write changed files to file
-      if: ${{ github.event_name == 'pull_request' }}
-      id: write-changed-files
-      shell: bash
-      run: |
-        set -e
-        printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
-# REVIEWDOG Steps
-    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      uses: reviewdog/action-setup@v1
-      with:
-        reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
-    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      name: Install scanners
-      shell: bash
-      run: |
-        python3 -m pip install --disable-pip-version-check semgrep~=1.5.0
-        sudo apt-get install -qy libxml2-utils
-        go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
-    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
-      env:
-        ASSIGNEES: ${{steps.assignees.outputs.value}}
-      run: ${{ github.action_path }}/assets/debug.sh
-      shell: bash
-    - if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      name: Run reviewdog
-      shell: bash
-      env:
-        ASSIGNEES: ${{steps.assignees.outputs.value}}
-        REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
-      run: ${{ github.action_path }}/assets/reviewdog.sh
-    - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
-      with:
-        github_token: ${{ inputs.github_token }}
-        labels: needs-security-review
-    - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
-      with:
-        github_token: ${{ inputs.github_token }}
-        assignees: ${{ inputs.assignees }}
-    - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
-      with:
-        slack_token: ${{ inputs.slack_token }}
-        message: |
-          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees.outputs.value}}
-        channel: secops-hotspots
-        color: green
-        verbose: true
-# CodeQL Steps
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && !steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
-      shell: bash
-      run: echo "Not public, not running CodeQL here!"
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' && hashFiles(inputs.codeql_config) }}
-      name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-        config-file: ${{ inputs.codeql_config }}
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' && !hashFiles(inputs.codeql_config)}}
-      name: Initialize CodeQL (without config)
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
-      name: Autobuild
-      uses: github/codeql-action/autobuild@v2
-    - if: ${{ github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
-      name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-#    - run: echo ${{ inputs.in-name }}
-#      shell: bash
-#    - id: output-step-id
-#      run: echo "output-name=antani" >> $GITHUB_OUTPUT
-#      shell bash
-
+        sarif_file: ../sarifs/
