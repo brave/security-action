@@ -32,25 +32,20 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Brakeman
-      id: brakeman
+    - name: Install Brakeman
+      id: install-brakeman
       shell: bash
       run: |
         set -xe
         GEM_HOME=../.gem gem install bundler
         ../.gem/bin/bundle install
-        RUBY_DIRS=$(for f in $(find ./t3sts -name 'Gemfile*'); do dirname $f; done | sort -u)
-        mkdir ../sarifs
-        i=0
-        for RD in $(echo "$RUBY_DIRS")
-        do
-          SARIF=../sarifs/"$i".sarif
-          ../.gem/bin/bundler exec brakeman --quiet -o tmp.sarif --no-exit-on-warn --no-exit-on-error "$RD"
-          cat tmp.sarif | sed -e 's|%SRCROOT%|%SRCROOT%'"$RD"'|' -e 's|%SRCROOT%.|%SRCROOT%|' > "$SARIF"
-          rm tmp.sarif
-          ((i=i+1))
-        done
-        cat ../sarifs/*
+    - name: Brakeman
+      id: brakeman
+      shell: bash
+      run: |
+        set -xe
+        ../.gem/bin/bundler exec brakeman --quiet -o brakeman.sarif --no-exit-on-warn --no-exit-on-error --force ./
+        cat brakeman.sarif
     - uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: ../sarifs/
+        sarif_file: brakeman.sarif
