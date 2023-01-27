@@ -44,10 +44,13 @@ runs:
         i=0
         for RD in $(echo "$RUBY_DIRS")
         do
-          ../.gem/bin/bundler exec brakeman --quiet -o ../sarifs/"$i".sarif --no-exit-on-warn --no-exit-on-error "$RD"
+          SARIF=../sarifs/"$i".sarif
+          ../.gem/bin/bundler exec brakeman --quiet -o tmp.sarif --no-exit-on-warn --no-exit-on-error "$RD"
+          cat tmp.sarif | sed -e 's|%SRCROOT%|%SRCROOT%'"$RD"'|' -e 's|%SRCROOT%.|%SRCROOT%|' > "$SARIF"
+          rm tmp.sarif
           ((i=i+1))
         done
-        ls -agh ../sarifs/
+        cat ../sarifs/*
     - uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: ../sarifs/
