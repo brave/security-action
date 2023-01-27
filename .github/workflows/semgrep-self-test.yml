@@ -1,0 +1,21 @@
+name: semgrep-self-test
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+jobs:
+  semgrep-self-test:
+    name: semgrep-self-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          python3 -m pip --disable-pip-version-check install semgrep~=1.5.0
+          semgrep --test --disable-version-check --strict --metrics=off \
+            --config assets/semgrep_rules/web/ \
+            t3sts/semgrep_rules/
+        shell: bash
