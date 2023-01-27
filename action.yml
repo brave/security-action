@@ -32,20 +32,58 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install Brakeman
-      id: install-brakeman
+    - name: Setup Ruby
+      id: ruby
+      uses: ruby/setup-ruby@ee2113536afb7f793eed4ce60e8d3b26db912da4
+      with:
+        ruby-version: '2.7'
+
+    - name: Setup Brakeman
+      id: setup-brakeman
       shell: bash
+      env:
+        BRAKEMAN_VERSION: '5.4.0'
       run: |
-        set -xe
-        GEM_HOME=../.gem gem install bundler
-        ../.gem/bin/bundle install
+        gem install brakeman --version $BRAKEMAN_VERSION
+
     - name: Brakeman
       id: brakeman
       shell: bash
+      continue-on-error: true
       run: |
         set -xe
-        ../.gem/bin/bundler exec brakeman --quiet -o brakeman.sarif --no-exit-on-warn --no-exit-on-error --force ./
-        cat brakeman.sarif
-    - uses: github/codeql-action/upload-sarif@v2
+        mkdir -p ../sarifs
+        brakeman -o ../sarifs/brakeman.sarif --force ./
+
+    - name: Setup Semgrep
+      id: setup-semgrep
+      shell: bash
+      run: |
+        python3 -m pip install --disable-pip-version-check semgrep~=1.5.0
+
+    - name: Semgrep
+      id: semgrep
+      shell: bash
+      continue-on-error: true
+      run: |
+        set -ex
+        mkdir -p ../sarifs
+        semgrep \
+          -c p/ci \
+          -c p/security-audit \
+          -c p/xss \
+          -c p/nginx \
+          -c p/docker \
+          -c p/terraform \
+          -c p/secrets \
+          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' | sed 's/^/-c /g') \
+          --metrics=off \
+          --baseline-commit origin/${GITHUB_BASE_REF:-main} \
+          --sarif \
+          --output ../sarifs/semgrep.sarif
+        # TODO: filter warnings
+        
+    - name: Upload SARIF
+      uses: github/codeql-action/upload-sarif@v2
       with:
-        sarif_file: brakeman.sarif
+        sarif_file: ../sarifs
