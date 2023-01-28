@@ -27,7 +27,7 @@ inputs:
     default: ./.github/codeql/codeql-config.yml
   enabled:
     description: may disable the whole action, big red button for emergency cases
-    default: false
+    default: true
 # outputs:
 #   out-name:
 #     description: yadda yadda
