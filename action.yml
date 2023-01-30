@@ -36,6 +36,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      name: Cache pip cache
+      id: cache-pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip/
+        key: ${{ runner.os }}-pip
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
       id: assignees
       env:
@@ -85,7 +92,8 @@ runs:
       shell: bash
       run: |
         sudo apt-get install -qy libxml2-utils
-    - name: Cache go binaries
+    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      name: Cache go binaries
       id: cache-go
       uses: actions/cache@v3
       with:
