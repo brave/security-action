@@ -6,7 +6,7 @@ export SCRIPTPATH=`dirname $SCRIPT`
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
-RUNNERS="safesvg tfsec semgrep"
+RUNNERS="safesvg tfsec semgrep brakeman"
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
