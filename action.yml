@@ -85,7 +85,13 @@ runs:
       shell: bash
       run: |
         sudo apt-get install -qy libxml2-utils
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - name: Cache go binaries
+      id: cache-go
+      uses: actions/cache@v3
+      with:
+        path: ~/go/bin
+        key: ${{ runner.os }}-go
+    - if: ${{ steps.cache-go.outputs.cache-hit != 'true' && inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install tfsec
       shell: bash
       run: |
