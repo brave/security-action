@@ -41,3 +41,16 @@ runner:
       | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"
+  brakeman:
+    name: brakeman
+    cmd: |
+      [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
+      cat $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$' &&\
+      brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format text --text-fields file,line,message,link \
+      | grep '^\(File\|Line\|Message\|Link\): ' -A1 \
+      | tr '\n' '\1' \
+      | sed -e 's/\x01\x01/\n/g' -e 's/\x01/~~~/g' -e 's/~~~Link:/<br><br>/g' \
+      | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g" \
+      || true
+    errorformat:
+      - "File: %f~~~Line: %l~~~Message: %m"
