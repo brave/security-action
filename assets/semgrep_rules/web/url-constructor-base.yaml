@@ -1,0 +1,26 @@
+rules:
+  - id: url-constructor-base
+    metadata:
+      author: Ben Caller
+      confidence: LOW
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/API/URL/URL#parameters
+    message: Are you using the `URL(url, base)` constructor as a security control
+      to limit the origin with base `$BASE`?
+      The base is ignored whenever url looks like an
+      absolute URL, e.g. when it begins `protocol://`. `\\\\` or `//x.y`.
+      Verify that the URL's origin is as expected rather than relying on
+      the URL constructor.
+    severity: INFO
+    languages:
+      - ts
+      - js
+    patterns:
+      - pattern: new URL($A, $BASE)
+      # Exclude constant string
+      - pattern-not: new URL("...", $BASE)
+      # Hopefully a sensible check for the correct origin
+      - pattern-not-inside: |
+          $VAR = new URL($A, $BASE)
+          ...
+          <... $VAR.origin ...>
