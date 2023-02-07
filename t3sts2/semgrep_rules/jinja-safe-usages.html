@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>{{article.title}}</h1>
+    <small>Written by {{article.author}} on {{article.create_date}}</small>
+    <hr>
+    <div>
+        <!-- ruleid: template-unescaped-with-safe-noclean -->
+        {{article.body | safe}}
+        <!-- ok: template-unescaped-with-safe-noclean -->
+        {{article.head | clean | safe}}
+        <!-- ok: template-unescaped-with-safe-noclean -->
+        {{article.head|clean|safe}}
+    </div>
+{% endblock %}
