@@ -1,5 +1,100 @@
 ---
 rules:
+- id: contrib.dlint.dlint-equivalent.insecure-xml-use
+  message: Insecure XML parsing functionality, prefer 'defusedxml'
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
+    category: security
+    technology:
+    - python
+    references:
+    - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
+    owasp:
+    - A09:2017 - Using Components with Known Vulnerabilities
+    - A06:2021 - Vulnerable and Outdated Components
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/contrib.dlint.dlint-equivalent.insecure-xml-use
+    shortlink: https://sg.run/5QOW
+    semgrep.dev:
+      rule:
+        rule_id: zdUkvA
+        version_id: 0bToER
+        url: https://semgrep.dev/playground/r/0bToER/contrib.dlint.dlint-equivalent.insecure-xml-use
+  pattern-either:
+  - patterns:
+    - pattern: xml.$ANYTHING
+    - pattern-not: xml.sax.saxutils
+    - pattern-not: xml.etree.ElementTree.Element
+    - pattern-not: xml.etree.ElementTree.SubElement
+  - pattern: xmlrpclib.$ANYTHING
+- id: java.lang.security.audit.crypto.weak-hash.use-of-md5
+  message: Detected MD5 hash algorithm which is considered insecure. MD5 is not collision
+    resistant and is therefore not suitable as a cryptographic signature. Use SHA256
+    or SHA3 instead.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_MESSAGE_DIGEST_MD5
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.5 Insecure Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+    category: security
+    technology:
+    - java
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.lang.security.audit.crypto.weak-hash.use-of-md5
+    shortlink: https://sg.run/KlRd
+    semgrep.dev:
+      rule:
+        rule_id: WAUo4l
+        version_id: vdTvxo
+        url: https://semgrep.dev/playground/r/vdTvxo/java.lang.security.audit.crypto.weak-hash.use-of-md5
+  pattern-either:
+  - pattern: 'MessageDigest $VAR = $MD.getInstance("MD5");
+
+      '
+  - pattern: "$DU.getMd5Digest().digest(...)\n"
+- id: java.lang.security.audit.crypto.weak-hash.use-of-sha1
+  message: Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
+    collision resistant and is therefore not suitable as a cryptographic signature.
+    Use SHA256 or SHA3 instead.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    owasp: 'A9: Using Components with Known Vulnerabilities'
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_MESSAGE_DIGEST_SHA1
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.2.5 Insecure Algorithm
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v62-algorithms
+      version: '4'
+    category: security
+    technology:
+    - java
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.lang.security.audit.crypto.weak-hash.use-of-sha1
+    shortlink: https://sg.run/0QKb
+    semgrep.dev:
+      rule:
+        rule_id: DbUprq
+        version_id: e1TZX4
+        url: https://semgrep.dev/playground/r/e1TZX4/java.lang.security.audit.crypto.weak-hash.use-of-sha1
+  pattern-either:
+  - pattern: 'MessageDigest $VAR = $MD.getInstance("SHA1");
+
+      '
+  - pattern: "$DU.getSha1Digest().digest(...)\n"
 - id: python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-blowfish
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
   message: Detected Blowfish cipher algorithm which is considered insecure. The algorithm

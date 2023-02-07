@@ -65,6 +65,29 @@ rules:
   severity: WARNING
   languages:
   - generic
+- id: javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
+  patterns:
+  - pattern: "$Y($X);"
+  - pattern-inside: |
+      const [$X, $Y] = useState(...);
+      ...
+  message: Calling setState on the current state is always a no-op. Did you mean to
+    change the state like $Y(!$X) instead?
+  languages:
+  - js
+  severity: ERROR
+  metadata:
+    technology:
+    - react
+    category: correctness
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
+    shortlink: https://sg.run/Y8BW
+    semgrep.dev:
+      rule:
+        rule_id: eqUz1k
+        version_id: vdTvgW
+        url: https://semgrep.dev/playground/r/vdTvgW/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
 - id: ocaml.lang.compatibility.deprecated.deprecated-pervasives
   pattern: Pervasives.$X
   message: Pervasives is deprecated and will not be available after 4.10. Use Stdlib.
@@ -888,6 +911,34 @@ rules:
         rule_id: 3qUEpL
         version_id: K3TYje
         url: https://semgrep.dev/playground/r/K3TYje/trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
+- id: trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: "$FOO, $A := <... $X.($TYPE) ...>\n"
+      - metavariable-regex:
+          metavariable: "$A"
+          regex: "^_$"
+    - patterns:
+      - pattern: "$FOO := <... $X.($TYPE) ...>\n"
+      - metavariable-regex:
+          metavariable: "$FOO"
+          regex: "^[^,]*$"
+  message: 'Unchecked type assertion.
+
+    '
+  severity: ERROR
+  languages:
+  - go
+  metadata:
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
+    shortlink: https://sg.run/054W
+    semgrep.dev:
+      rule:
+        rule_id: ZqUgpe
+        version_id: zyT183
+        url: https://semgrep.dev/playground/r/zyT183/trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
 - id: trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
   message: Usage of NumPy library inside PyTorch `$MODULE` module was found. Avoid
     mixing these libraries for efficiency and proper ONNX loading
@@ -918,6 +969,31 @@ rules:
   - pattern-inside: |
       class $MODULE(torch.nn.Module):
           ...
+- id: trailofbits.python.pytorch-tensor.pytorch-tensor
+  message: Avoid using `torch.Tensor()` to directly create a tensor for efficiency
+    and proper parsing
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: performance
+    subcategory:
+    - audit
+    confidence: HIGH
+    technology:
+    - pytorch
+    description: Possible parsing issues and inefficiency from improper tensor creation
+    references:
+    - https://pytorch.org/docs/stable/tensors.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.pytorch-tensor.pytorch-tensor
+    shortlink: https://sg.run/72xG
+    semgrep.dev:
+      rule:
+        rule_id: JDU4RQ
+        version_id: nWTbb8
+        url: https://semgrep.dev/playground/r/nWTbb8/trailofbits.python.pytorch-tensor.pytorch-tensor
+  pattern: torch.Tensor(...)
 - id: trailofbits.python.torch-tensor.torch-tensor
   message: Avoid using `torch.Tensor()` to directly create a tensor for efficiency
     and proper parsing
@@ -940,3 +1016,404 @@ rules:
         version_id: 7ZTq5z
         url: https://semgrep.dev/playground/r/7ZTq5z/trailofbits.python.torch-tensor.torch-tensor
   pattern: torch.Tensor(...)
+- id: typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
+  patterns:
+  - pattern-inside: |
+      import styled from 'styled-components';
+      ...
+  - pattern-either:
+    - pattern-inside: |
+        function $FUNC(...) {
+          ...
+        }
+    - pattern-inside: |
+        class $CLASS {
+          ...
+        }
+  - pattern-either:
+    - pattern: 'styled.$EL`...`;
+
+        '
+    - pattern: 'styled($EL)`...`;
+
+        '
+  message: By declaring a styled component inside the render method of a react component,
+    you are dynamically creating a new component on every render. This means that
+    React will have to discard and re-calculate that part of the DOM subtree on each
+    subsequent render, instead of just calculating the difference of what changed
+    between them. This leads to performance bottlenecks and unpredictable behavior.
+  metadata:
+    references:
+    - https://styled-components.com/docs/faqs#why-should-i-avoid-declaring-styled-components-in-the-render-method
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
+    shortlink: https://sg.run/okq7
+    semgrep.dev:
+      rule:
+        rule_id: j2Uqg5
+        version_id: jQTwZL
+        url: https://semgrep.dev/playground/r/jQTwZL/typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+- id: typescript.react.best-practice.react-find-dom.react-find-dom
+  pattern-either:
+  - pattern: 'findDOMNode(...)
+
+      '
+  - pattern: "$DOM.findDOMNode(...)\n"
+  message: findDOMNode is an escape hatch used to access the underlying DOM node.
+    In most cases, use of this escape hatch is discouraged because it pierces the
+    component abstraction.
+  metadata:
+    references:
+    - https://reactjs.org/docs/react-dom.html#finddomnode
+    - https://github.com/yannickcr/eslint-plugin-react/issues/678#issue-165177220
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.best-practice.react-find-dom.react-find-dom
+    shortlink: https://sg.run/zkdz
+    semgrep.dev:
+      rule:
+        rule_id: 10UZOv
+        version_id: 1QT4xn
+        url: https://semgrep.dev/playground/r/1QT4xn/typescript.react.best-practice.react-find-dom.react-find-dom
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+- id: typescript.react.best-practice.react-legacy-component.react-legacy-component
+  patterns:
+  - pattern: |
+      $METHOD(...) {
+        ...
+      }
+  - metavariable-regex:
+      metavariable: "$METHOD"
+      regex: componentWillMount|componentWillReceiveProps|componentWillUpdate
+  message: Legacy component lifecycle was detected - $METHOD.
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+  metadata:
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.best-practice.react-legacy-component.react-legacy-component
+    shortlink: https://sg.run/plK3
+    semgrep.dev:
+      rule:
+        rule_id: 9AUOdB
+        version_id: 9lTAK8
+        url: https://semgrep.dev/playground/r/9lTAK8/typescript.react.best-practice.react-legacy-component.react-legacy-component
+- id: typescript.react.best-practice.react-props-in-state.react-props-in-state
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        class $CN extends React.Component {
+          ...
+        }
+    - pattern-either:
+      - pattern: 'state = {$NAME: <... this.props.$PROP ...>}
+
+          '
+      - pattern: 'this.state = {$NAME: <... this.props.$PROP ...>}
+
+          '
+    - metavariable-regex:
+        metavariable: "$NAME"
+        regex: "^(?!default|initial).*$"
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          function $FN({$PROP},...) {
+            ...
+          }
+      - pattern-inside: |
+          function $FN($PROP,...) {
+            ...
+          }
+    - pattern-either:
+      - pattern: useState(<... $PROP ...>)
+      - pattern: useState(<... $PROP.$KEY ...>)
+      - pattern: |
+          useState(function $X(...) {
+            ...
+            <... $PROP ...>
+            ...
+          })
+      - pattern: |
+          useState(function $X(...) {
+            ...
+            <... $PROP.$KEY ...>
+            ...
+          })
+    - metavariable-regex:
+        metavariable: "$PROP"
+        regex: "^(?!default|initial).*$"
+  message: Copying a prop into state in React -- this is bad practice as all updates
+    to it are ignored. Instead, read props directly in your component and avoid copying
+    props into state.
+  metadata:
+    references:
+    - https://overreacted.io/writing-resilient-components/#principle-1-dont-stop-the-data-flow
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.best-practice.react-props-in-state.react-props-in-state
+    shortlink: https://sg.run/2bZz
+    semgrep.dev:
+      rule:
+        rule_id: yyUvRJ
+        version_id: vdTJo3
+        url: https://semgrep.dev/playground/r/vdTJo3/typescript.react.best-practice.react-props-in-state.react-props-in-state
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+- id: typescript.react.best-practice.react-props-spreading.react-props-spreading
+  patterns:
+  - pattern: "<$X {...$PROPS} />"
+  - focus-metavariable: "$PROPS"
+  message: It's best practice to explicitly pass props to an HTML component rather
+    than use the spread operator. The spread operator risks passing invalid HTML props
+    to an HTML element, which can cause console warnings or worse, give malicious
+    actors a way to inject unexpected attributes.
+  languages:
+  - js
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+    references:
+    - https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
+    category: best-practice
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.best-practice.react-props-spreading.react-props-spreading
+    shortlink: https://sg.run/XL5l
+    semgrep.dev:
+      rule:
+        rule_id: r6Uky5
+        version_id: kbTWvY
+        url: https://semgrep.dev/playground/r/kbTWvY/typescript.react.best-practice.react-props-spreading.react-props-spreading
+- id: typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: t('$KEY')
+        - pattern: t('$KEY', $OPTIONS)
+        - pattern: t([$DYNAMIC_KEY, '$KEY'])
+        - pattern: t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)
+      - metavariable-regex:
+          metavariable: "$KEY"
+          regex: "(?!^[a-z0-9-]+\\.[a-z0-9-]+\\.[a-zA-Z0-9_.-]+$)"
+    - patterns:
+      - pattern-either:
+        - pattern: t([$DYNAMIC_KEY, '$KEY'])
+        - pattern: t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)
+      - metavariable-regex:
+          metavariable: "$DYNAMIC_KEY"
+          regex: "(?!^[`][a-z0-9-]+[.][a-z0-9-]+[.]\\S+$)"
+    - patterns:
+      - pattern-either:
+        - pattern: "$I18NEXT.t('$KEY')"
+        - pattern: "$I18NEXT.t('$KEY', $OPTIONS)"
+        - pattern: "$I18NEXT.t([$DYNAMIC_KEY, '$KEY'])"
+        - pattern: "$I18NEXT.t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)"
+      - metavariable-regex:
+          metavariable: "$I18NEXT"
+          regex: "(^i18n|i18next$)"
+      - metavariable-regex:
+          metavariable: "$KEY"
+          regex: "(?!^[a-z0-9-]+\\.[a-z0-9-]+\\.[a-zA-Z0-9_.-]+$)"
+    - patterns:
+      - pattern-either:
+        - pattern: "$I18NEXT.t([$DYNAMIC_KEY, '$KEY'])"
+        - pattern: "$I18NEXT.t([$DYNAMIC_KEY, '$KEY'], $OPTIONS)"
+      - metavariable-regex:
+          metavariable: "$I18NEXT"
+          regex: "(^(i18n|i18next)$)"
+      - metavariable-regex:
+          metavariable: "$DYNAMIC_KEY"
+          regex: "(?!^[`][a-z0-9-]+[.][a-z0-9-]+[.]\\S+$)"
+  message: Translation key '$KEY' should match format 'MODULE.FEATURE.*'
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    - mui
+    - i18next
+    references:
+    - https://www.notion.so/hendyirawan/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://mui.com/
+    - https://react.i18next.com/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+    shortlink: https://sg.run/Y4oX
+    semgrep.dev:
+      rule:
+        rule_id: oqUKJr
+        version_id: X0T226
+        url: https://semgrep.dev/playground/r/X0T226/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+- id: typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
+  patterns:
+  - pattern-either:
+    - pattern: <TextField ... label="$MESSAGE" ... />
+    - pattern: <Tab ... label="$MESSAGE" ... />
+  - metavariable-regex:
+      metavariable: "$MESSAGE"
+      regex: "(.*[a-zA-Z]+.*)"
+  - pattern-not: <$ELEMENT ... label="" ... />
+  - pattern-not: "<$ELEMENT ... label={t($KEY, ...)} ... />"
+  message: 'JSX Component label not internationalized: ''$MESSAGE'''
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    - mui
+    - i18next
+    references:
+    - https://www.notion.so/hendyirawan/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://mui.com/
+    - https://react.i18next.com/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
+    shortlink: https://sg.run/6kv6
+    semgrep.dev:
+      rule:
+        rule_id: zdUGrY
+        version_id: jQTyyX
+        url: https://semgrep.dev/playground/r/jQTyyX/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
+- id: typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
+  patterns:
+  - pattern: "<$ELEMENT>$MESSAGE</$ELEMENT>"
+  - metavariable-regex:
+      metavariable: "$MESSAGE"
+      regex: "([A-Za-z\\n ]+[A-Za-z]+[A-Za-z\\n ]+)"
+  - pattern-not: "<$ELEMENT>t('$KEY', ...)</$ELEMENT>"
+  message: 'JSX element not internationalized: ''$MESSAGE''.  You should support different
+    languages in your website or app with internationalization. Instead, use packages
+    such as `i18next` in order to internationalize your elements.'
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    - mui
+    - i18next
+    references:
+    - https://www.notion.so/hendyirawan/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://mui.com/
+    - https://react.i18next.com/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
+    shortlink: https://sg.run/DeKW
+    semgrep.dev:
+      rule:
+        rule_id: KxUwo1
+        version_id: pZTv6z
+        url: https://semgrep.dev/playground/r/pZTv6z/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
+- id: typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
+  patterns:
+  - pattern: enqueueSnackbar('$MESSAGE', $X2)
+  - pattern-not: enqueueSnackbar(t($KEY), $X2)
+  message: 'React MUI enqueueSnackbar() title is not internationalized: ''$MESSAGE'''
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    - mui
+    - i18next
+    references:
+    - https://hendyirawan.notion.site/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://mui.com/
+    - https://react.i18next.com/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
+    shortlink: https://sg.run/WDvz
+    semgrep.dev:
+      rule:
+        rule_id: qNUpO8
+        version_id: 5PTe9P
+        url: https://semgrep.dev/playground/r/5PTe9P/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
+- id: typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
+  patterns:
+  - pattern: useSelect($X1, $X2, '$LABEL', $X4)
+  - metavariable-regex:
+      metavariable: "$LABEL"
+      regex: "(.*[A-Za-z].*)"
+  - pattern-not: useSelect($X1, $X2, t('...'), $X4)
+  message: React useSelect() label is not internationalized - '$LABEL'. You should
+    support different langauges in your website or app with internationalization.
+    Instead, use packages such as `i18next` to internationalize your elements.
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    - mui
+    - i18next
+    references:
+    - https://www.notion.so/hendyirawan/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://react.i18next.com/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
+    shortlink: https://sg.run/oR37
+    semgrep.dev:
+      rule:
+        rule_id: nJUPJL
+        version_id: vdTXdP
+        url: https://semgrep.dev/playground/r/vdTXdP/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
+- id: typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
+  patterns:
+  - pattern: useSelect($X1, $X2, '$LABEL', $X4)
+  - pattern-not: useSelect($X1, $X2, t('...'), $X4)
+  message: React useSelect() label is not internationalized - '$LABEL'
+  languages:
+  - ts
+  - js
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - react
+    references:
+    - https://hendyirawan.notion.site/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
+    - https://react.i18next.com/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
+    shortlink: https://sg.run/0WAJ
+    semgrep.dev:
+      rule:
+        rule_id: lBUXZO
+        version_id: GxT8P7
+        url: https://semgrep.dev/playground/r/GxT8P7/typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
