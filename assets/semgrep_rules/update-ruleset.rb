@@ -16,7 +16,26 @@ RULESETS = [
 	'terraform',
 	'secrets',
 	'owasp-top-ten',
-	'cwe-top-25'
+	'cwe-top-25',
+        'command-injection',
+        'insecure-transport',
+        'jwt',
+        'sql-injection',
+        'java',
+        'flask',
+        'javascript',
+        'python',
+        'react',
+        'ruby',
+        'bandit',
+        'brakeman',
+        'eslint',
+        'findsecbugs',
+        'flawfinder',
+        'gitleaks',
+        'gosec',
+        'phpcs-security-audit',
+        'security-code-scan'
 ]
 HOST = 'https://semgrep.dev'
 GENERATED_DIR = "#{__dir__}/generated/"
