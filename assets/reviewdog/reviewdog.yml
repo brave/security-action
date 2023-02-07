@@ -5,8 +5,10 @@ runner:
       set -xe
       [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       semgrep \
-        -c $SCRIPTPATH/semgrep_rules/generated/vulns.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/audit.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
         $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
         --metrics=off \
         --baseline-commit origin/${GITHUB_BASE_REF:-main} \

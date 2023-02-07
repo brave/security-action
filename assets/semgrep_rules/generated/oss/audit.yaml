@@ -1,0 +1,159 @@
+---
+rules:
+- id: csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
+  message: "$METHOD is a state-changing MVC method that does not validate the antiforgery
+    token or do strict content-type checking. State-changing controller methods should
+    either enforce antiforgery tokens or do strict content-type checking to prevent
+    simple HTTP request types from bypassing CORS preflight controls."
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    license: MIT
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#cross-site-request-forgery
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
+    subcategory:
+    - audit
+    technology:
+    - ".net"
+    - mvc
+    source: https://semgrep.dev/r/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
+    shortlink: https://sg.run/Y0Jy
+    semgrep.dev:
+      rule:
+        rule_id: ZqUlxE
+        version_id: JdTwk7
+        url: https://semgrep.dev/playground/r/JdTwk7/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
+  languages:
+  - csharp
+  patterns:
+  - pattern: |
+      [$HTTPMETHOD]
+      public IActionResult $METHOD(...){
+          ...
+      }
+  - pattern-inside: |
+      using Microsoft.AspNetCore.Mvc;
+      ...
+  - pattern-not: |
+      [ValidateAntiForgeryToken]
+      public IActionResult $METHOD(...){
+          ...
+      }
+  - pattern-not: |
+      [Consumes(...)]
+      public IActionResult $METHOD(...){
+        ...
+      }
+  - metavariable-regex:
+      metavariable: "$HTTPMETHOD"
+      regex: Http(Post|Put|Delete|Patch)
+- id: csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
+  message: Cookie Secure flag is explicitly disabled. You should enforce this value
+    to avoid accidentally presenting sensitive cookie values over plaintext HTTP connections.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+    license: MIT
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
+    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
+    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
+    subcategory:
+    - audit
+    technology:
+    - ".net"
+    - asp
+    - webforms
+    source: https://semgrep.dev/r/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
+    shortlink: https://sg.run/z1jd
+    semgrep.dev:
+      rule:
+        rule_id: 7KUxPg
+        version_id: 0bTkG2
+        url: https://semgrep.dev/playground/r/0bTkG2/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
+  languages:
+  - generic
+  paths:
+    include:
+    - "*web.config"
+  patterns:
+  - pattern-either:
+    - pattern: 'requireSSL="false"
+
+        '
+    - pattern: 'cookieRequireSSL="false"
+
+        '
+  - pattern-either:
+    - pattern-inside: "<httpCookies ...>\n"
+    - pattern-inside: "<forms ...>\n"
+    - pattern-inside: "<roleManager ...>\n"
+- id: csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
+  patterns:
+  - pattern-either:
+    - pattern: TypeNameHandling = TypeNameHandling.$TYPEHANDLER
+    - pattern: |
+        $SETTINGS.TypeNameHandling = TypeNameHandling.$TYPEHANDLER;
+        ...
+        JsonConvert.DeserializeObject<$TYPE>(...,$SETTINGS);
+    - pattern: |
+        $SETTINGS.TypeNameHandling = TypeNameHandling.$TYPEHANDLER;
+        ...
+        JsonConvert.DeserializeObject(...,$SETTINGS);
+  - pattern-inside: |
+      using Newtonsoft.Json;
+      ...
+  - metavariable-regex:
+      metavariable: "$TYPEHANDLER"
+      regex: "(All|Auto|Objects|Arrays)"
+  message: TypeNameHandling $TYPEHANDLER is unsafe and can lead to arbitrary code
+    execution in the context of the process.  Use a custom SerializationBinder whenever
+    using a setting other than TypeNameHandling.None.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    references:
+    - https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_TypeNameHandling.htm#remarks
+    technology:
+    - ".net"
+    - newtonsoft
+    - json
+    confidence: LOW
+    license: MIT
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    source: https://semgrep.dev/r/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
+    shortlink: https://sg.run/8n2g
+    semgrep.dev:
+      rule:
+        rule_id: OrUGgl
+        version_id: rxTbNq
+        url: https://semgrep.dev/playground/r/rxTbNq/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization

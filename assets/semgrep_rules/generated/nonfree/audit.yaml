@@ -334,63 +334,6 @@ rules:
   languages:
   - c
   severity: WARNING
-- id: csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
-  message: "$METHOD is a state-changing MVC method that does not validate the antiforgery
-    token or do strict content-type checking. State-changing controller methods should
-    either enforce antiforgery tokens or do strict content-type checking to prevent
-    simple HTTP request types from bypassing CORS preflight controls."
-  severity: WARNING
-  metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    category: security
-    cwe:
-    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
-    cwe2021-top25: true
-    cwe2022-top25: true
-    license: MIT
-    owasp:
-    - A01:2021 - Broken Access Control
-    references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/DotNet_Security_Cheat_Sheet.html#cross-site-request-forgery
-    - https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests
-    subcategory:
-    - audit
-    technology:
-    - ".net"
-    - mvc
-    source: https://semgrep.dev/r/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
-    shortlink: https://sg.run/Y0Jy
-    semgrep.dev:
-      rule:
-        rule_id: ZqUlxE
-        version_id: JdTwk7
-        url: https://semgrep.dev/playground/r/JdTwk7/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
-  languages:
-  - csharp
-  patterns:
-  - pattern: |
-      [$HTTPMETHOD]
-      public IActionResult $METHOD(...){
-          ...
-      }
-  - pattern-inside: |
-      using Microsoft.AspNetCore.Mvc;
-      ...
-  - pattern-not: |
-      [ValidateAntiForgeryToken]
-      public IActionResult $METHOD(...){
-          ...
-      }
-  - pattern-not: |
-      [Consumes(...)]
-      public IActionResult $METHOD(...){
-        ...
-      }
-  - metavariable-regex:
-      metavariable: "$HTTPMETHOD"
-      regex: Http(Post|Put|Delete|Patch)
 - id: csharp.dotnet.security.net-webconfig-debug.net-webconfig-debug
   message: ASP.NET applications built with `debug` set to true in production may leak
     debug information to attackers. Debug mode also affects performance and reliability.
@@ -473,54 +416,6 @@ rules:
       <system.web>
         ...
       </system.web>
-- id: csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
-  message: Cookie Secure flag is explicitly disabled. You should enforce this value
-    to avoid accidentally presenting sensitive cookie values over plaintext HTTP connections.
-  severity: WARNING
-  metadata:
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-    category: security
-    cwe:
-    - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
-    license: MIT
-    owasp:
-    - A05:2021 - Security Misconfiguration
-    references:
-    - https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies
-    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.formsauthentication.requiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_FormsAuthentication_RequireSSL
-    - https://docs.microsoft.com/en-us/dotnet/api/system.web.security.roles.cookierequiressl?redirectedfrom=MSDN&view=netframework-4.8#System_Web_Security_Roles_CookieRequireSSL
-    subcategory:
-    - audit
-    technology:
-    - ".net"
-    - asp
-    - webforms
-    source: https://semgrep.dev/r/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
-    shortlink: https://sg.run/z1jd
-    semgrep.dev:
-      rule:
-        rule_id: 7KUxPg
-        version_id: 0bTkG2
-        url: https://semgrep.dev/playground/r/0bTkG2/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
-  languages:
-  - generic
-  paths:
-    include:
-    - "*web.config"
-  patterns:
-  - pattern-either:
-    - pattern: 'requireSSL="false"
-
-        '
-    - pattern: 'cookieRequireSSL="false"
-
-        '
-  - pattern-either:
-    - pattern-inside: "<httpCookies ...>\n"
-    - pattern-inside: "<forms ...>\n"
-    - pattern-inside: "<roleManager ...>\n"
 - id: csharp.lang.security.ad.jwt-tokenvalidationparameters-no-expiry-validation.jwt-tokenvalidationparameters-no-expiry-validation
   patterns:
   - pattern-either:
@@ -824,58 +719,6 @@ rules:
   - pattern: 'new JavaScriptSerializer(new SimpleTypeResolver());
 
       '
-- id: csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
-  patterns:
-  - pattern-either:
-    - pattern: TypeNameHandling = TypeNameHandling.$TYPEHANDLER
-    - pattern: |
-        $SETTINGS.TypeNameHandling = TypeNameHandling.$TYPEHANDLER;
-        ...
-        JsonConvert.DeserializeObject<$TYPE>(...,$SETTINGS);
-    - pattern: |
-        $SETTINGS.TypeNameHandling = TypeNameHandling.$TYPEHANDLER;
-        ...
-        JsonConvert.DeserializeObject(...,$SETTINGS);
-  - pattern-inside: |
-      using Newtonsoft.Json;
-      ...
-  - metavariable-regex:
-      metavariable: "$TYPEHANDLER"
-      regex: "(All|Auto|Objects|Arrays)"
-  message: TypeNameHandling $TYPEHANDLER is unsafe and can lead to arbitrary code
-    execution in the context of the process.  Use a custom SerializationBinder whenever
-    using a setting other than TypeNameHandling.None.
-  languages:
-  - csharp
-  severity: WARNING
-  metadata:
-    category: security
-    cwe:
-    - 'CWE-502: Deserialization of Untrusted Data'
-    owasp:
-    - A08:2017 - Insecure Deserialization
-    - A08:2021 - Software and Data Integrity Failures
-    references:
-    - https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_TypeNameHandling.htm#remarks
-    technology:
-    - ".net"
-    - newtonsoft
-    - json
-    confidence: LOW
-    license: MIT
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: HIGH
-    source: https://semgrep.dev/r/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
-    shortlink: https://sg.run/8n2g
-    semgrep.dev:
-      rule:
-        rule_id: OrUGgl
-        version_id: rxTbNq
-        url: https://semgrep.dev/playground/r/rxTbNq/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
 - id: csharp.lang.security.memory.memory-marshal-create-span.memory-marshal-create-span
   severity: WARNING
   languages:
@@ -15059,6 +14902,65 @@ rules:
   languages:
   - php
   severity: ERROR
+- id: php.lang.security.file-inclusion.file-inclusion
+  message: Detected non-constant file inclusion. This can lead to local file inclusion
+    (LFI) or remote file inclusion (RFI) if user input reaches this statement. LFI
+    and RFI could lead to sensitive files being obtained by attackers. Instead, explicitly
+    specify what to include. If that is not a viable solution, validate user input
+    thoroughly.
+  metadata:
+    cwe:
+    - 'CWE-98: Improper Control of Filename for Include/Require Statement in PHP Program
+      (''PHP Remote File Inclusion'')'
+    references:
+    - https://www.php.net/manual/en/function.include.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/EasyRFISniff.php
+    - https://en.wikipedia.org/wiki/File_inclusion_vulnerability#Types_of_Inclusion
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2021 - Injection
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.lang.security.file-inclusion.file-inclusion
+    shortlink: https://sg.run/Ge56
+    semgrep.dev:
+      rule:
+        rule_id: lBU90N
+        version_id: 8KTo3Z
+        url: https://semgrep.dev/playground/r/8KTo3Z/php.lang.security.file-inclusion.file-inclusion
+  languages:
+  - php
+  severity: ERROR
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: "$_GET"
+      - pattern: "$_POST"
+      - pattern: "$_COOKIE"
+      - pattern: "$_REQUEST"
+      - pattern: "$_SERVER"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: basename($PATH, ...)
+      - pattern-inside: linkinfo($PATH, ...)
+      - pattern-inside: readlink($PATH, ...)
+      - pattern-inside: realpath($PATH, ...)
+      - pattern-inside: include_safe(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$FUNC(...);"
+    - pattern: "$VAR"
+    - metavariable-regex:
+        metavariable: "$FUNC"
+        regex: "\\b(include|include_once|require|require_once)\\b"
 - id: php.lang.security.ftp-use.ftp-use
   patterns:
   - pattern: "$FUNC(...);"
@@ -15423,6 +15325,41 @@ rules:
   languages:
   - php
   severity: WARNING
+- id: php.lang.security.weak-crypto.weak-crypto
+  patterns:
+  - pattern: "$FUNC(...);"
+  - metavariable-regex:
+      metavariable: "$FUNC"
+      regex: crypt|md5|md5_file|sha1|sha1_file|str_rot13
+  message: Detected usage of weak crypto function. Consider using stronger alternatives.
+  metadata:
+    cwe:
+    - 'CWE-328: Use of Weak Hash'
+    references:
+    - https://www.php.net/manual/en/book.sodium.php
+    - https://github.com/FloeDesignTechnologies/phpcs-security-audit/blob/master/Security/Sniffs/BadFunctions/CryptoFunctionsSniff.php
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.lang.security.weak-crypto.weak-crypto
+    shortlink: https://sg.run/KlBn
+    semgrep.dev:
+      rule:
+        rule_id: BYUNAg
+        version_id: e1TEAv
+        url: https://semgrep.dev/playground/r/e1TEAv/php.lang.security.weak-crypto.weak-crypto
+  languages:
+  - php
+  severity: ERROR
 - id: php.symfony.security.audit.symfony-csrf-protection-disabled.symfony-csrf-protection-disabled
   patterns:
   - pattern-either:
@@ -15565,6 +15502,441 @@ rules:
   languages:
   - php
   severity: WARNING
+- id: php.wordpress-plugins.security.audit.wp-ajax-no-auth-and-auth-hooks-audit.wp-ajax-no-auth-and-auth-hooks-audit
+  patterns:
+  - pattern: add_action($HOOK,...)
+  - metavariable-regex:
+      metavariable: "$HOOK"
+      regex: "'wp_ajax_.*'"
+  message: These hooks allow the developer to handle the custom AJAX endpoints."wp_ajax_$action"
+    hook get fires for any authenticated user and "wp_ajax_nopriv_$action" hook get
+    fires for non-authenticated users.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: MEDIUM
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#authorisation
+    - https://developer.wordpress.org/reference/hooks/wp_ajax_action/
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-285: Improper Authorization'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-ajax-no-auth-and-auth-hooks-audit.wp-ajax-no-auth-and-auth-hooks-audit
+    shortlink: https://sg.run/B0eA
+    semgrep.dev:
+      rule:
+        rule_id: DbUe2y
+        version_id: jQT0JK
+        url: https://semgrep.dev/playground/r/jQT0JK/php.wordpress-plugins.security.audit.wp-ajax-no-auth-and-auth-hooks-audit.wp-ajax-no-auth-and-auth-hooks-audit
+- id: php.wordpress-plugins.security.audit.wp-authorisation-checks-audit.wp-authorisation-checks-audit
+  patterns:
+  - pattern: "$FUNCTION(...)"
+  - metavariable-regex:
+      metavariable: "$FUNCTION"
+      regex: current_user_can|is_admin|is_user_logged_in|is_user_admin
+  message: These are some of the patterns used for authorisation. Look properly if
+    the authorisation is proper or not.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: MEDIUM
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#authorisation
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-285: Improper Authorization'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-authorisation-checks-audit.wp-authorisation-checks-audit
+    shortlink: https://sg.run/DqeP
+    semgrep.dev:
+      rule:
+        rule_id: WAU6YK
+        version_id: 1QTwQx
+        url: https://semgrep.dev/playground/r/1QTwQx/php.wordpress-plugins.security.audit.wp-authorisation-checks-audit.wp-authorisation-checks-audit
+- id: php.wordpress-plugins.security.audit.wp-code-execution-audit.wp-code-execution-audit
+  patterns:
+  - pattern-either:
+    - pattern: eval(...)
+    - pattern: assert(...)
+    - pattern: call_user_func(...)
+  message: These functions can lead to code injection if the data inside them is user-controlled.
+    Don't use the input directly or validate the data properly before passing it to
+    these functions.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#php-code-execution
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-code-execution-audit.wp-code-execution-audit
+    shortlink: https://sg.run/WKD2
+    semgrep.dev:
+      rule:
+        rule_id: 0oU6pX
+        version_id: 9lT96D
+        url: https://semgrep.dev/playground/r/9lT96D/php.wordpress-plugins.security.audit.wp-code-execution-audit.wp-code-execution-audit
+- id: php.wordpress-plugins.security.audit.wp-command-execution-audit.wp-command-execution-audit
+  patterns:
+  - pattern-either:
+    - pattern: system(...)
+    - pattern: exec(...)
+    - pattern: passthru(...)
+    - pattern: shell_exec(...)
+  message: These functions can lead to command execution if the data inside them is
+    user-controlled. Don't use the input directly or validate the data properly before
+    passing it to these functions.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#command-execution
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - 'CWE-78: Improper Neutralization of Special Elements used in an OS Command (''OS
+      Command Injection'')'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-command-execution-audit.wp-command-execution-audit
+    shortlink: https://sg.run/01Wj
+    semgrep.dev:
+      rule:
+        rule_id: KxUOw0
+        version_id: yeTW5k
+        url: https://semgrep.dev/playground/r/yeTW5k/php.wordpress-plugins.security.audit.wp-command-execution-audit.wp-command-execution-audit
+- id: php.wordpress-plugins.security.audit.wp-csrf-audit.wp-csrf-audit
+  pattern: check_ajax_referer(...,...,false)
+  message: Passing false or 0 as the third argument to this function will not cause
+    the script to die, making the check useless.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: MEDIUM
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#cross-site-request-forgery-csrf
+    - https://developer.wordpress.org/reference/functions/check_ajax_referer/
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-csrf-audit.wp-csrf-audit
+    shortlink: https://sg.run/K2y5
+    semgrep.dev:
+      rule:
+        rule_id: qNUKpk
+        version_id: rxTJGy
+        url: https://semgrep.dev/playground/r/rxTJGy/php.wordpress-plugins.security.audit.wp-csrf-audit.wp-csrf-audit
+- id: php.wordpress-plugins.security.audit.wp-file-download-audit.wp-file-download-audit
+  patterns:
+  - pattern-either:
+    - pattern: file(...)
+    - pattern: readfile(...)
+    - pattern: file_get_contents(...)
+  message: These functions can be used to read to content of the files if the data
+    inside is user-controlled. Don't use the input directly or validate the data properly
+    before passing it to these functions.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: MEDIUM
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-download
+    cwe:
+    - 'CWE-73: External Control of File Name or Path'
+    owasp:
+    - A01:2021 - Broken Access Control
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-download-audit.wp-file-download-audit
+    shortlink: https://sg.run/4gkz
+    semgrep.dev:
+      rule:
+        rule_id: lBUNXL
+        version_id: bZTg6R
+        url: https://semgrep.dev/playground/r/bZTg6R/php.wordpress-plugins.security.audit.wp-file-download-audit.wp-file-download-audit
+- id: php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
+  patterns:
+  - pattern-either:
+    - pattern: include(...)
+    - pattern: require(...)
+    - pattern: include_once(...)
+    - pattern: require_once(...)
+    - pattern: fread(...)
+  message: These functions can lead to Local File Inclusion (LFI) or Remote File Inclusion
+    (RFI) if the data inside is user-controlled. Validate the data properly before
+    passing it to these functions.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-inclusion
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    - 'CWE-73: The software allows user input to control or influence paths of file
+      names that are used in filesystem operations.'
+    - 'CWE-98: Improper Control of Filename for Include/Require Statement in PHP Program
+      (''PHP Remote File Inclusion'')'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
+    shortlink: https://sg.run/PGPW
+    semgrep.dev:
+      rule:
+        rule_id: YGU8Yo
+        version_id: NdTpr9
+        url: https://semgrep.dev/playground/r/NdTpr9/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
+- id: php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
+  patterns:
+  - pattern-either:
+    - pattern: unlink(...)
+    - pattern: wp_delete_file(...)
+  message: These functions can be used to delete the files if the data inside the
+    functions are user controlled. Use these functions carefully.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#file-manipulation
+    owasp:
+    - A01:2021 - Broken Access Control
+    - A08:2021 - Software and Data Integrity Failures
+    cwe:
+    - 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    - 'CWE-73: The software allows user input to control or influence paths of file
+      names that are used in filesystem operations.'
+    - 'CWE-98: Improper Control of Filename for Include/Require Statement in PHP Program
+      (''PHP Remote File Inclusion'')'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
+    shortlink: https://sg.run/JpwW
+    semgrep.dev:
+      rule:
+        rule_id: 6JU0yK
+        version_id: kbTyek
+        url: https://semgrep.dev/playground/r/kbTyek/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
+- id: php.wordpress-plugins.security.audit.wp-open-redirect-audit.wp-open-redirect-audit
+  pattern: wp_redirect(...)
+  message: This function can be used to redirect to user supplied URLs. If user input
+    is not sanitised or validated, this could lead to Open Redirect vulnerabilities.
+    Use "wp_safe_redirect()" to prevent this kind of attack.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: MEDIUM
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#open-redirect
+    - https://developer.wordpress.org/reference/functions/wp_safe_redirect/
+    cwe:
+    - 'CWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-open-redirect-audit.wp-open-redirect-audit
+    shortlink: https://sg.run/5nZX
+    semgrep.dev:
+      rule:
+        rule_id: oqU5KY
+        version_id: w8TBy8
+        url: https://semgrep.dev/playground/r/w8TBy8/php.wordpress-plugins.security.audit.wp-open-redirect-audit.wp-open-redirect-audit
+- id: php.wordpress-plugins.security.audit.wp-php-object-injection-audit.wp-php-object-injection-audit
+  patterns:
+  - pattern-either:
+    - pattern: unserialize(...)
+    - pattern: maybe_unserialize(...)
+  message: If the data used inside the patterns are directly used without proper sanitization,
+    then this could lead to PHP Object Injection. Do not use these function with user-supplied
+    input, use JSON functions instead.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#php-object-injection
+    - https://owasp.org/www-community/vulnerabilities/PHP_Object_Injection
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    owasp:
+    - A03:2021 - Injection
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-php-object-injection-audit.wp-php-object-injection-audit
+    shortlink: https://sg.run/G6X2
+    semgrep.dev:
+      rule:
+        rule_id: zdUelq
+        version_id: xyTDQ2
+        url: https://semgrep.dev/playground/r/xyTDQ2/php.wordpress-plugins.security.audit.wp-php-object-injection-audit.wp-php-object-injection-audit
+- id: php.wordpress-plugins.security.audit.wp-sql-injection-audit.wp-sql-injection-audit
+  patterns:
+  - pattern-either:
+    - pattern: "$wpdb->query(...)"
+    - pattern: "$wpdb->get_var(...)"
+    - pattern: "$wpdb->get_row(...)"
+    - pattern: "$wpdb->get_col(...)"
+    - pattern: "$wpdb->get_results(...)"
+    - pattern: "$wpdb->replace(...)"
+  - pattern-not: "$wpdb->prepare(...)"
+  - pattern-not: "$wpdb->delete(...)"
+  - pattern-not: "$wpdb->update(...)"
+  - pattern-not: "$wpdb->insert(...)"
+  message: Detected unsafe API methods. This could lead to SQL Injection if the used
+    variable in the functions are user controlled and not properly escaped or sanitized.
+    In order to prevent SQL Injection, use safe api methods like "$wpdb->prepare"
+    properly or escape/sanitize the data properly.
+  paths:
+    include:
+    - wp-content/plugins/**/*.php
+  languages:
+  - php
+  severity: WARNING
+  metadata:
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - Wordpress Plugins
+    references:
+    - https://github.com/wpscanteam/wpscan/wiki/WordPress-Plugin-Security-Testing-Cheat-Sheet#sql-injection
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    owasp:
+    - A03:2021 - Injection
+    cwe:
+    - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-sql-injection-audit.wp-sql-injection-audit
+    shortlink: https://sg.run/RAbe
+    semgrep.dev:
+      rule:
+        rule_id: pKUQN1
+        version_id: O9T2R6
+        url: https://semgrep.dev/playground/r/O9T2R6/php.wordpress-plugins.security.audit.wp-sql-injection-audit.wp-sql-injection-audit
 - id: problem-based-packs.insecure-transport.java-stdlib.socket-request.socket-request
   message: Insecure transport rules to catch socket connections to http, telnet, and
     ftp servers. This is dangerous because these are protocols that do not encrypt
@@ -23889,6 +24261,179 @@ rules:
   - pattern-not: "<%= j ... >"
   - pattern-not: "<%= escape_javascript ... >"
   - pattern: "<%= ... >"
+- id: ruby.rails.security.brakeman.check-cookie-store-session-security-attributes.check-cookie-store-session-security-attributes
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: ":$KEY => false\n"
+      - pattern-inside: 'ActionController::Base.session = {...}
+
+          '
+    - pattern: 'Rails3::Application.config.session_store :cookie_store, ..., :$KEY
+        => false, ...
+
+        '
+    - pattern: 'Rails.application.config.session_store :cookie_store, ..., $KEY: false
+
+        '
+  - metavariable-regex:
+      metavariable: "$KEY"
+      regex: "^(session_)?(http_?only|secure)$"
+  message: Found a Rails `cookie_store` session configuration setting the `$KEY` attribute
+    to `false`. If using a cookie-based session store, the HttpOnly and Secure flags
+    should be set.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_session_settings.rb
+    category: security
+    cwe:
+    - 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ruby.rails.security.brakeman.check-cookie-store-session-security-attributes.check-cookie-store-session-security-attributes
+    shortlink: https://sg.run/WDYA
+    semgrep.dev:
+      rule:
+        rule_id: KxUw3v
+        version_id: ZRTBJB
+        url: https://semgrep.dev/playground/r/ZRTBJB/ruby.rails.security.brakeman.check-cookie-store-session-security-attributes.check-cookie-store-session-security-attributes
+- id: ruby.rails.security.brakeman.check-permit-attributes-high.check-permit-attributes-high
+  patterns:
+  - pattern: "$P.permit($ATTRIBUTE)"
+  - metavariable-regex:
+      metavariable: "$ATTRIBUTE"
+      regex: ".*(admin|account_id).*"
+  message: Calling `permit` on security-critical properties like `$ATTRIBUTE` may
+    leave your application vulnerable to mass assignment.
+  languages:
+  - ruby
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_permit_attributes.rb
+    category: security
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object
+      Attributes'
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ruby.rails.security.brakeman.check-permit-attributes-high.check-permit-attributes-high
+    shortlink: https://sg.run/4k0Z
+    semgrep.dev:
+      rule:
+        rule_id: 5rUNql
+        version_id: 7ZT5w6
+        url: https://semgrep.dev/playground/r/7ZT5w6/ruby.rails.security.brakeman.check-permit-attributes-high.check-permit-attributes-high
+- id: ruby.rails.security.brakeman.check-permit-attributes-medium.check-permit-attributes-medium
+  patterns:
+  - pattern: "$P.permit($ATTRIBUTE)"
+  - metavariable-regex:
+      metavariable: "$ATTRIBUTE"
+      regex: ".*(role|banned).*"
+  message: Calling `permit` on security-critical properties like `$ATTRIBUTE` may
+    leave your application vulnerable to mass assignment.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_permit_attributes.rb
+    category: security
+    cwe:
+    - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object
+      Attributes'
+    owasp:
+    - A08:2021 - Software and Data Integrity Failures
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ruby.rails.security.brakeman.check-permit-attributes-medium.check-permit-attributes-medium
+    shortlink: https://sg.run/PPLE
+    semgrep.dev:
+      rule:
+        rule_id: GdUoq5
+        version_id: LjTxJD
+        url: https://semgrep.dev/playground/r/LjTxJD/ruby.rails.security.brakeman.check-permit-attributes-medium.check-permit-attributes-medium
+- id: ruby.rails.security.brakeman.check-rails-secret-yaml.check-rails-secret-yaml
+  paths:
+    include:
+    - "*secrets.*.yml"
+    - "*secrets.*.yaml"
+  patterns:
+  - pattern: 'secret_key_base: $VALUE
+
+      '
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      language: generic
+      patterns:
+      - pattern-not: "<%= ... %>\n"
+  - pattern-inside: |
+      production:
+        ...
+  message: "$VALUE Found a string literal assignment to a production Rails session
+    secret in `secrets.yaml`. Do not commit secret values to source control! Any user
+    in possession of this value may falsify arbitrary session data in your application.
+    \ Read this value from an environment variable, KMS, or file on disk outside of
+    source control."
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_session_settings.rb
+    category: security
+    cwe:
+    - 'CWE-540: Inclusion of Sensitive Information in Source Code'
+    owasp:
+    - A01:2021 - Broken Access Control
+    technology:
+    - ruby
+    - rails
+    references:
+    - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails4/config/secrets.yml
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ruby.rails.security.brakeman.check-rails-secret-yaml.check-rails-secret-yaml
+    shortlink: https://sg.run/0Wvb
+    semgrep.dev:
+      rule:
+        rule_id: qNUpJ5
+        version_id: 8KTW07
+        url: https://semgrep.dev/playground/r/8KTW07/ruby.rails.security.brakeman.check-rails-secret-yaml.check-rails-secret-yaml
 - id: ruby.rails.security.injection.rails-check-json-parsing-rce.rails-check-json-parsing-rce
   patterns:
   - pattern-either:
@@ -29131,6 +29676,103 @@ rules:
     - pattern: torch.utils.data.DataLoader(...)
     - pattern-not: torch.utils.data.DataLoader(..., pin_memory=$VALUE, ...)
   - pattern: torch.utils.data.DataLoader(..., pin_memory=False, ...)
+- id: trailofbits.python.numpy-distutils.numpy-distutils
+  message: NumPy distutils is deprecated, and will be removed in the future
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - numpy
+    description: Use of deprecated `numpy.distutils`
+    references:
+    - https://numpy.org/doc/stable/reference/distutils.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.numpy-distutils.numpy-distutils
+    shortlink: https://sg.run/rqGP
+    semgrep.dev:
+      rule:
+        rule_id: GdUgN8
+        version_id: yeT4Wg
+        url: https://semgrep.dev/playground/r/yeT4Wg/trailofbits.python.numpy-distutils.numpy-distutils
+  patterns:
+  - pattern: 'import numpy.distutils
+
+      '
+- id: trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+  message: Compiling arbitrary code can result in code execution. Ensure the source
+    code is from a trusted location
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - numpy
+    description: Potential arbitrary code execution from `NumPy` `f2py` compilation
+    references:
+    - https://numpy.org/doc/stable/f2py/usage.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+    shortlink: https://sg.run/bEdP
+    semgrep.dev:
+      rule:
+        rule_id: ReUdJ0
+        version_id: rxTpJK
+        url: https://semgrep.dev/playground/r/rxTpJK/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+  patterns:
+  - pattern: numpy.f2py.compile(...)
+  - pattern-not: numpy.f2py.compile("...", ...)
+- id: trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+  message: 'Using the NumPy RNG inside of a PyTorch dataset can lead to a number of
+    issues with loading data, including identical augmentations. Instead, use the
+    random number generators built into Python and PyTorch '
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-330: Use of Insufficiently Random Values'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - pytorch
+    - numpy
+    description: Calls to the `NumPy` RNG inside of a `Torch` dataset
+    references:
+    - https://tanelp.github.io/posts/a-bug-that-plagues-thousands-of-open-source-ml-projects
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+    shortlink: https://sg.run/dnR6
+    semgrep.dev:
+      rule:
+        rule_id: KxURLn
+        version_id: bZT7gd
+        url: https://semgrep.dev/playground/r/bZT7gd/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+  patterns:
+  - pattern: |
+      class $X(torch.utils.data.Dataset):
+        ...
+        def __getitem__(...):
+          ...
+          numpy.random.randint(...)
+          ...
 - id: trailofbits.python.numpy-in-torch-datasets.numpy-in-torch-datasets
   message: 'Using the NumPy RNG inside of a Torch dataset can lead to a number of
     issues with loading data, including identical augmentations. Instead, use the
@@ -29164,6 +29806,184 @@ rules:
           ...
           numpy.random.randint(...)
           ...
+- id: trailofbits.python.numpy-load-library.numpy-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - numpy
+    description: Potential arbitrary code execution from `NumPy` library loading
+    references:
+    - https://numpy.org/doc/stable/reference/routines.ctypeslib.html#numpy.ctypeslib.load_library
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.numpy-load-library.numpy-load-library
+    shortlink: https://sg.run/NXkL
+    semgrep.dev:
+      rule:
+        rule_id: AbUxDq
+        version_id: kbTByq
+        url: https://semgrep.dev/playground/r/kbTByq/trailofbits.python.numpy-load-library.numpy-load-library
+  patterns:
+  - pattern: numpy.ctypeslib.load_library(...)
+  - pattern-not: numpy.ctypeslib.load_library("...", "...")
+- id: trailofbits.python.onnx-session-options.onnx-session-options
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - onnx
+    description: Potential arbitrary code execution from `ONNX` library loading
+    references:
+    - https://onnxruntime.ai/docs/reference/operators/add-custom-op.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.onnx-session-options.onnx-session-options
+    shortlink: https://sg.run/kRd1
+    semgrep.dev:
+      rule:
+        rule_id: BYUoqy
+        version_id: w8TPBe
+        url: https://semgrep.dev/playground/r/w8TPBe/trailofbits.python.onnx-session-options.onnx-session-options
+  patterns:
+  - pattern-inside: |
+      $SESSION = onnxruntime.SessionOptions(...)
+      ...
+  - pattern: "$SESSION.register_custom_ops_library(...)"
+  - pattern-not: $SESSION.register_custom_ops_library("...")
+- id: trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pytorch
+    description: Potential arbitrary code execution from `PyTorch` library loading
+    references:
+    - https://pytorch.org/tutorials/advanced/torch_script_custom_classes.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+    shortlink: https://sg.run/nD6d
+    semgrep.dev:
+      rule:
+        rule_id: lBUYD9
+        version_id: d6T00r
+        url: https://semgrep.dev/playground/r/d6T00r/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+  patterns:
+  - pattern: torch.classes.load_library(...)
+  - pattern-not: torch.classes.load_library("...")
+- id: trailofbits.python.pytorch-package.pytorch-package
+  message: Avoid importing torch.package - it can result in arbitrary code execution
+    via pickle
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pytorch
+    description: Potential arbitrary code execution from `torch.package`
+    references:
+    - https://pytorch.org/docs/1.13/package.html#torch-package
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.pytorch-package.pytorch-package
+    shortlink: https://sg.run/EK35
+    semgrep.dev:
+      rule:
+        rule_id: PeUKGk
+        version_id: ZRT996
+        url: https://semgrep.dev/playground/r/ZRT996/trailofbits.python.pytorch-package.pytorch-package
+  pattern: import torch.package
+- id: trailofbits.python.tensorflow-load-library.tensorflow-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - tensorflow
+    description: Potential arbitrary code execution from `TensorFlow` library loading
+    references:
+    - https://www.tensorflow.org/api_docs/python/tf/load_library
+    - https://www.tensorflow.org/api_docs/python/tf/load_op_library
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.tensorflow-load-library.tensorflow-load-library
+    shortlink: https://sg.run/xp0j
+    semgrep.dev:
+      rule:
+        rule_id: WAUgBJ
+        version_id: LjTWWr
+        url: https://semgrep.dev/playground/r/LjTWWr/trailofbits.python.tensorflow-load-library.tensorflow-load-library
+  patterns:
+  - pattern-either:
+    - pattern: tensorflow.load_library(...)
+    - pattern: tensorflow.load_op_library(...)
+  - pattern-not: tensorflow.load_library("...")
+  - pattern-not: tensorflow.load_op_library("...")
+- id: trailofbits.python.torch-classes-load-library.torch-classes-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://pytorch.org/tutorials/advanced/torch_script_custom_classes.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.torch-classes-load-library.torch-classes-load-library
+    shortlink: https://sg.run/Oj37
+    semgrep.dev:
+      rule:
+        rule_id: 0oUZN9
+        version_id: nWTb2o
+        url: https://semgrep.dev/playground/r/nWTb2o/trailofbits.python.torch-classes-load-library.torch-classes-load-library
+  patterns:
+  - pattern: torch.classes.load_library(...)
+  - pattern-not: torch.classes.load_library("...")
 - id: trailofbits.python.torch-package.torch-package
   message: Avoid importing torch.package - it can result in arbitrary code execution
     via pickle
@@ -29190,6 +30010,63 @@ rules:
         version_id: ExTLEE
         url: https://semgrep.dev/playground/r/ExTLEE/trailofbits.python.torch-package.torch-package
   pattern: import torch.package
+- id: trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+  message: "`expect` or `unwrap` called in function returning a `Result`"
+  languages:
+  - rust
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-755: Improper Handling of Exceptional Conditions'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - "--no-technology--"
+    description: Calling `unwrap` or `expect` in a function returning a `Result`
+    references:
+    - https://doc.rust-lang.org/std/result/
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+    shortlink: https://sg.run/WpeL
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUPQ3
+        version_id: gETRRJ
+        url: https://semgrep.dev/playground/r/gETRRJ/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+  patterns:
+  - pattern-either:
+    - pattern: "$EXPR.unwrap()"
+    - pattern: "$EXPR.expect(...)"
+  - pattern-either:
+    - pattern-inside: |
+        fn $FUNC(...) -> Result<$T1, $T2> {
+            ...
+        }
+    - pattern-inside: |
+        fn $FUNC(...) -> Result<$T> {
+            ...
+        }
+    - patterns:
+      - pattern-inside: |
+          fn $FUNC(...) -> $RETTYPE {
+              ...
+          }
+      - pattern-either:
+        - pattern-inside: |
+            type $RETTYPE = Result<$T>;
+            ...
+            fn $FUNC(...) -> $RETTYPE {
+                ...
+            }
+        - pattern-inside: |
+            type $RETTYPE = Result<$T1, $T2>;
+            ...
+            fn $FUNC(...) -> $RETTYPE {
+                ...
+            }
 - id: typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard
   message: 'Unescaped ''.'' character in CORS domain regex $CORS: $PATTERN'
   metadata:
@@ -29399,6 +30276,147 @@ rules:
   patterns:
   - pattern: a()
   - pattern: b()
+- id: typescript.react.security.audit.react-href-var.react-href-var
+  message: Detected a variable used in an anchor tag with the 'href' attribute. A
+    malicious actor may be able to input the 'javascript:' URI, which could cause
+    cross-site scripting (XSS). It is recommended to disallow 'javascript:' URIs within
+    your application.
+  metadata:
+    cwe:
+    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    owasp:
+    - A07:2017 - Cross-Site Scripting (XSS)
+    - A03:2021 - Injection
+    references:
+    - https://reactjs.org/blog/2019/08/08/react-v16.9.0.html#deprecating-javascript-urls
+    - https://pragmaticwebsecurity.com/articles/spasecurity/react-xss-part1.html
+    category: security
+    confidence: LOW
+    technology:
+    - react
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    source: https://semgrep.dev/r/typescript.react.security.audit.react-href-var.react-href-var
+    shortlink: https://sg.run/bDZZ
+    semgrep.dev:
+      rule:
+        rule_id: OrUGkk
+        version_id: K3T60z
+        url: https://semgrep.dev/playground/r/K3T60z/typescript.react.security.audit.react-href-var.react-href-var
+  languages:
+  - typescript
+  - javascript
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: 'function ...({..., $X, ...}) { ... }
+
+          '
+      - pattern-inside: 'function ...(..., $X, ...) { ... }
+
+          '
+    - focus-metavariable: "$X"
+    - pattern-either:
+      - pattern: "$X.$Y"
+      - pattern: "$X[...]"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - focus-metavariable: "$X"
+        - pattern-not-inside: |
+            import {
+              ...,$X,...
+            } from "..."
+            ...
+        - pattern-not-inside: "<Buttons .../>\n"
+        - pattern-not-inside: "<Button .../>\n"
+        - pattern-not-inside: "<AnchorButton .../>\n"
+        - pattern-not-inside: "<$EL ... href={$FUNC($X)}></$EL>\n"
+        - pattern-not-inside: |
+            import $X from "..."
+            ...
+        - pattern-not-inside: |
+            import $X from "..."
+            ...
+        - pattern-not-inside: |
+            import * as $X from "..."
+            ...
+        - pattern-not-inside: |
+            $X = require(...)
+            ...
+        - pattern-either:
+          - pattern: "<$EL href={$X} />\n"
+          - pattern: "<$EL href={`${$X}...`} />\n"
+          - pattern: 'React.createElement($EL, {href: $X})
+
+              '
+          - pattern-inside: |
+              $PARAMS = {href: $X};
+              ...
+              React.createElement($EL, $PARAMS);
+        - pattern-not: '<$EL href="..." />
+
+            '
+        - pattern-not: '<$EL href={"..."+$X} />
+
+            '
+        - pattern-not: "React.createElement($EL, {href: \"...\"})        \n"
+        - pattern-not: '$PARAMS = {href: "..."};
+
+            '
+        - metavariable-pattern:
+            patterns:
+            - pattern-not: "$FOO + $VALUE\n"
+            - pattern-not: '"..." + $F
+
+                '
+            - pattern-not: "`...${$F}...`\n"
+            metavariable: "$X"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: "$A ? $VAL1 : $VAL2\n"
+      - pattern: "$A ? $VAL2 : $VAL1\n"
+    - metavariable-pattern:
+        patterns:
+        - pattern: "`${...}...`\n"
+        - pattern-not: '"..."
+
+            '
+        - pattern-not: '"..." + $V
+
+            '
+        - pattern-not: "`...${...}...`\n"
+        metavariable: "$VAL1"
+    - focus-metavariable: "$VAL1"
+  - patterns:
+    - pattern-either:
+      - pattern: validateUrl(...)
+      - pattern: getSanitizedUrl(...)
+  - patterns:
+    - pattern: "`...${$X}...`\n"
+    - pattern-not: "`${$X}...`\n"
+    - focus-metavariable: "$X"
+  - patterns:
+    - pattern: '"..." + $VALUE
+
+        '
+  - patterns:
+    - pattern-inside: "if (<... $SOURCE.startsWith(\"$REGEX\") ...>) { \n    ... \n}\n"
+  - patterns:
+    - pattern-inside: |
+        $X = [{...}];
+        ...
+    - pattern: "$X.map(...)"
 - id: typescript.react.security.audit.react-http-leak.react-http-leak
   message: this rule has been deprecated.
   metadata:
@@ -29513,6 +30531,41 @@ rules:
         $DECODED = jwt_decode(...);
         ...
         localStorage.setItem($NAME, <... $DECODED ...>);
+- id: typescript.react.security.audit.react-missing-noopener.react-missing-noopener
+  message: This rule has been deprecated
+  metadata:
+    cwe:
+    - 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
+    - https://web.dev/external-anchors-use-rel-noopener/
+    - https://owasp.org/www-community/attacks/Reverse_Tabnabbing
+    category: security
+    technology:
+    - react
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/typescript.react.security.audit.react-missing-noopener.react-missing-noopener
+    shortlink: https://sg.run/O19e
+    semgrep.dev:
+      rule:
+        rule_id: nJUYOZ
+        version_id: NdT5gb
+        url: https://semgrep.dev/playground/r/NdT5gb/typescript.react.security.audit.react-missing-noopener.react-missing-noopener
+  languages:
+  - typescript
+  - javascript
+  severity: INFO
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: typescript.react.security.audit.react-props-injection.react-props-injection
   message: this rule has been deprecated.
   metadata:
@@ -30377,6 +31430,60 @@ rules:
         rule_id: ZqUqeK
         version_id: YDT1ER
         url: https://semgrep.dev/playground/r/YDT1ER/yaml.kubernetes.security.run-as-non-root.run-as-non-root
+  languages:
+  - yaml
+  severity: WARNING
+- id: yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container
+  patterns:
+  - pattern-inside: |
+      containers:
+        ...
+  - pattern-inside: |
+      - name: $CONTAINER
+        ...
+  - pattern: |
+      image: ...
+      ...
+  - pattern-not: |
+      image: ...
+      ...
+      securityContext:
+        ...
+        readOnlyRootFilesystem: true
+  - focus-metavariable: "$CONTAINER"
+  message: 'Container $CONTAINER is running with a writable root filesystem. This
+    may allow malicious applications to download and run additional payloads, or modify
+    container files. If an application inside a container has to save something temporarily
+    consider using a tmpfs. Add ''readOnlyRootFilesystem: true'' to this container
+    to prevent this.'
+  metadata:
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#volumes-and-file-systems
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    - https://blog.atomist.com/security-of-docker-kubernetes/
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-8-set-filesystem-and-volumes-to-read-only
+    category: security
+    technology:
+    - kubernetes
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container
+    shortlink: https://sg.run/ZePL
+    semgrep.dev:
+      rule:
+        rule_id: nJUYn9
+        version_id: l4Tegj
+        url: https://semgrep.dev/playground/r/l4Tegj/yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container
   languages:
   - yaml
   severity: WARNING

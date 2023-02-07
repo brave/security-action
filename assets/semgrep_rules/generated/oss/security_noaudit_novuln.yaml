@@ -1,0 +1,4309 @@
+---
+rules:
+- id: gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $FUNC(..., $VAR, ...) {
+          ...
+        }
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: |
+        $FUNC(...) {
+          ...
+          $VAR = ... + $X;
+          ...
+        }
+    - pattern: "$VAR"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $REQ = new SelectRequest($QUERY, ...);
+          ...
+          $DB.select($REQ);
+      - pattern-inside: "$DB.select(new SelectRequest($QUERY,...));\n"
+      - pattern-inside: "$DB.select((SelectRequest $SR).withSelectExpression($QUERY,...));\n"
+    - pattern: "$QUERY"
+    - metavariable-pattern:
+        metavariable: "$DB"
+        pattern-either:
+        - pattern: "(AmazonSimpleDB $DB)"
+        - pattern: "(AmazonSimpleDBClient $DB)"
+  message: |
+    Constructing SimpleDB queries containing user input can allow an attacker to view unauthorized
+    records.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
+    shortlink: https://sg.run/ALZ6
+    semgrep.dev:
+      rule:
+        rule_id: QrU1JP
+        version_id: NdTKQn
+        url: https://semgrep.dev/playground/r/NdTKQn/gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
+- id: gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
+  patterns:
+  - pattern: |
+      $B_ARR = (java.security.MessageDigest $MD).digest(...);
+      ...
+      for(...) {
+        ...
+        Integer.toHexString(...);
+      }
+  languages:
+  - java
+  message: |
+    When converting a byte array containing a hash signature to a human readable string, a
+    conversion mistake can be made if the array is read byte by byte.
+  metadata:
+    cwe: 'CWE-704: Incorrect Type Conversion or Cast'
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
+    shortlink: https://sg.run/kD4K
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUd06
+        version_id: l4TKeb
+        url: https://semgrep.dev/playground/r/l4TKeb/gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
+  patterns:
+  - pattern-inside: "$TYPE $FUNC(..., HttpServletRequest $REQ, ...) { ... }"
+  - pattern-either:
+    - pattern: |
+        $MAP.put(..., $REQ.getParameter(...));
+        ...
+        $BEAN_UTIL.populate(..., $MAP);
+    - pattern: |
+        while (...) {
+            ...
+            $MAP.put(..., $REQ.getParameterValues(...));
+        }
+        ...
+        $BEAN_UTIL.populate(..., $MAP);
+  - metavariable-pattern:
+      metavariable: "$BEAN_UTIL"
+      pattern-either:
+      - pattern: "(BeanUtilsBean $B)"
+      - pattern: new BeanUtilsBean()
+      - pattern: org.apache.commons.beanutils.BeanUtils
+  message: |
+    An attacker can set arbitrary bean properties that can compromise system integrity. An
+    attacker can leverage this functionality to access special bean properties like
+    class.classLoader that will allow them to override system properties and potentially execute
+    arbitrary code.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-15: External Control of System or Configuration Setting'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
+    shortlink: https://sg.run/Ben9
+    semgrep.dev:
+      rule:
+        rule_id: 3qULd8
+        version_id: kbTBrK
+        url: https://semgrep.dev/playground/r/kbTBrK/gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
+- id: gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
+  patterns:
+  - pattern-inside: |
+      $KEYGEN = javax.crypto.KeyGenerator.getInstance("Blowfish", ...);
+      ...
+      $KEYGEN.init($KEY_SIZE);
+  - metavariable-comparison:
+      metavariable: "$KEY_SIZE"
+      comparison: "$KEY_SIZE < 128"
+  message: |
+    A small key size makes the ciphertext vulnerable to brute force attacks. At least 128 bits of
+    entropy should be used when generating the key if use of Blowfish is required.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
+    shortlink: https://sg.run/NjB1
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUd1P
+        version_id: GxTnWW
+        url: https://semgrep.dev/playground/r/GxTnWW/gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
+- id: gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
+  patterns:
+  - pattern-inside: javax.crypto.Cipher.getInstance("...")
+  - pattern-either:
+    - pattern-regex: "(/CBC/PKCS5Padding)"
+    - pattern-regex: "(AES|DES(ede)?)(/ECB/*)"
+  - pattern-not-regex: ".*/(CCM|CWC|OCB|EAX|GCM)/.*"
+  - pattern-not-regex: "^(RSA)/.*"
+  - pattern-not-regex: "^(ECIES)$"
+  message: |
+    The ciphertext produced is susceptible to alteration by an adversary. This mean that the
+    cipher provides no way to detect that the data has been tampered with. If the ciphertext can be
+    controlled by an attacker, it could be altered without detection.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-353: Missing Support for Integrity Check'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
+    shortlink: https://sg.run/O4Db
+    semgrep.dev:
+      rule:
+        rule_id: 9AUAzy
+        version_id: DkTPeo
+        url: https://semgrep.dev/playground/r/DkTPeo/gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
+- id: gitlab.find_sec_bugs.COMMAND_INJECTION-1
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        $FUNC(...,String $PARAM, ...) {
+          ...
+        }
+    - pattern-either:
+      - pattern: "(Runtime $R).exec($PARAM,...);"
+      - patterns:
+        - pattern-either:
+          - pattern: |
+              $CMDARR = new String[]{"$SHELL",...,$PARAM,...};
+              ...
+              (Runtime $R).exec($CMDARR,...);
+          - pattern: (Runtime $R).exec(new String[]{"$SHELL",...,$PARAM,...}, ...);
+          - pattern: (Runtime $R).exec(java.util.String.format("...", ...,$PARAM,...));
+          - pattern: "(Runtime $R).exec((String $A) + (String $B));"
+        - metavariable-regex:
+            metavariable: "$SHELL"
+            regex: "(/.../)?(sh|bash|ksh|csh|tcsh|zsh)$"
+    - pattern-not: (Runtime $R).exec("...","...","...",...);
+    - pattern-not: '(Runtime $R).exec(new String[]{"...","...","...",...},...);
+
+        '
+  - patterns:
+    - pattern-inside: |
+        $FUNC(...,String $PARAM, ...) {
+          ...
+        }
+    - pattern-either:
+      - pattern: "(ProcessBuilder $PB).command($PARAM,...);"
+      - patterns:
+        - pattern-either:
+          - pattern: (ProcessBuilder $PB).command("$SHELL",...,$PARAM,...);
+          - pattern: |
+              $CMDARR = java.util.Arrays.asList("$SHELL",...,$PARAM,...);
+              ...
+              (ProcessBuilder $PB).command($CMDARR,...);
+          - pattern: (ProcessBuilder $PB).command(java.util.Arrays.asList("$SHELL",...,$PARAM,...),...);
+          - pattern: (ProcessBuilder $PB).command(java.util.String.format("...", ...,$PARAM,...));
+          - pattern: "(ProcessBuilder $PB).command((String $A) + (String $B));"
+        - metavariable-regex:
+            metavariable: "$SHELL"
+            regex: "(/.../)?(sh|bash|ksh|csh|tcsh|zsh)$"
+    - pattern-not: (ProcessBuilder $PB).command("...","...","...",...);
+    - pattern-not: '(ProcessBuilder $PB).command(java.util.Arrays.asList("...","...","...",...));
+
+        '
+  message: |
+    The highlighted API is used to execute a system command. If unfiltered input is passed to this
+    API, it can lead to arbitrary command execution.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
+      (''OS Command Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.COMMAND_INJECTION-1
+    shortlink: https://sg.run/WDoz
+    semgrep.dev:
+      rule:
+        rule_id: PeUjYP
+        version_id: xyTg9v
+        url: https://semgrep.dev/playground/r/xyTg9v/gitlab.find_sec_bugs.COMMAND_INJECTION-1
+- id: gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
+  patterns:
+  - pattern-inside: "(javax.servlet.http.Cookie $C).setMaxAge($AGE);\n"
+  - metavariable-comparison:
+      metavariable: "$AGE"
+      comparison: "$AGE >= 31536000"
+  message: |
+    A new cookie is created without the Secure flag set. The Secure flag is a directive to the
+    browser to make sure that the cookie is not sent for insecure communication (http://)
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
+    shortlink: https://sg.run/2k6Y
+    semgrep.dev:
+      rule:
+        rule_id: KxUwpN
+        version_id: 8KTJL9
+        url: https://semgrep.dev/playground/r/8KTJL9/gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
+- id: gitlab.find_sec_bugs.COOKIE_USAGE-1
+  patterns:
+  - pattern-inside: |
+      $FUNC(..., HttpServletRequest $REQ, ...) {
+        ...
+      }
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          for (Cookie $C : $REQ.getCookies()) {
+              ...
+          }
+      - pattern-either:
+        - pattern: "$C.getName();"
+        - pattern: "$C.getValue();"
+        - pattern: "$C.getPath();"
+    - pattern: "(Cookie $COOKIE).getName();"
+    - pattern: "(Cookie $COOKIE).getValue();"
+    - pattern: "(Cookie $COOKIE).getPath();"
+  message: |
+    The information stored in a custom cookie should not be sensitive or related to the session.
+    In most cases, sensitive data should only be stored in session and referenced by the user's
+    session cookie.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.COOKIE_USAGE-1
+    shortlink: https://sg.run/XWze
+    semgrep.dev:
+      rule:
+        rule_id: qNUpNY
+        version_id: gETR5O
+        url: https://semgrep.dev/playground/r/gETR5O/gitlab.find_sec_bugs.COOKIE_USAGE-1
+- id: gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $TAINTED = (HttpServletRequest $REQ).getParameter(...);
+        ...
+        $LOGGER.$METHOD(...,$TAINTED,...);
+    - pattern: |
+        $TAINTED = (HttpServletRequest $REQ).getParameter(...);
+        ...
+        $VAR = String.Format(..., $TAINTED,...);
+        ...
+        $LOGGER.$METHOD(...,$VAR,...);
+    - pattern: |
+        $TAINTED = (HttpServletRequest $REQ).getParameter(...);
+        ...
+        $LOGGER.$METHOD(...,String.Format(..., $TAINTED,...),...);
+    - pattern: |
+        $TAINTED = (HttpServletRequest $REQ).getParameter(...);
+        ...
+        $VAR = ... + $TAINTED + ...;
+        ...
+        $LOGGER.$METHOD(...,$VAR,...);
+    - pattern: |
+        $TAINTED = (HttpServletRequest $REQ).getParameter(...);
+        ...
+        $LOGGER.$METHOD(...,... + $TAINTED + ...,...);
+  - metavariable-regex:
+      metavariable: "$METHOD"
+      regex: "(log|logp|logrb|entering|exiting|fine|finer|finest|info|debug|trace|warn|warning|config|error|severe)"
+  - metavariable-pattern:
+      metavariable: "$LOGGER"
+      pattern-either:
+      - pattern: "(Logger $LOG)"
+      - pattern: org.pmw.tinylog.Logger
+      - pattern: org.apache.log4j.Logger
+      - pattern: org.apache.logging.log4j.Logger
+      - pattern: org.slf4j.Logger
+      - pattern: org.apache.commons.logging.Log
+      - pattern: java.util.logging.Logger
+  message: |
+    When data from an untrusted source is put into a logger and not neutralized correctly, an
+    attacker could forge log entries or include malicious content. Inserted false entries could be
+    used to skew statistics, distract the administrator or even to implicate another party in the
+    commission of a malicious act. If the log file is processed automatically, the attacker can
+    render the file unusable by corrupting the format of the file or injecting unexpected
+    characters. An attacker may also inject code or other commands into the log file and take
+    advantage of a vulnerability in the log processing utility (e.g. command injection or XSS).
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-93: Improper Neutralization of CRLF Sequences (''CRLF Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
+    shortlink: https://sg.run/De7W
+    semgrep.dev:
+      rule:
+        rule_id: 4bUeor
+        version_id: w8TP49
+        url: https://semgrep.dev/playground/r/w8TP49/gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
+- id: gitlab.find_sec_bugs.CUSTOM_INJECTION-1
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $QUERY = ... + $VAR + ...;
+        ...
+        $ST.executeQuery($QUERY);
+    - pattern: |
+        $QUERY = ... + $VAR ;
+        ...
+        $ST.executeQuery($QUERY);
+    - pattern: |
+        $QUERY = String.format("...",...,$VAR,...);
+        ...
+        $ST.executeQuery($QUERY);
+    - pattern: "$ST.executeQuery((StringBuilder $SB).toString());"
+    - pattern: "$ST.executeQuery(... + $VAR + ...);"
+    - pattern: "$ST.executeQuery(... + $VAR);"
+    - pattern: $ST.executeQuery(...,String.format("...",...,$VAR,...), ...);
+  - metavariable-pattern:
+      metavariable: "$ST"
+      pattern-either:
+      - pattern: "(java.sql.Statement $ST)"
+      - pattern: "(org.apache.turbine.om.peer.BasePeer $ST)"
+  message: |
+    The method identified is susceptible to injection. The input should be validated and properly
+    escaped.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.CUSTOM_INJECTION-1
+    shortlink: https://sg.run/0WpJ
+    semgrep.dev:
+      rule:
+        rule_id: JDUoqr
+        version_id: O9Tq4n
+        url: https://semgrep.dev/playground/r/O9Tq4n/gitlab.find_sec_bugs.CUSTOM_INJECTION-1
+- id: gitlab.find_sec_bugs.CUSTOM_INJECTION-2
+  patterns:
+  - pattern-either:
+    - pattern: '"$SQL_STR" + ...
+
+        '
+    - pattern: String.format("$SQL_STR", ...)
+    - pattern: '"$SQL_STR".concat(...)
+
+        '
+    - pattern: (StringBuilder $BUILDER). ... .append("$SQL_STR")
+    - patterns:
+      - pattern-inside: |
+          StringBuilder $BUILDER = new StringBuilder("$SQL_STR");
+          ...
+      - pattern: "$BUILDER.append(...)"
+    - patterns:
+      - pattern-inside: |
+          $QUERY = "$SQL_STR";
+          ...
+      - pattern: "$QUERY += ..."
+  - metavariable-regex:
+      metavariable: "$SQL_STR"
+      regex: "(?i)(select|insert|create|update|alter|delete|drop)\\b"
+  message: |
+    The method identified is susceptible to injection. The input should be validated and properly
+    escaped.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.CUSTOM_INJECTION-2
+    shortlink: https://sg.run/KyG6
+    semgrep.dev:
+      rule:
+        rule_id: 5rUN6G
+        version_id: e1ToE8
+        url: https://semgrep.dev/playground/r/e1ToE8/gitlab.find_sec_bugs.CUSTOM_INJECTION-2
+- id: gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
+  patterns:
+  - pattern: |
+      class $CLAZZ extends java.security.MessageDigest {
+        ...
+      }
+  message: |
+    Implementing a custom MessageDigest is error-prone. National Institute of Standards and
+    Technology(NIST) recommends the use of SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, or
+    SHA-512/256.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
+    shortlink: https://sg.run/vpAR
+    semgrep.dev:
+      rule:
+        rule_id: r6Ujx4
+        version_id: 0bT86Y
+        url: https://semgrep.dev/playground/r/0bT86Y/gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
+- id: gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
+  pattern-either:
+  - pattern: |
+      $RUNVAR = new RuntimePermission("createClassLoader");
+      ...
+      (PermissionCollection $PC).add($RUNVAR);
+  - pattern: |
+      $REFVAR = new ReflectPermission("suppressAccessChecks");
+      ...
+      (PermissionCollection $PC).add($REFVAR);
+  - pattern: (PermissionCollection $PC).add(new ReflectPermission("suppressAccessChecks"))
+  - pattern: (PermissionCollection $PC).add(new RuntimePermission("createClassLoader"))
+  languages:
+  - java
+  message: 'Do not grant dangerous combinations of permissions.
+
+    '
+  metadata:
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
+    shortlink: https://sg.run/2kN5
+    semgrep.dev:
+      rule:
+        rule_id: 0oUpO1
+        version_id: GxTn4W
+        url: https://semgrep.dev/playground/r/GxTn4W/gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
+  patterns:
+  - pattern: new org.apache.http.impl.client.DefaultHttpClient(...);
+  message: 'DefaultHttpClient with default constructor is not compatible with TLS
+    1.2
+
+    '
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
+    shortlink: https://sg.run/dPw5
+    semgrep.dev:
+      rule:
+        rule_id: bwULG5
+        version_id: K3TDOD
+        url: https://semgrep.dev/playground/r/K3TDOD/gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
+- id: gitlab.find_sec_bugs.DES_USAGE-1
+  patterns:
+  - pattern-inside: javax.crypto.Cipher.getInstance("$ALG")
+  - metavariable-regex:
+      metavariable: "$ALG"
+      regex: "^(DES)/.*"
+  message: |
+    DES is considered strong ciphers for modern applications. Currently, NIST recommends the usage
+    of AES block ciphers instead of DES.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.DES_USAGE-1
+    shortlink: https://sg.run/kDnz
+    semgrep.dev:
+      rule:
+        rule_id: X5UAPg
+        version_id: RGT6wB
+        url: https://semgrep.dev/playground/r/RGT6wB/gitlab.find_sec_bugs.DES_USAGE-1
+- id: gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
+  patterns:
+  - pattern: java.sql.DriverManager.getConnection($URI, $USR, "...");
+  message: |
+    This code creates a database connect using a hardcoded, constant password. Anyone with access
+    to either the source code or the compiled code can easily learn the password.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-259: Use of Hard-coded Password'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
+    shortlink: https://sg.run/qZAx
+    semgrep.dev:
+      rule:
+        rule_id: 5rUN5O
+        version_id: PkTlE2
+        url: https://semgrep.dev/playground/r/PkTlE2/gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
+- id: gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
+  patterns:
+  - pattern: java.sql.DriverManager.getConnection($URI, $USR, "");
+  message: |
+    This code creates a database connect using a blank or empty password. This indicates that the
+    database is not protected by a password.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-259: Use of Hard-coded Password'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
+    shortlink: https://sg.run/lW3j
+    semgrep.dev:
+      rule:
+        rule_id: GdUow0
+        version_id: JdTB2K
+        url: https://semgrep.dev/playground/r/JdTB2K/gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
+- id: gitlab.find_sec_bugs.ECB_MODE-1
+  patterns:
+  - pattern-inside: javax.crypto.Cipher.getInstance("...")
+  - pattern-regex: "(AES|DES(ede)?)(/ECB/*)"
+  message: |
+    An authentication cipher mode which provides better confidentiality of the encrypted data
+    should be used instead of Electronic Code Book (ECB) mode, which does not provide good
+    confidentiality. Specifically, ECB mode produces the same output for the same input each time.
+    This allows an attacker to intercept and replay the data.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.ECB_MODE-1
+    shortlink: https://sg.run/xPDP
+    semgrep.dev:
+      rule:
+        rule_id: 10U4j4
+        version_id: BjTgG4
+        url: https://semgrep.dev/playground/r/BjTgG4/gitlab.find_sec_bugs.ECB_MODE-1
+- id: gitlab.find_sec_bugs.EL_INJECTION-1
+  patterns:
+  - pattern-inside: |
+      $FUNC(..., String $EXPR, ...) {
+        ...
+        ELContext $CTX = ...;
+        ...
+      }
+  - pattern-either:
+    - pattern: "(ExpressionFactory $EXP).createValueExpression((ELContext $CTX), $EXPR,
+        ...)"
+    - pattern: "(ExpressionFactory $EXP).createMethodExpression((ELContext $CTX),
+        $EXPR, ...)"
+  message: |
+    An expression is built with a dynamic value. The source of the value(s) should be verified to
+    avoid that unfiltered values fall into this risky code evaluation.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.EL_INJECTION-1
+    shortlink: https://sg.run/4k1E
+    semgrep.dev:
+      rule:
+        rule_id: GdUo2e
+        version_id: vdTwD5
+        url: https://semgrep.dev/playground/r/vdTwD5/gitlab.find_sec_bugs.EL_INJECTION-1
+- id: gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
+  patterns:
+  - pattern: |
+      $TAINTED = (HttpServletRequest $REQ).getParameter(...);
+      ...
+      (java.sql.Connection $CONN).setCatalog($TAINTED);
+  message: |
+    Allowing external control of system settings can disrupt service or cause an application to
+    behave in unexpected, and potentially malicious ways. An attacker could cause an error by
+    providing a nonexistent catalog name or connect to an unauthorized portion of the database.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-15: External Control of System or Configuration Setting'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
+    shortlink: https://sg.run/dPZY
+    semgrep.dev:
+      rule:
+        rule_id: r6UjYJ
+        version_id: A8TOyl
+        url: https://semgrep.dev/playground/r/A8TOyl/gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
+- id: gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
+  patterns:
+  - pattern-inside: |
+      $FUNC(..., HttpServletRequest $REQ, ... ) {
+        ...
+        $FILES = (ServletFileUpload $SFU).parseRequest($REQ);
+        ...
+      }
+  - pattern-inside: |
+      for(FileItem $ITEM : $FILES) {
+        ...
+      }
+  - pattern: "$ITEM.getName()"
+  message: |
+    The filename provided by the FileUpload API can be tampered with by the client to reference
+    unauthorized files. The provided filename should be properly validated to ensure it's properly
+    structured, contains no unauthorized path characters (e.g., / \), and refers to an authorized
+    file.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
+    shortlink: https://sg.run/5Z9l
+    semgrep.dev:
+      rule:
+        rule_id: L1Uz0W
+        version_id: yeT4d6
+        url: https://semgrep.dev/playground/r/yeT4d6/gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
+- id: gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          String $INPUT = (HttpServletRequest $REQ).getParameter(...);
+          ...
+      - pattern-inside: |
+          String $FORMAT_STR = ... + $INPUT;
+          ...
+    - patterns:
+      - pattern-inside: |
+          String $INPUT = (HttpServletRequest $REQ).getParameter(...);
+          ...
+      - pattern-inside: |
+          String $FORMAT_STR = ... + $INPUT + ...;
+          ...
+    - pattern-inside: |
+        String $FORMAT_STR = ... + (HttpServletRequest $REQ).getParameter(...) + ...;
+        ...
+    - pattern-inside: |
+        String $FORMAT_STR = ... + (HttpServletRequest $REQ).getParameter(...);
+        ...
+  - pattern-either:
+    - pattern: String.format($FORMAT_STR, ...);
+    - pattern: String.format(java.util.Locale.$LOCALE, $FORMAT_STR, ...);
+    - pattern: "(java.util.Formatter $F).format($FORMAT_STR, ...);"
+    - pattern: "(java.util.Formatter $F).format(java.util.Locale.$LOCALE, $FORMAT_STR,
+        ...);"
+    - pattern: "(java.io.PrintStream $F).printf($FORMAT_STR, ...);"
+    - pattern: "(java.io.PrintStream $F).printf(java.util.Locale.$LOCALE, $FORMAT_STR,
+        ...);"
+    - pattern: "(java.io.PrintStream $F).format($FORMAT_STR, ...);"
+    - pattern: "(java.io.PrintStream $F).format(java.util.Locale.$LOCALE, $FORMAT_STR,
+        ...);"
+    - pattern: System.out.printf($FORMAT_STR, ...);
+    - pattern: System.out.printf(java.util.Locale.$LOCALE, $FORMAT_STR, ...);
+    - pattern: System.out.format($FORMAT_STR, ...);
+    - pattern: System.out.format(java.util.Locale.$LOCALE, $FORMAT_STR, ...);
+  languages:
+  - java
+  message: |
+    Allowing user input to control format parameters could enable an attacker to cause exceptions
+    to be thrown or leak information.Attackers may be able to modify the format string argument,
+    such that an exception is thrown. If this exception is left uncaught, it may crash the
+    application. Alternatively, if sensitive information is used within the unused arguments,
+    attackers may change the format string to reveal this information.
+  metadata:
+    cwe: 'CWE-134: Use of Externally-Controlled Format String'
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
+    shortlink: https://sg.run/w4q0
+    semgrep.dev:
+      rule:
+        rule_id: X5UA3o
+        version_id: YDT1zW
+        url: https://semgrep.dev/playground/r/YDT1zW/gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.HARD_CODE_KEY-1
+  pattern-either:
+  - patterns:
+    - pattern-not-inside: |
+        $FUNC(...,byte[] $KEY_BYTES, ...) {
+            ...
+        }
+    - pattern-either:
+      - pattern: new DESKeySpec((byte[] $KEY_BYTES));
+      - pattern: new DESedeKeySpec((byte[] $KEY_BYTES));
+      - pattern: new KerberosKey(..., (byte[] $KEY_BYTES), ..., ...);
+      - pattern: new SecretKeySpec((byte[] $KEY_BYTES), ...);
+      - pattern: new X509EncodedKeySpec((byte[] $KEY_BYTES));
+      - pattern: new PKCS8EncodedKeySpec((byte[] $KEY_BYTES));
+      - pattern: new KeyRep(...,(byte[] $KEY_BYTES));
+      - pattern: new KerberosTicket(...,(byte[] $KEY_BYTES),...);
+    - metavariable-pattern:
+        metavariable: "$KEY_BYTES"
+        patterns:
+        - pattern-not-regex: "(null)"
+  - patterns:
+    - pattern-not-inside: |
+        $FUNC(..., BigInteger $PRIVATE_KEY, ...) {
+            ...
+        }
+    - pattern-either:
+      - pattern: new DSAPrivateKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new DSAPublicKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new DHPrivateKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new DHPublicKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new ECPrivateKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new RSAPrivateKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new RSAMultiPrimePrivateCrtKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new RSAPrivateCrtKeySpec((BigInteger $PRIVATE_KEY), ...);
+      - pattern: new RSAPublicKeySpec((BigInteger $PRIVATE_KEY), ...);
+    - metavariable-pattern:
+        metavariable: "$PRIVATE_KEY"
+        patterns:
+        - pattern-not-regex: "(null)"
+  message: |
+    Cryptographic keys should not be kept in the source code. The source code can be widely shared
+    in an enterprise environment, and is certainly shared in open source. To be managed safely,
+    passwords and secret keys should be stored in separate configuration files or keystores.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-321: Use of Hard-coded Cryptographic Key'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-1
+    shortlink: https://sg.run/Y4yX
+    semgrep.dev:
+      rule:
+        rule_id: ReU2vo
+        version_id: rxT4Zk
+        url: https://semgrep.dev/playground/r/rxT4Zk/gitlab.find_sec_bugs.HARD_CODE_KEY-1
+- id: gitlab.find_sec_bugs.HARD_CODE_KEY-2
+  patterns:
+  - pattern-either:
+    - pattern: String $VAR = "...";
+    - pattern: byte[] $VAR = {...};
+    - pattern: byte[] $VAR = new byte[]{...};
+    - pattern: char[] $VAR = {...};
+    - pattern: char[] $VAR = new char[]{...};
+  - metavariable-regex:
+      metavariable: "$VAR"
+      regex: "(?i).*(pass|pwd|psw|secret|key|cipher|crypt|des|aes|mac|private|sign|cert).*"
+  message: |
+    Cryptographic keys should not be kept in the source code. The source code can be widely shared
+    in an enterprise environment, and is certainly shared in open source. To be managed safely,
+    passwords and secret keys should be stored in separate configuration files or keystores.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-321: Use of Hard-coded Cryptographic Key'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-2
+    shortlink: https://sg.run/obGN
+    semgrep.dev:
+      rule:
+        rule_id: BYUKYz
+        version_id: NdTo8N
+        url: https://semgrep.dev/playground/r/NdTo8N/gitlab.find_sec_bugs.HARD_CODE_KEY-2
+- id: gitlab.find_sec_bugs.HARD_CODE_KEY-3
+  patterns:
+  - pattern: String $VAR = "$VAL";
+  - metavariable-regex:
+      metavariable: "$VAL"
+      regex: "(?i).*(password|motdepasse|heslo|adgangskode|wachtwoord|salasana|passwort|passord|senha|geslo|clave|losenord|clave|parola|secret|pwd).*"
+  message: |
+    Cryptographic keys should not be kept in the source code. The source code can be widely shared
+    in an enterprise environment, and is certainly shared in open source. To be managed safely,
+    passwords and secret keys should be stored in separate configuration files or keystores.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-321: Use of Hard-coded Cryptographic Key'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-3
+    shortlink: https://sg.run/z561
+    semgrep.dev:
+      rule:
+        rule_id: DbU28G
+        version_id: kbTLq6
+        url: https://semgrep.dev/playground/r/kbTLq6/gitlab.find_sec_bugs.HARD_CODE_KEY-3
+- id: gitlab.find_sec_bugs.HARD_CODE_KEY-4
+  patterns:
+  - pattern-not-inside: |
+      $FUNC(..., $VAR_NAME, ...) {
+          ...
+      }
+  - pattern-either:
+    - pattern: "(String $VAR_NAME).equals(...)"
+    - pattern: "(String $OTHER).equals((String $VAR_NAME))"
+    - pattern: java.util.Arrays.equals(...,(String $VAR_NAME),...)
+    - pattern: "(byte[] $VAR_NAME).equals(...)"
+    - pattern: "(byte[] $OTHER).equals((byte[] $VAR_NAME))"
+    - pattern: java.util.Arrays.equals(...,(byte[] $VAR_NAME),...)
+    - pattern: java.lang.Byte.comapre(...,(byte[] $VAR_NAME),...)
+    - pattern: "(char[] $VAR_NAME).equals(...)"
+    - pattern: "(char[] $OTHER).equals((char[] $VAR_NAME))"
+    - pattern: java.util.Arrays.equals(...,(char[] $VAR_NAME),...)
+  - metavariable-regex:
+      metavariable: "$VAR_NAME"
+      regex: "(?i).*(pass|pwd|psw|secret|key|cipher|crypt|des|aes|mac|private|sign|cert).*"
+  message: |
+    Cryptographic keys should not be kept in the source code. The source code can be widely shared
+    in an enterprise environment, and is certainly shared in open source. To be managed safely,
+    passwords and secret keys should be stored in separate configuration files or keystores.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-321: Use of Hard-coded Cryptographic Key'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-4
+    shortlink: https://sg.run/6kO6
+    semgrep.dev:
+      rule:
+        rule_id: AbUNYQ
+        version_id: bZT9qN
+        url: https://semgrep.dev/playground/r/bZT9qN/gitlab.find_sec_bugs.HARD_CODE_KEY-4
+- id: gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        char[] $PWD = ...;
+        ...
+    - pattern-inside: |
+        String $PWD = ...;
+        ...
+    - pattern-inside: |
+        public class $CLAZZ {
+        final char[] $PWD = ...;
+          ...
+        }
+    - pattern-inside: |
+        public class $CLAZZ {
+        final String $PWD = ...;
+          ...
+        }
+    - pattern-inside: |
+        $S = new SymmetricEncryptionConfig(...);
+        ...
+  - pattern-either:
+    - pattern: (java.security.KeyStore $KS).load(..., "...")
+    - pattern: (java.security.KeyStore $KS).load(..., "...".$FOO(...))
+    - pattern: "(java.security.KeyStore $KS).load(..., $PWD)"
+    - pattern: "(java.security.KeyStore $KS).load(..., $PWD.$FOO(...))"
+    - pattern: KeyManagerFactory.getInstance(...).init(..., $PWD);
+    - pattern: KeyManagerFactory.getInstance(...).init(..., $PWD.$FOO(...));
+    - pattern: KeyManagerFactory.getInstance(...).init(..., "...");
+    - pattern: KeyManagerFactory.getInstance(...).init(..., "...".$FOO(...));
+    - pattern: (java.security.KeyStore $KS).getInstance(...).load(..., "...")
+    - pattern: (java.security.KeyStore $KS).getInstance(...).load(..., "...".$FOO(...))
+    - pattern: "(java.security.KeyStore $KS).getInstance(...).load(..., $PWD)"
+    - pattern: "(java.security.KeyStore $KS).getInstance(...).load(..., $PWD.$FOO(...))"
+    - pattern: KeyStore.getInstance(...).load(..., "...");
+    - pattern: KeyStore.getInstance(...).load(..., "...".$FOO(...));
+    - pattern: KeyStore.getInstance(...).load(..., $PWD);
+    - pattern: KeyStore.getInstance(...).load(..., $PWD.$FOO(...));
+    - pattern: new PBEKeySpec("...", ...)
+    - pattern: new PBEKeySpec("...".$FOO(...), ...)
+    - pattern: new PBEKeySpec($PWD, ...)
+    - pattern: new PBEKeySpec($PWD.$FOO(...), ...)
+    - pattern: new PasswordAuthentication("...", "...")
+    - pattern: new PasswordAuthentication("...", "...".$FOO(...))
+    - pattern: new PasswordAuthentication("...", $PWD)
+    - pattern: new PasswordAuthentication("...", $PWD.$FOO(...))
+    - pattern: (PasswordCallback $CB).setPassword("...")
+    - pattern: (PasswordCallback $CB).setPassword("...".$FOO(...))
+    - pattern: "(PasswordCallback $CB).setPassword($PWD)"
+    - pattern: "(PasswordCallback $CB).setPassword($PWD.$FOO(...))"
+    - pattern: new KeyStore.PasswordProtection("...")
+    - pattern: new KeyStore.PasswordProtection("...".$FOO(...))
+    - pattern: new KeyStore.PasswordProtection($PWD)
+    - pattern: new KeyStore.PasswordProtection($PWD.$FOO(...))
+    - pattern: new KerberosKey(...,"...",...);
+    - pattern: new KerberosKey(...,"...".$FOO(...),...);
+    - pattern: new KerberosKey(...,$PWD,...);
+    - pattern: new KerberosKey(...,$PWD.$FOO(...),...);
+    - pattern: "(javax.net.ssl.KeyManagerFactory $KMF).init(..., $PWD);"
+    - pattern: (javax.net.ssl.KeyManagerFactory $KMF).init(..., "...");
+    - pattern: (javax.net.ssl.KeyManagerFactory $KMF).init(..., "...".$FOO(...));
+    - pattern: "(javax.net.ssl.KeyManagerFactory $KMF).init(..., $PWD.$FOO(...));"
+    - pattern: (java.sql.DriverManager).getConnection(..., "...");
+    - pattern: (java.sql.DriverManager).getConnection(..., "...".$FOO(...));
+    - pattern: "(java.sql.DriverManager).getConnection(..., $PWD);"
+    - pattern: "(java.sql.DriverManager).getConnection(..., $PWD.$FOO(...));"
+    - pattern: (javax.net.ssl.KeyManagerFactory $KMF).init(..., "...");
+    - pattern: (javax.net.ssl.KeyManagerFactory $KMF).init(..., "...".$FOO(...));
+    - pattern: "(javax.net.ssl.KeyManagerFactory $KMF).init(..., $PWD);"
+    - pattern: "(javax.net.ssl.KeyManagerFactory $KMF).init(..., $PWD.$FOO(...));"
+    - pattern: io.vertx.ext.web.handler.CSRFHandler.create(..., "...");
+    - pattern: io.vertx.ext.web.handler.CSRFHandler.create(..., "...".$FOO(...));
+    - pattern: io.vertx.ext.web.handler.CSRFHandler.create(..., $PWD);
+    - pattern: io.vertx.ext.web.handler.CSRFHandler.create(..., $PWD.$FOO(...));
+    - pattern: "$S.setPassword($PWD);"
+    - pattern: "$S.setPassword($PWD.$FOO(...));"
+    - pattern: $S.setPassword("...");
+  - metavariable-pattern:
+      metavariable: "$PWD"
+      patterns:
+      - pattern-regex: "(?i).*(pass|pwd|psw|secret|key|cipher|crypt|des|aes|mac|private|sign|cert).*"
+  message: |
+    Passwords should not be kept in the source code. The source code can be widely shared in an
+    enterprise environment, and is certainly shared in open source. To be managed safely, passwords
+    and secret keys should be stored in separate configuration files or keystores.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-259: Use of Hard-coded Password'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
+    shortlink: https://sg.run/pNRN
+    semgrep.dev:
+      rule:
+        rule_id: WAUYxY
+        version_id: 5PTRB3
+        url: https://semgrep.dev/playground/r/5PTRB3/gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
+- id: gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
+  patterns:
+  - pattern: new com.hazelcast.config.SymmetricEncryptionConfig()
+  message: |
+    The network communications for Hazelcast is configured to use a symmetric cipher (probably DES
+    or Blowfish). Those ciphers alone do not provide integrity or secure authentication. The use of
+    asymmetric encryption is preferred.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
+    shortlink: https://sg.run/ZP2L
+    semgrep.dev:
+      rule:
+        rule_id: NbUe1Z
+        version_id: qkTdKE
+        url: https://semgrep.dev/playground/r/qkTdKE/gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
+- id: gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
+  mode: taint
+  pattern-sources:
+  - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameter(...);"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: |
+        $STR.replaceAll("$REPLACE_CHAR", "$REPLACER");
+        ...
+    - pattern: "$STR"
+    - metavariable-regex:
+        metavariable: "$REPLACER"
+        regex: ".*^(CRLF).*"
+    - metavariable-regex:
+        metavariable: "$REPLACE_CHAR"
+        regex: "(*CRLF)"
+  - pattern: org.apache.commons.text.StringEscapeUtils.unescapeJava(...);
+  pattern-sinks:
+  - pattern: new javax.servlet.http.Cookie("$KEY", ...);
+  - patterns:
+    - pattern-inside: |
+        $C = new javax.servlet.http.Cookie("$KEY", ...);
+        ...
+    - pattern: "$C.setValue(...);"
+  message: |
+    This code constructs an HTTP Cookie using an untrusted HTTP parameter. If this cookie is added
+    to an HTTP response, it will allow a HTTP response splitting vulnerability. See
+    http://en.wikipedia.org/wiki/HTTP_response_splitting for more information.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers (''HTTP
+      Response Splitting'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
+    shortlink: https://sg.run/1k2Q
+    semgrep.dev:
+      rule:
+        rule_id: YGUYoN
+        version_id: 3ZTGxR
+        url: https://semgrep.dev/playground/r/3ZTGxR/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
+- id: gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
+  mode: taint
+  pattern-sources:
+  - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameter(...);"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: |
+        $STR.replaceAll("$REPLACE_CHAR", "$REPLACER");
+        ...
+    - pattern: "$STR"
+    - metavariable-regex:
+        metavariable: "$REPLACER"
+        regex: ".*^(CRLF).*"
+    - metavariable-regex:
+        metavariable: "$REPLACE_CHAR"
+        regex: "(*CRLF)"
+  - pattern: org.apache.commons.text.StringEscapeUtils.unescapeJava(...);
+  pattern-sinks:
+  - pattern: (javax.servlet.http.HttpServletResponse $RES).setHeader("$KEY", ...);
+  - pattern: (javax.servlet.http.HttpServletResponse $RES).addHeader("$KEY", ...);
+  - pattern: (javax.servlet.http.HttpServletResponseWrapper $WRP).setHeader("$KEY",
+      ...);
+  - pattern: (javax.servlet.http.HttpServletResponseWrapper $WRP).addHeader("$KEY",
+      ...);
+  message: |
+    This code directly writes an HTTP parameter to an HTTP header, which allows for a HTTP
+    response splitting vulnerability. See http://en.wikipedia.org/wiki/HTTP_response_splitting for
+    more information.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers (''HTTP
+      Response Splitting'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
+    shortlink: https://sg.run/93NR
+    semgrep.dev:
+      rule:
+        rule_id: 6JUye5
+        version_id: 44TLYb
+        url: https://semgrep.dev/playground/r/44TLYb/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
+- id: gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
+  pattern-either:
+  - patterns:
+    - pattern: |
+        javax.servlet.http.Cookie $C = new Cookie(..., ...);
+        ...
+        (HttpServletResponse $RESP).addCookie($C);
+    - pattern-not-inside: |
+        javax.servlet.http.Cookie $C = new Cookie(..., ...);
+        ...
+        $C.setHttpOnly(true);
+        ...
+        (HttpServletResponse $RESP).addCookie($C);
+  - pattern: "(javax.servlet.http.Cookie $C).setHttpOnly(false);"
+  message: |
+    A new cookie is created without the HttpOnly flag set. The HttpOnly flag is a directive to the
+    browser to make sure that the cookie can not be red by malicious script. When a user is the
+    target of a "Cross-Site Scripting", the attacker would benefit greatly from getting the session
+    id for example.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
+    shortlink: https://sg.run/z5B0
+    semgrep.dev:
+      rule:
+        rule_id: WAUYRb
+        version_id: 7ZTlYb
+        url: https://semgrep.dev/playground/r/7ZTlYb/gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
+- id: gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
+  mode: taint
+  pattern-sources:
+  - pattern: "(HttpServletRequest $REQ).getParameter(...)"
+  pattern-sanitizers:
+  - pattern: java.net.URLEncoder.encode(...)
+  - pattern: com.google.common.net.UrlEscapers.urlPathSegmentEscaper().escape(...)
+  pattern-sinks:
+  - pattern: new org.apache.http.client.methods.HttpGet(...)
+  - pattern: new org.apache.commons.httpclient.methods.GetMethod(...)
+  - pattern: "(org.apache.commons.httpclient.methods.GetMethod $GM).setQueryString(...)"
+  message: |
+    Concatenating unvalidated user input into a URL can allow an attacker to override the value of
+    a request parameter. Attacker may be able to override existing parameter values, inject a new
+    parameter or exploit variables out of a direct reach. HTTP Parameter Pollution (HPP) attacks
+    consist of injecting encoded query string delimiters into other existing parameters. If a web
+    application does not properly sanitize the user input, a malicious user may compromise the
+    logic of the application to perform either client-side or server-side attacks.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-88: Improper Neutralization of Argument Delimiters in a Command (''Argument
+      Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
+    shortlink: https://sg.run/Jw5Q
+    semgrep.dev:
+      rule:
+        rule_id: AbUNR4
+        version_id: ZRT9BO
+        url: https://semgrep.dev/playground/r/ZRT9BO/gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
+- id: gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
+  mode: taint
+  pattern-sources:
+  - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameter(...);"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: |
+        $STR.replaceAll("$REPLACE_CHAR", "$REPLACER");
+        ...
+    - pattern: "$STR"
+    - metavariable-regex:
+        metavariable: "$REPLACER"
+        regex: ".*^(CRLF).*"
+    - metavariable-regex:
+        metavariable: "$REPLACE_CHAR"
+        regex: "(*CRLF)"
+  - pattern: org.apache.commons.text.StringEscapeUtils.unescapeJava(...);
+  pattern-sinks:
+  - pattern: new javax.servlet.http.Cookie("$KEY", ...);
+  - patterns:
+    - pattern-inside: |
+        $C = new javax.servlet.http.Cookie("$KEY", ...);
+        ...
+    - pattern: "$C.setValue(...);"
+  message: |
+    When an HTTP request contains unexpected CR and LF characters, the server may respond with an
+    output stream that is interpreted as two different HTTP responses (instead of one). An attacker
+    can control the second response and mount attacks such as cross-site scripting and cache
+    poisoning attacks.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers (''HTTP
+      Response Splitting'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
+    shortlink: https://sg.run/jBZ2
+    semgrep.dev:
+      rule:
+        rule_id: lBUX54
+        version_id: QkTYQG
+        url: https://semgrep.dev/playground/r/QkTYQG/gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
+- id: gitlab.find_sec_bugs.IMPROPER_UNICODE-1
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          $S = (String $INPUT).$TRANSFORM(...);
+          ...
+          $S.$METHOD(...);
+      - pattern: "(String $INPUT).$TRANSFORM().$METHOD(...);"
+    - metavariable-regex:
+        metavariable: "$METHOD"
+        regex: "(equals|equalsIgnoreCase|indexOf)"
+    - metavariable-regex:
+        metavariable: "$TRANSFORM"
+        regex: "(toLowerCase|toUpperCase)"
+  - pattern: java.text.Normalizer.normalize(...);
+  - pattern: java.net.IDN.toASCII(...);
+  - pattern: "(URI $U).toASCIIString();"
+  languages:
+  - java
+  message: 'Improper Handling of Unicode Encoding
+
+    '
+  metadata:
+    cwe: 'CWE-176: Improper Handling of Unicode Encoding'
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.IMPROPER_UNICODE-1
+    shortlink: https://sg.run/xPlp
+    semgrep.dev:
+      rule:
+        rule_id: j2UwZp
+        version_id: JdTB2X
+        url: https://semgrep.dev/playground/r/JdTB2X/gitlab.find_sec_bugs.IMPROPER_UNICODE-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
+  pattern-either:
+  - pattern: |
+      catch(Throwable $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(Exception $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(Error $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.io.FileNotFoundException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.sql.SQLException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.net.BindException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.util.ConcurrentModificationException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(javax.naming.InsufficientResourcesException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.util.MissingResourceException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.util.jar.JarException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(java.security.acl.NotOwnerException $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(OutOfMemoryError $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  - pattern: |
+      catch(StackOverflowError $E) {
+        ...
+        $E.printStackTrace();
+        ...
+      }
+  message: |
+    The sensitive information may be valuable information on its own (such as a password), or it
+    may be useful for launching other, more deadly attacks. If an attack fails, an attacker may use
+    error information provided by the server to launch another more focused attack. For example, an
+    attempt to exploit a path traversal weakness (CWE-22) might yield the full pathname of the
+    installed application.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-209: Information Exposure Through an Error Message'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
+    shortlink: https://sg.run/ZPrn
+    semgrep.dev:
+      rule:
+        rule_id: bwULk7
+        version_id: BjTgQZ
+        url: https://semgrep.dev/playground/r/BjTgQZ/gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
+- id: gitlab.find_sec_bugs.INSECURE_COOKIE-1
+  pattern-either:
+  - patterns:
+    - pattern: |
+        javax.servlet.http.Cookie $C = new Cookie(..., ...);
+        ...
+        (HttpServletResponse $RESP).addCookie($C);
+    - pattern-not-inside: |
+        javax.servlet.http.Cookie $C = new Cookie(..., ...);
+        ...
+        $C.setSecure(true);
+        ...
+        (HttpServletResponse $RESP).addCookie($C);
+  - pattern: "(javax.servlet.http.Cookie $C).setSecure(false);"
+  message: |
+    "Storing sensitive data in a persistent cookie for an extended period can lead to a breach of
+    confidentiality or account compromise."
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-539: Information Exposure Through Persistent Cookies'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.INSECURE_COOKIE-1
+    shortlink: https://sg.run/pNER
+    semgrep.dev:
+      rule:
+        rule_id: 0oUp4O
+        version_id: LjTWpX
+        url: https://semgrep.dev/playground/r/LjTWpX/gitlab.find_sec_bugs.INSECURE_COOKIE-1
+- id: gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        @javax.ws.rs.Path("...")
+        $TYPE $FUNC(..., $VAR, ...) {
+          ...
+        }
+    - pattern: "$VAR"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: |
+        $STR.replaceAll("$REPLACE_CHAR", "$REPLACER");
+        ...
+    - pattern: "$STR"
+    - metavariable-regex:
+        metavariable: "$REPLACER"
+        regex: ".*^(CRLF).*"
+    - metavariable-regex:
+        metavariable: "$REPLACE_CHAR"
+        regex: "(*CRLF)"
+  - pattern: org.apache.commons.text.StringEscapeUtils.unescapeJava(...);
+  pattern-sinks:
+  - pattern: return ...;
+  message: |
+    This method is part of a REST Web Service (JSR311). The security of this web service should be
+    analyzed; Authentication, if enforced, should be tested. Access control, if enforced, should be
+    tested. The inputs should be tracked for potential vulnerabilities. The communication should
+    ideally be over SSL.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
+    shortlink: https://sg.run/QJ0x
+    semgrep.dev:
+      rule:
+        rule_id: d8U6DE
+        version_id: 2KTk6O
+        url: https://semgrep.dev/playground/r/2KTk6O/gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
+- id: gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        @javax.jws.WebMethod(...)
+        $TYPE $FUNC(..., $VAR, ...) {
+          ...
+        }
+    - pattern: "$VAR"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: |
+        $STR.replaceAll("$REPLACE_CHAR", "$REPLACER");
+        ...
+    - pattern: "$STR"
+    - metavariable-regex:
+        metavariable: "$REPLACER"
+        regex: ".*^(CRLF).*"
+    - metavariable-regex:
+        metavariable: "$REPLACE_CHAR"
+        regex: "(*CRLF)"
+  - pattern: org.apache.commons.text.StringEscapeUtils.unescapeJava(...);
+  pattern-sinks:
+  - pattern: return ...;
+  message: |
+    This method is part of a SOAP Web Service (JSR224). The security of this web service should be
+    analyzed; Authentication, if enforced, should be tested. Access control, if enforced, should be
+    tested. The inputs should be tracked for potential vulnerabilities. The communication should
+    ideally be over SSL.
+  languages:
+  - java
+  severity: INFO
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    owasp: 'OWASP: Cross-Site Request Forgery'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
+    shortlink: https://sg.run/3Qjl
+    semgrep.dev:
+      rule:
+        rule_id: ZqUewk
+        version_id: X0TjJy
+        url: https://semgrep.dev/playground/r/X0TjJy/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
+- id: gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
+  patterns:
+  - pattern-inside: |
+      import javax.naming.Context;
+      ...
+  - pattern: $ENV.put(Context.SECURITY_AUTHENTICATION, "none");
+  languages:
+  - java
+  message: |
+    Without proper access control, executing an LDAP statement that contains a
+    user-controlled value can allow an attacker to abuse poorly configured LDAP
+    context
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
+    shortlink: https://sg.run/0Wrb
+    semgrep.dev:
+      rule:
+        rule_id: PeUjLD
+        version_id: 3ZTG7R
+        url: https://semgrep.dev/playground/r/3ZTG7R/gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
+  patterns:
+  - pattern: new javax.naming.directory.SearchControls($SCOPE, $CLIMIT, $TLIMIT, $ATTR,
+      true, $DEREF)
+  languages:
+  - java
+  message: |
+    Without proper access control, executing an LDAP statement that contains a
+    user-controlled value can allow an attacker to abuse poorly configured LDAP
+    context
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
+    shortlink: https://sg.run/Ky0d
+    semgrep.dev:
+      rule:
+        rule_id: JDUog3
+        version_id: 44TLxb
+        url: https://semgrep.dev/playground/r/44TLxb/gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.LDAP_INJECTION-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $FUNC(..., $VAR, ...) {
+          ...
+        }
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: |
+        $FUNC(..., $X, ...) {
+          ...
+          $VAR = ... + $X;
+          ...
+        }
+    - pattern: "$VAR"
+  pattern-sinks:
+  - pattern: javax.naming.ldap.LdapName(...)
+  - pattern: "(javax.naming.directory.Context $C).lookup(...)"
+  - pattern: "(javax.naming.Context $C).lookup(...)"
+  - patterns:
+    - pattern-inside: "(java.util.Properties $P).put($KEY, $VAL)"
+    - pattern-not-inside: |
+        $FUNC(..., $VAL, ...) {
+          ...
+        }
+    - pattern: "$VAL"
+  - patterns:
+    - pattern-inside: "(com.unboundid.ldap.sdk.LDAPConnection $C).search($QUERY, ...)"
+    - pattern: "$QUERY"
+  - patterns:
+    - pattern-either:
+      - pattern: "$CTX.lookup(...)"
+      - patterns:
+        - pattern-inside: "$CTX.search($QUERY, ...)"
+        - pattern: "$QUERY"
+      - patterns:
+        - pattern-inside: "$CTX.search($NAME, $FILTER, ...)"
+        - pattern: "$FILTER"
+    - metavariable-pattern:
+        metavariable: "$CTX"
+        pattern-either:
+        - pattern: "(javax.naming.directory.DirContext $C)"
+        - pattern: "(javax.naming.directory.InitialDirContext $IDC)"
+        - pattern: "(javax.naming.ldap.LdapContext $LC)"
+        - pattern: "(javax.naming.event.EventDirContext $EDC)"
+        - pattern: "(com.sun.jndi.ldap.LdapCtx $LC)"
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-inside: "$CTX.list($QUERY, ...)"
+        - pattern: "$QUERY"
+      - patterns:
+        - pattern-inside: "$CTX.lookup($QUERY, ...)"
+        - pattern: "$QUERY"
+      - patterns:
+        - pattern-inside: "$CTX.search($QUERY, ...)"
+        - pattern: "$QUERY"
+      - patterns:
+        - pattern-inside: "$CTX.search($NAME, $FILTER, ...)"
+        - pattern: "$FILTER"
+    - metavariable-pattern:
+        metavariable: "$CTX"
+        pattern-either:
+        - pattern: "(org.springframework.ldap.core.LdapTemplate $LT)"
+        - pattern: "(org.springframework.ldap.core.LdapOperations $LO)"
+  message: |
+    Just like SQL, all inputs passed to an LDAP query need to be passed in safely. Unfortunately,
+    LDAP doesn't have prepared statement interfaces like SQL. Therefore, the primary defense
+    against LDAP injection is strong input validation of any untrusted data before including it in
+    an LDAP query.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-90: Improper Neutralization of Special Elements used in an LDAP Query
+      (''LDAP Injection'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.LDAP_INJECTION-1
+    shortlink: https://sg.run/5Z93
+    semgrep.dev:
+      rule:
+        rule_id: BYUKEw
+        version_id: nWTbdG
+        url: https://semgrep.dev/playground/r/nWTbdG/gitlab.find_sec_bugs.LDAP_INJECTION-1
+- id: gitlab.find_sec_bugs.MALICIOUS_XSLT-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $FUNC(...,String $VAR, ...) {
+              ...
+            }
+        - pattern-either:
+          - pattern: new FileInputStream(<... $VAR ...>);
+          - pattern: getClass().getResourceAsStream(<... $VAR ...>)
+      - patterns:
+        - pattern-inside: |
+            class $CLZ {
+              String $X = "...";
+              ...
+            }
+        - pattern-inside: |
+            $FUNC(...,String $Y, ...) {
+              ...
+            }
+        - pattern-either:
+          - pattern: new FileInputStream($X + $Y);
+          - pattern: getClass().getResourceAsStream($X + $Y)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: "(javax.xml.transform.TransformerFactory $T).newTransformer($SRC,
+          ...)"
+      - pattern-inside: "(javax.xml.transform.Transformer $T).transform($SRC, ...)"
+    - pattern: "$SRC"
+  languages:
+  - java
+  message: |
+    It is possible to attach malicious behavior to those style sheets. Therefore, if an attacker
+    can control the content or the source of the style sheet, he might be able to trigger remote
+    code execution.
+  metadata:
+    cwe": 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    category: security
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.MALICIOUS_XSLT-1
+    shortlink: https://sg.run/L2KJ
+    semgrep.dev:
+      rule:
+        rule_id: x8UdB6
+        version_id: K3TDPp
+        url: https://semgrep.dev/playground/r/K3TDPp/gitlab.find_sec_bugs.MALICIOUS_XSLT-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
+  patterns:
+  - pattern: |
+      (java.util.regex.Pattern $Y).matcher($VAR);
+      ...
+      $VAR.$METHOD(...);
+  - metavariable-regex:
+      metavariable: "$METHOD"
+      regex: "(replace)"
+  languages:
+  - java
+  message: 'CERT: IDS11-J. Perform any string modifications before validation
+
+    '
+  metadata:
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
+    shortlink: https://sg.run/O4Yp
+    semgrep.dev:
+      rule:
+        rule_id: 10U4xJ
+        version_id: 5PTRBb
+        url: https://semgrep.dev/playground/r/5PTRBb/gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
+  patterns:
+  - pattern: |
+      $Y = java.util.regex.Pattern.compile("[<>]");
+      ...
+      $Y.matcher($VAR);
+      ...
+      java.text.Normalizer.normalize($VAR, ...);
+  languages:
+  - java
+  message: 'IDS01-J. Normalize strings before validating them
+
+    '
+  metadata:
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
+    shortlink: https://sg.run/eJnl
+    semgrep.dev:
+      rule:
+        rule_id: 9AUAKN
+        version_id: GxTn4d
+        url: https://semgrep.dev/playground/r/GxTn4d/gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.NULL_CIPHER-1
+  pattern: new javax.crypto.NullCipher()
+  message: |
+    The NullCipher implements the Cipher interface by returning ciphertext identical to the
+    supplied plaintext. In a few contexts, such as testing, a NullCipher may be appropriate. Avoid
+    using the NullCipher. Its accidental use can introduce a significant confidentiality risk.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.NULL_CIPHER-1
+    shortlink: https://sg.run/EzLo
+    semgrep.dev:
+      rule:
+        rule_id: wdUk3N
+        version_id: YDT18W
+        url: https://semgrep.dev/playground/r/YDT18W/gitlab.find_sec_bugs.NULL_CIPHER-1
+- id: gitlab.find_sec_bugs.OGNL_INJECTION-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $FUNC(..., $VAR, ...) {
+          ...
+        }
+    - metavariable-pattern:
+        metavariable: "$VAR"
+        pattern-either:
+        - pattern: "(String $S)"
+        - pattern: "(Map<String, ?> $M)"
+        - pattern: "(Map<String, String> $M)"
+        - pattern: "(Map<String, Object> $M)"
+    - pattern: "$VAR"
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: com.opensymphony.xwork2.util.TextParseUtil.translateVariables($VAL,
+        ...)
+    - pattern: "$VAL"
+  - patterns:
+    - pattern-inside: com.opensymphony.xwork2.util.TextParseUtil.translateVariablesCollection($VAL,
+        ...)
+    - pattern: "$VAL"
+  - pattern: com.opensymphony.xwork2.util.TextParseUtil.shallBeIncluded(...)
+  - pattern: com.opensymphony.xwork2.util.TextParseUtil.commaDelimitedStringToSet(...)
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.TextParser $P).evaluate($VAR,
+        $VAL, ...)"
+    - pattern: "$VAL"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.OgnlTextParser $P).evaluate($VAR,
+        $VAL, ...)"
+    - pattern: "$VAL"
+  - pattern: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).getGetMethod($CLZ,
+      ...)"
+  - pattern: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).getSetMethod($CLZ,
+      ...)"
+  - pattern: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).getField($CLZ,
+      ...)"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).setProperties($MAP,
+        ...)"
+    - pattern: "$MAP"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).setProperty($VAL,
+        ...)"
+    - pattern: "$VAL"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).getValue($VAL,
+        ...)"
+    - pattern: "$VAL"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlReflectionProvider $P).setValue($VAL,
+        ...)"
+    - pattern: "$VAL"
+  - pattern: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider $P).getGetMethod($CLZ,
+      ...)"
+  - pattern: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider $P).getSetMethod($CLZ,
+      ...)"
+  - pattern: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider $P).getField($CLZ,
+      ...)"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider
+        $P).setProperties($MAP, ...)"
+    - pattern: "$MAP"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider
+        $P).setProperty($VAR, ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider
+        $P).getValue($VAR, ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.reflection.ReflectionProvider
+        $P).setValue($VAR, ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlUtil $P).setProperties($MAP,
+        ...)"
+    - pattern: "$MAP"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlUtil $P).setProperty($VAR,
+        ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlUtil $P).getValue($VAR, ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlUtil $P).setValue($VAR, ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlUtil $P).callMethod($VAR,
+        ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.ognl.OgnlUtil $P).compile($VAR, ...)"
+    - pattern: "$VAR"
+  - pattern: "(org.apache.struts2.util.VelocityStrutsUtil $P).evaluate(...)"
+  - pattern: org.apache.struts2.util.StrutsUtil.findString(...)
+  - pattern: org.apache.struts2.util.StrutsUtil.findValue(..., $VAL)
+  - pattern: org.apache.struts2.util.StrutsUtil.getText(...)
+  - pattern: org.apache.struts2.util.StrutsUtil.translateVariables(...)
+  - patterns:
+    - pattern-inside: org.apache.struts2.util.StrutsUtil.makeSelectList($VAR, ...)
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(org.apache.struts2.views.jsp.ui.OgnlTool $T).findValue($VAR,
+        ...)"
+    - pattern: "$VAR"
+  - pattern: "(com.opensymphony.xwork2.util.ValueStack $V).findString(...)"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.ValueStack $V).findValue($VAR,
+        ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.ValueStack $V).setValue($VAR,
+        ...)"
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: "(com.opensymphony.xwork2.util.ValueStack $V).setParameter($VAR,
+        ...)"
+    - pattern: "$VAR"
+  message: |
+    "A expression is built with a dynamic value. The source of the value(s) should be verified to
+    avoid that unfiltered values fall into this risky code evaluation."
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.OGNL_INJECTION-1
+    shortlink: https://sg.run/Gb4n
+    semgrep.dev:
+      rule:
+        rule_id: DbU2QO
+        version_id: ExTLdr
+        url: https://semgrep.dev/playground/r/ExTLdr/gitlab.find_sec_bugs.OGNL_INJECTION-1
+- id: gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
+  patterns:
+  - pattern-either:
+    - pattern: java.nio.file.Files.setPosixFilePermissions(..., java.nio.file.attribute.PosixFilePermissions.fromString("$PERM_STRING"));
+    - pattern: |
+        $PERMISSIONS = java.nio.file.attribute.PosixFilePermissions.fromString("$PERM_STRING");
+        ...
+        java.nio.file.Files.setPosixFilePermissions(..., $PERMISSIONS);
+  - metavariable-regex:
+      metavariable: "$PERM_STRING"
+      regex: "[rwx-]{6}[rwx]{1,}"
+  languages:
+  - java
+  message: 'Overly permissive file permission
+
+    '
+  metadata:
+    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
+    shortlink: https://sg.run/XW9A
+    semgrep.dev:
+      rule:
+        rule_id: KxUwyj
+        version_id: RGT6BB
+        url: https://semgrep.dev/playground/r/RGT6BB/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
+  patterns:
+  - pattern-inside: |
+      $PERMS.add($P);
+      ...
+      java.nio.file.Files.setPosixFilePermissions(..., $PERMS);
+  - metavariable-regex:
+      metavariable: "$P"
+      regex: "(PosixFilePermission.){0,1}(OTHERS_)"
+  languages:
+  - java
+  message: 'Overly permissive file permission
+
+    '
+  metadata:
+    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    category: security
+    confidence: HIGH
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
+    shortlink: https://sg.run/jBgA
+    semgrep.dev:
+      rule:
+        rule_id: qNUpqB
+        version_id: A8TOyx
+        url: https://semgrep.dev/playground/r/A8TOyx/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
+  severity: WARNING
+- id: gitlab.find_sec_bugs.PADDING_ORACLE-1
+  patterns:
+  - pattern-inside: javax.crypto.Cipher.getInstance("...")
+  - pattern-regex: "(/CBC/PKCS5Padding)"
+  - pattern-not-regex: "^(RSA)/.*"
+  - pattern-not-regex: "^(ECIES)$"
+  message: |
+    This specific mode of CBC with PKCS5Padding is susceptible to padding oracle attacks. An
+    adversary could potentially decrypt the message if the system exposed the difference between
+    plaintext with invalid padding or valid padding. The distinction between valid and invalid
+    padding is usually revealed through distinct error messages being returned for each condition.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-696: Incorrect Behavior Order'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PADDING_ORACLE-1
+    shortlink: https://sg.run/eJ3E
+    semgrep.dev:
+      rule:
+        rule_id: yyUDX2
+        version_id: WrTX62
+        url: https://semgrep.dev/playground/r/WrTX62/gitlab.find_sec_bugs.PADDING_ORACLE-1
+- id: gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $FUNC(String[] $ARGS) {
+          ...
+        }
+    - pattern: "$ARGS[$IDX]"
+  - patterns:
+    - pattern-inside: |
+        $FUNC(..., String $VAR, ...) {
+          ...
+        }
+    - pattern: "$VAR"
+  pattern-sanitizers:
+  - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$U = new java.net.URI($VAR)\n"
+    - pattern-either:
+      - pattern-inside: new java.io.File($U)
+      - pattern-inside: java.nio.file.Paths.get($U)
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: new java.io.RandomAccessFile($INPUT,...)
+    - pattern: "$INPUT"
+  - pattern: new java.io.FileReader(...)
+  - pattern: new javax.activation.FileDataSource(...)
+  - pattern: new java.io.FileInputStream(...)
+  - patterns:
+    - pattern-either:
+      - pattern-inside: new java.io.File(...,(String $VAR), ...)
+      - pattern-inside: java.nio.file.Paths.get(...,(String $VAR),...)
+      - pattern-inside: java.io.File.createTempFile(...,(String $VAR), ...)
+      - pattern-inside: java.io.File.createTempDirectory(...,(String $VAR),...)
+      - pattern-inside: java.nio.file.Files.createTempFile(..., (String $VAR), ...)
+      - pattern-inside: java.nio.file.Files.createTempDirectory(..., (String $VAR),
+          ...)
+    - pattern: "$VAR"
+  message: |
+    A file is opened to read its content. The filename comes from an input parameter. If an
+    unfiltered parameter is passed to this file API, files from an arbitrary filesystem location
+    could be read. This rule identifies potential path traversal vulnerabilities. In many cases,
+    the constructed file path cannot be controlled by the user.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
+    shortlink: https://sg.run/R5KK
+    semgrep.dev:
+      rule:
+        rule_id: WAUYbb
+        version_id: 7ZTl5b
+        url: https://semgrep.dev/playground/r/7ZTl5b/gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
+- id: gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $FUNC(String[] $ARGS) {
+          ...
+        }
+    - pattern: "$ARGS[$IDX]"
+  - patterns:
+    - pattern-inside: |
+        $FUNC(..., String $VAR, ...) {
+          ...
+        }
+    - pattern: "$VAR"
+  pattern-sanitizers:
+  - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: new java.io.FileWriter($PATH, ...)
+    - pattern: "$PATH"
+  - patterns:
+    - pattern-inside: new java.io.FileOutputStream($PATH, ...)
+    - pattern: "$PATH"
+  message: |
+    A file is opened to write to its contents. The filename comes from an input parameter. If an
+    unfiltered parameter is passed to this file API, files at an arbitrary filesystem location
+    could be modified. This rule identifies potential path traversal vulnerabilities. In many
+    cases, the constructed file path cannot be controlled by the user.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
+    shortlink: https://sg.run/ALZ4
+    semgrep.dev:
+      rule:
+        rule_id: 0oUpvO
+        version_id: LjTWxX
+        url: https://semgrep.dev/playground/r/LjTWxX/gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
+- id: gitlab.find_sec_bugs.PERMISSIVE_CORS-1
+  patterns:
+  - pattern-either:
+    - pattern: (HttpServletResponse $RES).setHeader("$HEADER", "$VAL")
+    - pattern: (HttpServletResponse $RES).addHeader("$HEADER", "$VAL")
+  - metavariable-regex:
+      metavariable: "$HEADER"
+      regex: "(?i)(Access-Control-Allow-Origin)"
+  - metavariable-regex:
+      metavariable: "$VAL"
+      regex: "(\\*|null)"
+  message: |
+    Prior to HTML5, Web browsers enforced the Same Origin Policy which ensures that in order for
+    JavaScript to access the contents of a Web page, both the JavaScript and the Web page must
+    originate from the same domain. Without the Same Origin Policy, a malicious website could serve
+    up JavaScript that loads sensitive information from other websites using a client's
+    credentials, cull through it, and communicate it back to the attacker. HTML5 makes it possible
+    for JavaScript to access data across domains if a new HTTP header called
+    Access-Control-Allow-Origin is defined. With this header, a Web server defines which other
+    domains are allowed to access its domain using cross-origin requests. However, caution should
+    be taken when defining the header because an overly permissive CORS policy will allow a
+    malicious application to communicate with the victim application in an inappropriate way,
+    leading to spoofing, data theft, relay and other attacks.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    category: security
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PERMISSIVE_CORS-1
+    shortlink: https://sg.run/rNJA
+    semgrep.dev:
+      rule:
+        rule_id: zdUG5y
+        version_id: JdTBZK
+        url: https://semgrep.dev/playground/r/JdTBZK/gitlab.find_sec_bugs.PERMISSIVE_CORS-1
+- id: gitlab.find_sec_bugs.PERMISSIVE_CORS-2
+  mode: taint
+  pattern-sources:
+  - pattern: "(HttpServletRequest $REQ).getParamater(...)"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: (HttpServletResponse $RES).setHeader("$HEADER", ...)
+      - pattern: (HttpServletResponse $RES).addHeader("$HEADER", ...)
+    - metavariable-regex:
+        metavariable: "$HEADER"
+        regex: "(?i)(Access-Control-Allow-Origin)"
+  message: |
+    Prior to HTML5, Web browsers enforced the Same Origin Policy which ensures that in order for
+    JavaScript to access the contents of a Web page, both the JavaScript and the Web page must
+    originate from the same domain. Without the Same Origin Policy, a malicious website could serve
+    up JavaScript that loads sensitive information from other websites using a client's
+    credentials, cull through it, and communicate it back to the attacker. HTML5 makes it possible
+    for JavaScript to access data across domains if a new HTTP header called
+    Access-Control-Allow-Origin is defined. With this header, a Web server defines which other
+    domains are allowed to access its domain using cross-origin requests. However, caution should
+    be taken when defining the header because an overly permissive CORS policy will allow a
+    malicious application to communicate with the victim application in an inappropriate way,
+    leading to spoofing, data theft, relay and other attacks.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    category: security
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PERMISSIVE_CORS-2
+    shortlink: https://sg.run/bWNr
+    semgrep.dev:
+      rule:
+        rule_id: pKUbrw
+        version_id: 5PTRY3
+        url: https://semgrep.dev/playground/r/5PTRY3/gitlab.find_sec_bugs.PERMISSIVE_CORS-2
+- id: gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
+  patterns:
+  - pattern-either:
+    - pattern: |
+        java.util.Random $R = new java.util.Random();
+        ...
+        $R.$METHOD();
+    - pattern: "(java.util.Random $R).$METHOD()"
+    - pattern: new java.util.Random().$METHOD()
+    - pattern: org.apache.commons.lang.math.RandomUtils.$METHOD()
+    - pattern: org.apache.commons.lang.RandomStringUtils.$METHOD(...)
+  - metavariable-regex:
+      metavariable: "$METHOD"
+      regex: "^(next|random)"
+  message: |
+    The use of a predictable random value can lead to vulnerabilities when
+    used in certain security critical contexts. A quick fix could be to replace
+    the use of java.util.Random with something stronger, such as java.security.SecureRandom.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-330: Use of Insufficiently Random Values'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
+    shortlink: https://sg.run/1kbD
+    semgrep.dev:
+      rule:
+        rule_id: lBUXPJ
+        version_id: BjTgQ4
+        url: https://semgrep.dev/playground/r/BjTgQ4/gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
+- id: gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
+  mode: taint
+  pattern-sources:
+  - pattern: "(HttpServletRequest $REQ).getParameter(...)"
+  pattern-sanitizers:
+  - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$U = new java.net.URI($VAR)\n"
+    - pattern-either:
+      - pattern-inside: new java.io.File($U)
+      - pattern-inside: java.nio.file.Paths.get($U)
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: new java.io.RandomAccessFile($INPUT,...)
+    - pattern: "$INPUT"
+  - pattern: new java.io.FileReader(...)
+  - pattern: new javax.activation.FileDataSource(...)
+  - pattern: new java.io.FileInputStream(...)
+  - pattern: new java.io.File(...)
+  - pattern: java.nio.file.Paths.get(...)
+  - pattern: java.io.File.createTempFile(...)
+  - pattern: java.io.File.createTempDirectory(...)
+  - pattern: java.nio.file.Files.createTempFile(...)
+  - pattern: java.nio.file.Files.createTempDirectory(...)
+  - patterns:
+    - pattern-inside: new java.io.FileWriter($PATH, ...)
+    - pattern: "$PATH"
+  - patterns:
+    - pattern-inside: new java.io.FileOutputStream($PATH, ...)
+    - pattern: "$PATH"
+  message: |
+    "The software uses an HTTP request parameter to construct a pathname that should be within a
+    restricted directory, but it does not properly neutralize absolute path sequences such as
+    "/abs/path" that can resolve to a location that is outside of that directory. See
+    http://cwe.mitre.org/data/definitions/36.html for more information."
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
+    shortlink: https://sg.run/Ben5
+    semgrep.dev:
+      rule:
+        rule_id: KxUwlN
+        version_id: 8KTJW9
+        url: https://semgrep.dev/playground/r/8KTJW9/gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
+- id: gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: |
+        $P = (HttpServletRequest $REQ).getParameter(...);
+        ...
+    - pattern-either:
+      - pattern: "$P + ..."
+      - pattern: "... + $P"
+  pattern-sanitizers:
+  - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$U = new java.net.URI($VAR)\n"
+    - pattern-either:
+      - pattern-inside: new java.io.File($U)
+      - pattern-inside: java.nio.file.Paths.get($U)
+    - pattern: "$VAR"
+  - patterns:
+    - pattern-inside: new java.io.RandomAccessFile($INPUT,...)
+    - pattern: "$INPUT"
+  - pattern: new java.io.FileReader(...)
+  - pattern: new javax.activation.FileDataSource(...)
+  - pattern: new java.io.FileInputStream(...)
+  - pattern: new java.io.File(...)
+  - pattern: java.nio.file.Paths.get(...)
+  - pattern: java.io.File.createTempFile(...)
+  - pattern: java.io.File.createTempDirectory(...)
+  - pattern: java.nio.file.Files.createTempFile(...)
+  - pattern: java.nio.file.Files.createTempDirectory(...)
+  - patterns:
+    - pattern-inside: new java.io.FileWriter($PATH, ...)
+    - pattern: "$PATH"
+  - patterns:
+    - pattern-inside: new java.io.FileOutputStream($PATH, ...)
+    - pattern: "$PATH"
+  message: |
+    "The software uses an HTTP request parameter to construct a pathname that should be within a
+    restricted directory, but it does not properly neutralize sequences such as ".." that can
+    resolve to a location that is outside of that directory. See
+    http://cwe.mitre.org/data/definitions/23.html for more information."
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
+    shortlink: https://sg.run/De5j
+    semgrep.dev:
+      rule:
+        rule_id: qNUpqY
+        version_id: gETRLO
+        url: https://semgrep.dev/playground/r/gETRLO/gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
+- id: gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
+  mode: taint
+  pattern-sources:
+  - pattern: "(javax.servlet.http.HttpServletRequest $VAR).getParameter(...)"
+  pattern-sinks:
+  - patterns:
+    - pattern: new org.springframework.web.servlet.ModelAndView($FST);
+    - pattern: "$FST"
+  - patterns:
+    - pattern: new org.springframework.web.servlet.ModelAndView($FST, $SND);
+    - pattern: "$FST"
+  - patterns:
+    - pattern: new org.springframework.web.servlet.ModelAndView($FST, $SND, $TRD);
+    - pattern: "$FST"
+  - patterns:
+    - pattern: new org.apache.struts.action.ActionForward($FST)
+    - pattern: "$FST"
+  - patterns:
+    - pattern: new org.apache.struts.action.ActionForward($FST, $SND)
+    - pattern: "$FST"
+  - patterns:
+    - pattern: new org.apache.struts.action.ActionForward($FST, $SND, $TRD)
+    - pattern: "$SND"
+  - patterns:
+    - pattern: new org.apache.struts.action.ActionForward($FST, $SND, $TRD)
+    - pattern: "$TRD"
+  - patterns:
+    - pattern-inside: |
+        $ACTION = new org.apache.struts.action.ActionForward();
+        ...
+    - pattern: "$ACTION.setPath(...)"
+  - patterns:
+    - pattern-inside: |
+        $MVC = new org.springframework.web.servlet.ModelAndView();
+        ...
+    - pattern: "$MVC.setViewName(...);"
+  - patterns:
+    - pattern-inside: |
+        $REQ = $HTTP.getRequestDispatcher(...);
+        ...
+    - pattern-either:
+      - pattern: "$REQ.include($FST, $SND)"
+      - pattern: "$REQ.forward($FST, $SND)"
+  languages:
+  - java
+  message: |
+    Constructing a server-side redirect path with user input could allow an
+    attacker to download application binaries (including application classes or
+    jar files) or view arbitrary files within protected directories.
+  metadata:
+    category: security
+    cwe: 'CWE-552: Files or Directories Accessible to External Parties'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
+    shortlink: https://sg.run/PPWq
+    semgrep.dev:
+      rule:
+        rule_id: ReU2bl
+        version_id: d6T0nl
+        url: https://semgrep.dev/playground/r/d6T0nl/gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          XmlRpcServerConfigImpl $VAR = new org.apache.xmlrpc.server.XmlRpcServerConfigImpl();
+          ...
+      - pattern: "$VAR.setEnabledForExtensions(true);"
+    - patterns:
+      - pattern-inside: |
+          XmlRpcClientConfigImpl $VAR = new org.apache.xmlrpc.client.XmlRpcClientConfigImpl();
+          ...
+      - pattern: "$VAR.setEnabledForExtensions(true);"
+  languages:
+  - java
+  message: |
+    Enabling extensions in Apache XML RPC server or client can lead to deserialization
+    vulnerability which would allow an attacker to execute arbitrary code.
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
+    shortlink: https://sg.run/nw5O
+    semgrep.dev:
+      rule:
+        rule_id: NbUeOb
+        version_id: DkTP3j
+        url: https://semgrep.dev/playground/r/DkTP3j/gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.RSA_KEY_SIZE-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $GEN = KeyPairGenerator.getInstance($ALG, ...);
+          ...
+      - pattern-either:
+        - pattern: "$VAR.initialize($SIZE, ...);"
+        - pattern: new java.security.spec.RSAKeyGenParameterSpec($SIZE,...);
+      - metavariable-comparison:
+          metavariable: "$SIZE"
+          comparison: "$SIZE < 2048"
+      - metavariable-regex:
+          metavariable: "$ALG"
+          regex: '"(RSA|DSA)"'
+  message: |
+    Detected an insufficient key size for DSA. NIST recommends a key size
+    of 2048 or higher.
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.RSA_KEY_SIZE-1
+    shortlink: https://sg.run/nwLb
+    semgrep.dev:
+      rule:
+        rule_id: kxUO7W
+        version_id: l4TKNb
+        url: https://semgrep.dev/playground/r/l4TKNb/gitlab.find_sec_bugs.RSA_KEY_SIZE-1
+  severity: WARNING
+  languages:
+  - java
+- id: gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
+  pattern: "(BasicParserPool $POOL).setIgnoreComments(false);"
+  languages:
+  - java
+  message: 'Ignoring XML comments in SAML may lead to authentication bypass
+
+    '
+  metadata:
+    cwe: 'CWE-287: Improper Authentication'
+    category: security
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
+    shortlink: https://sg.run/EzGA
+    semgrep.dev:
+      rule:
+        rule_id: kxUOAp
+        version_id: WrTXk1
+        url: https://semgrep.dev/playground/r/WrTXk1/gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getContentType(...)"
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getServerName(...)"
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getRequestedSessionId(...)"
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameterValues(...)"
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameterMap(...)"
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameterNames(...)"
+    - pattern: "(javax.servlet.http.HttpServletRequest $REQ).getParameter(...)"
+  pattern-sinks:
+  - pattern-either:
+    - pattern: '"..." + $PAR'
+    - pattern: $PAR + "..."
+  languages:
+  - java
+  message: |
+    The Servlet can read GET and POST parameters from various methods. The
+    value obtained should be considered unsafe."
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
+    shortlink: https://sg.run/gGey
+    semgrep.dev:
+      rule:
+        rule_id: v8Uv2D
+        version_id: pZTdQj
+        url: https://semgrep.dev/playground/r/pZTdQj/gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $M = new MimeMessage(...);
+          ...
+      - pattern: "$M.setSubject($ARG);"
+      - pattern-not: $M.setSubject("...")
+    - patterns:
+      - pattern-inside: |
+          $M = new MimeMessage(...);
+          ...
+      - pattern: "$M.addHeader($ARG1, $ARG2)"
+      - pattern-not: $M.addHeader("...", "...")
+    - patterns:
+      - pattern-inside: |
+          $M = new MimeMessage(...);
+          ...
+      - pattern: "$M.setDescription($ARG)"
+      - pattern-not: $M.setDescription("...")
+    - patterns:
+      - pattern-inside: |
+          $M = new MimeMessage(...);
+          ...
+      - pattern: "$M.setDisposition($ARG)"
+      - pattern-not: $M.setDisposition("...")
+  languages:
+  - java
+  message: |
+    Simple Mail Transfer Protocol (SMTP) is a the text based protocol used for
+    email delivery. Like with HTTP, headers are separate by new line separator. If
+    kuser input is place in a header line, the application should remove or replace
+    new line characters (CR / LF). You should use a safe wrapper such as Apache
+    Common Email and Simple Java Mail which filter special characters that can lead
+    to header injection.
+  metadata:
+    category: security
+    cwe: 'CWE-77: Improper Neutralization of Special Elements used in a Command'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
+    shortlink: https://sg.run/bWve
+    semgrep.dev:
+      rule:
+        rule_id: zdUGRr
+        version_id: K3TDPD
+        url: https://semgrep.dev/playground/r/K3TDPD/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
+  patterns:
+  - pattern-not-inside: |
+      final String $ARG = ...;
+      ...
+  - pattern-not-inside: |
+      class $CLAZZ {
+        ...
+        final String $ARG = ...;
+        ...
+      }
+  - pattern-either:
+    - patterns:
+      - pattern: "(javax.jdo.PersistenceManager $PM).newQuery($ARG)"
+      - pattern-not: (javax.jdo.PersistenceManager $PM).newQuery("...")
+    - patterns:
+      - pattern: "(javax.jdo.PersistenceManager $PM).newQuery(..., $ARG)"
+      - pattern-not: (javax.jdo.PersistenceManager $PM).newQuery(..., "...")
+    - patterns:
+      - pattern: "(javax.jdo.Query $Q).setFilter($ARG)"
+      - pattern-not: (javax.jdo.Query $Q).setFilter("...")
+    - patterns:
+      - pattern: "(javax.jdo.Query $Q).setGrouping($ARG)"
+      - pattern-not: (javax.jdo.Query $Q).setGrouping("...")
+    - patterns:
+      - pattern: "(javax.jdo.Query $Q).setGrouping($ARG)"
+      - pattern-not: (javax.jdo.Query $Q).setGrouping("...")
+    - patterns:
+      - pattern: "(org.hibernate.criterion.Restrictions $H).sqlRestriction($ARG, ...)"
+      - pattern-not: (org.hibernate.criterion.Restrictions $H).sqlRestriction("...",
+          ...)
+    - patterns:
+      - pattern: "(org.hibernate.Session $S).createQuery((String $ARG), ...)"
+      - pattern-not: (org.hibernate.Session $S).createQuery("...", ...)
+    - patterns:
+      - pattern: "(org.hibernate.Session $S).createSQLQuery($ARG, ...)"
+      - pattern-not: (org.hibernate.Session $S).createSQLQuery("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).executeQuery($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).createSQLQuery("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).execute($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).execute("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).executeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).executeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).executeLargeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).executeLargeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).addBatch($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).addBatch("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).executeQuery($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).executeQuery("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).execute($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).execute("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).executeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).executeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).executeLargeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).executeLargeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).addBatch($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).addBatch("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Connection $S).prepareCall($ARG, ...)"
+      - pattern-not: (java.sql.Connection $S).prepareCall("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Connection $S).prepareStatement($ARG, ...)"
+      - pattern-not: (java.sql.Connection $S).prepareStatement("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Connection $S).nativeSQL($ARG, ...)"
+      - pattern-not: (java.sql.Connection $S).nativeSQL("...", ...)
+    - patterns:
+      - pattern: new org.springframework.jdbc.core.PreparedStatementCreatorFactory($ARG,
+          ...)
+      - pattern-not: new org.springframework.jdbc.core.PreparedStatementCreatorFactory("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.PreparedStatementCreatorFactory $F).newPreparedStatementCreator($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.PreparedStatementCreatorFactory
+          $F).newPreparedStatementCreator("...", ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).batchUpdate($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).batchUpdate("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).execute($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).execute("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).query($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).query("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForList($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForList("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForMap($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForMap("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForObject($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForObject("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForObject($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForObject("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForRowSet($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForRowSet("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForInt($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForInt("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForLong($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForLong("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).udpate($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).udpate("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).batchUpdate($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).batchUpdate("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).execute($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).execute("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).query($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).query("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForList($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForList("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForMap($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForMap("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForObject($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForObject("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForRowSet($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForRowSet("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForInt($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForInt("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForLong($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForLong("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).update($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).update("...",
+          ...)
+    - patterns:
+      - pattern: "(io.vertx.sqlclient.SqlClient $O).query($ARG, ...)"
+      - pattern-not: (io.vertx.sqlclient.SqlClient $O).query("...", ...)
+    - patterns:
+      - pattern: "(io.vertx.sqlclient.SqlClient $O).preparedQuery($ARG, ...)"
+      - pattern-not: (io.vertx.sqlclient.SqlClient $O).preparedQuery("...", ...)
+    - patterns:
+      - pattern: "(io.vertx.sqlclient.SqlConnection $O).prepare($ARG, ...)"
+      - pattern-not: (io.vertx.sqlclient.SqlConnection $O).prepare("...", ...)
+    - patterns:
+      - pattern: "(org.apache.turbine.om.peer.BasePeer $O).executeQuery($ARG, ...)"
+      - pattern-not: (org.apache.turbine.om.peer.BasePeer $O).executeQuery("...",
+          ...)
+    - patterns:
+      - pattern: "(org.apache.torque.util.BasePeer $O).executeQuery($ARG, ...)"
+      - pattern-not: (org.apache.torque.util.BasePeer $O).executeQuery("...", ...)
+    - patterns:
+      - pattern: "(javax.persistence.EntityManager $O).createQuery($ARG, ...)"
+      - pattern-not: (javax.persistence.EntityManager $O).createQuery("...", ...)
+    - patterns:
+      - pattern: "(javax.persistence.EntityManager $O).createNativeQuery($ARG, ...)"
+      - pattern-not: (javax.persistence.EntityManager $O).createNativeQuery("...",
+          ...)
+  languages:
+  - java
+  message: |
+    The input values included in SQL queries need to be passed in safely. Bind
+    variables in prepared statements can be used to easily mitigate the risk of
+    SQL injection.
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
+    shortlink: https://sg.run/WD1A
+    semgrep.dev:
+      rule:
+        rule_id: lBUXP4
+        version_id: QkTYBG
+        url: https://semgrep.dev/playground/r/QkTYBG/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.SSL_CONTEXT-1
+  patterns:
+  - pattern-either:
+    - pattern: new org.apache.http.impl.client.DefaultHttpClient();
+    - pattern: javax.net.ssl.SSLContext.getInstance("SSL");
+  message: |
+    A HostnameVerifier that accept any host are often use because of certificate
+    reuse on many hosts. As a consequence, this is vulnerable to Man-in-the-middleattacks
+    attacks since the client will trust any certificate.
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SSL_CONTEXT-1
+    shortlink: https://sg.run/8k34
+    semgrep.dev:
+      rule:
+        rule_id: eqUZxA
+        version_id: zyTwe7
+        url: https://semgrep.dev/playground/r/zyTwe7/gitlab.find_sec_bugs.SSL_CONTEXT-1
+  severity: WARNING
+  languages:
+  - java
+- id: gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
+  patterns:
+  - pattern-inside: |
+      class $CLASS extends $SC {
+        ...
+      }
+  - metavariable-regex:
+      metavariable: "$SC"
+      regex: "(ActionForm|ValidatorForm)"
+  - pattern-not: public void validate() { ... }
+  languages:
+  - java
+  message: |
+    Form inputs should have minimal input validation. Preventive validation helps
+    provide defense in depth against a variety of risks.
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
+    shortlink: https://sg.run/R5K2
+    semgrep.dev:
+      rule:
+        rule_id: gxUkqj
+        version_id: bZT74k
+        url: https://semgrep.dev/playground/r/bZT74k/gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.TDES_USAGE-1
+  patterns:
+  - pattern-inside: javax.crypto.Cipher.getInstance("$ALG")
+  - metavariable-regex:
+      metavariable: "$ALG"
+      regex: "^(DESede)/.*"
+  message: |
+    Triple DES (also known as 3DES or DESede) is considered strong ciphers for modern
+    applications. NIST recommends the usage of AES block ciphers instead of 3DES.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.TDES_USAGE-1
+    shortlink: https://sg.run/w4BX
+    semgrep.dev:
+      rule:
+        rule_id: j2UwKr
+        version_id: A8TOnx
+        url: https://semgrep.dev/playground/r/A8TOnx/gitlab.find_sec_bugs.TDES_USAGE-1
+- id: gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
+  pattern-either:
+  - patterns:
+    - pattern: org.apache.velocity.app.Velocity.evaluate(..., $VAR)
+    - pattern-not: org.apache.velocity.app.Velocity.evaluate(..., "...")
+  - patterns:
+    - pattern-not-inside: |
+        $C = (freemarker.template.Configuration $CFG).getTemplate("...");
+        ...
+    - pattern-inside: |
+        $C = (freemarker.template.Configuration $CFG).getTemplate($IN);
+        ...
+    - pattern: "$C.process(...)"
+  - patterns:
+    - pattern-inside: |
+        import com.mitchellbosecke.pebble.PebbleEngine;
+        ...
+    - pattern-inside: |
+        $C = $T.getTemplate($IN);
+        ...
+    - pattern-not-inside: |
+        $C = $T.getTemplate("...");
+        ...
+    - pattern: "$C.evaluate(...)"
+  languages:
+  - java
+  message: |
+    A malicious user in control of a template can run malicious code on the
+    server-side. Velocity templates should be seen as scripts.
+  metadata:
+    category: security
+    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
+    shortlink: https://sg.run/vpK4
+    semgrep.dev:
+      rule:
+        rule_id: yyUDL9
+        version_id: RGT6BG
+        url: https://semgrep.dev/playground/r/RGT6BG/gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: "(HttpServletRequest $H). ... .setAttribute($ARG1, $ARG2);"
+      - pattern-not: (HttpServletRequest $H). ... .setAttribute("...", "...");
+    - patterns:
+      - pattern: "(HttpServletRequest $H). ... .putValue($ARG1, $ARG2);"
+      - pattern-not: (HttpServletRequest $H). ... .putValue("...", "...");
+  languages:
+  - java
+  message: |
+    A trust boundary can be thought of as line drawn through a program. On one side
+    of the line, data is untrusted. On the other side of the line, data is assumed
+    to be trustworthy. The purpose of validation logic is to allow data to safely
+    cross the trust boundary - to move from untrusted to trusted. A trust boundary
+    violation occurs when a program blurs the line between what is trusted and what
+    is untrusted. By combining trusted and untrusted data in the same data
+    structure, it becomes easier for programmers to mistakenly trust unvalidated
+    data.
+  metadata:
+    category: security
+    cwe: 'CWE-501: Trust Boundary Violation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
+    shortlink: https://sg.run/yJWd
+    semgrep.dev:
+      rule:
+        rule_id: oqUKne
+        version_id: PkTln2
+        url: https://semgrep.dev/playground/r/PkTln2/gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: "(HttpServletResponse $REQ).sendRedirect(...)"
+      - pattern-not: (HttpServletResponse $REQ).sendRedirect("...")
+    - patterns:
+      - pattern: "(HttpServletResponse $REQ).addHeader(...)"
+      - pattern-not: (HttpServletResponse $REQ).addHeader("...", "...")
+    - patterns:
+      - pattern: "(HttpServletResponse $REQ).encodeURL(...)"
+      - pattern-not: (HttpServletResponse $REQ).encodeURL("...")
+    - patterns:
+      - pattern: "(HttpServletResponse $REQ).encodeRedirectUrl(...)"
+      - pattern-not: (HttpServletResponse $REQ).encodeRedirectUrl("...")
+  languages:
+  - java
+  message: |
+    Unvalidated redirects occur when an application redirects a user to a
+    destination URL specified by a user supplied parameter that is not validated.
+    Such vulnerabilities can be used to facilitate phishing attacks.
+  metadata:
+    category: security
+    cwe: 'CWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
+    shortlink: https://sg.run/PPWE
+    semgrep.dev:
+      rule:
+        rule_id: EwU1nP
+        version_id: 1QTRXl
+        url: https://semgrep.dev/playground/r/1QTRXl/gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
+  pattern-either:
+  - patterns:
+    - pattern: new URL(...). ... .connect()
+    - pattern-not: new URL("..."). ... .connect()
+  - patterns:
+    - pattern: new URL(...). ... .GetContent(...)
+    - pattern-not: new URL("..."). ... .GetContent(...)
+  - patterns:
+    - pattern: new URL(...). ... .openConnection(...)
+    - pattern-not: new URL("..."). ... .openConnection(...)
+  - patterns:
+    - pattern: new URL(...). ... .openStream(...)
+    - pattern-not: new URL("..."). ... .openStream(...)
+  - patterns:
+    - pattern: new URL(...). ... .getContent(...)
+    - pattern-not: new URL("..."). ... .getContent(...)
+  languages:
+  - java
+  message: |
+    Server-Side Request Forgery occur when a web server executes a request to a
+    user supplied destination parameter that is not validated. Such vulnerabilities
+    could allow an attacker to access internal services or to launch attacks from
+    your web server.
+  metadata:
+    category: security
+    cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
+    shortlink: https://sg.run/Njl7
+    semgrep.dev:
+      rule:
+        rule_id: pKUblx
+        version_id: qkTd9E
+        url: https://semgrep.dev/playground/r/qkTd9E/gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
+  patterns:
+  - pattern-inside: |
+      import static org.apache.commons.io.FilenameUtils;
+      ...
+  - pattern-either:
+    - pattern: normalize(...)
+    - pattern: getExtension(...)
+    - pattern: isExtensions(...)
+    - pattern: getName(...)
+    - pattern: getBaseName(...)
+    - pattern: org.apache.commons.io.FilenameUtils.normalize(...)
+    - pattern: org.apache.commons.io.FilenameUtils.getExtension(...)
+    - pattern: org.apache.commons.io.FilenameUtils.isExtensions(...)
+    - pattern: org.apache.commons.io.FilenameUtils.getName(...)
+    - pattern: org.apache.commons.io.FilenameUtils.getBaseName(...)
+  message: |
+    A file is opened to read its content. The filename comes from an input
+    parameter. If an unfiltered parameter is passed to this file API, files from an
+    arbitrary filesystem location could be read.
+  languages:
+  - java
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
+    shortlink: https://sg.run/Gb41
+    semgrep.dev:
+      rule:
+        rule_id: 8GUvb6
+        version_id: rxTp8x
+        url: https://semgrep.dev/playground/r/rxTp8x/gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
+- id: gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          class $V implements HostnameVerifier {
+            ...
+          }
+      - pattern-inside: |
+          public boolean verify(...) {
+            ...
+          }
+      - pattern: return true;
+    - patterns:
+      - pattern-inside: |
+          class $V implements X509TrustManager {
+            ...
+          }
+      - pattern-either:
+        - pattern: public void checkClientTrusted(...) {}
+        - pattern: public void checkServerTrusted(...) {}
+        - pattern: |
+            public X509Certificate[] getAcceptedIssuers() {
+              ...
+              return null;
+            }
+  languages:
+  - java
+  message: |
+    A HostnameVerifier that accept any host are often use because of certificate
+    reuse on many hosts. As a consequence, this is vulnerable to Man-in-the-middle
+    attacks since the client will trust any certificate.
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
+    shortlink: https://sg.run/Jw5Z
+    semgrep.dev:
+      rule:
+        rule_id: 7KUbOj
+        version_id: 9lTGng
+        url: https://semgrep.dev/playground/r/9lTGng/gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
+  patterns:
+  - pattern-either:
+    - pattern: MessageDigest.getInstance($ALG, ...)
+    - pattern: Signature.getInstance($ALG, ...)
+  - metavariable-regex:
+      metavariable: "$ALG"
+      regex: ".*(MD5|MD4|MD2|SHA1|SHA-1).*"
+  message: |
+    DES is considered strong ciphers for modern applications. Currently, NIST recommends the usage
+    of AES block ciphers instead of DES.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-326: Inadequate Encryption Strength'
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
+    shortlink: https://sg.run/L2R7
+    semgrep.dev:
+      rule:
+        rule_id: OrUvyR
+        version_id: o5T356
+        url: https://semgrep.dev/playground/r/o5T356/gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
+- id: gitlab.find_sec_bugs.WICKET_XSS1-1
+  patterns:
+  - pattern: "(org.apache.wicket.markup.html.basic.Label $X).setEscapeModelStrings(false);"
+  languages:
+  - java
+  message: 'Disabling HTML escaping put the application at risk for Cross-Site Scripting
+    (XSS).
+
+    '
+  metadata:
+    category: security
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.WICKET_XSS1-1
+    shortlink: https://sg.run/QJoP
+    semgrep.dev:
+      rule:
+        rule_id: v8Uvkz
+        version_id: YDT1zX
+        url: https://semgrep.dev/playground/r/YDT1zX/gitlab.find_sec_bugs.WICKET_XSS1-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.XML_DECODER-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $D = new XMLDecoder($IN);
+          ...
+      - pattern-not-inside: |
+          $D = new XMLDecoder("...");
+          ...
+      - pattern: "$D.readObject()"
+  languages:
+  - java
+  message: 'Avoid using XMLDecoder to parse content from an untrusted source.
+
+    '
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XML_DECODER-1
+    shortlink: https://sg.run/7QeR
+    semgrep.dev:
+      rule:
+        rule_id: wdUk2X
+        version_id: 0bT8QA
+        url: https://semgrep.dev/playground/r/0bT8QA/gitlab.find_sec_bugs.XML_DECODER-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.XPATH_INJECTION-1
+  patterns:
+  - pattern-either:
+    - pattern-inside: import javax.xml.xpath.*; ...
+    - pattern-inside: import javax.xml.xpath.Xpath; ...
+  - pattern-either:
+    - patterns:
+      - pattern: "(XPath $X).compile($ARG)"
+      - pattern-not: (XPath $X).compile("...")
+    - patterns:
+      - pattern: "(XPath $X).evaluate($ARG)"
+      - pattern-not: (XPath $X).evaluate("...")
+  languages:
+  - java
+  message: |
+    The input values included in SQL queries need to be passed in safely. Bind
+    variables in prepared statements can be used to easily mitigate the risk of
+    SQL injection.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XPATH_INJECTION-1
+    shortlink: https://sg.run/8kv7
+    semgrep.dev:
+      rule:
+        rule_id: OrUv05
+        version_id: qkTd9N
+        url: https://semgrep.dev/playground/r/qkTd9N/gitlab.find_sec_bugs.XPATH_INJECTION-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletRequest $REQ, ...) {...}"
+    - pattern: "$REQ.getParameter(...);"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: org.owasp.encoder.Encode.forHtml($TAINTED);
+    - pattern: "$TAINTED"
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletResponse $RES, ...) {...}"
+    - pattern-inside: |
+        $WRITER = $RES.getWriter();
+        ...
+    - pattern: "$WRITER.write($DATA,...);"
+    - pattern: "$DATA"
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletResponse $RES, ...) {...}"
+    - pattern: "$RES.getWriter().write($DATA,...);"
+    - pattern: "$DATA"
+  message: 'Servlet reflected cross site scripting vulnerability
+
+    '
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation'
+    category: security
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
+    shortlink: https://sg.run/3Qkb
+    semgrep.dev:
+      rule:
+        rule_id: d8U6Rg
+        version_id: 6xTlkb
+        url: https://semgrep.dev/playground/r/6xTlkb/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
+- id: gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
+  patterns:
+  - pattern-inside: |
+      class $CLASS extends HttpServletRequestWrapper {
+      ...
+      }
+  - pattern: stripXSS(...) { ... }
+  languages:
+  - java
+  message: 'Avoid using custom XSS filtering. Please use standard sanitization functions.
+
+    '
+  metadata:
+    category: security
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
+    shortlink: https://sg.run/gG7n
+    semgrep.dev:
+      rule:
+        rule_id: eqUZdN
+        version_id: l4TKeP
+        url: https://semgrep.dev/playground/r/l4TKeP/gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
+  severity: INFO
+- id: gitlab.find_sec_bugs.XSS_SERVLET-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletRequest $REQ, ...) {...}"
+    - pattern: "$REQ.getParameter(...);"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: org.owasp.encoder.Encode.forHtml($TAINTED);
+    - pattern: "$TAINTED"
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletResponse $RES, ...) {...}"
+    - pattern-inside: |
+        $WRITER = $RES.getWriter();
+        ...
+    - pattern: "$WRITER.write($DATA,...);"
+    - pattern: "$DATA"
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletResponse $RES, ...) {...}"
+    - pattern: "$RES.getWriter().write($DATA,...);"
+    - pattern: "$DATA"
+  message: |
+    A potential XSS was found. It could be used to execute unwanted JavaScript in a
+    client's browser.
+  languages:
+  - java
+  metadata:
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    category: security
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_SERVLET-1
+    shortlink: https://sg.run/4kwE
+    semgrep.dev:
+      rule:
+        rule_id: ZqUeEA
+        version_id: o5T3Pg
+        url: https://semgrep.dev/playground/r/o5T3Pg/gitlab.find_sec_bugs.XSS_SERVLET-1
+  severity: WARNING
+- id: gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
+  pattern-either:
+  - patterns:
+    - pattern-inside: "$TYPE $FUNC(..., ServletRequest $REQ, ...) { ... }"
+    - pattern-either:
+      - pattern: "$REQ.getParameter(...);"
+      - pattern: "$REQ.getParameterValues();"
+      - pattern: "$REQ.getParameterMap(...);"
+      - pattern: "$REQ.getParameterNames();"
+  - patterns:
+    - pattern-inside: "$TYPE $FUNC(..., HttpServletRequest $SREQ, ...) { ... }"
+    - pattern-either:
+      - pattern: "$SREQ.getRequestedSessionId();"
+      - pattern: "$SREQ.getQueryString();"
+      - pattern: "$SREQ.getParameter(...);"
+      - pattern: "$SREQ.getParameterValues();"
+      - pattern: "$SREQ.getParameterMap(...);"
+      - pattern: "$SREQ.getParameterNames();"
+      - patterns:
+        - pattern: "$SREQ.getHeader($HEADER);"
+        - metavariable-regex:
+            metavariable: "$HEADER"
+            regex: "(?i)(Host|Referer|User-Agent)"
+  message: |
+    The Servlet can read GET and POST parameters from various methods. The value obtained should be
+    considered unsafe. You may need to validate or sanitize those values before passing them to
+    sensitive APIs
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-20: Improper Input Validation'
+    category: security
+    technology:
+    - java
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
+    shortlink: https://sg.run/PP6q
+    semgrep.dev:
+      rule:
+        rule_id: nJUneR
+        version_id: zyTw9j
+        url: https://semgrep.dev/playground/r/zyTw9j/gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
+- id: gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
+  patterns:
+  - pattern-inside: import javax.xml.transform.*; ...
+  - pattern-inside: |
+      $T = $FACT.newTransformer();
+      ...
+  - pattern-not-inside: |
+      $T.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      ...
+  - pattern-not-inside: |
+      $T.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+      ...
+  - pattern-not-inside: |
+      $T.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      ...
+  - pattern: "$T.transform(...)"
+  languages:
+  - java
+  message: |
+    XML External Entity (XXE) attacks can occur when an XML parser supports XML
+    entities while processing XML received from an untrusted source.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
+    shortlink: https://sg.run/5Zx3
+    semgrep.dev:
+      rule:
+        rule_id: 7KUb72
+        version_id: 2KTkXb
+        url: https://semgrep.dev/playground/r/2KTkXb/gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.XXE_SAXPARSER-1
+  patterns:
+  - pattern-inside: |
+      $SF = SAXParserFactory.newInstance();
+      ...
+  - pattern-not-inside: |
+      $SF.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      ...
+  - pattern-not-inside: |
+      $SF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      ...
+  - pattern-inside: |
+      $P = $SFP.newSAXParser();
+      ...
+  - pattern: "$P.parse(...);"
+  languages:
+  - java
+  message: |
+    XML External Entity (XXE) attacks can occur when an XML parser supports XML
+    entities while processing XML received from an untrusted source.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_SAXPARSER-1
+    shortlink: https://sg.run/JwWQ
+    semgrep.dev:
+      rule:
+        rule_id: EwU1kG
+        version_id: pZTdJ6
+        url: https://semgrep.dev/playground/r/pZTdJ6/gitlab.find_sec_bugs.XXE_SAXPARSER-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.XXE_XMLREADER-1
+  patterns:
+  - pattern-inside: |
+      $R = XMLReaderFactory.createXMLReader();
+      ...
+  - pattern-not-inside: |
+      $R.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      ...
+  - pattern: "$R.parse(...);"
+  languages:
+  - java
+  message: |
+    XML External Entity (XXE) attacks can occur when an XML parser supports XML
+    entities while processing XML received from an untrusted source.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_XMLREADER-1
+    shortlink: https://sg.run/GbAn
+    semgrep.dev:
+      rule:
+        rule_id: L1UzY1
+        version_id: X0TjpZ
+        url: https://semgrep.dev/playground/r/X0TjpZ/gitlab.find_sec_bugs.XXE_XMLREADER-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
+  patterns:
+  - pattern-inside: |
+      $SF = XMLInputFactory.newFactory();
+      ...
+  - pattern-not-inside: |
+      $SF.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+      ...
+  - pattern-not-inside: |
+      $SF.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+      ...
+  - pattern: "$SF.createXMLStreamReader(...)"
+  languages:
+  - java
+  message: |
+    XML External Entity (XXE) attacks can occur when an XML parser supports XML
+    entities while processing XML received from an untrusted source.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
+    shortlink: https://sg.run/R5zK
+    semgrep.dev:
+      rule:
+        rule_id: 8GUv2b
+        version_id: jQT4pR
+        url: https://semgrep.dev/playground/r/jQT4pR/gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
+  patterns:
+  - pattern-inside: |
+      $DF = df.newDocumentBuilder();
+      ...
+  - pattern-not-inside: |
+      $DF.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      ...
+  - pattern-not-inside: |
+      $DF.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+      ...
+  - pattern-not-inside: |
+      $DF.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      ...
+  - pattern-not-inside: |
+      $DF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      ...
+  - pattern: "$SF.newDocumentBuilder(...)"
+  languages:
+  - java
+  message: |
+    XML External Entity (XXE) attacks can occur when an XML parser supports XML
+    entities while processing XML received from an untrusted source.
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
+    shortlink: https://sg.run/AL44
+    semgrep.dev:
+      rule:
+        rule_id: gxUk44
+        version_id: 1QTRnd
+        url: https://semgrep.dev/playground/r/1QTRnd/gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
+  severity: ERROR
+- id: gitlab.security_code_scan.SCS0001-1
+  patterns:
+  - pattern-inside: |
+      using System.Diagnostics;
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern: Process.Start($ARG)
+      - pattern-not: Process.Start("...")
+    - pattern: "(Process $PROC).StartInfo.FileName = <...$ARG...>;"
+    - pattern: "(Process $PROC).StartInfo.Arguments = <...$ARG...>;"
+    - patterns:
+      - pattern-inside: |
+          $PSINFO = new ProcessStartInfo(...)
+          ...
+          Process.Start($PSINFO)
+      - pattern-either:
+        - pattern: "$PSINFO.Arguments = <...$ARG...>;"
+        - pattern: "$PSINFO.FileName = <...$ARG...>;"
+  message: |
+    The highlighted API is used to execute a system command. If unfiltered input is passed to this
+    API, it can lead to arbitrary command execution.
+  languages:
+  - csharp
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
+      (''OS Command Injection'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0001-1
+    shortlink: https://sg.run/WbD2
+    semgrep.dev:
+      rule:
+        rule_id: 3qU2L1
+        version_id: d6T0NJ
+        url: https://semgrep.dev/playground/r/d6T0NJ/gitlab.security_code_scan.SCS0001-1
+- id: gitlab.security_code_scan.SCS0002-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$FUNC"
+          regex: "^(SqlQuery|ExecuteSqlCommand|ExecuteSqlCommandAsync|ExecuteSqlRaw|ExecuteSqlRawAsync|FromSqlRaw|FromSql|GetSqlStringCommand|ExecuteDataSet|ExecuteReader|ExecuteNonQuery|ExecuteScalar|CreateSQLQuery)$"
+      - pattern: "$DB.$FUNC($ARG, ...);"
+      - pattern-not: $DB.$FUNC("...", ...);
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$FUNC"
+          regex: "^(ExecuteQuery|ExecuteCommand)$"
+      - pattern-inside: |
+          using System.Data.Linq;
+          ...
+      - pattern: "(DataContext $CTX).$FUNC($ARG, ...)"
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$IMPL"
+          regex: "^(SqlCommand|EntityCommand|OdbcCommand|OleDbCommand|SqliteCommand)$"
+      - pattern-either:
+        - patterns:
+          - pattern: new $IMPL($ARG, ...);
+          - pattern-not: new $IMPL("...", ...);
+        - patterns:
+          - pattern: "($IMPL $CMD).CommandText = <...$ARG...>;"
+          - pattern-not: ($IMPL $CMD).CommandText = "...";
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$FUNC"
+          regex: "^(ExecuteDataRow|ExecuteDataRowAsync|ExecuteDataset|ExecuteDatasetAsync|ExecuteNonQuery|ExecuteNonQueryAsync|ExecuteReader|ExecuteReaderAsync|ExecuteScalar|ExecuteScalarAsync|UpdateDataSet|UpdateDataSetAsync)$"
+      - pattern-inside: |
+          using MySql.Data.MySqlClient;
+          ...
+      - pattern: MySqlHelper.$FUNC("...", $ARG, ...);
+    - patterns:
+      - pattern-inside: |
+          using Cassandra;
+          ...
+      - pattern: "(Session $SESS).Execute($ARG, ...);"
+      - pattern-not: (Session $SESS).Execute("...", ...);
+  message: |
+    The method identified is susceptible to injection. The input should be validated and properly
+    escaped.
+  languages:
+  - csharp
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (‘SQL Injection’)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0002-1
+    shortlink: https://sg.run/K1y5
+    semgrep.dev:
+      rule:
+        rule_id: PeUejg
+        version_id: nWTbD4
+        url: https://semgrep.dev/playground/r/nWTbD4/gitlab.security_code_scan.SCS0002-1
+- id: gitlab.security_code_scan.SCS0003-1
+  patterns:
+  - pattern-inside: |
+      using System.Xml;
+      ...
+  - pattern-either:
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$FUNC"
+          regex: "^(SelectNodes|SelectSingleNode|Compile|Evaluate|Matches|Select|SelectAncestors|SelectChildren|SelectDescendants)$"
+      - metavariable-regex:
+          metavariable: "$TY"
+          regex: "^(XPathNavigator|XmlDocument|XmlNode|XmlDocumentXPathExtensions)$"
+      - pattern: "($TY $VAR).$FUNC(<...$ARG...>, ...)"
+      - pattern-not: ($TY $VAR).$FUNC("...", ...)
+    - patterns:
+      - pattern-inside: |
+          using System.Xml.Linq;
+          ...
+      - metavariable-regex:
+          metavariable: "$FUNC"
+          regex: "^(XPathEvaluate|XPathSelectElement|XPathSelectElements)$"
+      - pattern: "$VAR.$FUNC(<...$ARG...>, ...)"
+      - pattern-not: $VAR.$FUNC("...", ...)
+    - patterns:
+      - pattern-inside: |
+          using System.Xml.Schema;
+          ...
+      - pattern-either:
+        - patterns:
+          - pattern: "$VAR.XPath = <...$ARG...>;"
+          - pattern-not: $VAR.XPath = "..."
+        - patterns:
+          - pattern: new XmlSchemaXPath { XPath = <...$ARG...> };
+          - focus-metavariable: "$ARG"
+  message: |
+    The method identified is susceptible to injection. The input should be validated and properly
+    escaped.
+  languages:
+  - csharp
+  severity: INFO
+  metadata:
+    category: security
+    cwe: 'CWE-643: Improper Neutralization of Data within XPath Expressions (‘XPath
+      Injection’)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0003-1
+    shortlink: https://sg.run/qeZ7
+    semgrep.dev:
+      rule:
+        rule_id: JDUnoJ
+        version_id: ExTL5W
+        url: https://semgrep.dev/playground/r/ExTL5W/gitlab.security_code_scan.SCS0003-1
+- id: gitlab.security_code_scan.SCS0004-1
+  patterns:
+  - pattern-inside: |
+      using System.Net;
+      ...
+  - pattern: ServicePointManager.ServerCertificateValidationCallback += $CALLBACK;
+  - metavariable-pattern:
+      metavariable: "$CALLBACK"
+      patterns:
+      - pattern-either:
+        - pattern: "$RETURNTYPE $FUNC(...) { return true; }"
+        - pattern: "(...) => true;"
+  message: |
+    When a certificate is invalid or malicious, it might allow an attacker to spoof a trusted
+    entity by interfering in the communication path between the host and client. The software might
+    connect to a malicious host while believing it is a trusted host, or the software might be
+    deceived into accepting spoofed data that appears to originate from a trusted host.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0004-1
+    shortlink: https://sg.run/PwPz
+    semgrep.dev:
+      rule:
+        rule_id: ZqUDen
+        version_id: bZT7WW
+        url: https://semgrep.dev/playground/r/bZT7WW/gitlab.security_code_scan.SCS0004-1
+- id: gitlab.security_code_scan.SCS0005-1
+  patterns:
+  - pattern: "(Random $RNG).$METHOD(...);"
+  - focus-metavariable: "$RNG"
+  message: |
+    The use of a predictable random value can lead to vulnerabilities when used in certain security
+    critical contexts.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0005-1
+    shortlink: https://sg.run/Rw5q
+    semgrep.dev:
+      rule:
+        rule_id: L1URz8
+        version_id: xyTgbE
+        url: https://semgrep.dev/playground/r/xyTgbE/gitlab.security_code_scan.SCS0005-1
+- id: gitlab.security_code_scan.SCS0006-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$HASH_PROVIDER"
+          regex: "^(SHA1CryptoServiceProvider|MD5CryptoServiceProvider)$"
+      - pattern: new $HASH_PROVIDER
+    - patterns:
+      - metavariable-regex:
+          metavariable: "$HASH_CLASS"
+          regex: "^System.Security.Cryptography.(SHA1|MD5)$"
+      - pattern: "$HASH_CLASS.$METHOD();"
+  message: |
+    The use of a broken or risky cryptographic algorithm is an unnecessary risk that may result in
+    the exposure of sensitive information.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0006-1
+    shortlink: https://sg.run/Gzbq
+    semgrep.dev:
+      rule:
+        rule_id: 7KUKbk
+        version_id: w8TPgP
+        url: https://semgrep.dev/playground/r/w8TPgP/gitlab.security_code_scan.SCS0006-1
+- id: gitlab.security_code_scan.SCS0007-1
+  mode: taint
+  pattern-sanitizers:
+  - pattern: "(XmlReaderSettings $SETTINGS).ProhibitDtd = true;"
+  - pattern: "(XmlReaderSettings $SETTINGS).DtdProcessing = DtdProcessing.Prohibit;"
+  - pattern: "(XmlDocument $DOC).XmlResolver = null;"
+  - pattern: var $DOC = new XmlDocument { ..., XmlResolver = null, ... };
+  pattern-sinks:
+  - pattern: XmlReader.Create(..., $SETTINGS);
+  - pattern: "(XmlDocument $DOC).Load(...);"
+  pattern-sources:
+  - pattern: var $SETTINGS = new XmlReaderSettings();
+  - pattern: var $DOC = new XmlDocument(...);
+  - pattern: var $DOC = new XmlDocument {...};
+  message: |
+    The method identified is susceptible to injection. The input should be validated and properly
+    escaped.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (‘XXE’)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0007-1
+    shortlink: https://sg.run/lbWE
+    semgrep.dev:
+      rule:
+        rule_id: 5rU7N6
+        version_id: 7ZTl63
+        url: https://semgrep.dev/playground/r/7ZTl63/gitlab.security_code_scan.SCS0007-1
+- id: gitlab.security_code_scan.SCS0008-1
+  mode: taint
+  pattern-sources:
+  - pattern: 'var $COOKIE = new HttpCookie(...);
+
+      '
+  pattern-sinks:
+  - pattern: "$COOKIE"
+  pattern-sanitizers:
+  - pattern: "$COOKIE.Secure = true;"
+  message: |
+    The Secure attribute for sensitive cookies in HTTPS sessions is not set, which could cause the
+    user agent to send those cookies in plaintext over an HTTP session.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-614: Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0008-1
+    shortlink: https://sg.run/49k5
+    semgrep.dev:
+      rule:
+        rule_id: d8U86o
+        version_id: rxTpgB
+        url: https://semgrep.dev/playground/r/rxTpgB/gitlab.security_code_scan.SCS0008-1
+- id: gitlab.security_code_scan.SCS0009-1
+  mode: taint
+  pattern-sources:
+  - pattern: 'var $COOKIE = new HttpCookie(...);
+
+      '
+  pattern-sinks:
+  - pattern: "$COOKIE"
+  pattern-sanitizers:
+  - pattern: "$COOKIE.HttpOnly = true;"
+  message: |
+    The HttpOnly flag is not set for the cookie. An attacker could perform XSS with a malicious
+    script.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0009-1
+    shortlink: https://sg.run/39QK
+    semgrep.dev:
+      rule:
+        rule_id: v8ULvw
+        version_id: yeT4bz
+        url: https://semgrep.dev/playground/r/yeT4bz/gitlab.security_code_scan.SCS0009-1
+- id: gitlab.security_code_scan.SCS0010-1
+  patterns:
+  - pattern-inside: |
+      using System.Security.Cryptography;
+      ...
+  - pattern-either:
+    - pattern-regex: ".*DES\\.Create\\(\\);"
+    - pattern: new DESCryptoServiceProvider();
+    - pattern-regex: ".*TripleDES\\.Create\\(\\);"
+    - pattern: new TripleDESCryptoServiceProvider();
+    - pattern-regex: ".*RC2\\.Create\\(\\);"
+    - pattern: new RC2CryptoServiceProvider();
+  message: |
+    The use of a broken or risky cryptographic algorithm is an unnecessary risk that may result in
+    the exposure of sensitive information.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0010-1
+    shortlink: https://sg.run/Jzwy
+    semgrep.dev:
+      rule:
+        rule_id: nJUQnX
+        version_id: NdTKW0
+        url: https://semgrep.dev/playground/r/NdTKW0/gitlab.security_code_scan.SCS0010-1
+- id: gitlab.security_code_scan.SCS0011-1
+  patterns:
+  - pattern-either:
+    - pattern: new XsltSettings() {EnableScript = true};
+    - pattern: |
+        var $SETTINGS = new XsltSettings();
+        ...
+        $SETTINGS.EnableScript = true;
+  message: |
+    The method identified is susceptible to injection. The input should be validated and properly
+    escaped.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0011-1
+    shortlink: https://sg.run/64k1
+    semgrep.dev:
+      rule:
+        rule_id: ReUE21
+        version_id: 8KTJo1
+        url: https://semgrep.dev/playground/r/8KTJo1/gitlab.security_code_scan.SCS0011-1
+- id: gitlab.security_code_scan.SCS0012-1
+  patterns:
+  - pattern-inside: |
+      using System.Web.Mvc;
+      ...
+  - pattern-either:
+    - pattern: |
+        [$ANNO]
+        class $CLASS : Controller{ ... }
+    - pattern: 'class $CLASS : Controller{ ... }
+
+        '
+  - pattern-not: |
+      [AllowAnonymous]
+      class $CLASS : Controller{ ... }
+  - pattern-not: |
+      [Authorize]
+      class $CLASS : Controller{ ... }
+  message: |
+    The endpoint is potentially accessible to not authorized users. If it contains sensitive
+    information, like log files for example, it may lead to privilege escalation.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-284: Improper Access Control'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0012-1
+    shortlink: https://sg.run/YZ4y
+    semgrep.dev:
+      rule:
+        rule_id: GdUlow
+        version_id: LjTWd3
+        url: https://semgrep.dev/playground/r/LjTWd3/gitlab.security_code_scan.SCS0012-1
+- id: gitlab.security_code_scan.SCS0013-1
+  patterns:
+  - pattern-inside: |
+      using System.Security.Cryptography;
+      ...
+  - metavariable-regex:
+      metavariable: "$CIPHER"
+      regex: "^(ECB|CBC|OFB|CFB|CTS)$"
+  - pattern: CipherMode.$CIPHER
+  message: |
+    The cipher text produced is susceptible to alteration by an adversary. The cipher provides no
+    way to detect that the data has been tampered with. If the cipher text can be controlled by an
+    attacker, it could be altered without detection. The use of AES in CBC mode with a HMAC is
+    recommended guaranteeing integrity and confidentiality.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0013-1
+    shortlink: https://sg.run/5gZ0
+    semgrep.dev:
+      rule:
+        rule_id: EwUe1Z
+        version_id: kbTBvy
+        url: https://semgrep.dev/playground/r/kbTBvy/gitlab.security_code_scan.SCS0013-1
+- id: gitlab.security_code_scan.SCS0016-1
+  patterns:
+  - pattern: |
+      [HttpPost]
+      public $RET $FOO(...) {
+        ...
+      }
+  - pattern-not: |
+      [ValidateAntiForgeryToken]
+      public $RET $FOO(...) {
+        ...
+      }
+  message: |
+    An attacker could send a link to the victim. By visiting the
+    malicious link, a web page would trigger a POST request (because it is a
+    blind attack - the attacker doesn’t see a response from triggered request
+    and has no use from GET request and GET requests should not change a state
+    on the server by definition) to the website. The victim would not be able
+    to acknowledge that an action is made in the background, but his cookie
+    would be automatically submitted if he is authenticated to the website.
+    This attack does not require special interaction other than visiting a
+    website.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0016-1
+    shortlink: https://sg.run/AKL2
+    semgrep.dev:
+      rule:
+        rule_id: 8GU3vk
+        version_id: O9TqLz
+        url: https://semgrep.dev/playground/r/O9TqLz/gitlab.security_code_scan.SCS0016-1
+- id: gitlab.security_code_scan.SCS0017-1
+  patterns:
+  - pattern: |
+      [ValidateInput(false)]
+      public $RET $FOO(...)
+      {
+        ...
+      }
+  message: |
+    Input validation is a first line of defence for a variety of different
+    attacks and should be enabled per default. Please do not forget to use
+    @Html.AntiForgeryToken() in your view.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-554: ASP.NET Misconfiguration: Not Using Input Validation Framework'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0017-1
+    shortlink: https://sg.run/p16Z
+    semgrep.dev:
+      rule:
+        rule_id: DbUwNq
+        version_id: 3ZTGKd
+        url: https://semgrep.dev/playground/r/3ZTGKd/gitlab.security_code_scan.SCS0017-1
+- id: gitlab.security_code_scan.SCS0019-1
+  patterns:
+  - pattern-inside: |
+      [Authorize]
+      public class $CLZ {
+        ...
+      }
+  - pattern: |
+      [OutputCache]
+      public $RET $FOO(...)
+      {
+        ...
+      }
+  message: |
+    Having the annotation [OutputCache] will disable the annotation [Authorize] for
+    the requests following the first one.
+  languages:
+  - csharp
+  severity: INFO
+  metadata:
+    category: security
+    cwe: 'CWE-524: Use of Cache Containing Sensitive Information'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0019-1
+    shortlink: https://sg.run/QyJZ
+    semgrep.dev:
+      rule:
+        rule_id: eqU4Z2
+        version_id: 9lTGNE
+        url: https://semgrep.dev/playground/r/9lTGNE/gitlab.security_code_scan.SCS0019-1
+- id: gitlab.security_code_scan.SCS0026-1.SCS0031-1
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: "(DirectorySearcher $SOURCE).Filter = ..."
+      - pattern-not: (DirectorySearcher $SOURCE).Filter = "..."
+    - patterns:
+      - pattern: "(DirectorySearcher $SOURCE).Path = ..."
+      - pattern-not: (DirectorySearcher $SOURCE).Path = "..."
+  message: |
+    The software constructs all or part of an LDAP query using
+    externally-influenced input from an upstream component, but it does not
+    neutralize or incorrectly neutralizes special elements that could modify
+    the intended LDAP query when it is sent to a downstream component.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-90: Improper Neutralization of Special Elements used in an LDAP Query
+      (‘LDAP Injection’)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0026-1.SCS0031-1
+    shortlink: https://sg.run/0ZWj
+    semgrep.dev:
+      rule:
+        rule_id: 4bUbeO
+        version_id: ZRT9RY
+        url: https://semgrep.dev/playground/r/ZRT9RY/gitlab.security_code_scan.SCS0026-1.SCS0031-1
+- id: gitlab.security_code_scan.SCS0027-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: "$SRC"
+    - pattern-inside: 'public $RET $FUNC(...,$SRC,...){...}
+
+        '
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: TryCreate(...)
+    - pattern: Action(...)
+    - pattern: HttpRouteUrl(...)
+    - pattern: RouteUrl(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-not-inside: |
+        if (IsLocalUrl(...)) {
+            ...
+            Redirect(...);
+            ...
+        }
+    - pattern-not-inside: |
+        if ($URL.IsLocalUrl(...)) {
+            ...
+            Redirect(...);
+            ...
+        }
+    - pattern-either:
+      - pattern: Redirect(...)
+      - pattern: RedirectPermanent(...)
+      - pattern: RedirectToRoute(...)
+      - pattern: RedirectToRoutePermanent(...)
+      - pattern: new RedirectResult(...)
+  languages:
+  - csharp
+  message: |
+    Unvalidated redirects occur when an application redirects a user to a
+    destination URL specified by a user supplied parameter that is not validated.
+    Such vulnerabilities can be used to facilitate phishing attacks.
+  metadata:
+    category: security
+    cwe: 'CWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0027-1
+    shortlink: https://sg.run/DYeP
+    semgrep.dev:
+      rule:
+        rule_id: QrUE1q
+        version_id: vdTwbl
+        url: https://semgrep.dev/playground/r/vdTwbl/gitlab.security_code_scan.SCS0027-1
+  severity: WARNING
+- id: gitlab.security_code_scan.SCS0028-1
+  patterns:
+  - pattern-not: $OBJ.Deserialize("...")
+  - pattern-not: $OBJ.UnsafeDeserialize("...")
+  - pattern-not: $OBJ.UnsafeDeserializeMethodResponse("...")
+  - pattern-not: $OBJ.ReadObject("...")
+  - pattern-not: $OBJ.DeserializeFromString("...")
+  - pattern-not: $OBJ.DeserializeFromReader("...")
+  - pattern-not: $OBJ.DeserializeFromStream("...")
+  - pattern-not: $OBJ.DeserializeRequest("...")
+  - pattern-not: $OBJ.ToObject("...")
+  - pattern-not: $OBJ.DeserializeResponse("...")
+  - pattern-not: new System.Runtime.Serialization.DataContractSerializer("...")
+  - pattern-not: new System.Runtime.Serialization.Json.DataContractJsonSerializer("...")
+  - pattern-not: new System.Xml.Serialization.XmlSerializer("...")
+  - pattern-not: new System.Resources.ResourceReader("...")
+  - pattern-not: (System.Messaging.XmlMessageFormatter $E).Read("...")
+  - pattern-not: (System.Messaging.BinaryMessageFormatter $E).Read("...")
+  - pattern-either:
+    - pattern: "$OBJ.Deserialize(...)"
+    - pattern: "$OBJ.UnsafeDeserialize(...)"
+    - pattern: "$OBJ.UnsafeDeserializeMethodResponse(...)"
+    - pattern: "$OBJ.ReadObject(...)"
+    - pattern: "$OBJ.DeserializeFromString(...)"
+    - pattern: "$OBJ.DeserializeFromReader(...)"
+    - pattern: "$OBJ.DeserializeFromStream(...)"
+    - pattern: "$OBJ.DeserializeRequest(...)"
+    - pattern: "$OBJ.ToObject(...)"
+    - pattern: "$OBJ.DeserializeResponse(...)"
+    - pattern: new System.Runtime.Serialization.DataContractSerializer(...)
+    - pattern: new System.Runtime.Serialization.Json.DataContractJsonSerializer(...)
+    - pattern: new System.Xml.Serialization.XmlSerializer(...)
+    - pattern: new System.Resources.ResourceReader(...)
+    - pattern: "(System.Messaging.XmlMessageFormatter $E).Read(...)"
+    - pattern: "(System.Messaging.BinaryMessageFormatter $E).Read(...)"
+  languages:
+  - csharp
+  message: |
+    The application deserializes untrusted data without sufficiently verifying that
+    the resulting data will be valid.
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0028-1
+    shortlink: https://sg.run/BqeA
+    semgrep.dev:
+      rule:
+        rule_id: gxUrkX
+        version_id: e1ToPQ
+        url: https://semgrep.dev/playground/r/e1ToPQ/gitlab.security_code_scan.SCS0028-1
+  severity: WARNING
+- id: gitlab.security_code_scan.SCS0029-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: "$PARAM"
+    - metavariable-regex:
+        metavariable: "$HTTP_ANNO"
+        regex: "^(Http)"
+    - pattern-inside: |
+        public class $CLASS : Controller {
+          ...
+        }
+    - pattern-inside: |
+        [$HTTP_ANNO]
+        public string $METHOD(...,$PARAM,...){...}
+  pattern-sanitizers:
+  - patterns:
+    - metavariable-regex:
+        metavariable: "$FUNC"
+        regex: "(SerializeObject|HtmlAttributeEncode|HtmlEncode|HtmlFormUrlEncode|UrlEncode|UrlPathEncode|XmlAttributeEncode|XmlEncode|Encode)"
+    - pattern: "$CLASS.$FUNC(...)"
+  pattern-sinks:
+  - pattern: "(System.Web.Mvc.HtmlHelper $E).Raw(...)"
+  - pattern: "(Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper $E).Raw(...)"
+  - pattern: "(System.Web.HttpResponse $E).AddHeader(...)"
+  - pattern: "(System.Web.HttpResponse $E).AppendHeader(...)"
+  - pattern: "(System.Web.HttpResponse $E).Write(...)"
+  - pattern: "(System.Web.HttpResponse $E).BinaryWrite(...)"
+  - pattern: "(System.Web.HttpResponse $E).TransmitFile(...)"
+  - pattern: "(System.Web.HttpResponse $E).WriteFile(...)"
+  - pattern: "(System.Web.HttpResponseBase $E).AddHeader(...)"
+  - pattern: "(System.Web.HttpResponseBase $E).AppendHeader(...)"
+  - pattern: "(System.Web.HttpResponseBase $E).Write(...)"
+  - pattern: "(System.Web.HttpResponseBase $E).BinaryWrite(...)"
+  - pattern: "(System.Web.HttpResponseBase $E).WriteFile(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).AddAttribute(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).AddStyleAttribute(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).RenderBeginTag(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).Write(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).WriteAttribute(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).WriteBeginTag(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).WriteEndTag(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).WriteFullBeginTag(...)"
+  - pattern: "(System.Web.UI.HtmlTextWriter $E).WriteStyleAttribute(...)"
+  - pattern: "(System.Web.UI.ClientScriptManager $E).RegisterStartupScript(...)"
+  - pattern: "(System.Web.UI.ClientScriptManager $E).RegisterClientScriptBlock(...)"
+  - pattern: "(System.Web.UI.Page $E).RegisterStartupScript(...)"
+  - pattern: "(System.Web.UI.Page $E).RegisterClientScriptBlock(...)"
+  - pattern: return ...;
+  languages:
+  - csharp
+  message: |
+    A potential XSS was found. The endpoint returns a variable from the client
+    input that has not been encoded. To protect against stored XSS attacks, make
+    sure any dynamic content coming from user or data store cannot be used to
+    inject JavaScript on a page. Most modern frameworks will escape dynamic content
+    by default automatically (Razor for example)
+  metadata:
+    category: security
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (‘Cross-site
+      Scripting’)'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0029-1
+    shortlink: https://sg.run/2e5L
+    semgrep.dev:
+      rule:
+        rule_id: WAU7El
+        version_id: 44TLN3
+        url: https://semgrep.dev/playground/r/44TLN3/gitlab.security_code_scan.SCS0029-1
+  severity: WARNING
+- id: gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
+  patterns:
+  - pattern: |
+      new PasswordValidator
+      {
+        ...,
+      };
+  - pattern: |
+      new PasswordValidator
+      {
+        ...,
+        RequiredLength = $LEN,
+        ...,
+      };
+  - pattern-not: |
+      new PasswordValidator
+      {
+        ...,
+        RequireNonLetterOrDigit = true,
+        ...,
+      };
+  - pattern-not: |
+      new PasswordValidator
+      {
+        ...,
+        RequireDigit = true,
+        ...,
+      };
+  - pattern-not: |
+      new PasswordValidator
+      {
+        ...,
+        RequireLowercase = true,
+        ...,
+      };
+  - pattern-not: |
+      new PasswordValidator
+      {
+        ...,
+        RequireUppercase = true,
+        ...,
+      };
+  - metavariable-comparison:
+      metavariable: "$LEN"
+      comparison: "$LEN < 8"
+  message: |
+    The product does not require that users should have strong passwords, which
+    makes it easier for attackers to compromise user accounts.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-521: Weak Password Requirements'
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
+    shortlink: https://sg.run/o1e0
+    semgrep.dev:
+      rule:
+        rule_id: AbUEJj
+        version_id: gETR8w
+        url: https://semgrep.dev/playground/r/gETR8w/gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
