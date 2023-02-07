@@ -1,0 +1,874 @@
+---
+rules:
+- id: generic.dockerfile.missing-zypper-no-confirm-switch.missing-zypper-no-confirm-switch
+  severity: WARNING
+  languages:
+  - dockerfile
+  patterns:
+  - pattern: 'RUN ... zypper install ...
+
+      '
+  - pattern-not: 'RUN ... zypper install ... -y ...
+
+      '
+  - pattern-not: 'RUN ... zypper install ... --no-confirm ...
+
+      '
+  message: This 'zypper install' is missing the '-y' switch. This might stall builds
+    because it requires human intervention. Add the '-y' switch.
+  metadata:
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3034
+    references:
+    - https://github.com/hadolint/hadolint/wiki/DL3034
+    category: best-practice
+    technology:
+    - dockerfile
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/generic.dockerfile.missing-zypper-no-confirm-switch.missing-zypper-no-confirm-switch
+    shortlink: https://sg.run/R5vK
+    semgrep.dev:
+      rule:
+        rule_id: BYUKJE
+        version_id: GxT88Y
+        url: https://semgrep.dev/playground/r/GxT88Y/generic.dockerfile.missing-zypper-no-confirm-switch.missing-zypper-no-confirm-switch
+  paths:
+    include:
+    - "*dockerfile*"
+    - "*Dockerfile*"
+- id: html.security.missing-noreferrer.missing-noreferrer
+  metadata:
+    category: correctness
+    technology:
+    - html
+    cwe: 'CWE-1022: Use of Web Link to Untrusted Target with window.opener Access'
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    references:
+    - https://chromestatus.com/feature/6140064063029248
+    source: https://semgrep.dev/r/html.security.missing-noreferrer.missing-noreferrer
+    shortlink: https://sg.run/Gekn
+    semgrep.dev:
+      rule:
+        rule_id: 6JUjBL
+        version_id: 6xTrvK
+        url: https://semgrep.dev/playground/r/6xTrvK/html.security.missing-noreferrer.missing-noreferrer
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  paths:
+    include:
+    - "*.html"
+  message: This rule has been deprecated.
+  severity: WARNING
+  languages:
+  - generic
+- id: ocaml.lang.compatibility.deprecated.deprecated-pervasives
+  pattern: Pervasives.$X
+  message: Pervasives is deprecated and will not be available after 4.10. Use Stdlib.
+  languages:
+  - ocaml
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - ocaml
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ocaml.lang.compatibility.deprecated.deprecated-pervasives
+    shortlink: https://sg.run/dKe0
+    semgrep.dev:
+      rule:
+        rule_id: 3qUP1E
+        version_id: X0TADB
+        url: https://semgrep.dev/playground/r/X0TADB/ocaml.lang.compatibility.deprecated.deprecated-pervasives
+- id: ocaml.lang.portability.crlf-support.broken-input-line
+  pattern: 'input_line
+
+    '
+  message: '''input_line'' leaves a ''\r'' (CR) character when reading lines from
+    a Windows text file, whose lines end in "\r\n" (CRLF). This is a problem for any
+    Windows file that is being read either on a Unix-like platform or on Windows in
+    binary mode. If the code already takes care of removing any trailing ''\r'' after
+    reading the line, add a ''(* nosemgrep *)'' comment to disable this warning.'
+  languages:
+  - ocaml
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - ocaml
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ocaml.lang.portability.crlf-support.broken-input-line
+    shortlink: https://sg.run/v2gY
+    semgrep.dev:
+      rule:
+        rule_id: DbUKZX
+        version_id: kbTOJw
+        url: https://semgrep.dev/playground/r/kbTOJw/ocaml.lang.portability.crlf-support.broken-input-line
+- id: ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
+  pattern: open_in
+  fix: open_in_bin
+  message: "'open_in' behaves differently on Windows and on Unix-like systems with
+    respect to line endings. To get the same behavior everywhere, use 'open_in_bin'
+    or 'open_in_gen [Open_binary]'. If you really want CRLF-to-LF translations to
+    take place when running on Windows, use 'open_in_gen [Open_text]'."
+  languages:
+  - ocaml
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - ocaml
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
+    shortlink: https://sg.run/d0YE
+    semgrep.dev:
+      rule:
+        rule_id: WAUPAJ
+        version_id: w8TkYl
+        url: https://semgrep.dev/playground/r/w8TkYl/ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
+- id: ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
+  pattern: open_out
+  fix: open_out_bin
+  message: "'open_out' behaves differently on Windows and on Unix-like systems with
+    respect to line endings. To get the same behavior everywhere, use 'open_out_bin'
+    or 'open_out_gen [Open_binary]'. If you really want LF-to-CRLF translations to
+    take place when running on Windows, use 'open_out_gen [Open_text]'."
+  languages:
+  - ocaml
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - ocaml
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
+    shortlink: https://sg.run/ZkGw
+    semgrep.dev:
+      rule:
+        rule_id: 0oUJY9
+        version_id: xyTd6N
+        url: https://semgrep.dev/playground/r/xyTd6N/ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
+- id: ocaml.lang.portability.slash-tmp.not-portable-tmp-string
+  pattern: '"=~/\/tmp/"
+
+    '
+  message: You should probably use Filename.get_temp_dirname().
+  languages:
+  - ocaml
+  severity: WARNING
+  metadata:
+    category: portability
+    technology:
+    - ocaml
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ocaml.lang.portability.slash-tmp.not-portable-tmp-string
+    shortlink: https://sg.run/Q4ZZ
+    semgrep.dev:
+      rule:
+        rule_id: zdU100
+        version_id: O9Tv1v
+        url: https://semgrep.dev/playground/r/O9Tv1v/ocaml.lang.portability.slash-tmp.not-portable-tmp-string
+- id: python.flask.caching.query-string.flask-cache-query-string
+  patterns:
+  - pattern-either:
+    - pattern: |
+        @app.route("...")
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+          request.args.get(...)
+    - pattern: |
+        @app.route("...", methods=[..., "POST", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+    - pattern: |
+        @app.route("...", methods=[..., "PUT", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+    - pattern: |
+        @app.route("...", methods=[..., "DELETE", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+    - pattern: |
+        @app.route("...", methods=[..., "PATCH", ...])
+        @cache.cached(...)
+        def $HANDLER(...):
+          ...
+  - pattern-not: |
+      @app.route("...")
+      @cache.cached(..., query_string=True)
+      def $HANDLER(...):
+        ...
+        request.args.get(...)
+  message: Flask-caching doesn't cache query strings by default. You have to use `query_string=True`.
+    Also you shouldn't cache verbs that can mutate state.
+  severity: WARNING
+  languages:
+  - python
+  metadata:
+    category: caching
+    technology:
+    - flask
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.flask.caching.query-string.flask-cache-query-string
+    shortlink: https://sg.run/jROJ
+    semgrep.dev:
+      rule:
+        rule_id: kxUko3
+        version_id: 44TePj
+        url: https://semgrep.dev/playground/r/44TePj/python.flask.caching.query-string.flask-cache-query-string
+- id: python.lang.compatibility.python36.python36-compatibility-Popen1
+  pattern: subprocess.Popen(errors=$X, ...)
+  message: the `errors` argument to Popen is only available on Python 3.6+
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python36.python36-compatibility-Popen1
+    shortlink: https://sg.run/weBP
+    semgrep.dev:
+      rule:
+        rule_id: nJUz7A
+        version_id: 44Tejz
+        url: https://semgrep.dev/playground/r/44Tejz/python.lang.compatibility.python36.python36-compatibility-Popen1
+- id: python.lang.compatibility.python36.python36-compatibility-Popen2
+  pattern: subprocess.Popen(encoding=$X, ...)
+  message: the `encoding` argument to Popen is only available on Python 3.6+
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python36.python36-compatibility-Popen2
+    shortlink: https://sg.run/x1Dg
+    semgrep.dev:
+      rule:
+        rule_id: EwU2n3
+        version_id: PkTj3B
+        url: https://semgrep.dev/playground/r/PkTj3B/python.lang.compatibility.python36.python36-compatibility-Popen2
+- id: python.lang.compatibility.python36.python36-compatibility-ssl
+  pattern: ssl.get_ciphers()
+  message: this function is only available on Python 3.6+
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python36.python36-compatibility-ssl
+    shortlink: https://sg.run/kXn2
+    semgrep.dev:
+      rule:
+        rule_id: ZqU5wR
+        version_id: 3ZTLXP
+        url: https://semgrep.dev/playground/r/3ZTLXP/python.lang.compatibility.python36.python36-compatibility-ssl
+- id: python.lang.compatibility.python37.python37-compatibility-httpconn
+  pattern: http.client.HTTPConnection(blocksize=$X,...)
+  message: Found usage of the 'blocksize' argument in a HTTPConnection call. This
+    is only available on Python 3.7+ and is therefore not backwards compatible. Remove
+    this in order for this code to work in Python 3.6 and below.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-httpconn
+    shortlink: https://sg.run/vzAb
+    semgrep.dev:
+      rule:
+        rule_id: 8GUjbX
+        version_id: GxToeD
+        url: https://semgrep.dev/playground/r/GxToeD/python.lang.compatibility.python37.python37-compatibility-httpconn
+- id: python.lang.compatibility.python37.python37-compatibility-httpsconn
+  pattern: http.client.HTTPSConnection(blocksize=$X,...)
+  message: Found usage of the 'blocksize' argument in a HTTPSConnection call. This
+    is only available on Python 3.7+ and is therefore not backwards compatible. Remove
+    this in order for this code to work in Python 3.6 and below.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-httpsconn
+    shortlink: https://sg.run/dKwd
+    semgrep.dev:
+      rule:
+        rule_id: gxU1qd
+        version_id: RGT2L2
+        url: https://semgrep.dev/playground/r/RGT2L2/python.lang.compatibility.python37.python37-compatibility-httpsconn
+- id: python.lang.compatibility.python37.python37-compatibility-importlib
+  pattern: importlib.source_hash()
+  message: source_hash' is only available on Python 3.7+. This does not work in lower
+    versions, and therefore is not backwards compatible. Instead, use another hash
+    function.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-importlib
+    shortlink: https://sg.run/OPDn
+    semgrep.dev:
+      rule:
+        rule_id: 7KUQOl
+        version_id: JdToxL
+        url: https://semgrep.dev/playground/r/JdToxL/python.lang.compatibility.python37.python37-compatibility-importlib
+- id: python.lang.compatibility.python37.python37-compatibility-importlib2
+  pattern: import importlib.resources
+  message: Found 'importlib.resources', which is a module only available on Python
+    3.7+. This does not work in lower versions, and therefore is not backwards compatible.
+    Use importlib_resources instead for older Python versions.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-importlib2
+    shortlink: https://sg.run/eL3y
+    semgrep.dev:
+      rule:
+        rule_id: L1Uy0n
+        version_id: 5PTN1p
+        url: https://semgrep.dev/playground/r/5PTN1p/python.lang.compatibility.python37.python37-compatibility-importlib2
+- id: python.lang.compatibility.python37.python37-compatibility-importlib3
+  pattern: import importlib.abc.ResourceReader
+  message: Found usage of 'importlib.abc.ResourceReader'. This module is only available
+    on Python 3.7+ and is therefore not backwards compatible. Instead, use another
+    loader.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-importlib3
+    shortlink: https://sg.run/Zv2o
+    semgrep.dev:
+      rule:
+        rule_id: QrUzJ9
+        version_id: A8TNdJ
+        url: https://semgrep.dev/playground/r/A8TNdJ/python.lang.compatibility.python37.python37-compatibility-importlib3
+- id: python.lang.compatibility.python37.python37-compatibility-ipv4network1
+  pattern: ipaddress.IPv4Network.subnet_of($X)
+  message: IPv4Network.subnet_of is only available on Python 3.7+ and is therefore
+    not backwards compatible. Instead, check if the subnet is in 'subnets'.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv4network1
+    shortlink: https://sg.run/LwRo
+    semgrep.dev:
+      rule:
+        rule_id: JDUyqR
+        version_id: 0bTpzo
+        url: https://semgrep.dev/playground/r/0bTpzo/python.lang.compatibility.python37.python37-compatibility-ipv4network1
+- id: python.lang.compatibility.python37.python37-compatibility-ipv4network2
+  pattern: ipaddress.IPv4Network.supernet_of($X)
+  message: IPv4Network.supernet_of is only available on Python 3.7+ and is therefore
+    not backwards compatible. Instead, check if the supernet is in 'supernet'.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv4network2
+    shortlink: https://sg.run/8y3E
+    semgrep.dev:
+      rule:
+        rule_id: 5rUO61
+        version_id: K3Twkg
+        url: https://semgrep.dev/playground/r/K3Twkg/python.lang.compatibility.python37.python37-compatibility-ipv4network2
+- id: python.lang.compatibility.python37.python37-compatibility-ipv6network1
+  pattern: ipaddress.IPv6Network.subnet_of($X)
+  message: IPv6Network.subnet_of is only available on Python 3.7+ and is therefore
+    not backwards compatible. Instead, check if the subnet is in 'subnets'.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv6network1
+    shortlink: https://sg.run/EkLe
+    semgrep.dev:
+      rule:
+        rule_id: 4bUko0
+        version_id: DkT2bY
+        url: https://semgrep.dev/playground/r/DkT2bY/python.lang.compatibility.python37.python37-compatibility-ipv6network1
+- id: python.lang.compatibility.python37.python37-compatibility-ipv6network2
+  pattern: ipaddress.IPv6Network.supernet_of($X)
+  message: IPv6Network.supernet_of is only available on Python 3.7+ and is therefore
+    not backwards compatible. Instead, check if the supernet is in 'supernet'.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-ipv6network2
+    shortlink: https://sg.run/7orW
+    semgrep.dev:
+      rule:
+        rule_id: PeUZYr
+        version_id: WrTYKq
+        url: https://semgrep.dev/playground/r/WrTYKq/python.lang.compatibility.python37.python37-compatibility-ipv6network2
+- id: python.lang.compatibility.python37.python37-compatibility-locale1
+  pattern: locale.format_string(monetary=$X, ...)
+  message: Found usage of the 'monetary' argument in a function call of 'locale.format_string'.
+    This is only available on Python 3.7+ and is therefore not backwards compatible.
+    Instead, remove the 'monetary' argument.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-locale1
+    shortlink: https://sg.run/gLeZ
+    semgrep.dev:
+      rule:
+        rule_id: GdU72R
+        version_id: qkTp7L
+        url: https://semgrep.dev/playground/r/qkTp7L/python.lang.compatibility.python37.python37-compatibility-locale1
+- id: python.lang.compatibility.python37.python37-compatibility-math1
+  pattern: math.remainder($X, $Y)
+  message: math.remainder is only available on Python 3.7+ and is therefore not backwards
+    compatible. Instead, use math.fmod() or calculate $X - n* $Y.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-math1
+    shortlink: https://sg.run/Q50Q
+    semgrep.dev:
+      rule:
+        rule_id: ReUgbz
+        version_id: l4TXR1
+        url: https://semgrep.dev/playground/r/l4TXR1/python.lang.compatibility.python37.python37-compatibility-math1
+- id: python.lang.compatibility.python37.python37-compatibility-multiprocess1
+  pattern: multiprocessing.Process.close()
+  message: multiprocessing.Process.close() is only available on Python 3.7+ and is
+    therefore not backwards compatible. Instead, use join().
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-multiprocess1
+    shortlink: https://sg.run/3xjp
+    semgrep.dev:
+      rule:
+        rule_id: AbUzRA
+        version_id: YDTYeO
+        url: https://semgrep.dev/playground/r/YDTYeO/python.lang.compatibility.python37.python37-compatibility-multiprocess1
+- id: python.lang.compatibility.python37.python37-compatibility-multiprocess2
+  pattern: multiprocessing.Process.kill()
+  message: multiprocessing.Process.kill() is only available on Python 3.7+ and is
+    therefore not backwards compatible. Instead, use terminate().
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-multiprocess2
+    shortlink: https://sg.run/4x1z
+    semgrep.dev:
+      rule:
+        rule_id: BYUNE9
+        version_id: 6xTy90
+        url: https://semgrep.dev/playground/r/6xTy90/python.lang.compatibility.python37.python37-compatibility-multiprocess2
+- id: python.lang.compatibility.python37.python37-compatibility-os1
+  pattern: os.preadv(...)
+  message: os.preadv() is only available on Python 3.7+ and is therefore not backwards
+    compatible. Instead, use a combination of os.readv() and os.pread().
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-os1
+    shortlink: https://sg.run/PJWW
+    semgrep.dev:
+      rule:
+        rule_id: DbUpQQ
+        version_id: o5TKDW
+        url: https://semgrep.dev/playground/r/o5TKDW/python.lang.compatibility.python37.python37-compatibility-os1
+- id: python.lang.compatibility.python37.python37-compatibility-os2-ok2
+  patterns:
+  - pattern-not-inside: |
+      if hasattr(os, 'pwritev'):
+          ...
+  - pattern: os.pwritev(...)
+  message: os.pwritev() is only available on Python 3.3+ and is therefore not backwards
+    compatible. Instead, use a combination of pwrite() and writev().
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-os2-ok2
+    shortlink: https://sg.run/5Q9X
+    semgrep.dev:
+      rule:
+        rule_id: 0oU5vW
+        version_id: zyTG29
+        url: https://semgrep.dev/playground/r/zyTG29/python.lang.compatibility.python37.python37-compatibility-os2-ok2
+- id: python.lang.compatibility.python37.python37-compatibility-pdb
+  pattern: pdb.set_trace(header=$X, ...)
+  message: pdb.set_trace() with the header argument is only available on Python 3.7+
+    and is therefore not backwards compatible. Instead, use set_trace() without the
+    header argument.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-pdb
+    shortlink: https://sg.run/GeA2
+    semgrep.dev:
+      rule:
+        rule_id: KxUby2
+        version_id: pZTb3R
+        url: https://semgrep.dev/playground/r/pZTb3R/python.lang.compatibility.python37.python37-compatibility-pdb
+- id: python.lang.compatibility.python37.python37-compatibility-textiowrapper
+  pattern: TextIOWrapper.reconfigure(...)
+  message: Found usage of 'importlib.abc.ResourceReader'. This module is only available
+    on Python 3.7+ and is therefore not backwards compatible. Instead, use another
+    loader.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: compatibility
+    technology:
+    - python
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.lang.compatibility.python37.python37-compatibility-textiowrapper
+    shortlink: https://sg.run/ndL2
+    semgrep.dev:
+      rule:
+        rule_id: 3qUPdy
+        version_id: BjTKZr
+        url: https://semgrep.dev/playground/r/BjTKZr/python.lang.compatibility.python37.python37-compatibility-textiowrapper
+- id: python.sqlalchemy.performance.performance-improvements.batch-import
+  pattern: |
+    for $X in $Y:
+      db.session.add($Z)
+  message: Rather than adding one element at a time, consider batch loading to improve
+    performance.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - sqlalchemy
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.sqlalchemy.performance.performance-improvements.batch-import
+    shortlink: https://sg.run/PprN
+    semgrep.dev:
+      rule:
+        rule_id: AbUWjy
+        version_id: JdTodZ
+        url: https://semgrep.dev/playground/r/JdTodZ/python.sqlalchemy.performance.performance-improvements.batch-import
+- id: python.sqlalchemy.performance.performance-improvements.len-all-count
+  pattern: len($X.all())
+  message: Using QUERY.count() instead of len(QUERY.all()) sends less data to the
+    client since the SQLAlchemy method is performed server-side.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: performance
+    technology:
+    - sqlalchemy
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.sqlalchemy.performance.performance-improvements.len-all-count
+    shortlink: https://sg.run/4y8g
+    semgrep.dev:
+      rule:
+        rule_id: ReUPOw
+        version_id: PkTjgO
+        url: https://semgrep.dev/playground/r/PkTjgO/python.sqlalchemy.performance.performance-improvements.len-all-count
+- id: terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
+  message: Key vault Secret should have a content type set
+  patterns:
+  - pattern: resource
+  - pattern-not-inside: |
+      resource "azurerm_key_vault_secret" "..." {
+      ...
+      content_type = "..."
+      ...
+      }
+  - pattern-inside: |
+      resource "azurerm_key_vault_secret" "..." {
+      ...
+      }
+  metadata:
+    category: correctness
+    technology:
+    - terraform
+    - azure
+    references:
+    - https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret#content_type
+    - https://docs.microsoft.com/en-us/azure/key-vault/secrets/about-secrets
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
+    shortlink: https://sg.run/eoAb
+    semgrep.dev:
+      rule:
+        rule_id: 8GUzld
+        version_id: O9T4Kw
+        url: https://semgrep.dev/playground/r/O9T4Kw/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
+  languages:
+  - hcl
+  severity: INFO
+- id: trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
+  patterns:
+  - pattern: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $C[$X] = $V
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $C[$X]++
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $C[$X]--
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $CODEC.Unmarshal($C)
+      ...
+      for $K := range $C { ... }
+  message: 'Iteration over a possibly empty map `$C`. This is likely a bug or redundant
+    code.
+
+    '
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
+    shortlink: https://sg.run/WOeg
+    semgrep.dev:
+      rule:
+        rule_id: 7KUp1e
+        version_id: GxTZ6g
+        url: https://semgrep.dev/playground/r/GxTZ6g/trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
+- id: trailofbits.go.nondeterministic-select.nondeterministic-select
+  patterns:
+  - pattern: |
+      $TICKER := time.NewTicker(...)
+      ...
+      for {
+        ...
+        select {
+          case <- $DONECHAN: return
+          case <- $TICKER.C: ...
+        }
+      }
+  - pattern-not: |
+      $TICKER := time.NewTicker(...)
+      ...
+      for {
+        select {
+          case <-$DONECHAN: return
+          default:
+        }
+        ...
+        select {
+          case <- $DONECHAN: return
+          case <- $TICKER.C: ...
+        }
+      }
+  message: |
+    Logic executed as a result of ticker `$TICKER` may execute more times than desired.
+    When both `$TICKER` and `$DONECHAN` are written to at the same time, the scheduler randomly picks a
+    case to execute. As a result, the `$TICKER.C` may excute one more time than expected.
+  severity: WARNING
+  languages:
+  - go
+  metadata:
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.go.nondeterministic-select.nondeterministic-select
+    shortlink: https://sg.run/K8dX
+    semgrep.dev:
+      rule:
+        rule_id: 8GUxqz
+        version_id: A8TG5P
+        url: https://semgrep.dev/playground/r/A8TG5P/trailofbits.go.nondeterministic-select.nondeterministic-select
+- id: trailofbits.go.questionable-assignment.questionable-assignment
+  patterns:
+  - pattern-either:
+    - pattern: "..., $X . $Y, ..., err = ..."
+    - pattern: "..., $X . $Y, ..., err := ..."
+  message: Should `$X` be modified when an error could be returned?
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.go.questionable-assignment.questionable-assignment
+    shortlink: https://sg.run/qq6y
+    semgrep.dev:
+      rule:
+        rule_id: gxUYAJ
+        version_id: BjT7rO
+        url: https://semgrep.dev/playground/r/BjT7rO/trailofbits.go.questionable-assignment.questionable-assignment
+- id: trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
+  patterns:
+  - pattern-either:
+    - pattern: |
+        ...
+        go func(...) {
+        ...
+        }(...)
+        time.Sleep(...)
+        ...
+    - pattern: |
+        ...
+        go $FOO(...)
+        time.Sleep(...)
+        ...
+  - pattern-inside: func $FUNC(...){ ... }
+  message: Using `time.Sleep` for synchronizations is generally considered bad practice.
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
+    shortlink: https://sg.run/YXK4
+    semgrep.dev:
+      rule:
+        rule_id: 3qUEpL
+        version_id: K3TYje
+        url: https://semgrep.dev/playground/r/K3TYje/trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
+- id: trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
+  message: Usage of NumPy library inside PyTorch `$MODULE` module was found. Avoid
+    mixing these libraries for efficiency and proper ONNX loading
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: performance
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    technology:
+    - pytorch
+    - numpy
+    description: Uses of `NumPy` functions inside `PyTorch` modules
+    references:
+    - https://tanelp.github.io/posts/a-bug-that-plagues-thousands-of-open-source-ml-projects
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
+    shortlink: https://sg.run/9vxr
+    semgrep.dev:
+      rule:
+        rule_id: KxU507
+        version_id: NdTKpl
+        url: https://semgrep.dev/playground/r/NdTKpl/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
+  patterns:
+  - pattern: "$RESULT = numpy.$FUNCTION(...)"
+  - pattern-inside: |
+      class $MODULE(torch.nn.Module):
+          ...
+- id: trailofbits.python.torch-tensor.torch-tensor
+  message: Avoid using `torch.Tensor()` to directly create a tensor for efficiency
+    and proper parsing
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: performance
+    subcategory:
+    - audit
+    confidence: HIGH
+    references:
+    - https://pytorch.org/docs/stable/tensors.html
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.python.torch-tensor.torch-tensor
+    shortlink: https://sg.run/x4zL
+    semgrep.dev:
+      rule:
+        rule_id: ReUqz0
+        version_id: 7ZTq5z
+        url: https://semgrep.dev/playground/r/7ZTq5z/trailofbits.python.torch-tensor.torch-tensor
+  pattern: torch.Tensor(...)
