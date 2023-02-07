@@ -171,6 +171,47 @@ rules:
         rule_id: zdU100
         version_id: O9Tv1v
         url: https://semgrep.dev/playground/r/O9Tv1v/ocaml.lang.portability.slash-tmp.not-portable-tmp-string
+- id: python.flask.best-practice.use-jsonify.use-jsonify
+  patterns:
+  - pattern: "$JSONDUMPS"
+  - pattern-either:
+    - pattern-inside: 'return json.dumps($...VAR)
+
+        '
+    - pattern-inside: |
+        $DATA = json.dumps($...VAR)
+        ...
+        return $DATA
+  - pattern-inside: |
+      @app.route(...)
+      def $X():
+        ...
+  - metavariable-pattern:
+      metavariable: "$JSONDUMPS"
+      pattern: json.dumps($...VAR)
+  - focus-metavariable: "$JSONDUMPS"
+  fix: 'flask.jsonify($...VAR)
+
+    '
+  message: flask.jsonify() is a Flask helper method which handles the correct  settings
+    for returning JSON from Flask routes
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: best-practice
+    technology:
+    - flask
+    references:
+    - https://flask.palletsprojects.com/en/2.2.x/api/#flask.json.jsonify
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.flask.best-practice.use-jsonify.use-jsonify
+    shortlink: https://sg.run/XBlb
+    semgrep.dev:
+      rule:
+        rule_id: NbUkx6
+        version_id: l4TqoX
+        url: https://semgrep.dev/playground/r/l4TqoX/python.flask.best-practice.use-jsonify.use-jsonify
 - id: python.flask.caching.query-string.flask-cache-query-string
   patterns:
   - pattern-either:
@@ -223,6 +264,33 @@ rules:
         rule_id: kxUko3
         version_id: 44TePj
         url: https://semgrep.dev/playground/r/44TePj/python.flask.caching.query-string.flask-cache-query-string
+- id: python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
+  patterns:
+  - pattern-inside: |
+      @app.route(..., method="GET")
+      def $X(...):
+        ...
+  - pattern-either:
+    - pattern: "$Y = flask.request.json\n"
+    - pattern: "$Y = flask.request.form\n"
+    - pattern: "$Y = flask.request.data\n"
+  message: Accessing request object inside a route handle for HTTP GET command will
+    throw due to missing request body.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: correctness
+    technology:
+    - flask
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
+    shortlink: https://sg.run/1ZYv
+    semgrep.dev:
+      rule:
+        rule_id: wdUJe5
+        version_id: PkTjry
+        url: https://semgrep.dev/playground/r/PkTjry/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
 - id: python.lang.compatibility.python36.python36-compatibility-Popen1
   pattern: subprocess.Popen(errors=$X, ...)
   message: the `errors` argument to Popen is only available on Python 3.6+
