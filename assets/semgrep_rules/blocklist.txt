@@ -8,3 +8,4 @@ https://semgrep.dev/r/python.django.security.audit.xss.template-href-var.templat
 https://semgrep.dev/r/javascript.express.security.audit.xss.mustache.var-in-href.var-in-href
 https://semgrep.dev/r/generic.html-templates.security.var-in-script-src.var-in-script-src
 https://semgrep.dev/r/typescript.react.security.audit.react-missing-noreferrer.react-missing-noreferrer
+https://semgrep.dev/r/html.security.audit.missing-integrity.missing-integrity
