@@ -1,0 +1,20 @@
+name: Mirror Repo
+on:
+  schedule:
+    # nightly (0th hour 0th minute of every day)
+    - cron:  '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Mirror
+      run: |
+        if [[ "$GITHUB_REPOSITORY_OWNER" != "brave" ]]; then
+          git clone --mirror 'https://github.com/brave/${GITHUB_REPOSITORY#brave/}'
+          cd ${GITHUB_REPOSITORY#brave/}.git/
+          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git push --mirror github
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
