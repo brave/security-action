@@ -7,9 +7,13 @@
     <div>
         <!-- ruleid: template-unescaped-with-safe-noclean -->
         {{article.body | safe}}
+        <!-- ruleid: template-unescaped-with-safe-noclean -->
+        {{article.body | safe   }}
         <!-- ok: template-unescaped-with-safe-noclean -->
         {{article.head | clean | safe}}
         <!-- ok: template-unescaped-with-safe-noclean -->
         {{article.head|clean|safe}}
+        <!-- ok: template-unescaped-with-safe-noclean -->
+        {{article.body | safeBlah}}
     </div>
 {% endblock %}

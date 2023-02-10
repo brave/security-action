@@ -33,3 +33,4 @@ rules:
     patterns:
       - pattern-regex: "{{.*?\\|\\s*safe(\\s*}})?"
       - pattern-not-regex: "{{.*?clean\\s*\\|\\s*safe(\\s*}})?"
+      - pattern-not-regex: "{{.*?\\|\\s*safe[^\\s}]"
