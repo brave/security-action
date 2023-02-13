@@ -1,0 +1,14 @@
+rules:
+- id: cast signed to unsigned (C/C++)
+  patterns:
+    - pattern: ($CAST)($TYPE $X)
+    - metavariable-regex:
+        metavariable: $CAST
+        regex: ^(u.*)$
+    - metavariable-regex:
+        metavariable: $TYPE
+        regex: ^([^u].*)$
+  message: Semgrep found a cast from $TYPE (signed) to $CAST.
+    For arithmetic use `base::CheckAdd(value1, value2).AssignIfValid(&result)`
+  languages: [cpp, c]
+  severity: WARNING
