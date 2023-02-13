@@ -18,4 +18,5 @@ rules:
         - "*.svelte"
     patterns:
       - pattern-regex: \{@html\s+[^A-Z]
-      - pattern-not-regex: \{@html\s+safeTranslate
+      - pattern-not-regex: \{@html\s+safeTranslate\(
+      - pattern-not-regex: \{@html\s+sanitize\(
