@@ -43,14 +43,19 @@ rules:
     cwe: 'CWE-943: Improper Neutralization of Special Elements in Data Query Logic'
     technology:
     - java
+    primary_identifier: find_sec_bugs.AWS_QUERY_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-AWS_QUERY_INJECTION
+      type: find_sec_bugs_type
+      value: AWS_QUERY_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
     shortlink: https://sg.run/ALZ6
     semgrep.dev:
       rule:
         rule_id: QrU1JP
-        version_id: NdTKQn
-        url: https://semgrep.dev/playground/r/NdTKQn/gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
+        version_id: zyTdAx
+        url: https://semgrep.dev/playground/r/zyTdAx/gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
 - id: gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
   patterns:
   - pattern: |
@@ -69,14 +74,19 @@ rules:
     cwe: 'CWE-704: Incorrect Type Conversion or Cast'
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.BAD_HEXA_CONVERSION
+    secondary_identifiers:
+    - name: Find Security Bugs-BAD_HEXA_CONVERSION
+      type: find_sec_bugs_type
+      value: BAD_HEXA_CONVERSION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
     shortlink: https://sg.run/kD4K
     semgrep.dev:
       rule:
         rule_id: 2ZUd06
-        version_id: l4TKeb
-        url: https://semgrep.dev/playground/r/l4TKeb/gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
+        version_id: 5PTjO2
+        url: https://semgrep.dev/playground/r/5PTjO2/gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
   patterns:
@@ -112,14 +122,19 @@ rules:
     cwe: 'CWE-15: External Control of System or Configuration Setting'
     technology:
     - java
+    primary_identifier: find_sec_bugs.BEAN_PROPERTY_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-BEAN_PROPERTY_INJECTION
+      type: find_sec_bugs_type
+      value: BEAN_PROPERTY_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
     shortlink: https://sg.run/Ben9
     semgrep.dev:
       rule:
         rule_id: 3qULd8
-        version_id: kbTBrK
-        url: https://semgrep.dev/playground/r/kbTBrK/gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
+        version_id: pZTo6r
+        url: https://semgrep.dev/playground/r/pZTo6r/gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
 - id: gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
   patterns:
   - pattern-inside: |
@@ -140,14 +155,19 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     technology:
     - java
+    primary_identifier: find_sec_bugs.BLOWFISH_KEY_SIZE
+    secondary_identifiers:
+    - name: Find Security Bugs-BLOWFISH_KEY_SIZE
+      type: find_sec_bugs_type
+      value: BLOWFISH_KEY_SIZE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
     shortlink: https://sg.run/NjB1
     semgrep.dev:
       rule:
         rule_id: 2ZUd1P
-        version_id: GxTnWW
-        url: https://semgrep.dev/playground/r/GxTnWW/gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
+        version_id: 7ZTd1Z
+        url: https://semgrep.dev/playground/r/7ZTd1Z/gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
 - id: gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
   patterns:
   - pattern-inside: javax.crypto.Cipher.getInstance("...")
@@ -169,14 +189,19 @@ rules:
     cwe: 'CWE-353: Missing Support for Integrity Check'
     technology:
     - java
+    primary_identifier: find_sec_bugs.CIPHER_INTEGRITY
+    secondary_identifiers:
+    - name: Find Security Bugs-CIPHER_INTEGRITY
+      type: find_sec_bugs_type
+      value: CIPHER_INTEGRITY
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
     shortlink: https://sg.run/O4Db
     semgrep.dev:
       rule:
         rule_id: 9AUAzy
-        version_id: DkTPeo
-        url: https://semgrep.dev/playground/r/DkTPeo/gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
+        version_id: QkTD7B
+        url: https://semgrep.dev/playground/r/QkTD7B/gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
 - id: gitlab.find_sec_bugs.COMMAND_INJECTION-1
   pattern-either:
   - patterns:
@@ -238,14 +263,19 @@ rules:
       (''OS Command Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.COMMAND_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-COMMAND_INJECTION
+      type: find_sec_bugs_type
+      value: COMMAND_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.COMMAND_INJECTION-1
     shortlink: https://sg.run/WDoz
     semgrep.dev:
       rule:
         rule_id: PeUjYP
-        version_id: xyTg9v
-        url: https://semgrep.dev/playground/r/xyTg9v/gitlab.find_sec_bugs.COMMAND_INJECTION-1
+        version_id: X0TEwB
+        url: https://semgrep.dev/playground/r/X0TEwB/gitlab.find_sec_bugs.COMMAND_INJECTION-1
 - id: gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
   patterns:
   - pattern-inside: "(javax.servlet.http.Cookie $C).setMaxAge($AGE);\n"
@@ -253,8 +283,8 @@ rules:
       metavariable: "$AGE"
       comparison: "$AGE >= 31536000"
   message: |
-    A new cookie is created without the Secure flag set. The Secure flag is a directive to the
-    browser to make sure that the cookie is not sent for insecure communication (http://)
+    Storing sensitive data in a persistent cookie for an extended period can lead to a breach of
+    confidentiality or account compromise.
   languages:
   - java
   severity: WARNING
@@ -263,14 +293,19 @@ rules:
     cwe: 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
     technology:
     - java
+    primary_identifier: find_sec_bugs.COOKIE_PERSISTENT
+    secondary_identifiers:
+    - name: Find Security Bugs-COOKIE_PERSISTENT
+      type: find_sec_bugs_type
+      value: COOKIE_PERSISTENT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
     shortlink: https://sg.run/2k6Y
     semgrep.dev:
       rule:
         rule_id: KxUwpN
-        version_id: 8KTJL9
-        url: https://semgrep.dev/playground/r/8KTJL9/gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
+        version_id: xyTOAN
+        url: https://semgrep.dev/playground/r/xyTOAN/gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
 - id: gitlab.find_sec_bugs.COOKIE_USAGE-1
   patterns:
   - pattern-inside: |
@@ -302,14 +337,19 @@ rules:
     cwe: 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
     technology:
     - java
+    primary_identifier: find_sec_bugs.COOKIE_USAGE
+    secondary_identifiers:
+    - name: Find Security Bugs-COOKIE_USAGE
+      type: find_sec_bugs_type
+      value: COOKIE_USAGE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.COOKIE_USAGE-1
     shortlink: https://sg.run/XWze
     semgrep.dev:
       rule:
         rule_id: qNUpNY
-        version_id: gETR5O
-        url: https://semgrep.dev/playground/r/gETR5O/gitlab.find_sec_bugs.COOKIE_USAGE-1
+        version_id: O9Tznv
+        url: https://semgrep.dev/playground/r/O9Tznv/gitlab.find_sec_bugs.COOKIE_USAGE-1
 - id: gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
   patterns:
   - pattern-either:
@@ -366,14 +406,19 @@ rules:
     cwe: 'CWE-93: Improper Neutralization of CRLF Sequences (''CRLF Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.CRLF_INJECTION_LOGS
+    secondary_identifiers:
+    - name: Find Security Bugs-CRLF_INJECTION_LOGS
+      type: find_sec_bugs_type
+      value: CRLF_INJECTION_LOGS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
     shortlink: https://sg.run/De7W
     semgrep.dev:
       rule:
         rule_id: 4bUeor
-        version_id: w8TP49
-        url: https://semgrep.dev/playground/r/w8TP49/gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
+        version_id: 2KTeQ0
+        url: https://semgrep.dev/playground/r/2KTeQ0/gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
 - id: gitlab.find_sec_bugs.CUSTOM_INJECTION-1
   patterns:
   - pattern-either:
@@ -410,16 +455,24 @@ rules:
       (''SQL Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.CUSTOM_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-CUSTOM_INJECTION
+      type: find_sec_bugs_type
+      value: CUSTOM_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.CUSTOM_INJECTION-1
     shortlink: https://sg.run/0WpJ
     semgrep.dev:
       rule:
         rule_id: JDUoqr
-        version_id: O9Tq4n
-        url: https://semgrep.dev/playground/r/O9Tq4n/gitlab.find_sec_bugs.CUSTOM_INJECTION-1
+        version_id: jQTWvk
+        url: https://semgrep.dev/playground/r/jQTWvk/gitlab.find_sec_bugs.CUSTOM_INJECTION-1
 - id: gitlab.find_sec_bugs.CUSTOM_INJECTION-2
   patterns:
+  - pattern-not-inside: 'final String $VAR = ...;
+
+      '
   - pattern-either:
     - pattern: '"$SQL_STR" + ...
 
@@ -454,14 +507,19 @@ rules:
       (''SQL Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.CUSTOM_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-CUSTOM_INJECTION
+      type: find_sec_bugs_type
+      value: CUSTOM_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.CUSTOM_INJECTION-2
     shortlink: https://sg.run/KyG6
     semgrep.dev:
       rule:
         rule_id: 5rUN6G
-        version_id: e1ToE8
-        url: https://semgrep.dev/playground/r/e1ToE8/gitlab.find_sec_bugs.CUSTOM_INJECTION-2
+        version_id: 1QTBKO
+        url: https://semgrep.dev/playground/r/1QTBKO/gitlab.find_sec_bugs.CUSTOM_INJECTION-2
 - id: gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
   patterns:
   - pattern: |
@@ -480,14 +538,19 @@ rules:
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     technology:
     - java
+    primary_identifier: find_sec_bugs.CUSTOM_MESSAGE_DIGEST
+    secondary_identifiers:
+    - name: Find Security Bugs-CUSTOM_MESSAGE_DIGEST
+      type: find_sec_bugs_type
+      value: CUSTOM_MESSAGE_DIGEST
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
     shortlink: https://sg.run/vpAR
     semgrep.dev:
       rule:
         rule_id: r6Ujx4
-        version_id: 0bT86Y
-        url: https://semgrep.dev/playground/r/0bT86Y/gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
+        version_id: 44TpAK
+        url: https://semgrep.dev/playground/r/44TpAK/gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
 - id: gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
   pattern-either:
   - pattern: |
@@ -508,14 +571,19 @@ rules:
   metadata:
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION
+    secondary_identifiers:
+    - name: Find Security Bugs-DANGEROUS_PERMISSION_COMBINATION
+      type: find_sec_bugs_type
+      value: DANGEROUS_PERMISSION_COMBINATION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
     shortlink: https://sg.run/2kN5
     semgrep.dev:
       rule:
         rule_id: 0oUpO1
-        version_id: GxTn4W
-        url: https://semgrep.dev/playground/r/GxTn4W/gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
+        version_id: 7ZTdQZ
+        url: https://semgrep.dev/playground/r/7ZTdQZ/gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
   patterns:
@@ -531,14 +599,19 @@ rules:
     category: security
     technology:
     - java
+    primary_identifier: find_sec_bugs.DEFAULT_HTTP_CLIENT
+    secondary_identifiers:
+    - name: Find Security Bugs-DEFAULT_HTTP_CLIENT
+      type: find_sec_bugs_type
+      value: DEFAULT_HTTP_CLIENT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
     shortlink: https://sg.run/dPw5
     semgrep.dev:
       rule:
         rule_id: bwULG5
-        version_id: K3TDOD
-        url: https://semgrep.dev/playground/r/K3TDOD/gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
+        version_id: PkTvWw
+        url: https://semgrep.dev/playground/r/PkTvWw/gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
 - id: gitlab.find_sec_bugs.DES_USAGE-1
   patterns:
   - pattern-inside: javax.crypto.Cipher.getInstance("$ALG")
@@ -556,14 +629,19 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     technology:
     - java
+    primary_identifier: find_sec_bugs.DES_USAGE
+    secondary_identifiers:
+    - name: Find Security Bugs-DES_USAGE
+      type: find_sec_bugs_type
+      value: DES_USAGE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.DES_USAGE-1
     shortlink: https://sg.run/kDnz
     semgrep.dev:
       rule:
         rule_id: X5UAPg
-        version_id: RGT6wB
-        url: https://semgrep.dev/playground/r/RGT6wB/gitlab.find_sec_bugs.DES_USAGE-1
+        version_id: LjTO2B
+        url: https://semgrep.dev/playground/r/LjTO2B/gitlab.find_sec_bugs.DES_USAGE-1
 - id: gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
   patterns:
   - pattern: java.sql.DriverManager.getConnection($URI, $USR, "...");
@@ -578,14 +656,22 @@ rules:
     cwe: 'CWE-259: Use of Hard-coded Password'
     technology:
     - java
+    primary_identifier: find_sec_bugs.DMI_CONSTANT_DB_PASSWORD
+    secondary_identifiers:
+    - name: Find Security Bugs-DMI_CONSTANT_DB_PASSWORD
+      type: find_sec_bugs_type
+      value: DMI_CONSTANT_DB_PASSWORD
+    - name: Find Security Bugs-HARD_CODE_PASSWORD
+      type: find_sec_bugs_type
+      value: HARD_CODE_PASSWORD
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
     shortlink: https://sg.run/qZAx
     semgrep.dev:
       rule:
         rule_id: 5rUN5O
-        version_id: PkTlE2
-        url: https://semgrep.dev/playground/r/PkTlE2/gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
+        version_id: ZRTn5K
+        url: https://semgrep.dev/playground/r/ZRTn5K/gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
 - id: gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
   patterns:
   - pattern: java.sql.DriverManager.getConnection($URI, $USR, "");
@@ -600,14 +686,22 @@ rules:
     cwe: 'CWE-259: Use of Hard-coded Password'
     technology:
     - java
+    primary_identifier: find_sec_bugs.DMI_EMPTY_DB_PASSWORD
+    secondary_identifiers:
+    - name: Find Security Bugs-DMI_EMPTY_DB_PASSWORD
+      type: find_sec_bugs_type
+      value: DMI_EMPTY_DB_PASSWORD
+    - name: Find Security Bugs-HARD_CODE_PASSWORD
+      type: find_sec_bugs_type
+      value: HARD_CODE_PASSWORD
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
     shortlink: https://sg.run/lW3j
     semgrep.dev:
       rule:
         rule_id: GdUow0
-        version_id: JdTB2K
-        url: https://semgrep.dev/playground/r/JdTB2K/gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
+        version_id: nWTjz9
+        url: https://semgrep.dev/playground/r/nWTjz9/gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
 - id: gitlab.find_sec_bugs.ECB_MODE-1
   patterns:
   - pattern-inside: javax.crypto.Cipher.getInstance("...")
@@ -625,14 +719,19 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     technology:
     - java
+    primary_identifier: find_sec_bugs.ECB_MODE
+    secondary_identifiers:
+    - name: Find Security Bugs-ECB_MODE
+      type: find_sec_bugs_type
+      value: ECB_MODE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.ECB_MODE-1
     shortlink: https://sg.run/xPDP
     semgrep.dev:
       rule:
         rule_id: 10U4j4
-        version_id: BjTgG4
-        url: https://semgrep.dev/playground/r/BjTgG4/gitlab.find_sec_bugs.ECB_MODE-1
+        version_id: gETjA5
+        url: https://semgrep.dev/playground/r/gETjA5/gitlab.find_sec_bugs.ECB_MODE-1
 - id: gitlab.find_sec_bugs.EL_INJECTION-1
   patterns:
   - pattern-inside: |
@@ -657,14 +756,19 @@ rules:
     cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.EL_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-EL_INJECTION
+      type: find_sec_bugs_type
+      value: EL_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.EL_INJECTION-1
     shortlink: https://sg.run/4k1E
     semgrep.dev:
       rule:
         rule_id: GdUo2e
-        version_id: vdTwD5
-        url: https://semgrep.dev/playground/r/vdTwD5/gitlab.find_sec_bugs.EL_INJECTION-1
+        version_id: 9lT21e
+        url: https://semgrep.dev/playground/r/9lT21e/gitlab.find_sec_bugs.EL_INJECTION-1
 - id: gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
   patterns:
   - pattern: |
@@ -683,14 +787,19 @@ rules:
     cwe: 'CWE-15: External Control of System or Configuration Setting'
     technology:
     - java
+    primary_identifier: find_sec_bugs.EXTERNAL_CONFIG_CONTROL
+    secondary_identifiers:
+    - name: Find Security Bugs-EXTERNAL_CONFIG_CONTROL
+      type: find_sec_bugs_type
+      value: EXTERNAL_CONFIG_CONTROL
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
     shortlink: https://sg.run/dPZY
     semgrep.dev:
       rule:
         rule_id: r6UjYJ
-        version_id: A8TOyl
-        url: https://semgrep.dev/playground/r/A8TOyl/gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
+        version_id: WrT9o0
+        url: https://semgrep.dev/playground/r/WrT9o0/gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
 - id: gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
   patterns:
   - pattern-inside: |
@@ -718,14 +827,19 @@ rules:
       Traversal'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.FILE_UPLOAD_FILENAME
+    secondary_identifiers:
+    - name: Find Security Bugs-FILE_UPLOAD_FILENAME
+      type: find_sec_bugs_type
+      value: FILE_UPLOAD_FILENAME
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
     shortlink: https://sg.run/5Z9l
     semgrep.dev:
       rule:
         rule_id: L1Uz0W
-        version_id: yeT4d6
-        url: https://semgrep.dev/playground/r/yeT4d6/gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
+        version_id: YDT567
+        url: https://semgrep.dev/playground/r/YDT567/gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
 - id: gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
   patterns:
   - pattern-either:
@@ -777,14 +891,19 @@ rules:
     cwe: 'CWE-134: Use of Externally-Controlled Format String'
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.FORMAT_STRING_MANIPULATION
+    secondary_identifiers:
+    - name: Find Security Bugs-FORMAT_STRING_MANIPULATION
+      type: find_sec_bugs_type
+      value: FORMAT_STRING_MANIPULATION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
     shortlink: https://sg.run/w4q0
     semgrep.dev:
       rule:
         rule_id: X5UA3o
-        version_id: YDT1zW
-        url: https://semgrep.dev/playground/r/YDT1zW/gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
+        version_id: GxTy7n
+        url: https://semgrep.dev/playground/r/GxTy7n/gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.HARD_CODE_KEY-1
   pattern-either:
@@ -1036,14 +1155,19 @@ rules:
     cwe: 'CWE-259: Use of Hard-coded Password'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HARD_CODE_PASSWORD
+    secondary_identifiers:
+    - name: Find Security Bugs-HARD_CODE_PASSWORD
+      type: find_sec_bugs_type
+      value: HARD_CODE_PASSWORD
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
     shortlink: https://sg.run/pNRN
     semgrep.dev:
       rule:
         rule_id: WAUYxY
-        version_id: 5PTRB3
-        url: https://semgrep.dev/playground/r/5PTRB3/gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
+        version_id: ExTO2e
+        url: https://semgrep.dev/playground/r/ExTO2e/gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
 - id: gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
   patterns:
   - pattern: new com.hazelcast.config.SymmetricEncryptionConfig()
@@ -1059,14 +1183,19 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION
+    secondary_identifiers:
+    - name: Find Security Bugs-HAZELCAST_SYMMETRIC_ENCRYPTION
+      type: find_sec_bugs_type
+      value: HAZELCAST_SYMMETRIC_ENCRYPTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
     shortlink: https://sg.run/ZP2L
     semgrep.dev:
       rule:
         rule_id: NbUe1Z
-        version_id: qkTdKE
-        url: https://semgrep.dev/playground/r/qkTdKE/gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
+        version_id: JdTb3A
+        url: https://semgrep.dev/playground/r/JdTb3A/gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
 - id: gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
   mode: taint
   pattern-sources:
@@ -1104,14 +1233,19 @@ rules:
       Response Splitting'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE
+    secondary_identifiers:
+    - name: Find Security Bugs-HRS_REQUEST_PARAMETER_TO_COOKIE
+      type: find_sec_bugs_type
+      value: HRS_REQUEST_PARAMETER_TO_COOKIE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
     shortlink: https://sg.run/1k2Q
     semgrep.dev:
       rule:
         rule_id: YGUYoN
-        version_id: 3ZTGxR
-        url: https://semgrep.dev/playground/r/3ZTGxR/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
+        version_id: vdTgpN
+        url: https://semgrep.dev/playground/r/vdTgpN/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
 - id: gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
   mode: taint
   pattern-sources:
@@ -1149,14 +1283,19 @@ rules:
       Response Splitting'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER
+    secondary_identifiers:
+    - name: Find Security Bugs-HRS_REQUEST_PARAMETER_TO_HTTP_HEADER
+      type: find_sec_bugs_type
+      value: HRS_REQUEST_PARAMETER_TO_HTTP_HEADER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
     shortlink: https://sg.run/93NR
     semgrep.dev:
       rule:
         rule_id: 6JUye5
-        version_id: 44TLYb
-        url: https://semgrep.dev/playground/r/44TLYb/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
+        version_id: d6T1Qv
+        url: https://semgrep.dev/playground/r/d6T1Qv/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
 - id: gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
   pattern-either:
   - patterns:
@@ -1184,14 +1323,19 @@ rules:
     cwe: 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HTTPONLY_COOKIE
+    secondary_identifiers:
+    - name: Find Security Bugs-HTTPONLY_COOKIE
+      type: find_sec_bugs_type
+      value: HTTPONLY_COOKIE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
     shortlink: https://sg.run/z5B0
     semgrep.dev:
       rule:
         rule_id: WAUYRb
-        version_id: 7ZTlYb
-        url: https://semgrep.dev/playground/r/7ZTlYb/gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
+        version_id: kbTpjw
+        url: https://semgrep.dev/playground/r/kbTpjw/gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
 - id: gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
   mode: taint
   pattern-sources:
@@ -1219,14 +1363,19 @@ rules:
       Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HTTP_PARAMETER_POLLUTION
+    secondary_identifiers:
+    - name: Find Security Bugs-HTTP_PARAMETER_POLLUTION
+      type: find_sec_bugs_type
+      value: HTTP_PARAMETER_POLLUTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
     shortlink: https://sg.run/Jw5Q
     semgrep.dev:
       rule:
         rule_id: AbUNR4
-        version_id: ZRT9BO
-        url: https://semgrep.dev/playground/r/ZRT9BO/gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
+        version_id: rxTqrr
+        url: https://semgrep.dev/playground/r/rxTqrr/gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
 - id: gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
   mode: taint
   pattern-sources:
@@ -1265,14 +1414,19 @@ rules:
       Response Splitting'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.HTTP_RESPONSE_SPLITTING
+    secondary_identifiers:
+    - name: Find Security Bugs-HTTP_RESPONSE_SPLITTING
+      type: find_sec_bugs_type
+      value: HTTP_RESPONSE_SPLITTING
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
     shortlink: https://sg.run/jBZ2
     semgrep.dev:
       rule:
         rule_id: lBUX54
-        version_id: QkTYQG
-        url: https://semgrep.dev/playground/r/QkTYQG/gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
+        version_id: e1T5L9
+        url: https://semgrep.dev/playground/r/e1T5L9/gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
 - id: gitlab.find_sec_bugs.IMPROPER_UNICODE-1
   pattern-either:
   - patterns:
@@ -1300,14 +1454,19 @@ rules:
     cwe: 'CWE-176: Improper Handling of Unicode Encoding'
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.IMPROPER_UNICODE
+    secondary_identifiers:
+    - name: Find Security Bugs-IMPROPER_UNICODE
+      type: find_sec_bugs_type
+      value: IMPROPER_UNICODE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.IMPROPER_UNICODE-1
     shortlink: https://sg.run/xPlp
     semgrep.dev:
       rule:
         rule_id: j2UwZp
-        version_id: JdTB2X
-        url: https://semgrep.dev/playground/r/JdTB2X/gitlab.find_sec_bugs.IMPROPER_UNICODE-1
+        version_id: RGT7g8
+        url: https://semgrep.dev/playground/r/RGT7g8/gitlab.find_sec_bugs.IMPROPER_UNICODE-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
   pattern-either:
@@ -1403,14 +1562,19 @@ rules:
     cwe: 'CWE-209: Information Exposure Through an Error Message'
     technology:
     - java
+    primary_identifier: find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE
+    secondary_identifiers:
+    - name: Find Security Bugs-INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE
+      type: find_sec_bugs_type
+      value: INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
     shortlink: https://sg.run/ZPrn
     semgrep.dev:
       rule:
         rule_id: bwULk7
-        version_id: BjTgQZ
-        url: https://semgrep.dev/playground/r/BjTgQZ/gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
+        version_id: 0bTB5P
+        url: https://semgrep.dev/playground/r/0bTB5P/gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
 - id: gitlab.find_sec_bugs.INSECURE_COOKIE-1
   pattern-either:
   - patterns:
@@ -1426,8 +1590,8 @@ rules:
         (HttpServletResponse $RESP).addCookie($C);
   - pattern: "(javax.servlet.http.Cookie $C).setSecure(false);"
   message: |
-    "Storing sensitive data in a persistent cookie for an extended period can lead to a breach of
-    confidentiality or account compromise."
+    "A new cookie is created without the Secure flag set. The Secure flag is a directive to the
+    browser to make sure that the cookie is not sent for insecure communication (http://)"
   languages:
   - java
   severity: WARNING
@@ -1436,14 +1600,19 @@ rules:
     cwe: 'CWE-539: Information Exposure Through Persistent Cookies'
     technology:
     - java
+    primary_identifier: find_sec_bugs.INSECURE_COOKIE
+    secondary_identifiers:
+    - name: Find Security Bugs-INSECURE_COOKIE
+      type: find_sec_bugs_type
+      value: INSECURE_COOKIE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.INSECURE_COOKIE-1
     shortlink: https://sg.run/pNER
     semgrep.dev:
       rule:
         rule_id: 0oUp4O
-        version_id: LjTWpX
-        url: https://semgrep.dev/playground/r/LjTWpX/gitlab.find_sec_bugs.INSECURE_COOKIE-1
+        version_id: w8Trzl
+        url: https://semgrep.dev/playground/r/w8Trzl/gitlab.find_sec_bugs.INSECURE_COOKIE-1
 - id: gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
   mode: taint
   pattern-sources:
@@ -1482,14 +1651,19 @@ rules:
     cwe: 'CWE-20: Improper Input Validation'
     technology:
     - java
+    primary_identifier: find_sec_bugs.JAXRS_ENDPOINT
+    secondary_identifiers:
+    - name: Find Security Bugs-JAXRS_ENDPOINT
+      type: find_sec_bugs_type
+      value: JAXRS_ENDPOINT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
     shortlink: https://sg.run/QJ0x
     semgrep.dev:
       rule:
         rule_id: d8U6DE
-        version_id: 2KTk6O
-        url: https://semgrep.dev/playground/r/2KTk6O/gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
+        version_id: WrT9l0
+        url: https://semgrep.dev/playground/r/WrT9l0/gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
 - id: gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
   mode: taint
   pattern-sources:
@@ -1529,14 +1703,19 @@ rules:
     owasp: 'OWASP: Cross-Site Request Forgery'
     technology:
     - java
+    primary_identifier: find_sec_bugs.JAXWS_ENDPOINT
+    secondary_identifiers:
+    - name: Find Security Bugs-JAXWS_ENDPOINT
+      type: find_sec_bugs_type
+      value: JAXWS_ENDPOINT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
     shortlink: https://sg.run/3Qjl
     semgrep.dev:
       rule:
         rule_id: ZqUewk
-        version_id: X0TjJy
-        url: https://semgrep.dev/playground/r/X0TjJy/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
+        version_id: 0bTB7P
+        url: https://semgrep.dev/playground/r/0bTB7P/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
 - id: gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
   patterns:
   - pattern-inside: |
@@ -1552,14 +1731,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-20: Improper Input Validation'
+    primary_identifier: find_sec_bugs.LDAP_ANONYMOUS
+    secondary_identifiers:
+    - name: Find Security Bugs-LDAP_ANONYMOUS
+      type: find_sec_bugs_type
+      value: LDAP_ANONYMOUS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
     shortlink: https://sg.run/0Wrb
     semgrep.dev:
       rule:
         rule_id: PeUjLD
-        version_id: 3ZTG7R
-        url: https://semgrep.dev/playground/r/3ZTG7R/gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
+        version_id: vdTgnN
+        url: https://semgrep.dev/playground/r/vdTgnN/gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
   patterns:
@@ -1574,14 +1758,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-20: Improper Input Validation'
+    primary_identifier: find_sec_bugs.LDAP_ENTRY_POISONING
+    secondary_identifiers:
+    - name: Find Security Bugs-LDAP_ENTRY_POISONING
+      type: find_sec_bugs_type
+      value: LDAP_ENTRY_POISONING
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
     shortlink: https://sg.run/Ky0d
     semgrep.dev:
       rule:
         rule_id: JDUog3
-        version_id: 44TLxb
-        url: https://semgrep.dev/playground/r/44TLxb/gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
+        version_id: d6T1jv
+        url: https://semgrep.dev/playground/r/d6T1jv/gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.LDAP_INJECTION-1
   mode: taint
@@ -1664,14 +1853,19 @@ rules:
       (''LDAP Injection'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.LDAP_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-LDAP_INJECTION
+      type: find_sec_bugs_type
+      value: LDAP_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.LDAP_INJECTION-1
     shortlink: https://sg.run/5Z93
     semgrep.dev:
       rule:
         rule_id: BYUKEw
-        version_id: nWTbdG
-        url: https://semgrep.dev/playground/r/nWTbdG/gitlab.find_sec_bugs.LDAP_INJECTION-1
+        version_id: bZTrwO
+        url: https://semgrep.dev/playground/r/bZTrwO/gitlab.find_sec_bugs.LDAP_INJECTION-1
 - id: gitlab.find_sec_bugs.MALICIOUS_XSLT-1
   mode: taint
   pattern-sources:
@@ -1715,14 +1909,19 @@ rules:
     cwe": 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
       Traversal'')'
     category: security
+    primary_identifier: find_sec_bugs.MALICIOUS_XSLT
+    secondary_identifiers:
+    - name: Find Security Bugs-MALICIOUS_XSLT
+      type: find_sec_bugs_type
+      value: MALICIOUS_XSLT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.MALICIOUS_XSLT-1
     shortlink: https://sg.run/L2KJ
     semgrep.dev:
       rule:
         rule_id: x8UdB6
-        version_id: K3TDPp
-        url: https://semgrep.dev/playground/r/K3TDPp/gitlab.find_sec_bugs.MALICIOUS_XSLT-1
+        version_id: YDT5R7
+        url: https://semgrep.dev/playground/r/YDT5R7/gitlab.find_sec_bugs.MALICIOUS_XSLT-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
   patterns:
@@ -1741,14 +1940,19 @@ rules:
   metadata:
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.MODIFICATION_AFTER_VALIDATION
+    secondary_identifiers:
+    - name: Find Security Bugs-MODIFICATION_AFTER_VALIDATION
+      type: find_sec_bugs_type
+      value: MODIFICATION_AFTER_VALIDATION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
     shortlink: https://sg.run/O4Yp
     semgrep.dev:
       rule:
         rule_id: 10U4xJ
-        version_id: 5PTRBb
-        url: https://semgrep.dev/playground/r/5PTRBb/gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
+        version_id: A8T8z8
+        url: https://semgrep.dev/playground/r/A8T8z8/gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
   patterns:
@@ -1766,14 +1970,19 @@ rules:
   metadata:
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.NORMALIZATION_AFTER_VALIDATION
+    secondary_identifiers:
+    - name: Find Security Bugs-NORMALIZATION_AFTER_VALIDATION
+      type: find_sec_bugs_type
+      value: NORMALIZATION_AFTER_VALIDATION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
     shortlink: https://sg.run/eJnl
     semgrep.dev:
       rule:
         rule_id: 9AUAKN
-        version_id: GxTn4d
-        url: https://semgrep.dev/playground/r/GxTn4d/gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
+        version_id: BjT5Nq
+        url: https://semgrep.dev/playground/r/BjT5Nq/gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.NULL_CIPHER-1
   pattern: new javax.crypto.NullCipher()
@@ -1789,14 +1998,19 @@ rules:
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     technology:
     - java
+    primary_identifier: find_sec_bugs.NULL_CIPHER
+    secondary_identifiers:
+    - name: Find Security Bugs-NULL_CIPHER
+      type: find_sec_bugs_type
+      value: NULL_CIPHER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.NULL_CIPHER-1
     shortlink: https://sg.run/EzLo
     semgrep.dev:
       rule:
         rule_id: wdUk3N
-        version_id: YDT18W
-        url: https://semgrep.dev/playground/r/YDT18W/gitlab.find_sec_bugs.NULL_CIPHER-1
+        version_id: GxTyxn
+        url: https://semgrep.dev/playground/r/GxTyxn/gitlab.find_sec_bugs.NULL_CIPHER-1
 - id: gitlab.find_sec_bugs.OGNL_INJECTION-1
   mode: taint
   pattern-sources:
@@ -1932,14 +2146,19 @@ rules:
     category: security
     technology:
     - java
+    primary_identifier: find_sec_bugs.OGNL_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-OGNL_INJECTION
+      type: find_sec_bugs_type
+      value: OGNL_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.OGNL_INJECTION-1
     shortlink: https://sg.run/Gb4n
     semgrep.dev:
       rule:
         rule_id: DbU2QO
-        version_id: ExTLdr
-        url: https://semgrep.dev/playground/r/ExTLdr/gitlab.find_sec_bugs.OGNL_INJECTION-1
+        version_id: NdTLkY
+        url: https://semgrep.dev/playground/r/NdTLkY/gitlab.find_sec_bugs.OGNL_INJECTION-1
 - id: gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
   patterns:
   - pattern-either:
@@ -1960,14 +2179,19 @@ rules:
     cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION
+    secondary_identifiers:
+    - name: Find Security Bugs-OVERLY_PERMISSIVE_FILE_PERMISSION
+      type: find_sec_bugs_type
+      value: OVERLY_PERMISSIVE_FILE_PERMISSION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
     shortlink: https://sg.run/XW9A
     semgrep.dev:
       rule:
         rule_id: KxUwyj
-        version_id: RGT6BB
-        url: https://semgrep.dev/playground/r/RGT6BB/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
+        version_id: LjTOyB
+        url: https://semgrep.dev/playground/r/LjTOyB/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
   patterns:
@@ -1987,14 +2211,19 @@ rules:
     cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
     category: security
     confidence: HIGH
+    primary_identifier: find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION
+    secondary_identifiers:
+    - name: Find Security Bugs-OVERLY_PERMISSIVE_FILE_PERMISSION
+      type: find_sec_bugs_type
+      value: OVERLY_PERMISSIVE_FILE_PERMISSION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
     shortlink: https://sg.run/jBgA
     semgrep.dev:
       rule:
         rule_id: qNUpqB
-        version_id: A8TOyx
-        url: https://semgrep.dev/playground/r/A8TOyx/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
+        version_id: 8KTXjB
+        url: https://semgrep.dev/playground/r/8KTXjB/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
   severity: WARNING
 - id: gitlab.find_sec_bugs.PADDING_ORACLE-1
   patterns:
@@ -2015,14 +2244,19 @@ rules:
     cwe: 'CWE-696: Incorrect Behavior Order'
     technology:
     - java
+    primary_identifier: find_sec_bugs.PADDING_ORACLE
+    secondary_identifiers:
+    - name: Find Security Bugs-PADDING_ORACLE
+      type: find_sec_bugs_type
+      value: PADDING_ORACLE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PADDING_ORACLE-1
     shortlink: https://sg.run/eJ3E
     semgrep.dev:
       rule:
         rule_id: yyUDX2
-        version_id: WrTX62
-        url: https://semgrep.dev/playground/r/WrTX62/gitlab.find_sec_bugs.PADDING_ORACLE-1
+        version_id: 3ZTnpg
+        url: https://semgrep.dev/playground/r/3ZTnpg/gitlab.find_sec_bugs.PADDING_ORACLE-1
 - id: gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
   mode: taint
   pattern-sources:
@@ -2077,14 +2311,19 @@ rules:
       Traversal'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.PATH_TRAVERSAL_IN
+    secondary_identifiers:
+    - name: Find Security Bugs-PATH_TRAVERSAL_IN
+      type: find_sec_bugs_type
+      value: PATH_TRAVERSAL_IN
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
     shortlink: https://sg.run/R5KK
     semgrep.dev:
       rule:
         rule_id: WAUYbb
-        version_id: 7ZTl5b
-        url: https://semgrep.dev/playground/r/7ZTl5b/gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
+        version_id: kbTpkw
+        url: https://semgrep.dev/playground/r/kbTpkw/gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
 - id: gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
   mode: taint
   pattern-sources:
@@ -2123,14 +2362,19 @@ rules:
       Traversal'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.PATH_TRAVERSAL_OUT
+    secondary_identifiers:
+    - name: Find Security Bugs-PATH_TRAVERSAL_OUT
+      type: find_sec_bugs_type
+      value: PATH_TRAVERSAL_OUT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
     shortlink: https://sg.run/ALZ4
     semgrep.dev:
       rule:
         rule_id: 0oUpvO
-        version_id: LjTWxX
-        url: https://semgrep.dev/playground/r/LjTWxX/gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
+        version_id: w8TrJl
+        url: https://semgrep.dev/playground/r/w8TrJl/gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
 - id: gitlab.find_sec_bugs.PERMISSIVE_CORS-1
   patterns:
   - pattern-either:
@@ -2162,14 +2406,19 @@ rules:
     category: security
     technology:
     - java
+    primary_identifier: find_sec_bugs.PERMISSIVE_CORS
+    secondary_identifiers:
+    - name: Find Security Bugs-PERMISSIVE_CORS
+      type: find_sec_bugs_type
+      value: PERMISSIVE_CORS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PERMISSIVE_CORS-1
     shortlink: https://sg.run/rNJA
     semgrep.dev:
       rule:
         rule_id: zdUG5y
-        version_id: JdTBZK
-        url: https://semgrep.dev/playground/r/JdTBZK/gitlab.find_sec_bugs.PERMISSIVE_CORS-1
+        version_id: nWTj89
+        url: https://semgrep.dev/playground/r/nWTj89/gitlab.find_sec_bugs.PERMISSIVE_CORS-1
 - id: gitlab.find_sec_bugs.PERMISSIVE_CORS-2
   mode: taint
   pattern-sources:
@@ -2202,14 +2451,19 @@ rules:
     category: security
     technology:
     - java
+    primary_identifier: find_sec_bugs.PERMISSIVE_CORS
+    secondary_identifiers:
+    - name: Find Security Bugs-PERMISSIVE_CORS
+      type: find_sec_bugs_type
+      value: PERMISSIVE_CORS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PERMISSIVE_CORS-2
     shortlink: https://sg.run/bWNr
     semgrep.dev:
       rule:
         rule_id: pKUbrw
-        version_id: 5PTRY3
-        url: https://semgrep.dev/playground/r/5PTRY3/gitlab.find_sec_bugs.PERMISSIVE_CORS-2
+        version_id: ExTOpe
+        url: https://semgrep.dev/playground/r/ExTOpe/gitlab.find_sec_bugs.PERMISSIVE_CORS-2
 - id: gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
   patterns:
   - pattern-either:
@@ -2236,14 +2490,19 @@ rules:
     cwe: 'CWE-330: Use of Insufficiently Random Values'
     technology:
     - java
+    primary_identifier: find_sec_bugs.PREDICTABLE_RANDOM
+    secondary_identifiers:
+    - name: Find Security Bugs-PREDICTABLE_RANDOM
+      type: find_sec_bugs_type
+      value: PREDICTABLE_RANDOM
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
     shortlink: https://sg.run/1kbD
     semgrep.dev:
       rule:
         rule_id: lBUXPJ
-        version_id: BjTgQ4
-        url: https://semgrep.dev/playground/r/BjTgQ4/gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
+        version_id: gETj15
+        url: https://semgrep.dev/playground/r/gETj15/gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
 - id: gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
   mode: taint
   pattern-sources:
@@ -2289,14 +2548,19 @@ rules:
       Traversal'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL
+    secondary_identifiers:
+    - name: Find Security Bugs-PT_ABSOLUTE_PATH_TRAVERSAL
+      type: find_sec_bugs_type
+      value: PT_ABSOLUTE_PATH_TRAVERSAL
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
     shortlink: https://sg.run/Ben5
     semgrep.dev:
       rule:
         rule_id: KxUwlN
-        version_id: 8KTJW9
-        url: https://semgrep.dev/playground/r/8KTJW9/gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
+        version_id: xyTOnN
+        url: https://semgrep.dev/playground/r/xyTOnN/gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
 - id: gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
   mode: taint
   pattern-sources:
@@ -2348,14 +2612,19 @@ rules:
       Traversal'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL
+    secondary_identifiers:
+    - name: Find Security Bugs-PT_RELATIVE_PATH_TRAVERSAL
+      type: find_sec_bugs_type
+      value: PT_RELATIVE_PATH_TRAVERSAL
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
     shortlink: https://sg.run/De5j
     semgrep.dev:
       rule:
         rule_id: qNUpqY
-        version_id: gETRLO
-        url: https://semgrep.dev/playground/r/gETRLO/gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
+        version_id: O9Tz3v
+        url: https://semgrep.dev/playground/r/O9Tz3v/gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
 - id: gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
   mode: taint
   pattern-sources:
@@ -2408,14 +2677,25 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-552: Files or Directories Accessible to External Parties'
+    primary_identifier: find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE
+    secondary_identifiers:
+    - name: Find Security Bugs-REQUESTDISPATCHER_FILE_DISCLOSURE
+      type: find_sec_bugs_type
+      value: REQUESTDISPATCHER_FILE_DISCLOSURE
+    - name: Find Security Bugs-STRUTS_FILE_DISCLOSURE
+      type: find_sec_bugs_type
+      value: STRUTS_FILE_DISCLOSURE
+    - name: Find Security Bugs-SPRING_FILE_DISCLOSURE
+      type: find_sec_bugs_type
+      value: SPRING_FILE_DISCLOSURE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
     shortlink: https://sg.run/PPWq
     semgrep.dev:
       rule:
         rule_id: ReU2bl
-        version_id: d6T0nl
-        url: https://semgrep.dev/playground/r/d6T0nl/gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
+        version_id: yeT8nB
+        url: https://semgrep.dev/playground/r/yeT8nB/gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
   patterns:
@@ -2438,14 +2718,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-502: Deserialization of Untrusted Data'
+    primary_identifier: find_sec_bugs.RPC_ENABLED_EXTENSIONS
+    secondary_identifiers:
+    - name: Find Security Bugs-RPC_ENABLED_EXTENSIONS
+      type: find_sec_bugs_type
+      value: RPC_ENABLED_EXTENSIONS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
     shortlink: https://sg.run/nw5O
     semgrep.dev:
       rule:
         rule_id: NbUeOb
-        version_id: DkTP3j
-        url: https://semgrep.dev/playground/r/DkTP3j/gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
+        version_id: K3Tebq
+        url: https://semgrep.dev/playground/r/K3Tebq/gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.RSA_KEY_SIZE-1
   patterns:
@@ -2469,14 +2754,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-326: Inadequate Encryption Strength'
+    primary_identifier: find_sec_bugs.RSA_KEY_SIZE
+    secondary_identifiers:
+    - name: Find Security Bugs-RSA_KEY_SIZE
+      type: find_sec_bugs_type
+      value: RSA_KEY_SIZE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.RSA_KEY_SIZE-1
     shortlink: https://sg.run/nwLb
     semgrep.dev:
       rule:
         rule_id: kxUO7W
-        version_id: l4TKNb
-        url: https://semgrep.dev/playground/r/l4TKNb/gitlab.find_sec_bugs.RSA_KEY_SIZE-1
+        version_id: 5PTjP2
+        url: https://semgrep.dev/playground/r/5PTjP2/gitlab.find_sec_bugs.RSA_KEY_SIZE-1
   severity: WARNING
   languages:
   - java
@@ -2490,14 +2780,19 @@ rules:
   metadata:
     cwe: 'CWE-287: Improper Authentication'
     category: security
+    primary_identifier: find_sec_bugs.SAML_IGNORE_COMMENTS
+    secondary_identifiers:
+    - name: Find Security Bugs-SAML_IGNORE_COMMENTS
+      type: find_sec_bugs_type
+      value: SAML_IGNORE_COMMENTS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
     shortlink: https://sg.run/EzGA
     semgrep.dev:
       rule:
         rule_id: kxUOAp
-        version_id: WrTXk1
-        url: https://semgrep.dev/playground/r/WrTXk1/gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
+        version_id: qkTGjw
+        url: https://semgrep.dev/playground/r/qkTGjw/gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
   mode: taint
@@ -2522,14 +2817,40 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-20: Improper Input Validation'
+    primary_identifier: find_sec_bugs.SERVLET_PARAMETER
+    secondary_identifiers:
+    - name: Find Security Bugs-SERVLET_PARAMETER
+      type: find_sec_bugs_type
+      value: SERVLET_PARAMETER
+    - name: Find Security Bugs-SERVLET_CONTENT_TYPE
+      type: find_sec_bugs_type
+      value: SERVLET_CONTENT_TYPE
+    - name: Find Security Bugs-SERVLET_SERVER_NAME
+      type: find_sec_bugs_type
+      value: SERVLET_SERVER_NAME
+    - name: Find Security Bugs-SERVLET_SESSION_ID
+      type: find_sec_bugs_type
+      value: SERVLET_SESSION_ID
+    - name: Find Security Bugs-SERVLET_QUERY_STRING
+      type: find_sec_bugs_type
+      value: SERVLET_QUERY_STRING
+    - name: Find Security Bugs-SERVLET_HEADER
+      type: find_sec_bugs_type
+      value: SERVLET_HEADER
+    - name: Find Security Bugs-SERVLET_HEADER_REFERER
+      type: find_sec_bugs_type
+      value: SERVLET_HEADER_REFERER
+    - name: Find Security Bugs-SERVLET_HEADER_USER_AGENT
+      type: find_sec_bugs_type
+      value: SERVLET_HEADER_USER_AGENT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
     shortlink: https://sg.run/gGey
     semgrep.dev:
       rule:
         rule_id: v8Uv2D
-        version_id: pZTdQj
-        url: https://semgrep.dev/playground/r/pZTdQj/gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
+        version_id: DkTJ9E
+        url: https://semgrep.dev/playground/r/DkTJ9E/gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
   patterns:
@@ -2570,14 +2891,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-77: Improper Neutralization of Special Elements used in a Command'
+    primary_identifier: find_sec_bugs.SMTP_HEADER_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-SMTP_HEADER_INJECTION
+      type: find_sec_bugs_type
+      value: SMTP_HEADER_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
     shortlink: https://sg.run/bWve
     semgrep.dev:
       rule:
         rule_id: zdUGRr
-        version_id: K3TDPD
-        url: https://semgrep.dev/playground/r/K3TDPD/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
+        version_id: PkTvZw
+        url: https://semgrep.dev/playground/r/PkTvZw/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
   patterns:
@@ -2798,14 +3124,31 @@ rules:
     category: security
     cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
       (''SQL Injection'')'
+    primary_identifier: find_sec_bugs.SQL_INJECTION_SPRING_JDBC
+    secondary_identifiers:
+    - name: Find Security Bugs-SQL_INJECTION_SPRING_JDBC
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_SPRING_JDBC
+    - name: Find Security Bugs-SQL_INJECTION_JPA
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_JPA
+    - name: Find Security Bugs-SQL_INJECTION_JDO
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_JDO
+    - name: Find Security Bugs-SQL_INJECTION_JDBC
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_JDBC
+    - name: Find Security Bugs-SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE
+      type: find_sec_bugs_type
+      value: SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
     shortlink: https://sg.run/WD1A
     semgrep.dev:
       rule:
         rule_id: lBUXP4
-        version_id: QkTYBG
-        url: https://semgrep.dev/playground/r/QkTYBG/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
+        version_id: e1T589
+        url: https://semgrep.dev/playground/r/e1T589/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.SSL_CONTEXT-1
   patterns:
@@ -2819,14 +3162,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-295: Improper Certificate Validation'
+    primary_identifier: find_sec_bugs.SSL_CONTEXT
+    secondary_identifiers:
+    - name: Find Security Bugs-SSL_CONTEXT
+      type: find_sec_bugs_type
+      value: SSL_CONTEXT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.SSL_CONTEXT-1
     shortlink: https://sg.run/8k34
     semgrep.dev:
       rule:
         rule_id: eqUZxA
-        version_id: zyTwe7
-        url: https://semgrep.dev/playground/r/zyTwe7/gitlab.find_sec_bugs.SSL_CONTEXT-1
+        version_id: BjT5Dq
+        url: https://semgrep.dev/playground/r/BjT5Dq/gitlab.find_sec_bugs.SSL_CONTEXT-1
   severity: WARNING
   languages:
   - java
@@ -2848,14 +3196,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-20: Improper Input Validation'
+    primary_identifier: find_sec_bugs.STRUTS_FORM_VALIDATION
+    secondary_identifiers:
+    - name: Find Security Bugs-STRUTS_FORM_VALIDATION
+      type: find_sec_bugs_type
+      value: STRUTS_FORM_VALIDATION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
     shortlink: https://sg.run/R5K2
     semgrep.dev:
       rule:
         rule_id: gxUkqj
-        version_id: bZT74k
-        url: https://semgrep.dev/playground/r/bZT74k/gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
+        version_id: o5Tvy0
+        url: https://semgrep.dev/playground/r/o5Tvy0/gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.TDES_USAGE-1
   patterns:
@@ -2874,14 +3227,19 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     technology:
     - java
+    primary_identifier: find_sec_bugs.TDES_USAGE
+    secondary_identifiers:
+    - name: Find Security Bugs-TDES_USAGE
+      type: find_sec_bugs_type
+      value: TDES_USAGE
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.TDES_USAGE-1
     shortlink: https://sg.run/w4BX
     semgrep.dev:
       rule:
         rule_id: j2UwKr
-        version_id: A8TOnx
-        url: https://semgrep.dev/playground/r/A8TOnx/gitlab.find_sec_bugs.TDES_USAGE-1
+        version_id: 8KTXqB
+        url: https://semgrep.dev/playground/r/8KTXqB/gitlab.find_sec_bugs.TDES_USAGE-1
 - id: gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
   pattern-either:
   - patterns:
@@ -2914,14 +3272,25 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    primary_identifier: find_sec_bugs.TEMPLATE_INJECTION_PEBBLE
+    secondary_identifiers:
+    - name: Find Security Bugs-TEMPLATE_INJECTION_PEBBLE
+      type: find_sec_bugs_type
+      value: TEMPLATE_INJECTION_PEBBLE
+    - name: Find Security Bugs-TEMPLATE_INJECTION_FREEMARKER
+      type: find_sec_bugs_type
+      value: TEMPLATE_INJECTION_FREEMARKER
+    - name: Find Security Bugs-TEMPLATE_INJECTION_VELOCITY
+      type: find_sec_bugs_type
+      value: TEMPLATE_INJECTION_VELOCITY
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
     shortlink: https://sg.run/vpK4
     semgrep.dev:
       rule:
         rule_id: yyUDL9
-        version_id: RGT6BG
-        url: https://semgrep.dev/playground/r/RGT6BG/gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
+        version_id: DkTJpE
+        url: https://semgrep.dev/playground/r/DkTJpE/gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
   patterns:
@@ -2946,14 +3315,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-501: Trust Boundary Violation'
+    primary_identifier: find_sec_bugs.TRUST_BOUNDARY_VIOLATION
+    secondary_identifiers:
+    - name: Find Security Bugs-TRUST_BOUNDARY_VIOLATION
+      type: find_sec_bugs_type
+      value: TRUST_BOUNDARY_VIOLATION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
     shortlink: https://sg.run/yJWd
     semgrep.dev:
       rule:
         rule_id: oqUKne
-        version_id: PkTln2
-        url: https://semgrep.dev/playground/r/PkTln2/gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
+        version_id: ZRTn7K
+        url: https://semgrep.dev/playground/r/ZRTn7K/gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
   patterns:
@@ -2979,14 +3353,22 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    primary_identifier: find_sec_bugs.UNVALIDATED_REDIRECT
+    secondary_identifiers:
+    - name: Find Security Bugs-UNVALIDATED_REDIRECT
+      type: find_sec_bugs_type
+      value: UNVALIDATED_REDIRECT
+    - name: Find Security Bugs-URL_REWRITING
+      type: find_sec_bugs_type
+      value: URL_REWRITING
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
     shortlink: https://sg.run/PPWE
     semgrep.dev:
       rule:
         rule_id: EwU1nP
-        version_id: 1QTRXl
-        url: https://semgrep.dev/playground/r/1QTRXl/gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
+        version_id: qkTG1w
+        url: https://semgrep.dev/playground/r/qkTG1w/gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
   pattern-either:
@@ -3015,14 +3397,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-918: Server-Side Request Forgery (SSRF)'
+    primary_identifier: find_sec_bugs.URLCONNECTION_SSRF_FD
+    secondary_identifiers:
+    - name: Find Security Bugs-URLCONNECTION_SSRF_FD
+      type: find_sec_bugs_type
+      value: URLCONNECTION_SSRF_FD
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
     shortlink: https://sg.run/Njl7
     semgrep.dev:
       rule:
         rule_id: pKUblx
-        version_id: qkTd9E
-        url: https://semgrep.dev/playground/r/qkTd9E/gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
+        version_id: JdTbyA
+        url: https://semgrep.dev/playground/r/JdTbyA/gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
   patterns:
@@ -3053,14 +3440,19 @@ rules:
       Traversal'')'
     technology:
     - java
+    primary_identifier: find_sec_bugs.WEAK_FILENAMEUTILS
+    secondary_identifiers:
+    - name: Find Security Bugs-WEAK_FILENAMEUTILS
+      type: find_sec_bugs_type
+      value: WEAK_FILENAMEUTILS
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
     shortlink: https://sg.run/Gb41
     semgrep.dev:
       rule:
         rule_id: 8GUvb6
-        version_id: rxTp8x
-        url: https://semgrep.dev/playground/r/rxTp8x/gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
+        version_id: 6xT35Y
+        url: https://semgrep.dev/playground/r/6xT35Y/gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
 - id: gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
   patterns:
   - pattern-either:
@@ -3096,14 +3488,22 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-295: Improper Certificate Validation'
+    primary_identifier: find_sec_bugs.WEAK_HOSTNAME_VERIFIER
+    secondary_identifiers:
+    - name: Find Security Bugs-WEAK_HOSTNAME_VERIFIER
+      type: find_sec_bugs_type
+      value: WEAK_HOSTNAME_VERIFIER
+    - name: Find Security Bugs-WEAK_TRUST_MANAGER
+      type: find_sec_bugs_type
+      value: WEAK_TRUST_MANAGER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
     shortlink: https://sg.run/Jw5Z
     semgrep.dev:
       rule:
         rule_id: 7KUbOj
-        version_id: 9lTGng
-        url: https://semgrep.dev/playground/r/9lTGng/gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
+        version_id: l4TbrR
+        url: https://semgrep.dev/playground/r/l4TbrR/gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
   patterns:
@@ -3124,14 +3524,22 @@ rules:
     cwe: 'CWE-326: Inadequate Encryption Strength'
     technology:
     - java
+    primary_identifier: find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5
+    secondary_identifiers:
+    - name: Find Security Bugs-WEAK_MESSAGE_DIGEST_MD5
+      type: find_sec_bugs_type
+      value: WEAK_MESSAGE_DIGEST_MD5
+    - name: Find Security Bugs-WEAK_MESSAGE_DIGEST_SHA1
+      type: find_sec_bugs_type
+      value: WEAK_MESSAGE_DIGEST_SHA1
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
     shortlink: https://sg.run/L2R7
     semgrep.dev:
       rule:
         rule_id: OrUvyR
-        version_id: o5T356
-        url: https://semgrep.dev/playground/r/o5T356/gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
+        version_id: A8T8r8
+        url: https://semgrep.dev/playground/r/A8T8r8/gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
 - id: gitlab.find_sec_bugs.WICKET_XSS1-1
   patterns:
   - pattern: "(org.apache.wicket.markup.html.basic.Label $X).setEscapeModelStrings(false);"
@@ -3145,14 +3553,19 @@ rules:
     category: security
     cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
       Scripting'')'
+    primary_identifier: find_sec_bugs.WICKET_XSS1
+    secondary_identifiers:
+    - name: Find Security Bugs-WICKET_XSS1
+      type: find_sec_bugs_type
+      value: WICKET_XSS1
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.WICKET_XSS1-1
     shortlink: https://sg.run/QJoP
     semgrep.dev:
       rule:
         rule_id: v8Uvkz
-        version_id: YDT1zX
-        url: https://semgrep.dev/playground/r/YDT1zX/gitlab.find_sec_bugs.WICKET_XSS1-1
+        version_id: GxTy7G
+        url: https://semgrep.dev/playground/r/GxTy7G/gitlab.find_sec_bugs.WICKET_XSS1-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.XML_DECODER-1
   patterns:
@@ -3173,14 +3586,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-502: Deserialization of Untrusted Data'
+    primary_identifier: find_sec_bugs.XML_DECODER
+    secondary_identifiers:
+    - name: Find Security Bugs-XML_DECODER
+      type: find_sec_bugs_type
+      value: XML_DECODER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XML_DECODER-1
     shortlink: https://sg.run/7QeR
     semgrep.dev:
       rule:
         rule_id: wdUk2X
-        version_id: 0bT8QA
-        url: https://semgrep.dev/playground/r/0bT8QA/gitlab.find_sec_bugs.XML_DECODER-1
+        version_id: l4Tb9R
+        url: https://semgrep.dev/playground/r/l4Tb9R/gitlab.find_sec_bugs.XML_DECODER-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.XPATH_INJECTION-1
   patterns:
@@ -3203,14 +3621,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    primary_identifier: find_sec_bugs.XPATH_INJECTION
+    secondary_identifiers:
+    - name: Find Security Bugs-XPATH_INJECTION
+      type: find_sec_bugs_type
+      value: XPATH_INJECTION
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XPATH_INJECTION-1
     shortlink: https://sg.run/8kv7
     semgrep.dev:
       rule:
         rule_id: OrUv05
-        version_id: qkTd9N
-        url: https://semgrep.dev/playground/r/qkTd9N/gitlab.find_sec_bugs.XPATH_INJECTION-1
+        version_id: JdTbyW
+        url: https://semgrep.dev/playground/r/JdTbyW/gitlab.find_sec_bugs.XPATH_INJECTION-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
   mode: taint
@@ -3245,14 +3668,19 @@ rules:
     category: security
     technology:
     - java
+    primary_identifier: find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER
+    secondary_identifiers:
+    - name: Find Security Bugs-XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER
+      type: find_sec_bugs_type
+      value: XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
     shortlink: https://sg.run/3Qkb
     semgrep.dev:
       rule:
         rule_id: d8U6Rg
-        version_id: 6xTlkb
-        url: https://semgrep.dev/playground/r/6xTlkb/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
+        version_id: RGT7gb
+        url: https://semgrep.dev/playground/r/RGT7gb/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
 - id: gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
   patterns:
   - pattern-inside: |
@@ -3269,14 +3697,19 @@ rules:
     category: security
     cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
       Scripting'')'
+    primary_identifier: find_sec_bugs.XSS_REQUEST_WRAPPER
+    secondary_identifiers:
+    - name: Find Security Bugs-XSS_REQUEST_WRAPPER
+      type: find_sec_bugs_type
+      value: XSS_REQUEST_WRAPPER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
     shortlink: https://sg.run/gG7n
     semgrep.dev:
       rule:
         rule_id: eqUZdN
-        version_id: l4TKeP
-        url: https://semgrep.dev/playground/r/l4TKeP/gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
+        version_id: 5PTjOX
+        url: https://semgrep.dev/playground/r/5PTjOX/gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
   severity: INFO
 - id: gitlab.find_sec_bugs.XSS_SERVLET-1
   mode: taint
@@ -3309,14 +3742,19 @@ rules:
     cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
       Scripting'')'
     category: security
+    primary_identifier: find_sec_bugs.XSS_SERVLET
+    secondary_identifiers:
+    - name: Find Security Bugs-XSS_SERVLET
+      type: find_sec_bugs_type
+      value: XSS_SERVLET
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_SERVLET-1
     shortlink: https://sg.run/4kwE
     semgrep.dev:
       rule:
         rule_id: ZqUeEA
-        version_id: o5T3Pg
-        url: https://semgrep.dev/playground/r/o5T3Pg/gitlab.find_sec_bugs.XSS_SERVLET-1
+        version_id: A8T8zY
+        url: https://semgrep.dev/playground/r/A8T8zY/gitlab.find_sec_bugs.XSS_SERVLET-1
   severity: WARNING
 - id: gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
   pattern-either:
@@ -3353,14 +3791,22 @@ rules:
     category: security
     technology:
     - java
+    primary_identifier: find_sec_bugs.XSS_SERVLET
+    secondary_identifiers:
+    - name: Find Security Bugs-XSS_SERVLET
+      type: find_sec_bugs_type
+      value: XSS_SERVLET
+    - name: Find Security Bugs-XSS_SERVLET_PARAMETER
+      type: find_sec_bugs_type
+      value: XSS_SERVLET_PARAMETER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
     shortlink: https://sg.run/PP6q
     semgrep.dev:
       rule:
         rule_id: nJUneR
-        version_id: zyTw9j
-        url: https://semgrep.dev/playground/r/zyTw9j/gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
+        version_id: BjT5N2
+        url: https://semgrep.dev/playground/r/BjT5N2/gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
 - id: gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
   patterns:
   - pattern-inside: import javax.xml.transform.*; ...
@@ -3385,14 +3831,22 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    primary_identifier: find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY
+    secondary_identifiers:
+    - name: Find Security Bugs-XXE_DTD_TRANSFORM_FACTORY
+      type: find_sec_bugs_type
+      value: XXE_DTD_TRANSFORM_FACTORY
+    - name: Find Security Bugs-XXE_XSLT_TRANSFORM_FACTORY
+      type: find_sec_bugs_type
+      value: XXE_XSLT_TRANSFORM_FACTORY
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
     shortlink: https://sg.run/5Zx3
     semgrep.dev:
       rule:
         rule_id: 7KUb72
-        version_id: 2KTkXb
-        url: https://semgrep.dev/playground/r/2KTkXb/gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
+        version_id: WrT9ZW
+        url: https://semgrep.dev/playground/r/WrT9ZW/gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_SAXPARSER-1
   patterns:
@@ -3417,14 +3871,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    primary_identifier: find_sec_bugs.XXE_SAXPARSER
+    secondary_identifiers:
+    - name: Find Security Bugs-XXE_SAXPARSER
+      type: find_sec_bugs_type
+      value: XXE_SAXPARSER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_SAXPARSER-1
     shortlink: https://sg.run/JwWQ
     semgrep.dev:
       rule:
         rule_id: EwU1kG
-        version_id: pZTdJ6
-        url: https://semgrep.dev/playground/r/pZTdJ6/gitlab.find_sec_bugs.XXE_SAXPARSER-1
+        version_id: DkTJWd
+        url: https://semgrep.dev/playground/r/DkTJWd/gitlab.find_sec_bugs.XXE_SAXPARSER-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_XMLREADER-1
   patterns:
@@ -3443,14 +3902,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    primary_identifier: find_sec_bugs.XXE_XMLREADER
+    secondary_identifiers:
+    - name: Find Security Bugs-XXE_XMLREADER
+      type: find_sec_bugs_type
+      value: XXE_XMLREADER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_XMLREADER-1
     shortlink: https://sg.run/GbAn
     semgrep.dev:
       rule:
         rule_id: L1UzY1
-        version_id: X0TjpZ
-        url: https://semgrep.dev/playground/r/X0TjpZ/gitlab.find_sec_bugs.XXE_XMLREADER-1
+        version_id: 0bTBEy
+        url: https://semgrep.dev/playground/r/0bTBEy/gitlab.find_sec_bugs.XXE_XMLREADER-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
   patterns:
@@ -3463,6 +3927,12 @@ rules:
   - pattern-not-inside: |
       $SF.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
       ...
+  - pattern-not-inside: |
+      $SF.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+      ...
+  - pattern-not-inside: |
+      $SF.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
+      ...
   - pattern: "$SF.createXMLStreamReader(...)"
   languages:
   - java
@@ -3472,14 +3942,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    primary_identifier: find_sec_bugs.XXE_XMLSTREAMREADER
+    secondary_identifiers:
+    - name: Find Security Bugs-XXE_XMLSTREAMREADER
+      type: find_sec_bugs_type
+      value: XXE_XMLSTREAMREADER
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
     shortlink: https://sg.run/R5zK
     semgrep.dev:
       rule:
         rule_id: 8GUv2b
-        version_id: jQT4pR
-        url: https://semgrep.dev/playground/r/jQT4pR/gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
+        version_id: K3Te4z
+        url: https://semgrep.dev/playground/r/K3Te4z/gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
   patterns:
@@ -3507,14 +3982,22 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (''XXE'')'
+    primary_identifier: find_sec_bugs.XXE_XPATH
+    secondary_identifiers:
+    - name: Find Security Bugs-XXE_XPATH
+      type: find_sec_bugs_type
+      value: XXE_XPATH
+    - name: Find Security Bugs-XXE_DOCUMENT
+      type: find_sec_bugs_type
+      value: XXE_DOCUMENT
     license: MIT
     source: https://semgrep.dev/r/gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
     shortlink: https://sg.run/AL44
     semgrep.dev:
       rule:
         rule_id: gxUk44
-        version_id: 1QTRnd
-        url: https://semgrep.dev/playground/r/1QTRnd/gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
+        version_id: qkTGoj
+        url: https://semgrep.dev/playground/r/qkTGoj/gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
   severity: ERROR
 - id: gitlab.security_code_scan.SCS0001-1
   patterns:
@@ -3545,14 +4028,19 @@ rules:
     category: security
     cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
       (''OS Command Injection'')'
+    primary_identifier: security_code_scan.SCS0001
+    secondary_identifiers:
+    - name: SCS0001
+      type: security_code_scan_rule_id
+      value: SCS0001
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0001-1
     shortlink: https://sg.run/WbD2
     semgrep.dev:
       rule:
         rule_id: 3qU2L1
-        version_id: d6T0NJ
-        url: https://semgrep.dev/playground/r/d6T0NJ/gitlab.security_code_scan.SCS0001-1
+        version_id: 1QTBdR
+        url: https://semgrep.dev/playground/r/1QTBdR/gitlab.security_code_scan.SCS0001-1
 - id: gitlab.security_code_scan.SCS0002-1
   patterns:
   - pattern-either:
@@ -3573,7 +4061,7 @@ rules:
     - patterns:
       - metavariable-regex:
           metavariable: "$IMPL"
-          regex: "^(SqlCommand|EntityCommand|OdbcCommand|OleDbCommand|SqliteCommand)$"
+          regex: "^(SqlCommand|OracleCommand|NpgsqlCommand|MySqlCommand|EntityCommand|OdbcCommand|OleDbCommand|SqliteCommand)$"
       - pattern-either:
         - patterns:
           - pattern: new $IMPL($ARG, ...);
@@ -3605,14 +4093,19 @@ rules:
     category: security
     cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
       (‘SQL Injection’)'
+    primary_identifier: security_code_scan.SCS0002
+    secondary_identifiers:
+    - name: SCS0002
+      type: security_code_scan_rule_id
+      value: SCS0002
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0002-1
     shortlink: https://sg.run/K1y5
     semgrep.dev:
       rule:
         rule_id: PeUejg
-        version_id: nWTbD4
-        url: https://semgrep.dev/playground/r/nWTbD4/gitlab.security_code_scan.SCS0002-1
+        version_id: yeT8P8
+        url: https://semgrep.dev/playground/r/yeT8P8/gitlab.security_code_scan.SCS0002-1
 - id: gitlab.security_code_scan.SCS0003-1
   patterns:
   - pattern-inside: |
@@ -3658,14 +4151,19 @@ rules:
     category: security
     cwe: 'CWE-643: Improper Neutralization of Data within XPath Expressions (‘XPath
       Injection’)'
+    primary_identifier: security_code_scan.SCS0003
+    secondary_identifiers:
+    - name: SCS0003
+      type: security_code_scan_rule_id
+      value: SCS0003
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0003-1
     shortlink: https://sg.run/qeZ7
     semgrep.dev:
       rule:
         rule_id: JDUnoJ
-        version_id: ExTL5W
-        url: https://semgrep.dev/playground/r/ExTL5W/gitlab.security_code_scan.SCS0003-1
+        version_id: rxTqwd
+        url: https://semgrep.dev/playground/r/rxTqwd/gitlab.security_code_scan.SCS0003-1
 - id: gitlab.security_code_scan.SCS0004-1
   patterns:
   - pattern-inside: |
@@ -3689,14 +4187,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-295: Improper Certificate Validation'
+    primary_identifier: security_code_scan.SCS0004
+    secondary_identifiers:
+    - name: SCS0004
+      type: security_code_scan_rule_id
+      value: SCS0004
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0004-1
     shortlink: https://sg.run/PwPz
     semgrep.dev:
       rule:
         rule_id: ZqUDen
-        version_id: bZT7WW
-        url: https://semgrep.dev/playground/r/bZT7WW/gitlab.security_code_scan.SCS0004-1
+        version_id: YDT5DO
+        url: https://semgrep.dev/playground/r/YDT5DO/gitlab.security_code_scan.SCS0004-1
 - id: gitlab.security_code_scan.SCS0005-1
   patterns:
   - pattern: "(Random $RNG).$METHOD(...);"
@@ -3710,14 +4213,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
+    primary_identifier: security_code_scan.SCS0005
+    secondary_identifiers:
+    - name: SCS0005
+      type: security_code_scan_rule_id
+      value: SCS0005
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0005-1
     shortlink: https://sg.run/Rw5q
     semgrep.dev:
       rule:
         rule_id: L1URz8
-        version_id: xyTgbE
-        url: https://semgrep.dev/playground/r/xyTgbE/gitlab.security_code_scan.SCS0005-1
+        version_id: pZTopR
+        url: https://semgrep.dev/playground/r/pZTopR/gitlab.security_code_scan.SCS0005-1
 - id: gitlab.security_code_scan.SCS0006-1
   patterns:
   - pattern-either:
@@ -3740,14 +4248,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    primary_identifier: security_code_scan.SCS0006
+    secondary_identifiers:
+    - name: SCS0006
+      type: security_code_scan_rule_id
+      value: SCS0006
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0006-1
     shortlink: https://sg.run/Gzbq
     semgrep.dev:
       rule:
         rule_id: 7KUKbk
-        version_id: w8TPgP
-        url: https://semgrep.dev/playground/r/w8TPgP/gitlab.security_code_scan.SCS0006-1
+        version_id: zyTdY9
+        url: https://semgrep.dev/playground/r/zyTdY9/gitlab.security_code_scan.SCS0006-1
 - id: gitlab.security_code_scan.SCS0007-1
   mode: taint
   pattern-sanitizers:
@@ -3771,14 +4284,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference (‘XXE’)'
+    primary_identifier: security_code_scan.SCS0007
+    secondary_identifiers:
+    - name: SCS0007
+      type: security_code_scan_rule_id
+      value: SCS0007
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0007-1
     shortlink: https://sg.run/lbWE
     semgrep.dev:
       rule:
         rule_id: 5rU7N6
-        version_id: 7ZTl63
-        url: https://semgrep.dev/playground/r/7ZTl63/gitlab.security_code_scan.SCS0007-1
+        version_id: bZTr8y
+        url: https://semgrep.dev/playground/r/bZTr8y/gitlab.security_code_scan.SCS0007-1
 - id: gitlab.security_code_scan.SCS0008-1
   mode: taint
   pattern-sources:
@@ -3798,14 +4316,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-614: Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute'
+    primary_identifier: security_code_scan.SCS0008
+    secondary_identifiers:
+    - name: SCS0008
+      type: security_code_scan_rule_id
+      value: SCS0008
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0008-1
     shortlink: https://sg.run/49k5
     semgrep.dev:
       rule:
         rule_id: d8U86o
-        version_id: rxTpgB
-        url: https://semgrep.dev/playground/r/rxTpgB/gitlab.security_code_scan.SCS0008-1
+        version_id: l4Tb81
+        url: https://semgrep.dev/playground/r/l4Tb81/gitlab.security_code_scan.SCS0008-1
 - id: gitlab.security_code_scan.SCS0009-1
   mode: taint
   pattern-sources:
@@ -3825,14 +4348,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-1004: Sensitive Cookie Without ''HttpOnly'' Flag'
+    primary_identifier: security_code_scan.SCS0009
+    secondary_identifiers:
+    - name: SCS0009
+      type: security_code_scan_rule_id
+      value: SCS0009
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0009-1
     shortlink: https://sg.run/39QK
     semgrep.dev:
       rule:
         rule_id: v8ULvw
-        version_id: yeT4bz
-        url: https://semgrep.dev/playground/r/yeT4bz/gitlab.security_code_scan.SCS0009-1
+        version_id: qkTGXL
+        url: https://semgrep.dev/playground/r/qkTGXL/gitlab.security_code_scan.SCS0009-1
 - id: gitlab.security_code_scan.SCS0010-1
   patterns:
   - pattern-inside: |
@@ -3854,14 +4382,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    primary_identifier: security_code_scan.SCS0010
+    secondary_identifiers:
+    - name: SCS0010
+      type: security_code_scan_rule_id
+      value: SCS0010
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0010-1
     shortlink: https://sg.run/Jzwy
     semgrep.dev:
       rule:
         rule_id: nJUQnX
-        version_id: NdTKW0
-        url: https://semgrep.dev/playground/r/NdTKW0/gitlab.security_code_scan.SCS0010-1
+        version_id: 6xT310
+        url: https://semgrep.dev/playground/r/6xT310/gitlab.security_code_scan.SCS0010-1
 - id: gitlab.security_code_scan.SCS0011-1
   patterns:
   - pattern-either:
@@ -3879,14 +4412,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    primary_identifier: security_code_scan.SCS0011
+    secondary_identifiers:
+    - name: SCS0011
+      type: security_code_scan_rule_id
+      value: SCS0011
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0011-1
     shortlink: https://sg.run/64k1
     semgrep.dev:
       rule:
         rule_id: ReUE21
-        version_id: 8KTJo1
-        url: https://semgrep.dev/playground/r/8KTJo1/gitlab.security_code_scan.SCS0011-1
+        version_id: kbTpwn
+        url: https://semgrep.dev/playground/r/kbTpwn/gitlab.security_code_scan.SCS0011-1
 - id: gitlab.security_code_scan.SCS0012-1
   patterns:
   - pattern-inside: |
@@ -3914,14 +4452,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-284: Improper Access Control'
+    primary_identifier: security_code_scan.SCS0012
+    secondary_identifiers:
+    - name: SCS0012
+      type: security_code_scan_rule_id
+      value: SCS0012
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0012-1
     shortlink: https://sg.run/YZ4y
     semgrep.dev:
       rule:
         rule_id: GdUlow
-        version_id: LjTWd3
-        url: https://semgrep.dev/playground/r/LjTWd3/gitlab.security_code_scan.SCS0012-1
+        version_id: NdTLN7
+        url: https://semgrep.dev/playground/r/NdTLN7/gitlab.security_code_scan.SCS0012-1
 - id: gitlab.security_code_scan.SCS0013-1
   patterns:
   - pattern-inside: |
@@ -3942,18 +4485,23 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    primary_identifier: security_code_scan.SCS0013
+    secondary_identifiers:
+    - name: SCS0013
+      type: security_code_scan_rule_id
+      value: SCS0013
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0013-1
     shortlink: https://sg.run/5gZ0
     semgrep.dev:
       rule:
         rule_id: EwUe1Z
-        version_id: kbTBvy
-        url: https://semgrep.dev/playground/r/kbTBvy/gitlab.security_code_scan.SCS0013-1
+        version_id: o5Tv4W
+        url: https://semgrep.dev/playground/r/o5Tv4W/gitlab.security_code_scan.SCS0013-1
 - id: gitlab.security_code_scan.SCS0016-1
   patterns:
   - pattern: |
-      [HttpPost]
+      [$HTTPMETHOD]
       public $RET $FOO(...) {
         ...
       }
@@ -3962,6 +4510,9 @@ rules:
       public $RET $FOO(...) {
         ...
       }
+  - metavariable-regex:
+      metavariable: "$HTTPMETHOD"
+      regex: Http(Post|Delete|Patch|Put)
   message: |
     An attacker could send a link to the victim. By visiting the
     malicious link, a web page would trigger a POST request (because it is a
@@ -3978,14 +4529,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    primary_identifier: security_code_scan.SCS0016
+    secondary_identifiers:
+    - name: SCS0016
+      type: security_code_scan_rule_id
+      value: SCS0016
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0016-1
     shortlink: https://sg.run/AKL2
     semgrep.dev:
       rule:
         rule_id: 8GU3vk
-        version_id: O9TqLz
-        url: https://semgrep.dev/playground/r/O9TqLz/gitlab.security_code_scan.SCS0016-1
+        version_id: 2KTePN
+        url: https://semgrep.dev/playground/r/2KTePN/gitlab.security_code_scan.SCS0016-1
 - id: gitlab.security_code_scan.SCS0017-1
   patterns:
   - pattern: |
@@ -4004,14 +4560,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-554: ASP.NET Misconfiguration: Not Using Input Validation Framework'
+    primary_identifier: security_code_scan.SCS0017
+    secondary_identifiers:
+    - name: SCS0017
+      type: security_code_scan_rule_id
+      value: SCS0017
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0017-1
     shortlink: https://sg.run/p16Z
     semgrep.dev:
       rule:
         rule_id: DbUwNq
-        version_id: 3ZTGKd
-        url: https://semgrep.dev/playground/r/3ZTGKd/gitlab.security_code_scan.SCS0017-1
+        version_id: O9Tz6x
+        url: https://semgrep.dev/playground/r/O9Tz6x/gitlab.security_code_scan.SCS0017-1
 - id: gitlab.security_code_scan.SCS0019-1
   patterns:
   - pattern-inside: |
@@ -4034,14 +4595,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-524: Use of Cache Containing Sensitive Information'
+    primary_identifier: security_code_scan.SCS0019
+    secondary_identifiers:
+    - name: SCS0019
+      type: security_code_scan_rule_id
+      value: SCS0019
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0019-1
     shortlink: https://sg.run/QyJZ
     semgrep.dev:
       rule:
         rule_id: eqU4Z2
-        version_id: 9lTGNE
-        url: https://semgrep.dev/playground/r/9lTGNE/gitlab.security_code_scan.SCS0019-1
+        version_id: K3Te7g
+        url: https://semgrep.dev/playground/r/K3Te7g/gitlab.security_code_scan.SCS0019-1
 - id: gitlab.security_code_scan.SCS0026-1.SCS0031-1
   patterns:
   - pattern-either:
@@ -4063,14 +4629,22 @@ rules:
     category: security
     cwe: 'CWE-90: Improper Neutralization of Special Elements used in an LDAP Query
       (‘LDAP Injection’)'
+    primary_identifier: security_code_scan.SCS0026
+    secondary_identifiers:
+    - name: SCS0026
+      type: security_code_scan_rule_id
+      value: SCS0026
+    - name: SCS0031
+      type: security_code_scan_rule_id
+      value: SCS0031
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0026-1.SCS0031-1
     shortlink: https://sg.run/0ZWj
     semgrep.dev:
       rule:
         rule_id: 4bUbeO
-        version_id: ZRT9RY
-        url: https://semgrep.dev/playground/r/ZRT9RY/gitlab.security_code_scan.SCS0026-1.SCS0031-1
+        version_id: 9lT2Rv
+        url: https://semgrep.dev/playground/r/9lT2Rv/gitlab.security_code_scan.SCS0026-1.SCS0031-1
 - id: gitlab.security_code_scan.SCS0027-1
   mode: taint
   pattern-sources:
@@ -4114,14 +4688,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-601: URL Redirection to Untrusted Site (''Open Redirect'')'
+    primary_identifier: security_code_scan.SCS0027
+    secondary_identifiers:
+    - name: SCS0027
+      type: security_code_scan_rule_id
+      value: SCS0027
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0027-1
     shortlink: https://sg.run/DYeP
     semgrep.dev:
       rule:
         rule_id: QrUE1q
-        version_id: vdTwbl
-        url: https://semgrep.dev/playground/r/vdTwbl/gitlab.security_code_scan.SCS0027-1
+        version_id: jQTW30
+        url: https://semgrep.dev/playground/r/jQTW30/gitlab.security_code_scan.SCS0027-1
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0028-1
   patterns:
@@ -4166,14 +4745,19 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-502: Deserialization of Untrusted Data'
+    primary_identifier: security_code_scan.SCS0028
+    secondary_identifiers:
+    - name: SCS0028
+      type: security_code_scan_rule_id
+      value: SCS0028
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0028-1
     shortlink: https://sg.run/BqeA
     semgrep.dev:
       rule:
         rule_id: gxUrkX
-        version_id: e1ToPQ
-        url: https://semgrep.dev/playground/r/e1ToPQ/gitlab.security_code_scan.SCS0028-1
+        version_id: X0TEdX
+        url: https://semgrep.dev/playground/r/X0TEdX/gitlab.security_code_scan.SCS0028-1
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0029-1
   mode: taint
@@ -4236,14 +4820,19 @@ rules:
     category: security
     cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (‘Cross-site
       Scripting’)'
+    primary_identifier: security_code_scan.SCS0029
+    secondary_identifiers:
+    - name: SCS0029
+      type: security_code_scan_rule_id
+      value: SCS0029
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0029-1
     shortlink: https://sg.run/2e5L
     semgrep.dev:
       rule:
         rule_id: WAU7El
-        version_id: 44TLN3
-        url: https://semgrep.dev/playground/r/44TLN3/gitlab.security_code_scan.SCS0029-1
+        version_id: e1T5zO
+        url: https://semgrep.dev/playground/r/e1T5zO/gitlab.security_code_scan.SCS0029-1
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
   patterns:
@@ -4299,11 +4888,22 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-521: Weak Password Requirements'
+    primary_identifier: security_code_scan.SCS0032
+    secondary_identifiers:
+    - name: SCS0032
+      type: security_code_scan_rule_id
+      value: SCS0032
+    - name: SCS0033
+      type: security_code_scan_rule_id
+      value: SCS0033
+    - name: SCS0034
+      type: security_code_scan_rule_id
+      value: SCS0034
     license: MIT
     source: https://semgrep.dev/r/gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
     shortlink: https://sg.run/o1e0
     semgrep.dev:
       rule:
         rule_id: AbUEJj
-        version_id: gETR8w
-        url: https://semgrep.dev/playground/r/gETR8w/gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
+        version_id: w8Trjx
+        url: https://semgrep.dev/playground/r/w8Trjx/gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1

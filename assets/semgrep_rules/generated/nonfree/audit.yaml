@@ -6081,7 +6081,7 @@ rules:
     - pattern: "$RUNTIME.loadLibrary(String.format(...));"
     - patterns:
       - pattern-either:
-        - pattern: '$RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...)
+        - pattern: '$RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $ARG,...)
 
             '
         - pattern: '$RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/","-c",$ARG,...),...)
@@ -6103,6 +6103,26 @@ rules:
                 '
           - pattern-inside: |
               $CMD = "=~/(sh|bash|ksh|csh|tcsh|zsh)/";
+              ...
+        - patterns:
+          - pattern-either:
+            - pattern: "$RUNTIME.exec($CMD, $EXECUTE, $ARG, ...)\n"
+          - pattern-inside: |
+              $CMD = new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/", ...};
+              ...
+        - patterns:
+          - pattern-either:
+            - pattern: '$RUNTIME.exec("=~/(sh|bash|ksh|csh|tcsh|zsh)/", $BASH, $ARG,...)
+
+                '
+            - pattern: '$RUNTIME.exec(Arrays.asList("=~/(sh|bash|ksh|csh|tcsh|zsh)/",$BASH,$ARG,...),...)
+
+                '
+            - pattern: '$RUNTIME.exec(new String[]{"=~/(sh|bash|ksh|csh|tcsh|zsh)/",$BASH,$ARG,...},...)
+
+                '
+          - pattern-inside: |
+              $BASH = new String[]{"=~/(-c)/", ...};
               ...
       - pattern-not-inside: |
           $ARG = "...";
@@ -6146,8 +6166,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUzvJ
-        version_id: X0TeYk
-        url: https://semgrep.dev/playground/r/X0TeYk/java.lang.security.audit.command-injection-formatted-runtime-call.command-injection-formatted-runtime-call
+        version_id: 2KTeLN
+        url: https://semgrep.dev/playground/r/2KTeLN/java.lang.security.audit.command-injection-formatted-runtime-call.command-injection-formatted-runtime-call
   severity: ERROR
   languages:
   - java
@@ -9427,7 +9447,8 @@ rules:
         ...
       }
 - id: java.spring.security.audit.spring-csrf-disabled.spring-csrf-disabled
-  message: CSRF is disabled for this configuration. This is a security risk.
+  message: CSRF protection is disabled for this configuration. This is a security
+    risk.
   metadata:
     cwe:
     - 'CWE-352: Cross-Site Request Forgery (CSRF)'
@@ -9457,8 +9478,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU3gK
-        version_id: gET52L
-        url: https://semgrep.dev/playground/r/gET52L/java.spring.security.audit.spring-csrf-disabled.spring-csrf-disabled
+        version_id: X0TEgX
+        url: https://semgrep.dev/playground/r/X0TEgX/java.spring.security.audit.spring-csrf-disabled.spring-csrf-disabled
   severity: WARNING
   languages:
   - java
@@ -15327,8 +15348,9 @@ rules:
       - pattern-inside: |
           $VAL = false;
           ...
-  message: CSRF is disabled for this configuration. This is a security risk. Make
-    sure that it is safe or consider setting `csrf_protection` property to `true`.
+  message: CSRF protection is disabled for this configuration. This is a security
+    risk. Make sure that it is safe or consider setting `csrf_protection` property
+    to `true`.
   metadata:
     references:
     - https://symfony.com/doc/current/security/csrf.html
@@ -15352,8 +15374,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UeKO
-        version_id: 44TxY5
-        url: https://semgrep.dev/playground/r/44TxY5/php.symfony.security.audit.symfony-csrf-protection-disabled.symfony-csrf-protection-disabled
+        version_id: 9lT2Zv
+        url: https://semgrep.dev/playground/r/9lT2Zv/php.symfony.security.audit.symfony-csrf-protection-disabled.symfony-csrf-protection-disabled
   languages:
   - php
   severity: WARNING
