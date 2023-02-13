@@ -27,8 +27,8 @@ RULESETS = [
 	'python',
 	'react',
 	'ruby',
-        'nextjs',
-        'nodejs',
+	'nextjs',
+	'nodejs',
 	'kotlin',
 	'supply-chain',
 	'react-team-tier',
@@ -42,7 +42,7 @@ RULESETS = [
 	'eslint',
 	'findsecbugs',
 	'brakeman',
-        'bandit',
+	'bandit',
 	'flawfinder',
 	'gitleaks',
 	'gosec',
@@ -72,6 +72,27 @@ others_rules = Set.new
 nonfree_others_rules = Set.new
 
 BLOCKLIST = Set.new File.readlines("#{__dir__}/blocklist.txt").map(&:strip)
+
+# 0xdea C++ ruleset
+CPP_GITHUB_REPO = "0xdea/semgrep-rules"
+CPP_GITHUB_REPO_API = "https://api.github.com/repos/#{CPP_GITHUB_REPO}/git/trees/main?recursive=0"
+CPP_YAML_FILES = JSON.parse(URI.open(CPP_GITHUB_REPO_API).read)['tree'].map { |e| e['path'] }.select { |c| c =~ /^c\/.*\.yaml$/ }
+
+CPP_YAML_FILES.each do |cpp_yaml_file|
+	puts "Downloading ruleset for 0xdea/#{cpp_yaml_file}"
+	ret = YAML.load(URI.open("https://raw.githubusercontent.com/#{CPP_GITHUB_REPO}/main/#{cpp_yaml_file}").read)['rules']
+
+	ret.each do |rule|
+		rule['metadata']['license'] = 'MIT' unless rule['metadata']['license']
+		rule['metadata']['category'] = 'security'
+		rule['metadata']['subcategory'] = ['audit'] unless rule['metadata']['subcategory']
+		if NONFREE_LICENSES.include? rule['metadata']['license']
+			nonfree_rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
+		else 
+			rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
+		end
+	end
+end
 
 RULESETS.each do |ruleset|
 	puts "Downloading ruleset for /p/#{ruleset}"

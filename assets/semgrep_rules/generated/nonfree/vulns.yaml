@@ -10880,47 +10880,83 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUvkL
-        version_id: o5TO4N
-        url: https://semgrep.dev/playground/r/o5TO4N/java.spring.security.injection.tainted-html-string.tainted-html-string
+        version_id: jQTWQ0
+        url: https://semgrep.dev/playground/r/jQTWQ0/java.spring.security.injection.tainted-html-string.tainted-html-string
   mode: taint
   pattern-sources:
-  - patterns:
+  - label: INPUT
+    patterns:
     - pattern-either:
-      - pattern-inside: "$METHODNAME(..., @$REQ(...) $TYPE \n$SOURCE,...) {\n  ...\n}\n"
-      - pattern-inside: "$METHODNAME(..., @$REQ $TYPE \n$SOURCE,...) {\n  ...\n}\n"
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
+            ...
+          }
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
+            ...
+          }
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam)"
-    - pattern: "$SOURCE"
+    - focus-metavariable: "$SOURCE"
+  - label: CONCAT
+    by-side-effect: true
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - pattern: '"$HTMLSTR" + ...
+
+          '
+      - pattern: '"$HTMLSTR".concat(...)
+
+          '
+      - patterns:
+        - pattern-inside: |
+            StringBuilder $SB = new StringBuilder("$HTMLSTR");
+            ...
+        - pattern: "$SB.append(...)"
+      - patterns:
+        - pattern-inside: |
+            $VAR = "$HTMLSTR";
+            ...
+        - pattern: "$VAR += ..."
+      - pattern: String.format("$HTMLSTR", ...)
+      - patterns:
+        - pattern-inside: |
+            String $VAR = "$HTMLSTR";
+            ...
+        - pattern: String.format($VAR, ...)
+    - metavariable-regex:
+        metavariable: "$HTMLSTR"
+        regex: "^<\\w+"
+  pattern-propagators:
+  - pattern: "(StringBuilder $SB).append($...TAINTED)"
+    from: "$...TAINTED"
+    to: "$SB"
+  - pattern: "$VAR += $...TAINTED"
+    from: "$...TAINTED"
+    to: "$VAR"
   pattern-sinks:
-  - patterns:
-    - patterns:
-      - pattern-either:
-        - pattern: '"$HTMLSTR" + ...
+  - requires: CONCAT
+    patterns:
+    - pattern-either:
+      - pattern: new ResponseEntity<>($PAYLOAD, ...)
+      - pattern: new ResponseEntity<$ERROR>($PAYLOAD, ...)
+      - pattern: ResponseEntity. ... .body($PAYLOAD)
+      - patterns:
+        - pattern: 'ResponseEntity.$RESPFUNC($PAYLOAD). ...
 
             '
-        - pattern: '"$HTMLSTR".concat(...)
-
-            '
-        - patterns:
-          - pattern-inside: |
-              StringBuilder $SB = new StringBuilder("$HTMLSTR");
-              ...
-          - pattern: "$SB.append(...)"
-        - patterns:
-          - pattern-inside: |
-              $VAR = "$HTMLSTR";
-              ...
-          - pattern: "$VAR += ..."
-        - pattern: String.format("$HTMLSTR", ...)
-        - patterns:
-          - pattern-inside: |
-              String $VAR = "$HTMLSTR";
-              ...
-          - pattern: String.format($VAR, ...)
-      - metavariable-regex:
-          metavariable: "$HTMLSTR"
-          regex: "^<\\w+"
+        - metavariable-regex:
+            metavariable: "$RESPFUNC"
+            regex: "^(ok|of)$"
+    - focus-metavariable: "$PAYLOAD"
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: Encode.forHtml(...)
+    - pattern: "(PolicyFactory $POLICY).sanitize(...)"
+    - pattern: "(AntiSamy $AS).scan(...)"
+    - pattern: JSoup.clean(...)
 - id: java.spring.security.injection.tainted-sql-string.tainted-sql-string
   languages:
   - java
@@ -14625,13 +14661,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUr9k
-        version_id: kbTE68
-        url: https://semgrep.dev/playground/r/kbTE68/javascript.express.security.express-insecure-template-usage.express-insecure-template-usage
+        version_id: 1QTB5R
+        url: https://semgrep.dev/playground/r/1QTB5R/javascript.express.security.express-insecure-template-usage.express-insecure-template-usage
   languages:
   - javascript
   - typescript
   severity: WARNING
   mode: taint
+  pattern-propagators:
+  - pattern: "$MODEL.$FIND($E).then((...,$S,...)=>{...})"
+    from: "$E"
+    to: "$S"
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -32424,12 +32464,39 @@ rules:
         metavariable: "$FUNCTION"
         regex: "(?i)(.*password.*)"
 - id: ruby.lang.security.no-eval.ruby-eval
-  message: Use of eval with user-controllable input detected. This can lead to attackers
-    running arbitrary code. Ensure external data does not reach here, otherwise this
-    is a security vulnerability. Consider other ways to do this without eval.
+  message: Use of eval with user-controllable input detected. This can lead  to attackers
+    running arbitrary code. Ensure external data does not  reach here, otherwise this
+    is a security vulnerability. Consider  other ways to do this without eval.
+  severity: WARNING
+  metadata:
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe2022-top25: true
+    cwe2021-top25: true
+    cwe:
+    - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_evaluation.rb
+    subcategory:
+    - vuln
+    technology:
+    - ruby
+    - rails
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/ruby.lang.security.no-eval.ruby-eval
+    shortlink: https://sg.run/bDwZ
+    semgrep.dev:
+      rule:
+        rule_id: OrUGNk
+        version_id: rxTq2d
+        url: https://semgrep.dev/playground/r/rxTq2d/ruby.lang.security.no-eval.ruby-eval
   languages:
   - ruby
-  severity: WARNING
   mode: taint
   pattern-sources:
   - pattern-either:
@@ -32458,33 +32525,6 @@ rules:
       - pattern: module_eval(...)
       - pattern: instance_eval(...)
     - pattern-not: $M("...",...)
-  metadata:
-    source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/lib/brakeman/checks/check_evaluation.rb
-    category: security
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    references:
-    - https://owasp.org/www-community/attacks/Code_Injection
-    technology:
-    - ruby
-    - rails
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: MEDIUM
-    confidence: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/ruby.lang.security.no-eval.ruby-eval
-    shortlink: https://sg.run/bDwZ
-    semgrep.dev:
-      rule:
-        rule_id: OrUGNk
-        version_id: QkTBBX
-        url: https://semgrep.dev/playground/r/QkTBBX/ruby.lang.security.no-eval.ruby-eval
 - id: ruby.lang.security.ssl-mode-no-verify.ssl-mode-no-verify
   pattern: OpenSSL::SSL::VERIFY_NONE
   message: Detected SSL that will accept an unverified connection. This makes the
