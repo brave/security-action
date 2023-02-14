@@ -10,3 +10,4 @@ https://semgrep.dev/r/generic.html-templates.security.var-in-script-src.var-in-s
 https://semgrep.dev/r/typescript.react.security.audit.react-missing-noreferrer.react-missing-noreferrer
 https://semgrep.dev/r/html.security.audit.missing-integrity.missing-integrity
 https://semgrep.dev/r/generic.secrets.gitleaks.generic-api-key.generic-api-key
+https://github.com/0xdea/semgrep-rules/blob/main/c/typos.yaml
