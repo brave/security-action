@@ -5,6 +5,7 @@ rules:
       confidence: LOW
       references:
         - https://developer.mozilla.org/en-US/docs/Web/API/URL/URL#parameters
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/url-constructor-base.yaml
     message: Are you using the `URL(url, base)` constructor as a security control
       to limit the origin with base `$BASE`?
       The base is ignored whenever url looks like an
