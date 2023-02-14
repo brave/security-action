@@ -28,7 +28,8 @@ rules:
     pattern-either:
       # == instead of = in assignment (the ternary operator is not supported by Semgrep)
       - pattern: for ($EXPR1 == $EXPR2; $EXPR3; $EXPR4) ...
-      - pattern: $EXPR1 == $EXPR2;
+      # NOTE: removed since anything similar to DCHECK leads to false positive here
+      # - pattern: $EXPR1 == $EXPR2;
       # = instead of == in comparison
       - patterns:
         - pattern: if (<... $EXPR1 = $EXPR2 ...>) ...
