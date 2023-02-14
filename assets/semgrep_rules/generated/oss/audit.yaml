@@ -171,6 +171,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/command-injection.yaml
   message: The program invokes a potentially dangerous function that could introduce
     a vulnerability if it is used incorrectly, but the function can also be used safely.
     The software constructs all or part of an OS command using externally-influenced
@@ -200,6 +201,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/double-free.yaml
   message: The software calls free() twice on the same memory address, potentially
     leading to modification of unexpected memory locations. When a program calls free()
     twice with the same argument, the program's memory management data structures
@@ -237,6 +239,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/format-string-bugs.yaml
   message: The software uses a function that accepts a format string as an argument,
     but the format string originates from an external source. When an attacker can
     modify an externally-controlled format string, this can lead to buffer overflows,
@@ -322,6 +325,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-order-setuid-setgid-etc.yaml
   message: The software performs multiple related behaviors, but the behaviors are
     performed in the wrong order in ways which may produce resultant weaknesses. The
     set(e)gid() function must be called as root, so the order of the set(e)uid() and
@@ -403,6 +407,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-unsigned-comparison.yaml
   message: The software compares two entities in a security-relevant context, but
     the comparison is incorrect, which may lead to resultant weaknesses. Checking
     if an unsigned variable is negative makes no sense and is usually a good indication
@@ -443,6 +448,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-sizeof.yaml
   message: The code calls sizeof() on a malloced pointer type, which always returns
     the wordsize/8. This can produce an unexpected result if the programmer intended
     to determine how much memory has been allocated. The use of sizeof() on a pointer
@@ -479,6 +485,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-strncat.yaml
   message: The strncat() function is intended to be a safe alternative to the strcat()
     function. However, strncat() is nearly as dangerous as strcat(), in that it's
     quite easy to misuse. Specifically, the size parameter can be confusing, as it
@@ -515,6 +522,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-strncpy-stpncpy-strlcpy.yaml
   message: The software uses the size of a source buffer when reading from or writing
     to a destination buffer, which may cause it to access memory that is outside of
     the bounds of the buffer. When the size of the destination is smaller than the
@@ -558,6 +566,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-access-stat-lstat.yaml
   message: The software checks the state of a resource before using that resource,
     but the resource's state can change between the check and the use in a way that
     invalidates the results of the check. This can cause the software to perform invalid
@@ -586,6 +595,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-alloca.yaml
   message: The program invokes a potentially dangerous function that could introduce
     a vulnerability if it is used incorrectly, but the function can also be used safely.
     Use of alloca() is discouraged. It is unsafe because it cannot ensure that the
@@ -607,6 +617,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-atoi-atol-atof.yaml
   message: The atoi(), atol(), and atof() functions, which convert strings to numbers,
     have undefined behavior when the strings cannot be converted, and should therefore
     be avoided.
@@ -629,6 +640,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-gets.yaml
   message: The program calls a function that can never be guaranteed to work safely.
     Certain functions behave in dangerous ways regardless of how they are used. Functions
     in this category were often implemented without taking security concerns into
@@ -651,6 +663,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-mktemp-tmpnam-tempnam.yaml
   message: Creating and using insecure temporary files can leave application and system
     data vulnerable to attack.
   severity: WARNING
@@ -673,6 +686,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-rand-srand.yaml
   message: The software uses a Pseudo-Random Number Generator (PRNG) in a security
     context, but the PRNG's algorithm is not cryptographically strong. When a non-cryptographic
     PRNG is used in a cryptographic context, it can expose the cryptography to certain
@@ -702,6 +716,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-scanf-etc.yaml
   message: The program invokes a potentially dangerous function that could introduce
     a vulnerability if it is used incorrectly, but the function can also be used safely.
     A buffer overflow condition exists when a program attempts to put more data in
@@ -745,6 +760,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-sprintf-vsprintf.yaml
   message: The program invokes a potentially dangerous function that could introduce
     a vulnerability if it is used incorrectly, but the function can also be used safely.
     A buffer overflow condition exists when a program attempts to put more data in
@@ -778,6 +794,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-strcpy-stpcpy-strcat.yaml
   message: The program invokes a potentially dangerous function that could introduce
     a vulnerability if it is used incorrectly, but the function can also be used safely.
     A buffer overflow condition exists when a program attempts to put more data in
@@ -813,6 +830,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/integer-truncation.yaml
   message: Truncation errors occur when a primitive is cast to a primitive of a smaller
     size and data is lost in the conversion. When a primitive is cast to a smaller
     primitive, the high order bits of the large value are lost in the conversion,
@@ -914,6 +932,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/integer-wraparound.yaml
   message: The software performs a calculation that can produce an integer overflow
     or wraparound, when the logic assumes that the resulting value will always be
     larger than the original value. This can introduce other weaknesses when the calculation
@@ -982,6 +1001,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/interesting-api-calls.yaml
   message: Locate all calls to interesting and potentially insecure API functions
     (candidate points). The auditor can backtrace from these candidate points to find
     pathways allowing access from untrusted input.
@@ -1042,6 +1062,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/memory-address-exposure.yaml
   message: The software generates an error message that includes sensitive information
     about its environment, users, or associated data. In particular, exposure of memory
     addresses might defeat ASLR.
@@ -1089,6 +1110,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/mismatched-memory-management.yaml
   message: The software attempts to return a memory resource to the system, but it
     calls a release function that is not compatible with the function that was originally
     used to allocate that resource. When the memory management functions are mismatched,
@@ -1138,6 +1160,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/mismatched-memory-management-cpp.yaml
   message: The software attempts to return a memory resource to the system, but it
     calls a release function that is not compatible with the function that was originally
     used to allocate that resource. When the memory management functions are mismatched,
@@ -1204,6 +1227,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/off-by-one.yaml
   message: The software calculates or uses an incorrect maximum or minimum value that
     is 1 more, or 1 less, than the correct value.
   severity: WARNING
@@ -1243,6 +1267,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/pointer-subtraction.yaml
   message: The software subtracts one pointer from another in order to determine size,
     but this calculation can be incorrect if the pointers do not exist in the same
     memory chunk.
@@ -1298,6 +1323,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/ret-stack-address.yaml
   message: A function returns the address of a stack variable, which will cause unintended
     program behavior, typically in the form of a crash. Because local variables are
     allocated on the stack, when a program returns a pointer to a local variable,
@@ -1359,6 +1385,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/signed-unsigned-conversion.yaml
   message: The software uses a signed primitive and performs a cast to an unsigned
     primitive, or uses an unsigned primitive and performs a cast to a signed primitive,
     which can produce an unexpected value if the value of the signed primitive cannot
@@ -1459,65 +1486,6 @@ rules:
       ...
       return (size_t $UNSIGNED);
       }
-- id: raptor-typos
-  metadata:
-    author: Marco Ivaldi <raptor@0xdeadbeef.info>
-    references:
-    - https://cwe.mitre.org/data/definitions/480
-    - https://cwe.mitre.org/data/definitions/481
-    - https://cwe.mitre.org/data/definitions/482
-    - https://cwe.mitre.org/data/definitions/483
-    - https://g.co/kgs/PCHQjJ
-    - https://www.sei.cmu.edu/downloads/sei-cert-c-coding-standard-2016-v01.pdf
-    confidence: LOW
-    license: MIT
-    category: security
-    subcategory:
-    - audit
-  message: The programmer accidentally uses the wrong operator, which changes the
-    application logic in security-relevant ways. These types of errors are generally
-    the result of a typo. This rule also covers some other common typo patterns.
-  severity: WARNING
-  languages:
-  - c
-  - cpp
-  pattern-either:
-  - pattern: for ($EXPR1 == $EXPR2; $EXPR3; $EXPR4) ...
-  - pattern: "$EXPR1 == $EXPR2;"
-  - patterns:
-    - pattern: if (<... $EXPR1 = $EXPR2 ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) == $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) != $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) < $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) <= $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) > $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) >= $EXPR ...>) ...
-  - patterns:
-    - pattern: if (<... $EXPR1 & $EXPR2 ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 & $EXPR2) == $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 & $EXPR2) != $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 & $EXPR2) < $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 & $EXPR2) <= $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 & $EXPR2) > $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 & $EXPR2) >= $EXPR ...>) ...
-  - patterns:
-    - pattern: if (<... $EXPR1 | $EXPR2 ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) == $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) != $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) < $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) <= $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) > $EXPR ...>) ...
-    - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) >= $EXPR ...>) ...
-  - pattern: "$EXPR1 =+ $EXPR2"
-  - pattern: if ($COND);
-  - pattern: for ($EXPR1; $EXPR2; $EXPR3);
-  - patterns:
-    - pattern-either:
-      - pattern: "$TYPE $ARR[$SIZE];"
-      - pattern: "$TYPE $ARR[$SIZE] = $EXPR;"
-    - metavariable-regex:
-        metavariable: "$SIZE"
-        regex: "^0.*"
 - id: raptor-unchecked-ret-malloc-calloc-realloc
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1532,6 +1500,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unchecked-ret-malloc-calloc-realloc.yaml
   message: The software does not check the return value from a method or function,
     which can prevent it from detecting unexpected states and conditions. The software
     does not check for an error after calling a function that can return with a NULL
@@ -1623,6 +1592,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unchecked-ret-setuid-seteuid.yaml
   message: The software does not check the return value from a method or function,
     which can prevent it from detecting unexpected states and conditions. If an attacker
     can force the function to fail or otherwise return a value that is not expected,
@@ -1664,6 +1634,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unsafe-ret-snprintf-vsnprintf.yaml
   message: The snprintf() and vsnprintf() functions return the total length of the
     string they tried to create. Therefore, this return value can be larger than the
     size of the destination buffer. If it is used unsafely, e.g. as an index to write
@@ -1690,6 +1661,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unsafe-ret-strlcpy-strlcat.yaml
   message: The strlcpy() and strlcat() functions return the total length of the string
     they tried to create. For strlcpy() that means the length of the source string.
     For strlcat() that means the initial length of the destination string plus the
@@ -1723,6 +1695,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unsafe-strlen.yaml
   message: The software performs a calculation that can produce an integer overflow
     or wraparound, when the logic assumes that the resulting value will always be
     larger than the original value. This can introduce other weaknesses when the calculation
@@ -1762,6 +1735,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unterminated-string-strncpy-stpncpy.yaml
   message: The software does not terminate or incorrectly terminates a string or array
     with a NUL character or equivalent terminator. If there is no NUL character byte
     in the first n bytes of the source string, strncpy() and stpncpy() do not null-terminate
@@ -1842,6 +1816,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/use-after-free.yaml
   message: Referencing memory after it has been freed can cause a program to crash,
     use unexpected values, or execute code. The use of previously-freed memory can
     have any number of adverse consequences, ranging from the corruption of valid
@@ -1927,6 +1902,7 @@ rules:
     category: security
     subcategory:
     - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/write-into-stack-buffer.yaml
   message: The software directly writes into a stack buffer. This might lead to a
     stack-based buffer overflow.
   severity: INFO

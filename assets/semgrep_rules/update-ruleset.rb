@@ -86,6 +86,7 @@ CPP_YAML_FILES.each do |cpp_yaml_file|
 		rule['metadata']['license'] = 'MIT' unless rule['metadata']['license']
 		rule['metadata']['category'] = 'security'
 		rule['metadata']['subcategory'] = ['audit'] unless rule['metadata']['subcategory']
+		rule['metadata']['source'] = "https://github.com/0xdea/semgrep-rules/blob/main/#{cpp_yaml_file}"
 		if NONFREE_LICENSES.include? rule['metadata']['license']
 			nonfree_rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
 		else 
