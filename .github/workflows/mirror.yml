@@ -13,7 +13,7 @@ jobs:
       run: |
         if [[ "$GITHUB_REPOSITORY_OWNER" != "brave" ]]; then
           git clone --mirror "https://github.com/brave/${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}"
-          cd ${GITHUB_REPOSITORY#brave/}.git/
+          cd ${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}.git/
           git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
           git push --mirror github
         fi
