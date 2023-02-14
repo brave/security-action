@@ -1,5 +1,7 @@
 rules:
 - id: cast signed to unsigned (C/C++)
+  metadata:
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/cast-signed-to-unsigned.yaml
   patterns:
     - pattern: ($CAST)($TYPE $X)
     - metavariable-regex:
