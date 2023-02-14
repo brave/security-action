@@ -1,0 +1,23 @@
+rules:
+  - id: svelte-purifyConfig-usages
+    metadata:
+      author: Andrea Brancaleoni
+      references:
+        - https://cwe.mitre.org/data/definitions/546
+        - https://cwe.mitre.org/data/definitions/615
+        - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
+      confidence: LOW
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/svelte-purifyConfig-usages.yaml
+    message: >-
+      The code contains new security hotspots (`purifyConfig`) which should be checked manually
+      by a security team member!
+    severity: INFO
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.svelte"
+        - "*.ts"
+        - "*.js"
+    patterns:
+      - pattern-regex: purifyConfig\([^)]+\)

@@ -1,0 +1,1 @@
+purifyConfig(test, 3)
