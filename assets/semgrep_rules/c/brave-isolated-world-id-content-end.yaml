@@ -1,0 +1,19 @@
+rules:
+  - id: brave-isolated-world-id-content-end
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      confidence: LOW
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/brave-isolated-world-id-content-end.yaml
+    message: Security hotspot found (`ISOLATED_WORLD_ID_CONTENT_END`). A security-team member should analyze the code security for possible vulnerabilities.
+    severity: WARNING
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.c"
+        - "*.cpp"
+        - "*.cc"
+        - "*.h"
+        - "*.hh"
+        - "*.hcc" 
+    pattern-regex: ISOLATED_WORLD_ID_CONTENT_END
