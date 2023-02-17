@@ -13,3 +13,4 @@ https://semgrep.dev/r/generic.secrets.gitleaks.generic-api-key.generic-api-key
 https://github.com/0xdea/semgrep-rules/blob/main/c/typos.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/interesting-api-calls.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/signed-unsigned-conversion.yaml
+https://semgrep.dev/r/generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var

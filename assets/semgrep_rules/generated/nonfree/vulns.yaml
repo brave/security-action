@@ -34199,9 +34199,10 @@ rules:
     - metavariable-regex:
         metavariable: "$MODEL"
         regex: "[A-Z]\\S+"
-  message: Found an unscoped `find(...)` with user-controllable input.  If the ActiveRecord
+  message: Found an unscoped `find(...)` with user-controllable input. If the ActiveRecord
     model being searched against is sensitive, this may lead to Insecure Direct Object
-    Reference (IDOR) behavior and allow users to read arbitrary records.
+    Reference (IDOR) behavior and allow users to read arbitrary records. Scope the
+    find to the current user, e.g. `current_user.accounts.find(params[:id])`.
   languages:
   - ruby
   severity: WARNING
@@ -34217,6 +34218,7 @@ rules:
     - ruby
     - rails
     references:
+    - https://brakemanscanner.org/docs/warning_types/unscoped_find/
     - https://github.com/presidentbeef/brakeman/blob/main/test/apps/rails3.1/app/controllers/users_controller.rb
     subcategory:
     - vuln
@@ -34229,8 +34231,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8Ud6d
-        version_id: ExTdD8
-        url: https://semgrep.dev/playground/r/ExTdD8/ruby.rails.security.brakeman.check-unscoped-find.check-unscoped-find
+        version_id: d6T11N
+        url: https://semgrep.dev/playground/r/d6T11N/ruby.rails.security.brakeman.check-unscoped-find.check-unscoped-find
 - id: ruby.rails.security.brakeman.check-validation-regex.check-validation-regex
   mode: search
   patterns:
@@ -35363,9 +35365,10 @@ rules:
         }
         ...
       }
-  message: The AWS DynamoDB Table is unencrypted. The AWS KMS encryption key protects
-    data in the DynamoDB table. To create your own, create a aws_kms_key resource
-    or use the ARN string of a key in your account.
+  message: By default, AWS DynamoDB Table is encrypted using AWS-managed keys. However,
+    for added security, it's recommended to configure your own AWS KMS encryption
+    key to protect your data in the DynamoDB table. You can either create a new aws_kms_key
+    resource or use the ARN of an existing key in your AWS account to do so.
   languages:
   - hcl
   severity: WARNING
@@ -35392,8 +35395,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUGe2
-        version_id: 9lTE8J
-        url: https://semgrep.dev/playground/r/9lTE8J/terraform.aws.security.aws-dynamodb-table-unencrypted.aws-dynamodb-table-unencrypted
+        version_id: LjTOOO
+        url: https://semgrep.dev/playground/r/LjTOOO/terraform.aws.security.aws-dynamodb-table-unencrypted.aws-dynamodb-table-unencrypted
 - id: terraform.aws.security.aws-ebs-snapshot-encrypted-with-cmk.aws-ebs-snapshot-encrypted-with-cmk
   patterns:
   - pattern: |
@@ -39985,16 +39988,33 @@ rules:
   - pattern: |
       image: ...
       ...
-  - pattern-not: |
+  - pattern-inside: |
+      image: ...
+      ...
+      $SC:
+        ...
+  - metavariable-regex:
+      metavariable: "$SC"
+      regex: "^(securityContext)$"
+  - pattern-not-inside: |
       image: ...
       ...
       securityContext:
         ...
-        allowPrivilegeEscalation: false
-  - focus-metavariable: "$CONTAINER"
-  message: 'Container $CONTAINER allows for privilege escalation via setuid or setgid
-    binaries. Add ''allowPrivilegeEscalation: false'' in ''securityContext'' to prevent
-    this.'
+        allowPrivilegeEscalation: $VAL
+  - focus-metavariable: "$SC"
+  fix: |
+    securityContext:
+            allowPrivilegeEscalation: false #
+  message: In Kubernetes, each pod runs in its own isolated environment with its own  set
+    of security policies. However, certain container images may contain  `setuid`
+    or `setgid` binaries that could allow an attacker to perform  privilege escalation
+    and gain access to sensitive resources. To mitigate  this risk, it's recommended
+    to add a `securityContext` to the container in  the pod, with the parameter `allowPrivilegeEscalation`
+    set to `false`.  This will prevent the container from running any privileged processes
+    and  limit the impact of any potential attacks.  By adding the `allowPrivilegeEscalation`
+    parameter to your the  `securityContext`, you can help to  ensure that your containerized
+    applications are more secure and less  vulnerable to privilege escalation attacks.
   metadata:
     cwe:
     - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
@@ -40021,8 +40041,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUqEO
-        version_id: l4Tegw
-        url: https://semgrep.dev/playground/r/l4Tegw/yaml.kubernetes.security.allow-privilege-escalation.allow-privilege-escalation
+        version_id: 44TppP
+        url: https://semgrep.dev/playground/r/44TppP/yaml.kubernetes.security.allow-privilege-escalation.allow-privilege-escalation
   languages:
   - yaml
   severity: WARNING

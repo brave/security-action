@@ -96,11 +96,12 @@ CPP_YAML_FILES.each do |cpp_yaml_file|
 end
 
 RULESETS.each do |ruleset|
-	puts "Downloading ruleset for /p/#{ruleset}"
+	print "Downloading ruleset for /p/#{ruleset}: "
 	ret = JSON.parse(URI.open("#{HOST}/c/p/#{ruleset}",
 		"User-Agent" => "Semgrep/#{SEMGREP_VERSION} (command/unset)",
 		"Accept" => "application/json",
 		"Connection" => "keep-alive").read)['rules']
+        puts ret.length
 
 	ret.each do |rule|
 		if NONFREE_LICENSES.include? rule['metadata']['license']

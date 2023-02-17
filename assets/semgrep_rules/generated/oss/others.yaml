@@ -614,7 +614,7 @@ rules:
   metadata:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     owasp: 'A8: Insecure Deserialization'
-    primary_identifier: bandit.B301
+    primary_identifier: bandit.B301-2
     secondary_identifiers:
     - name: Bandit Test ID B301
       type: bandit_test_id
@@ -625,8 +625,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUwGl
-        version_id: 7ZTdgQ
-        url: https://semgrep.dev/playground/r/7ZTdgQ/gitlab.bandit.B301-2
+        version_id: 2KTe6z
+        url: https://semgrep.dev/playground/r/2KTe6z/gitlab.bandit.B301-2
   severity: WARNING
   languages:
   - python
@@ -641,7 +641,7 @@ rules:
   metadata:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     owasp: 'A8: Insecure Deserialization'
-    primary_identifier: bandit.B301
+    primary_identifier: bandit.B301-3
     secondary_identifiers:
     - name: Bandit Test ID B301
       type: bandit_test_id
@@ -652,8 +652,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UqZR
-        version_id: LjTOq4
-        url: https://semgrep.dev/playground/r/LjTOq4/gitlab.bandit.B301-3
+        version_id: X0TEJO
+        url: https://semgrep.dev/playground/r/X0TEJO/gitlab.bandit.B301-3
   languages:
   - python
   severity: WARNING
@@ -668,7 +668,7 @@ rules:
   metadata:
     cwe: 'CWE-502: Deserialization of Untrusted Data'
     owasp: 'A8: Insecure Deserialization'
-    primary_identifier: bandit.B301
+    primary_identifier: bandit.B301-4
     secondary_identifiers:
     - name: Bandit Test ID B301
       type: bandit_test_id
@@ -679,8 +679,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UZxd
-        version_id: 8KTXQx
-        url: https://semgrep.dev/playground/r/8KTXQx/gitlab.bandit.B301-4
+        version_id: jQTW96
+        url: https://semgrep.dev/playground/r/jQTW96/gitlab.bandit.B301-4
   severity: WARNING
   languages:
   - python
@@ -1225,7 +1225,7 @@ rules:
   metadata:
     cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     owasp: 'A3: Sensitive Data Exposure'
-    primary_identifier: bandit.B304
+    primary_identifier: bandit.B304-9
     secondary_identifiers:
     - name: Bandit Test ID B304
       type: bandit_test_id
@@ -1236,8 +1236,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUG0Q
-        version_id: YDT5pG
-        url: https://semgrep.dev/playground/r/YDT5pG/gitlab.bandit.B304-9
+        version_id: 1QTBXK
+        url: https://semgrep.dev/playground/r/1QTBXK/gitlab.bandit.B304-9
   severity: WARNING
   languages:
   - python
@@ -4157,7 +4157,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-297: Improper Validation of Certificate with Host Mismatch'
-    primary_identifier: find_sec_bugs.INSECURE_SMTP_SSL
+    primary_identifier: find_sec_bugs.INSECURE_SMTP_SSL-1
     secondary_identifiers:
     - name: Find Security Bugs-INSECURE_SMTP_SSL
       type: find_sec_bugs_type
@@ -4168,8 +4168,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUKxo
-        version_id: 44TpkK
-        url: https://semgrep.dev/playground/r/44TpkK/gitlab.find_sec_bugs.INSECURE_SMTP_SSL-1
+        version_id: bZTrxx
+        url: https://semgrep.dev/playground/r/bZTrxx/gitlab.find_sec_bugs.INSECURE_SMTP_SSL-1
   severity: ERROR
   languages:
   - java
@@ -4184,7 +4184,7 @@ rules:
     Encryption Padding (OAEP), which might weaken the encryption.
   metadata:
     cwe: 'CWE-780: Use of RSA Algorithm without OAEP'
-    primary_identifier: find_sec_bugs.RSA_NO_PADDING
+    primary_identifier: find_sec_bugs.RSA_NO_PADDING-1
     secondary_identifiers:
     - name: Find Security Bugs-RSA_NO_PADDING
       type: find_sec_bugs_type
@@ -4195,8 +4195,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8Ud4w
-        version_id: RGT7Q8
-        url: https://semgrep.dev/playground/r/RGT7Q8/gitlab.find_sec_bugs.RSA_NO_PADDING-1
+        version_id: 44TpYw
+        url: https://semgrep.dev/playground/r/44TpYw/gitlab.find_sec_bugs.RSA_NO_PADDING-1
   severity: WARNING
   languages:
   - java
@@ -4214,7 +4214,7 @@ rules:
   severity: ERROR
   metadata:
     cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
-    primary_identifier: find_sec_bugs.SCRIPT_ENGINE_INJECTION
+    primary_identifier: find_sec_bugs.SCRIPT_ENGINE_INJECTION-1.SPEL_INJECTION-1.EL_INJECTION-2.SEAM_LOG_INJECTION-1
     secondary_identifiers:
     - name: Find Security Bugs-SCRIPT_ENGINE_INJECTION
       type: find_sec_bugs_type
@@ -4234,8 +4234,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUYPE
-        version_id: QkTDzB
-        url: https://semgrep.dev/playground/r/QkTDzB/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-1.SPEL_INJECTION-1.EL_INJECTION-2.SEAM_LOG_INJECTION-1
+        version_id: yeT8Q5
+        url: https://semgrep.dev/playground/r/yeT8Q5/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-1.SPEL_INJECTION-1.EL_INJECTION-2.SEAM_LOG_INJECTION-1
 - id: gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
   patterns:
   - pattern: "(org.springframework.expression.spel.standard.SpelExpressionParser $P).parseExpression($ARG);"
@@ -4251,7 +4251,7 @@ rules:
   severity: ERROR
   metadata:
     cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
-    primary_identifier: find_sec_bugs.SCRIPT_ENGINE_INJECTION
+    primary_identifier: find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
     secondary_identifiers:
     - name: Find Security Bugs-SCRIPT_ENGINE_INJECTION
       type: find_sec_bugs_type
@@ -4262,8 +4262,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUyKR
-        version_id: 3ZTnPg
-        url: https://semgrep.dev/playground/r/3ZTnPg/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
+        version_id: rxTqb8
+        url: https://semgrep.dev/playground/r/rxTqb8/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
 - id: gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
   patterns:
   - pattern: new java.net.Socket(...)
@@ -4276,7 +4276,7 @@ rules:
     Protection Cheat Sheet for details on how to do this correctly.
   metadata:
     cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
-    primary_identifier: find_sec_bugs.UNENCRYPTED_SOCKET
+    primary_identifier: find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
     secondary_identifiers:
     - name: Find Security Bugs-UNENCRYPTED_SOCKET
       type: find_sec_bugs_type
@@ -4290,8 +4290,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUn7D
-        version_id: K3Tezq
-        url: https://semgrep.dev/playground/r/K3Tezq/gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
+        version_id: A8T8nw
+        url: https://semgrep.dev/playground/r/A8T8nw/gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
   severity: WARNING
 - id: gitlab.flawfinder.AddAccessAllowedAce-1
   languages:
@@ -4302,7 +4302,7 @@ rules:
   metadata:
     cwe: 'CWE-732: This doesn''t set the inheritance bits in the access control entry
       (ACE) header (CWE-732)'
-    primary_identifier: flawfinder.AddAccessAllowedAce
+    primary_identifier: flawfinder.AddAccessAllowedAce-1
     secondary_identifiers:
     - name: Flawfinder - AddAccessAllowedAce
       type: flawfinder_func_name
@@ -4313,8 +4313,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUpk7
-        version_id: 0bTBJy
-        url: https://semgrep.dev/playground/r/0bTBJy/gitlab.flawfinder.AddAccessAllowedAce-1
+        version_id: RGT7NO
+        url: https://semgrep.dev/playground/r/RGT7NO/gitlab.flawfinder.AddAccessAllowedAce-1
   pattern: AddAccessAllowedAce(...)
   severity: WARNING
 - id: gitlab.flawfinder.CreateProcess-1
@@ -4326,7 +4326,7 @@ rules:
   metadata:
     cwe: 'CWE-78: This causes a new process to execute and is difficult to use safely
       (CWE-78)'
-    primary_identifier: flawfinder.CreateProcess
+    primary_identifier: flawfinder.CreateProcess-1
     secondary_identifiers:
     - name: Flawfinder - CreateProcess
       type: flawfinder_func_name
@@ -4337,8 +4337,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUQ94
-        version_id: xyTO21
-        url: https://semgrep.dev/playground/r/xyTO21/gitlab.flawfinder.CreateProcess-1
+        version_id: qkTGAK
+        url: https://semgrep.dev/playground/r/qkTGAK/gitlab.flawfinder.CreateProcess-1
   pattern: CreateProcess(...)
   severity: WARNING
 - id: gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
@@ -4350,7 +4350,7 @@ rules:
   metadata:
     cwe: 'CWE-78: This causes a new process to execute and is difficult to use safely
       (CWE-78)'
-    primary_identifier: flawfinder.CreateProcessAsUser
+    primary_identifier: flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
     secondary_identifiers:
     - name: Flawfinder - CreateProcessAsUser
       type: flawfinder_func_name
@@ -4364,8 +4364,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JU6Pz
-        version_id: O9TzDA
-        url: https://semgrep.dev/playground/r/O9TzDA/gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
+        version_id: l4Tb3e
+        url: https://semgrep.dev/playground/r/l4Tb3e/gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
   pattern-either:
   - pattern: CreateProcessAsUser(...)
   - pattern: CreateProcessWithLogon(...)
@@ -4380,7 +4380,7 @@ rules:
   metadata:
     cwe: 'CWE-327: DES only supports a 56-bit keysize, which is too small given today''s
       computers (CWE-327)'
-    primary_identifier: flawfinder.EVP_des_ecb
+    primary_identifier: flawfinder.EVP_des_ecb-1.EVP_des_cbc-1.EVP_des_cfb-1.EVP_des_ofb-1.EVP_desx_cbc-1
     secondary_identifiers:
     - name: Flawfinder - EVP_des_ecb
       type: flawfinder_func_name
@@ -4403,8 +4403,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUGO7
-        version_id: PkTvky
-        url: https://semgrep.dev/playground/r/PkTvky/gitlab.flawfinder.EVP_des_ecb-1.EVP_des_cbc-1.EVP_des_cfb-1.EVP_des_ofb-1.EVP_desx_cbc-1
+        version_id: 8KTX0l
+        url: https://semgrep.dev/playground/r/8KTX0l/gitlab.flawfinder.EVP_des_ecb-1.EVP_des_cbc-1.EVP_des_cfb-1.EVP_des_ofb-1.EVP_desx_cbc-1
   pattern-either:
   - pattern: EVP_des_ecb(...)
   - pattern: EVP_des_cbc(...)
@@ -4421,7 +4421,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-327: These keysizes are too small given today''s computers (CWE-327)'
-    primary_identifier: flawfinder.EVP_rc4_40
+    primary_identifier: flawfinder.EVP_rc4_40-1.EVP_rc2_40_cbc-1.EVP_rc2_64_cbc-1
     secondary_identifiers:
     - name: Flawfinder - EVP_rc4_40
       type: flawfinder_func_name
@@ -4438,8 +4438,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8U2ke
-        version_id: JdTbPW
-        url: https://semgrep.dev/playground/r/JdTbPW/gitlab.flawfinder.EVP_rc4_40-1.EVP_rc2_40_cbc-1.EVP_rc2_64_cbc-1
+        version_id: gETjp7
+        url: https://semgrep.dev/playground/r/gETjp7/gitlab.flawfinder.EVP_rc4_40-1.EVP_rc2_40_cbc-1.EVP_rc2_64_cbc-1
   pattern-either:
   - pattern: EVP_rc4_40(...)
   - pattern: EVP_rc2_40_cbc(...)
@@ -4454,7 +4454,7 @@ rules:
   metadata:
     cwe: 'CWE-377: Temporary file race condition in certain cases (e.g., if run as
       SYSTEM in many versions of Windows) (CWE-377)'
-    primary_identifier: flawfinder.GetTempFileName
+    primary_identifier: flawfinder.GetTempFileName-1
     secondary_identifiers:
     - name: Flawfinder - GetTempFileName
       type: flawfinder_func_name
@@ -4465,8 +4465,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUw7J
-        version_id: d6T1l5
-        url: https://semgrep.dev/playground/r/d6T1l5/gitlab.flawfinder.GetTempFileName-1
+        version_id: o5TvGQ
+        url: https://semgrep.dev/playground/r/o5TvGQ/gitlab.flawfinder.GetTempFileName-1
   pattern: GetTempFileName(...)
   severity: WARNING
 - id: gitlab.flawfinder.InitializeCriticalSection-1
@@ -4477,7 +4477,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-754: Exceptions can be thrown in low-memory situations'
-    primary_identifier: flawfinder.InitializeCriticalSection
+    primary_identifier: flawfinder.InitializeCriticalSection-1
     secondary_identifiers:
     - name: Flawfinder - InitializeCriticalSection
       type: flawfinder_func_name
@@ -4488,8 +4488,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1Urv6
-        version_id: K3TeYz
-        url: https://semgrep.dev/playground/r/K3TeYz/gitlab.flawfinder.InitializeCriticalSection-1
+        version_id: A8T8v9
+        url: https://semgrep.dev/playground/r/A8T8v9/gitlab.flawfinder.InitializeCriticalSection-1
   pattern: InitializeCriticalSection(...)
   severity: WARNING
 - id: gitlab.flawfinder.LoadLibrary-1
@@ -4501,7 +4501,7 @@ rules:
   metadata:
     cwe: 'CWE-20: Ensure that the full path to the library is specified, or current
       directory may be used (CWE-829, CWE-20)'
-    primary_identifier: flawfinder.LoadLibrary
+    primary_identifier: flawfinder.LoadLibrary-1
     secondary_identifiers:
     - name: Flawfinder - LoadLibrary
       type: flawfinder_func_name
@@ -4512,8 +4512,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUx8Y
-        version_id: qkTGbj
-        url: https://semgrep.dev/playground/r/qkTGbj/gitlab.flawfinder.LoadLibrary-1
+        version_id: BjT54x
+        url: https://semgrep.dev/playground/r/BjT54x/gitlab.flawfinder.LoadLibrary-1
   pattern: LoadLibrary(...)
   severity: WARNING
 - id: gitlab.flawfinder.LoadLibraryEx-1
@@ -4525,7 +4525,7 @@ rules:
   metadata:
     cwe: 'CWE-20: Ensure that the full path to the library is specified, or current
       directory may be used (CWE-829, CWE-20)'
-    primary_identifier: flawfinder.LoadLibraryEx
+    primary_identifier: flawfinder.LoadLibraryEx-1
     secondary_identifiers:
     - name: Flawfinder - LoadLibraryEx
       type: flawfinder_func_name
@@ -4536,8 +4536,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUYQ3
-        version_id: l4Tbzd
-        url: https://semgrep.dev/playground/r/l4Tbzd/gitlab.flawfinder.LoadLibraryEx-1
+        version_id: DkTJB9
+        url: https://semgrep.dev/playground/r/DkTJB9/gitlab.flawfinder.LoadLibraryEx-1
   pattern: LoadLibraryEx(...)
   severity: WARNING
 - id: gitlab.flawfinder.MultiByteToWideChar-1
@@ -4548,7 +4548,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-120: Requires maximum length in CHARACTERS, not bytes (CWE-120)'
-    primary_identifier: flawfinder.MultiByteToWideChar
+    primary_identifier: flawfinder.MultiByteToWideChar-1
     secondary_identifiers:
     - name: Flawfinder - MultiByteToWideChar
       type: flawfinder_func_name
@@ -4559,8 +4559,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUb31
-        version_id: 6xT3q1
-        url: https://semgrep.dev/playground/r/6xT3q1/gitlab.flawfinder.MultiByteToWideChar-1
+        version_id: 0bTBZE
+        url: https://semgrep.dev/playground/r/0bTBZE/gitlab.flawfinder.MultiByteToWideChar-1
   pattern: MultiByteToWideChar(...)
   severity: INFO
 - id: gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
@@ -4573,7 +4573,7 @@ rules:
   metadata:
     cwe: 'CWE-250: If this call fails, the program could fail to drop heightened privileges
       (CWE-250)'
-    primary_identifier: flawfinder.RpcImpersonateClient
+    primary_identifier: flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
     secondary_identifiers:
     - name: Flawfinder - RpcImpersonateClient
       type: flawfinder_func_name
@@ -4602,8 +4602,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUJjL
-        version_id: l4Tbdd
-        url: https://semgrep.dev/playground/r/l4Tbdd/gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
+        version_id: DkTJL9
+        url: https://semgrep.dev/playground/r/DkTJL9/gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
   pattern-either:
   - pattern: RpcImpersonateClient(...)
   - pattern: ImpersonateLoggedOnUser(...)
@@ -4622,7 +4622,7 @@ rules:
   metadata:
     cwe: 'CWE-732: Never create NULL ACLs; an attacker can set it to Everyone (Deny
       All Access), which would even forbid administrator access (CWE-732)'
-    primary_identifier: flawfinder.SetSecurityDescriptorDacl
+    primary_identifier: flawfinder.SetSecurityDescriptorDacl-1
     secondary_identifiers:
     - name: Flawfinder - SetSecurityDescriptorDacl
       type: flawfinder_func_name
@@ -4633,8 +4633,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUpe8
-        version_id: YDT5QQ
-        url: https://semgrep.dev/playground/r/YDT5QQ/gitlab.flawfinder.SetSecurityDescriptorDacl-1
+        version_id: WrT9eo
+        url: https://semgrep.dev/playground/r/WrT9eo/gitlab.flawfinder.SetSecurityDescriptorDacl-1
   pattern: SetSecurityDescriptorDacl(...)
   severity: ERROR
 - id: gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
@@ -4646,7 +4646,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when concatenating to destination
       [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.StrCat
+    primary_identifier: flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
     secondary_identifiers:
     - name: Flawfinder - StrCat
       type: flawfinder_func_name
@@ -4717,8 +4717,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUzG9
-        version_id: o5Tvz2
-        url: https://semgrep.dev/playground/r/o5Tvz2/gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
+        version_id: K3TeRY
+        url: https://semgrep.dev/playground/r/K3TeRY/gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
   pattern-either:
   - pattern: StrCat(...)
   - pattern: StrCatA(...)
@@ -4753,7 +4753,7 @@ rules:
     cwe: 'CWE-362: This usually indicates a security flaw.  If an attacker can change
       anything along the path between the call to access() and the file''s actual
       use (e.g., by moving files), the attacker can exploit the race condition (CWE-362/CWE-367!)'
-    primary_identifier: flawfinder.access
+    primary_identifier: flawfinder.access-1
     secondary_identifiers:
     - name: Flawfinder - access
       type: flawfinder_func_name
@@ -4764,8 +4764,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYU731
-        version_id: 9lT2kl
-        url: https://semgrep.dev/playground/r/9lT2kl/gitlab.flawfinder.access-1
+        version_id: RGT7NR
+        url: https://semgrep.dev/playground/r/RGT7NR/gitlab.flawfinder.access-1
   pattern: access(...)
   severity: ERROR
 - id: gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
@@ -4778,7 +4778,7 @@ rules:
   metadata:
     cwe: 'CWE-190: Unless checked, the resulting number can exceed the expected range
       (CWE-190)'
-    primary_identifier: flawfinder.atoi
+    primary_identifier: flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
     secondary_identifiers:
     - name: Flawfinder - atoi
       type: flawfinder_func_name
@@ -4798,8 +4798,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUQzn
-        version_id: WrT9PW
-        url: https://semgrep.dev/playground/r/WrT9PW/gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
+        version_id: GxTyg9
+        url: https://semgrep.dev/playground/r/GxTyg9/gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
   pattern-either:
   - pattern: atoi(...)
   - pattern: atol(...)
@@ -4815,7 +4815,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Statically-sized arrays can be improperly restricted, leading to
       potential overflows or other issues (CWE-119!/CWE-120)'
-    primary_identifier: flawfinder.char
+    primary_identifier: flawfinder.char-1.TCHAR-1.wchar_t-1
     secondary_identifiers:
     - name: Flawfinder - char
       type: flawfinder_func_name
@@ -4832,8 +4832,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUBNk
-        version_id: zyTdyW
-        url: https://semgrep.dev/playground/r/zyTdyW/gitlab.flawfinder.char-1.TCHAR-1.wchar_t-1
+        version_id: qkTGrX
+        url: https://semgrep.dev/playground/r/qkTGrX/gitlab.flawfinder.char-1.TCHAR-1.wchar_t-1
   pattern-either:
   - patterns:
     - pattern-regex: "(wchar_t) *[a-zA-Z0-9_]+\\[.*\\]"
@@ -4858,7 +4858,7 @@ rules:
   metadata:
     cwe: 'CWE-362: This accepts filename arguments; if an attacker can move those
       files, a race condition results. (CWE-362)'
-    primary_identifier: flawfinder.chgrp
+    primary_identifier: flawfinder.chgrp-1
     secondary_identifiers:
     - name: Flawfinder - chgrp
       type: flawfinder_func_name
@@ -4869,8 +4869,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUKrn
-        version_id: yeT8yq
-        url: https://semgrep.dev/playground/r/yeT8yq/gitlab.flawfinder.chgrp-1
+        version_id: A8T8vg
+        url: https://semgrep.dev/playground/r/A8T8vg/gitlab.flawfinder.chgrp-1
   pattern: chgrp(...)
   severity: ERROR
 - id: gitlab.flawfinder.chmod-1
@@ -4882,7 +4882,7 @@ rules:
   metadata:
     cwe: 'CWE-362: This accepts filename arguments; if an attacker can move those
       files, a race condition results. (CWE-362)'
-    primary_identifier: flawfinder.chmod
+    primary_identifier: flawfinder.chmod-1
     secondary_identifiers:
     - name: Flawfinder - chmod
       type: flawfinder_func_name
@@ -4893,8 +4893,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUP43
-        version_id: rxTq9l
-        url: https://semgrep.dev/playground/r/rxTq9l/gitlab.flawfinder.chmod-1
+        version_id: BjT54b
+        url: https://semgrep.dev/playground/r/BjT54b/gitlab.flawfinder.chmod-1
   pattern: chmod(...)
   severity: ERROR
 - id: gitlab.flawfinder.chown-1
@@ -4906,7 +4906,7 @@ rules:
   metadata:
     cwe: 'CWE-362: This accepts filename arguments; if an attacker can move those
       files, a race condition results. (CWE-362)'
-    primary_identifier: flawfinder.chown
+    primary_identifier: flawfinder.chown-1
     secondary_identifiers:
     - name: Flawfinder - chown
       type: flawfinder_func_name
@@ -4917,8 +4917,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUJPK
-        version_id: bZTrNl
-        url: https://semgrep.dev/playground/r/bZTrNl/gitlab.flawfinder.chown-1
+        version_id: DkTJBw
+        url: https://semgrep.dev/playground/r/DkTJBw/gitlab.flawfinder.chown-1
   pattern: chown(...)
   severity: ERROR
 - id: gitlab.flawfinder.chroot-1
@@ -4930,7 +4930,7 @@ rules:
   metadata:
     cwe: 'CWE-22: chroot can be very helpful, but is hard to use correctly (CWE-250,
       CWE-22)'
-    primary_identifier: flawfinder.chroot
+    primary_identifier: flawfinder.chroot-1
     secondary_identifiers:
     - name: Flawfinder - chroot
       type: flawfinder_func_name
@@ -4941,8 +4941,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUE0p
-        version_id: 6xT361
-        url: https://semgrep.dev/playground/r/6xT361/gitlab.flawfinder.chroot-1
+        version_id: 0bTB0E
+        url: https://semgrep.dev/playground/r/0bTB0E/gitlab.flawfinder.chroot-1
   pattern: chroot(...)
   severity: WARNING
 - id: gitlab.flawfinder.crypt-1.crypt_r-1
@@ -4957,7 +4957,7 @@ rules:
       they only accept passwords of 8 characters or fewer and only a two-byte salt,
       they are excessively vulnerable to dictionary attacks given today''s faster
       computing equipment (CWE-327)'
-    primary_identifier: flawfinder.crypt
+    primary_identifier: flawfinder.crypt-1.crypt_r-1
     secondary_identifiers:
     - name: Flawfinder - crypt
       type: flawfinder_func_name
@@ -4971,8 +4971,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUD57
-        version_id: 5PTj4X
-        url: https://semgrep.dev/playground/r/5PTj4X/gitlab.flawfinder.crypt-1.crypt_r-1
+        version_id: QkTDLO
+        url: https://semgrep.dev/playground/r/QkTDLO/gitlab.flawfinder.crypt-1.crypt_r-1
   pattern-either:
   - pattern: crypt(...)
   - pattern: crypt_r(...)
@@ -4990,7 +4990,7 @@ rules:
       function was included in the 1988 version of POSIX, but removed from the 1990
       version).  Also, if passed a non-null parameter, there''s a risk of a buffer
       overflow if the passed-in buffer is not at least L_cuserid characters long (CWE-120)'
-    primary_identifier: flawfinder.cuserid
+    primary_identifier: flawfinder.cuserid-1
     secondary_identifiers:
     - name: Flawfinder - cuserid
       type: flawfinder_func_name
@@ -5001,8 +5001,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bU20k
-        version_id: o5Tvr2
-        url: https://semgrep.dev/playground/r/o5Tvr2/gitlab.flawfinder.cuserid-1
+        version_id: K3TeAY
+        url: https://semgrep.dev/playground/r/K3TeAY/gitlab.flawfinder.cuserid-1
   pattern: cuserid(...)
   severity: ERROR
 - id: gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
@@ -5014,7 +5014,7 @@ rules:
   metadata:
     cwe: 'CWE-327: This function is not sufficiently random for security-related functions
       such as key and nonce creation (CWE-327)'
-    primary_identifier: flawfinder.drand48
+    primary_identifier: flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
     secondary_identifiers:
     - name: Flawfinder - drand48
       type: flawfinder_func_name
@@ -5091,8 +5091,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUzno
-        version_id: w8TrG4
-        url: https://semgrep.dev/playground/r/w8TrG4/gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
+        version_id: K3TeAQ
+        url: https://semgrep.dev/playground/r/K3TeAQ/gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
   pattern-either:
   - pattern: drand48(...)
   - pattern: erand48(...)
@@ -5129,7 +5129,7 @@ rules:
   metadata:
     cwe: 'CWE-126: Function does not check the second iterator for over-read conditions
       (CWE-126)'
-    primary_identifier: flawfinder.equal
+    primary_identifier: flawfinder.equal-1.mismatch-1.is_permutation-1
     secondary_identifiers:
     - name: Flawfinder - equal
       type: flawfinder_func_name
@@ -5146,8 +5146,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUQ8Q
-        version_id: pZToGb
-        url: https://semgrep.dev/playground/r/pZToGb/gitlab.flawfinder.equal-1.mismatch-1.is_permutation-1
+        version_id: l4TbYW
+        url: https://semgrep.dev/playground/r/l4TbYW/gitlab.flawfinder.equal-1.mismatch-1.is_permutation-1
   pattern-either:
   - pattern: equal(...)
   - pattern: mismatch(...)
@@ -5162,7 +5162,7 @@ rules:
   metadata:
     cwe: 'CWE-78: This causes a new program to execute and is difficult to use safely
       (CWE-78)'
-    primary_identifier: flawfinder.execl
+    primary_identifier: flawfinder.execl-1.execlp-1.execle-1.execv-1.execvp-1.popen-1.WinExec-1.ShellExecute-1
     secondary_identifiers:
     - name: Flawfinder - execl
       type: flawfinder_func_name
@@ -5194,8 +5194,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUr85
-        version_id: e1T5pP
-        url: https://semgrep.dev/playground/r/e1T5pP/gitlab.flawfinder.execl-1.execlp-1.execle-1.execv-1.execvp-1.popen-1.WinExec-1.ShellExecute-1
+        version_id: YDT5gx
+        url: https://semgrep.dev/playground/r/YDT5gx/gitlab.flawfinder.execl-1.execlp-1.execle-1.execv-1.execvp-1.popen-1.WinExec-1.ShellExecute-1
   pattern-either:
   - pattern: execl(...)
   - pattern: execlp(...)
@@ -5216,7 +5216,7 @@ rules:
     cwe: 'CWE-362: Check when opening files - can an attacker redirect it (via symlinks),
       force the opening of special file type (e.g., device files), move things around
       to create a race condition, control its ancestors, or change its contents? (CWE-362)'
-    primary_identifier: flawfinder.fopen
+    primary_identifier: flawfinder.fopen-1.open-1
     secondary_identifiers:
     - name: Flawfinder - fopen
       type: flawfinder_func_name
@@ -5230,8 +5230,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUBPk
-        version_id: zyTd1W
-        url: https://semgrep.dev/playground/r/zyTd1W/gitlab.flawfinder.fopen-1.open-1
+        version_id: qkTGAX
+        url: https://semgrep.dev/playground/r/qkTGAX/gitlab.flawfinder.fopen-1.open-1
   pattern-either:
   - pattern: fopen(...)
   - pattern: open(...)
@@ -5245,7 +5245,7 @@ rules:
   metadata:
     cwe: 'CWE-134: If format strings can be influenced by an attacker, they can be
       exploited (CWE-134)'
-    primary_identifier: flawfinder.fprintf
+    primary_identifier: flawfinder.fprintf-1.vfprintf-1._ftprintf-1._vftprintf-1.fwprintf-1.fvwprintf-1
     secondary_identifiers:
     - name: Flawfinder - fprintf
       type: flawfinder_func_name
@@ -5271,8 +5271,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUpJj
-        version_id: GxTy0G
-        url: https://semgrep.dev/playground/r/GxTy0G/gitlab.flawfinder.fprintf-1.vfprintf-1._ftprintf-1._vftprintf-1.fwprintf-1.fvwprintf-1
+        version_id: 3ZTngN
+        url: https://semgrep.dev/playground/r/3ZTngN/gitlab.flawfinder.fprintf-1.vfprintf-1._ftprintf-1._vftprintf-1.fwprintf-1.fvwprintf-1
   pattern-either:
   - patterns:
     - pattern: fprintf($FD, $FMT, ...)
@@ -5299,7 +5299,7 @@ rules:
   metadata:
     cwe: 'CWE-120: The scanf() family''s %s operation, without a limit specification,
       permits buffer overflows (CWE-120, CWE-20)'
-    primary_identifier: flawfinder.fscanf
+    primary_identifier: flawfinder.fscanf-1.sscanf-1.vsscanf-1.vfscanf-1._ftscanf-1.fwscanf-1.vfwscanf-1.vswscanf-1
     secondary_identifiers:
     - name: Flawfinder - fscanf
       type: flawfinder_func_name
@@ -5331,8 +5331,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rU8bL
-        version_id: 2KTe4Y
-        url: https://semgrep.dev/playground/r/2KTe4Y/gitlab.flawfinder.fscanf-1.sscanf-1.vsscanf-1.vfscanf-1._ftscanf-1.fwscanf-1.vfwscanf-1.vswscanf-1
+        version_id: YDT5xl
+        url: https://semgrep.dev/playground/r/YDT5xl/gitlab.flawfinder.fscanf-1.sscanf-1.vsscanf-1.vfscanf-1._ftscanf-1.fwscanf-1.vfwscanf-1.vswscanf-1
   pattern-either:
   - pattern: fscanf(...)
   - pattern: sscanf(...)
@@ -5353,7 +5353,7 @@ rules:
     cwe: 'CWE-20: This function is synonymous with ''getenv("HOME")'';it returns untrustable
       input if the environment can beset by an attacker.  It can have any content
       and length, and the same variable can be set more than once (CWE-807, CWE-20)'
-    primary_identifier: flawfinder.g_get_home_dir
+    primary_identifier: flawfinder.g_get_home_dir-1
     secondary_identifiers:
     - name: Flawfinder - g_get_home_dir
       type: flawfinder_func_name
@@ -5364,8 +5364,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUZpz
-        version_id: X0TEZx
-        url: https://semgrep.dev/playground/r/X0TEZx/gitlab.flawfinder.g_get_home_dir-1
+        version_id: 6xT3ky
+        url: https://semgrep.dev/playground/r/6xT3ky/gitlab.flawfinder.g_get_home_dir-1
   pattern: g_get_home_dir(...)
   severity: WARNING
 - id: gitlab.flawfinder.g_get_tmp_dir-1
@@ -5378,7 +5378,7 @@ rules:
     cwe: 'CWE-20: This function is synonymous with ''getenv("TMP")'';it returns untrustable
       input if the environment can beset by an attacker.  It can have any content
       and length, and the same variable can be set more than once (CWE-807, CWE-20)'
-    primary_identifier: flawfinder.g_get_tmp_dir
+    primary_identifier: flawfinder.g_get_tmp_dir-1
     secondary_identifiers:
     - name: Flawfinder - g_get_tmp_dir
       type: flawfinder_func_name
@@ -5389,8 +5389,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUojK
-        version_id: jQTWqy
-        url: https://semgrep.dev/playground/r/jQTWqy/gitlab.flawfinder.g_get_tmp_dir-1
+        version_id: o5TvPZ
+        url: https://semgrep.dev/playground/r/o5TvPZ/gitlab.flawfinder.g_get_tmp_dir-1
   pattern: g_get_tmp_dir(...)
   severity: WARNING
 - id: gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
@@ -5403,7 +5403,7 @@ rules:
   metadata:
     cwe: 'CWE-20: Check buffer boundaries if used in a loop including recursive loops
       (CWE-120, CWE-20)'
-    primary_identifier: flawfinder.getchar
+    primary_identifier: flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
     secondary_identifiers:
     - name: Flawfinder - getchar
       type: flawfinder_func_name
@@ -5426,8 +5426,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUGwN
-        version_id: 1QTBZy
-        url: https://semgrep.dev/playground/r/1QTBZy/gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
+        version_id: zyTd98
+        url: https://semgrep.dev/playground/r/zyTd98/gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
   pattern-either:
   - pattern: getchar(...)
   - pattern: fgetc(...)
@@ -5445,7 +5445,7 @@ rules:
     cwe: 'CWE-20: Environment variables are untrustable input if they can be set by
       an attacker.  They can have any content and length, and the same variable can
       be set more than once (CWE-807, CWE-20)'
-    primary_identifier: flawfinder.getenv
+    primary_identifier: flawfinder.getenv-1.curl_getenv-1
     secondary_identifiers:
     - name: Flawfinder - getenv
       type: flawfinder_func_name
@@ -5459,8 +5459,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYU761
-        version_id: 9lT2Ol
-        url: https://semgrep.dev/playground/r/9lT2Ol/gitlab.flawfinder.getenv-1.curl_getenv-1
+        version_id: pZToJL
+        url: https://semgrep.dev/playground/r/pZToJL/gitlab.flawfinder.getenv-1.curl_getenv-1
   pattern-either:
   - pattern: getenv(...)
   - pattern: curl_getenv(...)
@@ -5477,7 +5477,7 @@ rules:
       the first 8 characters of the login name. The user currently logged in on the
       controlling tty of our program need not be the user who started it.  Avoid getlogin()
       for security-related purposes (CWE-807)'
-    primary_identifier: flawfinder.getlogin
+    primary_identifier: flawfinder.getlogin-1
     secondary_identifiers:
     - name: Flawfinder - getlogin
       type: flawfinder_func_name
@@ -5488,8 +5488,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUQ9Q
-        version_id: pZTowb
-        url: https://semgrep.dev/playground/r/pZTowb/gitlab.flawfinder.getlogin-1
+        version_id: l4Tb3W
+        url: https://semgrep.dev/playground/r/l4Tb3W/gitlab.flawfinder.getlogin-1
   pattern: getlogin(...)
   severity: ERROR
 - id: gitlab.flawfinder.getopt-1.getopt_long-1
@@ -5502,7 +5502,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Some older implementations do not protect against internal buffer
       overflows (CWE-120, CWE-20)'
-    primary_identifier: flawfinder.getopt
+    primary_identifier: flawfinder.getopt-1.getopt_long-1
     secondary_identifiers:
     - name: Flawfinder - getopt
       type: flawfinder_func_name
@@ -5516,8 +5516,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUKAn
-        version_id: yeT8vq
-        url: https://semgrep.dev/playground/r/yeT8vq/gitlab.flawfinder.getopt-1.getopt_long-1
+        version_id: 2KTeXv
+        url: https://semgrep.dev/playground/r/2KTeXv/gitlab.flawfinder.getopt-1.getopt_long-1
   pattern-either:
   - pattern: getopt(...)
   - pattern: getopt_long(...)
@@ -5535,7 +5535,7 @@ rules:
       particularly in where its prompt is displayed and where it gets its data (e.g.,
       /dev/tty, stdin, stderr, etc.). In addition, some implementations overflow buffers.
       (CWE-676, CWE-120, CWE-20)'
-    primary_identifier: flawfinder.getpass
+    primary_identifier: flawfinder.getpass-1
     secondary_identifiers:
     - name: Flawfinder - getpass
       type: flawfinder_func_name
@@ -5546,8 +5546,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rU8gL
-        version_id: 2KTeKY
-        url: https://semgrep.dev/playground/r/2KTeKY/gitlab.flawfinder.getpass-1
+        version_id: YDT5gl
+        url: https://semgrep.dev/playground/r/YDT5gl/gitlab.flawfinder.getpass-1
   pattern: getpass(...)
   severity: ERROR
 - id: gitlab.flawfinder.getpw-1
@@ -5561,7 +5561,7 @@ rules:
       It extracts data from a ''protected'' area, but most systems have many commands
       to let users modify the protected area, and it''s not always clear what their
       limits are.  Best to avoid using this function altogether (CWE-676, CWE-120)'
-    primary_identifier: flawfinder.getpw
+    primary_identifier: flawfinder.getpw-1
     secondary_identifiers:
     - name: Flawfinder - getpw
       type: flawfinder_func_name
@@ -5572,8 +5572,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUP03
-        version_id: rxTqkl
-        url: https://semgrep.dev/playground/r/rxTqkl/gitlab.flawfinder.getpw-1
+        version_id: X0TEp4
+        url: https://semgrep.dev/playground/r/X0TEp4/gitlab.flawfinder.getpw-1
   pattern: getpw(...)
   severity: ERROR
 - id: gitlab.flawfinder.gets-1._getts-1
@@ -5584,7 +5584,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows (CWE-120, CWE-20)'
-    primary_identifier: flawfinder.gets
+    primary_identifier: flawfinder.gets-1._getts-1
     secondary_identifiers:
     - name: Flawfinder - gets
       type: flawfinder_func_name
@@ -5598,8 +5598,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUJjK
-        version_id: bZTrOl
-        url: https://semgrep.dev/playground/r/bZTrOl/gitlab.flawfinder.gets-1._getts-1
+        version_id: jQTWp1
+        url: https://semgrep.dev/playground/r/jQTWp1/gitlab.flawfinder.gets-1._getts-1
   pattern-either:
   - pattern: gets(...)
   - pattern: _getts(...)
@@ -5613,7 +5613,7 @@ rules:
   metadata:
     cwe: 'CWE-120: This does not protect against buffer overflows by itself, so use
       with caution (CWE-120, CWE-20)'
-    primary_identifier: flawfinder.getwd
+    primary_identifier: flawfinder.getwd-1
     secondary_identifiers:
     - name: Flawfinder - getwd
       type: flawfinder_func_name
@@ -5624,8 +5624,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUY1o
-        version_id: NdTLAr
-        url: https://semgrep.dev/playground/r/NdTLAr/gitlab.flawfinder.getwd-1
+        version_id: 1QTBn3
+        url: https://semgrep.dev/playground/r/1QTBn3/gitlab.flawfinder.getwd-1
   pattern: getwd(...)
   severity: WARNING
 - id: gitlab.flawfinder.gsignal-1.ssignal-1
@@ -5639,7 +5639,7 @@ rules:
       non-portable (Linux-based systems handle them radically different, basically
       if gsignal/ssignal were the same as raise/signal respectively, while System
       V considers them a separate set and obsolete) (CWE-676)'
-    primary_identifier: flawfinder.gsignal
+    primary_identifier: flawfinder.gsignal-1.ssignal-1
     secondary_identifiers:
     - name: Flawfinder - gsignal
       type: flawfinder_func_name
@@ -5653,8 +5653,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUZdz
-        version_id: X0TE7x
-        url: https://semgrep.dev/playground/r/X0TE7x/gitlab.flawfinder.gsignal-1.ssignal-1
+        version_id: JdTbOo
+        url: https://semgrep.dev/playground/r/JdTbOo/gitlab.flawfinder.gsignal-1.ssignal-1
   pattern-either:
   - pattern: gsignal(...)
   - pattern: ssignal(...)
@@ -5668,7 +5668,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when concatenating to destination
       [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.lstrcat
+    primary_identifier: flawfinder.lstrcat-1.wcscat-1._tcscat-1._mbscat-1
     secondary_identifiers:
     - name: Flawfinder - lstrcat
       type: flawfinder_func_name
@@ -5688,8 +5688,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUb3v
-        version_id: kbTpRZ
-        url: https://semgrep.dev/playground/r/kbTpRZ/gitlab.flawfinder.lstrcat-1.wcscat-1._tcscat-1._mbscat-1
+        version_id: 9lT2L6
+        url: https://semgrep.dev/playground/r/9lT2L6/gitlab.flawfinder.lstrcat-1.wcscat-1._tcscat-1._mbscat-1
   pattern-either:
   - pattern: lstrcat(...)
   - pattern: wcscat(...)
@@ -5705,7 +5705,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Easily used incorrectly (e.g., incorrectly computing the correct
       maximum size to add) [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.lstrcatn
+    primary_identifier: flawfinder.lstrcatn-1.wcsncat-1._tcsncat-1._mbsnbcat-1
     secondary_identifiers:
     - name: Flawfinder - lstrcatn
       type: flawfinder_func_name
@@ -5725,8 +5725,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUzGo
-        version_id: w8Tr84
-        url: https://semgrep.dev/playground/r/w8Tr84/gitlab.flawfinder.lstrcatn-1.wcsncat-1._tcsncat-1._mbsnbcat-1
+        version_id: yeT8z5
+        url: https://semgrep.dev/playground/r/yeT8z5/gitlab.flawfinder.lstrcatn-1.wcsncat-1._tcsncat-1._mbsnbcat-1
   pattern-either:
   - pattern: lstrcatn(...)
   - pattern: wcsncat(...)
@@ -5743,7 +5743,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when copying to destination
       [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.lstrcpy
+    primary_identifier: flawfinder.lstrcpy-1.wcscpy-1._tcscpy-1._mbscpy-1
     secondary_identifiers:
     - name: Flawfinder - lstrcpy
       type: flawfinder_func_name
@@ -5763,8 +5763,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUQd4
-        version_id: xyTOW1
-        url: https://semgrep.dev/playground/r/xyTOW1/gitlab.flawfinder.lstrcpy-1.wcscpy-1._tcscpy-1._mbscpy-1
+        version_id: rxTqX8
+        url: https://semgrep.dev/playground/r/rxTqX8/gitlab.flawfinder.lstrcpy-1.wcscpy-1._tcscpy-1._mbscpy-1
   pattern-either:
   - pattern: lstrcpy(...)
   - pattern: wcscpy(...)
@@ -5780,7 +5780,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Doesn''t always \0-terminate or check for invalid pointers [MS-banned]
       (CWE-120)'
-    primary_identifier: flawfinder.lstrcpyn
+    primary_identifier: flawfinder.lstrcpyn-1.wcsncpy-1._tcsncpy-1._mbsnbcpy-1
     secondary_identifiers:
     - name: Flawfinder - lstrcpyn
       type: flawfinder_func_name
@@ -5800,8 +5800,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JU6Nz
-        version_id: O9TzGA
-        url: https://semgrep.dev/playground/r/O9TzGA/gitlab.flawfinder.lstrcpyn-1.wcsncpy-1._tcsncpy-1._mbsnbcpy-1
+        version_id: bZTrJx
+        url: https://semgrep.dev/playground/r/bZTrJx/gitlab.flawfinder.lstrcpyn-1.wcsncpy-1._tcsncpy-1._mbsnbcpy-1
   pattern-either:
   - pattern: lstrcpyn(...)
   - pattern: wcsncpy(...)
@@ -5819,7 +5819,7 @@ rules:
     cwe: 'CWE-676: On some systems (though not Linux-based systems) an attempt to
       free() results from memalign() may fail. This may, on a few systems, be exploitable.  Also
       note that memalign() may not check that the boundary parameter is correct (CWE-676)'
-    primary_identifier: flawfinder.memalign
+    primary_identifier: flawfinder.memalign-1
     secondary_identifiers:
     - name: Flawfinder - memalign
       type: flawfinder_func_name
@@ -5830,8 +5830,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUrv6
-        version_id: DkTJKd
-        url: https://semgrep.dev/playground/r/DkTJKd/gitlab.flawfinder.memalign-1
+        version_id: 5PTjx5
+        url: https://semgrep.dev/playground/r/5PTjx5/gitlab.flawfinder.memalign-1
   pattern-either:
   - pattern: memalign(...)
   - pattern-regex: "(void)\\s\\*(\\s|)(memalign)\\;"
@@ -5845,7 +5845,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when copying to destination
       (CWE-120)'
-    primary_identifier: flawfinder.memcpy
+    primary_identifier: flawfinder.memcpy-1.CopyMemory-1.bcopy-1
     secondary_identifiers:
     - name: Flawfinder - memcpy
       type: flawfinder_func_name
@@ -5862,8 +5862,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUr65
-        version_id: e1T5vP
-        url: https://semgrep.dev/playground/r/e1T5vP/gitlab.flawfinder.memcpy-1.CopyMemory-1.bcopy-1
+        version_id: NdTLEE
+        url: https://semgrep.dev/playground/r/NdTLEE/gitlab.flawfinder.memcpy-1.CopyMemory-1.bcopy-1
   pattern-either:
   - pattern: memcpy(...)
   - pattern: CopyMemory(...)
@@ -5879,7 +5879,7 @@ rules:
     O_EXCL is used by the library.
   metadata:
     cwe: 'CWE-377: Potential for temporary file vulnerability in some circumstances.'
-    primary_identifier: flawfinder.mkstemp
+    primary_identifier: flawfinder.mkstemp-1
     secondary_identifiers:
     - name: Flawfinder - mkstemp
       type: flawfinder_func_name
@@ -5890,8 +5890,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUKJn
-        version_id: ZRTng9
-        url: https://semgrep.dev/playground/r/ZRTng9/gitlab.flawfinder.mkstemp-1
+        version_id: zyTd6v
+        url: https://semgrep.dev/playground/r/zyTd6v/gitlab.flawfinder.mkstemp-1
   pattern: mkstemp(...)
   severity: INFO
 - id: gitlab.flawfinder.mktemp-1
@@ -5902,7 +5902,7 @@ rules:
     attack (CWE-377).
   metadata:
     cwe: 'CWE-377: Temporary file race condition (CWE-377)'
-    primary_identifier: flawfinder.mktemp
+    primary_identifier: flawfinder.mktemp-1
     secondary_identifiers:
     - name: Flawfinder - mktemp
       type: flawfinder_func_name
@@ -5913,8 +5913,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5U76e
-        version_id: nWTjrE
-        url: https://semgrep.dev/playground/r/nWTjrE/gitlab.flawfinder.mktemp-1
+        version_id: pZToR4
+        url: https://semgrep.dev/playground/r/pZToR4/gitlab.flawfinder.mktemp-1
   pattern: mktemp(...)
   severity: ERROR
 - id: gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
@@ -5926,7 +5926,7 @@ rules:
   metadata:
     cwe: 'CWE-134: If format strings can be influenced by an attacker, they can be
       exploited (CWE-134)'
-    primary_identifier: flawfinder.printf
+    primary_identifier: flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
     secondary_identifiers:
     - name: Flawfinder - printf
       type: flawfinder_func_name
@@ -5952,8 +5952,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8UjyR
-        version_id: RGT7Pb
-        url: https://semgrep.dev/playground/r/RGT7Pb/gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
+        version_id: 44TpJn
+        url: https://semgrep.dev/playground/r/44TpJn/gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
   pattern-either:
   - patterns:
     - pattern: printf(...)
@@ -5984,7 +5984,7 @@ rules:
     cwe: 'CWE-20: This accepts filename arguments; if an attacker can move those files
       or change the link content, a race condition results.  Also, it does not terminate
       with ASCII NUL. (CWE-362, CWE-20)'
-    primary_identifier: flawfinder.readlink
+    primary_identifier: flawfinder.readlink-1
     secondary_identifiers:
     - name: Flawfinder - readlink
       type: flawfinder_func_name
@@ -5995,8 +5995,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUYWo
-        version_id: NdTLYr
-        url: https://semgrep.dev/playground/r/NdTLYr/gitlab.flawfinder.readlink-1
+        version_id: WrT9eG
+        url: https://semgrep.dev/playground/r/WrT9eG/gitlab.flawfinder.readlink-1
   pattern: readlink(...)
   severity: ERROR
 - id: gitlab.flawfinder.realpath-1
@@ -6009,7 +6009,7 @@ rules:
   metadata:
     cwe: 'CWE-120: This function does not protect against buffer overflows, and some
       implementations can overflow internally (CWE-120/CWE-785!)'
-    primary_identifier: flawfinder.realpath
+    primary_identifier: flawfinder.realpath-1
     secondary_identifiers:
     - name: Flawfinder - realpath
       type: flawfinder_func_name
@@ -6020,8 +6020,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU1EX
-        version_id: vdTg5x
-        url: https://semgrep.dev/playground/r/vdTg5x/gitlab.flawfinder.realpath-1
+        version_id: kbTp9Q
+        url: https://semgrep.dev/playground/r/kbTp9Q/gitlab.flawfinder.realpath-1
   pattern: realpath(...)
   severity: WARNING
 - id: gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
@@ -6033,7 +6033,7 @@ rules:
   metadata:
     cwe: 'CWE-120: The scanf() family''s %s operation, without a limit specification,
       permits buffer overflows (CWE-120, CWE-20)'
-    primary_identifier: flawfinder.scanf
+    primary_identifier: flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
     secondary_identifiers:
     - name: Flawfinder - scanf
       type: flawfinder_func_name
@@ -6056,8 +6056,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUw5J
-        version_id: d6T1z5
-        url: https://semgrep.dev/playground/r/d6T1z5/gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
+        version_id: w8Trvg
+        url: https://semgrep.dev/playground/r/w8Trvg/gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
   pattern-either:
   - patterns:
     - pattern: scanf($FMT, ...)
@@ -6084,7 +6084,7 @@ rules:
   metadata:
     cwe: 'CWE-134: If format strings can be influenced by an attacker, they can be
       exploited, and note that sprintf variations do not always \0-terminate (CWE-134)'
-    primary_identifier: flawfinder.snprintf
+    primary_identifier: flawfinder.snprintf-1.vsnprintf-1._snprintf-1._sntprintf-1._vsntprintf-1
     secondary_identifiers:
     - name: Flawfinder - snprintf
       type: flawfinder_func_name
@@ -6107,8 +6107,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UlJZ
-        version_id: A8T8WY
-        url: https://semgrep.dev/playground/r/A8T8WY/gitlab.flawfinder.snprintf-1.vsnprintf-1._snprintf-1._sntprintf-1._vsntprintf-1
+        version_id: PkTvKp
+        url: https://semgrep.dev/playground/r/PkTvKp/gitlab.flawfinder.snprintf-1.vsnprintf-1._snprintf-1._sntprintf-1._vsntprintf-1
   pattern-either:
   - patterns:
     - pattern: snprintf($BUF,$SIZ,$FMT,...)
@@ -6134,7 +6134,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows (CWE-120)'
-    primary_identifier: flawfinder.sprintf
+    primary_identifier: flawfinder.sprintf-1.vsprintf-1.swprintf-1.vswprintf-1._stprintf-1._vstprintf-1
     secondary_identifiers:
     - name: Flawfinder - sprintf
       type: flawfinder_func_name
@@ -6160,8 +6160,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUK9n
-        version_id: ZRTnq9
-        url: https://semgrep.dev/playground/r/ZRTnq9/gitlab.flawfinder.sprintf-1.vsprintf-1.swprintf-1.vswprintf-1._stprintf-1._vstprintf-1
+        version_id: xyTO1y
+        url: https://semgrep.dev/playground/r/xyTO1y/gitlab.flawfinder.sprintf-1.vsprintf-1.swprintf-1.vswprintf-1._stprintf-1._vstprintf-1
   pattern-either:
   - pattern: sprintf(...)
   - pattern: vsprintf(...)
@@ -6180,7 +6180,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when concatenating to destination
       [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.strcat
+    primary_identifier: flawfinder.strcat-1
     secondary_identifiers:
     - name: Flawfinder - strcat
       type: flawfinder_func_name
@@ -6191,8 +6191,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5U7re
-        version_id: nWTjYE
-        url: https://semgrep.dev/playground/r/nWTjYE/gitlab.flawfinder.strcat-1
+        version_id: O9Tzr2
+        url: https://semgrep.dev/playground/r/O9Tzr2/gitlab.flawfinder.strcat-1
   pattern: strcat(...)
   severity: ERROR
 - id: gitlab.flawfinder.strccpy-1.strcadd-1
@@ -6203,7 +6203,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-120: Subject to buffer overflow if buffer is not as big as claimed (CWE-120)'
-    primary_identifier: flawfinder.strccpy
+    primary_identifier: flawfinder.strccpy-1.strcadd-1
     secondary_identifiers:
     - name: Flawfinder - strccpy
       type: flawfinder_func_name
@@ -6217,8 +6217,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2URoA
-        version_id: ExTO4O
-        url: https://semgrep.dev/playground/r/ExTO4O/gitlab.flawfinder.strccpy-1.strcadd-1
+        version_id: e1T5wo
+        url: https://semgrep.dev/playground/r/e1T5wo/gitlab.flawfinder.strccpy-1.strcadd-1
   pattern-either:
   - pattern: strccpy(...)
   - pattern: strcadd(...)
@@ -6233,7 +6233,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when copying to destination
       [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.strcpy
+    primary_identifier: flawfinder.strcpy-1
     secondary_identifiers:
     - name: Flawfinder - strcpy
       type: flawfinder_func_name
@@ -6244,8 +6244,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10Ue1w
-        version_id: 7ZTde0
-        url: https://semgrep.dev/playground/r/7ZTde0/gitlab.flawfinder.strcpy-1
+        version_id: vdTgJE
+        url: https://semgrep.dev/playground/r/vdTgJE/gitlab.flawfinder.strcpy-1
   pattern: strcpy(...)
   severity: ERROR
 - id: gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
@@ -6258,7 +6258,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Does not check for buffer overflows when copying to destination
       [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.strcpyA
+    primary_identifier: flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
     secondary_identifiers:
     - name: Flawfinder - strcpyA
       type: flawfinder_func_name
@@ -6323,8 +6323,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUkxG
-        version_id: LjTO4j
-        url: https://semgrep.dev/playground/r/LjTO4j/gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
+        version_id: d6T1E1
+        url: https://semgrep.dev/playground/r/d6T1E1/gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
   pattern-either:
   - pattern: strcpyA(...)
   - pattern: strcpyW(...)
@@ -6355,7 +6355,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-120: This function does not protect against buffer overflows (CWE-120)'
-    primary_identifier: flawfinder.streadd
+    primary_identifier: flawfinder.streadd-1.strecpy-1
     secondary_identifiers:
     - name: Flawfinder - streadd
       type: flawfinder_func_name
@@ -6369,8 +6369,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUyKE
-        version_id: 8KTXEw
-        url: https://semgrep.dev/playground/r/8KTXEw/gitlab.flawfinder.streadd-1.strecpy-1
+        version_id: ZRTnJ0
+        url: https://semgrep.dev/playground/r/ZRTnJ0/gitlab.flawfinder.streadd-1.strecpy-1
   pattern-either:
   - pattern: streadd(...)
   - pattern: strecpy(...)
@@ -6384,7 +6384,7 @@ rules:
   metadata:
     cwe: 'CWE-126: Does not handle strings that are not \0-terminated; if given one
       it may perform an over-read (it could cause a crash if unprotected) (CWE-126)'
-    primary_identifier: flawfinder.strlen
+    primary_identifier: flawfinder.strlen-1.wcslen-1._tcslen-1._mbslen-1
     secondary_identifiers:
     - name: Flawfinder - strlen
       type: flawfinder_func_name
@@ -6404,8 +6404,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6U9Qq
-        version_id: gETjWQ
-        url: https://semgrep.dev/playground/r/gETjWQ/gitlab.flawfinder.strlen-1.wcslen-1._tcslen-1._mbslen-1
+        version_id: nWTjl3
+        url: https://semgrep.dev/playground/r/nWTjl3/gitlab.flawfinder.strlen-1.wcslen-1._tcslen-1._mbslen-1
   pattern-either:
   - pattern: strlen(...)
   - pattern: wcslen(...)
@@ -6421,7 +6421,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Easily used incorrectly (e.g., incorrectly computing the correct
       maximum size to add) [MS-banned] (CWE-120)'
-    primary_identifier: flawfinder.strncat
+    primary_identifier: flawfinder.strncat-1
     secondary_identifiers:
     - name: Flawfinder - strncat
       type: flawfinder_func_name
@@ -6432,8 +6432,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUN2p
-        version_id: QkTD6r
-        url: https://semgrep.dev/playground/r/QkTD6r/gitlab.flawfinder.strncat-1
+        version_id: ExTObz
+        url: https://semgrep.dev/playground/r/ExTObz/gitlab.flawfinder.strncat-1
   pattern: strncat(...)
   severity: INFO
 - id: gitlab.flawfinder.strncpy-1
@@ -6445,7 +6445,7 @@ rules:
   metadata:
     cwe: 'CWE-120: Doesn''t always \0-terminate or check for invalid pointers [MS-banned]
       (CWE-120)'
-    primary_identifier: flawfinder.strncpy
+    primary_identifier: flawfinder.strncpy-1
     secondary_identifiers:
     - name: Flawfinder - strncpy
       type: flawfinder_func_name
@@ -6456,8 +6456,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUY74
-        version_id: 3ZTnBw
-        url: https://semgrep.dev/playground/r/3ZTnBw/gitlab.flawfinder.strncpy-1
+        version_id: 7ZTdw4
+        url: https://semgrep.dev/playground/r/7ZTdw4/gitlab.flawfinder.strncpy-1
   pattern: strncpy(...)
   severity: INFO
 - id: gitlab.flawfinder.strtrns-1
@@ -6468,7 +6468,7 @@ rules:
     '
   metadata:
     cwe: 'CWE-120: This function does not protect against buffer overflows (CWE-120)'
-    primary_identifier: flawfinder.strtrns
+    primary_identifier: flawfinder.strtrns-1
     secondary_identifiers:
     - name: Flawfinder - strtrns
       type: flawfinder_func_name
@@ -6479,8 +6479,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU811
-        version_id: 44Tpzj
-        url: https://semgrep.dev/playground/r/44Tpzj/gitlab.flawfinder.strtrns-1
+        version_id: LjTOJb
+        url: https://semgrep.dev/playground/r/LjTOJb/gitlab.flawfinder.strtrns-1
   pattern: strtrns(...)
   severity: WARNING
 - id: gitlab.flawfinder.syslog-1
@@ -6492,7 +6492,7 @@ rules:
   metadata:
     cwe: 'CWE-134: If syslog''s format strings can be influenced by an attacker, they
       can be exploited (CWE-134)'
-    primary_identifier: flawfinder.syslog
+    primary_identifier: flawfinder.syslog-1
     secondary_identifiers:
     - name: Flawfinder - syslog
       type: flawfinder_func_name
@@ -6503,8 +6503,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUgoz
-        version_id: BjT5B2
-        url: https://semgrep.dev/playground/r/BjT5B2/gitlab.flawfinder.syslog-1
+        version_id: JdTb4q
+        url: https://semgrep.dev/playground/r/JdTb4q/gitlab.flawfinder.syslog-1
   pattern-either:
   - patterns:
     - pattern: syslog($FUNC,...)
@@ -6519,7 +6519,7 @@ rules:
   metadata:
     cwe: 'CWE-78: This causes a new program to execute and is difficult to use safely
       (CWE-78)'
-    primary_identifier: flawfinder.system
+    primary_identifier: flawfinder.system-1
     secondary_identifiers:
     - name: Flawfinder - system
       type: flawfinder_func_name
@@ -6530,8 +6530,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU17X
-        version_id: vdTgjx
-        url: https://semgrep.dev/playground/r/vdTgjx/gitlab.flawfinder.system-1
+        version_id: 6xT344
+        url: https://semgrep.dev/playground/r/6xT344/gitlab.flawfinder.system-1
   pattern: system(...)
   severity: ERROR
 - id: gitlab.flawfinder.tmpfile-1
@@ -6543,7 +6543,7 @@ rules:
   metadata:
     cwe: 'CWE-377: Function tmpfile() has a security flaw on some systems (e.g., older
       System V systems) (CWE-377)'
-    primary_identifier: flawfinder.tmpfile
+    primary_identifier: flawfinder.tmpfile-1
     secondary_identifiers:
     - name: Flawfinder - tmpfile
       type: flawfinder_func_name
@@ -6554,8 +6554,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UR7A
-        version_id: ExTOQO
-        url: https://semgrep.dev/playground/r/ExTOQO/gitlab.flawfinder.tmpfile-1
+        version_id: 2KTenk
+        url: https://semgrep.dev/playground/r/2KTenk/gitlab.flawfinder.tmpfile-1
   pattern: tmpfile(...)
   severity: INFO
 - id: gitlab.flawfinder.tmpnam-1.tempnam-1
@@ -6566,7 +6566,7 @@ rules:
     attack.
   metadata:
     cwe: 'CWE-377: Temporary file race condition (CWE-377)'
-    primary_identifier: flawfinder.tmpnam
+    primary_identifier: flawfinder.tmpnam-1.tempnam-1
     secondary_identifiers:
     - name: Flawfinder - tmpnam
       type: flawfinder_func_name
@@ -6580,8 +6580,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10Ueqw
-        version_id: 7ZTdp0
-        url: https://semgrep.dev/playground/r/7ZTdp0/gitlab.flawfinder.tmpnam-1.tempnam-1
+        version_id: X0TEG1
+        url: https://semgrep.dev/playground/r/X0TEG1/gitlab.flawfinder.tmpnam-1.tempnam-1
   pattern-either:
   - pattern: tmpnam(...)
   - pattern: tempnam(...)
@@ -6595,7 +6595,7 @@ rules:
   metadata:
     cwe: 'CWE-676: This C routine is considered obsolete (as opposed to the shell
       command by the same name, which is NOT obsolete) (CWE-676)'
-    primary_identifier: flawfinder.ulimit
+    primary_identifier: flawfinder.ulimit-1
     secondary_identifiers:
     - name: Flawfinder - ulimit
       type: flawfinder_func_name
@@ -6606,8 +6606,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUo4K
-        version_id: jQTWRy
-        url: https://semgrep.dev/playground/r/jQTWRy/gitlab.flawfinder.ulimit-1
+        version_id: 5PTjK9
+        url: https://semgrep.dev/playground/r/5PTjK9/gitlab.flawfinder.ulimit-1
   pattern: ulimit(...)
   severity: INFO
 - id: gitlab.flawfinder.umask-1
@@ -6619,7 +6619,7 @@ rules:
   metadata:
     cwe: 'CWE-732: Ensure that umask is given most restrictive possible setting (e.g.,
       066 or 077) (CWE-732)'
-    primary_identifier: flawfinder.umask
+    primary_identifier: flawfinder.umask-1
     secondary_identifiers:
     - name: Flawfinder - umask
       type: flawfinder_func_name
@@ -6630,8 +6630,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUY1n
-        version_id: YDT5rQ
-        url: https://semgrep.dev/playground/r/YDT5rQ/gitlab.flawfinder.umask-1
+        version_id: WrT9go
+        url: https://semgrep.dev/playground/r/WrT9go/gitlab.flawfinder.umask-1
   pattern: umask(...)
   severity: INFO
 - id: gitlab.flawfinder.usleep-1
@@ -6645,7 +6645,7 @@ rules:
       command by the same name).   The interaction of this function with SIGALRM and
       other timer functions such as sleep(), alarm(), setitimer(), and nanosleep()
       is unspecified (CWE-676)'
-    primary_identifier: flawfinder.usleep
+    primary_identifier: flawfinder.usleep-1
     secondary_identifiers:
     - name: Flawfinder - usleep
       type: flawfinder_func_name
@@ -6656,8 +6656,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUGoN
-        version_id: 1QTBey
-        url: https://semgrep.dev/playground/r/1QTBey/gitlab.flawfinder.usleep-1
+        version_id: GxTyb6
+        url: https://semgrep.dev/playground/r/GxTyb6/gitlab.flawfinder.usleep-1
   pattern: usleep(...)
   severity: INFO
 - id: gitlab.flawfinder.vfork-1
@@ -6669,7 +6669,7 @@ rules:
   metadata:
     cwe: 'CWE-362: On some old systems, vfork() permits race conditions, and it''s
       very difficult to use correctly (CWE-362)'
-    primary_identifier: flawfinder.vfork
+    primary_identifier: flawfinder.vfork-1
     secondary_identifiers:
     - name: Flawfinder - vfork
       type: flawfinder_func_name
@@ -6680,1058 +6680,10 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUb8v
-        version_id: kbTp8Z
-        url: https://semgrep.dev/playground/r/kbTp8Z/gitlab.flawfinder.vfork-1
+        version_id: 0bTB0q
+        url: https://semgrep.dev/playground/r/0bTB0q/gitlab.flawfinder.vfork-1
   pattern: vfork(...)
   severity: INFO
-- id: gitlab.gosec.G101-1
-  patterns:
-  - pattern-either:
-    - pattern: $MASK = "..."
-  - metavariable-regex:
-      metavariable: "$MASK"
-      regex: "(password|pass|passwd|pwd|secret|token)"
-  message: 'The use of hard-coded passwords increases the possibility of password
-    guessing tremendously.
-
-    '
-  metadata:
-    cwe: 'CWE-259: Use of Hard-coded Password'
-    owasp: 'A3: Broken Authentication and Session Management'
-    primary_identifier: gosec.G101
-    secondary_identifiers:
-    - name: Gosec Rule ID G101
-      type: gosec_rule_id
-      value: G101
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G101-1
-    shortlink: https://sg.run/XOBj
-    semgrep.dev:
-      rule:
-        rule_id: wdUjJo
-        version_id: A8T8QJ
-        url: https://semgrep.dev/playground/r/A8T8QJ/gitlab.gosec.G101-1
-  severity: ERROR
-  languages:
-  - go
-- id: gitlab.gosec.G102-1
-  patterns:
-  - pattern-either:
-    - pattern: net.Listen(..., "$ADDR")
-    - pattern: tls.Listen(..., "$ADDR", ...)
-  - metavariable-regex:
-      metavariable: "$ADDR"
-      regex: 0.0.0.0:[0-9]+
-  message: |
-    Binding to all network interfaces can potentially open up a service to
-    traffic on unintended interfaces, that may not be properly documented or
-    secured. This plugin test looks for a string pattern “0.0.0.0” that may
-    indicate a hardcoded binding to all network interfaces.
-  metadata:
-    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
-    owasp: 'A6: Security Misconfiguration'
-    primary_identifier: gosec.G102
-    secondary_identifiers:
-    - name: Gosec Rule ID G102
-      type: gosec_rule_id
-      value: G102
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G102-1
-    shortlink: https://sg.run/28xr
-    semgrep.dev:
-      rule:
-        rule_id: kxUwkP
-        version_id: RGT732
-        url: https://semgrep.dev/playground/r/RGT732/gitlab.gosec.G102-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G103-1
-  patterns:
-  - pattern-either:
-    - pattern: unsafe.Alignof(...)
-    - pattern: unsafe.Offsetof(...)
-    - pattern: unsafe.Sizeof(...)
-    - pattern: unsafe.Pointer(...)
-  message: |
-    Using the unsafe package in Go gives you low-level memory management and many
-    of the strength of the C language but also gives flexibility to the attacker of
-    your application. The pointer arithmetic is one of the examples from the unsafe
-    package which can be used for data leak, memory corruption or even execution of
-    attackers own script.
-  metadata:
-    cwe: 'CWE-242: Audit the use of unsafe block'
-    primary_identifier: gosec.G103
-    secondary_identifiers:
-    - name: Gosec Rule ID G103
-      type: gosec_rule_id
-      value: G103
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G103-1
-    shortlink: https://sg.run/y1dA
-    semgrep.dev:
-      rule:
-        rule_id: v8U9nZ
-        version_id: 0bTB2o
-        url: https://semgrep.dev/playground/r/0bTB2o/gitlab.gosec.G103-1
-  severity: INFO
-  languages:
-  - go
-- id: gitlab.gosec.G104-1.G107-1
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: http.Get($URL)
-      - pattern-not: http.Get("...")
-    - patterns:
-      - pattern: http.Head($URL)
-      - pattern-not: http.Head("...")
-    - patterns:
-      - pattern: http.Post($URL, ...)
-      - pattern-not: http.Post("...", ...)
-    - patterns:
-      - pattern: http.PostForm($URL, ...)
-      - pattern-not: http.PostForm("...", ...)
-    - patterns:
-      - pattern-inside: |
-          $REQ, ... := http.NewRequest(..., url, ...)
-          ...
-          $CLIENT := &http.Client{...}
-          ...
-      - pattern: "$CLIENT.Do($REQ)"
-    - patterns:
-      - pattern-not-inside: |
-          const $X = "..."
-          ...
-      - pattern-not-inside: |
-          var $Y string = "..."
-          ...
-          $X = $Y
-          ...
-      - pattern-not-inside: |
-          $Y := "..."
-          ...
-          $X = $Y
-          ...
-      - pattern: http.Get($X)
-  message: 'Url provided to HTTP request as taint input
-
-    '
-  metadata:
-    cwe: 'CWE-88: Improper Neutralization of Argument Delimiters in a Command'
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G104-1.G107-1
-    shortlink: https://sg.run/Y8vd
-    semgrep.dev:
-      rule:
-        rule_id: 9AUR1r
-        version_id: GxTzZZ
-        url: https://semgrep.dev/playground/r/GxTzZZ/gitlab.gosec.G104-1.G107-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G106-1
-  patterns:
-  - pattern: ssh.InsecureIgnoreHostKey(...)
-  message: 'Audit the use of ssh.InsecureIgnoreHostKey
-
-    '
-  metadata:
-    cwe: 'CWE-322: Key Exchange without Entity Authentication'
-    primary_identifier: gosec.G106
-    secondary_identifiers:
-    - name: Gosec Rule ID G106
-      type: gosec_rule_id
-      value: G106
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G106-1
-    shortlink: https://sg.run/5DQj
-    semgrep.dev:
-      rule:
-        rule_id: qNUXje
-        version_id: PkTvBy
-        url: https://semgrep.dev/playground/r/PkTvBy/gitlab.gosec.G106-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G107-1
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: http.Get($URL)
-      - pattern-not: http.Get("...")
-    - patterns:
-      - pattern: http.Head($URL)
-      - pattern-not: http.Head("...")
-    - patterns:
-      - pattern: http.Post($URL, ...)
-      - pattern-not: http.Post("...", ...)
-    - patterns:
-      - pattern: http.PostForm($URL, ...)
-      - pattern-not: http.PostForm("...", ...)
-    - patterns:
-      - pattern-inside: |
-          $REQ, ... := http.NewRequest(..., url, ...)
-          ...
-          $CLIENT := &http.Client{...}
-          ...
-      - pattern: "$CLIENT.Do($REQ)"
-    - patterns:
-      - pattern-not-inside: |
-          const $X = "..."
-          ...
-      - pattern-not-inside: |
-          var $Y string = "..."
-          ...
-          $X = $Y
-          ...
-      - pattern-not-inside: |
-          $Y := "..."
-          ...
-          $X = $Y
-          ...
-      - pattern: http.Get($X)
-  message: 'Url provided to HTTP request as taint input
-
-    '
-  metadata:
-    cwe: 'CWE-88: Improper Neutralization of Argument Delimiters in a Command'
-    primary_identifier: gosec.G107
-    secondary_identifiers:
-    - name: Gosec Rule ID G107
-      type: gosec_rule_id
-      value: G107
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G107-1
-    shortlink: https://sg.run/rDQj
-    semgrep.dev:
-      rule:
-        rule_id: x8UZly
-        version_id: l4Tb8d
-        url: https://semgrep.dev/playground/r/l4Tb8d/gitlab.gosec.G107-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G108-1
-  patterns:
-  - pattern: 'import _ "net/http/pprof"
-
-      '
-  message: 'Profiling endpoint automatically exposed on /debug/pprof
-
-    '
-  metadata:
-    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
-    primary_identifier: gosec.G108
-    secondary_identifiers:
-    - name: Gosec Rule ID G108
-      type: gosec_rule_id
-      value: G108
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G108-1
-    shortlink: https://sg.run/oYxX
-    semgrep.dev:
-      rule:
-        rule_id: r6UwrQ
-        version_id: JdTbLL
-        url: https://semgrep.dev/playground/r/JdTbLL/gitlab.gosec.G108-1
-  severity: ERROR
-  languages:
-  - go
-- id: gitlab.gosec.G109-1
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          $X, ... := strconv.Atoi(...)
-          ...
-      - pattern-either:
-        - pattern: int32($X)
-        - pattern: int16($X)
-  message: 'Potential Integer overflow made by strconv.Atoi result conversion to int16/32
-
-    '
-  metadata:
-    cwe: 'CWE-190: Integer Overflow or Wraparound'
-    primary_identifier: gosec.G109
-    secondary_identifiers:
-    - name: Gosec Rule ID G109
-      type: gosec_rule_id
-      value: G109
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G109-1
-    shortlink: https://sg.run/zxvn
-    semgrep.dev:
-      rule:
-        rule_id: bwU8wj
-        version_id: 5PTjLp
-        url: https://semgrep.dev/playground/r/5PTjLp/gitlab.gosec.G109-1
-  severity: ERROR
-  languages:
-  - go
-- id: gitlab.gosec.G110-1
-  mode: taint
-  pattern-sinks:
-  - pattern: io.Copy(...)
-  - pattern: io.CopyBuffer(...)
-  pattern-sources:
-  - pattern: gzip.NewReader(...)
-  - pattern: zlib.NewReader(...)
-  - pattern: bzip2.NewReader(...)
-  - pattern: flate.NewReader(...)
-  - pattern: lzw.NewReader(...)
-  - pattern: tar.NewReader(...)
-  - pattern: zip.NewReader(...)
-  - pattern: zlib.NewReaderDict(...)
-  - pattern: flate.NewReaderDict(...)
-  - pattern: zip.OpenReader(...)
-  message: 'Potential DoS vulnerability via decompression bomb
-
-    '
-  metadata:
-    cwe: 'CWE-409: Improper Handling of Highly Compressed Data'
-    primary_identifier: gosec.G110
-    secondary_identifiers:
-    - name: Gosec Rule ID G110
-      type: gosec_rule_id
-      value: G110
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G110-1
-    shortlink: https://sg.run/Wp8E
-    semgrep.dev:
-      rule:
-        rule_id: pKUpOv
-        version_id: DkTJ1d
-        url: https://semgrep.dev/playground/r/DkTJ1d/gitlab.gosec.G110-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G201-1
-  patterns:
-  - pattern-inside: |
-      $Q := fmt.Sprintf("$QUERY", ...)
-      ...
-  - pattern-not-inside: |
-      $Q := fmt.Sprintf("$QUERY", "...")
-      ...
-  - pattern-not-inside: |
-      pq.QuoteIdentifier(...)
-      ...
-  - metavariable-regex:
-      metavariable: "$QUERY"
-      regex: "(?i)(SELECT|DELETE|INSERT|UPDATE|INTO|FROM|WHERE).*%[^bdoxXfFp].*"
-  - pattern-either:
-    - pattern: "$DB.QueryContext(..., $Q)"
-    - pattern: "$DB.Query($Q)"
-  message: 'SQL query construction using format string
-
-    '
-  metadata:
-    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command'
-    primary_identifier: gosec.G201
-    secondary_identifiers:
-    - name: Gosec Rule ID G201
-      type: gosec_rule_id
-      value: G201
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G201-1
-    shortlink: https://sg.run/18Z1
-    semgrep.dev:
-      rule:
-        rule_id: OrU63Y
-        version_id: DkTJ1Y
-        url: https://semgrep.dev/playground/r/DkTJ1Y/gitlab.gosec.G201-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G202-1
-  patterns:
-  - pattern-inside: |
-      import "database/sql"
-      ...
-  - pattern-either:
-    - pattern: "$DB.Query($Q + $IN)"
-    - pattern: "$DB.QueryContext(..., $Q + $IN)"
-  - pattern-not: $DB.QueryContext(..., "..." + "...")
-  - pattern-not: $DB.Query("..." + "...")
-  message: 'SQL query construction using string concatenation
-
-    '
-  metadata:
-    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command'
-    primary_identifier: gosec.G202
-    secondary_identifiers:
-    - name: Gosec Rule ID G202
-      type: gosec_rule_id
-      value: G202
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G202-1
-    shortlink: https://sg.run/jwRP
-    semgrep.dev:
-      rule:
-        rule_id: x8Uxn5
-        version_id: BjT5dr
-        url: https://semgrep.dev/playground/r/BjT5dr/gitlab.gosec.G202-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G203-1
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: template.HTML($IN)
-      - pattern-not: template.HTML("...")
-    - patterns:
-      - pattern: template.JS($IN)
-      - pattern-not: template.JS("...")
-    - patterns:
-      - pattern: template.URL($IN)
-      - pattern-not: template.URL("...")
-    - patterns:
-      - pattern: template.HTMLAttr($IN)
-      - pattern-not: template.HTMLAttr("...")
-  message: 'Use of unescaped data in HTML templates
-
-    '
-  metadata:
-    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation'
-    primary_identifier: gosec.G203
-    secondary_identifiers:
-    - name: Gosec Rule ID G203
-      type: gosec_rule_id
-      value: G203
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G203-1
-    shortlink: https://sg.run/66nK
-    semgrep.dev:
-      rule:
-        rule_id: yyUPno
-        version_id: YDT5DQ
-        url: https://semgrep.dev/playground/r/YDT5DQ/gitlab.gosec.G203-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G204-1
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: exec.CommandContext($CTX, $EXE, ...)
-      - pattern-not: exec.CommandContext($CTX, "...", ...)
-    - patterns:
-      - pattern: exec.Command($EXE, ...)
-      - pattern-not: exec.Command("...", ...)
-    - patterns:
-      - pattern: syscall.ForkExec($EXE, ...)
-      - pattern-not: syscall.ForkExec("...", ...)
-    - patterns:
-      - pattern: syscall.StartProcess($EXE, ...)
-      - pattern-not: syscall.StartProcess("...", ...)
-  message: 'Audit use of command execution
-
-    '
-  metadata:
-    cwe: 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
-      (''Eval Injection'')'
-    owasp: 'A1: Injection'
-    primary_identifier: gosec.G204
-    secondary_identifiers:
-    - name: Gosec Rule ID G204
-      type: gosec_rule_id
-      value: G204
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G204-1
-    shortlink: https://sg.run/9roy
-    semgrep.dev:
-      rule:
-        rule_id: eqUz8W
-        version_id: WrT9yq
-        url: https://semgrep.dev/playground/r/WrT9yq/gitlab.gosec.G204-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G301-1
-  patterns:
-  - pattern-either:
-    - pattern: os.Mkdir(...,$MASK)
-    - pattern: os.MkdirAll(...,$MASK)
-  - metavariable-comparison:
-      metavariable: "$MASK"
-      comparison: "$MASK > 0o600 and $MASK != 0o750"
-      base: 8
-  message: 'Poor file permissions used when creating a directory
-
-    '
-  metadata:
-    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
-    owasp: 'A6: Security Misconfiguration'
-    primary_identifier: gosec.G301
-    secondary_identifiers:
-    - name: Gosec Rule ID G301
-      type: gosec_rule_id
-      value: G301
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G301-1
-    shortlink: https://sg.run/DzoG
-    semgrep.dev:
-      rule:
-        rule_id: zdUYkg
-        version_id: BjT572
-        url: https://semgrep.dev/playground/r/BjT572/gitlab.gosec.G301-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G302-1
-  patterns:
-  - pattern-either:
-    - pattern: os.Chmod(...,$MASK)
-    - pattern: os.OpenFile(...,$MASK)
-  - metavariable-comparison:
-      metavariable: "$MASK"
-      comparison: "$MASK > 0o600"
-      base: 8
-  message: 'Poor file permissions used when creation file or using chmod
-
-    '
-  metadata:
-    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
-    owasp: 'A6: Security Misconfiguration'
-    primary_identifier: gosec.G302
-    secondary_identifiers:
-    - name: Gosec Rule ID G302
-      type: gosec_rule_id
-      value: G302
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G302-1
-    shortlink: https://sg.run/B6kR
-    semgrep.dev:
-      rule:
-        rule_id: oqU4eG
-        version_id: A8T8GY
-        url: https://semgrep.dev/playground/r/A8T8GY/gitlab.gosec.G302-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G303-1
-  patterns:
-  - pattern-either:
-    - pattern: 'ioutil.WriteFile("$ARG", ...)
-
-        '
-    - pattern: 'os.Create("$ARG")
-
-        '
-  - metavariable-regex:
-      metavariable: "$ARG"
-      regex: "(/tmp/.*|/var/tmp/.*)"
-  message: 'File creation in shared tmp directory without using ioutil.Tempfile
-
-    '
-  metadata:
-    cwe: 'CWE-378: Creation of Temporary File With Insecure Permissions'
-    primary_identifier: gosec.G303
-    secondary_identifiers:
-    - name: Gosec Rule ID G303
-      type: gosec_rule_id
-      value: G303
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G303-1
-    shortlink: https://sg.run/qYxO
-    semgrep.dev:
-      rule:
-        rule_id: j2U3v8
-        version_id: K3Te7z
-        url: https://semgrep.dev/playground/r/K3Te7z/gitlab.gosec.G303-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G304-1
-  patterns:
-  - pattern-not-inside: 'os.OpenFile(filepath.Clean(...), ...)
-
-      '
-  - pattern-not-inside: 'os.Open(filepath.Clean(...))
-
-      '
-  - pattern-not-inside: 'ioutil.ReadFile(filepath.Clean(...), ...)
-
-      '
-  - pattern-not-inside: 'os.OpenFile(filepath.Rel(...), ...)
-
-      '
-  - pattern-not-inside: 'os.Open(filepath.Rel(...))
-
-      '
-  - pattern-not-inside: 'ioutil.ReadFile(filepath.Rel(...), ...)
-
-      '
-  - pattern-not-inside: |
-      const $ARG = "..."
-      ...
-  - pattern-not-inside: |
-      var $Y string = "..."
-      ...
-      $ARG = $Y
-      ...
-  - pattern-not-inside: |
-      $ARG = filepath.Clean($X)
-      ...
-  - pattern-not-inside: |
-      $ARG = filepath.Rel($X)
-      ...
-  - pattern-not-inside: |
-      $ARG, ... := filepath.Rel("...", "...")
-      ...
-  - pattern-not: os.OpenFile("..." + strconv.Itoa($I), ...)
-  - pattern-not: os.OpenFile("...", ...)
-  - pattern-not: os.Open("...")
-  - pattern-not: os.Open("..." + strconv.Itoa($I))
-  - pattern-not: ioutil.ReadFile("...", ...)
-  - pattern-not: ioutil.ReadFile("..." + strconv.Itoa($I), ...)
-  - pattern-either:
-    - pattern: os.OpenFile($ARG, ...)
-    - pattern: os.Open($ARG)
-    - pattern: ioutil.ReadFile($ARG, ...)
-  message: 'File open from tainted variable
-
-    '
-  metadata:
-    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
-      Traversal'')'
-    primary_identifier: gosec.G304
-    secondary_identifiers:
-    - name: Gosec Rule ID G304
-      type: gosec_rule_id
-      value: G304
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G304-1
-    shortlink: https://sg.run/0yQw
-    semgrep.dev:
-      rule:
-        rule_id: 2ZUPbo
-        version_id: WrT9yW
-        url: https://semgrep.dev/playground/r/WrT9yW/gitlab.gosec.G304-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G305-1
-  mode: taint
-  pattern-sources:
-  - pattern: zip.OpenReader(...)
-  pattern-sinks:
-  - pattern: filepath.Join(...)
-  message: 'File traversal when extracting zip/tar archive
-
-    '
-  metadata:
-    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
-      Traversal'')'
-    primary_identifier: gosec.G305
-    secondary_identifiers:
-    - name: Gosec Rule ID G305
-      type: gosec_rule_id
-      value: G305
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G305-1
-    shortlink: https://sg.run/lZ2o
-    semgrep.dev:
-      rule:
-        rule_id: 10UdKB
-        version_id: qkTGXj
-        url: https://semgrep.dev/playground/r/qkTGXj/gitlab.gosec.G305-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G306-1
-  patterns:
-  - pattern-either:
-    - pattern: 'ioutil.WriteFile(..., ..., $ARG)
-
-        '
-  - metavariable-comparison:
-      metavariable: "$ARG"
-      comparison: "$ARG > 0o600"
-      base: 8
-  message: 'Expect WriteFile permissions to be 600 or less
-
-    '
-  metadata:
-    cwe: 'CWE-276: Incorrect Default Permissions'
-    primary_identifier: gosec.G306
-    secondary_identifiers:
-    - name: Gosec Rule ID G306
-      type: gosec_rule_id
-      value: G306
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G306-1
-    shortlink: https://sg.run/KXln
-    semgrep.dev:
-      rule:
-        rule_id: X5Ud8j
-        version_id: 0bTB2y
-        url: https://semgrep.dev/playground/r/0bTB2y/gitlab.gosec.G306-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G401-1
-  patterns:
-  - pattern-either:
-    - pattern: 'des.NewCipher(...)
-
-        '
-    - pattern: 'des.NewTripleDESCipher(...)
-
-        '
-    - pattern: 'md5.New()
-
-        '
-    - pattern: 'md5.Sum(...)
-
-        '
-    - pattern: 'rc4.NewCipher(...)
-
-        '
-    - pattern: 'sha1.New()
-
-        '
-    - pattern: 'sha1.Sum(...)
-
-        '
-  message: |
-    Usage of a cryptographically insecure algorithm has been detected. It
-    is recommended that alternative algorithms be used instead.
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G401
-    secondary_identifiers:
-    - name: Gosec Rule ID G401
-      type: gosec_rule_id
-      value: G401
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G401-1
-    shortlink: https://sg.run/GOe6
-    semgrep.dev:
-      rule:
-        rule_id: lBU89N
-        version_id: 5PTj8X
-        url: https://semgrep.dev/playground/r/5PTj8X/gitlab.gosec.G401-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G402-1
-  patterns:
-  - pattern-either:
-    - pattern: 'tls.Config{..., CipherSuites: []$SLICE{..., $CIPHERS, ...}, ...}
-
-        '
-    - pattern: 'tls.CipherSuite{..., ID: $CIPHERS, ...}
-
-        '
-  - metavariable-regex:
-      metavariable: "$CIPHERS"
-      regex: "((?!tls.TLS_AES_128_GCM_SHA256)|(?!tls.TLS_AES_256_GCM_SHA384)|(?!tls.TLS_CHACHA20_POLY1305_SHA256)|
-        (?!tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256)|(?!tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256)|
-        (?!tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384)|(?!tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)|
-        (?!tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305)|(?!tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256)|
-        (?!tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305)|(?!tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256)|
-        (?!tls.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)|(?!tls.TLS_DHE_RSA_WITH_AES_256_GCM_SHA384))"
-  message: "Usage of a cryptographically insecure cipher suite has been detected.
-    It is recommended that \nalternative ciphers be used instead.\n"
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G402
-    secondary_identifiers:
-    - name: Gosec Rule ID G402
-      type: gosec_rule_id
-      value: G402
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G402-1
-    shortlink: https://sg.run/Jx9P
-    semgrep.dev:
-      rule:
-        rule_id: KxU7b3
-        version_id: 44Tp2j
-        url: https://semgrep.dev/playground/r/44Tp2j/gitlab.gosec.G402-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G402-2
-  patterns:
-  - pattern-either:
-    - pattern: tls.VersionTLS11
-    - pattern: tls.VersionTLS10
-  message: |
-    Use of deprecated TLS version which may result in the unauthorized retrieval
-    of sensitive information. It is recommended to use TLS 1.2 or TLS 1.3 instead.
-  metadata:
-    cwe: 'CWE-310: Cryptographic Issues'
-    owasp: 'A05:2021: Security Misconfiguration'
-    primary_identifier: gosec.G402
-    secondary_identifiers:
-    - name: Gosec Rule ID G402
-      type: gosec_rule_id
-      value: G402
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G402-2
-    shortlink: https://sg.run/ykQZ
-    semgrep.dev:
-      rule:
-        rule_id: wdUnqg
-        version_id: JdTbQW
-        url: https://semgrep.dev/playground/r/JdTbQW/gitlab.gosec.G402-2
-  languages:
-  - go
-  severity: WARNING
-- id: gitlab.gosec.G403-1
-  patterns:
-  - pattern-either:
-    - pattern: 'rsa.GenerateKey(..., $ARG)
-
-        '
-  - metavariable-comparison:
-      metavariable: "$ARG"
-      comparison: "$ARG < 2048"
-  message: 'It is recommended that generated RSA keys are at least 2048 bits in length.
-
-    '
-  metadata:
-    cwe: 'CWE-326: Inadequate Encryption Strength'
-    owasp: 'A3: Sensitive Data Exposure'
-    primary_identifier: gosec.G403
-    secondary_identifiers:
-    - name: Gosec Rule ID G403
-      type: gosec_rule_id
-      value: G403
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G403-1
-    shortlink: https://sg.run/RXoN
-    semgrep.dev:
-      rule:
-        rule_id: YGUDRz
-        version_id: GxTyZG
-        url: https://semgrep.dev/playground/r/GxTyZG/gitlab.gosec.G403-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G404-1
-  patterns:
-  - patterns:
-    - pattern-inside: |
-        import $IMPORT "math/rand"
-        ...
-    - pattern-not-inside: 'import "crypto/rand"
-
-        '
-    - pattern-either:
-      - pattern: "$IMPORT.$METHOD(...)"
-      - pattern: rand.$METHOD(...)
-  - metavariable-regex:
-      metavariable: "$METHOD"
-      regex: "(Float32|Float64|Int31|Int31n|Int63|Int63n|NormalFloat64|Uint32|Uint64)"
-  message: 'Use of weak random number generator (math/rand instead of crypto/rand)
-
-    '
-  metadata:
-    cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
-    owasp: 'A3: Sensitive Data Exposure'
-    primary_identifier: gosec.G404
-    secondary_identifiers:
-    - name: Gosec Rule ID G404
-      type: gosec_rule_id
-      value: G404
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G404-1
-    shortlink: https://sg.run/AXvB
-    semgrep.dev:
-      rule:
-        rule_id: 6JU1jk
-        version_id: RGT7ob
-        url: https://semgrep.dev/playground/r/RGT7ob/gitlab.gosec.G404-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G501-1
-  patterns:
-  - pattern: 'import "crypto/md5"
-
-      '
-  message: |
-    The MD5 message-digest algorithm has been cryptographically broken and is unsuitable for
-    further use. It is recommended that the SHA-3, or BLAKE2 family of algorithms be used for
-    non-password based cryptographic hashes instead. For password based cryptographic hashes,
-    consider using the bcrypt or Argon2 family of cryptographic hashes.
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G501
-    secondary_identifiers:
-    - name: Gosec Rule ID G501
-      type: gosec_rule_id
-      value: G501
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G501-1
-    shortlink: https://sg.run/3rxW
-    semgrep.dev:
-      rule:
-        rule_id: DbU1pk
-        version_id: gETjYQ
-        url: https://semgrep.dev/playground/r/gETjYQ/gitlab.gosec.G501-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G502-1
-  patterns:
-  - pattern: 'import "crypto/des"
-
-      '
-  message: "Usage of a cryptographically broken primitive has been detected. It is
-    recommended that \nChaCha20 or Advanced Encryption Standard (AES) be used instead.\n"
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G502
-    secondary_identifiers:
-    - name: Gosec Rule ID G502
-      type: gosec_rule_id
-      value: G502
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G502-1
-    shortlink: https://sg.run/Q95q
-    semgrep.dev:
-      rule:
-        rule_id: BYUdNk
-        version_id: 8KTXxw
-        url: https://semgrep.dev/playground/r/8KTXxw/gitlab.gosec.G502-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G503-1
-  patterns:
-  - pattern: 'import "crypto/rc4"
-
-      '
-  message: |
-    The RC4 stream-cipher has been cryptographically broken and is unsuitable
-    for use in production. It is recommended that ChaCha20 or Advanced Encryption
-    Standard (AES) be used instead.
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G503
-    secondary_identifiers:
-    - name: Gosec Rule ID G503
-      type: gosec_rule_id
-      value: G503
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G503-1
-    shortlink: https://sg.run/4ex9
-    semgrep.dev:
-      rule:
-        rule_id: WAUyo7
-        version_id: QkTDpr
-        url: https://semgrep.dev/playground/r/QkTDpr/gitlab.gosec.G503-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G504-1
-  patterns:
-  - pattern: 'import "net/http/cgi"
-
-      '
-  message: 'Go versions < 1.6.3 are vulnerable to Httpoxy attack: (CVE-2016-5386)
-
-    '
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G504
-    secondary_identifiers:
-    - name: Gosec Rule ID G504
-      type: gosec_rule_id
-      value: G504
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G504-1
-    shortlink: https://sg.run/gYL5
-    semgrep.dev:
-      rule:
-        rule_id: AbUQzX
-        version_id: LjTOrj
-        url: https://semgrep.dev/playground/r/LjTOrj/gitlab.gosec.G504-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G505-1
-  patterns:
-  - pattern: 'import "crypto/sha1"
-
-      '
-  message: |
-    The SHA-1 message-digest algorithm has been cryptographically broken and
-    is unsuitable for further use. It is recommended that the SHA-3, or BLAKE2 family
-    of algorithms be used for non-password based cryptographic hashes instead. For
-    password based cryptographic hashes, consider using the bcrypt or Argon2 family
-    of cryptographic hashes.
-  metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp: 'A9: Using Components with Known Vulnerabilities'
-    primary_identifier: gosec.G505
-    secondary_identifiers:
-    - name: Gosec Rule ID G505
-      type: gosec_rule_id
-      value: G505
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G505-1
-    shortlink: https://sg.run/PbJv
-    semgrep.dev:
-      rule:
-        rule_id: 0oU25g
-        version_id: 3ZTnEw
-        url: https://semgrep.dev/playground/r/3ZTnEw/gitlab.gosec.G505-1
-  severity: WARNING
-  languages:
-  - go
-- id: gitlab.gosec.G601-1
-  patterns:
-  - pattern-either:
-    - pattern: |
-        for _, $ARG := range $SLICE {
-          <... &($ARG) ...>
-        }
-    - pattern: |
-        for _, $ARG := range $SLICE {
-          <... func() { <... &$ARG ...> } ...>
-        }
-    - pattern: |
-        for _, $ARG := range $SLICE {
-          <... $X(..., <... &$ARG ...>, ...) ...>
-        }
-  - pattern-not: |
-      for _, $ARG := range $SLICE {
-        <... *$ARG ...>
-      }
-  - pattern-not-inside: for _, $ARG := range $SLICE { return ... }
-  message: 'Implicit memory aliasing in for loop.
-
-    '
-  metadata:
-    cwe: 'CWE-118: Incorrect Access of Indexable Resource (''Range Error'')'
-    primary_identifier: gosec.G601
-    secondary_identifiers:
-    - name: Gosec Rule ID G601
-      type: gosec_rule_id
-      value: G601
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.gosec.G601-1
-    shortlink: https://sg.run/pYxe
-    semgrep.dev:
-      rule:
-        rule_id: NbUNk2
-        version_id: GxTyrD
-        url: https://semgrep.dev/playground/r/GxTyrD/gitlab.gosec.G601-1
-  severity: WARNING
-  languages:
-  - go
 - id: gitlab.security_code_scan.SCS0018-1
   mode: taint
   pattern-sources:
@@ -7828,7 +6780,7 @@ rules:
   metadata:
     cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
       Traversal'')'
-    primary_identifier: security_code_scan.SCS0018
+    primary_identifier: security_code_scan.SCS0018-1
     secondary_identifiers:
     - name: SCS0018
       type: security_code_scan_rule_id
@@ -7839,8 +6791,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUy1X
-        version_id: xyTOxr
-        url: https://semgrep.dev/playground/r/xyTOxr/gitlab.security_code_scan.SCS0018-1
+        version_id: rxTqg7
+        url: https://semgrep.dev/playground/r/rxTqg7/gitlab.security_code_scan.SCS0018-1
   severity: WARNING
   languages:
   - csharp
