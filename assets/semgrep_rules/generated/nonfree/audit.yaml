@@ -132,9 +132,18 @@ rules:
   - c
   severity: ERROR
 - id: c.lang.security.insecure-use-memset.insecure-use-memset
-  pattern: memset($VAR,...)
-  message: Using memset and then deleting that data can cause sensitive information
-    to still be in the buffer. Use **memset_s()** instead.
+  pattern: memset($...VARS)
+  fix: memset_s($...VARS)
+  message: When handling sensitive information in a buffer, it's important to ensure  that
+    the data is securely erased before the buffer is deleted or reused.  While `memset()`
+    is commonly used for this purpose, it can leave sensitive  information behind
+    due to compiler optimizations or other factors.  To avoid this potential vulnerability,
+    it's recommended to use the  `memset_s()` function instead. `memset_s()` is a
+    standardized function  that securely overwrites the memory with a specified value,
+    making it more  difficult for an attacker to recover any sensitive data that was
+    stored in  the buffer. By using `memset_s()` instead of `memset()`, you can help
+    to  ensure that your application is more secure and less vulnerable to exploits  that
+    rely on residual data in memory.
   languages:
   - c
   severity: WARNING
@@ -160,8 +169,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UK7D
-        version_id: 44Twb1
-        url: https://semgrep.dev/playground/r/44Twb1/c.lang.security.insecure-use-memset.insecure-use-memset
+        version_id: xyTOO3
+        url: https://semgrep.dev/playground/r/xyTOO3/c.lang.security.insecure-use-memset.insecure-use-memset
 - id: c.lang.security.insecure-use-scanf-fn.insecure-use-scanf-fn
   pattern: scanf(...)
   message: Avoid using 'scanf()'. This function, when used improperly, does not consider
@@ -334,6 +343,98 @@ rules:
   languages:
   - c
   severity: WARNING
+- id: contrib.nodejsscan.crypto_node.node_md5
+  message: The MD5 hashing algorithm is considered to be weak. If this is used in
+    any sensitive operation such as password hashing, or is used to ensure data integrity
+    (collision sensitive) then you should use a stronger hashing algorithm. For passwords,
+    consider using `Argon2id`, `scrypt`, or `bcrypt`. For data integrity, consider
+    using `SHA-256`
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    technology:
+    - node.js
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/contrib.nodejsscan.crypto_node.node_md5
+    shortlink: https://sg.run/dKBX
+    semgrep.dev:
+      rule:
+        rule_id: GdU75E
+        version_id: zyTdbN
+        url: https://semgrep.dev/playground/r/zyTdbN/contrib.nodejsscan.crypto_node.node_md5
+  languages:
+  - javascript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: '"md5"
+
+          '
+      - pattern: '"MD5"
+
+          '
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$CRYPTO.createHash(...)\n"
+- id: contrib.nodejsscan.crypto_node.node_sha1
+  message: The SHA1 hashing algorithm is considered to be weak. If this is used in
+    any sensitive operation such as password hashing, or is used to ensure data integrity
+    (collision sensitive) then you should use a stronger hashing algorithm. For passwords,
+    consider using `Argon2id`, `scrypt`, or `bcrypt`. For data integrity, consider
+    using `SHA-256`
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    references:
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
+    subcategory:
+    - audit
+    technology:
+    - node.js
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/contrib.nodejsscan.crypto_node.node_sha1
+    shortlink: https://sg.run/ZvEx
+    semgrep.dev:
+      rule:
+        rule_id: ReUgYx
+        version_id: pZTo0A
+        url: https://semgrep.dev/playground/r/pZTo0A/contrib.nodejsscan.crypto_node.node_sha1
+  languages:
+  - javascript
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: '"SHA1"
+
+          '
+      - pattern: '"sha1"
+
+          '
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$CRYPTO.createHash(...)\n"
 - id: csharp.dotnet.security.net-webconfig-debug.net-webconfig-debug
   message: ASP.NET applications built with `debug` set to true in production may leak
     debug information to attackers. Debug mode also affects performance and reliability.
@@ -1307,20 +1408,21 @@ rules:
   severity: ERROR
 - id: dockerfile.security.last-user-is-root.last-user-is-root
   patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: USER root
-      - pattern-not-inside: |
-          USER root
-          ...
-          USER $A
-    - patterns:
-      - pattern-inside: |
-          USER $ANYTHING
-          ...
-          USER $ROOT
-      - focus-metavariable: "$ROOT"
-      - pattern: root
+  - pattern-inside: |
+      USER $F
+      ...
+      USER $X
+  - pattern-not-inside: |
+      USER $X
+      ...
+      USER $F
+  - focus-metavariable: "$X"
+  - metavariable-regex:
+      metavariable: "$X"
+      regex: "^(root)$"
+  - metavariable-regex:
+      metavariable: "$F"
+      regex: "(.*(?!root))"
   message: The last user in the container is 'root'. This is a security hazard because
     if an attacker gains control of the container they will have root access. Switch
     back to another user after running commands as 'root'.
@@ -1341,7 +1443,7 @@ rules:
     - A04:2021 - Insecure Design
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/dockerfile.security.last-user-is-root.last-user-is-root
@@ -1349,16 +1451,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReU2n5
-        version_id: GxT4Ny
-        url: https://semgrep.dev/playground/r/GxT4Ny/dockerfile.security.last-user-is-root.last-user-is-root
+        version_id: 1QTBAg
+        url: https://semgrep.dev/playground/r/1QTBAg/dockerfile.security.last-user-is-root.last-user-is-root
 - id: dockerfile.security.missing-user.missing-user
-  patterns:
-  - pattern-either:
-    - pattern: CMD ...
-    - pattern: ENTRYPOINT ...
-  - pattern-not-inside: |
-      USER $USER
-      ...
+  pattern: 'CMD $...VARS
+
+    '
+  fix: |
+    USER non-root
+    CMD $...VARS
   message: By not specifying a USER, a program in the container may run as 'root'.
     This is a security hazard. If an attacker can control a process running as root,
     they may have control over the container. Ensure that the last USER in a Dockerfile
@@ -1387,8 +1488,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUN06
-        version_id: 3ZTxyL
-        url: https://semgrep.dev/playground/r/3ZTxyL/dockerfile.security.missing-user.missing-user
+        version_id: e1T55w
+        url: https://semgrep.dev/playground/r/e1T55w/dockerfile.security.missing-user.missing-user
 - id: generic.ci.security.bash-reverse-shell.bash_reverse_shell
   metadata:
     cwe:
@@ -1428,53 +1529,43 @@ rules:
   - pattern: 'sh -i ...<...> /dev/tcp/.../... ...<&... 1>&... 2>&
 
       '
-- id: generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var
-  message: 'Detected a unquoted template variable as an attribute. If unquoted, a
-    malicious actor could inject custom JavaScript handlers. To fix this, add quotes
-    around the template expression, like this: "{{ expr }}".'
+- id: generic.dockerfile.security.last-user-is-root.last-user-is-root
+  patterns:
+  - pattern: USER root
+  - pattern-not-inside: |
+      USER root
+      ...
+      USER $ANYTHING
+  message: The last user in the container is 'root'. This is a security hazard because
+    if an attacker gains control of the container they will have root access. Switch
+    back to another user after running commands as 'root'.
+  severity: ERROR
+  languages:
+  - dockerfile
   metadata:
     cwe:
-    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
+    - 'CWE-269: Improper Privilege Management'
+    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3002
     references:
-    - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss
+    - https://github.com/hadolint/hadolint/wiki/DL3002
     category: security
     technology:
-    - html-templates
-    confidence: LOW
-    cwe2022-top25: true
-    cwe2021-top25: true
+    - dockerfile
+    confidence: MEDIUM
+    owasp:
+    - A04:2021 - Insecure Design
     subcategory:
     - audit
-    likelihood: LOW
+    likelihood: MEDIUM
     impact: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var
-    shortlink: https://sg.run/weNX
+    source: https://semgrep.dev/r/generic.dockerfile.security.last-user-is-root.last-user-is-root
+    shortlink: https://sg.run/N461
     semgrep.dev:
       rule:
-        rule_id: gxU1jy
-        version_id: WrTkbE
-        url: https://semgrep.dev/playground/r/WrTkbE/generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var
-  languages:
-  - generic
-  paths:
-    include:
-    - "*.html"
-    - "*.mustache"
-    - "*.hbs"
-  severity: WARNING
-  patterns:
-  - pattern-inside: "<$TAG ...>"
-  - pattern-not-inside: ="..."
-  - pattern-not-inside: "='...'"
-  - pattern: "{{ ... }}"
-  fix-regex:
-    regex: "{{(.*?)}}"
-    replacement: '"{{\1}}"'
+        rule_id: L1UyO5
+        version_id: 9lT29Q
+        url: https://semgrep.dev/playground/r/9lT29Q/generic.dockerfile.security.last-user-is-root.last-user-is-root
 - id: generic.nginx.security.alias-path-traversal.alias-path-traversal
   patterns:
   - pattern: |
@@ -5147,8 +5238,14 @@ rules:
         url: https://semgrep.dev/playground/r/zyTvjY/go.lang.security.audit.unsafe.use-of-unsafe-block
   pattern: unsafe.$FUNC(...)
 - id: go.lang.security.audit.xss.import-text-template.import-text-template
-  message: "'text/template' does not escape HTML content. If you need to escape HTML
-    content, use 'html/template' instead."
+  message: When working with web applications that involve rendering user-generated  content,
+    it's important to properly escape any HTML content to prevent  Cross-Site Scripting
+    (XSS) attacks. In Go, the `text/template` package does  not automatically escape
+    HTML content, which can leave your application  vulnerable to these types of attacks.
+    To mitigate this risk, it's  recommended to use the `html/template` package instead,
+    which provides  built-in functionality for HTML escaping. By using `html/template`
+    to render  your HTML content, you can help to ensure that your web application
+    is more  secure and less susceptible to XSS vulnerabilities.
   metadata:
     owasp:
     - A07:2017 - Cross-Site Scripting (XSS)
@@ -5174,10 +5271,18 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUOZQ
-        version_id: zyTX7g
-        url: https://semgrep.dev/playground/r/zyTX7g/go.lang.security.audit.xss.import-text-template.import-text-template
+        version_id: vdTggK
+        url: https://semgrep.dev/playground/r/vdTggK/go.lang.security.audit.xss.import-text-template.import-text-template
   severity: WARNING
-  pattern: 'import "text/template"
+  patterns:
+  - pattern: 'import "$IMPORT"
+
+      '
+  - metavariable-regex:
+      metavariable: "$IMPORT"
+      regex: "^(text/template)$"
+  - focus-metavariable: "$IMPORT"
+  fix: 'html/template
 
     '
   languages:
@@ -25482,9 +25587,10 @@ rules:
         kms_key_id = ...
         ...
       }
-  message: The AWS CloudWatch Log Group is unencrypted. The AWS KMS encryption key
-    protects log groups in the CloudWatch. To create your own, create a aws_kms_key
-    resource or use the ARN string of a key in your account.
+  message: By default, AWS CloudWatch Log Group is encrypted using AWS-managed keys.
+    However, for added security, it's recommended to configure your own AWS KMS encryption
+    key to protect your log group in CloudWatch. You can either create a new aws_kms_key
+    resource or use the ARN of an existing key in your AWS account to do so.
   languages:
   - hcl
   severity: WARNING
@@ -25511,8 +25617,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUl0J
-        version_id: pZTqRO
-        url: https://semgrep.dev/playground/r/pZTqRO/terraform.aws.security.aws-cloudwatch-log-group-unencrypted.aws-cloudwatch-log-group-unencrypted
+        version_id: ExTOOL
+        url: https://semgrep.dev/playground/r/ExTOOL/terraform.aws.security.aws-cloudwatch-log-group-unencrypted.aws-cloudwatch-log-group-unencrypted
 - id: terraform.aws.security.aws-codebuild-project-artifacts-unencrypted.aws-codebuild-project-artifacts-unencrypted
   patterns:
   - pattern: |
@@ -26158,9 +26264,11 @@ rules:
             ...
           }
     - pattern: kms_key_arn = ""
-  message: The AWS Lambda Environment is unencrypted. The AWS KMS encryption key protects
-    environment in the Lambda. To create your own, create a aws_kms_key resource or
-    use the ARN string of a key in your account.
+  message: By default, the AWS Lambda Environment is encrypted using AWS-managed keys.
+    However, for added security, it's recommended to configure your own AWS KMS encryption
+    key to protect your environment variables in Lambda. You can either create a new
+    aws_kms_key resource or use the ARN of an existing key in your AWS account to
+    do so.
   languages:
   - hcl
   severity: WARNING
@@ -26186,8 +26294,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUp5w
-        version_id: RGTBNx
-        url: https://semgrep.dev/playground/r/RGTBNx/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
+        version_id: 8KTXXR
+        url: https://semgrep.dev/playground/r/8KTXXR/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
 - id: terraform.aws.security.aws-redshift-cluster-encrypted-with-cmk.aws-redshift-cluster-encrypted-with-cmk
   patterns:
   - pattern: |
@@ -26365,9 +26473,11 @@ rules:
         kms_key_id = ...
         ...
       }
-  message: The AWS SecretManager secrets are unencrypted. The AWS KMS encryption key
-    protects secrets in the Secret Manager. To create your own, create a aws_kms_key
-    resource or use the ARN string of a key in your account.
+  message: By default, AWS SecretManager secrets are encrypted using AWS-managed keys.
+    However, for added security, it's recommended to configure your own AWS KMS encryption
+    key to protect your secrets in the Secret Manager. You can either create a new
+    aws_kms_key resource or use the ARN of an existing key in your AWS account to
+    do so.
   languages:
   - hcl
   severity: WARNING
@@ -26394,8 +26504,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUNrz
-        version_id: qkT9Aq
-        url: https://semgrep.dev/playground/r/qkT9Aq/terraform.aws.security.aws-secretsmanager-secret-unencrypted.aws-secretsmanager-secret-unencrypted
+        version_id: gETjjK
+        url: https://semgrep.dev/playground/r/gETjjK/terraform.aws.security.aws-secretsmanager-secret-unencrypted.aws-secretsmanager-secret-unencrypted
 - id: terraform.aws.security.aws-ssm-document-logging-issues.aws-ssm-document-logging-issues
   patterns:
   - pattern-either:
@@ -31306,13 +31416,25 @@ rules:
           securityContext:
             ...
             runAsNonRoot: $VALUE
-  - pattern: "$VALUE\n"
-  - pattern: 'false
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern: 'false
 
-      '
-  message: Container allows for running applications as root. This can result in privilege
-    escalation attacks. Change 'runAsNonRoot:' to 'true' in 'securityContext' to prevent
-    this.
+        '
+  - focus-metavariable: "$VALUE"
+  fix: 'true
+
+    '
+  message: When running containers in Kubernetes, it's important to ensure that they  are
+    properly secured to prevent privilege escalation attacks.  One potential vulnerability
+    is when a container is allowed to run  applications as the root user, which could
+    allow an attacker to gain  access to sensitive resources. To mitigate this risk,
+    it's recommended to  add a `securityContext` to the container, with the parameter
+    `runAsNonRoot`  set to `true`. This will ensure that the container runs as a non-root
+    user,  limiting the damage that could be caused by any potential attacks. By  adding
+    a `securityContext` to the container in your Kubernetes pod, you can  help to
+    ensure that your containerized applications are more secure and  less vulnerable
+    to privilege escalation attacks.
   metadata:
     references:
     - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/
@@ -31337,40 +31459,59 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UAxy
-        version_id: l4TKZr
-        url: https://semgrep.dev/playground/r/l4TKZr/yaml.kubernetes.security.run-as-non-root-unsafe-value.run-as-non-root-unsafe-value
+        version_id: GxTyyA
+        url: https://semgrep.dev/playground/r/GxTyyA/yaml.kubernetes.security.run-as-non-root-unsafe-value.run-as-non-root-unsafe-value
   languages:
   - yaml
-  severity: WARNING
+  severity: INFO
 - id: yaml.kubernetes.security.run-as-non-root.run-as-non-root
   patterns:
+  - pattern-inside: |
+      $SPEC:
+        ...
+        containers:
+          ...
+        ...
+  - metavariable-regex:
+      metavariable: "$SPEC"
+      regex: "^(spec)$"
   - pattern-not-inside: |
       spec:
         ...
         securityContext:
           ...
-          runAsNonRoot: $VALUE
+        ...
+  - pattern-inside: |
+      $SPEC:
         ...
         containers:
           ...
-  - pattern-inside: |
-      containers:
+  - pattern-not-inside: |
+      $SPEC:
         ...
-  - pattern-not: |
-      - name: $NAME
-        image: ...
-        ...
-        securityContext:
+        containers:
           ...
-          runAsNonRoot: $VALUE
-  - pattern: |
-      - name: $NAME
-        image: ...
-        ...
-  - focus-metavariable: "$NAME"
-  message: 'Container allows for running applications as root. This can result in
-    privilege escalation attacks. Add ''runAsNonRoot: true'' in ''securityContext''
-    to prevent this.'
+          - name: $NAME
+            image: ...
+            ...
+            securityContext:
+              ...
+              runAsNonRoot: $VALUE
+  - focus-metavariable: "$SPEC"
+  fix: |
+    $SPEC:
+      securityContext:
+        runAsNonRoot: true #
+  message: When running containers in Kubernetes, it's important to ensure that they  are
+    properly secured to prevent privilege escalation attacks.  One potential vulnerability
+    is when a container is allowed to run  applications as the root user, which could
+    allow an attacker to gain  access to sensitive resources. To mitigate this risk,
+    it's recommended to  add a `securityContext` to the container, with the parameter
+    `runAsNonRoot`  set to `true`. This will ensure that the container runs as a non-root
+    user,  limiting the damage that could be caused by any potential attacks. By  adding
+    a `securityContext` to the container in your Kubernetes pod, you can  help to
+    ensure that your containerized applications are more secure and  less vulnerable
+    to privilege escalation attacks.
   metadata:
     references:
     - https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/
@@ -31395,11 +31536,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUqeK
-        version_id: YDT1ER
-        url: https://semgrep.dev/playground/r/YDT1ER/yaml.kubernetes.security.run-as-non-root.run-as-non-root
+        version_id: RGT775
+        url: https://semgrep.dev/playground/r/RGT775/yaml.kubernetes.security.run-as-non-root.run-as-non-root
   languages:
   - yaml
-  severity: WARNING
+  severity: INFO
 - id: yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container
   patterns:
   - pattern-inside: |
