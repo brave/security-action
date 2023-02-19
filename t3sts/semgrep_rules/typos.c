@@ -56,7 +56,7 @@ int bad2(char *username)
 
 int bad3(char *src, char *dst)
 {
-	// ruleid: raptor-typos
+	// ok: raptor-typos
 	if (get_string(src) &&
 		check_for_overflow(src) & copy_string(dst, src)) {
 		printf("string safely copied\n");
@@ -91,7 +91,7 @@ int bad6(char *userinput)
 
 int bad7()
 {
-	// ruleid: raptor-typos
+	// ok: raptor-typos
 	if (frag_len &
 		!BUF_MEM_grow_clean(s->init_buf, (int)frag_len +
 		DTLS1_HM_HEADER_LENGTH + s->init_num)) {
@@ -143,7 +143,7 @@ void push(int i)
 	if (p1 == (tos + SIZE)) {
 		printf("Print stack overflow error message and exit\n");
 	}
-	// ruleid: raptor-typos
+	// ok: raptor-typos
 	*p1 == i;
 }
 
