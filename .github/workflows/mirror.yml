@@ -15,7 +15,7 @@ jobs:
           git clone "https://github.com/brave/${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}"
           cd ${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}
           git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-          git push -fu github master
+          git push -fu github main
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
