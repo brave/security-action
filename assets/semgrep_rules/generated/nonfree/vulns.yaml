@@ -39977,6 +39977,133 @@ rules:
       patterns:
       - pattern: "${{ github.event.workflow_run ... }}"
   severity: WARNING
+- id: yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext
+  patterns:
+  - pattern-inside: |
+      containers:
+        ...
+  - pattern-inside: |
+      - name: $CONTAINER
+        ...
+  - pattern: |
+      image: ...
+      ...
+  - pattern-not: |
+      image: ...
+      ...
+      securityContext:
+        ...
+  - focus-metavariable: "$CONTAINER"
+  fix: |
+    $CONTAINER
+          securityContext:
+            allowPrivilegeEscalation: false
+  message: In Kubernetes, each pod runs in its own isolated environment with its own  set
+    of security policies. However, certain container images may contain  `setuid`
+    or `setgid` binaries that could allow an attacker to perform  privilege escalation
+    and gain access to sensitive resources. To mitigate  this risk, it's recommended
+    to add a `securityContext` to the container in  the pod, with the parameter `allowPrivilegeEscalation`
+    set to `false`.  This will prevent the container from running any privileged processes
+    and  limit the impact of any potential attacks.  By adding a `securityContext`
+    to your Kubernetes pod, you can help to  ensure that your containerized applications
+    are more secure and less  vulnerable to privilege escalation attacks.
+  metadata:
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#privilege-escalation
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
+    category: security
+    technology:
+    - kubernetes
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext
+    shortlink: https://sg.run/eleR
+    semgrep.dev:
+      rule:
+        rule_id: WAU5J6
+        version_id: QkTDDx
+        url: https://semgrep.dev/playground/r/QkTDDx/yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext
+  languages:
+  - yaml
+  severity: WARNING
+- id: yaml.kubernetes.security.allow-privilege-escalation-true.allow-privilege-escalation-true
+  patterns:
+  - pattern-inside: |
+      containers:
+        ...
+  - pattern-inside: |
+      - name: $CONTAINER
+        ...
+  - pattern-inside: |
+      image: ...
+      ...
+  - pattern-inside: |
+      securityContext:
+        ...
+  - pattern: 'allowPrivilegeEscalation: $TRUE
+
+      '
+  - metavariable-pattern:
+      metavariable: "$TRUE"
+      pattern: 'true
+
+        '
+  - focus-metavariable: "$TRUE"
+  fix: 'false
+
+    '
+  message: In Kubernetes, each pod runs in its own isolated environment with its own  set
+    of security policies. However, certain container images may contain  `setuid`
+    or `setgid` binaries that could allow an attacker to perform  privilege escalation
+    and gain access to sensitive resources. To mitigate  this risk, it's recommended
+    to add a `securityContext` to the container in  the pod, with the parameter `allowPrivilegeEscalation`
+    set to `false`.  This will prevent the container from running any privileged processes
+    and  limit the impact of any potential attacks.  In the container `$CONTAINER`
+    this parameter is set to `true` which makes this container much more vulnerable
+    to privelege escalation attacks.
+  metadata:
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    references:
+    - https://kubernetes.io/docs/concepts/policy/pod-security-policy/#privilege-escalation
+    - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
+    category: security
+    technology:
+    - kubernetes
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/yaml.kubernetes.security.allow-privilege-escalation-true.allow-privilege-escalation-true
+    shortlink: https://sg.run/vw3W
+    semgrep.dev:
+      rule:
+        rule_id: 0oUkqQ
+        version_id: 3ZTnn0
+        url: https://semgrep.dev/playground/r/3ZTnn0/yaml.kubernetes.security.allow-privilege-escalation-true.allow-privilege-escalation-true
+  languages:
+  - yaml
+  severity: WARNING
 - id: yaml.kubernetes.security.allow-privilege-escalation.allow-privilege-escalation
   patterns:
   - pattern-inside: |
