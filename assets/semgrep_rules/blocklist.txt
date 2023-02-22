@@ -14,3 +14,4 @@ https://github.com/0xdea/semgrep-rules/blob/main/c/typos.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/interesting-api-calls.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/signed-unsigned-conversion.yaml
 https://semgrep.dev/r/generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var
+https://semgrep.dev/r/html.security.audit.missing-integrity.missing-integrity

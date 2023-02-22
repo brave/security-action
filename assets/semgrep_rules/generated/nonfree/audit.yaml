@@ -1453,6 +1453,43 @@ rules:
         rule_id: ReU2n5
         version_id: 1QTBAg
         url: https://semgrep.dev/playground/r/1QTBAg/dockerfile.security.last-user-is-root.last-user-is-root
+- id: dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
+  pattern: 'ENTRYPOINT $...VARS
+
+    '
+  fix: |
+    USER non-root
+    ENTRYPOINT $...VARS
+  message: By not specifying a USER, a program in the container may run as 'root'.
+    This is a security hazard. If an attacker can control a process running as root,
+    they may have control over the container. Ensure that the last USER in a Dockerfile
+    is a USER other than 'root'.
+  severity: ERROR
+  languages:
+  - dockerfile
+  metadata:
+    cwe:
+    - 'CWE-269: Improper Privilege Management'
+    category: security
+    technology:
+    - dockerfile
+    confidence: MEDIUM
+    owasp:
+    - A04:2021 - Insecure Design
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
+    shortlink: https://sg.run/k281
+    semgrep.dev:
+      rule:
+        rule_id: ReUW9E
+        version_id: O9Tzz4
+        url: https://semgrep.dev/playground/r/O9Tzz4/dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
 - id: dockerfile.security.missing-user.missing-user
   pattern: 'CMD $...VARS
 
@@ -2921,39 +2958,6 @@ rules:
         rule_id: 5rU4pe
         version_id: 6xT7RJ
         url: https://semgrep.dev/playground/r/6xT7RJ/generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
-- id: generic.secrets.security.detected-npm-token.detected-npm-token
-  pattern-regex: "\\/\\/.+\\/:_authToken=.+"
-  languages:
-  - regex
-  message: NPM token
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/Yelp/detect-secrets/blob/master/detect_secrets/plugins/npm.py
-    category: security
-    technology:
-    - secrets
-    - npm
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/generic.secrets.security.detected-npm-token.detected-npm-token
-    shortlink: https://sg.run/K8bX
-    semgrep.dev:
-      rule:
-        rule_id: wdUGEj
-        version_id: JdT2XJ
-        url: https://semgrep.dev/playground/r/JdT2XJ/generic.secrets.security.detected-npm-token.detected-npm-token
 - id: generic.secrets.security.detected-outlook-team.detected-outlook-team
   pattern-regex: https://outlook\.office\.com/webhook/[0-9a-f-]{36}
   languages:
@@ -25678,6 +25682,58 @@ rules:
         rule_id: eqUrdZ
         version_id: 2KTAn4
         url: https://semgrep.dev/playground/r/2KTAn4/terraform.aws.security.aws-codebuild-project-artifacts-unencrypted.aws-codebuild-project-artifacts-unencrypted
+- id: terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
+  pattern-either:
+  - pattern: |
+      resource "aws_config_configuration_aggregator" $ANYTHING {
+        ...
+        account_aggregation_source {
+          ...
+          regions = ...
+          ...
+        }
+        ...
+      }
+  - pattern: |
+      resource "aws_config_configuration_aggregator" $ANYTHING {
+        ...
+        organization_aggregation_source {
+          ...
+          regions = ...
+          ...
+        }
+        ...
+      }
+  message: The AWS configuration aggregator does not aggregate all AWS Config region.
+    This may result in unmonitored configuration in regions that are thought to be
+    unused. Configure the aggregator with all_regions for the source.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A09:2021 - Security Logging and Monitoring Failures
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    references:
+    - https://owasp.org/Top10/A09_2021-Security_Logging_and_Monitoring_Failures/
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
+    shortlink: https://sg.run/O6A7
+    semgrep.dev:
+      rule:
+        rule_id: DbUo7v
+        version_id: 7ZTddG
+        url: https://semgrep.dev/playground/r/7ZTddG/terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
 - id: terraform.aws.security.aws-docdb-encrypted-with-cmk.aws-docdb-encrypted-with-cmk
   patterns:
   - pattern: |

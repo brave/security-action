@@ -2905,6 +2905,35 @@ rules:
         version_id: NdTL5E
         url: https://semgrep.dev/playground/r/NdTL5E/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
   severity: ERROR
+- id: gitlab.find_sec_bugs.SPRING_CSRF_PROTECTION_DISABLED-1
+  pattern-either:
+  - pattern: "(org.springframework.security.config.annotation.web.builders.HttpSecurity
+      $H). ... .csrf().disable();"
+  - pattern: "(org.springframework.security.config.annotation.web.configurers.CsrfConfigurer<HttpSecurity>
+      $C).disable();"
+  languages:
+  - java
+  message: 'Disabling Spring Security''s CSRF protection is unsafe for standard web
+    applications.
+
+    '
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    primary_identifier: find_sec_bugs.SPRING_CSRF_PROTECTION_DISABLED-1
+    secondary_identifiers:
+    - name: Find Security Bugs-SPRING_CSRF_PROTECTION_DISABLED
+      type: find_sec_bugs_type
+      value: SPRING_CSRF_PROTECTION_DISABLED
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SPRING_CSRF_PROTECTION_DISABLED-1
+    shortlink: https://sg.run/DGLj
+    semgrep.dev:
+      rule:
+        rule_id: 7KU6jz
+        version_id: vdTgRl
+        url: https://semgrep.dev/playground/r/vdTgRl/gitlab.find_sec_bugs.SPRING_CSRF_PROTECTION_DISABLED-1
+  severity: WARNING
 - id: gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
   patterns:
   - pattern-not-inside: |
@@ -3149,6 +3178,262 @@ rules:
         rule_id: lBUXP4
         version_id: YDT5zl
         url: https://semgrep.dev/playground/r/YDT5zl/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
+  severity: ERROR
+- id: gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1.SQL_INJECTION-1.SQL_INJECTION_HIBERNATE-1.SQL_INJECTION_VERTX-1.SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING-1
+  patterns:
+  - pattern-not-inside: |
+      final String $ARG = ...;
+      ...
+  - pattern-not-inside: |
+      class $CLAZZ {
+        ...
+        final String $ARG = ...;
+        ...
+      }
+  - pattern-either:
+    - patterns:
+      - pattern: "(javax.jdo.PersistenceManager $PM).newQuery($ARG)"
+      - pattern-not: (javax.jdo.PersistenceManager $PM).newQuery("...")
+    - patterns:
+      - pattern: "(javax.jdo.PersistenceManager $PM).newQuery(..., $ARG)"
+      - pattern-not: (javax.jdo.PersistenceManager $PM).newQuery(..., "...")
+    - patterns:
+      - pattern: "(javax.jdo.Query $Q).setFilter($ARG)"
+      - pattern-not: (javax.jdo.Query $Q).setFilter("...")
+    - patterns:
+      - pattern: "(javax.jdo.Query $Q).setGrouping($ARG)"
+      - pattern-not: (javax.jdo.Query $Q).setGrouping("...")
+    - patterns:
+      - pattern: "(javax.jdo.Query $Q).setGrouping($ARG)"
+      - pattern-not: (javax.jdo.Query $Q).setGrouping("...")
+    - patterns:
+      - pattern: org.hibernate.criterion.Restrictions.sqlRestriction($ARG, ...)
+      - pattern-not: org.hibernate.criterion.Restrictions.sqlRestriction("...", ...)
+    - patterns:
+      - pattern: "(org.hibernate.Session $S).createQuery((String $ARG), ...)"
+      - pattern-not: (org.hibernate.Session $S).createQuery("...", ...)
+    - patterns:
+      - pattern: "(org.hibernate.Session $S).createSQLQuery($ARG, ...)"
+      - pattern-not: (org.hibernate.Session $S).createSQLQuery("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).executeQuery($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).createSQLQuery("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).execute($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).execute("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).executeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).executeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).executeLargeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).executeLargeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Statement $S).addBatch($ARG, ...)"
+      - pattern-not: (java.sql.Statement $S).addBatch("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).executeQuery($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).executeQuery("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).execute($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).execute("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).executeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).executeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).executeLargeUpdate($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).executeLargeUpdate("...", ...)
+    - patterns:
+      - pattern: "(java.sql.PreparedStatement $S).addBatch($ARG, ...)"
+      - pattern-not: (java.sql.PreparedStatement $S).addBatch("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Connection $S).prepareCall($ARG, ...)"
+      - pattern-not: (java.sql.Connection $S).prepareCall("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Connection $S).prepareStatement($ARG, ...)"
+      - pattern-not: (java.sql.Connection $S).prepareStatement("...", ...)
+    - patterns:
+      - pattern: "(java.sql.Connection $S).nativeSQL($ARG, ...)"
+      - pattern-not: (java.sql.Connection $S).nativeSQL("...", ...)
+    - patterns:
+      - pattern: new org.springframework.jdbc.core.PreparedStatementCreatorFactory($ARG,
+          ...)
+      - pattern-not: new org.springframework.jdbc.core.PreparedStatementCreatorFactory("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.PreparedStatementCreatorFactory $F).newPreparedStatementCreator($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.PreparedStatementCreatorFactory
+          $F).newPreparedStatementCreator("...", ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).batchUpdate($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).batchUpdate("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).execute($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).execute("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).query($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).query("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForList($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForList("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForMap($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForMap("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForObject($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForObject("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForObject($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForObject("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForRowSet($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForRowSet("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForInt($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForInt("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).queryForLong($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).queryForLong("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcOperations $O).udpate($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcOperations $O).udpate("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).batchUpdate($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).batchUpdate("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).execute($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).execute("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).query($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).query("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForList($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForList("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForMap($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForMap("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForObject($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForObject("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForRowSet($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForRowSet("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForInt($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForInt("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).queryForLong($ARG,
+          ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).queryForLong("...",
+          ...)
+    - patterns:
+      - pattern: "(org.springframework.jdbc.core.JdbcTemplate $O).update($ARG, ...)"
+      - pattern-not: (org.springframework.jdbc.core.JdbcTemplate $O).update("...",
+          ...)
+    - patterns:
+      - pattern: "(io.vertx.sqlclient.SqlClient $O).query($ARG, ...)"
+      - pattern-not: (io.vertx.sqlclient.SqlClient $O).query("...", ...)
+    - patterns:
+      - pattern: "(io.vertx.sqlclient.SqlClient $O).preparedQuery($ARG, ...)"
+      - pattern-not: (io.vertx.sqlclient.SqlClient $O).preparedQuery("...", ...)
+    - patterns:
+      - pattern: "(io.vertx.sqlclient.SqlConnection $O).prepare($ARG, ...)"
+      - pattern-not: (io.vertx.sqlclient.SqlConnection $O).prepare("...", ...)
+    - patterns:
+      - pattern: "(org.apache.turbine.om.peer.BasePeer $O).executeQuery($ARG, ...)"
+      - pattern-not: (org.apache.turbine.om.peer.BasePeer $O).executeQuery("...",
+          ...)
+    - patterns:
+      - pattern: "(org.apache.torque.util.BasePeer $O).executeQuery($ARG, ...)"
+      - pattern-not: (org.apache.torque.util.BasePeer $O).executeQuery("...", ...)
+    - patterns:
+      - pattern: "(javax.persistence.EntityManager $O).createQuery($ARG, ...)"
+      - pattern-not: (javax.persistence.EntityManager $O).createQuery("...", ...)
+    - patterns:
+      - pattern: "(javax.persistence.EntityManager $O).createNativeQuery($ARG, ...)"
+      - pattern-not: (javax.persistence.EntityManager $O).createNativeQuery("...",
+          ...)
+  languages:
+  - java
+  message: |
+    The input values included in SQL queries need to be passed in safely. Bind
+    variables in prepared statements can be used to easily mitigate the risk of
+    SQL injection.
+  metadata:
+    category: security
+    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    primary_identifier: find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1.SQL_INJECTION-1.SQL_INJECTION_HIBERNATE-1.SQL_INJECTION_VERTX-1.SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING-1
+    secondary_identifiers:
+    - name: Find Security Bugs-SQL_INJECTION_SPRING_JDBC
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_SPRING_JDBC
+    - name: Find Security Bugs-SQL_INJECTION_JPA
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_JPA
+    - name: Find Security Bugs-SQL_INJECTION_JDO
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_JDO
+    - name: Find Security Bugs-SQL_INJECTION_JDBC
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_JDBC
+    - name: Find Security Bugs-SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE
+      type: find_sec_bugs_type
+      value: SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE
+    - name: Find Security Bugs-SQL_INJECTION
+      type: find_sec_bugs_type
+      value: SQL_INJECTION
+    - name: Find Security Bugs-SQL_INJECTION_HIBERNATE
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_HIBERNATE
+    - name: Find Security Bugs-SQL_INJECTION_VERTX
+      type: find_sec_bugs_type
+      value: SQL_INJECTION_VERTX
+    - name: Find Security Bugs-SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING
+      type: find_sec_bugs_type
+      value: SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1.SQL_INJECTION-1.SQL_INJECTION_HIBERNATE-1.SQL_INJECTION_VERTX-1.SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING-1
+    shortlink: https://sg.run/W9PA
+    semgrep.dev:
+      rule:
+        rule_id: L1Udoq
+        version_id: d6T1WJ
+        url: https://semgrep.dev/playground/r/d6T1WJ/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1.SQL_INJECTION-1.SQL_INJECTION_HIBERNATE-1.SQL_INJECTION_VERTX-1.SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING-1
   severity: ERROR
 - id: gitlab.find_sec_bugs.SSL_CONTEXT-1
   patterns:
@@ -3635,6 +3920,51 @@ rules:
         version_id: gETjL7
         url: https://semgrep.dev/playground/r/gETjL7/gitlab.find_sec_bugs.XPATH_INJECTION-1
   severity: ERROR
+- id: gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SEND_ERROR-1
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletRequest $REQ, ...) {...}"
+    - pattern-either:
+      - pattern: "$REQ.getParameter(...);"
+      - pattern: "$REQ.getHeader(...);"
+      - pattern: "$REQ.getRequestedSessionId();"
+      - pattern: "$REQ.getQueryString();"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-inside: org.owasp.encoder.Encode.forHtml($TAINTED);
+    - pattern: "$TAINTED"
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$FUNC(..., HttpServletResponse $RES, ...) {...}"
+    - pattern: "$RES.sendError(..., $DATA);"
+    - pattern: "$DATA"
+  message: |
+    Servlet reflected cross site scripting vulnerability in error page. This code directly writes
+    an HTTP parameter to a Server error page (using HttpServletResponse.sendError). Echoing this
+    untrusted input allows for a reflected cross site scripting vulnerability.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
+      Scripting'')'
+    category: security
+    technology:
+    - java
+    primary_identifier: find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SEND_ERROR-1
+    secondary_identifiers:
+    - name: Find Security Bugs-XSS_REQUEST_PARAMETER_TO_SEND_ERROR
+      type: find_sec_bugs_type
+      value: XSS_REQUEST_PARAMETER_TO_SEND_ERROR
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SEND_ERROR-1
+    shortlink: https://sg.run/0xwb
+    semgrep.dev:
+      rule:
+        rule_id: 8GUo74
+        version_id: ZRTnZY
+        url: https://semgrep.dev/playground/r/ZRTnZY/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SEND_ERROR-1
 - id: gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
   mode: taint
   pattern-sources:

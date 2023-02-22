@@ -547,6 +547,48 @@ rules:
   severity: INFO
   languages:
   - python
+- id: gitlab.bandit.B113
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: requests.$METHOD('...', timeout=$VAL)
+      - metavariable-comparison:
+          metavariable: "$VAL"
+          comparison: "$VAL <= 0"
+    - patterns:
+      - pattern: requests.$METHOD('...', timeout=$VAL)
+      - metavariable-regex:
+          metavariable: "$VAL"
+          regex: "(^None)"
+    - patterns:
+      - pattern-not: requests.$METHOD('...', timeout=$VAL)
+      - pattern-either:
+        - pattern: requests.$METHOD('...', ...)
+        - pattern: requests.$METHOD('...')
+  - metavariable-regex:
+      metavariable: "$METHOD"
+      regex: "(get|put|delete|post|options|head|patch)"
+  message: 'Requests call without timeout can cause your program to hang indefinitely.
+
+    '
+  metadata:
+    cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    primary_identifier: bandit.B113
+    secondary_identifiers:
+    - name: Bandit Test ID B113
+      type: bandit_test_id
+      value: B113
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.bandit.B113
+    shortlink: https://sg.run/PoEq
+    semgrep.dev:
+      rule:
+        rule_id: OrULKb
+        version_id: bZTrdW
+        url: https://semgrep.dev/playground/r/bZTrdW/gitlab.bandit.B113
+  severity: WARNING
+  languages:
+  - python
 - id: gitlab.bandit.B201
   patterns:
   - pattern-inside: |
@@ -574,6 +616,45 @@ rules:
         version_id: d6T1rw
         url: https://semgrep.dev/playground/r/d6T1rw/gitlab.bandit.B201
   severity: WARNING
+  languages:
+  - python
+- id: gitlab.bandit.B202
+  patterns:
+  - pattern-inside: |
+      import tarfile
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $TAR = tarfile.open(...)
+          ...
+      - pattern-either:
+        - pattern: "$TAR.extractall(...)"
+        - pattern: tarfile.extractall(..., members=$TAR)
+        - pattern: "$TAR.extractall(..., members=[])"
+    - patterns:
+      - pattern: tarfile.extractall(...)
+      - pattern: tarfile.extractall(..., members=[])
+  message: |
+    tarfile.extractall used without any validation. You should check members and discard dangerous
+    ones.
+  metadata:
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    primary_identifier: bandit.B202
+    secondary_identifiers:
+    - name: Bandit Test ID B202
+      type: bandit_test_id
+      value: B202
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.bandit.B202
+    shortlink: https://sg.run/J0EQ
+    semgrep.dev:
+      rule:
+        rule_id: eqUPXn
+        version_id: NdTLj0
+        url: https://semgrep.dev/playground/r/NdTLj0/gitlab.bandit.B202
+  severity: ERROR
   languages:
   - python
 - id: gitlab.bandit.B301-1
@@ -2255,6 +2336,30 @@ rules:
   severity: ERROR
   languages:
   - python
+- id: gitlab.bandit.B415
+  pattern-either:
+  - pattern: import pyghmi
+  message: |
+    An IPMI-related module is being imported. IPMI is considered insecure. Use an encrypted
+    protocol.
+  metadata:
+    cisa: https://www.cisa.gov/uscert/ncas/alerts/TA13-207A
+    primary_identifier: bandit.B415
+    secondary_identifiers:
+    - name: Bandit Test ID B415
+      type: bandit_test_id
+      value: B415
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.bandit.B415
+    shortlink: https://sg.run/5NO3
+    semgrep.dev:
+      rule:
+        rule_id: v8Ubxq
+        version_id: kbTpby
+        url: https://semgrep.dev/playground/r/kbTpby/gitlab.bandit.B415
+  severity: ERROR
+  languages:
+  - python
 - id: gitlab.bandit.B501
   patterns:
   - pattern-either:
@@ -2517,6 +2622,59 @@ rules:
         rule_id: EwUQQv
         version_id: YDT5NG
         url: https://semgrep.dev/playground/r/YDT5NG/gitlab.bandit.B507
+  severity: WARNING
+  languages:
+  - python
+- id: gitlab.bandit.B508
+  pattern-either:
+  - pattern: pysnmp.hlapi.CommunityData(..., mpModel=0, ...)
+  - pattern: pysnmp.hlapi.CommunityData(..., mpModel=1, ...)
+  message: 'The use of SNMPv1 and SNMPv2 is insecure. You should use SNMPv3 if able.
+
+    '
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    primary_identifier: bandit.B508
+    secondary_identifiers:
+    - name: Bandit Test ID B508
+      type: bandit_test_id
+      value: B508
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.bandit.B508
+    shortlink: https://sg.run/RpEK
+    semgrep.dev:
+      rule:
+        rule_id: ZqUR1w
+        version_id: xyTO5E
+        url: https://semgrep.dev/playground/r/xyTO5E/gitlab.bandit.B508
+  severity: WARNING
+  languages:
+  - python
+- id: gitlab.bandit.B509
+  pattern-either:
+  - pattern: pysnmp.hlapi.UsmUserData($ARG1, $ARG2)
+  - pattern: pysnmp.hlapi.UsmUserData($ARG1)
+  - pattern: pysnmp.hlapi.UsmUserData(...,'noAuthNoPriv',...)
+  - pattern: pysnmp.hlapi.UsmUserData(...,'authNoPriv',...)
+  message: 'You should not use SNMPv3 without encryption. noAuthNoPriv & authNoPriv
+    is insecure
+
+    '
+  metadata:
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    primary_identifier: bandit.B509
+    secondary_identifiers:
+    - name: Bandit Test ID B509
+      type: bandit_test_id
+      value: B509
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.bandit.B509
+    shortlink: https://sg.run/A3O4
+    semgrep.dev:
+      rule:
+        rule_id: nJUDAe
+        version_id: O9Tzbz
+        url: https://semgrep.dev/playground/r/O9Tzbz/gitlab.bandit.B509
   severity: WARNING
   languages:
   - python
@@ -2929,6 +3087,35 @@ rules:
   severity: ERROR
   languages:
   - python
+- id: gitlab.bandit.B612
+  patterns:
+  - pattern: logging.config.listen(...)
+  message: |
+    The logging.config.listen function provides the ability to listen for external configuration
+    files on a socket server. Because portions of the configuration are passed through eval(), use
+    of this function may open its users to a security risk. While the function only binds to a
+    socket on localhost, and so does not accept connections from remote machines, there are
+    scenarios where untrusted code could be run under the account of the process which calls
+    listen(). logging.config.listen provides the ability to verify bytes received across the socket
+    with signature verification or encryption/decryption.
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    primary_identifier: bandit.B612
+    secondary_identifiers:
+    - name: Bandit Test ID B612
+      type: bandit_test_id
+      value: B612
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.bandit.B612
+    shortlink: https://sg.run/GBEn
+    semgrep.dev:
+      rule:
+        rule_id: d8UN2B
+        version_id: w8TrLP
+        url: https://semgrep.dev/playground/r/w8TrLP/gitlab.bandit.B612
+  severity: WARNING
+  languages:
+  - python
 - id: gitlab.bandit.B701
   patterns:
   - pattern-not: jinja2.Environment(..., autoescape=True, ...)
@@ -3158,6 +3345,45 @@ rules:
   languages:
   - javascript
   - typescript
+- id: gitlab.eslint.detect-new-buffer
+  metadata:
+    source-rule-url: https://github.com/eslint-community/eslint-plugin-security/blob/main/rules/detect-new-buffer.js
+    primary_identifier: eslint.detect-new-buffer
+    secondary_identifiers:
+    - name: ESLint rule ID/detect-new-buffer
+      type: eslint_rule_id
+      value: detect-new-buffer
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.eslint.detect-new-buffer
+    shortlink: https://sg.run/BJ85
+    semgrep.dev:
+      rule:
+        rule_id: EwU5PB
+        version_id: e1T5OQ
+        url: https://semgrep.dev/playground/r/e1T5OQ/gitlab.eslint.detect-new-buffer
+  patterns:
+  - patterns:
+    - pattern-not-inside: |-
+        require("safe-buffer")
+        ...
+    - pattern-not-inside: |-
+        import { Buffer } from "safe-buffer"
+        ...
+    - pattern-inside: function $FUNC(..., $X, ...) { ... }
+    - pattern: new Buffer($X,...)
+  - pattern-not: 'new Buffer("...",...)
+
+      '
+  - pattern-not: 'new Buffer([...] , ...)
+
+      '
+  message: |
+    Detects instances of new Buffer(argument) where argument is any non-literal value which could
+    cause memory leak. Recommended usage is `Buffer.from()` or `Buffer.alloc()`.
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
 - id: gitlab.eslint.detect-no-csrf-before-method-override
   metadata:
     cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
