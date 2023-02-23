@@ -103,4 +103,4 @@ rules:
                 - pattern: open($URL, $TARGET, $FEATURES, ...)
             - metavariable-comparison:
                 metavariable: $...FEATURES
-                comparison: not re.match(".*[\"']no(opener|referrer)[\"'].*", str($...FEATURES))
+                comparison: not re.match(".*no(opener|referrer).*", str($FEATURES))
