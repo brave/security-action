@@ -6,4 +6,6 @@ window.open("ciao", "biao")
 open("ciao", "ciao")
 
 // ok: missing-noopener-window-open-native
-window.open("ciao", "bao", "noopener", "asd")
+window.open("ciao", "bao", "noopeners", "asd")
+// ruleid: missing-noopener-window-open-native
+window.open("ciao", "bao", "antani", "asd")
