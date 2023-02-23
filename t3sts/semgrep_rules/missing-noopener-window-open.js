@@ -1,0 +1,9 @@
+// ruleid: missing-noopener-window-open
+window.open("something")
+// ruleid: missing-noopener-window-open
+window.open("ciao", "biao")
+// ruleid: missing-noopener-window-open
+open("ciao", "ciao")
+
+// ok: missing-noopener-window-open
+window.open("ciao", "bao", "noopener", "asd")

@@ -1,0 +1,47 @@
+rules:
+  - id: missing-noopener-window-open
+    message: window.open should enforce `noopener` to avoid tab-nabbing vulnerabilities.
+    metadata:
+      author: Andrea Brancaleoni @ Brave
+      confidence: LOW
+      cwe:
+        - "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp:
+        - A01:2021 - Broken Access Control
+      references:
+        - https://web.dev/external-anchors-use-rel-noopener/
+        - https://html.spec.whatwg.org/multipage/links.html#link-type-noreferrer
+      category: security
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      license: MIT
+    languages:
+      - generic
+    paths:
+      include:
+        - '*.mustache'
+        - '*.html'
+        - '*.erb'
+        - '*.hbs'
+        - '*.js'
+        - '*.ts'
+    severity: INFO
+    patterns:
+      - pattern-either:
+          - patterns:
+            - pattern-either:
+              - pattern: window.open($...URL)
+              - pattern: open($...URL)
+            - metavariable-regex:
+                metavariable: $...URL
+                regex: '^([^,]*|[^,]*,[^,]*)$'
+          - patterns:
+            - pattern-either:
+                - pattern: window.open($...URL, $...TARGET, $...FEATURES, ...)
+                - pattern: open($...URL, $...TARGET, $...FEATURES, ...)
+            - metavariable-comparison:
+                metavariable: $...FEATURES
+                comparison: not re.match(".*[\"']noopener[\"'].*", str($...FEATURES))
