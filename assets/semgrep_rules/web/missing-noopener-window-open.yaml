@@ -18,6 +18,7 @@ rules:
       likelihood: LOW
       impact: LOW
       license: MIT
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/missing-noopener-window-open.yaml
     languages:
       - generic
     paths:
@@ -77,6 +78,7 @@ rules:
       likelihood: LOW
       impact: LOW
       license: MIT
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/missing-noopener-window-open.yaml
     languages:
       - typescript
       - javascript
