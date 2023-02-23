@@ -28,6 +28,8 @@ rules:
         - '*.hbs'
         - '*.js'
         - '*.ts'
+        - '*.tsx'
+        - '*.patch'
     severity: INFO
     patterns:
       - pattern-either:
