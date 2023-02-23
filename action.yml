@@ -36,6 +36,25 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - id: comments-before
+      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      uses: actions/github-script@v6
+      with:
+          script: |
+            var commentsNumber = 0;
+            const { data: comments } = await github.rest.pulls.listReviewComments({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            for (const comment of comments) {
+              if (comment.body.includes("@brave/sec-team")) {
+                commentsNumber += 1;
+              }
+            }
+            return commentsNumber;
+
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Cache pip cache
       id: cache-pip
@@ -122,18 +141,36 @@ runs:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
+    - id: comments-after
+      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      uses: actions/github-script@v6
+      with:
+          script: |
+            var commentsNumber = 0;
+            const { data: comments } = await github.rest.pulls.listReviewComments({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            for (const comment of comments) {
+              if (comment.body.includes("@brave/sec-team")) {
+                commentsNumber += 1;
+              }
+            }
+            return commentsNumber;
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
+      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && hashFiles('reviewdog.log') }}
+      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && hashFiles('reviewdog.log') }}
+      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
