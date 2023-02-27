@@ -50,3 +50,11 @@ runner:
       || true
     errorformat:
       - "%t:%f:%l %m"
+  npm-audit:
+    name: npm-audit
+    cmd: |
+      set -e
+      python3 $SCRIPTPATH/npm-audit.py \
+      | sort -u | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
+    errorformat:
+      - "%t:%f:%l %m"
