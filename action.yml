@@ -98,7 +98,7 @@ runs:
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Setup Ruby
       id: ruby
-      uses: ruby/setup-ruby@92aece5fc9c784ab66851c1e702b1bd5885a51f2
+      uses: ruby/setup-ruby@31a7f6d628878b80bc63375a93ae079ec50a1601
       with:
         ruby-version: '2.7'
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
