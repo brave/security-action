@@ -41,18 +41,67 @@ runs:
       uses: actions/github-script@v6
       with:
           script: |
-            var commentsNumber = 0;
-            const { data: comments } = await github.rest.pulls.listReviewComments({
-              pull_number: context.issue.number,
+            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+              repository(owner:$owner, name:$name) { 
+                pullRequest(number:$prnumber) {
+                  reviewThreads(last:100) {
+                    nodes {
+                      isOutdated
+                      comments(first:1) {
+                        totalCount
+                        nodes {
+                          id
+                          author {
+                            login
+                          }
+                          bodyText
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
               owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
-            for (const comment of comments) {
-              if (comment.body.includes("@brave/sec-team")) {
-                commentsNumber += 1;
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            console.log(JSON.stringify(result));
+            const threads = result.repository.pullRequest.reviewThreads;
+            const deletableComments = threads.nodes.filter(
+              reviewThread => (
+                reviewThread.isOutdated === true &&
+                reviewThread.comments.totalCount === 1 &&
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].bodyText.includes("Cc @brave/sec-team")
+              )
+            ).map(
+              reviewThread => (
+                reviewThread.comments.nodes[0].id
+              )
+            );
+            console.log("Delete", deletableComments);
+            if (deletableComments) {
+              deleteMutation = `mutation($comment:ID!) {
+                deletePullRequestReviewComment(input: {id:$comment}) {
+                  clientMutationId
+                }
+              }`;
+              for (const commentId of deletableComments) {
+                console.log("Deleting %s", commentId);
+                await github.graphql(deleteMutation, {comment: commentId});
               }
             }
+            var commentsNumber = threads.nodes.filter(
+              reviewThread => (
+                !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].bodyText.includes("Cc @brave/sec-team")
+              )
+            ).length;
+            console.log("Comments: %d", commentsNumber);
             return commentsNumber;
 
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
@@ -146,18 +195,42 @@ runs:
       uses: actions/github-script@v6
       with:
           script: |
-            var commentsNumber = 0;
-            const { data: comments } = await github.rest.pulls.listReviewComments({
-              pull_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
-            for (const comment of comments) {
-              if (comment.body.includes("@brave/sec-team")) {
-                commentsNumber += 1;
+            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+              repository(owner:$owner, name:$name) { 
+                pullRequest(number:$prnumber) {
+                  reviewThreads(last:100) {
+                    nodes {
+                      isOutdated
+                      comments(first:1) {
+                        totalCount
+                        nodes {
+                          author {
+                            login
+                          }
+                          bodyText
+                        }
+                      }
+                    }
+                  }
+                }
               }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
             }
+            const result = await github.graphql(query, variables);
+            console.log(JSON.stringify(result));
+            const threads = result.repository.pullRequest.reviewThreads;
+            var commentsNumber = threads.nodes.filter(
+              reviewThread => (
+                !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].bodyText.includes("Cc @brave/sec-team")
+              )
+            ).length;
+            console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - uses: actions-ecosystem/action-add-labels@v1
       if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
