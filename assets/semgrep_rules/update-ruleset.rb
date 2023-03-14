@@ -52,6 +52,7 @@ RULESETS = [
 	'wordpress',
 	'react-best-practices',
 	'trailofbits',
+        'rust'
 ]
 
 HOST = 'https://semgrep.dev'
@@ -113,11 +114,11 @@ RULESETS.each do |ruleset|
 end
 
 rules.each do |k, v|
-	if v['metadata']['category'] == 'security' && v['metadata']['subcategory'] != ['vuln'] && v['metadata']['subcategory'] != ['audit']
+	if v['metadata']['category'] == 'security' && v['metadata']['subcategory'] != ['vuln'] && v['metadata']['subcategory'] != ['audit'] && v['metadata']['subcategory'] != 'vuln' && v['metadata']['subcategory'] != 'audit'
 		security_noaudit_novuln_rules << v
-	elsif v['metadata']['category'] == 'security' && v['metadata']['subcategory'] == ['vuln']
+	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['vuln'] || v['metadata']['subcategory'] == 'vuln')
 		vuln_rules << v
-	elsif v['metadata']['category'] == 'security' && v['metadata']['subcategory'] == ['audit']
+	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['audit'] || v['metadata']['subcategory'] == 'audit')
 		audit_rules << v
 	else
 		others_rules << v
@@ -125,11 +126,12 @@ rules.each do |k, v|
 end
 
 nonfree_rules.each do |k, v|
-	if v['metadata']['category'] == 'security' && v['metadata']['subcategory'] != ['vuln'] && v['metadata']['subcategory'] != ['audit']
+	if v['metadata']['category'] == 'security' && v['metadata']['subcategory'] != ['vuln'] && v['metadata']['subcategory'] != ['audit'] && v['metadata']['subcategory'] != 'vuln' && v['metadata']['subcategory'] != 'audit'
 		nonfree_security_noaudit_novuln_rules << v
-	elsif v['metadata']['category'] == 'security' && v['metadata']['subcategory'] == ['vuln']
+	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['vuln'] || v['metadata']['subcategory'] == 'vuln')
 		nonfree_vuln_rules << v
-	elsif v['metadata']['category'] == 'security' && v['metadata']['subcategory'] == ['audit']
+	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['audit'] || v['metadata']['subcategory'] == 'audit')
+		audit_rules << v
 		nonfree_audit_rules << v
 	else
 		nonfree_others_rules << v
