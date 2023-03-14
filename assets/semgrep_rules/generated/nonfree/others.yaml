@@ -31,6 +31,7 @@ rules:
         rule_id: BYUKJE
         version_id: GxT88Y
         url: https://semgrep.dev/playground/r/GxT88Y/generic.dockerfile.missing-zypper-no-confirm-switch.missing-zypper-no-confirm-switch
+        origin: community
   paths:
     include:
     - "*dockerfile*"
@@ -55,6 +56,7 @@ rules:
         rule_id: 6JUjBL
         version_id: 6xTrvK
         url: https://semgrep.dev/playground/r/6xTrvK/html.security.missing-noreferrer.missing-noreferrer
+        origin: community
   patterns:
   - pattern: a()
   - pattern: b()
@@ -88,6 +90,7 @@ rules:
         rule_id: eqUz1k
         version_id: vdTvgW
         url: https://semgrep.dev/playground/r/vdTvgW/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
+        origin: community
 - id: ocaml.lang.compatibility.deprecated.deprecated-pervasives
   pattern: Pervasives.$X
   message: Pervasives is deprecated and will not be available after 4.10. Use Stdlib.
@@ -106,6 +109,7 @@ rules:
         rule_id: 3qUP1E
         version_id: X0TADB
         url: https://semgrep.dev/playground/r/X0TADB/ocaml.lang.compatibility.deprecated.deprecated-pervasives
+        origin: community
 - id: ocaml.lang.portability.crlf-support.broken-input-line
   pattern: 'input_line
 
@@ -130,6 +134,7 @@ rules:
         rule_id: DbUKZX
         version_id: kbTOJw
         url: https://semgrep.dev/playground/r/kbTOJw/ocaml.lang.portability.crlf-support.broken-input-line
+        origin: community
 - id: ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
   pattern: open_in
   fix: open_in_bin
@@ -152,6 +157,7 @@ rules:
         rule_id: WAUPAJ
         version_id: w8TkYl
         url: https://semgrep.dev/playground/r/w8TkYl/ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
+        origin: community
 - id: ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
   pattern: open_out
   fix: open_out_bin
@@ -174,6 +180,7 @@ rules:
         rule_id: 0oUJY9
         version_id: xyTd6N
         url: https://semgrep.dev/playground/r/xyTd6N/ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
+        origin: community
 - id: ocaml.lang.portability.slash-tmp.not-portable-tmp-string
   pattern: '"=~/\/tmp/"
 
@@ -194,6 +201,7 @@ rules:
         rule_id: zdU100
         version_id: O9Tv1v
         url: https://semgrep.dev/playground/r/O9Tv1v/ocaml.lang.portability.slash-tmp.not-portable-tmp-string
+        origin: community
 - id: python.flask.best-practice.use-jsonify.use-jsonify
   patterns:
   - pattern: "$JSONDUMPS"
@@ -235,6 +243,7 @@ rules:
         rule_id: NbUkx6
         version_id: l4TqoX
         url: https://semgrep.dev/playground/r/l4TqoX/python.flask.best-practice.use-jsonify.use-jsonify
+        origin: community
 - id: python.flask.caching.query-string.flask-cache-query-string
   patterns:
   - pattern-either:
@@ -287,6 +296,7 @@ rules:
         rule_id: kxUko3
         version_id: 44TePj
         url: https://semgrep.dev/playground/r/44TePj/python.flask.caching.query-string.flask-cache-query-string
+        origin: community
 - id: python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
   patterns:
   - pattern-inside: |
@@ -314,6 +324,7 @@ rules:
         rule_id: wdUJe5
         version_id: PkTjry
         url: https://semgrep.dev/playground/r/PkTjry/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
+        origin: community
 - id: python.lang.compatibility.python36.python36-compatibility-Popen1
   pattern: subprocess.Popen(errors=$X, ...)
   message: the `errors` argument to Popen is only available on Python 3.6+
@@ -332,6 +343,7 @@ rules:
         rule_id: nJUz7A
         version_id: 44Tejz
         url: https://semgrep.dev/playground/r/44Tejz/python.lang.compatibility.python36.python36-compatibility-Popen1
+        origin: community
 - id: python.lang.compatibility.python36.python36-compatibility-Popen2
   pattern: subprocess.Popen(encoding=$X, ...)
   message: the `encoding` argument to Popen is only available on Python 3.6+
@@ -350,6 +362,7 @@ rules:
         rule_id: EwU2n3
         version_id: PkTj3B
         url: https://semgrep.dev/playground/r/PkTj3B/python.lang.compatibility.python36.python36-compatibility-Popen2
+        origin: community
 - id: python.lang.compatibility.python36.python36-compatibility-ssl
   pattern: ssl.get_ciphers()
   message: this function is only available on Python 3.6+
@@ -368,6 +381,7 @@ rules:
         rule_id: ZqU5wR
         version_id: 3ZTLXP
         url: https://semgrep.dev/playground/r/3ZTLXP/python.lang.compatibility.python36.python36-compatibility-ssl
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-httpconn
   pattern: http.client.HTTPConnection(blocksize=$X,...)
   message: Found usage of the 'blocksize' argument in a HTTPConnection call. This
@@ -388,6 +402,7 @@ rules:
         rule_id: 8GUjbX
         version_id: GxToeD
         url: https://semgrep.dev/playground/r/GxToeD/python.lang.compatibility.python37.python37-compatibility-httpconn
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-httpsconn
   pattern: http.client.HTTPSConnection(blocksize=$X,...)
   message: Found usage of the 'blocksize' argument in a HTTPSConnection call. This
@@ -408,6 +423,7 @@ rules:
         rule_id: gxU1qd
         version_id: RGT2L2
         url: https://semgrep.dev/playground/r/RGT2L2/python.lang.compatibility.python37.python37-compatibility-httpsconn
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-importlib
   pattern: importlib.source_hash()
   message: source_hash' is only available on Python 3.7+. This does not work in lower
@@ -428,6 +444,7 @@ rules:
         rule_id: 7KUQOl
         version_id: JdToxL
         url: https://semgrep.dev/playground/r/JdToxL/python.lang.compatibility.python37.python37-compatibility-importlib
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-importlib2
   pattern: import importlib.resources
   message: Found 'importlib.resources', which is a module only available on Python
@@ -448,6 +465,7 @@ rules:
         rule_id: L1Uy0n
         version_id: 5PTN1p
         url: https://semgrep.dev/playground/r/5PTN1p/python.lang.compatibility.python37.python37-compatibility-importlib2
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-importlib3
   pattern: import importlib.abc.ResourceReader
   message: Found usage of 'importlib.abc.ResourceReader'. This module is only available
@@ -468,6 +486,7 @@ rules:
         rule_id: QrUzJ9
         version_id: A8TNdJ
         url: https://semgrep.dev/playground/r/A8TNdJ/python.lang.compatibility.python37.python37-compatibility-importlib3
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv4network1
   pattern: ipaddress.IPv4Network.subnet_of($X)
   message: IPv4Network.subnet_of is only available on Python 3.7+ and is therefore
@@ -487,6 +506,7 @@ rules:
         rule_id: JDUyqR
         version_id: 0bTpzo
         url: https://semgrep.dev/playground/r/0bTpzo/python.lang.compatibility.python37.python37-compatibility-ipv4network1
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv4network2
   pattern: ipaddress.IPv4Network.supernet_of($X)
   message: IPv4Network.supernet_of is only available on Python 3.7+ and is therefore
@@ -506,6 +526,7 @@ rules:
         rule_id: 5rUO61
         version_id: K3Twkg
         url: https://semgrep.dev/playground/r/K3Twkg/python.lang.compatibility.python37.python37-compatibility-ipv4network2
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv6network1
   pattern: ipaddress.IPv6Network.subnet_of($X)
   message: IPv6Network.subnet_of is only available on Python 3.7+ and is therefore
@@ -525,6 +546,7 @@ rules:
         rule_id: 4bUko0
         version_id: DkT2bY
         url: https://semgrep.dev/playground/r/DkT2bY/python.lang.compatibility.python37.python37-compatibility-ipv6network1
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv6network2
   pattern: ipaddress.IPv6Network.supernet_of($X)
   message: IPv6Network.supernet_of is only available on Python 3.7+ and is therefore
@@ -544,6 +566,7 @@ rules:
         rule_id: PeUZYr
         version_id: WrTYKq
         url: https://semgrep.dev/playground/r/WrTYKq/python.lang.compatibility.python37.python37-compatibility-ipv6network2
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-locale1
   pattern: locale.format_string(monetary=$X, ...)
   message: Found usage of the 'monetary' argument in a function call of 'locale.format_string'.
@@ -564,6 +587,7 @@ rules:
         rule_id: GdU72R
         version_id: qkTp7L
         url: https://semgrep.dev/playground/r/qkTp7L/python.lang.compatibility.python37.python37-compatibility-locale1
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-math1
   pattern: math.remainder($X, $Y)
   message: math.remainder is only available on Python 3.7+ and is therefore not backwards
@@ -583,6 +607,7 @@ rules:
         rule_id: ReUgbz
         version_id: l4TXR1
         url: https://semgrep.dev/playground/r/l4TXR1/python.lang.compatibility.python37.python37-compatibility-math1
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-multiprocess1
   pattern: multiprocessing.Process.close()
   message: multiprocessing.Process.close() is only available on Python 3.7+ and is
@@ -602,6 +627,7 @@ rules:
         rule_id: AbUzRA
         version_id: YDTYeO
         url: https://semgrep.dev/playground/r/YDTYeO/python.lang.compatibility.python37.python37-compatibility-multiprocess1
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-multiprocess2
   pattern: multiprocessing.Process.kill()
   message: multiprocessing.Process.kill() is only available on Python 3.7+ and is
@@ -621,6 +647,7 @@ rules:
         rule_id: BYUNE9
         version_id: 6xTy90
         url: https://semgrep.dev/playground/r/6xTy90/python.lang.compatibility.python37.python37-compatibility-multiprocess2
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-os1
   pattern: os.preadv(...)
   message: os.preadv() is only available on Python 3.7+ and is therefore not backwards
@@ -640,6 +667,7 @@ rules:
         rule_id: DbUpQQ
         version_id: o5TKDW
         url: https://semgrep.dev/playground/r/o5TKDW/python.lang.compatibility.python37.python37-compatibility-os1
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-os2-ok2
   patterns:
   - pattern-not-inside: |
@@ -663,6 +691,7 @@ rules:
         rule_id: 0oU5vW
         version_id: zyTG29
         url: https://semgrep.dev/playground/r/zyTG29/python.lang.compatibility.python37.python37-compatibility-os2-ok2
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-pdb
   pattern: pdb.set_trace(header=$X, ...)
   message: pdb.set_trace() with the header argument is only available on Python 3.7+
@@ -683,6 +712,7 @@ rules:
         rule_id: KxUby2
         version_id: pZTb3R
         url: https://semgrep.dev/playground/r/pZTb3R/python.lang.compatibility.python37.python37-compatibility-pdb
+        origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-textiowrapper
   pattern: TextIOWrapper.reconfigure(...)
   message: Found usage of 'importlib.abc.ResourceReader'. This module is only available
@@ -703,6 +733,7 @@ rules:
         rule_id: 3qUPdy
         version_id: BjTKZr
         url: https://semgrep.dev/playground/r/BjTKZr/python.lang.compatibility.python37.python37-compatibility-textiowrapper
+        origin: community
 - id: python.sqlalchemy.performance.performance-improvements.batch-import
   pattern: |
     for $X in $Y:
@@ -724,6 +755,7 @@ rules:
         rule_id: AbUWjy
         version_id: JdTodZ
         url: https://semgrep.dev/playground/r/JdTodZ/python.sqlalchemy.performance.performance-improvements.batch-import
+        origin: community
 - id: python.sqlalchemy.performance.performance-improvements.len-all-count
   pattern: len($X.all())
   message: Using QUERY.count() instead of len(QUERY.all()) sends less data to the
@@ -743,6 +775,7 @@ rules:
         rule_id: ReUPOw
         version_id: PkTjgO
         url: https://semgrep.dev/playground/r/PkTjgO/python.sqlalchemy.performance.performance-improvements.len-all-count
+        origin: community
 - id: terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
   message: Key vault Secret should have a content type set
   patterns:
@@ -773,6 +806,7 @@ rules:
         rule_id: 8GUzld
         version_id: O9T4Kw
         url: https://semgrep.dev/playground/r/O9T4Kw/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
+        origin: community
   languages:
   - hcl
   severity: INFO
@@ -822,6 +856,7 @@ rules:
         rule_id: 7KUp1e
         version_id: GxTZ6g
         url: https://semgrep.dev/playground/r/GxTZ6g/trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
+        origin: community
 - id: trailofbits.go.nondeterministic-select.nondeterministic-select
   patterns:
   - pattern: |
@@ -864,6 +899,7 @@ rules:
         rule_id: 8GUxqz
         version_id: A8TG5P
         url: https://semgrep.dev/playground/r/A8TG5P/trailofbits.go.nondeterministic-select.nondeterministic-select
+        origin: community
 - id: trailofbits.go.questionable-assignment.questionable-assignment
   patterns:
   - pattern-either:
@@ -882,6 +918,7 @@ rules:
         rule_id: gxUYAJ
         version_id: BjT7rO
         url: https://semgrep.dev/playground/r/BjT7rO/trailofbits.go.questionable-assignment.questionable-assignment
+        origin: community
 - id: trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
   patterns:
   - pattern-either:
@@ -911,6 +948,7 @@ rules:
         rule_id: 3qUEpL
         version_id: K3TYje
         url: https://semgrep.dev/playground/r/K3TYje/trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
+        origin: community
 - id: trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
   patterns:
   - pattern-either:
@@ -939,6 +977,7 @@ rules:
         rule_id: ZqUgpe
         version_id: zyT183
         url: https://semgrep.dev/playground/r/zyT183/trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
+        origin: community
 - id: trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
   message: Usage of NumPy library inside PyTorch `$MODULE` module was found. Avoid
     mixing these libraries for efficiency and proper ONNX loading
@@ -964,6 +1003,7 @@ rules:
         rule_id: KxU507
         version_id: NdTKpl
         url: https://semgrep.dev/playground/r/NdTKpl/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
+        origin: community
   patterns:
   - pattern: "$RESULT = numpy.$FUNCTION(...)"
   - pattern-inside: |
@@ -993,6 +1033,7 @@ rules:
         rule_id: JDU4RQ
         version_id: nWTbb8
         url: https://semgrep.dev/playground/r/nWTbb8/trailofbits.python.pytorch-tensor.pytorch-tensor
+        origin: community
   pattern: torch.Tensor(...)
 - id: trailofbits.python.torch-tensor.torch-tensor
   message: Avoid using `torch.Tensor()` to directly create a tensor for efficiency
@@ -1015,6 +1056,7 @@ rules:
         rule_id: ReUqz0
         version_id: 7ZTq5z
         url: https://semgrep.dev/playground/r/7ZTq5z/trailofbits.python.torch-tensor.torch-tensor
+        origin: community
   pattern: torch.Tensor(...)
 - id: typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
   patterns:
@@ -1056,6 +1098,7 @@ rules:
         rule_id: j2Uqg5
         version_id: jQTwZL
         url: https://semgrep.dev/playground/r/jQTwZL/typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
+        origin: community
   languages:
   - typescript
   - javascript
@@ -1084,6 +1127,7 @@ rules:
         rule_id: 10UZOv
         version_id: 1QT4xn
         url: https://semgrep.dev/playground/r/1QT4xn/typescript.react.best-practice.react-find-dom.react-find-dom
+        origin: community
   languages:
   - typescript
   - javascript
@@ -1114,6 +1158,7 @@ rules:
         rule_id: 9AUOdB
         version_id: 9lTAK8
         url: https://semgrep.dev/playground/r/9lTAK8/typescript.react.best-practice.react-legacy-component.react-legacy-component
+        origin: community
 - id: typescript.react.best-practice.react-props-in-state.react-props-in-state
   pattern-either:
   - patterns:
@@ -1176,6 +1221,7 @@ rules:
         rule_id: yyUvRJ
         version_id: vdTJo3
         url: https://semgrep.dev/playground/r/vdTJo3/typescript.react.best-practice.react-props-in-state.react-props-in-state
+        origin: community
   languages:
   - typescript
   - javascript
@@ -1206,6 +1252,7 @@ rules:
         rule_id: r6Uky5
         version_id: kbTWvY
         url: https://semgrep.dev/playground/r/kbTWvY/typescript.react.best-practice.react-props-spreading.react-props-spreading
+        origin: community
 - id: typescript.react.portability.i18next.i18next-key-format.i18next-key-format
   patterns:
   - pattern-either:
@@ -1270,6 +1317,7 @@ rules:
         rule_id: oqUKJr
         version_id: X0T226
         url: https://semgrep.dev/playground/r/X0T226/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+        origin: community
 - id: typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
   patterns:
   - pattern-either:
@@ -1303,6 +1351,7 @@ rules:
         rule_id: zdUGrY
         version_id: jQTyyX
         url: https://semgrep.dev/playground/r/jQTyyX/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
+        origin: community
 - id: typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
   patterns:
   - pattern: "<$ELEMENT>$MESSAGE</$ELEMENT>"
@@ -1335,6 +1384,7 @@ rules:
         rule_id: KxUwo1
         version_id: pZTv6z
         url: https://semgrep.dev/playground/r/pZTv6z/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
+        origin: community
 - id: typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
   patterns:
   - pattern: enqueueSnackbar('$MESSAGE', $X2)
@@ -1362,6 +1412,7 @@ rules:
         rule_id: qNUpO8
         version_id: 5PTe9P
         url: https://semgrep.dev/playground/r/5PTe9P/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
+        origin: community
 - id: typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
   patterns:
   - pattern: useSelect($X1, $X2, '$LABEL', $X4)
@@ -1393,6 +1444,7 @@ rules:
         rule_id: nJUPJL
         version_id: vdTXdP
         url: https://semgrep.dev/playground/r/vdTXdP/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
+        origin: community
 - id: typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
   patterns:
   - pattern: useSelect($X1, $X2, '$LABEL', $X4)
@@ -1417,3 +1469,4 @@ rules:
         rule_id: lBUXZO
         version_id: GxT8P7
         url: https://semgrep.dev/playground/r/GxT8P7/typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
+        origin: community

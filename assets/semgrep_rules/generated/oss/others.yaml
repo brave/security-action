@@ -27,6 +27,7 @@ rules:
         rule_id: KxU4lp
         version_id: rxTqOv
         url: https://semgrep.dev/playground/r/rxTqOv/gitlab.bandit.B101
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -54,6 +55,7 @@ rules:
         rule_id: qNUoNN
         version_id: bZTrA3
         url: https://semgrep.dev/playground/r/bZTrA3/gitlab.bandit.B102
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -80,6 +82,7 @@ rules:
         rule_id: lBUd5P
         version_id: NdTLDj
         url: https://semgrep.dev/playground/r/NdTLDj/gitlab.bandit.B103
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -119,6 +122,7 @@ rules:
         rule_id: YGUroX
         version_id: kbTpKX
         url: https://semgrep.dev/playground/r/kbTpKX/gitlab.bandit.B104
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -149,6 +153,7 @@ rules:
         rule_id: 6JUqKb
         version_id: w8Tr1Z
         url: https://semgrep.dev/playground/r/w8Tr1Z/gitlab.bandit.B105
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -177,6 +182,7 @@ rules:
         rule_id: oqUzxg
         version_id: xyTOLY
         url: https://semgrep.dev/playground/r/xyTOLY/gitlab.bandit.B106
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -204,6 +210,7 @@ rules:
         rule_id: zdUyRj
         version_id: O9Tzjy
         url: https://semgrep.dev/playground/r/O9Tzjy/gitlab.bandit.B107
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -228,6 +235,7 @@ rules:
         rule_id: 0oU6oJ
         version_id: e1T5Rd
         url: https://semgrep.dev/playground/r/e1T5Rd/gitlab.bandit.B108
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -247,6 +255,7 @@ rules:
         rule_id: 6JU6qd
         version_id: l4TzRP
         url: https://semgrep.dev/playground/r/l4TzRP/gitlab.bandit.B108-1
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -274,6 +283,7 @@ rules:
         rule_id: pKUGl6
         version_id: vdTgrW
         url: https://semgrep.dev/playground/r/vdTgrW/gitlab.bandit.B108-2
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -409,6 +419,7 @@ rules:
         rule_id: 2ZU40b
         version_id: nWTjxO
         url: https://semgrep.dev/playground/r/nWTjxO/gitlab.bandit.B110
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -544,6 +555,7 @@ rules:
         rule_id: X5UZ3Z
         version_id: ZRTnQQ
         url: https://semgrep.dev/playground/r/ZRTnQQ/gitlab.bandit.B112
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -586,6 +598,7 @@ rules:
         rule_id: OrULKb
         version_id: bZTrdW
         url: https://semgrep.dev/playground/r/bZTrdW/gitlab.bandit.B113
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -615,6 +628,7 @@ rules:
         rule_id: oqUrz7
         version_id: d6T1rw
         url: https://semgrep.dev/playground/r/d6T1rw/gitlab.bandit.B201
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -654,6 +668,7 @@ rules:
         rule_id: eqUPXn
         version_id: NdTLj0
         url: https://semgrep.dev/playground/r/NdTLj0/gitlab.bandit.B202
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -682,6 +697,7 @@ rules:
         rule_id: zdU1y5
         version_id: ExTOjp
         url: https://semgrep.dev/playground/r/ExTOjp/gitlab.bandit.B301-1
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -708,6 +724,7 @@ rules:
         rule_id: pKUwGl
         version_id: 2KTe6z
         url: https://semgrep.dev/playground/r/2KTe6z/gitlab.bandit.B301-2
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -735,6 +752,7 @@ rules:
         rule_id: j2UqZR
         version_id: X0TEJO
         url: https://semgrep.dev/playground/r/X0TEJO/gitlab.bandit.B301-3
+        origin: custom
   languages:
   - python
   severity: WARNING
@@ -762,6 +780,7 @@ rules:
         rule_id: 10UZxd
         version_id: jQTW96
         url: https://semgrep.dev/playground/r/jQTW96/gitlab.bandit.B301-4
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -791,6 +810,7 @@ rules:
         rule_id: 2ZUK4W
         version_id: gETj3g
         url: https://semgrep.dev/playground/r/gETj3g/gitlab.bandit.B302
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -816,6 +836,7 @@ rules:
         rule_id: X5U77W
         version_id: QkTDWn
         url: https://semgrep.dev/playground/r/QkTDWn/gitlab.bandit.B303-1
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -841,6 +862,7 @@ rules:
         rule_id: j2URRg
         version_id: 3ZTnk3
         url: https://semgrep.dev/playground/r/3ZTnk3/gitlab.bandit.B303-2
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -868,6 +890,7 @@ rules:
         rule_id: 9AUOKZ
         version_id: 44TpRe
         url: https://semgrep.dev/playground/r/44TpRe/gitlab.bandit.B303-3
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -895,6 +918,7 @@ rules:
         rule_id: yyUvLN
         version_id: PkTvJQ
         url: https://semgrep.dev/playground/r/PkTvJQ/gitlab.bandit.B303-4
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -923,6 +947,7 @@ rules:
         rule_id: r6UkYj
         version_id: JdTbNp
         url: https://semgrep.dev/playground/r/JdTbNp/gitlab.bandit.B303-5
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -951,6 +976,7 @@ rules:
         rule_id: bwUOkX
         version_id: 5PTjde
         url: https://semgrep.dev/playground/r/5PTjde/gitlab.bandit.B303-6
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -976,6 +1002,7 @@ rules:
         rule_id: 10Ueez
         version_id: GxTyvk
         url: https://semgrep.dev/playground/r/GxTyvk/gitlab.bandit.B303-7
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1001,6 +1028,7 @@ rules:
         rule_id: 9AUkko
         version_id: RGT7Dp
         url: https://semgrep.dev/playground/r/RGT7Dp/gitlab.bandit.B303-8
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1028,6 +1056,7 @@ rules:
         rule_id: yyUyyn
         version_id: A8T89E
         url: https://semgrep.dev/playground/r/A8T89E/gitlab.bandit.B304-1
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1052,6 +1081,7 @@ rules:
         rule_id: kxU886
         version_id: 6xT3vO
         url: https://semgrep.dev/playground/r/6xT3vO/gitlab.bandit.B304-10
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1076,6 +1106,7 @@ rules:
         rule_id: wdUGGA
         version_id: o5Tvgp
         url: https://semgrep.dev/playground/r/o5Tvgp/gitlab.bandit.B304-11
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1100,6 +1131,7 @@ rules:
         rule_id: x8U22d
         version_id: zyTdKw
         url: https://semgrep.dev/playground/r/zyTdKw/gitlab.bandit.B304-12
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1127,6 +1159,7 @@ rules:
         rule_id: r6U99k
         version_id: BjT5XJ
         url: https://semgrep.dev/playground/r/BjT5XJ/gitlab.bandit.B304-2
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1155,6 +1188,7 @@ rules:
         rule_id: bwUNNN
         version_id: DkTJ67
         url: https://semgrep.dev/playground/r/DkTJ67/gitlab.bandit.B304-3
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1183,6 +1217,7 @@ rules:
         rule_id: NbUYYN
         version_id: WrT9Wj
         url: https://semgrep.dev/playground/r/WrT9Wj/gitlab.bandit.B304-4
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1211,6 +1246,7 @@ rules:
         rule_id: NbUAOd
         version_id: 0bTBL6
         url: https://semgrep.dev/playground/r/0bTBL6/gitlab.bandit.B304-5
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1238,6 +1274,7 @@ rules:
         rule_id: kxURAL
         version_id: K3TevP
         url: https://semgrep.dev/playground/r/K3TevP/gitlab.bandit.B304-6
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1265,6 +1302,7 @@ rules:
         rule_id: wdU82R
         version_id: qkTG2r
         url: https://semgrep.dev/playground/r/qkTG2r/gitlab.bandit.B304-7
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1292,6 +1330,7 @@ rules:
         rule_id: x8UWB8
         version_id: l4Tb43
         url: https://semgrep.dev/playground/r/l4Tb43/gitlab.bandit.B304-8
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1319,6 +1358,7 @@ rules:
         rule_id: OrUG0Q
         version_id: 1QTBXK
         url: https://semgrep.dev/playground/r/1QTBXK/gitlab.bandit.B304-9
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1343,6 +1383,7 @@ rules:
         rule_id: OrUDDX
         version_id: pZTo18
         url: https://semgrep.dev/playground/r/pZTo18/gitlab.bandit.B305
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1368,6 +1409,7 @@ rules:
         rule_id: eqUvdb
         version_id: 2KTeze
         url: https://semgrep.dev/playground/r/2KTeze/gitlab.bandit.B306
+        origin: custom
   languages:
   - python
   severity: ERROR
@@ -1396,6 +1438,7 @@ rules:
         rule_id: v8U5kd
         version_id: X0TEQD
         url: https://semgrep.dev/playground/r/X0TEQD/gitlab.bandit.B307
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1420,6 +1463,7 @@ rules:
         rule_id: d8UzRp
         version_id: JdTQjX
         url: https://semgrep.dev/playground/r/JdTQjX/gitlab.bandit.B308.B703
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1451,6 +1495,7 @@ rules:
         rule_id: ZqUqEy
         version_id: 1QTBO1
         url: https://semgrep.dev/playground/r/1QTBO1/gitlab.bandit.B309
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1503,6 +1548,7 @@ rules:
         rule_id: nJUYed
         version_id: 9lT2dP
         url: https://semgrep.dev/playground/r/9lT2dP/gitlab.bandit.B310-1
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1539,6 +1585,7 @@ rules:
         rule_id: EwU4kb
         version_id: yeT8R1
         url: https://semgrep.dev/playground/r/yeT8R1/gitlab.bandit.B310-2
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1570,6 +1617,7 @@ rules:
         rule_id: 7KUe7J
         version_id: rxTqyv
         url: https://semgrep.dev/playground/r/rxTqyv/gitlab.bandit.B311
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -1594,6 +1642,7 @@ rules:
         rule_id: eqUpp1
         version_id: bZTrb3
         url: https://semgrep.dev/playground/r/bZTrb3/gitlab.bandit.B312
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1621,6 +1670,7 @@ rules:
         rule_id: KxUOo7
         version_id: NdTL3j
         url: https://semgrep.dev/playground/r/NdTL3j/gitlab.bandit.B313
+        origin: custom
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1663,6 +1713,7 @@ rules:
         rule_id: L1U4Yd
         version_id: DkTKjj
         url: https://semgrep.dev/playground/r/DkTKjj/gitlab.bandit.B313.B314.B315.B316.B318.B319.B320.B405.B406.B407.B408.B409.B410
+        origin: custom
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the 'defusedxml' library instead. Use 'defusedxml'.
@@ -1694,6 +1745,7 @@ rules:
         rule_id: qNUKOW
         version_id: kbTpdX
         url: https://semgrep.dev/playground/r/kbTpdX/gitlab.bandit.B314
+        origin: custom
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1728,6 +1780,7 @@ rules:
         rule_id: JDUZkD
         version_id: O9TzNy
         url: https://semgrep.dev/playground/r/O9TzNy/gitlab.bandit.B315
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1756,6 +1809,7 @@ rules:
         rule_id: PeUnzj
         version_id: xyTOKY
         url: https://semgrep.dev/playground/r/xyTOKY/gitlab.bandit.B316
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1785,6 +1839,7 @@ rules:
         rule_id: v8Ujj8
         version_id: 7ZTdDQ
         url: https://semgrep.dev/playground/r/7ZTdDQ/gitlab.bandit.B317
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1814,6 +1869,7 @@ rules:
         rule_id: WAU68J
         version_id: LjTO74
         url: https://semgrep.dev/playground/r/LjTO74/gitlab.bandit.B318
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1839,6 +1895,7 @@ rules:
         rule_id: 0oU6o9
         version_id: 8KTX4x
         url: https://semgrep.dev/playground/r/8KTX4x/gitlab.bandit.B319
+        origin: custom
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1872,6 +1929,7 @@ rules:
         rule_id: lBUNZy
         version_id: w8Tr9Z
         url: https://semgrep.dev/playground/r/w8Tr9Z/gitlab.bandit.B320
+        origin: custom
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1900,6 +1958,7 @@ rules:
         rule_id: d8Ully
         version_id: gETj6g
         url: https://semgrep.dev/playground/r/gETj6g/gitlab.bandit.B321
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1924,6 +1983,7 @@ rules:
         rule_id: ZqUgg2
         version_id: QkTD8n
         url: https://semgrep.dev/playground/r/QkTD8n/gitlab.bandit.B323
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -1956,6 +2016,7 @@ rules:
         rule_id: 8GUE2O
         version_id: 3ZTnl3
         url: https://semgrep.dev/playground/r/3ZTnl3/gitlab.bandit.B324
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -1979,6 +2040,7 @@ rules:
         rule_id: nJUrrQ
         version_id: 44Tp7e
         url: https://semgrep.dev/playground/r/44Tp7e/gitlab.bandit.B325
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2005,6 +2067,7 @@ rules:
         rule_id: gxUW4o
         version_id: PkTvDQ
         url: https://semgrep.dev/playground/r/PkTvDQ/gitlab.bandit.B401
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2034,6 +2097,7 @@ rules:
         rule_id: QrU6yY
         version_id: JdTb5p
         url: https://semgrep.dev/playground/r/JdTb5p/gitlab.bandit.B402
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2062,6 +2126,7 @@ rules:
         rule_id: 3qUBJZ
         version_id: 5PTjke
         url: https://semgrep.dev/playground/r/5PTjke/gitlab.bandit.B403
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2088,6 +2153,7 @@ rules:
         rule_id: 4bUz3p
         version_id: GxTyjk
         url: https://semgrep.dev/playground/r/GxTyjk/gitlab.bandit.B404
+        origin: custom
   languages:
   - python
   severity: WARNING
@@ -2115,6 +2181,7 @@ rules:
         rule_id: 5rUYqA
         version_id: e1T50d
         url: https://semgrep.dev/playground/r/e1T50d/gitlab.bandit.B405
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2142,6 +2209,7 @@ rules:
         rule_id: GdUWq8
         version_id: vdTgYW
         url: https://semgrep.dev/playground/r/vdTgYW/gitlab.bandit.B406
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2169,6 +2237,7 @@ rules:
         rule_id: ReUwp0
         version_id: d6T1qw
         url: https://semgrep.dev/playground/r/d6T1qw/gitlab.bandit.B407
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2196,6 +2265,7 @@ rules:
         rule_id: DbUekX
         version_id: ExTORp
         url: https://semgrep.dev/playground/r/ExTORp/gitlab.bandit.B408
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2223,6 +2293,7 @@ rules:
         rule_id: AbUnqq
         version_id: ZRTn6Q
         url: https://semgrep.dev/playground/r/ZRTn6Q/gitlab.bandit.B409
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2249,6 +2320,7 @@ rules:
         rule_id: BYUGby
         version_id: nWTjOO
         url: https://semgrep.dev/playground/r/nWTjOO/gitlab.bandit.B410
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2274,6 +2346,7 @@ rules:
         rule_id: PeUkL4
         version_id: RGT7ep
         url: https://semgrep.dev/playground/r/RGT7ep/gitlab.bandit.B411
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2300,6 +2373,7 @@ rules:
         rule_id: JDUPgX
         version_id: A8T8kE
         url: https://semgrep.dev/playground/r/A8T8kE/gitlab.bandit.B412
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2333,6 +2407,7 @@ rules:
         rule_id: 5rU45b
         version_id: BjT5xJ
         url: https://semgrep.dev/playground/r/BjT5xJ/gitlab.bandit.B413
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2357,6 +2432,7 @@ rules:
         rule_id: v8Ubxq
         version_id: kbTpby
         url: https://semgrep.dev/playground/r/kbTpby/gitlab.bandit.B415
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2391,6 +2467,7 @@ rules:
         rule_id: GdU0wd
         version_id: DkTJq7
         url: https://semgrep.dev/playground/r/DkTJq7/gitlab.bandit.B501
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2426,6 +2503,7 @@ rules:
         rule_id: KxUOoO
         version_id: WrT9Oj
         url: https://semgrep.dev/playground/r/WrT9Oj/gitlab.bandit.B502
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2456,6 +2534,7 @@ rules:
         rule_id: ReUPvG
         version_id: 1QTeld
         url: https://semgrep.dev/playground/r/1QTeld/gitlab.bandit.B502.B503
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2482,6 +2561,7 @@ rules:
         rule_id: AbUWYl
         version_id: 0bTBy6
         url: https://semgrep.dev/playground/r/0bTBy6/gitlab.bandit.B504
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2534,6 +2614,7 @@ rules:
         rule_id: BYUBYZ
         version_id: K3TenP
         url: https://semgrep.dev/playground/r/K3TenP/gitlab.bandit.B505-1
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2559,6 +2640,7 @@ rules:
         rule_id: DbUW8j
         version_id: qkTG5r
         url: https://semgrep.dev/playground/r/qkTG5r/gitlab.bandit.B505-2
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2589,6 +2671,7 @@ rules:
         rule_id: WAUZx1
         version_id: l4Tbl3
         url: https://semgrep.dev/playground/r/l4Tbl3/gitlab.bandit.B506
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2622,6 +2705,7 @@ rules:
         rule_id: EwUQQv
         version_id: YDT5NG
         url: https://semgrep.dev/playground/r/YDT5NG/gitlab.bandit.B507
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2647,6 +2731,7 @@ rules:
         rule_id: ZqUR1w
         version_id: xyTO5E
         url: https://semgrep.dev/playground/r/xyTO5E/gitlab.bandit.B508
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2675,6 +2760,7 @@ rules:
         rule_id: nJUDAe
         version_id: O9Tzbz
         url: https://semgrep.dev/playground/r/O9Tzbz/gitlab.bandit.B509
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2704,6 +2790,7 @@ rules:
         rule_id: 0oUEOA
         version_id: JdTb5A
         url: https://semgrep.dev/playground/r/JdTb5A/gitlab.bandit.B601
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2742,6 +2829,7 @@ rules:
         rule_id: KxU4yp
         version_id: 5PTjk2
         url: https://semgrep.dev/playground/r/5PTjk2/gitlab.bandit.B602
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -2792,6 +2880,7 @@ rules:
         rule_id: qNUoqN
         version_id: GxTyjn
         url: https://semgrep.dev/playground/r/GxTyjn/gitlab.bandit.B603
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2819,6 +2908,7 @@ rules:
         rule_id: lBUdPP
         version_id: RGT7e8
         url: https://semgrep.dev/playground/r/RGT7e8/gitlab.bandit.B604
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2857,6 +2947,7 @@ rules:
         rule_id: YGUrPX
         version_id: A8T8k8
         url: https://semgrep.dev/playground/r/A8T8k8/gitlab.bandit.B605
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2907,6 +2998,7 @@ rules:
         rule_id: 6JUqpb
         version_id: BjT5xq
         url: https://semgrep.dev/playground/r/BjT5xq/gitlab.bandit.B606
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -2939,6 +3031,7 @@ rules:
         rule_id: oqUzYg
         version_id: DkTJqE
         url: https://semgrep.dev/playground/r/DkTJqE/gitlab.bandit.B607
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -2981,6 +3074,7 @@ rules:
         rule_id: zdUyPj
         version_id: WrT9O0
         url: https://semgrep.dev/playground/r/WrT9O0/gitlab.bandit.B608
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -3017,6 +3111,7 @@ rules:
         rule_id: 7KUppP
         version_id: 0bTByP
         url: https://semgrep.dev/playground/r/0bTByP/gitlab.bandit.B609
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -3057,6 +3152,7 @@ rules:
         rule_id: pKUG96
         version_id: K3Tenq
         url: https://semgrep.dev/playground/r/K3Tenq/gitlab.bandit.B610
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -3084,6 +3180,7 @@ rules:
         rule_id: 2ZU4Wb
         version_id: qkTG5w
         url: https://semgrep.dev/playground/r/qkTG5w/gitlab.bandit.B611
+        origin: custom
   severity: ERROR
   languages:
   - python
@@ -3113,6 +3210,7 @@ rules:
         rule_id: d8UN2B
         version_id: w8TrLP
         url: https://semgrep.dev/playground/r/w8TrLP/gitlab.bandit.B612
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -3143,6 +3241,7 @@ rules:
         rule_id: X5UZBZ
         version_id: l4TblR
         url: https://semgrep.dev/playground/r/l4TblR/gitlab.bandit.B701
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -3171,6 +3270,7 @@ rules:
         rule_id: L1Urrl
         version_id: YDT5N7
         url: https://semgrep.dev/playground/r/YDT5N7/gitlab.bandit.B702
+        origin: custom
   severity: INFO
   languages:
   - python
@@ -3203,6 +3303,7 @@ rules:
         rule_id: j2UqOR
         version_id: jQTWgP
         url: https://semgrep.dev/playground/r/jQTWgP/gitlab.bandit.B703
+        origin: custom
   severity: WARNING
   languages:
   - python
@@ -3224,6 +3325,7 @@ rules:
         rule_id: yyUvwN
         version_id: jQTW6k
         url: https://semgrep.dev/playground/r/jQTW6k/gitlab.eslint.detect-buffer-noassert
+        origin: custom
   message: |
     Detected usage of noassert in Buffer API, which allows the offset the be beyond the
     end of the buffer. This could result in writing or reading beyond the end of the buffer.
@@ -3279,6 +3381,7 @@ rules:
         rule_id: 9AUODZ
         version_id: zyTdjx
         url: https://semgrep.dev/playground/r/zyTdjx/gitlab.eslint.detect-child-process
+        origin: custom
   message: |
     Detected non-literal calls to child_process.exec(). This could lead to a command
     injection vulnerability.
@@ -3307,6 +3410,7 @@ rules:
         rule_id: QrUppL
         version_id: 2KTeG0
         url: https://semgrep.dev/playground/r/2KTeG0/gitlab.eslint.detect-disable-mustache-escape
+        origin: custom
   message: |
     Markup escaping disabled. This can be used with some template engines to escape
     disabling of HTML entities, which can lead to XSS attacks.
@@ -3334,6 +3438,7 @@ rules:
         rule_id: 10UZgd
         version_id: o5Tvk0
         url: https://semgrep.dev/playground/r/o5Tvk0/gitlab.eslint.detect-eval-with-expression
+        origin: custom
   message: 'Detected eval(variable), which could allow a malicious actor to run arbitrary
     code.
 
@@ -3361,6 +3466,7 @@ rules:
         rule_id: EwU5PB
         version_id: e1T5OQ
         url: https://semgrep.dev/playground/r/e1T5OQ/gitlab.eslint.detect-new-buffer
+        origin: custom
   patterns:
   - patterns:
     - pattern-not-inside: |-
@@ -3403,6 +3509,7 @@ rules:
         rule_id: 8GUxxL
         version_id: 6xT3ZY
         url: https://semgrep.dev/playground/r/6xT3ZY/gitlab.eslint.detect-no-csrf-before-method-override
+        origin: custom
   message: |
     Detected use of express.csrf() middleware before express.methodOverride(). This can
     allow GET requests (which are not checked by csrf) to turn into POST requests later.
@@ -3539,6 +3646,7 @@ rules:
         rule_id: bwUO0X
         version_id: yeT8BB
         url: https://semgrep.dev/playground/r/yeT8BB/gitlab.eslint.detect-non-literal-fs-filename
+        origin: custom
 - id: gitlab.eslint.detect-non-literal-regexp
   patterns:
   - pattern: 'new RegExp($ARG, ...)
@@ -3570,6 +3678,7 @@ rules:
         rule_id: r6UkPj
         version_id: 9lT2oe
         url: https://semgrep.dev/playground/r/9lT2oe/gitlab.eslint.detect-non-literal-regexp
+        origin: custom
 - id: gitlab.eslint.detect-non-literal-require
   metadata:
     cwe: 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
@@ -3589,6 +3698,7 @@ rules:
         rule_id: 3qUEE5
         version_id: X0TEOB
         url: https://semgrep.dev/playground/r/X0TEOB/gitlab.eslint.detect-non-literal-require
+        origin: custom
   message: |
     Detected the use of require(variable). Calling require with a non-literal argument might
     allow an attacker to load an run arbitrary code, or access arbitrary files.
@@ -3637,6 +3747,7 @@ rules:
         rule_id: NbUAnd
         version_id: rxTqor
         url: https://semgrep.dev/playground/r/rxTqor/gitlab.eslint.detect-object-injection
+        origin: custom
 - id: gitlab.eslint.detect-possible-timing-attacks
   patterns:
   - pattern-not: if ($Z == null) { ... };
@@ -4228,6 +4339,7 @@ rules:
         rule_id: 4bU22N
         version_id: 1QTBbO
         url: https://semgrep.dev/playground/r/1QTBbO/gitlab.eslint.detect-possible-timing-attacks
+        origin: custom
 - id: gitlab.eslint.detect-pseudoRandomBytes
   metadata:
     cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
@@ -4245,6 +4357,7 @@ rules:
         rule_id: gxUYYL
         version_id: pZTokr
         url: https://semgrep.dev/playground/r/pZTokr/gitlab.eslint.detect-pseudoRandomBytes
+        origin: custom
   message: 'Detected usage of crypto.pseudoRandomBytes, which does not produce secure
     random numbers.
 
@@ -4280,6 +4393,7 @@ rules:
         rule_id: JDUQQY
         version_id: NdTL9Y
         url: https://semgrep.dev/playground/r/NdTL9Y/gitlab.eslint.react-dangerouslysetinnerhtml
+        origin: custom
   languages:
   - typescript
   - javascript
@@ -4352,6 +4466,7 @@ rules:
         rule_id: PeUBBq
         version_id: bZTrKO
         url: https://semgrep.dev/playground/r/bZTrKO/gitlab.eslint.react-missing-noopener
+        origin: custom
   languages:
   - typescript
   - javascript
@@ -4396,6 +4511,7 @@ rules:
         rule_id: oqUKxo
         version_id: bZTrxx
         url: https://semgrep.dev/playground/r/bZTrxx/gitlab.find_sec_bugs.INSECURE_SMTP_SSL-1
+        origin: custom
   severity: ERROR
   languages:
   - java
@@ -4423,6 +4539,7 @@ rules:
         rule_id: x8Ud4w
         version_id: 44TpYw
         url: https://semgrep.dev/playground/r/44TpYw/gitlab.find_sec_bugs.RSA_NO_PADDING-1
+        origin: custom
   severity: WARNING
   languages:
   - java
@@ -4462,6 +4579,7 @@ rules:
         rule_id: YGUYPE
         version_id: yeT8Q5
         url: https://semgrep.dev/playground/r/yeT8Q5/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-1.SPEL_INJECTION-1.EL_INJECTION-2.SEAM_LOG_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
   patterns:
   - pattern: "(org.springframework.expression.spel.standard.SpelExpressionParser $P).parseExpression($ARG);"
@@ -4490,6 +4608,7 @@ rules:
         rule_id: 6JUyKR
         version_id: rxTqb8
         url: https://semgrep.dev/playground/r/rxTqb8/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
+        origin: custom
 - id: gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
   patterns:
   - pattern: new java.net.Socket(...)
@@ -4518,6 +4637,7 @@ rules:
         rule_id: nJUn7D
         version_id: A8T8nw
         url: https://semgrep.dev/playground/r/A8T8nw/gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
+        origin: custom
   severity: WARNING
 - id: gitlab.flawfinder.AddAccessAllowedAce-1
   languages:
@@ -4541,6 +4661,7 @@ rules:
         rule_id: 7KUpk7
         version_id: RGT7NO
         url: https://semgrep.dev/playground/r/RGT7NO/gitlab.flawfinder.AddAccessAllowedAce-1
+        origin: custom
   pattern: AddAccessAllowedAce(...)
   severity: WARNING
 - id: gitlab.flawfinder.CreateProcess-1
@@ -4565,6 +4686,7 @@ rules:
         rule_id: YGUQ94
         version_id: qkTGAK
         url: https://semgrep.dev/playground/r/qkTGAK/gitlab.flawfinder.CreateProcess-1
+        origin: custom
   pattern: CreateProcess(...)
   severity: WARNING
 - id: gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
@@ -4592,6 +4714,7 @@ rules:
         rule_id: 6JU6Pz
         version_id: l4Tb3e
         url: https://semgrep.dev/playground/r/l4Tb3e/gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
+        origin: custom
   pattern-either:
   - pattern: CreateProcessAsUser(...)
   - pattern: CreateProcessWithLogon(...)
@@ -4631,6 +4754,7 @@ rules:
         rule_id: wdUGO7
         version_id: 8KTX0l
         url: https://semgrep.dev/playground/r/8KTX0l/gitlab.flawfinder.EVP_des_ecb-1.EVP_des_cbc-1.EVP_des_cfb-1.EVP_des_ofb-1.EVP_desx_cbc-1
+        origin: custom
   pattern-either:
   - pattern: EVP_des_ecb(...)
   - pattern: EVP_des_cbc(...)
@@ -4666,6 +4790,7 @@ rules:
         rule_id: x8U2ke
         version_id: gETjp7
         url: https://semgrep.dev/playground/r/gETjp7/gitlab.flawfinder.EVP_rc4_40-1.EVP_rc2_40_cbc-1.EVP_rc2_64_cbc-1
+        origin: custom
   pattern-either:
   - pattern: EVP_rc4_40(...)
   - pattern: EVP_rc2_40_cbc(...)
@@ -4693,6 +4818,7 @@ rules:
         rule_id: pKUw7J
         version_id: o5TvGQ
         url: https://semgrep.dev/playground/r/o5TvGQ/gitlab.flawfinder.GetTempFileName-1
+        origin: custom
   pattern: GetTempFileName(...)
   severity: WARNING
 - id: gitlab.flawfinder.InitializeCriticalSection-1
@@ -4716,6 +4842,7 @@ rules:
         rule_id: L1Urv6
         version_id: A8T8v9
         url: https://semgrep.dev/playground/r/A8T8v9/gitlab.flawfinder.InitializeCriticalSection-1
+        origin: custom
   pattern: InitializeCriticalSection(...)
   severity: WARNING
 - id: gitlab.flawfinder.LoadLibrary-1
@@ -4740,6 +4867,7 @@ rules:
         rule_id: 8GUx8Y
         version_id: BjT54x
         url: https://semgrep.dev/playground/r/BjT54x/gitlab.flawfinder.LoadLibrary-1
+        origin: custom
   pattern: LoadLibrary(...)
   severity: WARNING
 - id: gitlab.flawfinder.LoadLibraryEx-1
@@ -4764,6 +4892,7 @@ rules:
         rule_id: gxUYQ3
         version_id: DkTJB9
         url: https://semgrep.dev/playground/r/DkTJB9/gitlab.flawfinder.LoadLibraryEx-1
+        origin: custom
   pattern: LoadLibraryEx(...)
   severity: WARNING
 - id: gitlab.flawfinder.MultiByteToWideChar-1
@@ -4787,6 +4916,7 @@ rules:
         rule_id: qNUb31
         version_id: 0bTBZE
         url: https://semgrep.dev/playground/r/0bTBZE/gitlab.flawfinder.MultiByteToWideChar-1
+        origin: custom
   pattern: MultiByteToWideChar(...)
   severity: INFO
 - id: gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
@@ -4830,6 +4960,7 @@ rules:
         rule_id: 0oUJjL
         version_id: DkTJL9
         url: https://semgrep.dev/playground/r/DkTJL9/gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
+        origin: custom
   pattern-either:
   - pattern: RpcImpersonateClient(...)
   - pattern: ImpersonateLoggedOnUser(...)
@@ -4861,6 +4992,7 @@ rules:
         rule_id: QrUpe8
         version_id: WrT9eo
         url: https://semgrep.dev/playground/r/WrT9eo/gitlab.flawfinder.SetSecurityDescriptorDacl-1
+        origin: custom
   pattern: SetSecurityDescriptorDacl(...)
   severity: ERROR
 - id: gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
@@ -4945,6 +5077,7 @@ rules:
         rule_id: lBUzG9
         version_id: K3TeRY
         url: https://semgrep.dev/playground/r/K3TeRY/gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
+        origin: custom
   pattern-either:
   - pattern: StrCat(...)
   - pattern: StrCatA(...)
@@ -4992,6 +5125,7 @@ rules:
         rule_id: BYU731
         version_id: RGT7NR
         url: https://semgrep.dev/playground/r/RGT7NR/gitlab.flawfinder.access-1
+        origin: custom
   pattern: access(...)
   severity: ERROR
 - id: gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
@@ -5026,6 +5160,7 @@ rules:
         rule_id: EwUQzn
         version_id: GxTyg9
         url: https://semgrep.dev/playground/r/GxTyg9/gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
+        origin: custom
   pattern-either:
   - pattern: atoi(...)
   - pattern: atol(...)
@@ -5060,6 +5195,7 @@ rules:
         rule_id: PeUBNk
         version_id: qkTGrX
         url: https://semgrep.dev/playground/r/qkTGrX/gitlab.flawfinder.char-1.TCHAR-1.wchar_t-1
+        origin: custom
   pattern-either:
   - patterns:
     - pattern-regex: "(wchar_t) *[a-zA-Z0-9_]+\\[.*\\]"
@@ -5097,6 +5233,7 @@ rules:
         rule_id: DbUKrn
         version_id: A8T8vg
         url: https://semgrep.dev/playground/r/A8T8vg/gitlab.flawfinder.chgrp-1
+        origin: custom
   pattern: chgrp(...)
   severity: ERROR
 - id: gitlab.flawfinder.chmod-1
@@ -5121,6 +5258,7 @@ rules:
         rule_id: WAUP43
         version_id: BjT54b
         url: https://semgrep.dev/playground/r/BjT54b/gitlab.flawfinder.chmod-1
+        origin: custom
   pattern: chmod(...)
   severity: ERROR
 - id: gitlab.flawfinder.chown-1
@@ -5145,6 +5283,7 @@ rules:
         rule_id: 0oUJPK
         version_id: DkTJBw
         url: https://semgrep.dev/playground/r/DkTJBw/gitlab.flawfinder.chown-1
+        origin: custom
   pattern: chown(...)
   severity: ERROR
 - id: gitlab.flawfinder.chroot-1
@@ -5169,6 +5308,7 @@ rules:
         rule_id: 3qUE0p
         version_id: 0bTB0E
         url: https://semgrep.dev/playground/r/0bTB0E/gitlab.flawfinder.chroot-1
+        origin: custom
   pattern: chroot(...)
   severity: WARNING
 - id: gitlab.flawfinder.crypt-1.crypt_r-1
@@ -5199,6 +5339,7 @@ rules:
         rule_id: OrUD57
         version_id: QkTDLO
         url: https://semgrep.dev/playground/r/QkTDLO/gitlab.flawfinder.crypt-1.crypt_r-1
+        origin: custom
   pattern-either:
   - pattern: crypt(...)
   - pattern: crypt_r(...)
@@ -5229,6 +5370,7 @@ rules:
         rule_id: 4bU20k
         version_id: K3TeAY
         url: https://semgrep.dev/playground/r/K3TeAY/gitlab.flawfinder.cuserid-1
+        origin: custom
   pattern: cuserid(...)
   severity: ERROR
 - id: gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
@@ -5319,6 +5461,7 @@ rules:
         rule_id: lBUzno
         version_id: K3TeAQ
         url: https://semgrep.dev/playground/r/K3TeAQ/gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
+        origin: custom
   pattern-either:
   - pattern: drand48(...)
   - pattern: erand48(...)
@@ -5374,6 +5517,7 @@ rules:
         rule_id: JDUQ8Q
         version_id: l4TbYW
         url: https://semgrep.dev/playground/r/l4TbYW/gitlab.flawfinder.equal-1.mismatch-1.is_permutation-1
+        origin: custom
   pattern-either:
   - pattern: equal(...)
   - pattern: mismatch(...)
@@ -5422,6 +5566,7 @@ rules:
         rule_id: oqUr85
         version_id: YDT5gx
         url: https://semgrep.dev/playground/r/YDT5gx/gitlab.flawfinder.execl-1.execlp-1.execle-1.execv-1.execvp-1.popen-1.WinExec-1.ShellExecute-1
+        origin: custom
   pattern-either:
   - pattern: execl(...)
   - pattern: execlp(...)
@@ -5458,6 +5603,7 @@ rules:
         rule_id: PeUBPk
         version_id: qkTGAX
         url: https://semgrep.dev/playground/r/qkTGAX/gitlab.flawfinder.fopen-1.open-1
+        origin: custom
   pattern-either:
   - pattern: fopen(...)
   - pattern: open(...)
@@ -5499,6 +5645,7 @@ rules:
         rule_id: eqUpJj
         version_id: 3ZTngN
         url: https://semgrep.dev/playground/r/3ZTngN/gitlab.flawfinder.fprintf-1.vfprintf-1._ftprintf-1._vftprintf-1.fwprintf-1.fvwprintf-1
+        origin: custom
   pattern-either:
   - patterns:
     - pattern: fprintf($FD, $FMT, ...)
@@ -5559,6 +5706,7 @@ rules:
         rule_id: 5rU8bL
         version_id: YDT5xl
         url: https://semgrep.dev/playground/r/YDT5xl/gitlab.flawfinder.fscanf-1.sscanf-1.vsscanf-1.vfscanf-1._ftscanf-1.fwscanf-1.vfwscanf-1.vswscanf-1
+        origin: custom
   pattern-either:
   - pattern: fscanf(...)
   - pattern: sscanf(...)
@@ -5592,6 +5740,7 @@ rules:
         rule_id: GdUZpz
         version_id: 6xT3ky
         url: https://semgrep.dev/playground/r/6xT3ky/gitlab.flawfinder.g_get_home_dir-1
+        origin: custom
   pattern: g_get_home_dir(...)
   severity: WARNING
 - id: gitlab.flawfinder.g_get_tmp_dir-1
@@ -5617,6 +5766,7 @@ rules:
         rule_id: ReUojK
         version_id: o5TvPZ
         url: https://semgrep.dev/playground/r/o5TvPZ/gitlab.flawfinder.g_get_tmp_dir-1
+        origin: custom
   pattern: g_get_tmp_dir(...)
   severity: WARNING
 - id: gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
@@ -5654,6 +5804,7 @@ rules:
         rule_id: AbUGwN
         version_id: zyTd98
         url: https://semgrep.dev/playground/r/zyTd98/gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
+        origin: custom
   pattern-either:
   - pattern: getchar(...)
   - pattern: fgetc(...)
@@ -5687,6 +5838,7 @@ rules:
         rule_id: BYU761
         version_id: pZToJL
         url: https://semgrep.dev/playground/r/pZToJL/gitlab.flawfinder.getenv-1.curl_getenv-1
+        origin: custom
   pattern-either:
   - pattern: getenv(...)
   - pattern: curl_getenv(...)
@@ -5716,6 +5868,7 @@ rules:
         rule_id: JDUQ9Q
         version_id: l4Tb3W
         url: https://semgrep.dev/playground/r/l4Tb3W/gitlab.flawfinder.getlogin-1
+        origin: custom
   pattern: getlogin(...)
   severity: ERROR
 - id: gitlab.flawfinder.getopt-1.getopt_long-1
@@ -5744,6 +5897,7 @@ rules:
         rule_id: DbUKAn
         version_id: 2KTeXv
         url: https://semgrep.dev/playground/r/2KTeXv/gitlab.flawfinder.getopt-1.getopt_long-1
+        origin: custom
   pattern-either:
   - pattern: getopt(...)
   - pattern: getopt_long(...)
@@ -5774,6 +5928,7 @@ rules:
         rule_id: 5rU8gL
         version_id: YDT5gl
         url: https://semgrep.dev/playground/r/YDT5gl/gitlab.flawfinder.getpass-1
+        origin: custom
   pattern: getpass(...)
   severity: ERROR
 - id: gitlab.flawfinder.getpw-1
@@ -5800,6 +5955,7 @@ rules:
         rule_id: WAUP03
         version_id: X0TEp4
         url: https://semgrep.dev/playground/r/X0TEp4/gitlab.flawfinder.getpw-1
+        origin: custom
   pattern: getpw(...)
   severity: ERROR
 - id: gitlab.flawfinder.gets-1._getts-1
@@ -5826,6 +5982,7 @@ rules:
         rule_id: 0oUJjK
         version_id: jQTWp1
         url: https://semgrep.dev/playground/r/jQTWp1/gitlab.flawfinder.gets-1._getts-1
+        origin: custom
   pattern-either:
   - pattern: gets(...)
   - pattern: _getts(...)
@@ -5852,6 +6009,7 @@ rules:
         rule_id: KxUY1o
         version_id: 1QTBn3
         url: https://semgrep.dev/playground/r/1QTBn3/gitlab.flawfinder.getwd-1
+        origin: custom
   pattern: getwd(...)
   severity: WARNING
 - id: gitlab.flawfinder.gsignal-1.ssignal-1
@@ -5881,6 +6039,7 @@ rules:
         rule_id: GdUZdz
         version_id: JdTbOo
         url: https://semgrep.dev/playground/r/JdTbOo/gitlab.flawfinder.gsignal-1.ssignal-1
+        origin: custom
   pattern-either:
   - pattern: gsignal(...)
   - pattern: ssignal(...)
@@ -5916,6 +6075,7 @@ rules:
         rule_id: qNUb3v
         version_id: 9lT2L6
         url: https://semgrep.dev/playground/r/9lT2L6/gitlab.flawfinder.lstrcat-1.wcscat-1._tcscat-1._mbscat-1
+        origin: custom
   pattern-either:
   - pattern: lstrcat(...)
   - pattern: wcscat(...)
@@ -5953,6 +6113,7 @@ rules:
         rule_id: lBUzGo
         version_id: yeT8z5
         url: https://semgrep.dev/playground/r/yeT8z5/gitlab.flawfinder.lstrcatn-1.wcsncat-1._tcsncat-1._mbsnbcat-1
+        origin: custom
   pattern-either:
   - pattern: lstrcatn(...)
   - pattern: wcsncat(...)
@@ -5991,6 +6152,7 @@ rules:
         rule_id: YGUQd4
         version_id: rxTqX8
         url: https://semgrep.dev/playground/r/rxTqX8/gitlab.flawfinder.lstrcpy-1.wcscpy-1._tcscpy-1._mbscpy-1
+        origin: custom
   pattern-either:
   - pattern: lstrcpy(...)
   - pattern: wcscpy(...)
@@ -6028,6 +6190,7 @@ rules:
         rule_id: 6JU6Nz
         version_id: bZTrJx
         url: https://semgrep.dev/playground/r/bZTrJx/gitlab.flawfinder.lstrcpyn-1.wcsncpy-1._tcsncpy-1._mbsnbcpy-1
+        origin: custom
   pattern-either:
   - pattern: lstrcpyn(...)
   - pattern: wcsncpy(...)
@@ -6058,6 +6221,7 @@ rules:
         rule_id: nJUrv6
         version_id: 5PTjx5
         url: https://semgrep.dev/playground/r/5PTjx5/gitlab.flawfinder.memalign-1
+        origin: custom
   pattern-either:
   - pattern: memalign(...)
   - pattern-regex: "(void)\\s\\*(\\s|)(memalign)\\;"
@@ -6090,6 +6254,7 @@ rules:
         rule_id: oqUr65
         version_id: NdTLEE
         url: https://semgrep.dev/playground/r/NdTLEE/gitlab.flawfinder.memcpy-1.CopyMemory-1.bcopy-1
+        origin: custom
   pattern-either:
   - pattern: memcpy(...)
   - pattern: CopyMemory(...)
@@ -6118,6 +6283,7 @@ rules:
         rule_id: 2ZUKJn
         version_id: zyTd6v
         url: https://semgrep.dev/playground/r/zyTd6v/gitlab.flawfinder.mkstemp-1
+        origin: custom
   pattern: mkstemp(...)
   severity: INFO
 - id: gitlab.flawfinder.mktemp-1
@@ -6141,6 +6307,7 @@ rules:
         rule_id: X5U76e
         version_id: pZToR4
         url: https://semgrep.dev/playground/r/pZToR4/gitlab.flawfinder.mktemp-1
+        origin: custom
   pattern: mktemp(...)
   severity: ERROR
 - id: gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
@@ -6180,6 +6347,7 @@ rules:
         rule_id: v8UjyR
         version_id: 44TpJn
         url: https://semgrep.dev/playground/r/44TpJn/gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
+        origin: custom
   pattern-either:
   - patterns:
     - pattern: printf(...)
@@ -6223,6 +6391,7 @@ rules:
         rule_id: KxUYWo
         version_id: WrT9eG
         url: https://semgrep.dev/playground/r/WrT9eG/gitlab.flawfinder.readlink-1
+        origin: custom
   pattern: readlink(...)
   severity: ERROR
 - id: gitlab.flawfinder.realpath-1
@@ -6248,6 +6417,7 @@ rules:
         rule_id: zdU1EX
         version_id: kbTp9Q
         url: https://semgrep.dev/playground/r/kbTp9Q/gitlab.flawfinder.realpath-1
+        origin: custom
   pattern: realpath(...)
   severity: WARNING
 - id: gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
@@ -6284,6 +6454,7 @@ rules:
         rule_id: pKUw5J
         version_id: w8Trvg
         url: https://semgrep.dev/playground/r/w8Trvg/gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
+        origin: custom
   pattern-either:
   - patterns:
     - pattern: scanf($FMT, ...)
@@ -6335,6 +6506,7 @@ rules:
         rule_id: d8UlJZ
         version_id: PkTvKp
         url: https://semgrep.dev/playground/r/PkTvKp/gitlab.flawfinder.snprintf-1.vsnprintf-1._snprintf-1._sntprintf-1._vsntprintf-1
+        origin: custom
   pattern-either:
   - patterns:
     - pattern: snprintf($BUF,$SIZ,$FMT,...)
@@ -6388,6 +6560,7 @@ rules:
         rule_id: 2ZUK9n
         version_id: xyTO1y
         url: https://semgrep.dev/playground/r/xyTO1y/gitlab.flawfinder.sprintf-1.vsprintf-1.swprintf-1.vswprintf-1._stprintf-1._vstprintf-1
+        origin: custom
   pattern-either:
   - pattern: sprintf(...)
   - pattern: vsprintf(...)
@@ -6419,6 +6592,7 @@ rules:
         rule_id: X5U7re
         version_id: O9Tzr2
         url: https://semgrep.dev/playground/r/O9Tzr2/gitlab.flawfinder.strcat-1
+        origin: custom
   pattern: strcat(...)
   severity: ERROR
 - id: gitlab.flawfinder.strccpy-1.strcadd-1
@@ -6445,6 +6619,7 @@ rules:
         rule_id: j2URoA
         version_id: e1T5wo
         url: https://semgrep.dev/playground/r/e1T5wo/gitlab.flawfinder.strccpy-1.strcadd-1
+        origin: custom
   pattern-either:
   - pattern: strccpy(...)
   - pattern: strcadd(...)
@@ -6472,6 +6647,7 @@ rules:
         rule_id: 10Ue1w
         version_id: vdTgJE
         url: https://semgrep.dev/playground/r/vdTgJE/gitlab.flawfinder.strcpy-1
+        origin: custom
   pattern: strcpy(...)
   severity: ERROR
 - id: gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
@@ -6551,6 +6727,7 @@ rules:
         rule_id: 9AUkxG
         version_id: d6T1E1
         url: https://semgrep.dev/playground/r/d6T1E1/gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
+        origin: custom
   pattern-either:
   - pattern: strcpyA(...)
   - pattern: strcpyW(...)
@@ -6597,6 +6774,7 @@ rules:
         rule_id: yyUyKE
         version_id: ZRTnJ0
         url: https://semgrep.dev/playground/r/ZRTnJ0/gitlab.flawfinder.streadd-1.strecpy-1
+        origin: custom
   pattern-either:
   - pattern: streadd(...)
   - pattern: strecpy(...)
@@ -6632,6 +6810,7 @@ rules:
         rule_id: r6U9Qq
         version_id: nWTjl3
         url: https://semgrep.dev/playground/r/nWTjl3/gitlab.flawfinder.strlen-1.wcslen-1._tcslen-1._mbslen-1
+        origin: custom
   pattern-either:
   - pattern: strlen(...)
   - pattern: wcslen(...)
@@ -6660,6 +6839,7 @@ rules:
         rule_id: bwUN2p
         version_id: ExTObz
         url: https://semgrep.dev/playground/r/ExTObz/gitlab.flawfinder.strncat-1
+        origin: custom
   pattern: strncat(...)
   severity: INFO
 - id: gitlab.flawfinder.strncpy-1
@@ -6684,6 +6864,7 @@ rules:
         rule_id: NbUY74
         version_id: 7ZTdw4
         url: https://semgrep.dev/playground/r/7ZTdw4/gitlab.flawfinder.strncpy-1
+        origin: custom
   pattern: strncpy(...)
   severity: INFO
 - id: gitlab.flawfinder.strtrns-1
@@ -6707,6 +6888,7 @@ rules:
         rule_id: kxU811
         version_id: LjTOJb
         url: https://semgrep.dev/playground/r/LjTOJb/gitlab.flawfinder.strtrns-1
+        origin: custom
   pattern: strtrns(...)
   severity: WARNING
 - id: gitlab.flawfinder.syslog-1
@@ -6731,6 +6913,7 @@ rules:
         rule_id: ZqUgoz
         version_id: JdTb4q
         url: https://semgrep.dev/playground/r/JdTb4q/gitlab.flawfinder.syslog-1
+        origin: custom
   pattern-either:
   - patterns:
     - pattern: syslog($FUNC,...)
@@ -6758,6 +6941,7 @@ rules:
         rule_id: zdU17X
         version_id: 6xT344
         url: https://semgrep.dev/playground/r/6xT344/gitlab.flawfinder.system-1
+        origin: custom
   pattern: system(...)
   severity: ERROR
 - id: gitlab.flawfinder.tmpfile-1
@@ -6782,6 +6966,7 @@ rules:
         rule_id: j2UR7A
         version_id: 2KTenk
         url: https://semgrep.dev/playground/r/2KTenk/gitlab.flawfinder.tmpfile-1
+        origin: custom
   pattern: tmpfile(...)
   severity: INFO
 - id: gitlab.flawfinder.tmpnam-1.tempnam-1
@@ -6808,6 +6993,7 @@ rules:
         rule_id: 10Ueqw
         version_id: X0TEG1
         url: https://semgrep.dev/playground/r/X0TEG1/gitlab.flawfinder.tmpnam-1.tempnam-1
+        origin: custom
   pattern-either:
   - pattern: tmpnam(...)
   - pattern: tempnam(...)
@@ -6834,6 +7020,7 @@ rules:
         rule_id: ReUo4K
         version_id: 5PTjK9
         url: https://semgrep.dev/playground/r/5PTjK9/gitlab.flawfinder.ulimit-1
+        origin: custom
   pattern: ulimit(...)
   severity: INFO
 - id: gitlab.flawfinder.umask-1
@@ -6858,6 +7045,7 @@ rules:
         rule_id: KxUY1n
         version_id: WrT9go
         url: https://semgrep.dev/playground/r/WrT9go/gitlab.flawfinder.umask-1
+        origin: custom
   pattern: umask(...)
   severity: INFO
 - id: gitlab.flawfinder.usleep-1
@@ -6884,6 +7072,7 @@ rules:
         rule_id: AbUGoN
         version_id: GxTyb6
         url: https://semgrep.dev/playground/r/GxTyb6/gitlab.flawfinder.usleep-1
+        origin: custom
   pattern: usleep(...)
   severity: INFO
 - id: gitlab.flawfinder.vfork-1
@@ -6908,6 +7097,7 @@ rules:
         rule_id: qNUb8v
         version_id: 0bTB0q
         url: https://semgrep.dev/playground/r/0bTB0q/gitlab.flawfinder.vfork-1
+        origin: custom
   pattern: vfork(...)
   severity: INFO
 - id: gitlab.security_code_scan.SCS0018-1
@@ -7019,6 +7209,7 @@ rules:
         rule_id: BYUy1X
         version_id: rxTqg7
         url: https://semgrep.dev/playground/r/rxTqg7/gitlab.security_code_scan.SCS0018-1
+        origin: custom
   severity: WARNING
   languages:
   - csharp
@@ -7095,6 +7286,7 @@ rules:
         rule_id: NbUYgl
         version_id: pZTNvl
         url: https://semgrep.dev/playground/r/pZTNvl/mobsf.mobsfscan.accept_self_signed.accept_self_signed_certificate
+        origin: community
 - id: mobsf.mobsfscan.aes_ecb.aes_ecb_mode
   patterns:
   - pattern-either:
@@ -7120,6 +7312,7 @@ rules:
         rule_id: WAUPO6
         version_id: pZTwN3
         url: https://semgrep.dev/playground/r/pZTwN3/mobsf.mobsfscan.aes_ecb.aes_ecb_mode
+        origin: community
 - id: mobsf.mobsfscan.aes_ecb.aes_ecb_mode_default
   patterns:
   - pattern-either:
@@ -7145,6 +7338,7 @@ rules:
         rule_id: 0oUJyQ
         version_id: 2KTKYj
         url: https://semgrep.dev/playground/r/2KTKYj/mobsf.mobsfscan.aes_ecb.aes_ecb_mode_default
+        origin: community
 - id: mobsf.mobsfscan.aes_encryption_keys.aes_hardcoded_key
   patterns:
   - pattern-either:
@@ -7174,6 +7368,7 @@ rules:
         rule_id: KxUYnR
         version_id: X0T7L9
         url: https://semgrep.dev/playground/r/X0T7L9/mobsf.mobsfscan.aes_encryption_keys.aes_hardcoded_key
+        origin: community
 - id: mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
   patterns:
   - pattern-either:
@@ -7205,6 +7400,7 @@ rules:
         rule_id: L1UJDJ
         version_id: w8TPz2
         url: https://semgrep.dev/playground/r/w8TPz2/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
+        origin: community
 - id: mobsf.mobsfscan.android.logging.android_logging
   patterns:
   - pattern-not: System.out.print();
@@ -7261,6 +7457,7 @@ rules:
         rule_id: 8GU0OP
         version_id: xyTgAJ
         url: https://semgrep.dev/playground/r/xyTgAJ/mobsf.mobsfscan.android.logging.android_logging
+        origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_api_key
   patterns:
   - pattern-not: $X = "";
@@ -7292,6 +7489,7 @@ rules:
         rule_id: 3qUgDz
         version_id: vdTwn1
         url: https://semgrep.dev/playground/r/vdTwn1/mobsf.mobsfscan.android.secrets.hardcoded_api_key
+        origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_password
   patterns:
   - pattern-not: $X = "";
@@ -7323,6 +7521,7 @@ rules:
         rule_id: gxUpG8
         version_id: O9Tq3j
         url: https://semgrep.dev/playground/r/O9Tq3j/mobsf.mobsfscan.android.secrets.hardcoded_password
+        origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_secret
   patterns:
   - pattern-not: $X = "";
@@ -7354,6 +7553,7 @@ rules:
         rule_id: 4bUJWL
         version_id: d6T0jQ
         url: https://semgrep.dev/playground/r/d6T0jQ/mobsf.mobsfscan.android.secrets.hardcoded_secret
+        origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_username
   patterns:
   - pattern-not: $X = "";
@@ -7385,6 +7585,7 @@ rules:
         rule_id: QrULll
         version_id: e1To80
         url: https://semgrep.dev/playground/r/e1To80/mobsf.mobsfscan.android.secrets.hardcoded_username
+        origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_readable
   patterns:
   - pattern-either:
@@ -7408,6 +7609,7 @@ rules:
         rule_id: PeUKq9
         version_id: ZRT955
         url: https://semgrep.dev/playground/r/ZRT955/mobsf.mobsfscan.android.word_readable_writable.world_readable
+        origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_writeable
   patterns:
   - pattern-either:
@@ -7432,6 +7634,7 @@ rules:
         rule_id: JDU4Ab
         version_id: nWTbzY
         url: https://semgrep.dev/playground/r/nWTbzY/mobsf.mobsfscan.android.word_readable_writable.world_writeable
+        origin: community
 - id: mobsf.mobsfscan.android_safetynetapi.android_safetynet_api
   patterns:
   - pattern-either:
@@ -7465,6 +7668,7 @@ rules:
         rule_id: 5rU8ko
         version_id: qkTb46
         url: https://semgrep.dev/playground/r/qkTb46/mobsf.mobsfscan.android_safetynetapi.android_safetynet_api
+        origin: community
 - id: mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
   patterns:
   - pattern-either:
@@ -7498,6 +7702,7 @@ rules:
         rule_id: 5rUx0W
         version_id: ExTL2Q
         url: https://semgrep.dev/playground/r/ExTL2Q/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
+        origin: community
 - id: mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
   patterns:
   - pattern-either:
@@ -7543,6 +7748,7 @@ rules:
         rule_id: GdUg51
         version_id: 7ZTlQv
         url: https://semgrep.dev/playground/r/7ZTlQv/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
+        origin: community
 - id: mobsf.mobsfscan.best_practices.root_detection.android_root_detection
   patterns:
   - pattern-either:
@@ -7574,6 +7780,7 @@ rules:
         rule_id: ReUdYj
         version_id: LjTWyP
         url: https://semgrep.dev/playground/r/LjTWyP/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
+        origin: community
 - id: mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
   patterns:
   - pattern-either:
@@ -7597,6 +7804,7 @@ rules:
         rule_id: AbUx1o
         version_id: 8KTJjG
         url: https://semgrep.dev/playground/r/8KTJjG/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
+        origin: community
 - id: mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
   patterns:
   - pattern-either:
@@ -7628,6 +7836,7 @@ rules:
         rule_id: BYUoO0
         version_id: gETR1k
         url: https://semgrep.dev/playground/r/gETR1k/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
+        origin: community
 - id: mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
   patterns:
   - pattern-either:
@@ -7695,6 +7904,7 @@ rules:
         rule_id: DbUL4y
         version_id: QkTYzZ
         url: https://semgrep.dev/playground/r/QkTYzZ/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
+        origin: community
 - id: mobsf.mobsfscan.cbc_padding_oracle.cbc_padding_oracle
   patterns:
   - pattern-either:
@@ -7734,6 +7944,7 @@ rules:
         rule_id: qNUb5A
         version_id: jQTRzb
         url: https://semgrep.dev/playground/r/jQTRzb/mobsf.mobsfscan.cbc_padding_oracle.cbc_padding_oracle
+        origin: community
 - id: mobsf.mobsfscan.cbc_static_iv.cbc_static_iv
   patterns:
   - pattern-either:
@@ -7767,6 +7978,7 @@ rules:
         rule_id: lBUzlq
         version_id: 1QTeoD
         url: https://semgrep.dev/playground/r/1QTeoD/mobsf.mobsfscan.cbc_static_iv.cbc_static_iv
+        origin: community
 - id: mobsf.mobsfscan.command_injection.command_injection
   patterns:
   - pattern-not: Runtime.getRuntime().exec("...", ...);
@@ -7792,6 +8004,7 @@ rules:
         rule_id: yyUy3g
         version_id: vdTjN9
         url: https://semgrep.dev/playground/r/vdTjN9/mobsf.mobsfscan.command_injection.command_injection
+        origin: community
 - id: mobsf.mobsfscan.command_injection_formated.command_injection_warning
   patterns:
   - pattern-either:
@@ -7861,6 +8074,7 @@ rules:
         rule_id: r6U90K
         version_id: d6TlA4
         url: https://semgrep.dev/playground/r/d6TlA4/mobsf.mobsfscan.command_injection_formated.command_injection_warning
+        origin: community
 - id: mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
   patterns:
   - pattern-either:
@@ -7886,6 +8100,7 @@ rules:
         rule_id: WAUg2K
         version_id: 3ZTGPQ
         url: https://semgrep.dev/playground/r/3ZTGPQ/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
+        origin: community
 - id: mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
   patterns:
   - pattern-either:
@@ -7911,6 +8126,7 @@ rules:
         rule_id: 0oUZRX
         version_id: 44TLk6
         url: https://semgrep.dev/playground/r/44TLk6/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
+        origin: community
 - id: mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
   patterns:
   - pattern-either:
@@ -7940,6 +8156,7 @@ rules:
         rule_id: KxURB0
         version_id: PkTlZR
         url: https://semgrep.dev/playground/r/PkTlZR/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
+        origin: community
 - id: mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
   patterns:
   - pattern-either:
@@ -7979,6 +8196,7 @@ rules:
         rule_id: qNUrzk
         version_id: JdTByk
         url: https://semgrep.dev/playground/r/JdTByk/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
+        origin: community
 - id: mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
   patterns:
   - pattern-either:
@@ -8012,6 +8230,7 @@ rules:
         rule_id: lBUYwL
         version_id: 5PTRO7
         url: https://semgrep.dev/playground/r/5PTRO7/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
+        origin: community
 - id: mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
   patterns:
   - pattern-either:
@@ -8038,6 +8257,7 @@ rules:
         rule_id: PeUKqY
         version_id: GxTn7Y
         url: https://semgrep.dev/playground/r/GxTn7Y/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
+        origin: community
 - id: mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
   patterns:
   - pattern-either:
@@ -8061,6 +8281,7 @@ rules:
         rule_id: JDU4Ag
         version_id: RGT6g9
         url: https://semgrep.dev/playground/r/RGT6g9/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
+        origin: community
 - id: mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
   patterns:
   - pattern-either:
@@ -8092,6 +8313,7 @@ rules:
         rule_id: 5rUx0n
         version_id: A8TOzL
         url: https://semgrep.dev/playground/r/A8TOzL/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
+        origin: community
 - id: mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
   patterns:
   - pattern-either:
@@ -8124,6 +8346,7 @@ rules:
         rule_id: GdUgKL
         version_id: BjTgNG
         url: https://semgrep.dev/playground/r/BjTgNG/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
+        origin: community
 - id: mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
   patterns:
   - pattern-either:
@@ -8149,6 +8372,7 @@ rules:
         rule_id: ReUdZD
         version_id: DkTPp3
         url: https://semgrep.dev/playground/r/DkTPp3/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
+        origin: community
 - id: mobsf.mobsfscan.crypto.weak_hashes.weak_hash
   patterns:
   - pattern-either:
@@ -8182,6 +8406,7 @@ rules:
         rule_id: AbUxZk
         version_id: WrTXog
         url: https://semgrep.dev/playground/r/WrTXog/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
+        origin: community
 - id: mobsf.mobsfscan.crypto.weak_iv.weak_iv
   patterns:
   - pattern-either:
@@ -8216,6 +8441,7 @@ rules:
         rule_id: BYUonD
         version_id: 0bT850
         url: https://semgrep.dev/playground/r/0bT850/mobsf.mobsfscan.crypto.weak_iv.weak_iv
+        origin: community
 - id: mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
   patterns:
   - pattern-either:
@@ -8273,6 +8499,7 @@ rules:
         rule_id: DbULZp
         version_id: K3TDb9
         url: https://semgrep.dev/playground/r/K3TDb9/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
+        origin: community
 - id: mobsf.mobsfscan.default_http_client_tls.default_http_client_tls
   patterns:
   - pattern-either:
@@ -8297,6 +8524,7 @@ rules:
         rule_id: kxU8gq
         version_id: ExTQNg
         url: https://semgrep.dev/playground/r/ExTQNg/mobsf.mobsfscan.default_http_client_tls.default_http_client_tls
+        origin: community
 - id: mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
   patterns:
   - pattern-either:
@@ -8324,6 +8552,7 @@ rules:
         rule_id: WAUgAZ
         version_id: qkTdjz
         url: https://semgrep.dev/playground/r/qkTdjz/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
+        origin: community
 - id: mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
   patterns:
   - pattern: new ObjectInputStream(...);
@@ -8351,6 +8580,7 @@ rules:
         rule_id: 0oUZYJ
         version_id: l4TK9A
         url: https://semgrep.dev/playground/r/l4TK9A/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
+        origin: community
 - id: mobsf.mobsfscan.flag_secure.android_prevent_screenshot
   patterns:
   - pattern-either:
@@ -8396,6 +8626,7 @@ rules:
         rule_id: GdUZjq
         version_id: l4TzxE
         url: https://semgrep.dev/playground/r/l4TzxE/mobsf.mobsfscan.flag_secure.android_prevent_screenshot
+        origin: community
 - id: mobsf.mobsfscan.hidden_ui.android_hidden_ui
   patterns:
   - pattern-either:
@@ -8427,6 +8658,7 @@ rules:
         rule_id: DbUKqK
         version_id: GxTZPg
         url: https://semgrep.dev/playground/r/GxTZPg/mobsf.mobsfscan.hidden_ui.android_hidden_ui
+        origin: community
 - id: mobsf.mobsfscan.injection.command_injection.command_injection
   patterns:
   - pattern-not: Runtime.getRuntime().exec("...", ...);
@@ -8452,6 +8684,7 @@ rules:
         rule_id: KxUR67
         version_id: YDT1R1
         url: https://semgrep.dev/playground/r/YDT1R1/mobsf.mobsfscan.injection.command_injection.command_injection
+        origin: community
 - id: mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
   patterns:
   - pattern-either:
@@ -8521,6 +8754,7 @@ rules:
         rule_id: qNUrPW
         version_id: 6xTljr
         url: https://semgrep.dev/playground/r/6xTljr/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
+        origin: community
 - id: mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
   patterns:
   - pattern-not: $DB.execSQL("..." , ...);
@@ -8569,6 +8803,7 @@ rules:
         rule_id: lBUYAy
         version_id: o5T3ev
         url: https://semgrep.dev/playground/r/o5T3ev/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
+        origin: community
 - id: mobsf.mobsfscan.insecure_random.java_insecure_random
   patterns:
   - pattern-either:
@@ -8595,6 +8830,7 @@ rules:
         rule_id: YGUQNj
         version_id: 9lTkyz
         url: https://semgrep.dev/playground/r/9lTkyz/mobsf.mobsfscan.insecure_random.java_insecure_random
+        origin: community
 - id: mobsf.mobsfscan.insecure_ssl_v3.insecure_sslv3
   patterns:
   - pattern-either:
@@ -8618,6 +8854,7 @@ rules:
         rule_id: 6JU6Zw
         version_id: yeTy0L
         url: https://semgrep.dev/playground/r/yeTy0L/mobsf.mobsfscan.insecure_ssl_v3.insecure_sslv3
+        origin: community
 - id: mobsf.mobsfscan.jackson_deserialization.jackson_deserialization
   patterns:
   - pattern-either:
@@ -8645,6 +8882,7 @@ rules:
         rule_id: 10Uezq
         version_id: O9TDOG
         url: https://semgrep.dev/playground/r/O9TDOG/mobsf.mobsfscan.jackson_deserialization.jackson_deserialization
+        origin: community
 - id: mobsf.mobsfscan.logging.android_logging
   patterns:
   - pattern-not: System.out.print();
@@ -8701,6 +8939,7 @@ rules:
         rule_id: WAUPOy
         version_id: RGToAN
         url: https://semgrep.dev/playground/r/RGToAN/mobsf.mobsfscan.logging.android_logging
+        origin: community
 - id: mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
   patterns:
   - pattern-either:
@@ -8774,6 +9013,7 @@ rules:
         rule_id: YGUxKY
         version_id: zyTwko
         url: https://semgrep.dev/playground/r/zyTwko/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
+        origin: community
 - id: mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
   patterns:
   - pattern-either:
@@ -8798,6 +9038,7 @@ rules:
         rule_id: 6JUkwx
         version_id: pZTdOE
         url: https://semgrep.dev/playground/r/pZTdOE/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
+        origin: community
 - id: mobsf.mobsfscan.object_deserialization.object_deserialization
   patterns:
   - pattern: new ObjectInputStream(...);
@@ -8825,6 +9066,7 @@ rules:
         rule_id: 9AUke0
         version_id: e1Tp1p
         url: https://semgrep.dev/playground/r/e1Tp1p/mobsf.mobsfscan.object_deserialization.object_deserialization
+        origin: community
 - id: mobsf.mobsfscan.root_detection.android_root_detection
   patterns:
   - pattern-either:
@@ -8856,6 +9098,7 @@ rules:
         rule_id: ReUoeE
         version_id: YDTQvd
         url: https://semgrep.dev/playground/r/YDTQvd/mobsf.mobsfscan.root_detection.android_root_detection
+        origin: community
 - id: mobsf.mobsfscan.rsa_no_oeap.rsa_no_oeap
   patterns:
   - pattern-either:
@@ -8887,6 +9130,7 @@ rules:
         rule_id: oqUrk3
         version_id: rxT96P
         url: https://semgrep.dev/playground/r/rxT96P/mobsf.mobsfscan.rsa_no_oeap.rsa_no_oeap
+        origin: community
 - id: mobsf.mobsfscan.secrets.hardcoded_api_key
   patterns:
   - pattern-not: $X = "";
@@ -8918,6 +9162,7 @@ rules:
         rule_id: qNUb5p
         version_id: DkTKNZ
         url: https://semgrep.dev/playground/r/DkTKNZ/mobsf.mobsfscan.secrets.hardcoded_api_key
+        origin: community
 - id: mobsf.mobsfscan.secrets.hardcoded_password
   patterns:
   - pattern-not: $X = "";
@@ -8949,6 +9194,7 @@ rules:
         rule_id: 0oUJyr
         version_id: A8TGJP
         url: https://semgrep.dev/playground/r/A8TGJP/mobsf.mobsfscan.secrets.hardcoded_password
+        origin: community
 - id: mobsf.mobsfscan.secrets.hardcoded_secret
   patterns:
   - pattern-not: $X = "";
@@ -8980,6 +9226,7 @@ rules:
         rule_id: lBUzlx
         version_id: WrTPEX
         url: https://semgrep.dev/playground/r/WrTPEX/mobsf.mobsfscan.secrets.hardcoded_secret
+        origin: community
 - id: mobsf.mobsfscan.secrets.hardcoded_username
   patterns:
   - pattern-not: $X = "";
@@ -9011,6 +9258,7 @@ rules:
         rule_id: KxUYnr
         version_id: BjT71O
         url: https://semgrep.dev/playground/r/BjT71O/mobsf.mobsfscan.secrets.hardcoded_username
+        origin: community
 - id: mobsf.mobsfscan.sha1_hash.sha1_hash
   patterns:
   - pattern-either:
@@ -9043,6 +9291,7 @@ rules:
         rule_id: zdU1jO
         version_id: bZTN1A
         url: https://semgrep.dev/playground/r/bZTN1A/mobsf.mobsfscan.sha1_hash.sha1_hash
+        origin: community
 - id: mobsf.mobsfscan.sqlite_injection.sqlite_injection
   patterns:
   - pattern-not: $DB.execSQL("..." , ...);
@@ -9091,6 +9340,7 @@ rules:
         rule_id: bwUNRd
         version_id: zyTlv5
         url: https://semgrep.dev/playground/r/zyTlv5/mobsf.mobsfscan.sqlite_injection.sqlite_injection
+        origin: community
 - id: mobsf.mobsfscan.tapjacking.android_detect_tapjacking
   patterns:
   - pattern-either:
@@ -9114,6 +9364,7 @@ rules:
         rule_id: AbUGk0
         version_id: 6xT6xP
         url: https://semgrep.dev/playground/r/6xT6xP/mobsf.mobsfscan.tapjacking.android_detect_tapjacking
+        origin: community
 - id: mobsf.mobsfscan.tls_certificate_transparency.android_certificate_transparency
   patterns:
   - pattern-either:
@@ -9145,6 +9396,7 @@ rules:
         rule_id: BYU7xv
         version_id: o5TrZE
         url: https://semgrep.dev/playground/r/o5TrZE/mobsf.mobsfscan.tls_certificate_transparency.android_certificate_transparency
+        origin: community
 - id: mobsf.mobsfscan.tls_pinning.android_certificate_pinning
   patterns:
   - pattern-either:
@@ -9212,6 +9464,7 @@ rules:
         rule_id: DbUKqv
         version_id: zyT1l3
         url: https://semgrep.dev/playground/r/zyT1l3/mobsf.mobsfscan.tls_pinning.android_certificate_pinning
+        origin: community
 - id: mobsf.mobsfscan.weak_ciphers.weak_cipher
   patterns:
   - pattern-either:
@@ -9237,6 +9490,7 @@ rules:
         rule_id: pKUwko
         version_id: NdTYd3
         url: https://semgrep.dev/playground/r/NdTYd3/mobsf.mobsfscan.weak_ciphers.weak_cipher
+        origin: community
 - id: mobsf.mobsfscan.weak_hashes.weak_hash
   patterns:
   - pattern-either:
@@ -9270,6 +9524,7 @@ rules:
         rule_id: 2ZUKGy
         version_id: kbT8xg
         url: https://semgrep.dev/playground/r/kbT8xg/mobsf.mobsfscan.weak_hashes.weak_hash
+        origin: community
 - id: mobsf.mobsfscan.weak_iv.weak_iv
   patterns:
   - pattern-either:
@@ -9304,6 +9559,7 @@ rules:
         rule_id: X5U7OR
         version_id: w8TGnz
         url: https://semgrep.dev/playground/r/w8TGnz/mobsf.mobsfscan.weak_iv.weak_iv
+        origin: community
 - id: mobsf.mobsfscan.weak_key_size.weak_key_size
   patterns:
   - pattern-either:
@@ -9361,6 +9617,7 @@ rules:
         rule_id: j2URlo
         version_id: xyT2Zn
         url: https://semgrep.dev/playground/r/xyT2Zn/mobsf.mobsfscan.weak_key_size.weak_key_size
+        origin: community
 - id: mobsf.mobsfscan.webview.webview_debugging.webview_debugging
   patterns:
   - pattern-either:
@@ -9387,6 +9644,7 @@ rules:
         rule_id: oqUPpl
         version_id: 2KTkb9
         url: https://semgrep.dev/playground/r/2KTkb9/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
+        origin: community
 - id: mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
   patterns:
   - pattern-either:
@@ -9421,6 +9679,7 @@ rules:
         rule_id: zdU90D
         version_id: X0Tj86
         url: https://semgrep.dev/playground/r/X0Tj86/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
+        origin: community
 - id: mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
   patterns:
   - pattern-either:
@@ -9443,6 +9702,7 @@ rules:
         rule_id: pKUJ40
         version_id: jQT4vX
         url: https://semgrep.dev/playground/r/jQT4vX/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
+        origin: community
 - id: mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
   patterns:
   - pattern-either:
@@ -9469,6 +9729,7 @@ rules:
         rule_id: 2ZUXop
         version_id: 1QTRKN
         url: https://semgrep.dev/playground/r/1QTRKN/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
+        origin: community
 - id: mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
   patterns:
   - pattern-either:
@@ -9494,6 +9755,7 @@ rules:
         rule_id: X5Up0Y
         version_id: 9lTG1b
         url: https://semgrep.dev/playground/r/9lTG1b/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
+        origin: community
 - id: mobsf.mobsfscan.webview_debugging.webview_debugging
   patterns:
   - pattern-either:
@@ -9520,6 +9782,7 @@ rules:
         rule_id: wdUG6e
         version_id: 9lTyyQ
         url: https://semgrep.dev/playground/r/9lTyyQ/mobsf.mobsfscan.webview_debugging.webview_debugging
+        origin: community
 - id: mobsf.mobsfscan.webview_external_storage.webview_external_storage
   patterns:
   - pattern-either:
@@ -9554,6 +9817,7 @@ rules:
         rule_id: x8U2v4
         version_id: LjTrQA
         url: https://semgrep.dev/playground/r/LjTrQA/mobsf.mobsfscan.webview_external_storage.webview_external_storage
+        origin: community
 - id: mobsf.mobsfscan.webview_file_access.webview_set_allow_file_access
   patterns:
   - pattern-either:
@@ -9576,6 +9840,7 @@ rules:
         rule_id: GdUZDo
         version_id: 8KTx95
         url: https://semgrep.dev/playground/r/8KTx95/mobsf.mobsfscan.webview_file_access.webview_set_allow_file_access
+        origin: community
 - id: mobsf.mobsfscan.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
   patterns:
   - pattern-either:
@@ -9602,6 +9867,7 @@ rules:
         rule_id: OrUDk0
         version_id: gETYxP
         url: https://semgrep.dev/playground/r/gETYxP/mobsf.mobsfscan.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
+        origin: community
 - id: mobsf.mobsfscan.webview_javascript_interface.webview_javascript_interface
   patterns:
   - pattern-either:
@@ -9627,6 +9893,7 @@ rules:
         rule_id: eqUpg7
         version_id: QkTp0E
         url: https://semgrep.dev/playground/r/QkTp0E/mobsf.mobsfscan.webview_javascript_interface.webview_javascript_interface
+        origin: community
 - id: mobsf.mobsfscan.word_readable_writable.world_readable
   patterns:
   - pattern-either:
@@ -9650,6 +9917,7 @@ rules:
         rule_id: PeUBD1
         version_id: 0bTJ1D
         url: https://semgrep.dev/playground/r/0bTJ1D/mobsf.mobsfscan.word_readable_writable.world_readable
+        origin: community
 - id: mobsf.mobsfscan.word_readable_writable.world_writeable
   patterns:
   - pattern-either:
@@ -9674,6 +9942,7 @@ rules:
         rule_id: JDUQ5v
         version_id: K3TYJe
         url: https://semgrep.dev/playground/r/K3TYJe/mobsf.mobsfscan.word_readable_writable.world_writeable
+        origin: community
 - id: mobsf.mobsfscan.xmldecoder_xxe.xml_decoder_xxe
   patterns:
   - pattern: |
@@ -9716,6 +9985,7 @@ rules:
         rule_id: v8Ujpr
         version_id: 3ZTEQW
         url: https://semgrep.dev/playground/r/3ZTEQW/mobsf.mobsfscan.xmldecoder_xxe.xml_decoder_xxe
+        origin: community
 - id: mobsf.mobsfscan.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
   pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities",
     true);
@@ -9740,6 +10010,7 @@ rules:
         rule_id: d8UlQr
         version_id: 44T2l8
         url: https://semgrep.dev/playground/r/44T2l8/mobsf.mobsfscan.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
+        origin: community
 - id: mobsf.mobsfscan.xmlfactory_xxe.xmlinputfactory_xxe
   patterns:
   - pattern-not-inside: |
@@ -9779,6 +10050,7 @@ rules:
         rule_id: ZqUg76
         version_id: PkTB1O
         url: https://semgrep.dev/playground/r/PkTB1O/mobsf.mobsfscan.xmlfactory_xxe.xmlinputfactory_xxe
+        origin: community
 - id: mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
   patterns:
   - pattern: |
@@ -9821,6 +10093,7 @@ rules:
         rule_id: j2Up0D
         version_id: yeT4nr
         url: https://semgrep.dev/playground/r/yeT4nr/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
+        origin: community
 - id: mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
   pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities",
     true);
@@ -9845,6 +10118,7 @@ rules:
         rule_id: 10UnwQ
         version_id: rxTpr3
         url: https://semgrep.dev/playground/r/rxTpr3/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
+        origin: community
 - id: mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
   patterns:
   - pattern-not-inside: |
@@ -9884,3 +10158,4 @@ rules:
         rule_id: 9AUL9X
         version_id: bZT7wq
         url: https://semgrep.dev/playground/r/bZT7wq/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
+        origin: community
