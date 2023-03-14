@@ -156,6 +156,11 @@ runs:
       run: |
         python3 -m pip install --disable-pip-version-check semgrep~=1.5.0
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      name: Install pip audit
+      shell: bash
+      run: |
+        python3 -m pip install --disable-pip-version-check pip-audit~=2.4.0
+    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install xmllint for safesvg
       shell: bash
       run: |

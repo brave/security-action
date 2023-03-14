@@ -1,0 +1,6 @@
+# This is probably ok
+boto3
+
+# This has a vulnerability
+flask==0.5
+salt==2016.3
