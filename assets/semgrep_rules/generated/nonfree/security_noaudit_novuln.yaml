@@ -25,6 +25,7 @@ rules:
         rule_id: zdUkvA
         version_id: 0bToER
         url: https://semgrep.dev/playground/r/0bToER/contrib.dlint.dlint-equivalent.insecure-xml-use
+        origin: community
   pattern-either:
   - patterns:
     - pattern: xml.$ANYTHING
@@ -58,6 +59,7 @@ rules:
         rule_id: WAUo4l
         version_id: vdTvxo
         url: https://semgrep.dev/playground/r/vdTvxo/java.lang.security.audit.crypto.weak-hash.use-of-md5
+        origin: community
   pattern-either:
   - pattern: 'MessageDigest $VAR = $MD.getInstance("MD5");
 
@@ -90,6 +92,7 @@ rules:
         rule_id: DbUprq
         version_id: e1TZX4
         url: https://semgrep.dev/playground/r/e1TZX4/java.lang.security.audit.crypto.weak-hash.use-of-sha1
+        origin: community
   pattern-either:
   - pattern: 'MessageDigest $VAR = $MD.getInstance("SHA1");
 
@@ -117,6 +120,7 @@ rules:
         rule_id: AbUz4Z
         version_id: qkTp3w
         url: https://semgrep.dev/playground/r/qkTp3w/python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-blowfish
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -143,6 +147,7 @@ rules:
         rule_id: ReUgzY
         version_id: K3Tw1q
         url: https://semgrep.dev/playground/r/K3Tw1q/python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-rc4
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -174,6 +179,7 @@ rules:
         rule_id: WAUo19
         version_id: w8TnA7
         url: https://semgrep.dev/playground/r/w8TnA7/python.cryptography.security.insecure-hash-algorithms.insecure-hash-algorithm-md5
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -208,6 +214,7 @@ rules:
         rule_id: pKUOrp
         version_id: yeTDg8
         url: https://semgrep.dev/playground/r/yeTDg8/python.jinja2.security.audit.autoescape-disabled.autoescape-disabled
+        origin: community
   languages:
   - python
   severity: WARNING
@@ -236,6 +243,7 @@ rules:
         rule_id: EwU2kJ
         version_id: gETxvX
         url: https://semgrep.dev/playground/r/gETxvX/python.lang.security.audit.dangerous-spawn-process.dangerous-spawn-process
+        origin: community
   languages:
   - python
   severity: ERROR
@@ -319,6 +327,7 @@ rules:
         rule_id: L1UyY0
         version_id: RGTE5x
         url: https://semgrep.dev/playground/r/RGTE5x/python.lang.security.audit.dangerous-system-call.dangerous-system-call
+        origin: community
   languages:
   - python
   severity: ERROR
@@ -355,6 +364,7 @@ rules:
         rule_id: wdUJ2Y
         version_id: nWTPy6
         url: https://semgrep.dev/playground/r/nWTPy6/python.lang.security.insecure-hash-algorithms.insecure-hash-algorithm-md5
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -379,6 +389,7 @@ rules:
         rule_id: 3qUBYk
         version_id: bZTLqA
         url: https://semgrep.dev/playground/r/bZTLqA/python.pycryptodome.security.insecure-cipher-algorithm.insecure-cipher-algorithm-blowfish
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -406,6 +417,7 @@ rules:
         rule_id: 4bUzy7
         version_id: NdTe83
         url: https://semgrep.dev/playground/r/NdTe83/python.pycryptodome.security.insecure-cipher-algorithm.insecure-cipher-algorithm-des
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -434,6 +446,7 @@ rules:
         rule_id: gxU199
         version_id: yeTDjL
         url: https://semgrep.dev/playground/r/yeTDjL/python.pycryptodome.security.insecure-cipher-algorithm.insecure-cipher-algorithm-rc2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -462,6 +475,7 @@ rules:
         rule_id: QrU6vv
         version_id: rxTj3P
         url: https://semgrep.dev/playground/r/rxTj3P/python.pycryptodome.security.insecure-cipher-algorithm.insecure-cipher-algorithm-rc4
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -490,6 +504,7 @@ rules:
         rule_id: JDUP1y
         version_id: w8TkZz
         url: https://semgrep.dev/playground/r/w8TkZz/python.pycryptodome.security.insecure-hash-algorithm.insecure-hash-algorithm-md2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -517,6 +532,7 @@ rules:
         rule_id: 5rU4J4
         version_id: xyTdXn
         url: https://semgrep.dev/playground/r/xyTdXn/python.pycryptodome.security.insecure-hash-algorithm.insecure-hash-algorithm-md4
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -546,6 +562,7 @@ rules:
         rule_id: GdU0LZ
         version_id: O9TveG
         url: https://semgrep.dev/playground/r/O9TveG/python.pycryptodome.security.insecure-hash-algorithm.insecure-hash-algorithm-md5
+        origin: community
   severity: WARNING
   languages:
   - python

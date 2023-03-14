@@ -30,6 +30,7 @@ rules:
         rule_id: EwUr68
         version_id: RGTWEe
         url: https://semgrep.dev/playground/r/RGTWEe/csharp.dotnet.security.razor-template-injection.razor-template-injection
+        origin: community
   languages:
   - csharp
   mode: taint
@@ -118,6 +119,7 @@ rules:
         rule_id: 3qU3bE
         version_id: YDTz44
         url: https://semgrep.dev/playground/r/YDTz44/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine
+        origin: community
 - id: csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
   mode: taint
   pattern-sources:
@@ -166,6 +168,7 @@ rules:
         rule_id: ReUK9k
         version_id: 7ZT5P7
         url: https://semgrep.dev/playground/r/7ZT5P7/csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
+        origin: community
 - id: csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
   mode: taint
   pattern-sources:
@@ -216,6 +219,7 @@ rules:
         rule_id: AbU3pX
         version_id: LjTxB6
         url: https://semgrep.dev/playground/r/LjTxB6/csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
+        origin: community
 - id: csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
   mode: taint
   pattern-sources:
@@ -268,6 +272,7 @@ rules:
         rule_id: BYUevk
         version_id: 8KTWBY
         url: https://semgrep.dev/playground/r/8KTWBY/csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
+        origin: community
 - id: php.lang.security.deserialization.extract-user-data
   mode: taint
   pattern-sources:
@@ -309,6 +314,7 @@ rules:
         rule_id: nJUykq
         version_id: 0bTQ98
         url: https://semgrep.dev/playground/r/0bTQ98/php.lang.security.deserialization.extract-user-data
+        origin: community
   severity: ERROR
 - id: php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
   patterns:
@@ -347,3 +353,4 @@ rules:
         rule_id: DbUGbE
         version_id: bZTx60
         url: https://semgrep.dev/playground/r/bZTx60/php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
+        origin: community

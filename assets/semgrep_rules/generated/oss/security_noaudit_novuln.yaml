@@ -56,6 +56,7 @@ rules:
         rule_id: QrU1JP
         version_id: qkTGKZ
         url: https://semgrep.dev/playground/r/qkTGKZ/gitlab.find_sec_bugs.AWS_QUERY_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
   patterns:
   - pattern: |
@@ -87,6 +88,7 @@ rules:
         rule_id: 2ZUd06
         version_id: w8Tr4g
         url: https://semgrep.dev/playground/r/w8Tr4g/gitlab.find_sec_bugs.BAD_HEXA_CONVERSION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
   patterns:
@@ -135,6 +137,7 @@ rules:
         rule_id: 3qULd8
         version_id: l4TbN7
         url: https://semgrep.dev/playground/r/l4TbN7/gitlab.find_sec_bugs.BEAN_PROPERTY_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
   patterns:
   - pattern-inside: |
@@ -168,6 +171,7 @@ rules:
         rule_id: 2ZUd1P
         version_id: vdTg3X
         url: https://semgrep.dev/playground/r/vdTg3X/gitlab.find_sec_bugs.BLOWFISH_KEY_SIZE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
   patterns:
   - pattern-inside: javax.crypto.Cipher.getInstance("...")
@@ -202,6 +206,7 @@ rules:
         rule_id: 9AUAzy
         version_id: ExTOYX
         url: https://semgrep.dev/playground/r/ExTOYX/gitlab.find_sec_bugs.CIPHER_INTEGRITY-1
+        origin: custom
 - id: gitlab.find_sec_bugs.COMMAND_INJECTION-1
   pattern-either:
   - patterns:
@@ -276,6 +281,7 @@ rules:
         rule_id: PeUjYP
         version_id: JdTbZq
         url: https://semgrep.dev/playground/r/JdTbZq/gitlab.find_sec_bugs.COMMAND_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
   patterns:
   - pattern-inside: "(javax.servlet.http.Cookie $C).setMaxAge($AGE);\n"
@@ -306,6 +312,7 @@ rules:
         rule_id: KxUwpN
         version_id: rxTq8w
         url: https://semgrep.dev/playground/r/rxTq8w/gitlab.find_sec_bugs.COOKIE_PERSISTENT-1
+        origin: custom
 - id: gitlab.find_sec_bugs.COOKIE_USAGE-1
   patterns:
   - pattern-inside: |
@@ -350,6 +357,7 @@ rules:
         rule_id: qNUpNY
         version_id: bZTr4z
         url: https://semgrep.dev/playground/r/bZTr4z/gitlab.find_sec_bugs.COOKIE_USAGE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
   patterns:
   - pattern-either:
@@ -419,6 +427,7 @@ rules:
         rule_id: 4bUeor
         version_id: YDT583
         url: https://semgrep.dev/playground/r/YDT583/gitlab.find_sec_bugs.CRLF_INJECTION_LOGS-1
+        origin: custom
 - id: gitlab.find_sec_bugs.CUSTOM_INJECTION-1
   patterns:
   - pattern-either:
@@ -468,6 +477,7 @@ rules:
         rule_id: JDUoqr
         version_id: 5PTjY5
         url: https://semgrep.dev/playground/r/5PTjY5/gitlab.find_sec_bugs.CUSTOM_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.CUSTOM_INJECTION-2
   patterns:
   - pattern-not-inside: 'final String $VAR = ...;
@@ -520,6 +530,7 @@ rules:
         rule_id: 5rUN6G
         version_id: GxTyW9
         url: https://semgrep.dev/playground/r/GxTyW9/gitlab.find_sec_bugs.CUSTOM_INJECTION-2
+        origin: custom
 - id: gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
   patterns:
   - pattern: |
@@ -551,6 +562,7 @@ rules:
         rule_id: r6Ujx4
         version_id: LjTOpx
         url: https://semgrep.dev/playground/r/LjTOpx/gitlab.find_sec_bugs.CUSTOM_MESSAGE_DIGEST-1
+        origin: custom
 - id: gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
   pattern-either:
   - pattern: |
@@ -584,6 +596,7 @@ rules:
         rule_id: 0oUpO1
         version_id: X0TEo4
         url: https://semgrep.dev/playground/r/X0TEo4/gitlab.find_sec_bugs.DANGEROUS_PERMISSION_COMBINATION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
   patterns:
@@ -612,6 +625,7 @@ rules:
         rule_id: bwULG5
         version_id: 8KTXL0
         url: https://semgrep.dev/playground/r/8KTXL0/gitlab.find_sec_bugs.DEFAULT_HTTP_CLIENT-1
+        origin: custom
 - id: gitlab.find_sec_bugs.DES_USAGE-1
   patterns:
   - pattern-inside: javax.crypto.Cipher.getInstance("$ALG")
@@ -642,6 +656,7 @@ rules:
         rule_id: X5UAPg
         version_id: d6T1b8
         url: https://semgrep.dev/playground/r/d6T1b8/gitlab.find_sec_bugs.DES_USAGE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
   patterns:
   - pattern: java.sql.DriverManager.getConnection($URI, $USR, "...");
@@ -672,6 +687,7 @@ rules:
         rule_id: 5rUN5O
         version_id: zyTdX8
         url: https://semgrep.dev/playground/r/zyTdX8/gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3
+        origin: custom
 - id: gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
   patterns:
   - pattern: java.sql.DriverManager.getConnection($URI, $USR, "");
@@ -702,6 +718,7 @@ rules:
         rule_id: GdUow0
         version_id: pZToqL
         url: https://semgrep.dev/playground/r/pZToqL/gitlab.find_sec_bugs.DMI_EMPTY_DB_PASSWORD-1.HARD_CODE_PASSWORD-2
+        origin: custom
 - id: gitlab.find_sec_bugs.ECB_MODE-1
   patterns:
   - pattern-inside: javax.crypto.Cipher.getInstance("...")
@@ -732,6 +749,7 @@ rules:
         rule_id: 10U4j4
         version_id: nWTjwk
         url: https://semgrep.dev/playground/r/nWTjwk/gitlab.find_sec_bugs.ECB_MODE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.EL_INJECTION-1
   patterns:
   - pattern-inside: |
@@ -769,6 +787,7 @@ rules:
         rule_id: GdUo2e
         version_id: RGT7BO
         url: https://semgrep.dev/playground/r/RGT7BO/gitlab.find_sec_bugs.EL_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
   patterns:
   - pattern: |
@@ -800,6 +819,7 @@ rules:
         rule_id: r6UjYJ
         version_id: ZRTnB0
         url: https://semgrep.dev/playground/r/ZRTnB0/gitlab.find_sec_bugs.EXTERNAL_CONFIG_CONTROL-1
+        origin: custom
 - id: gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
   patterns:
   - pattern-inside: |
@@ -840,6 +860,7 @@ rules:
         rule_id: L1Uz0W
         version_id: WrT96n
         url: https://semgrep.dev/playground/r/WrT96n/gitlab.find_sec_bugs.FILE_UPLOAD_FILENAME-1
+        origin: custom
 - id: gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
   patterns:
   - pattern-either:
@@ -904,6 +925,7 @@ rules:
         rule_id: X5UA3o
         version_id: xyTO9y
         url: https://semgrep.dev/playground/r/xyTO9y/gitlab.find_sec_bugs.FORMAT_STRING_MANIPULATION-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.HARD_CODE_KEY-1
   pattern-either:
@@ -964,6 +986,7 @@ rules:
         rule_id: ReU2vo
         version_id: rxT4Zk
         url: https://semgrep.dev/playground/r/rxT4Zk/gitlab.find_sec_bugs.HARD_CODE_KEY-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HARD_CODE_KEY-2
   patterns:
   - pattern-either:
@@ -995,6 +1018,7 @@ rules:
         rule_id: BYUKYz
         version_id: NdTo8N
         url: https://semgrep.dev/playground/r/NdTo8N/gitlab.find_sec_bugs.HARD_CODE_KEY-2
+        origin: custom
 - id: gitlab.find_sec_bugs.HARD_CODE_KEY-3
   patterns:
   - pattern: String $VAR = "$VAL";
@@ -1021,6 +1045,7 @@ rules:
         rule_id: DbU28G
         version_id: kbTLq6
         url: https://semgrep.dev/playground/r/kbTLq6/gitlab.find_sec_bugs.HARD_CODE_KEY-3
+        origin: custom
 - id: gitlab.find_sec_bugs.HARD_CODE_KEY-4
   patterns:
   - pattern-not-inside: |
@@ -1061,6 +1086,7 @@ rules:
         rule_id: AbUNYQ
         version_id: bZT9qN
         url: https://semgrep.dev/playground/r/bZT9qN/gitlab.find_sec_bugs.HARD_CODE_KEY-4
+        origin: custom
 - id: gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
   patterns:
   - pattern-either:
@@ -1168,6 +1194,7 @@ rules:
         rule_id: WAUYxY
         version_id: 2KTeAv
         url: https://semgrep.dev/playground/r/2KTeAv/gitlab.find_sec_bugs.HARD_CODE_PASSWORD-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
   patterns:
   - pattern: new com.hazelcast.config.SymmetricEncryptionConfig()
@@ -1196,6 +1223,7 @@ rules:
         rule_id: NbUe1Z
         version_id: gETj5v
         url: https://semgrep.dev/playground/r/gETj5v/gitlab.find_sec_bugs.HAZELCAST_SYMMETRIC_ENCRYPTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
   mode: taint
   pattern-sources:
@@ -1246,6 +1274,7 @@ rules:
         rule_id: YGUYoN
         version_id: kbTpZO
         url: https://semgrep.dev/playground/r/kbTpZO/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_COOKIE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
   mode: taint
   pattern-sources:
@@ -1296,6 +1325,7 @@ rules:
         rule_id: 6JUye5
         version_id: w8Tr0K
         url: https://semgrep.dev/playground/r/w8Tr0K/gitlab.find_sec_bugs.HRS_REQUEST_PARAMETER_TO_HTTP_HEADER-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
   pattern-either:
   - patterns:
@@ -1336,6 +1366,7 @@ rules:
         rule_id: WAUYRb
         version_id: 9lT2nO
         url: https://semgrep.dev/playground/r/9lT2nO/gitlab.find_sec_bugs.HTTPONLY_COOKIE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
   mode: taint
   pattern-sources:
@@ -1376,6 +1407,7 @@ rules:
         rule_id: AbUNR4
         version_id: BjT5Qx
         url: https://semgrep.dev/playground/r/BjT5Qx/gitlab.find_sec_bugs.HTTP_PARAMETER_POLLUTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
   mode: taint
   pattern-sources:
@@ -1427,6 +1459,7 @@ rules:
         rule_id: lBUX54
         version_id: NdTLQB
         url: https://semgrep.dev/playground/r/NdTLQB/gitlab.find_sec_bugs.HTTP_RESPONSE_SPLITTING-1
+        origin: custom
 - id: gitlab.find_sec_bugs.IMPROPER_UNICODE-1
   pattern-either:
   - patterns:
@@ -1467,6 +1500,7 @@ rules:
         rule_id: j2UwZp
         version_id: O9Tz42
         url: https://semgrep.dev/playground/r/O9Tz42/gitlab.find_sec_bugs.IMPROPER_UNICODE-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
   pattern-either:
@@ -1575,6 +1609,7 @@ rules:
         rule_id: bwULk7
         version_id: nWTjd3
         url: https://semgrep.dev/playground/r/nWTjd3/gitlab.find_sec_bugs.INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.INSECURE_COOKIE-1
   pattern-either:
   - patterns:
@@ -1613,6 +1648,7 @@ rules:
         rule_id: 0oUp4O
         version_id: yeT8dy
         url: https://semgrep.dev/playground/r/yeT8dy/gitlab.find_sec_bugs.INSECURE_COOKIE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
   mode: taint
   pattern-sources:
@@ -1664,6 +1700,7 @@ rules:
         rule_id: d8U6DE
         version_id: GxTyWN
         url: https://semgrep.dev/playground/r/GxTyWN/gitlab.find_sec_bugs.JAXRS_ENDPOINT-1
+        origin: custom
 - id: gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
   mode: taint
   pattern-sources:
@@ -1716,6 +1753,7 @@ rules:
         rule_id: ZqUewk
         version_id: RGT7wy
         url: https://semgrep.dev/playground/r/RGT7wy/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
+        origin: custom
 - id: gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
   patterns:
   - pattern-inside: |
@@ -1744,6 +1782,7 @@ rules:
         rule_id: PeUjLD
         version_id: 6xT3Ay
         url: https://semgrep.dev/playground/r/6xT3Ay/gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
   patterns:
@@ -1771,6 +1810,7 @@ rules:
         rule_id: JDUog3
         version_id: o5TvWZ
         url: https://semgrep.dev/playground/r/o5TvWZ/gitlab.find_sec_bugs.LDAP_ENTRY_POISONING-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.LDAP_INJECTION-1
   mode: taint
@@ -1866,6 +1906,7 @@ rules:
         rule_id: BYUKEw
         version_id: DkTJ39
         url: https://semgrep.dev/playground/r/DkTJ39/gitlab.find_sec_bugs.LDAP_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.MALICIOUS_XSLT-1
   mode: taint
   pattern-sources:
@@ -1922,6 +1963,7 @@ rules:
         rule_id: x8UdB6
         version_id: 8KTXWl
         url: https://semgrep.dev/playground/r/8KTXWl/gitlab.find_sec_bugs.MALICIOUS_XSLT-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
   patterns:
@@ -1953,6 +1995,7 @@ rules:
         rule_id: 10U4xJ
         version_id: e1T5Eo
         url: https://semgrep.dev/playground/r/e1T5Eo/gitlab.find_sec_bugs.MODIFICATION_AFTER_VALIDATION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
   patterns:
@@ -1983,6 +2026,7 @@ rules:
         rule_id: 9AUAKN
         version_id: vdTgDE
         url: https://semgrep.dev/playground/r/vdTgDE/gitlab.find_sec_bugs.NORMALIZATION_AFTER_VALIDATION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.NULL_CIPHER-1
   pattern: new javax.crypto.NullCipher()
@@ -2011,6 +2055,7 @@ rules:
         rule_id: wdUk3N
         version_id: 3ZTnxD
         url: https://semgrep.dev/playground/r/3ZTnxD/gitlab.find_sec_bugs.NULL_CIPHER-1
+        origin: custom
 - id: gitlab.find_sec_bugs.OGNL_INJECTION-1
   mode: taint
   pattern-sources:
@@ -2159,6 +2204,7 @@ rules:
         rule_id: DbU2QO
         version_id: WrT9ko
         url: https://semgrep.dev/playground/r/WrT9ko/gitlab.find_sec_bugs.OGNL_INJECTION-1
+        origin: custom
 - id: gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
   patterns:
   - pattern-either:
@@ -2192,6 +2238,7 @@ rules:
         rule_id: KxUwyj
         version_id: jQTWL1
         url: https://semgrep.dev/playground/r/jQTWL1/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
   patterns:
@@ -2224,6 +2271,7 @@ rules:
         rule_id: qNUpqB
         version_id: 1QTB03
         url: https://semgrep.dev/playground/r/1QTB03/gitlab.find_sec_bugs.OVERLY_PERMISSIVE_FILE_PERMISSION-2
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.PADDING_ORACLE-1
   patterns:
@@ -2257,6 +2305,7 @@ rules:
         rule_id: yyUDX2
         version_id: 7ZTdYY
         url: https://semgrep.dev/playground/r/7ZTdYY/gitlab.find_sec_bugs.PADDING_ORACLE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
   mode: taint
   pattern-sources:
@@ -2324,6 +2373,7 @@ rules:
         rule_id: WAUYbb
         version_id: 0bTBQE
         url: https://semgrep.dev/playground/r/0bTBQE/gitlab.find_sec_bugs.PATH_TRAVERSAL_IN-1
+        origin: custom
 - id: gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
   mode: taint
   pattern-sources:
@@ -2375,6 +2425,7 @@ rules:
         rule_id: 0oUpvO
         version_id: K3TePY
         url: https://semgrep.dev/playground/r/K3TePY/gitlab.find_sec_bugs.PATH_TRAVERSAL_OUT-1.PATH_TRAVERSAL_OUT-1
+        origin: custom
 - id: gitlab.find_sec_bugs.PERMISSIVE_CORS-1
   patterns:
   - pattern-either:
@@ -2419,6 +2470,7 @@ rules:
         rule_id: zdUG5y
         version_id: O9TzZd
         url: https://semgrep.dev/playground/r/O9TzZd/gitlab.find_sec_bugs.PERMISSIVE_CORS-1
+        origin: custom
 - id: gitlab.find_sec_bugs.PERMISSIVE_CORS-2
   mode: taint
   pattern-sources:
@@ -2464,6 +2516,7 @@ rules:
         rule_id: pKUbrw
         version_id: e1T5Ay
         url: https://semgrep.dev/playground/r/e1T5Ay/gitlab.find_sec_bugs.PERMISSIVE_CORS-2
+        origin: custom
 - id: gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
   patterns:
   - pattern-either:
@@ -2503,6 +2556,7 @@ rules:
         rule_id: lBUXPJ
         version_id: 9lT2E6
         url: https://semgrep.dev/playground/r/9lT2E6/gitlab.find_sec_bugs.PREDICTABLE_RANDOM-1
+        origin: custom
 - id: gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
   mode: taint
   pattern-sources:
@@ -2561,6 +2615,7 @@ rules:
         rule_id: KxUwlN
         version_id: qkTG9X
         url: https://semgrep.dev/playground/r/qkTG9X/gitlab.find_sec_bugs.PT_ABSOLUTE_PATH_TRAVERSAL-1
+        origin: custom
 - id: gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
   mode: taint
   pattern-sources:
@@ -2625,6 +2680,7 @@ rules:
         rule_id: qNUpqY
         version_id: l4TbeW
         url: https://semgrep.dev/playground/r/l4TbeW/gitlab.find_sec_bugs.PT_RELATIVE_PATH_TRAVERSAL-1
+        origin: custom
 - id: gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
   mode: taint
   pattern-sources:
@@ -2696,6 +2752,7 @@ rules:
         rule_id: ReU2bl
         version_id: A8T8y9
         url: https://semgrep.dev/playground/r/A8T8y9/gitlab.find_sec_bugs.REQUESTDISPATCHER_FILE_DISCLOSURE-1.STRUTS_FILE_DISCLOSURE-1.SPRING_FILE_DISCLOSURE-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
   patterns:
@@ -2731,6 +2788,7 @@ rules:
         rule_id: NbUeOb
         version_id: ExTOdz
         url: https://semgrep.dev/playground/r/ExTOdz/gitlab.find_sec_bugs.RPC_ENABLED_EXTENSIONS-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.RSA_KEY_SIZE-1
   patterns:
@@ -2767,6 +2825,7 @@ rules:
         rule_id: kxUO7W
         version_id: QkTDQ3
         url: https://semgrep.dev/playground/r/QkTDQ3/gitlab.find_sec_bugs.RSA_KEY_SIZE-1
+        origin: custom
   severity: WARNING
   languages:
   - java
@@ -2793,6 +2852,7 @@ rules:
         rule_id: kxUOAp
         version_id: 7ZTd54
         url: https://semgrep.dev/playground/r/7ZTd54/gitlab.find_sec_bugs.SAML_IGNORE_COMMENTS-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
   mode: taint
@@ -2851,6 +2911,7 @@ rules:
         rule_id: v8Uv2D
         version_id: 5PTjYj
         url: https://semgrep.dev/playground/r/5PTjYj/gitlab.find_sec_bugs.SERVLET_PARAMETER-1.SERVLET_CONTENT_TYPE-1.SERVLET_SERVER_NAME-1.SERVLET_SESSION_ID-1.SERVLET_QUERY_STRING-1.SERVLET_HEADER-1.SERVLET_HEADER_REFERER-1.SERVLET_HEADER_USER_AGENT-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
   patterns:
@@ -2904,6 +2965,7 @@ rules:
         rule_id: zdUGRr
         version_id: NdTL5E
         url: https://semgrep.dev/playground/r/NdTL5E/gitlab.find_sec_bugs.SMTP_HEADER_INJECTION-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.SPRING_CSRF_PROTECTION_DISABLED-1
   pattern-either:
@@ -2933,6 +2995,7 @@ rules:
         rule_id: 7KU6jz
         version_id: vdTgRl
         url: https://semgrep.dev/playground/r/vdTgRl/gitlab.find_sec_bugs.SPRING_CSRF_PROTECTION_DISABLED-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
   patterns:
@@ -3178,6 +3241,7 @@ rules:
         rule_id: lBUXP4
         version_id: YDT5zl
         url: https://semgrep.dev/playground/r/YDT5zl/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1.SQL_INJECTION-1.SQL_INJECTION_HIBERNATE-1.SQL_INJECTION_VERTX-1.SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING-1
   patterns:
@@ -3434,6 +3498,7 @@ rules:
         rule_id: L1Udoq
         version_id: d6T1WJ
         url: https://semgrep.dev/playground/r/d6T1WJ/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1.SQL_INJECTION-1.SQL_INJECTION_HIBERNATE-1.SQL_INJECTION_VERTX-1.SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.SSL_CONTEXT-1
   patterns:
@@ -3460,6 +3525,7 @@ rules:
         rule_id: eqUZxA
         version_id: JdTbZE
         url: https://semgrep.dev/playground/r/JdTbZE/gitlab.find_sec_bugs.SSL_CONTEXT-1
+        origin: custom
   severity: WARNING
   languages:
   - java
@@ -3494,6 +3560,7 @@ rules:
         rule_id: gxUkqj
         version_id: K3TeOX
         url: https://semgrep.dev/playground/r/K3TeOX/gitlab.find_sec_bugs.STRUTS_FORM_VALIDATION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.TDES_USAGE-1
   patterns:
@@ -3525,6 +3592,7 @@ rules:
         rule_id: j2UwKr
         version_id: ZRTnyx
         url: https://semgrep.dev/playground/r/ZRTnyx/gitlab.find_sec_bugs.TDES_USAGE-1
+        origin: custom
 - id: gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
   pattern-either:
   - patterns:
@@ -3576,6 +3644,7 @@ rules:
         rule_id: yyUDL9
         version_id: d6T1n1
         url: https://semgrep.dev/playground/r/d6T1n1/gitlab.find_sec_bugs.TEMPLATE_INJECTION_PEBBLE-1.TEMPLATE_INJECTION_FREEMARKER-1.TEMPLATE_INJECTION_VELOCITY-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
   patterns:
@@ -3613,6 +3682,7 @@ rules:
         rule_id: oqUKne
         version_id: xyTO3Z
         url: https://semgrep.dev/playground/r/xyTO3Z/gitlab.find_sec_bugs.TRUST_BOUNDARY_VIOLATION-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
   patterns:
@@ -3654,6 +3724,7 @@ rules:
         rule_id: EwU1nP
         version_id: BjT5G3
         url: https://semgrep.dev/playground/r/BjT5G3/gitlab.find_sec_bugs.UNVALIDATED_REDIRECT-1.URL_REWRITING-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
   pattern-either:
@@ -3695,6 +3766,7 @@ rules:
         rule_id: pKUblx
         version_id: kbTprQ
         url: https://semgrep.dev/playground/r/kbTprQ/gitlab.find_sec_bugs.URLCONNECTION_SSRF_FD-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
   patterns:
@@ -3738,6 +3810,7 @@ rules:
         rule_id: 8GUvb6
         version_id: 0bTB6z
         url: https://semgrep.dev/playground/r/0bTB6z/gitlab.find_sec_bugs.WEAK_FILENAMEUTILS-1
+        origin: custom
 - id: gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
   patterns:
   - pattern-either:
@@ -3789,6 +3862,7 @@ rules:
         rule_id: 7KUbOj
         version_id: DkTJe0
         url: https://semgrep.dev/playground/r/DkTJe0/gitlab.find_sec_bugs.WEAK_HOSTNAME_VERIFIER-1.WEAK_TRUST_MANAGER-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
   patterns:
@@ -3825,6 +3899,7 @@ rules:
         rule_id: OrUvyR
         version_id: PkTvnl
         url: https://semgrep.dev/playground/r/PkTvnl/gitlab.find_sec_bugs.WEAK_MESSAGE_DIGEST_MD5-1.WEAK_MESSAGE_DIGEST_SHA1-1
+        origin: custom
 - id: gitlab.find_sec_bugs.WICKET_XSS1-1
   patterns:
   - pattern: "(org.apache.wicket.markup.html.basic.Label $X).setEscapeModelStrings(false);"
@@ -3851,6 +3926,7 @@ rules:
         rule_id: v8Uvkz
         version_id: 3ZTn7N
         url: https://semgrep.dev/playground/r/3ZTn7N/gitlab.find_sec_bugs.WICKET_XSS1-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.XML_DECODER-1
   patterns:
@@ -3884,6 +3960,7 @@ rules:
         rule_id: wdUk2X
         version_id: LjTOxb
         url: https://semgrep.dev/playground/r/LjTOxb/gitlab.find_sec_bugs.XML_DECODER-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.XPATH_INJECTION-1
   patterns:
@@ -3919,6 +3996,7 @@ rules:
         rule_id: OrUv05
         version_id: gETjL7
         url: https://semgrep.dev/playground/r/gETjL7/gitlab.find_sec_bugs.XPATH_INJECTION-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SEND_ERROR-1
   mode: taint
@@ -3965,6 +4043,7 @@ rules:
         rule_id: 8GUo74
         version_id: ZRTnZY
         url: https://semgrep.dev/playground/r/ZRTnZY/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SEND_ERROR-1
+        origin: custom
 - id: gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
   mode: taint
   pattern-sources:
@@ -4011,6 +4090,7 @@ rules:
         rule_id: d8U6Rg
         version_id: 44Tpxn
         url: https://semgrep.dev/playground/r/44Tpxn/gitlab.find_sec_bugs.XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER-1
+        origin: custom
 - id: gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
   patterns:
   - pattern-inside: |
@@ -4040,6 +4120,7 @@ rules:
         rule_id: eqUZdN
         version_id: QkTDBO
         url: https://semgrep.dev/playground/r/QkTDBO/gitlab.find_sec_bugs.XSS_REQUEST_WRAPPER-1
+        origin: custom
   severity: INFO
 - id: gitlab.find_sec_bugs.XSS_SERVLET-1
   mode: taint
@@ -4085,6 +4166,7 @@ rules:
         rule_id: ZqUeEA
         version_id: PkTvEp
         url: https://semgrep.dev/playground/r/PkTvEp/gitlab.find_sec_bugs.XSS_SERVLET-1
+        origin: custom
   severity: WARNING
 - id: gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
   pattern-either:
@@ -4137,6 +4219,7 @@ rules:
         rule_id: nJUneR
         version_id: JdTb2q
         url: https://semgrep.dev/playground/r/JdTb2q/gitlab.find_sec_bugs.XSS_SERVLET-2.XSS_SERVLET_PARAMETER-1
+        origin: custom
 - id: gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
   patterns:
   - pattern-inside: import javax.xml.transform.*; ...
@@ -4177,6 +4260,7 @@ rules:
         rule_id: 7KUb72
         version_id: GxTy49
         url: https://semgrep.dev/playground/r/GxTy49/gitlab.find_sec_bugs.XXE_DTD_TRANSFORM_FACTORY-1.XXE_XSLT_TRANSFORM_FACTORY-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_SAXPARSER-1
   patterns:
@@ -4214,6 +4298,7 @@ rules:
         rule_id: EwU1kG
         version_id: 5PTjB5
         url: https://semgrep.dev/playground/r/5PTjB5/gitlab.find_sec_bugs.XXE_SAXPARSER-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_XMLREADER-1
   patterns:
@@ -4245,6 +4330,7 @@ rules:
         rule_id: L1UzY1
         version_id: RGT7dO
         url: https://semgrep.dev/playground/r/RGT7dO/gitlab.find_sec_bugs.XXE_XMLREADER-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
   patterns:
@@ -4285,6 +4371,7 @@ rules:
         rule_id: 8GUv2b
         version_id: A8T8x9
         url: https://semgrep.dev/playground/r/A8T8x9/gitlab.find_sec_bugs.XXE_XMLSTREAMREADER-1
+        origin: custom
   severity: ERROR
 - id: gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
   patterns:
@@ -4328,6 +4415,7 @@ rules:
         rule_id: gxUk44
         version_id: BjT5ox
         url: https://semgrep.dev/playground/r/BjT5ox/gitlab.find_sec_bugs.XXE_XPATH-1.XXE_DOCUMENT-1
+        origin: custom
   severity: ERROR
 - id: gitlab.security_code_scan.SCS0001-1
   patterns:
@@ -4371,6 +4459,7 @@ rules:
         rule_id: 3qU2L1
         version_id: zyTdgv
         url: https://semgrep.dev/playground/r/zyTdgv/gitlab.security_code_scan.SCS0001-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0002-1
   patterns:
   - pattern-either:
@@ -4436,6 +4525,7 @@ rules:
         rule_id: PeUejg
         version_id: 2KTeNk
         url: https://semgrep.dev/playground/r/2KTeNk/gitlab.security_code_scan.SCS0002-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0003-1
   patterns:
   - pattern-inside: |
@@ -4494,6 +4584,7 @@ rules:
         rule_id: JDUnoJ
         version_id: X0TEe1
         url: https://semgrep.dev/playground/r/X0TEe1/gitlab.security_code_scan.SCS0003-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0004-1
   patterns:
   - pattern-inside: |
@@ -4530,6 +4621,7 @@ rules:
         rule_id: ZqUDen
         version_id: WrT95G
         url: https://semgrep.dev/playground/r/WrT95G/gitlab.security_code_scan.SCS0004-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0005-1
   patterns:
   - pattern: "(Random $RNG).$METHOD(...);"
@@ -4556,6 +4648,7 @@ rules:
         rule_id: L1URz8
         version_id: l4Tbqe
         url: https://semgrep.dev/playground/r/l4Tbqe/gitlab.security_code_scan.SCS0005-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0006-1
   patterns:
   - pattern-either:
@@ -4591,6 +4684,7 @@ rules:
         rule_id: 7KUKbk
         version_id: qkTGgK
         url: https://semgrep.dev/playground/r/qkTGgK/gitlab.security_code_scan.SCS0006-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0007-1
   mode: taint
   pattern-sanitizers:
@@ -4627,6 +4721,7 @@ rules:
         rule_id: 5rU7N6
         version_id: jQTWeW
         url: https://semgrep.dev/playground/r/jQTWeW/gitlab.security_code_scan.SCS0007-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0008-1
   mode: taint
   pattern-sources:
@@ -4659,6 +4754,7 @@ rules:
         rule_id: d8U86o
         version_id: DkTJow
         url: https://semgrep.dev/playground/r/DkTJow/gitlab.security_code_scan.SCS0008-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0009-1
   mode: taint
   pattern-sources:
@@ -4691,6 +4787,7 @@ rules:
         rule_id: v8ULvw
         version_id: BjT5jb
         url: https://semgrep.dev/playground/r/BjT5jb/gitlab.security_code_scan.SCS0009-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0010-1
   patterns:
   - pattern-inside: |
@@ -4725,6 +4822,7 @@ rules:
         rule_id: nJUQnX
         version_id: 0bTBkq
         url: https://semgrep.dev/playground/r/0bTBkq/gitlab.security_code_scan.SCS0010-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0011-1
   patterns:
   - pattern-either:
@@ -4755,6 +4853,7 @@ rules:
         rule_id: ReUE21
         version_id: 9lT2Np
         url: https://semgrep.dev/playground/r/9lT2Np/gitlab.security_code_scan.SCS0011-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0012-1
   patterns:
   - pattern-inside: |
@@ -4795,6 +4894,7 @@ rules:
         rule_id: GdUlow
         version_id: 1QTBW6
         url: https://semgrep.dev/playground/r/1QTBW6/gitlab.security_code_scan.SCS0012-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0013-1
   patterns:
   - pattern-inside: |
@@ -4828,6 +4928,7 @@ rules:
         rule_id: EwUe1Z
         version_id: K3Te9Q
         url: https://semgrep.dev/playground/r/K3Te9Q/gitlab.security_code_scan.SCS0013-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0016-1
   patterns:
   - pattern: |
@@ -4872,6 +4973,7 @@ rules:
         rule_id: 8GU3vk
         version_id: YDT5Gx
         url: https://semgrep.dev/playground/r/YDT5Gx/gitlab.security_code_scan.SCS0016-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0017-1
   patterns:
   - pattern: |
@@ -4903,6 +5005,7 @@ rules:
         rule_id: DbUwNq
         version_id: bZTrWe
         url: https://semgrep.dev/playground/r/bZTrWe/gitlab.security_code_scan.SCS0017-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0019-1
   patterns:
   - pattern-inside: |
@@ -4938,6 +5041,7 @@ rules:
         rule_id: eqU4Z2
         version_id: A8T8Pg
         url: https://semgrep.dev/playground/r/A8T8Pg/gitlab.security_code_scan.SCS0019-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0026-1.SCS0031-1
   patterns:
   - pattern-either:
@@ -4975,6 +5079,7 @@ rules:
         rule_id: 4bUbeO
         version_id: pZTog4
         url: https://semgrep.dev/playground/r/pZTog4/gitlab.security_code_scan.SCS0026-1.SCS0031-1
+        origin: custom
 - id: gitlab.security_code_scan.SCS0027-1
   mode: taint
   pattern-sources:
@@ -5031,6 +5136,7 @@ rules:
         rule_id: QrUE1q
         version_id: o5TvQQ
         url: https://semgrep.dev/playground/r/o5TvQQ/gitlab.security_code_scan.SCS0027-1
+        origin: custom
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0028-1
   patterns:
@@ -5088,6 +5194,7 @@ rules:
         rule_id: gxUrkX
         version_id: 6xT374
         url: https://semgrep.dev/playground/r/6xT374/gitlab.security_code_scan.SCS0028-1
+        origin: custom
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0029-1
   mode: taint
@@ -5163,6 +5270,7 @@ rules:
         rule_id: WAU7El
         version_id: NdTLWR
         url: https://semgrep.dev/playground/r/NdTLWR/gitlab.security_code_scan.SCS0029-1
+        origin: custom
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
   patterns:
@@ -5237,3 +5345,4 @@ rules:
         rule_id: AbUEJj
         version_id: yeT8bK
         url: https://semgrep.dev/playground/r/yeT8bK/gitlab.security_code_scan.SCS0032-1.SCS0033-1.SCS0034-1
+        origin: custom
