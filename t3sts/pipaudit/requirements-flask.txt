@@ -3,4 +3,4 @@ boto3
 
 # This has a vulnerability
 flask==0.5
-salt==2016.3
+salt==3003.5
