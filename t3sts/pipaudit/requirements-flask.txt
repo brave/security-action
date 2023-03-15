@@ -2,5 +2,5 @@
 boto3
 
 # This has a vulnerability
-flask==0.5
+flask==1.0
 salt==2016.3
