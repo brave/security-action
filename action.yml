@@ -68,7 +68,6 @@ runs:
               prnumber: context.issue.number
             }
             const result = await github.graphql(query, variables);
-            console.log(JSON.stringify(result));
             const threads = result.repository.pullRequest.reviewThreads;
             const deletableComments = threads.nodes.filter(
               reviewThread => (
@@ -221,7 +220,6 @@ runs:
               prnumber: context.issue.number
             }
             const result = await github.graphql(query, variables);
-            console.log(JSON.stringify(result));
             const threads = result.repository.pullRequest.reviewThreads;
             var commentsNumber = threads.nodes.filter(
               reviewThread => (
