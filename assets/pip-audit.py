@@ -30,11 +30,11 @@ def main():
     for lock_path in changed_lock_files:
         with open(lock_path) as lock_file:
             lock_file_lines = [l.strip() for l in lock_file.readlines()]
-        from subprocess import run
+        base_branch = f"origin/{environ.get('GITHUB_BASE_REF', 'main')}"
         diff_lines = {
             line[1:].strip()
             for line in
-            run(["git", "--no-pager", "diff", "origin/main", "-U0", "--", lock_path], capture_output=True).stdout.decode().split("\n")
+            subprocess.run(["git", "--no-pager", "diff", base_branch, "-U0", "--", lock_path], capture_output=True).stdout.decode().split("\n")
             if line.startswith("+") and not line.startswith("+++")
         }
         zero_indexed_lineno = 0
