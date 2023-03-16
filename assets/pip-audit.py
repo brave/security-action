@@ -51,6 +51,7 @@ def main():
                     venv.create("./.venv-deleteme")
                 except VirtualEnvError as e:
                     print(e)
+                    zero_indexed_lineno += 1
                     continue
                 deps = RequirementSource(venv)
                 try:
@@ -67,6 +68,7 @@ def main():
                         print(f"M:{lock_path}:{zero_indexed_lineno + 1} {message}")
                 except ReadTimeout as e:
                     print(e)
+                    zero_indexed_lineno += 1
                     continue
                 finally:
                     venv.clear_directory("./.venv-deleteme")
