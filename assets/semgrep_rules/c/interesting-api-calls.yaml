@@ -24,4 +24,4 @@ rules:
       - pattern: $FUNC(...)
       - metavariable-regex:
           metavariable: $FUNC
-          regex: \w*(set\w*(u|g)id|(init|set)groups|str\w?cpy|stpn?cpy|str\w?cat|wcs\w?cpy|wcpn?cpy|wcs\w?cat|strtok|wcstok|s\w?printf\w*\(.*|sn\w?printf\w*\(.*|scanf|get(s|c|char|pw|pass|wd|cwd|env|opt|opt_long)|memc?cpy|mem(move|set)|bcopy|alloca|exec(l|v)?(p|e)?e?|system|open(at)?(64)?|pipe|connect|read|recv(from)?|fork|clone|mk\w?temp(64)?|te?mpnam|tmpfile|mkdir|creat|link(at)?|rename(at)?|access(at)?|stat(at)?|ch(own|mod)(at)?|rand|assert)
+          regex: \w*(set\w*(u|g)id|(init|set)groups|str\w?cpy|stpn?cpy|str\w?cat|wcs\w?cpy|wcpn?cpy|wcs\w?cat|strtok|wcstok|s\w?printf\w*\(.*|sn\w?printf\w*\(.*|scanf|get(s|c|char|pw|pass|wd|cwd|env|opt|opt_long)|memc?cpy|mem(move|set)|bcopy|alloca|exec(l|v)?(p|e)?e?|system|open(at)?(64)?|pipe|connect|read|recv(from)?|fork|clone|mk\w?temp(64)?|te?mpnam|tmpfile|mkdir|creat|link(at)?|rename(at)?|access(at)?|stat(at)?|ch(own|mod)(at)?|rand|assert)$

@@ -5,6 +5,9 @@ amazing_scanf();
 memset(str, 'x', 10);
 
 // ok:raptor-interesting-api-calls
+memsetnope();
+
+// ok:raptor-interesting-api-calls
 void MyService::MaybeReconnect(TaskList tasks, int reconnect) {
     return;
 }
