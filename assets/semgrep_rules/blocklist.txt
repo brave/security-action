@@ -16,3 +16,5 @@ https://github.com/0xdea/semgrep-rules/blob/main/c/signed-unsigned-conversion.ya
 https://semgrep.dev/r/generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var
 https://semgrep.dev/r/html.security.audit.missing-integrity.missing-integrity
 https://github.com/0xdea/semgrep-rules/blob/main/c/missing-default-in-switch.yaml
+https://semgrep.dev/r/generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value
+https://semgrep.dev/r/generic.secrets.gitleaks.aws-access-token.aws-access-token
