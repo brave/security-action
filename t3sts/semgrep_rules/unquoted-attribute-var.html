@@ -1,9 +1,0 @@
-{{ $classes := slice "flex flex-col items-center" .class }}
-{{ $playerDivClasses := slice "w-full" .playerDivClass }}
-
-<!-- ok: unquoted-attribute-var -->
-<div id="libsyn-{{ .id }}" class="{{ delimit $classes " " }}">
-
-<!-- ruleid: unquoted-attribute-var -->
-<div id="libsyn-{{ .id }}" class={{ delimit $classes }}>
-
