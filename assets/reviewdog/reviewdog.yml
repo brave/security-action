@@ -25,6 +25,7 @@ runner:
       set -xe
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
       | egrep -f $SCRIPTPATH/dtd/blocklist.txt -v \
+      | sort -u \
       | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%f:%l: %m"
