@@ -573,7 +573,7 @@ rules:
           metavariable: "$VAL"
           regex: "(^None)"
     - patterns:
-      - pattern-not: requests.$METHOD('...', timeout=$VAL)
+      - pattern-not: requests.$METHOD('...', timeout=$VAL, ...)
       - pattern-either:
         - pattern: requests.$METHOD('...', ...)
         - pattern: requests.$METHOD('...')
@@ -596,8 +596,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrULKb
-        version_id: bZTrdW
-        url: https://semgrep.dev/playground/r/bZTrdW/gitlab.bandit.B113
+        version_id: YDTLXR
+        url: https://semgrep.dev/playground/r/YDTLXR/gitlab.bandit.B113
         origin: custom
   severity: WARNING
   languages:

@@ -804,8 +804,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUzld
-        version_id: O9T4Kw
-        url: https://semgrep.dev/playground/r/O9T4Kw/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
+        version_id: 2KT8gD
+        url: https://semgrep.dev/playground/r/2KT8gD/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
         origin: community
   languages:
   - hcl

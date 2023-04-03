@@ -1,7 +1,7 @@
 ---
 rules:
 - id: csharp.dotnet.security.razor-template-injection.razor-template-injection
-  message: User-controllable string passed to Razor.Parse.  This leads directly to
+  message: User-controllable string passed to Razor.Parse. This leads directly to
     code execution in the context of the process.
   severity: WARNING
   metadata:
@@ -28,15 +28,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUr68
-        version_id: RGTWEe
-        url: https://semgrep.dev/playground/r/RGTWEe/csharp.dotnet.security.razor-template-injection.razor-template-injection
+        version_id: X0T6dQ
+        url: https://semgrep.dev/playground/r/X0T6dQ/csharp.dotnet.security.razor-template-injection.razor-template-injection
         origin: community
   languages:
   - csharp
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$ARG"
+    - focus-metavariable: "$ARG"
     - pattern-inside: 'public ActionResult $METHOD(..., string $ARG,...){...}
 
         '
@@ -61,8 +61,8 @@ rules:
     - pattern-not-inside: "<... Path.GetFileName($A) != $A ...>\n"
   pattern-sinks:
   - patterns:
-    - pattern: "$X"
-    - pattern-inside: 'File.$METHOD($X,...)
+    - focus-metavariable: "$X"
+    - pattern: 'File.$METHOD($X,...)
 
         '
     - metavariable-regex:
@@ -117,14 +117,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qU3bE
-        version_id: YDTz44
-        url: https://semgrep.dev/playground/r/YDTz44/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine
+        version_id: 0bTjP9
+        url: https://semgrep.dev/playground/r/0bTjP9/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine
         origin: community
 - id: csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$ARG"
+    - focus-metavariable: "$ARG"
     - pattern-inside: 'public $T $M(...,string $ARG,...){...}
 
         '
@@ -134,7 +134,7 @@ rules:
     - pattern-inside: "XmlDocument $XMLDOCUMENT = new XmlDocument(...);\n...\n$XMLDOCUMENT.XmlResolver
         = new XmlUrlResolver(...);\n...  \n"
   message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling
-    a string argument from a public method.  Enabling Document Type Definition (DTD)
+    a string argument from a public method. Enabling Document Type Definition (DTD)
     parsing may cause XML External Entity (XXE) injection if supplied with user-controllable
     data.
   languages:
@@ -166,14 +166,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUK9k
-        version_id: 7ZT5P7
-        url: https://semgrep.dev/playground/r/7ZT5P7/csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
+        version_id: rxT7w9
+        url: https://semgrep.dev/playground/r/rxT7w9/csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
         origin: community
 - id: csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$ARG"
+    - focus-metavariable: "$ARG"
     - pattern-inside: 'public $T $M(...,string $ARG,...){...}
 
         '
@@ -185,7 +185,7 @@ rules:
     - pattern-inside: "XmlReaderSettings $RS = new XmlReaderSettings();\n...\n$RS.DtdProcessing
         = DtdProcessing.Parse;\n...        \n"
   message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling
-    a string argument from a public method.  Enabling Document Type Definition (DTD)
+    a string argument from a public method. Enabling Document Type Definition (DTD)
     parsing may cause XML External Entity (XXE) injection if supplied with user-controllable
     data.
   languages:
@@ -217,14 +217,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbU3pX
-        version_id: LjTxB6
-        url: https://semgrep.dev/playground/r/LjTxB6/csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
+        version_id: bZTj88
+        url: https://semgrep.dev/playground/r/bZTj88/csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
         origin: community
 - id: csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$ARG"
+    - focus-metavariable: "$ARG"
     - pattern-inside: 'public $T $M(...,string $ARG,...){...}
 
         '
@@ -238,7 +238,7 @@ rules:
         XmlTextReader $READER = new XmlTextReader(...);
         ...
   message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling
-    a string argument from a public method.  Enabling Document Type Definition (DTD)
+    a string argument from a public method. Enabling Document Type Definition (DTD)
     parsing may cause XML External Entity (XXE) injection if supplied with user-controllable
     data.
   languages:
@@ -270,8 +270,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUevk
-        version_id: 8KTWBY
-        url: https://semgrep.dev/playground/r/8KTWBY/csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
+        version_id: NdTwNX
+        url: https://semgrep.dev/playground/r/NdTwNX/csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
         origin: community
 - id: php.lang.security.deserialization.extract-user-data
   mode: taint
@@ -284,7 +284,7 @@ rules:
   - pattern: extract(...)
   pattern-sanitizers:
   - pattern: extract($VAR, EXTR_SKIP,...)
-  message: Do not call 'extract()' on user-controllable data.  If you must, then you
+  message: Do not call 'extract()' on user-controllable data. If you must, then you
     must also provide the EXTR_SKIP flag to prevent overwriting existing variables.
   languages:
   - php
@@ -312,8 +312,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUykq
-        version_id: 0bTQ98
-        url: https://semgrep.dev/playground/r/0bTQ98/php.lang.security.deserialization.extract-user-data
+        version_id: GxTdrw
+        url: https://semgrep.dev/playground/r/GxTdrw/php.lang.security.deserialization.extract-user-data
         origin: community
   severity: ERROR
 - id: php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
@@ -324,7 +324,7 @@ rules:
   - metavariable-comparison:
       metavariable: "$M"
       comparison: re.match(".*-CBC",$M)
-  message: Static IV used with AES in CBC mode.  Static IVs enable chosen-plaintext
+  message: Static IV used with AES in CBC mode. Static IVs enable chosen-plaintext
     attacks against encrypted data.
   languages:
   - php
@@ -351,6 +351,6 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUGbE
-        version_id: bZTx60
-        url: https://semgrep.dev/playground/r/bZTx60/php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
+        version_id: RGT431
+        url: https://semgrep.dev/playground/r/RGT431/php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
         origin: community
