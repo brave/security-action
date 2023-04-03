@@ -32,15 +32,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUXrw
-        version_id: 3ZTz2E
-        url: https://semgrep.dev/playground/r/3ZTz2E/bash.curl.security.curl-pipe-bash.curl-pipe-bash
+        version_id: GxTpd8
+        url: https://semgrep.dev/playground/r/GxTpd8/bash.curl.security.curl-pipe-bash.curl-pipe-bash
         origin: community
   patterns:
   - pattern-either:
-    - pattern: curl ... | bash ...
-    - pattern: curl ... | /bin/bash ...
-    - pattern: bash <(curl ...)
-    - pattern: "/bin/bash <(curl ...)"
+    - pattern: curl ... | ... bash ...
+    - pattern: curl ... | ... /bin/bash ...
+    - pattern: "... bash <(curl ...)"
+    - pattern: "... /bin/bash <(curl ...)"
 - id: bash.lang.security.ifs-tampering.ifs-tampering
   languages:
   - bash
@@ -549,9 +549,9 @@ rules:
   fix: 'true
 
     '
-  message: The TokenValidationParameters.$LIFETIME is set to $FALSE, this means the  JWT
-    tokens lifetime is not validated. This can lead to an  JWT token being used after
-    it has expired, which has security implications.  It is recommended to validate
+  message: The TokenValidationParameters.$LIFETIME is set to $FALSE, this means the
+    JWT tokens lifetime is not validated. This can lead to an JWT token being used
+    after it has expired, which has security implications. It is recommended to validate
     the JWT lifetime to ensure only valid tokens are used.
   metadata:
     category: security
@@ -577,8 +577,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwU5kK
-        version_id: 0bTQqK
-        url: https://semgrep.dev/playground/r/0bTQqK/csharp.lang.security.ad.jwt-tokenvalidationparameters-no-expiry-validation.jwt-tokenvalidationparameters-no-expiry-validation
+        version_id: 1QTqdb
+        url: https://semgrep.dev/playground/r/1QTqdb/csharp.lang.security.ad.jwt-tokenvalidationparameters-no-expiry-validation.jwt-tokenvalidationparameters-no-expiry-validation
         origin: community
   languages:
   - csharp
@@ -902,14 +902,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUDBP
-        version_id: 5PT2EK
-        url: https://semgrep.dev/playground/r/5PT2EK/csharp.lang.security.regular-expression-dos.regular-expression-dos-infinite-timeout.regular-expression-dos-infinite-timeout
+        version_id: yeT7Pv
+        url: https://semgrep.dev/playground/r/yeT7Pv/csharp.lang.security.regular-expression-dos.regular-expression-dos-infinite-timeout.regular-expression-dos-infinite-timeout
         origin: community
   message: 'Specifying the regex timeout leaves the system vulnerable to a regex-based
-    Denial of Service (DoS) attack.  Consider setting the timeout to a short amount
+    Denial of Service (DoS) attack. Consider setting the timeout to a short amount
     of time like 2 or 3 seconds. If you are sure you need an infinite timeout, double
     check that your context meets the conditions outlined in the "Notes to Callers"
-    section at the bottom of this page:  https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0'
+    section at the bottom of this page: https://docs.microsoft.com/en-us/dotnet/api/system.text.regularexpressions.regex.-ctor?view=net-6.0'
   patterns:
   - pattern-inside: |
       using System.Text.RegularExpressions;
@@ -1443,6 +1443,7 @@ rules:
       ...
       USER $X
   - pattern-not-inside: |
+      ...
       USER $X
       ...
       USER $F
@@ -1481,8 +1482,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReU2n5
-        version_id: 1QTBAg
-        url: https://semgrep.dev/playground/r/1QTBAg/dockerfile.security.last-user-is-root.last-user-is-root
+        version_id: 8KTDkl
+        url: https://semgrep.dev/playground/r/8KTDkl/dockerfile.security.last-user-is-root.last-user-is-root
         origin: community
 - id: dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
   patterns:
@@ -2229,44 +2230,6 @@ rules:
         version_id: X0ToRz
         url: https://semgrep.dev/playground/r/X0ToRz/generic.secrets.security.detected-artifactory-token.detected-artifactory-token
         origin: community
-- id: generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value
-  patterns:
-  - pattern-regex: "(A3T[A-Z0-9]|AKIA|AGPA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}"
-  - pattern-not-regex: "(?i)example|sample|test|fake"
-  languages:
-  - regex
-  message: AWS Access Key ID Value detected. This is a sensitive credential and should
-    not be hardcoded here. Instead, read this value from an environment variable or
-    keep it in a separate, private file.
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
-    category: security
-    technology:
-    - secrets
-    - aws
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: HIGH
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value
-    shortlink: https://sg.run/GeD1
-    semgrep.dev:
-      rule:
-        rule_id: oqUevO
-        version_id: jQTLPB
-        url: https://semgrep.dev/playground/r/jQTLPB/generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value
-        origin: community
 - id: generic.secrets.security.detected-aws-account-id.detected-aws-account-id
   patterns:
   - pattern-either:
@@ -2296,7 +2259,7 @@ rules:
       analyzer: entropy
   - metavariable-regex:
       metavariable: "$SECRET"
-      regex: "^[0-9]{12}$"
+      regex: "^((?!(12345|0000).*)[0-9]{12})$"
   - metavariable-regex:
       metavariable: "$ACCOUNT_ID"
       regex: (AWS|aws|Aws)?_?(ACCOUNT|account|Account)_?(ID|id|Id)?("|')?
@@ -2331,8 +2294,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUkdd
-        version_id: 1QT0GE
-        url: https://semgrep.dev/playground/r/1QT0GE/generic.secrets.security.detected-aws-account-id.detected-aws-account-id
+        version_id: gETK27
+        url: https://semgrep.dev/playground/r/gETK27/generic.secrets.security.detected-aws-account-id.detected-aws-account-id
         origin: community
 - id: generic.secrets.security.detected-aws-appsync-graphql-key.detected-aws-appsync-graphql-key
   pattern-regex: da2-[a-z0-9]{26}
@@ -3974,8 +3937,8 @@ rules:
   message: 'The Origin header in the HTTP WebSocket handshake is used to guarantee
     that the connection accepted by the WebSocket is from a trusted origin domain.
     Failure to enforce can lead to Cross Site Request Forgery (CSRF). As per "gorilla/websocket"
-    documentation: "A CheckOrigin  function should carefully validate the request
-    origin to prevent cross-site request forgery."'
+    documentation: "A CheckOrigin function should carefully validate the request origin
+    to prevent cross-site request forgery."'
   languages:
   - go
   severity: WARNING
@@ -4002,8 +3965,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUKdz
-        version_id: O9T45K
-        url: https://semgrep.dev/playground/r/O9T45K/go.gorilla.security.audit.websocket-missing-origin-check.websocket-missing-origin-check
+        version_id: w8T7jk
+        url: https://semgrep.dev/playground/r/w8T7jk/go.gorilla.security.audit.websocket-missing-origin-check.websocket-missing-origin-check
         origin: community
 - id: go.grpc.security.grpc-client-insecure-connection.grpc-client-insecure-connection
   metadata:
@@ -4888,9 +4851,9 @@ rules:
         ...
         $OBJ.QueryRowContext($CTX, $QUERY, ...)
 - id: go.lang.security.audit.net.bind_all.avoid-bind-to-all-interfaces
-  message: Detected a network listener listening on 0.0.0.0 or an empty string.  This
-    could unexpectedly expose the server publicly as it binds to all available interfaces.  Instead,
-    specify another IP address that is not 0.0.0.0 nor the empty string.
+  message: Detected a network listener listening on 0.0.0.0 or an empty string. This
+    could unexpectedly expose the server publicly as it binds to all available interfaces.
+    Instead, specify another IP address that is not 0.0.0.0 nor the empty string.
   languages:
   - go
   severity: WARNING
@@ -4917,8 +4880,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUz3J
-        version_id: K3TPW4
-        url: https://semgrep.dev/playground/r/K3TPW4/go.lang.security.audit.net.bind_all.avoid-bind-to-all-interfaces
+        version_id: O9Tg6O
+        url: https://semgrep.dev/playground/r/O9Tg6O/go.lang.security.audit.net.bind_all.avoid-bind-to-all-interfaces
         origin: community
   pattern-either:
   - pattern: tls.Listen($NETWORK, "=~/^0.0.0.0:.*$/", ...)
@@ -4926,9 +4889,9 @@ rules:
   - pattern: tls.Listen($NETWORK, "=~/^:.*$/", ...)
   - pattern: net.Listen($NETWORK, "=~/^:.*$/", ...)
 - id: go.lang.security.audit.net.formatted-template-string.formatted-template-string
-  message: Found a formatted template string passed to 'template.HTML()'.  'template.HTML()'
-    does not escape contents.  Be absolutely sure there is no user-controlled data
-    in this template.  If user data can reach this template, you may have a XSS vulnerability.
+  message: Found a formatted template string passed to 'template.HTML()'. 'template.HTML()'
+    does not escape contents. Be absolutely sure there is no user-controlled data
+    in this template. If user data can reach this template, you may have a XSS vulnerability.
   metadata:
     cwe:
     - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
@@ -4954,8 +4917,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUjDW
-        version_id: JdT29l
-        url: https://semgrep.dev/playground/r/JdT29l/go.lang.security.audit.net.formatted-template-string.formatted-template-string
+        version_id: e1TNz3
+        url: https://semgrep.dev/playground/r/e1TNz3/go.lang.security.audit.net.formatted-template-string.formatted-template-string
         origin: community
   languages:
   - go
@@ -5038,8 +5001,8 @@ rules:
   - pattern: http.ListenAndServe(...)
 - id: go.lang.security.audit.net.unescaped-data-in-htmlattr.unescaped-data-in-htmlattr
   message: Found a formatted template string passed to 'template. HTMLAttr()'. 'template.HTMLAttr()'
-    does not escape contents.  Be absolutely sure there is no user-controlled data
-    in this template or  validate and sanitize the data before passing it into the
+    does not escape contents. Be absolutely sure there is no user-controlled data
+    in this template or validate and sanitize the data before passing it into the
     template.
   metadata:
     cwe:
@@ -5066,8 +5029,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUz9R
-        version_id: RGTB4k
-        url: https://semgrep.dev/playground/r/RGTB4k/go.lang.security.audit.net.unescaped-data-in-htmlattr.unescaped-data-in-htmlattr
+        version_id: vdT790
+        url: https://semgrep.dev/playground/r/vdT790/go.lang.security.audit.net.unescaped-data-in-htmlattr.unescaped-data-in-htmlattr
         origin: community
   languages:
   - go
@@ -5163,9 +5126,9 @@ rules:
       template.JS($OTHER, ...)
 - id: go.lang.security.audit.net.unescaped-data-in-url.unescaped-data-in-url
   message: Found a formatted template string passed to 'template.URL()'. 'template.URL()'
-    does not escape contents, and this could result in XSS (cross-site scripting)  and
-    therefore confidential data being stolen.  Sanitize data coming into this function
-    or make sure that  no user-controlled input is coming into the function.
+    does not escape contents, and this could result in XSS (cross-site scripting)
+    and therefore confidential data being stolen. Sanitize data coming into this function
+    or make sure that no user-controlled input is coming into the function.
   metadata:
     cwe:
     - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
@@ -5191,8 +5154,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUkDW
-        version_id: BjTQ3k
-        url: https://semgrep.dev/playground/r/BjTQ3k/go.lang.security.audit.net.unescaped-data-in-url.unescaped-data-in-url
+        version_id: d6Tde3
+        url: https://semgrep.dev/playground/r/d6Tde3/go.lang.security.audit.net.unescaped-data-in-url.unescaped-data-in-url
         origin: community
   languages:
   - go
@@ -9491,14 +9454,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUZeQ
-        version_id: nWTdgq
-        url: https://semgrep.dev/playground/r/nWTdgq/java.log4j.security.log4j-message-lookup-injection.log4j-message-lookup-injection
+        version_id: 0bTn3E
+        url: https://semgrep.dev/playground/r/0bTn3E/java.log4j.security.log4j-message-lookup-injection.log4j-message-lookup-injection
         origin: community
   message: Possible Lookup injection into Log4j messages. Lookups provide a way to
     add values to the Log4j messages at arbitrary places. If the message parameter
     contains an attacker controlled string, the attacker could inject arbitrary lookups,
     for instance '${java:runtime}'. This could lead to information disclosure or even
-    remote code execution if 'log4j2.formatMsgNoLookups' is enabled. This was enabled
+    remote code execution if 'log4j2.formatMsgNoLookups' is disabled. This was disabled
     by default until version 2.15.0.
   mode: taint
   pattern-sources:
@@ -10822,7 +10785,7 @@ rules:
     '
 - id: javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
   message: A CSRF middleware was not detected in your express application. Ensure
-    you are either using one  such as `csurf` or `csrf` (see rule references) and/or
+    you are either using one such as `csurf` or `csrf` (see rule references) and/or
     you are properly doing CSRF validation in your routes with a token or cookies.
   metadata:
     category: security
@@ -10851,8 +10814,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUKEq
-        version_id: 0bT63b
-        url: https://semgrep.dev/playground/r/0bT63b/javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
+        version_id: BjT3d6
+        url: https://semgrep.dev/playground/r/BjT3d6/javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
         origin: community
   languages:
   - javascript
@@ -11556,11 +11519,11 @@ rules:
   pattern-sinks:
   - pattern: Object.assign(...)
 - id: javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     interfile: true
     cwe:
@@ -11586,8 +11549,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUOjy
-        version_id: w8TElj
-        url: https://semgrep.dev/playground/r/w8TElj/javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret
+        version_id: WrT4yp
+        url: https://semgrep.dev/playground/r/WrT4yp/javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret
         origin: community
   languages:
   - javascript
@@ -12258,8 +12221,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReU3OJ
-        version_id: d6TbW0
-        url: https://semgrep.dev/playground/r/d6TbW0/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
+        version_id: rxTQzo
+        url: https://semgrep.dev/playground/r/rxTQzo/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
         origin: community
   languages:
   - javascript
@@ -12280,16 +12243,16 @@ rules:
         '
   pattern-sinks:
   - patterns:
-    - pattern: "$STR"
+    - focus-metavariable: "$STR"
     - pattern-either:
-      - pattern-inside: 'console.$LOG($STR,$PARAM,...)
+      - pattern: 'console.$LOG($STR,$PARAM,...)
 
           '
       - patterns:
         - pattern-inside: |
             $UTIL = require('util')
             ...
-        - pattern-inside: "$UTIL.format($STR,$PARAM,...)\n"
+        - pattern: "$UTIL.format($STR,$PARAM,...)\n"
 - id: javascript.lang.security.audit.vm-injection.vm-compilefunction-code-injection
   message: this rule has been deprecated.
   severity: INFO
@@ -12683,7 +12646,7 @@ rules:
       regex: "(read|write)(U?Int8|(U?Int(16|32)|Float|Double)(LE|BE))"
 - id: javascript.lang.security.detect-child-process.detect-child-process
   message: 'Detected calls to child_process from a function argument `$FUNC`. This
-    could lead to a command injection if the input is  user controllable. Try to avoid
+    could lead to a command injection if the input is user controllable. Try to avoid
     calls to child_process, and if it is needed ensure user input is correctly sanitized
     or sandboxed. '
   metadata:
@@ -12712,8 +12675,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UKNB
-        version_id: rxTXlL
-        url: https://semgrep.dev/playground/r/rxTXlL/javascript.lang.security.detect-child-process.detect-child-process
+        version_id: JdT9LJ
+        url: https://semgrep.dev/playground/r/JdT9LJ/javascript.lang.security.detect-child-process.detect-child-process
         origin: community
   languages:
   - javascript
@@ -12853,6 +12816,7 @@ rules:
     - javascript
     owasp:
     - A01:2021 - Broken Access Control
+    - A05:2017 - Broken Access Control
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
@@ -12866,8 +12830,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6UrvQ
-        version_id: gET5D2
-        url: https://semgrep.dev/playground/r/gET5D2/javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override
+        version_id: qkTDwX
+        url: https://semgrep.dev/playground/r/qkTDwX/javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override
         origin: community
   languages:
   - javascript
@@ -15045,7 +15009,7 @@ rules:
   - php
   message: Detected string concatenation with a non-literal variable in a Doctrine
     DBAL query method. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead.
   metadata:
     category: security
@@ -15073,8 +15037,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5UdZj
-        version_id: 5PTB3Y
-        url: https://semgrep.dev/playground/r/5PTB3Y/php.doctrine.security.audit.doctrine-dbal-dangerous-query.doctrine-dbal-dangerous-query
+        version_id: GxTpxW
+        url: https://semgrep.dev/playground/r/GxTpxW/php.doctrine.security.audit.doctrine-dbal-dangerous-query.doctrine-dbal-dangerous-query
         origin: community
   patterns:
   - pattern-either:
@@ -16630,9 +16594,9 @@ rules:
   - python
   severity: WARNING
 - id: python.cryptography.security.mode-without-authentication.crypto-mode-without-authentication
-  message: 'An encryption mode of operation is being used without proper message authentication.  This
-    can potentially result in the encrypted content to be decrypted by an attacker.  Consider
-    instead use an AEAD mode of operation like GCM. '
+  message: 'An encryption mode of operation is being used without proper message authentication.
+    This can potentially result in the encrypted content to be decrypted by an attacker.
+    Consider instead use an AEAD mode of operation like GCM. '
   languages:
   - python
   severity: ERROR
@@ -16658,8 +16622,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUpNZ
-        version_id: RGTw5A
-        url: https://semgrep.dev/playground/r/RGTw5A/python.cryptography.security.mode-without-authentication.crypto-mode-without-authentication
+        version_id: o5T82K
+        url: https://semgrep.dev/playground/r/o5T82K/python.cryptography.security.mode-without-authentication.crypto-mode-without-authentication
         origin: community
   patterns:
   - pattern-either:
@@ -18222,8 +18186,8 @@ rules:
       ...
       $OBJ.save()
 - id: python.django.security.injection.path-traversal.path-traversal-join.path-traversal-join
-  message: Data from request is passed to os.path.join() and to open().  This is a
-    path traversal vulnerability, which can lead to sensitive data being leaked.  To
+  message: Data from request is passed to os.path.join() and to open(). This is a
+    path traversal vulnerability, which can lead to sensitive data being leaked. To
     mitigate, consider using os.path.abspath or os.path.realpath or Path library.
   metadata:
     cwe:
@@ -18250,8 +18214,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUjLj
-        version_id: GxTWGo
-        url: https://semgrep.dev/playground/r/GxTWGo/python.django.security.injection.path-traversal.path-traversal-join.path-traversal-join
+        version_id: pZT7zy
+        url: https://semgrep.dev/playground/r/pZT7zy/python.django.security.injection.path-traversal.path-traversal-join.path-traversal-join
         origin: community
   patterns:
   - pattern-inside: |
@@ -21418,7 +21382,7 @@ rules:
   - python
   message: 'Detected string concatenation with a non-literal variable in a asyncpg
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can create parameterized queries like
     so: ''conn.fetch("SELECT $1 FROM table", value)''. You can also create prepared
     statements with ''Connection.prepare'': ''stmt = conn.prepare("SELECT $1 FROM
@@ -21449,8 +21413,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUZqq
-        version_id: K3TOyN
-        url: https://semgrep.dev/playground/r/K3TOyN/python.lang.security.audit.sqli.asyncpg-sqli.asyncpg-sqli
+        version_id: K3T1zD
+        url: https://semgrep.dev/playground/r/K3T1zD/python.lang.security.audit.sqli.asyncpg-sqli.asyncpg-sqli
         origin: community
   patterns:
   - pattern-either:
@@ -21516,7 +21480,7 @@ rules:
   - python
   message: 'Detected string concatenation with a non-literal variable in a pg8000
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can create parameterized queries like
     so: ''conn.run("SELECT :value FROM table", value=myvalue)''. You can also create
     prepared statements with ''conn.prepare'': ''conn.prepare("SELECT (:v) FROM table")'''
@@ -21545,8 +21509,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUEKo
-        version_id: qkTKlY
-        url: https://semgrep.dev/playground/r/qkTKlY/python.lang.security.audit.sqli.pg8000-sqli.pg8000-sqli
+        version_id: qkT31E
+        url: https://semgrep.dev/playground/r/qkT31E/python.lang.security.audit.sqli.pg8000-sqli.pg8000-sqli
         origin: community
   patterns:
   - pattern-either:
@@ -21611,7 +21575,7 @@ rules:
   - python
   message: 'Detected string concatenation with a non-literal variable in a psycopg2
     Python SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can use prepared statements by creating
     a ''sql.SQL'' string. You can also use the pyformat binding style to create parameterized
     queries. For example: ''cur.execute(SELECT * FROM table WHERE name=%s, user_input)'''
@@ -21640,8 +21604,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU4Kg
-        version_id: l4TNB4
-        url: https://semgrep.dev/playground/r/l4TNB4/python.lang.security.audit.sqli.psycopg-sqli.psycopg-sqli
+        version_id: l4TGrb
+        url: https://semgrep.dev/playground/r/l4TGrb/python.lang.security.audit.sqli.psycopg-sqli.psycopg-sqli
         origin: community
   patterns:
   - pattern-either:
@@ -22489,8 +22453,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUz5y
-        version_id: w8T41N
-        url: https://semgrep.dev/playground/r/w8T41N/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query
+        version_id: YDTd6W
+        url: https://semgrep.dev/playground/r/YDTd6W/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query
         origin: community
   severity: ERROR
   languages:
@@ -22502,22 +22466,26 @@ rules:
   - pattern: '$CONNECTION.execute(f"...{...}...", ...)
 
       '
-  - pattern: |
-      $QUERY = $SQL + ...
-      ...
-      $CONNECTION.execute($QUERY, ...)
-  - pattern: |
-      $QUERY = $SQL % (...)
-      ...
-      $CONNECTION.execute($QUERY, ...)
-  - pattern: |
-      $QUERY = $SQL.format(...)
-      ...
-      $CONNECTION.execute($QUERY, ...)
-  - pattern: |
-      $QUERY = f"...{...}..."
-      ...
-      $CONNECTION.execute($QUERY, ...)
+  - patterns:
+    - pattern-inside: |
+        $QUERY = $SQL + ...
+        ...
+    - pattern: "$CONNECTION.execute($QUERY, ...)\n"
+  - patterns:
+    - pattern-inside: |
+        $QUERY = $SQL % (...)
+        ...
+    - pattern: "$CONNECTION.execute($QUERY, ...)\n"
+  - patterns:
+    - pattern-inside: |
+        $QUERY = $SQL.format(...)
+        ...
+    - pattern: "$CONNECTION.execute($QUERY, ...)\n"
+  - patterns:
+    - pattern-inside: |
+        $QUERY = f"...{...}..."
+        ...
+    - pattern: "$CONNECTION.execute($QUERY, ...)\n"
 - id: ruby.jwt.security.audit.jwt-decode-without-verify.ruby-jwt-decode-without-verify
   message: Detected the decoding of a JWT token without a verify step. JWT tokens
     must be verified before use, otherwise the token's integrity is unknown. This
@@ -23665,12 +23633,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUAo4
-        version_id: K3TPPZ
-        url: https://semgrep.dev/playground/r/K3TPPZ/ruby.rails.security.audit.detailed-exceptions.detailed-exceptions
+        version_id: kbTn69
+        url: https://semgrep.dev/playground/r/kbTn69/ruby.rails.security.audit.detailed-exceptions.detailed-exceptions
         origin: community
   message: Found that the setting for providing detailed exception reports in Rails
     is set to true. This can lead to information exposure, where sensitive system
-    or internal information is displayed  to the end user. Instead, turn this setting
+    or internal information is displayed to the end user. Instead, turn this setting
     off.
   languages:
   - ruby
@@ -23820,14 +23788,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10U56J
-        version_id: 9lT9nW
-        url: https://semgrep.dev/playground/r/9lT9nW/ruby.rails.security.audit.mime-type-dos.mime-type-dos
+        version_id: w8T7lq
+        url: https://semgrep.dev/playground/r/w8T7lq/ruby.rails.security.audit.mime-type-dos.mime-type-dos
         origin: community
   message: Detected usage of `Mime.const_set`. This could lead to a Denial of Service
     attack, as an attacker could send lots of different mime types to the server,
     causing the cache to grow large and use all available RAM. Make sure you are using
-    5.0.0.beta1.1, 4.2.5.1, 4.1.14.1, 3.2.22.1 or higher.  If this is not possible,
-    use the workaround with  "Mime.const_set :LOOKUP, Hash.new { |h,k| Mime::Type.new(k)
+    5.0.0.beta1.1, 4.2.5.1, 4.1.14.1, 3.2.22.1 or higher. If this is not possible,
+    use the workaround with "Mime.const_set :LOOKUP, Hash.new { |h,k| Mime::Type.new(k)
     unless k.blank? }"
   languages:
   - ruby
@@ -23862,12 +23830,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUZrN
-        version_id: 5PTBBg
-        url: https://semgrep.dev/playground/r/5PTBBg/ruby.rails.security.audit.number-to-currency-erb.number-to-currency-erb
+        version_id: xyT7Gb
+        url: https://semgrep.dev/playground/r/xyT7Gb/ruby.rails.security.audit.number-to-currency-erb.number-to-currency-erb
         origin: community
   message: Detected user input flowing into number_to_currency helper. One of the
-    parameters to the helper (unit) is  not escaped correctly and could  lead to XSS,
-    which in turn could lead to  sensitive data being exfiltrated. Instead, sanitize
+    parameters to the helper (unit) is not escaped correctly and could lead to XSS,
+    which in turn could lead to sensitive data being exfiltrated. Instead, sanitize
     data with the 'html_escape' or 'h' function before passing it into `number_to_currency`
     or upgrade to Rails 4.0.2 or 3.2.16.
   languages:
@@ -23908,8 +23876,8 @@ rules:
           metavariable: "$Z"
           comparison: "$Z == 0 or $Z == 1"
   message: Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a DoS
-    attack (CVE-2013-6414). This can cause your service to be  taken down for substantial
-    amount of time. Instead, upgrade to  4.0.2 or 3.2.16 or higher.
+    attack (CVE-2013-6414). This can cause your service to be taken down for substantial
+    amount of time. Instead, upgrade to 4.0.2 or 3.2.16 or higher.
   severity: WARNING
   metadata:
     technology:
@@ -23935,8 +23903,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUDRY
-        version_id: A8Tyyd
-        url: https://semgrep.dev/playground/r/A8Tyyd/ruby.rails.security.audit.rails-check-header-dos.rails-check-header-dos
+        version_id: e1TNr2
+        url: https://semgrep.dev/playground/r/e1TNr2/ruby.rails.security.audit.rails-check-header-dos.rails-check-header-dos
         origin: community
   paths:
     include:
@@ -24982,7 +24950,7 @@ rules:
   message: "$VALUE Found a string literal assignment to a production Rails session
     secret in `secrets.yaml`. Do not commit secret values to source control! Any user
     in possession of this value may falsify arbitrary session data in your application.
-    \ Read this value from an environment variable, KMS, or file on disk outside of
+    Read this value from an environment variable, KMS, or file on disk outside of
     source control."
   languages:
   - yaml
@@ -25010,8 +24978,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUpJ5
-        version_id: 8KTW07
-        url: https://semgrep.dev/playground/r/8KTW07/ruby.rails.security.brakeman.check-rails-secret-yaml.check-rails-secret-yaml
+        version_id: d6Td4o
+        url: https://semgrep.dev/playground/r/d6Td4o/ruby.rails.security.brakeman.check-rails-secret-yaml.check-rails-secret-yaml
         origin: community
 - id: ruby.rails.security.injection.rails-check-json-parsing-rce.rails-check-json-parsing-rce
   patterns:
@@ -26249,8 +26217,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUXOA
-        version_id: l4TeYB
-        url: https://semgrep.dev/playground/r/l4TeYB/terraform.aws.security.aws-athena-workgroup-unencrypted.aws-athena-workgroup-unencrypted
+        version_id: e1TBKo
+        url: https://semgrep.dev/playground/r/e1TBKo/terraform.aws.security.aws-athena-workgroup-unencrypted.aws-athena-workgroup-unencrypted
         origin: community
 - id: terraform.aws.security.aws-backup-vault-unencrypted.aws-backup-vault-unencrypted
   patterns:
@@ -26289,8 +26257,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UxrP
-        version_id: YDTzgq
-        url: https://semgrep.dev/playground/r/YDTzgq/terraform.aws.security.aws-backup-vault-unencrypted.aws-backup-vault-unencrypted
+        version_id: vdTlQE
+        url: https://semgrep.dev/playground/r/vdTlQE/terraform.aws.security.aws-backup-vault-unencrypted.aws-backup-vault-unencrypted
         origin: community
 - id: terraform.aws.security.aws-cloudtrail-encrypted-with-cmk.aws-cloudtrail-encrypted-with-cmk
   patterns:
@@ -26328,8 +26296,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUl2j
-        version_id: o5TWGk
-        url: https://semgrep.dev/playground/r/o5TWGk/terraform.aws.security.aws-cloudtrail-encrypted-with-cmk.aws-cloudtrail-encrypted-with-cmk
+        version_id: ZRTbd0
+        url: https://semgrep.dev/playground/r/ZRTbd0/terraform.aws.security.aws-cloudtrail-encrypted-with-cmk.aws-cloudtrail-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -26376,8 +26344,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUl0J
-        version_id: ExTOOL
-        url: https://semgrep.dev/playground/r/ExTOOL/terraform.aws.security.aws-cloudwatch-log-group-unencrypted.aws-cloudwatch-log-group-unencrypted
+        version_id: ExTZWz
+        url: https://semgrep.dev/playground/r/ExTZWz/terraform.aws.security.aws-cloudwatch-log-group-unencrypted.aws-cloudwatch-log-group-unencrypted
         origin: community
 - id: terraform.aws.security.aws-codebuild-project-artifacts-unencrypted.aws-codebuild-project-artifacts-unencrypted
   patterns:
@@ -26436,8 +26404,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUrdZ
-        version_id: 2KTAn4
-        url: https://semgrep.dev/playground/r/2KTAn4/terraform.aws.security.aws-codebuild-project-artifacts-unencrypted.aws-codebuild-project-artifacts-unencrypted
+        version_id: 7ZT8R4
+        url: https://semgrep.dev/playground/r/7ZT8R4/terraform.aws.security.aws-codebuild-project-artifacts-unencrypted.aws-codebuild-project-artifacts-unencrypted
         origin: community
 - id: terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
   pattern-either:
@@ -26489,8 +26457,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUo7v
-        version_id: 7ZTddG
-        url: https://semgrep.dev/playground/r/7ZTddG/terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
+        version_id: 8KTDll
+        url: https://semgrep.dev/playground/r/8KTDll/terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
         origin: community
 - id: terraform.aws.security.aws-docdb-encrypted-with-cmk.aws-docdb-encrypted-with-cmk
   patterns:
@@ -26528,8 +26496,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUGEp
-        version_id: 1QT0J5
-        url: https://semgrep.dev/playground/r/1QT0J5/terraform.aws.security.aws-docdb-encrypted-with-cmk.aws-docdb-encrypted-with-cmk
+        version_id: QkT9NO
+        url: https://semgrep.dev/playground/r/QkT9NO/terraform.aws.security.aws-docdb-encrypted-with-cmk.aws-docdb-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -26575,8 +26543,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbU1WN
-        version_id: 8KTRPD
-        url: https://semgrep.dev/playground/r/8KTRPD/terraform.aws.security.aws-documentdb-auditing-disabled.aws-documentdb-auditing-disabled
+        version_id: 3ZT8wN
+        url: https://semgrep.dev/playground/r/3ZT8wN/terraform.aws.security.aws-documentdb-auditing-disabled.aws-documentdb-auditing-disabled
         origin: community
 - id: terraform.aws.security.aws-ebs-volume-encrypted-with-cmk.aws-ebs-volume-encrypted-with-cmk
   patterns:
@@ -26617,12 +26585,117 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UPY9
-        version_id: bZTxP1
-        url: https://semgrep.dev/playground/r/bZTxP1/terraform.aws.security.aws-ebs-volume-encrypted-with-cmk.aws-ebs-volume-encrypted-with-cmk
+        version_id: RGTyLO
+        url: https://semgrep.dev/playground/r/RGTyLO/terraform.aws.security.aws-ebs-volume-encrypted-with-cmk.aws-ebs-volume-encrypted-with-cmk
         origin: community
   languages:
   - hcl
   severity: WARNING
+- id: terraform.aws.security.aws-ebs-volume-unencrypted.aws-ebs-volume-unencrypted
+  patterns:
+  - pattern: |
+      resource "aws_ebs_volume" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_ebs_volume" $ANYTHING {
+        ...
+        encrypted = true
+        ...
+      }
+  message: The AWS EBS volume is unencrypted. The volume, the disk I/O and any derived
+    snapshots could be read if compromised. Volumes should be encrypted to ensure
+    sensitive data is stored securely.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_volume#encrypted
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-ebs-volume-unencrypted.aws-ebs-volume-unencrypted
+    shortlink: https://sg.run/6ZbY
+    semgrep.dev:
+      rule:
+        rule_id: YGUKl1
+        version_id: A8TBd9
+        url: https://semgrep.dev/playground/r/A8TBd9/terraform.aws.security.aws-ebs-volume-unencrypted.aws-ebs-volume-unencrypted
+        origin: community
+- id: terraform.aws.security.aws-ec2-launch-template-metadata-service-v1-enabled.aws-ec2-launch-template-metadata-service-v1-enabled
+  patterns:
+  - pattern: |
+      resource "aws_launch_template" $ANYTHING {
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_launch_template" $ANYTHING {
+        ...
+        metadata_options {
+          ...
+          http_endpoint = "disabled"
+          ...
+        }
+        ...
+      }
+  - pattern-not-inside: |
+      resource "aws_launch_template" $ANYTHING {
+        ...
+        metadata_options {
+          ...
+          http_tokens = "required"
+          ...
+        }
+        ...
+      }
+  message: The EC2 launch template has Instance Metadata Service Version 1 (IMDSv1)
+    enabled. IMDSv2 introduced session authentication tokens which improve security
+    when talking to IMDS. You should either disable IMDS or require the use of IMDSv2.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-1390: Weak Authentication'
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures/
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_configuration#metadata_options
+    - https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-ec2-launch-template-metadata-service-v1-enabled.aws-ec2-launch-template-metadata-service-v1-enabled
+    shortlink: https://sg.run/pg9J
+    semgrep.dev:
+      rule:
+        rule_id: zdU0Wo
+        version_id: 0bTnzE
+        url: https://semgrep.dev/playground/r/0bTnzE/terraform.aws.security.aws-ec2-launch-template-metadata-service-v1-enabled.aws-ec2-launch-template-metadata-service-v1-enabled
+        origin: community
 - id: terraform.aws.security.aws-ecr-mutable-image-tags.aws-ecr-mutable-image-tags
   patterns:
   - pattern: |
@@ -26635,7 +26708,7 @@ rules:
         image_tag_mutability = "IMMUTABLE"
         ...
       }
-  message: The ECR repository has image scans disabled. Image tags could be overwritten
+  message: The ECR repository allows tag mutability. Image tags could be overwritten
     with compromised images. ECR images should be set to IMMUTABLE to prevent code
     injection through image mutation. This can be done by setting image_tab_mutability
     to IMMUTABLE.
@@ -26665,8 +26738,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUB4o
-        version_id: PkT473
-        url: https://semgrep.dev/playground/r/PkT473/terraform.aws.security.aws-ecr-mutable-image-tags.aws-ecr-mutable-image-tags
+        version_id: l4TERW
+        url: https://semgrep.dev/playground/r/l4TERW/terraform.aws.security.aws-ecr-mutable-image-tags.aws-ecr-mutable-image-tags
         origin: community
 - id: terraform.aws.security.aws-efs-filesystem-encrypted-with-cmk.aws-efs-filesystem-encrypted-with-cmk
   patterns:
@@ -26707,8 +26780,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUJ4n
-        version_id: kbTrQz
-        url: https://semgrep.dev/playground/r/kbTrQz/terraform.aws.security.aws-efs-filesystem-encrypted-with-cmk.aws-efs-filesystem-encrypted-with-cmk
+        version_id: JdTXxo
+        url: https://semgrep.dev/playground/r/JdTXxo/terraform.aws.security.aws-efs-filesystem-encrypted-with-cmk.aws-efs-filesystem-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -26740,8 +26813,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUnyQ
-        version_id: 5PTWKw
-        url: https://semgrep.dev/playground/r/5PTWKw/terraform.aws.security.aws-elasticache-replication-group-encrypted-with-cmk.aws-elasticache-replication-group-encrypted-with-cmk
+        version_id: 5PTZ19
+        url: https://semgrep.dev/playground/r/5PTZ19/terraform.aws.security.aws-elasticache-replication-group-encrypted-with-cmk.aws-elasticache-replication-group-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -26796,8 +26869,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUg3J
-        version_id: e1TEYq
-        url: https://semgrep.dev/playground/r/e1TEYq/terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
+        version_id: A8TBdg
+        url: https://semgrep.dev/playground/r/A8TBdg/terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
         origin: community
 - id: terraform.aws.security.aws-emr-encrypted-with-cmk.aws-emr-encrypted-with-cmk
   patterns:
@@ -26837,8 +26910,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeU0L7
-        version_id: vdTDKB
-        url: https://semgrep.dev/playground/r/vdTDKB/terraform.aws.security.aws-emr-encrypted-with-cmk.aws-emr-encrypted-with-cmk
+        version_id: BjTRZb
+        url: https://semgrep.dev/playground/r/BjTRZb/terraform.aws.security.aws-emr-encrypted-with-cmk.aws-emr-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -26924,8 +26997,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUp50
-        version_id: ZRTBkB
-        url: https://semgrep.dev/playground/r/ZRTBkB/terraform.aws.security.aws-fsx-lustre-filesystem-encrypted-with-cmk.aws-fsx-lustre-filesystem-encrypted-with-cmk
+        version_id: DkTEbw
+        url: https://semgrep.dev/playground/r/DkTEbw/terraform.aws.security.aws-fsx-lustre-filesystem-encrypted-with-cmk.aws-fsx-lustre-filesystem-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -26966,8 +27039,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUzwK
-        version_id: nWTd5l
-        url: https://semgrep.dev/playground/r/nWTd5l/terraform.aws.security.aws-fsx-ontapfs-encrypted-with-cmk.aws-fsx-ontapfs-encrypted-with-cmk
+        version_id: WrTLKG
+        url: https://semgrep.dev/playground/r/WrTLKG/terraform.aws.security.aws-fsx-ontapfs-encrypted-with-cmk.aws-fsx-ontapfs-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27008,8 +27081,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUqv6
-        version_id: ExTdyy
-        url: https://semgrep.dev/playground/r/ExTdyy/terraform.aws.security.aws-fsx-windows-encrypted-with-cmk.aws-fsx-windows-encrypted-with-cmk
+        version_id: 0bTnzq
+        url: https://semgrep.dev/playground/r/0bTnzq/terraform.aws.security.aws-fsx-windows-encrypted-with-cmk.aws-fsx-windows-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27050,8 +27123,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUNxL
-        version_id: gETLvR
-        url: https://semgrep.dev/playground/r/gETLvR/terraform.aws.security.aws-imagebuilder-component-encrypted-with-cmk.aws-imagebuilder-component-encrypted-with-cmk
+        version_id: YDTLex
+        url: https://semgrep.dev/playground/r/YDTLex/terraform.aws.security.aws-imagebuilder-component-encrypted-with-cmk.aws-imagebuilder-component-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27092,8 +27165,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU5yW
-        version_id: 44TxK4
-        url: https://semgrep.dev/playground/r/44TxK4/terraform.aws.security.aws-kinesis-stream-encrypted-with-cmk.aws-kinesis-stream-encrypted-with-cmk
+        version_id: zyTz2v
+        url: https://semgrep.dev/playground/r/zyTz2v/terraform.aws.security.aws-kinesis-stream-encrypted-with-cmk.aws-kinesis-stream-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27134,8 +27207,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUWqn
-        version_id: PkTE78
-        url: https://semgrep.dev/playground/r/PkTE78/terraform.aws.security.aws-kinesis-video-stream-encrypted-with-cmk.aws-kinesis-video-stream-encrypted-with-cmk
+        version_id: pZTE34
+        url: https://semgrep.dev/playground/r/pZTE34/terraform.aws.security.aws-kinesis-video-stream-encrypted-with-cmk.aws-kinesis-video-stream-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27198,8 +27271,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUp5w
-        version_id: 8KTXXR
-        url: https://semgrep.dev/playground/r/8KTXXR/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
+        version_id: 1QTGp6
+        url: https://semgrep.dev/playground/r/1QTGp6/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
         origin: community
 - id: terraform.aws.security.aws-redshift-cluster-encrypted-with-cmk.aws-redshift-cluster-encrypted-with-cmk
   patterns:
@@ -27238,8 +27311,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUqvX
-        version_id: DkT3B5
-        url: https://semgrep.dev/playground/r/DkT3B5/terraform.aws.security.aws-redshift-cluster-encrypted-with-cmk.aws-redshift-cluster-encrypted-with-cmk
+        version_id: bZTy3e
+        url: https://semgrep.dev/playground/r/bZTy3e/terraform.aws.security.aws-redshift-cluster-encrypted-with-cmk.aws-redshift-cluster-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27280,8 +27353,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUeYR
-        version_id: WrTkev
-        url: https://semgrep.dev/playground/r/WrTkev/terraform.aws.security.aws-s3-bucket-object-encrypted-with-cmk.aws-s3-bucket-object-encrypted-with-cmk
+        version_id: NdT4yR
+        url: https://semgrep.dev/playground/r/NdT4yR/terraform.aws.security.aws-s3-bucket-object-encrypted-with-cmk.aws-s3-bucket-object-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27322,8 +27395,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUzYY
-        version_id: 0bTQ04
-        url: https://semgrep.dev/playground/r/0bTQ04/terraform.aws.security.aws-s3-object-copy-encrypted-with-cmk.aws-s3-object-copy-encrypted-with-cmk
+        version_id: kbTJGG
+        url: https://semgrep.dev/playground/r/kbTJGG/terraform.aws.security.aws-s3-object-copy-encrypted-with-cmk.aws-s3-object-copy-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27364,8 +27437,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUx8z
-        version_id: K3TPAl
-        url: https://semgrep.dev/playground/r/K3TPAl/terraform.aws.security.aws-sagemaker-domain-encrypted-with-cmk.aws-sagemaker-domain-encrypted-with-cmk
+        version_id: w8TYoL
+        url: https://semgrep.dev/playground/r/w8TYoL/terraform.aws.security.aws-sagemaker-domain-encrypted-with-cmk.aws-sagemaker-domain-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27413,8 +27486,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUNrz
-        version_id: gETjjK
-        url: https://semgrep.dev/playground/r/gETjjK/terraform.aws.security.aws-secretsmanager-secret-unencrypted.aws-secretsmanager-secret-unencrypted
+        version_id: xyT6zo
+        url: https://semgrep.dev/playground/r/xyT6zo/terraform.aws.security.aws-secretsmanager-secret-unencrypted.aws-secretsmanager-secret-unencrypted
         origin: community
 - id: terraform.aws.security.aws-ssm-document-logging-issues.aws-ssm-document-logging-issues
   patterns:
@@ -27465,8 +27538,61 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUrWL
-        version_id: l4Te3B
-        url: https://semgrep.dev/playground/r/l4Te3B/terraform.aws.security.aws-ssm-document-logging-issues.aws-ssm-document-logging-issues
+        version_id: e1TBj6
+        url: https://semgrep.dev/playground/r/e1TBj6/terraform.aws.security.aws-ssm-document-logging-issues.aws-ssm-document-logging-issues
+        origin: community
+- id: terraform.aws.security.aws-subnet-has-public-ip-address.aws-subnet-has-public-ip-address
+  patterns:
+  - pattern-either:
+    - pattern: |
+        resource "aws_subnet" $ANYTHING {
+          ...
+          map_public_ip_on_launch = true
+          ...
+        }
+    - pattern: |
+        resource "aws_default_subnet" $ANYTHING {
+          ...
+        }
+  - pattern-not: |
+      resource "aws_default_subnet" $ANYTHING {
+        ...
+        map_public_ip_on_launch = false
+        ...
+      }
+  message: Resources in the AWS subnet are assigned a public IP address. Resources
+    should not be exposed on the public internet, but should have access limited to
+    consumers required for the function of your application. Set `map_public_ip_on_launch`
+    to false so that resources are not publicly-accessible.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://owasp.org/Top10/A01_2021-Broken_Access_Control/
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet#map_public_ip_on_launch
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html#concepts-public-addresses
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-subnet-has-public-ip-address.aws-subnet-has-public-ip-address
+    shortlink: https://sg.run/XJZw
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUo79
+        version_id: vdTl62
+        url: https://semgrep.dev/playground/r/vdTl62/terraform.aws.security.aws-subnet-has-public-ip-address.aws-subnet-has-public-ip-address
         origin: community
 - id: terraform.aws.security.aws-timestream-database-encrypted-with-cmk.aws-timestream-database-encrypted-with-cmk
   patterns:
@@ -27504,8 +27630,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU5Nn
-        version_id: YDTzGq
-        url: https://semgrep.dev/playground/r/YDTzGq/terraform.aws.security.aws-timestream-database-encrypted-with-cmk.aws-timestream-database-encrypted-with-cmk
+        version_id: d6TYxR
+        url: https://semgrep.dev/playground/r/d6TYxR/terraform.aws.security.aws-timestream-database-encrypted-with-cmk.aws-timestream-database-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -27547,8 +27673,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUWl1
-        version_id: JdT2wN
-        url: https://semgrep.dev/playground/r/JdT2wN/terraform.aws.security.aws-transfer-server-is-public.aws-transfer-server-is-public
+        version_id: ZRTbAj
+        url: https://semgrep.dev/playground/r/ZRTbAj/terraform.aws.security.aws-transfer-server-is-public.aws-transfer-server-is-public
         origin: community
   languages:
   - hcl
@@ -27594,8 +27720,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUWB9
-        version_id: 5PTBlk
-        url: https://semgrep.dev/playground/r/5PTBlk/terraform.aws.security.aws-workspaces-root-volume-unencrypted.aws-workspaces-root-volume-unencrypted
+        version_id: nWT3RW
+        url: https://semgrep.dev/playground/r/nWT3RW/terraform.aws.security.aws-workspaces-root-volume-unencrypted.aws-workspaces-root-volume-unencrypted
         origin: community
 - id: terraform.aws.security.aws-workspaces-user-volume-unencrypted.aws-workspaces-user-volume-unencrypted
   patterns:
@@ -27637,8 +27763,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUAXr
-        version_id: GxT4Ox
-        url: https://semgrep.dev/playground/r/GxT4Ox/terraform.aws.security.aws-workspaces-user-volume-unencrypted.aws-workspaces-user-volume-unencrypted
+        version_id: ExTZwj
+        url: https://semgrep.dev/playground/r/ExTZwj/terraform.aws.security.aws-workspaces-user-volume-unencrypted.aws-workspaces-user-volume-unencrypted
         origin: community
 - id: terraform.aws.security.missing-athena-workgroup-encryption.missing-athena-workgroup-encryption
   patterns:
@@ -27679,8 +27805,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUljO
-        version_id: A8TyPW
-        url: https://semgrep.dev/playground/r/A8TyPW/terraform.aws.security.missing-athena-workgroup-encryption.missing-athena-workgroup-encryption
+        version_id: LjTj32
+        url: https://semgrep.dev/playground/r/LjTj32/terraform.aws.security.missing-athena-workgroup-encryption.missing-athena-workgroup-encryption
         origin: community
 - id: terraform.azure.security.appservice.appservice-account-identity-registered.appservice-account-identity-registered
   message: Registering the identity used by an App with AD allows it to interact with
@@ -27734,8 +27860,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUynd
-        version_id: l4Teqv
-        url: https://semgrep.dev/playground/r/l4Teqv/terraform.azure.security.appservice.appservice-account-identity-registered.appservice-account-identity-registered
+        version_id: qkTDZK
+        url: https://semgrep.dev/playground/r/qkTDZK/terraform.azure.security.appservice.appservice-account-identity-registered.appservice-account-identity-registered
         origin: community
   languages:
   - hcl
@@ -27778,8 +27904,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8UNL7
-        version_id: kbTrvB
-        url: https://semgrep.dev/playground/r/kbTrvB/terraform.azure.security.appservice.azure-appservice-min-tls-version.azure-appservice-min-tls-version
+        version_id: YDTLyb
+        url: https://semgrep.dev/playground/r/YDTLyb/terraform.azure.security.appservice.azure-appservice-min-tls-version.azure-appservice-min-tls-version
         origin: community
   languages:
   - hcl
@@ -27840,8 +27966,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JU1X8
-        version_id: w8T4dE
-        url: https://semgrep.dev/playground/r/w8T4dE/terraform.azure.security.functionapp.functionapp-authentication-enabled.functionapp-authentication-enabled
+        version_id: zyTzp4
+        url: https://semgrep.dev/playground/r/zyTzp4/terraform.azure.security.functionapp.functionapp-authentication-enabled.functionapp-authentication-enabled
         origin: community
   languages:
   - hcl
@@ -27899,8 +28025,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqU41L
-        version_id: xyT9yO
-        url: https://semgrep.dev/playground/r/xyT9yO/terraform.azure.security.functionapp.functionapp-enable-http2.functionapp-enable-http2
+        version_id: pZTEKK
+        url: https://semgrep.dev/playground/r/pZTEKK/terraform.azure.security.functionapp.functionapp-enable-http2.functionapp-enable-http2
         origin: community
   languages:
   - hcl
@@ -27960,8 +28086,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bU1jy
-        version_id: ZRTB1P
-        url: https://semgrep.dev/playground/r/ZRTB1P/terraform.azure.security.keyvault.keyvault-specify-network-acl.keyvault-specify-network-acl
+        version_id: 9lTpjQ
+        url: https://semgrep.dev/playground/r/9lTpjQ/terraform.azure.security.keyvault.keyvault-specify-network-acl.keyvault-specify-network-acl
         origin: community
   languages:
   - hcl
@@ -28030,8 +28156,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUreY
-        version_id: nWTdAN
-        url: https://semgrep.dev/playground/r/nWTdAN/terraform.azure.security.storage.storage-allow-microsoft-service-bypass.storage-allow-microsoft-service-bypass
+        version_id: yeTo6R
+        url: https://semgrep.dev/playground/r/yeTo6R/terraform.azure.security.storage.storage-allow-microsoft-service-bypass.storage-allow-microsoft-service-bypass
         origin: community
   languages:
   - hcl
@@ -28077,8 +28203,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUY3N
-        version_id: ExTdPx
-        url: https://semgrep.dev/playground/r/ExTdPx/terraform.azure.security.storage.storage-default-action-deny.storage-default-action-deny
+        version_id: rxTW50
+        url: https://semgrep.dev/playground/r/rxTW50/terraform.azure.security.storage.storage-default-action-deny.storage-default-action-deny
         origin: community
   languages:
   - hcl
@@ -28138,8 +28264,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReU3L9
-        version_id: LjTxDK
-        url: https://semgrep.dev/playground/r/LjTxDK/terraform.azure.security.storage.storage-queue-services-logging.storage-queue-services-logging
+        version_id: NdT4xk
+        url: https://semgrep.dev/playground/r/NdT4xk/terraform.azure.security.storage.storage-queue-services-logging.storage-queue-services-logging
         origin: community
   languages:
   - hcl
@@ -28187,8 +28313,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUELR
-        version_id: NdT5K8
-        url: https://semgrep.dev/playground/r/NdT5K8/terraform.lang.security.ecr-image-scan-on-push.ecr-image-scan-on-push
+        version_id: 8KTD2R
+        url: https://semgrep.dev/playground/r/8KTD2R/terraform.lang.security.ecr-image-scan-on-push.ecr-image-scan-on-push
         origin: community
 - id: terraform.lang.security.eks-insufficient-control-plane-logging.eks-insufficient-control-plane-logging
   patterns:
@@ -28241,8 +28367,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UGx7
-        version_id: e1TwbG
-        url: https://semgrep.dev/playground/r/e1TwbG/terraform.lang.security.eks-insufficient-control-plane-logging.eks-insufficient-control-plane-logging
+        version_id: gETK4K
+        url: https://semgrep.dev/playground/r/gETK4K/terraform.lang.security.eks-insufficient-control-plane-logging.eks-insufficient-control-plane-logging
         origin: community
 - id: terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
   patterns:
@@ -28290,8 +28416,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU4v6
-        version_id: w8T4P3
-        url: https://semgrep.dev/playground/r/w8T4P3/terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
+        version_id: QkT9yx
+        url: https://semgrep.dev/playground/r/QkT9yx/terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
         origin: community
 - id: terraform.lang.security.elastic-search-encryption-at-rest.elastic-search-encryption-at-rest
   patterns:
@@ -28338,8 +28464,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUo2d
-        version_id: xyT9gB
-        url: https://semgrep.dev/playground/r/xyT9gB/terraform.lang.security.elastic-search-encryption-at-rest.elastic-search-encryption-at-rest
+        version_id: 3ZT8J0
+        url: https://semgrep.dev/playground/r/3ZT8J0/terraform.lang.security.elastic-search-encryption-at-rest.elastic-search-encryption-at-rest
         origin: community
 - id: terraform.lang.security.iam.no-iam-admin-privileges.no-iam-admin-privileges
   pattern-either:
@@ -28444,8 +28570,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUNDX
-        version_id: O9T4qo
-        url: https://semgrep.dev/playground/r/O9T4qo/terraform.lang.security.iam.no-iam-admin-privileges.no-iam-admin-privileges
+        version_id: 44TD3P
+        url: https://semgrep.dev/playground/r/44TD3P/terraform.lang.security.iam.no-iam-admin-privileges.no-iam-admin-privileges
         origin: community
   languages:
   - hcl
@@ -28650,8 +28776,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUwK2
-        version_id: e1TElR
-        url: https://semgrep.dev/playground/r/e1TElR/terraform.lang.security.iam.no-iam-creds-exposure.no-iam-creds-exposure
+        version_id: PkT8LG
+        url: https://semgrep.dev/playground/r/PkT8LG/terraform.lang.security.iam.no-iam-creds-exposure.no-iam-creds-exposure
         origin: community
   languages:
   - hcl
@@ -28764,8 +28890,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUj1k
-        version_id: vdTDEY
-        url: https://semgrep.dev/playground/r/vdTDEY/terraform.lang.security.iam.no-iam-data-exfiltration.no-iam-data-exfiltration
+        version_id: JdTXgx
+        url: https://semgrep.dev/playground/r/JdTXgx/terraform.lang.security.iam.no-iam-data-exfiltration.no-iam-data-exfiltration
         origin: community
   languages:
   - hcl
@@ -28877,8 +29003,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UxLq
-        version_id: d6Tnoq
-        url: https://semgrep.dev/playground/r/d6Tnoq/terraform.lang.security.iam.no-iam-priv-esc-funcs.no-iam-priv-esc-funcs
+        version_id: 5PTZ5z
+        url: https://semgrep.dev/playground/r/5PTZ5z/terraform.lang.security.iam.no-iam-priv-esc-funcs.no-iam-priv-esc-funcs
         origin: community
   languages:
   - hcl
@@ -28979,8 +29105,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU6jO
-        version_id: ZRTB87
-        url: https://semgrep.dev/playground/r/ZRTB87/terraform.lang.security.iam.no-iam-priv-esc-other-users.no-iam-priv-esc-other-users
+        version_id: GxT1wA
+        url: https://semgrep.dev/playground/r/GxT1wA/terraform.lang.security.iam.no-iam-priv-esc-other-users.no-iam-priv-esc-other-users
         origin: community
   languages:
   - hcl
@@ -29115,8 +29241,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUzR3
-        version_id: nWTdEz
-        url: https://semgrep.dev/playground/r/nWTdEz/terraform.lang.security.iam.no-iam-priv-esc-roles.no-iam-priv-esc-roles
+        version_id: RGTyv5
+        url: https://semgrep.dev/playground/r/RGTyv5/terraform.lang.security.iam.no-iam-priv-esc-roles.no-iam-priv-esc-roles
         origin: community
   languages:
   - hcl
@@ -30248,8 +30374,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8U9r0
-        version_id: ExTdl4
-        url: https://semgrep.dev/playground/r/ExTdl4/terraform.lang.security.iam.no-iam-resource-exposure.no-iam-resource-exposure
+        version_id: A8TBY6
+        url: https://semgrep.dev/playground/r/A8TBY6/terraform.lang.security.iam.no-iam-resource-exposure.no-iam-resource-exposure
         origin: community
   languages:
   - hcl
@@ -30327,8 +30453,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8Uew3
-        version_id: 7ZT5Gp
-        url: https://semgrep.dev/playground/r/7ZT5Gp/terraform.lang.security.iam.no-iam-star-actions.no-iam-star-actions
+        version_id: BjTRYE
+        url: https://semgrep.dev/playground/r/BjTRYE/terraform.lang.security.iam.no-iam-star-actions.no-iam-star-actions
         origin: community
   languages:
   - hcl
@@ -30368,8 +30494,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUrzK
-        version_id: 8KTW6A
-        url: https://semgrep.dev/playground/r/8KTW6A/terraform.lang.security.rds-public-access.rds-public-access
+        version_id: WrTLxr
+        url: https://semgrep.dev/playground/r/WrTLxr/terraform.lang.security.rds-public-access.rds-public-access
         origin: community
 - id: terraform.lang.security.s3-cors-all-origins.all-origins-allowed
   patterns:
@@ -30401,8 +30527,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUd4g
-        version_id: gETLzy
-        url: https://semgrep.dev/playground/r/gETLzy/terraform.lang.security.s3-cors-all-origins.all-origins-allowed
+        version_id: 0bTnWx
+        url: https://semgrep.dev/playground/r/0bTnWx/terraform.lang.security.s3-cors-all-origins.all-origins-allowed
         origin: community
 - id: terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket
   patterns:
@@ -30443,8 +30569,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUrp5
-        version_id: QkTB51
-        url: https://semgrep.dev/playground/r/QkTB51/terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket
+        version_id: K3TxNv
+        url: https://semgrep.dev/playground/r/K3TxNv/terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket
         origin: community
 - id: trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
   message: 'Variable `$X` is likely modified and later used on error. In some cases

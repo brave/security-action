@@ -207,8 +207,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUv3R
-        version_id: DkTokb
-        url: https://semgrep.dev/playground/r/DkTokb/csharp.dotnet.security.audit.ldap-injection.ldap-injection
+        version_id: BjT63y
+        url: https://semgrep.dev/playground/r/BjT63y/csharp.dotnet.security.audit.ldap-injection.ldap-injection
         origin: community
   languages:
   - csharp
@@ -216,8 +216,8 @@ rules:
   options:
     taint_unify_mvars: true
   pattern-sources:
-  - pattern-either:
-    - pattern: "$INPUT"
+  - patterns:
+    - focus-metavariable: "$INPUT"
     - pattern-inside: "$T $M($INPUT,...) {...}"
   pattern-sinks:
   - patterns:
@@ -557,8 +557,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU3Nq
-        version_id: DkTowW
-        url: https://semgrep.dev/playground/r/DkTowW/csharp.dotnet.security.use_weak_rng_for_keygeneration.use_weak_rng_for_keygeneration
+        version_id: WrT04J
+        url: https://semgrep.dev/playground/r/WrT04J/csharp.dotnet.security.use_weak_rng_for_keygeneration.use_weak_rng_for_keygeneration
         origin: community
   languages:
   - csharp
@@ -570,8 +570,8 @@ rules:
   pattern-sinks:
   - pattern-either:
     - patterns:
-      - pattern-inside: "($KEYTYPE $CIPHER).Key = $SINK;"
-      - pattern: "$SINK"
+      - pattern: "($KEYTYPE $CIPHER).Key = $SINK;"
+      - focus-metavariable: "$SINK"
       - metavariable-pattern:
           metavariable: "$KEYTYPE"
           pattern-either:
@@ -1419,45 +1419,6 @@ rules:
         origin: community
   patterns:
   - pattern-regex: (?i)(?:atlassian|confluence|jira)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
-- id: generic.secrets.gitleaks.aws-access-token.aws-access-token
-  message: A gitleaks aws-access-token was detected which attempts to identify hard-coded
-    credentials. It is not recommended to store credentials in source-code, as this
-    risks secrets being leaked and used by either an internal or external malicious
-    adversary. It is recommended to use environment variables to securely provide
-    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
-    Module).
-  languages:
-  - regex
-  severity: INFO
-  metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    category: security
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    cwe2021-top25: true
-    cwe2022-top25: true
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
-    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
-    subcategory:
-    - vuln
-    technology:
-    - gitleaks
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/generic.secrets.gitleaks.aws-access-token.aws-access-token
-    shortlink: https://sg.run/nQeY
-    semgrep.dev:
-      rule:
-        rule_id: L1UL2p
-        version_id: ZRT9zk
-        url: https://semgrep.dev/playground/r/ZRT9zk/generic.secrets.gitleaks.aws-access-token.aws-access-token
-        origin: community
-  patterns:
-  - pattern-regex: "(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}"
 - id: generic.secrets.gitleaks.beamer-api-token.beamer-api-token
   message: A gitleaks beamer-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -6732,7 +6693,7 @@ rules:
   - go
   message: Detected SQL statement that is tainted by `$EVENT` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use prepared statements with the 'Prepare' and 'PrepareContext'
     calls.
   mode: taint
@@ -6763,12 +6724,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUdJ7
-        version_id: NdT575
-        url: https://semgrep.dev/playground/r/NdT575/go.aws-lambda.security.database-sqli.database-sqli
+        version_id: ExTzpr
+        url: https://semgrep.dev/playground/r/ExTzpr/go.aws-lambda.security.database-sqli.database-sqli
         origin: community
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
       - pattern: "$DB.Exec($QUERY,...)"
       - pattern: "$DB.ExecContent($QUERY,...)"
@@ -6795,7 +6756,7 @@ rules:
             func $HANDLER($EVENT context.Context) {...}
             ...
             lambda.Start($HANDLER, ...)
-    - pattern: "$EVENT"
+    - focus-metavariable: "$EVENT"
   severity: WARNING
 - id: go.aws-lambda.security.tainted-sql-string.tainted-sql-string
   languages:
@@ -6832,8 +6793,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUwqg
-        version_id: kbTr19
-        url: https://semgrep.dev/playground/r/kbTr19/go.aws-lambda.security.tainted-sql-string.tainted-sql-string
+        version_id: 3ZT8AN
+        url: https://semgrep.dev/playground/r/3ZT8AN/go.aws-lambda.security.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sources:
@@ -6852,7 +6813,7 @@ rules:
             func $HANDLER($EVENT context.Context) {...}
             ...
             lambda.Start($HANDLER, ...)
-    - pattern: "$EVENT"
+    - focus-metavariable: "$EVENT"
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -6862,7 +6823,7 @@ rules:
             '
         - metavariable-regex:
             metavariable: "$SQLSTR"
-            regex: "(?i)(select|delete|insert|create|update|alter|drop).*"
+            regex: "(?i)(\\s*select|\\s*delete|\\s*insert|\\s*create|\\s*update|\\s*alter|\\s*drop).*"
       - patterns:
         - pattern-either:
           - pattern: fmt.Fprintf($F, "$SQLSTR", ...)
@@ -6943,11 +6904,11 @@ rules:
         url: https://semgrep.dev/playground/r/6xTOZq/go.gorm.security.audit.gorm-dangerous-methods-usage.gorm-dangerous-method-usage
         origin: community
 - id: go.jwt-go.security.jwt.hardcoded-jwt-key
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -6972,8 +6933,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdU7Ny
-        version_id: ExTdzZ
-        url: https://semgrep.dev/playground/r/ExTdzZ/go.jwt-go.security.jwt.hardcoded-jwt-key
+        version_id: xyT7xq
+        url: https://semgrep.dev/playground/r/xyT7xq/go.jwt-go.security.jwt.hardcoded-jwt-key
         origin: community
   severity: WARNING
   languages:
@@ -7675,7 +7636,7 @@ rules:
   - go
   message: Detected string concatenation with a non-literal variable in a "database/sql"
     Go SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can use prepared statements with the
     'Prepare' and 'PrepareContext' calls.
   metadata:
@@ -7703,12 +7664,21 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUrnQ
-        version_id: K3TPlG
-        url: https://semgrep.dev/playground/r/K3TPlG/go.lang.security.audit.sqli.gosql-sqli.gosql-sqli
+        version_id: 7ZTk1b
+        url: https://semgrep.dev/playground/r/7ZTk1b/go.lang.security.audit.sqli.gosql-sqli.gosql-sqli
         origin: community
   severity: ERROR
 - id: go.lang.security.audit.sqli.pg-orm-sqli.pg-orm-sqli
   patterns:
+  - pattern-inside: |
+      import (
+        ...
+        "$IMPORT"
+      )
+      ...
+  - metavariable-regex:
+      metavariable: "$IMPORT"
+      regex: ".*go-pg"
   - pattern-either:
     - patterns:
       - pattern: "$DB.$METHOD(...,$QUERY,...)"
@@ -7739,7 +7709,20 @@ rules:
         func $FUNCNAME(..., $DB *pg.DB, ...) {
           ...
         }
-  - pattern-not: '$DB.$INTFUNC1(...).$METHOD(..., "..." + "...", ...).$INTFUNC2(...)
+  - pattern-not-inside: |
+      $QUERY = fmt.Sprintf("...", ...,"...", ...)
+      ...
+  - pattern-not-inside: |
+      $QUERY += "..."
+      ...
+  - pattern-not: $DB.$METHOD(...,"...",...)
+  - pattern-not: '$DB.$INTFUNC1(...).$METHOD(..., "...", ...).$INTFUNC2(...)
+
+      '
+  - pattern-not-inside: '$QUERY = "..." + "..."
+
+      '
+  - pattern-not: '"..."
 
       '
   - pattern-not: path.Join(...)
@@ -7778,8 +7761,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUqQ1
-        version_id: qkT9NR
-        url: https://semgrep.dev/playground/r/qkT9NR/go.lang.security.audit.sqli.pg-orm-sqli.pg-orm-sqli
+        version_id: 44TDPn
+        url: https://semgrep.dev/playground/r/44TDPn/go.lang.security.audit.sqli.pg-orm-sqli.pg-orm-sqli
         origin: community
   severity: ERROR
 - id: go.lang.security.audit.sqli.pg-sqli.pg-sqli
@@ -7787,7 +7770,7 @@ rules:
   - go
   message: 'Detected string concatenation with a non-literal variable in a go-pg SQL
     statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries instead of string concatenation. You can use parameterized queries like
     so: ''(SELECT ? FROM table, data1)'''
   metadata:
@@ -7816,8 +7799,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUWXY
-        version_id: l4Te5Z
-        url: https://semgrep.dev/playground/r/l4Te5Z/go.lang.security.audit.sqli.pg-sqli.pg-sqli
+        version_id: LjTv2X
+        url: https://semgrep.dev/playground/r/LjTv2X/go.lang.security.audit.sqli.pg-sqli.pg-sqli
         origin: community
   severity: ERROR
   patterns:
@@ -7859,7 +7842,7 @@ rules:
   - go
   message: 'Detected string concatenation with a non-literal variable in a pgx Go
     SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries instead. You can use parameterized queries like so: (`SELECT $1 FROM table`,
     `data1)'
   metadata:
@@ -7888,8 +7871,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUz92
-        version_id: YDTzow
-        url: https://semgrep.dev/playground/r/YDTzow/go.lang.security.audit.sqli.pgx-sqli.pgx-sqli
+        version_id: 8KTwq9
+        url: https://semgrep.dev/playground/r/8KTwq9/go.lang.security.audit.sqli.pgx-sqli.pgx-sqli
         origin: community
   patterns:
   - pattern-either:
@@ -8320,19 +8303,19 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUl4z
-        version_id: l4Tg8D
-        url: https://semgrep.dev/playground/r/l4Tg8D/java.aws-lambda.security.tainted-sql-string.tainted-sql-string
+        version_id: DkTEy9
+        url: https://semgrep.dev/playground/r/DkTEy9/java.aws-lambda.security.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$EVENT"
+    - focus-metavariable: "$EVENT"
     - pattern-either:
-      - pattern-inside: |
+      - pattern: |
           $HANDLERTYPE $HANDLER($TYPE $EVENT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
             ...
           }
-      - pattern-inside: |
+      - pattern: |
           $HANDLERTYPE $HANDLER(InputStream $EVENT, OutputStream $OUT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
             ...
           }
@@ -8372,13 +8355,13 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$EVENT"
+    - focus-metavariable: "$EVENT"
     - pattern-either:
-      - pattern-inside: |
+      - pattern: |
           $HANDLERTYPE $HANDLER($TYPE $EVENT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
             ...
           }
-      - pattern-inside: |
+      - pattern: |
           $HANDLERTYPE $HANDLER(InputStream $EVENT, OutputStream $OUT, com.amazonaws.services.lambda.runtime.Context $CONTEXT) {
             ...
           }
@@ -8431,8 +8414,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUDWk
-        version_id: YDTBDe
-        url: https://semgrep.dev/playground/r/YDTBDe/java.aws-lambda.security.tainted-sqli.tainted-sqli
+        version_id: WrTLno
+        url: https://semgrep.dev/playground/r/WrTLno/java.aws-lambda.security.tainted-sqli.tainted-sqli
         origin: community
 - id: java.java-jwt.security.audit.jwt-decode-without-verify.java-jwt-decode-without-verify
   message: Detected the decoding of a JWT token without a verify step. JWT tokens
@@ -8481,11 +8464,11 @@ rules:
         }
       }
 - id: java.java-jwt.security.jwt-hardcode.java-jwt-hardcoded-secret
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -8511,8 +8494,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUeAn
-        version_id: BjTG6v
-        url: https://semgrep.dev/playground/r/BjTG6v/java.java-jwt.security.jwt-hardcode.java-jwt-hardcoded-secret
+        version_id: nWTgZJ
+        url: https://semgrep.dev/playground/r/nWTgZJ/java.java-jwt.security.jwt-hardcode.java-jwt-hardcoded-secret
         origin: community
   languages:
   - java
@@ -9252,7 +9235,37 @@ rules:
   languages:
   - java
 - id: java.lang.security.audit.crypto.use-of-default-aes.use-of-default-aes
-  pattern: $CIPHER.getInstance("AES")
+  pattern-either:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import javax;
+          ...
+    - pattern-either:
+      - pattern: javax.crypto.Cipher.getInstance("AES")
+      - pattern: (javax.crypto.Cipher $CIPHER).getInstance("AES")
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import javax.*;
+          ...
+      - pattern-inside: |
+          import javax.crypto;
+          ...
+    - pattern-either:
+      - pattern: crypto.Cipher.getInstance("AES")
+      - pattern: (crypto.Cipher $CIPHER).getInstance("AES")
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          import javax.crypto.*;
+          ...
+      - pattern-inside: |
+          import javax.crypto.Cipher;
+          ...
+    - pattern-either:
+      - pattern: Cipher.getInstance("AES")
+      - pattern: (Cipher $CIPHER).getInstance("AES")
   metadata:
     cwe:
     - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
@@ -9276,12 +9289,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUB7Z
-        version_id: A8TDZN
-        url: https://semgrep.dev/playground/r/A8TDZN/java.lang.security.audit.crypto.use-of-default-aes.use-of-default-aes
+        version_id: gETNAO
+        url: https://semgrep.dev/playground/r/gETNAO/java.lang.security.audit.crypto.use-of-default-aes.use-of-default-aes
         origin: community
-  message: 'Use of AES with no settings detected. By default, ECB mode is used. ECB
-    doesn''t  provide message confidentiality and is not semantically secure so should
-    not be used. Instead, use a strong, secure cipher: Cipher.getInstance("AES/CBC/PKCS7PADDING").
+  message: 'Use of AES with no settings detected. By default, java.crypto.Cipher uses
+    ECB mode. ECB doesn''t  provide message confidentiality and is not semantically
+    secure so should not be used. Instead, use a strong, secure cipher: java.crypto.Cipher.getInstance("AES/CBC/PKCS7PADDING").
     See https://owasp.org/www-community/Using_the_Java_Cryptographic_Extensions for
     more information.'
   severity: WARNING
@@ -9568,8 +9581,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzxR
-        version_id: 3ZTx0L
-        url: https://semgrep.dev/playground/r/3ZTx0L/java.lang.security.audit.formatted-sql-string.formatted-sql-string
+        version_id: LjT85p
+        url: https://semgrep.dev/playground/r/LjT85p/java.lang.security.audit.formatted-sql-string.formatted-sql-string
         origin: community
   message: Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized. Use a
@@ -9599,6 +9612,14 @@ rules:
     - metavariable-regex:
         metavariable: "$SQLFUNC"
         regex: execute|executeQuery|createQuery|query
+  pattern-sanitizers:
+  - patterns:
+    - focus-metavariable: "$...X"
+    - pattern-either:
+      - pattern: "<... $...X != $...Y ...>"
+      - pattern: "<... $...Y != $...X ...>"
+      - pattern: "<... $...X == $...Y ...>"
+      - pattern: "<... $...Y == $...X ...>"
   severity: ERROR
   languages:
   - java
@@ -9786,6 +9807,14 @@ rules:
         - metavariable-regex:
             metavariable: "$SQLCMD"
             regex: "(execute|query|executeUpdate)"
+  pattern-sanitizers:
+  - patterns:
+    - focus-metavariable: "$...X"
+    - pattern-either:
+      - pattern: "<... $...X != $...Y ...>"
+      - pattern: "<... $...Y != $...X ...>"
+      - pattern: "<... $...X == $...Y ...>"
+      - pattern: "<... $...Y == $...X ...>"
   metadata:
     category: security
     technology:
@@ -9812,13 +9841,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUBJG
-        version_id: 5PTYgR
-        url: https://semgrep.dev/playground/r/5PTYgR/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
+        version_id: 8KT8zW
+        url: https://semgrep.dev/playground/r/8KT8zW/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
         origin: community
 - id: java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request
   message: Detected input from a HTTPServletRequest going into a 'ProcessBuilder'
-    or 'exec' command.  This could lead to command injection if variables passed into
-    the exec commands are not properly sanitized.  Instead, avoid using these OS commands
+    or 'exec' command. This could lead to command injection if variables passed into
+    the exec commands are not properly sanitized. Instead, avoid using these OS commands
     with user-supplied input, or, if you must use these commands, use a whitelist
     of specific values.
   languages:
@@ -9876,8 +9905,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUWrg
-        version_id: w8Tv3R
-        url: https://semgrep.dev/playground/r/w8Tv3R/java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request
+        version_id: gETQgp
+        url: https://semgrep.dev/playground/r/gETQgp/java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request
         origin: community
 - id: java.lang.security.audit.tainted-ldapi-from-http-request.tainted-ldapi-from-http-request
   message: Detected input from a HTTPServletRequest going into an LDAP query. This
@@ -9932,8 +9961,8 @@ rules:
 - id: java.lang.security.audit.tainted-session-from-http-request.tainted-session-from-http-request
   message: Detected input from a HTTPServletRequest going into a session command,
     like `setAttribute`. User input into such a command could lead to an attacker
-    inputting malicious code into your session parameters,  blurring the line between
-    what's trusted and untrusted,  and therefore leading to a trust boundary violation.
+    inputting malicious code into your session parameters, blurring the line between
+    what's trusted and untrusted, and therefore leading to a trust boundary violation.
     This could lead to programmers trusting unvalidated data. Instead, thoroughly
     sanitize user input before passing it into such function calls.
   languages:
@@ -9993,13 +10022,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZU7Eo
-        version_id: DkTerA
-        url: https://semgrep.dev/playground/r/DkTerA/java.lang.security.audit.tainted-session-from-http-request.tainted-session-from-http-request
+        version_id: QkTedR
+        url: https://semgrep.dev/playground/r/QkTedR/java.lang.security.audit.tainted-session-from-http-request.tainted-session-from-http-request
         origin: community
 - id: java.lang.security.audit.tainted-xpath-from-http-request.tainted-xpath-from-http-request
   message: Detected input from a HTTPServletRequest going into a XPath evaluate or
-    compile command.  This could lead to xpath injection if variables passed into
-    the evaluate or compile commands are not properly sanitized. Xpath injection could
+    compile command. This could lead to xpath injection if variables passed into the
+    evaluate or compile commands are not properly sanitized. Xpath injection could
     lead to unauthorized access to sensitive information in XML documents. Instead,
     thoroughly sanitize user input or use parameterized xpath queries if you can.
   languages:
@@ -10036,8 +10065,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5U5nj
-        version_id: WrT644
-        url: https://semgrep.dev/playground/r/WrT644/java.lang.security.audit.tainted-xpath-from-http-request.tainted-xpath-from-http-request
+        version_id: 3ZT0jK
+        url: https://semgrep.dev/playground/r/3ZT0jK/java.lang.security.audit.tainted-xpath-from-http-request.tainted-xpath-from-http-request
         origin: community
 - id: java.lang.security.audit.unvalidated-redirect.unvalidated-redirect
   message: Application redirects to a destination URL specified by a user-supplied
@@ -10277,12 +10306,12 @@ rules:
       - pattern: "(java.io.PrintWriter $WRITER).$WRITE(..., $SINK, ...)\n"
       - pattern: "(javax.servlet.ServletOutputStream $WRITER).$WRITE(..., $SINK, ...)\n"
       - pattern: "(java.io.OutputStream $WRITER).$WRITE(..., $SINK, ...)\n"
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
   message: Detected a request with potential user-input going into a OutputStream
-    or Writer object.  This bypasses any view or template environments, including
-    HTML escaping, which may expose this application to cross-site scripting (XSS)
-    vulnerabilities. Consider using a view technology such as JavaServer Faces (JSFs)
-    which automatically escapes HTML views.
+    or Writer object. This bypasses any view or template environments, including HTML
+    escaping, which may expose this application to cross-site scripting (XSS) vulnerabilities.
+    Consider using a view technology such as JavaServer Faces (JSFs) which automatically
+    escapes HTML views.
   metadata:
     owasp:
     - A07:2017 - Cross-Site Scripting (XSS)
@@ -10309,8 +10338,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Uv7B
-        version_id: 2KT6JW
-        url: https://semgrep.dev/playground/r/2KT6JW/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
+        version_id: 44T01W
+        url: https://semgrep.dev/playground/r/44T01W/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
         origin: community
   severity: WARNING
   languages:
@@ -11065,33 +11094,41 @@ rules:
         '
   pattern-sanitizers:
   - not_conflicting: true
-    patterns:
-    - pattern: "$A"
-    - pattern-inside: 'new $TYPE(...,$A,...);
+    pattern-either:
+    - patterns:
+      - focus-metavariable: "$A"
+      - pattern-inside: 'new $TYPE(...,$A,...);
 
-        '
+          '
+    - patterns:
+      - focus-metavariable: "$...X"
+      - pattern-either:
+        - pattern: "<... $...X != $...Y ...>"
+        - pattern: "<... $...Y != $...X ...>"
+        - pattern: "<... $...X == $...Y ...>"
+        - pattern: "<... $...Y == $...X ...>"
   pattern-sinks:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: "$A"
-        - pattern-inside: 'new PreparedStatementCreatorFactory($A,...);
+        - focus-metavariable: "$A"
+        - pattern: 'new PreparedStatementCreatorFactory($A,...);
 
             '
       - patterns:
-        - pattern: "$A"
-        - pattern-inside: "(JdbcTemplate $T).$M($A,...)\n"
+        - focus-metavariable: "$A"
+        - pattern: "(JdbcTemplate $T).$M($A,...)\n"
       - patterns:
         - pattern: "(String $A)"
         - pattern-inside: "(JdbcTemplate $T).batchUpdate(...)\n"
       - patterns:
-        - pattern: "$A"
-        - pattern-inside: 'NamedParameterBatchUpdateUtils.$M($A,...)
+        - focus-metavariable: "$A"
+        - pattern: 'NamedParameterBatchUpdateUtils.$M($A,...)
 
             '
       - patterns:
-        - pattern: "$A"
-        - pattern-inside: 'BatchUpdateUtils.$M($A,...)
+        - focus-metavariable: "$A"
+        - pattern: 'BatchUpdateUtils.$M($A,...)
 
             '
   message: Detected a string argument from a public method contract in a raw SQL statement.
@@ -11126,8 +11163,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqU8N2
-        version_id: 3ZTxA5
-        url: https://semgrep.dev/playground/r/3ZTxA5/java.spring.security.audit.spring-sqli.spring-sqli
+        version_id: PkTPoX
+        url: https://semgrep.dev/playground/r/PkTPoX/java.spring.security.audit.spring-sqli.spring-sqli
         origin: community
 - id: java.spring.security.audit.spring-unvalidated-redirect.spring-unvalidated-redirect
   message: Application redirects a user to a destination URL specified by a user supplied
@@ -11219,8 +11256,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUxok
-        version_id: 6xTr1o
-        url: https://semgrep.dev/playground/r/6xTr1o/java.spring.security.injection.tainted-file-path.tainted-file-path
+        version_id: RGTj46
+        url: https://semgrep.dev/playground/r/RGTj46/java.spring.security.injection.tainted-file-path.tainted-file-path
         origin: community
   mode: taint
   pattern-sources:
@@ -11237,7 +11274,7 @@ rules:
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)"
-    - pattern: "$SOURCE"
+    - focus-metavariable: "$SOURCE"
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -11415,8 +11452,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UdRR
-        version_id: zyTOYp
-        url: https://semgrep.dev/playground/r/zyTOYp/java.spring.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: JdT9LB
+        url: https://semgrep.dev/playground/r/JdT9LB/java.spring.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sources:
@@ -11433,7 +11470,10 @@ rules:
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)"
-    - pattern: "$SOURCE"
+    - metavariable-regex:
+        metavariable: "$TYPE"
+        regex: "^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))"
+    - focus-metavariable: "$SOURCE"
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -11469,6 +11509,14 @@ rules:
     - metavariable-regex:
         metavariable: "$SQLSTR"
         regex: "(?i)(select|delete|insert|create|update|alter|drop)\\b"
+  pattern-sanitizers:
+  - patterns:
+    - focus-metavariable: "$...X"
+    - pattern-either:
+      - pattern: "<... $...X != $...Y ...>"
+      - pattern: "<... $...Y != $...X ...>"
+      - pattern: "<... $...X == $...Y ...>"
+      - pattern: "<... $...Y == $...X ...>"
 - id: java.spring.security.injection.tainted-system-command.tainted-system-command
   languages:
   - java
@@ -11492,7 +11540,7 @@ rules:
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)"
-    - pattern: "$SOURCE"
+    - focus-metavariable: "$SOURCE"
     label: INPUT
   - patterns:
     - pattern-either:
@@ -11573,8 +11621,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUxGN
-        version_id: pZT8pB
-        url: https://semgrep.dev/playground/r/pZT8pB/java.spring.security.injection.tainted-system-command.tainted-system-command
+        version_id: BjT635
+        url: https://semgrep.dev/playground/r/BjT635/java.spring.security.injection.tainted-system-command.tainted-system-command
         origin: community
 - id: java.spring.security.injection.tainted-url-host.tainted-url-host
   languages:
@@ -11612,8 +11660,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUZo8
-        version_id: 2KTZP1
-        url: https://semgrep.dev/playground/r/2KTZP1/java.spring.security.injection.tainted-url-host.tainted-url-host
+        version_id: K3TxLY
+        url: https://semgrep.dev/playground/r/K3TxLY/java.spring.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sources:
@@ -11630,7 +11678,7 @@ rules:
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)"
-    - pattern: "$SOURCE"
+    - focus-metavariable: "$SOURCE"
   pattern-sinks:
   - pattern-either:
     - pattern: new URL($ONEARG)
@@ -11665,9 +11713,9 @@ rules:
           regex: http(s?)://%(v|s|q).*
 - id: javascript.angular.security.detect-angular-element-methods.detect-angular-element-methods
   message: Use of angular.element can lead to XSS if user-input is treated as part
-    of the HTML element within `$SINK`.  It is recommended to contextually output
-    encode user-input, before inserting into `$SINK`.  If the HTML needs to be preserved
-    it is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
+    of the HTML element within `$SINK`. It is recommended to contextually output encode
+    user-input, before inserting into `$SINK`. If the HTML needs to be preserved it
+    is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
   metadata:
     confidence: LOW
     references:
@@ -11694,8 +11742,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8Ujdo
-        version_id: X0TXOA
-        url: https://semgrep.dev/playground/r/X0TXOA/javascript.angular.security.detect-angular-element-methods.detect-angular-element-methods
+        version_id: 5PTgLQ
+        url: https://semgrep.dev/playground/r/5PTgLQ/javascript.angular.security.detect-angular-element-methods.detect-angular-element-methods
         origin: community
   languages:
   - javascript
@@ -11729,7 +11777,7 @@ rules:
     - metavariable-regex:
         metavariable: "$SINK"
         regex: "^(after|append|html|prepend|replaceWith|wrap)$"
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
   pattern-sanitizers:
   - patterns:
     - pattern-either:
@@ -11738,9 +11786,9 @@ rules:
       - pattern: DOMPurify.sanitize(...)
 - id: javascript.angular.security.detect-angular-element-taint.detect-angular-element-taint
   message: Use of angular.element can lead to XSS if user-input is treated as part
-    of the HTML element within `$SINK`.  It is recommended to contextually output
-    encode user-input, before inserting into `$SINK`.  If the HTML needs to be preserved
-    it is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
+    of the HTML element within `$SINK`. It is recommended to contextually output encode
+    user-input, before inserting into `$SINK`. If the HTML needs to be preserved it
+    is recommended to sanitize the input using $sce.getTrustedHTML or $sanitize.
   metadata:
     confidence: MEDIUM
     cwe:
@@ -11767,8 +11815,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUP71
-        version_id: jQTAlz
-        url: https://semgrep.dev/playground/r/jQTAlz/javascript.angular.security.detect-angular-element-taint.detect-angular-element-taint
+        version_id: GxTdry
+        url: https://semgrep.dev/playground/r/GxTdry/javascript.angular.security.detect-angular-element-taint.detect-angular-element-taint
         origin: community
   languages:
   - javascript
@@ -11820,7 +11868,7 @@ rules:
     - metavariable-regex:
         metavariable: "$SINK"
         regex: "^(after|append|html|prepend|replaceWith|wrap)$"
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
   pattern-sanitizers:
   - patterns:
     - pattern-either:
@@ -11994,8 +12042,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6UDNQ
-        version_id: yeTdgn
-        url: https://semgrep.dev/playground/r/yeTdgn/javascript.aws-lambda.security.detect-child-process.detect-child-process
+        version_id: 0bTjPj
+        url: https://semgrep.dev/playground/r/0bTjPj/javascript.aws-lambda.security.detect-child-process.detect-child-process
         origin: community
   languages:
   - javascript
@@ -12020,16 +12068,16 @@ rules:
           exports.handler = $FUNC
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
-      - pattern-inside: exec($CMD,...)
-      - pattern-inside: execSync($CMD,...)
-      - pattern-inside: spawn($CMD,...)
-      - pattern-inside: spawnSync($CMD,...)
-      - pattern-inside: "$CP.exec($CMD,...)"
-      - pattern-inside: "$CP.execSync($CMD,...)"
-      - pattern-inside: "$CP.spawn($CMD,...)"
-      - pattern-inside: "$CP.spawnSync($CMD,...)"
+      - pattern: exec($CMD,...)
+      - pattern: execSync($CMD,...)
+      - pattern: spawn($CMD,...)
+      - pattern: spawnSync($CMD,...)
+      - pattern: "$CP.exec($CMD,...)"
+      - pattern: "$CP.execSync($CMD,...)"
+      - pattern: "$CP.spawn($CMD,...)"
+      - pattern: "$CP.spawnSync($CMD,...)"
     - pattern-either:
       - pattern-inside: |
           require('child_process')
@@ -12065,8 +12113,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU1xk
-        version_id: rxT8vk
-        url: https://semgrep.dev/playground/r/rxT8vk/javascript.aws-lambda.security.dynamodb-request-object.dynamodb-request-object
+        version_id: K3T1WW
+        url: https://semgrep.dev/playground/r/K3T1WW/javascript.aws-lambda.security.dynamodb-request-object.dynamodb-request-object
         origin: community
   languages:
   - javascript
@@ -12091,8 +12139,8 @@ rules:
           exports.handler = $FUNC
   pattern-sinks:
   - patterns:
-    - pattern: "$SINK"
-    - pattern-inside: "$DC.$METHOD($SINK, ...)\n"
+    - focus-metavariable: "$SINK"
+    - pattern: "$DC.$METHOD($SINK, ...)\n"
     - metavariable-regex:
         metavariable: "$METHOD"
         regex: "(query|send|scan|delete|put|transactWrite|update|batchExecuteStatement|executeStatement|executeTransaction|transactWriteItems)"
@@ -12115,7 +12163,7 @@ rules:
 - id: javascript.aws-lambda.security.knex-sqli.knex-sqli
   message: 'Detected SQL statement that is tainted by `$EVENT` object. This could
     lead to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `knex.raw(''SELECT $1 from
     table'', [userinput])`'
   metadata:
@@ -12145,8 +12193,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUBlj
-        version_id: bZT4oN
-        url: https://semgrep.dev/playground/r/bZT4oN/javascript.aws-lambda.security.knex-sqli.knex-sqli
+        version_id: qkT38n
+        url: https://semgrep.dev/playground/r/qkT38n/javascript.aws-lambda.security.knex-sqli.knex-sqli
         origin: community
   languages:
   - javascript
@@ -12171,11 +12219,11 @@ rules:
     - pattern: "$EVENT"
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
-      - pattern-inside: "$KNEX.fromRaw($QUERY, ...)"
-      - pattern-inside: "$KNEX.whereRaw($QUERY, ...)"
-      - pattern-inside: "$KNEX.raw($QUERY, ...)"
+      - pattern: "$KNEX.fromRaw($QUERY, ...)"
+      - pattern: "$KNEX.whereRaw($QUERY, ...)"
+      - pattern: "$KNEX.raw($QUERY, ...)"
     - pattern-either:
       - pattern-inside: |
           require('knex')
@@ -12186,7 +12234,7 @@ rules:
 - id: javascript.aws-lambda.security.mysql-sqli.mysql-sqli
   message: 'Detected SQL statement that is tainted by `$EVENT` object. This could
     lead to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `connection.query(''SELECT
     $1 from table'', [userinput])`'
   metadata:
@@ -12216,8 +12264,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUBJ2
-        version_id: NdTQRN
-        url: https://semgrep.dev/playground/r/NdTQRN/javascript.aws-lambda.security.mysql-sqli.mysql-sqli
+        version_id: l4TGnD
+        url: https://semgrep.dev/playground/r/l4TGnD/javascript.aws-lambda.security.mysql-sqli.mysql-sqli
         origin: community
   languages:
   - javascript
@@ -12242,10 +12290,10 @@ rules:
     - pattern: "$EVENT"
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
-      - pattern-inside: "$POOL.query($QUERY, ...)"
-      - pattern-inside: "$POOL.execute($QUERY, ...)"
+      - pattern: "$POOL.query($QUERY, ...)"
+      - pattern: "$POOL.execute($QUERY, ...)"
     - pattern-either:
       - pattern-inside: |
           require('mysql')
@@ -12268,7 +12316,7 @@ rules:
 - id: javascript.aws-lambda.security.pg-sqli.pg-sqli
   message: 'Detected SQL statement that is tainted by `$EVENT` object. This could
     lead to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `connection.query(''SELECT
     $1 from table'', [userinput])`'
   metadata:
@@ -12298,8 +12346,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU25P
-        version_id: kbTZP6
-        url: https://semgrep.dev/playground/r/kbTZP6/javascript.aws-lambda.security.pg-sqli.pg-sqli
+        version_id: YDTd9e
+        url: https://semgrep.dev/playground/r/YDTd9e/javascript.aws-lambda.security.pg-sqli.pg-sqli
         origin: community
   languages:
   - javascript
@@ -12324,9 +12372,9 @@ rules:
     - pattern: "$EVENT"
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
-      - pattern-inside: "$DB.query($QUERY, ...)"
+      - pattern: "$DB.query($QUERY, ...)"
     - pattern-either:
       - pattern-inside: |
           require('pg')
@@ -12337,7 +12385,7 @@ rules:
 - id: javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli
   message: 'Detected SQL statement that is tainted by `$EVENT` object. This could
     lead to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `sequelize.query(''SELECT
     * FROM projects WHERE status = ?'', { replacements: [''active''], type: QueryTypes.SELECT
     });`'
@@ -12367,8 +12415,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUA5o
-        version_id: w8T0bA
-        url: https://semgrep.dev/playground/r/w8T0bA/javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli
+        version_id: 6xTNPo
+        url: https://semgrep.dev/playground/r/6xTNPo/javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli
         origin: community
   languages:
   - javascript
@@ -12393,9 +12441,9 @@ rules:
     - pattern: "$EVENT"
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
-      - pattern-inside: "$DB.query($QUERY, ...)"
+      - pattern: "$DB.query($QUERY, ...)"
     - pattern-either:
       - pattern-inside: |
           require('sequelize')
@@ -12431,8 +12479,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UNw5
-        version_id: xyT3rd
-        url: https://semgrep.dev/playground/r/xyT3rd/javascript.aws-lambda.security.tainted-eval.tainted-eval
+        version_id: o5T68N
+        url: https://semgrep.dev/playground/r/o5T68N/javascript.aws-lambda.security.tainted-eval.tainted-eval
         origin: community
   languages:
   - javascript
@@ -12457,7 +12505,7 @@ rules:
           exports.handler = $FUNC
   pattern-sinks:
   - patterns:
-    - pattern: "$CODE"
+    - focus-metavariable: "$CODE"
     - pattern-either:
       - pattern: eval($CODE)
       - pattern: Function(...,$CODE)
@@ -12492,8 +12540,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUJBY
-        version_id: O9TZ7X
-        url: https://semgrep.dev/playground/r/O9TZ7X/javascript.aws-lambda.security.tainted-html-response.tainted-html-response
+        version_id: zyTE7p
+        url: https://semgrep.dev/playground/r/zyTE7p/javascript.aws-lambda.security.tainted-html-response.tainted-html-response
         origin: community
   languages:
   - javascript
@@ -12518,7 +12566,7 @@ rules:
     - pattern: "$EVENT"
   pattern-sinks:
   - patterns:
-    - pattern: "$BODY"
+    - focus-metavariable: "$BODY"
     - pattern-inside: "{..., headers: {..., 'Content-Type': 'text/html', ...}, body:
         $BODY, ... }\n"
 - id: javascript.aws-lambda.security.tainted-html-string.tainted-html-string
@@ -12803,8 +12851,8 @@ rules:
 - id: javascript.browser.security.open-redirect.js-open-redirect
   message: The application accepts potentially user-controlled input `$PROP` which
     can control the location of the current window context. This can lead two types
-    of vulnerabilities open-redirection and Cross-Site-Scripting (XSS)  with JavaScript
-    URIs. It is recommended to validate user-controllable  input before allowing it
+    of vulnerabilities open-redirection and Cross-Site-Scripting (XSS) with JavaScript
+    URIs. It is recommended to validate user-controllable input before allowing it
     to control the redirection.
   metadata:
     interfile: true
@@ -12833,8 +12881,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUopl
-        version_id: X0T1d3
-        url: https://semgrep.dev/playground/r/X0T1d3/javascript.browser.security.open-redirect.js-open-redirect
+        version_id: A8ToQB
+        url: https://semgrep.dev/playground/r/A8ToQB/javascript.browser.security.open-redirect.js-open-redirect
         origin: community
   languages:
   - javascript
@@ -13748,8 +13796,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUNeD
-        version_id: 1QTr58
-        url: https://semgrep.dev/playground/r/1QTr58/javascript.express.security.audit.express-libxml-noent.express-libxml-noent
+        version_id: pZT57B
+        url: https://semgrep.dev/playground/r/pZT57B/javascript.express.security.audit.express-libxml-noent.express-libxml-noent
         origin: community
   languages:
   - javascript
@@ -13811,7 +13859,7 @@ rules:
       - metavariable-regex:
           metavariable: "$FUNC"
           regex: "^(parseXmlString|parseXml)$"
-      - pattern: "$QUERY"
+      - focus-metavariable: "$QUERY"
 - id: javascript.express.security.audit.express-open-redirect.express-open-redirect
   message: The application redirects to a URL specified by user-supplied input `$REQ`
     that is not validated. This could redirect users to malicious locations. Consider
@@ -13838,8 +13886,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5ULkq
-        version_id: A8T1ED
-        url: https://semgrep.dev/playground/r/A8T1ED/javascript.express.security.audit.express-open-redirect.express-open-redirect
+        version_id: 2KT9J1
+        url: https://semgrep.dev/playground/r/2KT9J1/javascript.express.security.audit.express-open-redirect.express-open-redirect
         origin: community
   languages:
   - javascript
@@ -13926,7 +13974,7 @@ rules:
       - pattern: "$RES.redirect($ASSIGN)"
       - pattern: "$RES.redirect($ASSIGN + $...FOO)"
       - pattern: "$RES.redirect(`${$ASSIGN}...`)"
-    - pattern: "$ASSIGN"
+    - focus-metavariable: "$ASSIGN"
 - id: javascript.express.security.audit.express-path-join-resolve-traversal.express-path-join-resolve-traversal
   message: Possible writing outside of the destination, make sure that the target
     path is nested in the intended destination
@@ -13956,8 +14004,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1Uyb8
-        version_id: RGTwxv
-        url: https://semgrep.dev/playground/r/RGTwxv/javascript.express.security.audit.express-path-join-resolve-traversal.express-path-join-resolve-traversal
+        version_id: X0Tr63
+        url: https://semgrep.dev/playground/r/X0Tr63/javascript.express.security.audit.express-path-join-resolve-traversal.express-path-join-resolve-traversal
         origin: community
   languages:
   - javascript
@@ -13997,7 +14045,7 @@ rules:
       - pattern: body
   pattern-sinks:
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-either:
       - pattern-inside: |
           $PATH = require('path');
@@ -14006,16 +14054,16 @@ rules:
           import $PATH from 'path';
           ...
     - pattern-either:
-      - pattern-inside: "$PATH.join(...,$SINK,...)"
-      - pattern-inside: "$PATH.resolve(...,$SINK,...)"
+      - pattern: "$PATH.join(...,$SINK,...)"
+      - pattern: "$PATH.resolve(...,$SINK,...)"
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-inside: |
         import 'path';
         ...
     - pattern-either:
-      - pattern-inside: path.join(...,$SINK,...)
-      - pattern-inside: path.resolve(...,$SINK,...)
+      - pattern: path.join(...,$SINK,...)
+      - pattern: path.resolve(...,$SINK,...)
   pattern-sanitizers:
   - pattern: "$Y.replace(...)"
   - pattern: "$Y.indexOf(...)"
@@ -14057,8 +14105,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UzDx
-        version_id: A8Tnlb
-        url: https://semgrep.dev/playground/r/A8Tnlb/javascript.express.security.audit.express-res-sendfile.express-res-sendfile
+        version_id: jQTo7O
+        url: https://semgrep.dev/playground/r/jQTo7O/javascript.express.security.audit.express-res-sendfile.express-res-sendfile
         origin: community
   languages:
   - javascript
@@ -14108,18 +14156,18 @@ rules:
   pattern-sinks:
   - patterns:
     - pattern-either:
-      - pattern-inside: "$RES.$METH($QUERY,...)"
+      - pattern: "$RES.$METH($QUERY,...)"
     - pattern-not-inside: "$RES.$METH($QUERY,$OPTIONS)"
     - metavariable-regex:
         metavariable: "$METH"
         regex: "^(sendfile|sendFile)$"
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
 - id: javascript.express.security.audit.express-session-hardcoded-secret.express-session-hardcoded-secret
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     interfile: true
     cwe:
@@ -14145,8 +14193,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10Uo39
-        version_id: 9lTvZd
-        url: https://semgrep.dev/playground/r/9lTvZd/javascript.express.security.audit.express-session-hardcoded-secret.express-session-hardcoded-secret
+        version_id: DkTr1r
+        url: https://semgrep.dev/playground/r/DkTr1r/javascript.express.security.audit.express-session-hardcoded-secret.express-session-hardcoded-secret
         origin: community
   languages:
   - javascript
@@ -15029,8 +15077,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUkJl
-        version_id: NdTbXA
-        url: https://semgrep.dev/playground/r/NdTbXA/javascript.express.security.express-expat-xxe.express-expat-xxe
+        version_id: 1QT1L8
+        url: https://semgrep.dev/playground/r/1QT1L8/javascript.express.security.express-expat-xxe.express-expat-xxe
         origin: community
   languages:
   - javascript
@@ -15085,9 +15133,9 @@ rules:
           $PARSER = new $XML.Parser(...);
           ...
     - pattern-either:
-      - pattern-inside: "$PARSER.parse($QUERY)"
+      - pattern: "$PARSER.parse($QUERY)"
       - pattern: "$PARSER.write($QUERY)"
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
 - id: javascript.express.security.express-insecure-template-usage.express-insecure-template-usage
   message: User data from `$REQ` is being compiled into the template, which can lead
     to a Server Side Template Injection (SSTI) vulnerability.
@@ -15909,9 +15957,9 @@ rules:
     - focus-metavariable: "$SINK"
 - id: javascript.express.security.injection.raw-html-format.raw-html-format
   message: User data flows into the host portion of this manually-constructed HTML.
-    This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from  user-provided
-    input. Consider using a sanitization library such as  DOMPurify to sanitize the
-    HTML within.
+    This can introduce a Cross-Site-Scripting (XSS) vulnerability if this comes from
+    user-provided input. Consider using a sanitization library such as DOMPurify to
+    sanitize the HTML within.
   metadata:
     cwe:
     - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
@@ -15937,8 +15985,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUL0X
-        version_id: LjTpgv
-        url: https://semgrep.dev/playground/r/LjTpgv/javascript.express.security.injection.raw-html-format.raw-html-format
+        version_id: 0bTP23
+        url: https://semgrep.dev/playground/r/0bTP23/javascript.express.security.injection.raw-html-format.raw-html-format
         origin: community
   languages:
   - javascript
@@ -16222,11 +16270,11 @@ rules:
         metavariable: "$HEADER"
         regex: ".*(X-Frame-Options|x-frame-options).*"
 - id: javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     interfile: true
     cwe:
@@ -16258,8 +16306,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUyRl
-        version_id: O9T9lJ
-        url: https://semgrep.dev/playground/r/O9T9lJ/javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret
+        version_id: K3TW7k
+        url: https://semgrep.dev/playground/r/K3TW7k/javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret
         origin: community
   languages:
   - javascript
@@ -16350,11 +16398,11 @@ rules:
       ...
       JWT.verify($P, JWK.None,...);
 - id: javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -16385,8 +16433,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUon7
-        version_id: 7ZT6KR
-        url: https://semgrep.dev/playground/r/7ZT6KR/javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret
+        version_id: qkT8Xy
+        url: https://semgrep.dev/playground/r/qkT8Xy/javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret
         origin: community
   languages:
   - javascript
@@ -16646,8 +16694,8 @@ rules:
             ...
     - focus-metavariable: "$ARG"
 - id: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
-  message: RegExp() called with a `$ARG` function argument, this might  allow an attacker
-    to cause a Denial of Service (DoS)  within your application as RegExP which blocks
+  message: RegExp() called with a `$ARG` function argument, this might allow an attacker
+    to cause a Denial of Service (DoS) within your application as RegExP which blocks
     the main thread.
   metadata:
     owasp:
@@ -16672,8 +16720,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU1gD
-        version_id: yeTz1x
-        url: https://semgrep.dev/playground/r/yeTz1x/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
+        version_id: YDT9DJ
+        url: https://semgrep.dev/playground/r/YDT9DJ/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
         origin: community
   languages:
   - javascript
@@ -16772,8 +16820,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUjrq
-        version_id: yeTzG0
-        url: https://semgrep.dev/playground/r/yeTzG0/javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+        version_id: yeTK13
+        url: https://semgrep.dev/playground/r/yeTK13/javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
         origin: community
   languages:
   - javascript
@@ -16782,7 +16830,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$X"
+    - focus-metavariable: "$X"
     - pattern-either:
       - pattern-inside: 'function ... (...,$X,...) {...}
 
@@ -16792,7 +16840,7 @@ rules:
           '
   pattern-sinks:
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-either:
       - pattern-inside: |
           $PATH = require('path');
@@ -16801,10 +16849,10 @@ rules:
           import $PATH from 'path';
           ...
     - pattern-either:
-      - pattern-inside: "$PATH.join(...,$SINK,...)"
-      - pattern-inside: "$PATH.resolve(...,$SINK,...)"
+      - pattern: "$PATH.join(...,$SINK,...)"
+      - pattern: "$PATH.resolve(...,$SINK,...)"
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-inside: |
         import 'path';
         ...
@@ -16923,7 +16971,7 @@ rules:
 - id: javascript.lang.security.audit.sqli.node-mssql-sqli.node-mssql-sqli
   message: 'Detected string concatenation with a non-literal variable in a `mssql`
     JS SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can use parameterized statements like
     so: `$REQ.input(''USER_ID'', mssql.Int, id);`'
   metadata:
@@ -16951,8 +16999,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU8Pd
-        version_id: w8T0Lv
-        url: https://semgrep.dev/playground/r/w8T0Lv/javascript.lang.security.audit.sqli.node-mssql-sqli.node-mssql-sqli
+        version_id: JdT83K
+        url: https://semgrep.dev/playground/r/JdT83K/javascript.lang.security.audit.sqli.node-mssql-sqli.node-mssql-sqli
         origin: community
   languages:
   - javascript
@@ -17063,7 +17111,7 @@ rules:
 - id: javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli
   message: 'Detected string concatenation with a non-literal variable in a node-postgres
     JS SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can use parameterized statements like
     so: `client.query(''SELECT $1 from table'', [userinput])`'
   metadata:
@@ -17088,8 +17136,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUPN9
-        version_id: O9TZbL
-        url: https://semgrep.dev/playground/r/O9TZbL/javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli
+        version_id: 5PTbP3
+        url: https://semgrep.dev/playground/r/5PTbP3/javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli
         origin: community
   languages:
   - javascript
@@ -17257,11 +17305,11 @@ rules:
   pattern-sinks:
   - pattern: Object.assign(...)
 - id: javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -17292,8 +17340,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzq6
-        version_id: NdTWlB
-        url: https://semgrep.dev/playground/r/NdTWlB/javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret
+        version_id: 5PTgL6
+        url: https://semgrep.dev/playground/r/5PTgL6/javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret
         origin: community
   languages:
   - javascript
@@ -17404,8 +17452,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyU0GX
-        version_id: d6To4A
-        url: https://semgrep.dev/playground/r/d6To4A/javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection
+        version_id: bZT2ew
+        url: https://semgrep.dev/playground/r/bZT2ew/javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection
         origin: community
   languages:
   - javascript
@@ -17451,9 +17499,9 @@ rules:
   - pattern-either:
     - patterns:
       - pattern-either:
-        - pattern-inside: sequelize.query($QUERY,...)
-        - pattern-inside: "$DB.sequelize.query($QUERY,...)"
-      - pattern: "$QUERY"
+        - pattern: sequelize.query($QUERY,...)
+        - pattern: "$DB.sequelize.query($QUERY,...)"
+      - focus-metavariable: "$QUERY"
   pattern-sanitizers:
   - pattern-either:
     - pattern: parseInt(...)
@@ -17823,7 +17871,7 @@ rules:
   message: "`$QUERY` Detected string concatenation with a non-literal variable in
     a Doctrine QueryBuilder method. This could lead to SQL injection if the variable
     is user-controlled and not properly sanitized. In order to prevent SQL injection,
-    used parameterized queries or prepared statements instead."
+    use parameterized queries or prepared statements instead."
   metadata:
     category: security
     cwe:
@@ -17850,37 +17898,37 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUw23
-        version_id: GxT4J4
-        url: https://semgrep.dev/playground/r/GxT4J4/php.doctrine.security.audit.doctrine-orm-dangerous-query.doctrine-orm-dangerous-query
+        version_id: NdT72A
+        url: https://semgrep.dev/playground/r/NdT72A/php.doctrine.security.audit.doctrine-orm-dangerous-query.doctrine-orm-dangerous-query
         origin: community
   mode: taint
   pattern-sinks:
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-either:
-      - pattern-inside: "$QUERY->add(...,$SINK,...)"
-      - pattern-inside: "$QUERY->select(...,$SINK,...)"
-      - pattern-inside: "$QUERY->addSelect(...,$SINK,...)"
-      - pattern-inside: "$QUERY->delete(...,$SINK,...)"
-      - pattern-inside: "$QUERY->update(...,$SINK,...)"
-      - pattern-inside: "$QUERY->insert(...,$SINK,...)"
-      - pattern-inside: "$QUERY->from(...,$SINK,...)"
-      - pattern-inside: "$QUERY->join(...,$SINK,...)"
-      - pattern-inside: "$QUERY->innerJoin(...,$SINK,...)"
-      - pattern-inside: "$QUERY->leftJoin(...,$SINK,...)"
-      - pattern-inside: "$QUERY->rightJoin(...,$SINK,...)"
-      - pattern-inside: "$QUERY->where(...,$SINK,...)"
-      - pattern-inside: "$QUERY->andWhere(...,$SINK,...)"
-      - pattern-inside: "$QUERY->orWhere(...,$SINK,...)"
-      - pattern-inside: "$QUERY->groupBy(...,$SINK,...)"
-      - pattern-inside: "$QUERY->addGroupBy(...,$SINK,...)"
-      - pattern-inside: "$QUERY->having(...,$SINK,...)"
-      - pattern-inside: "$QUERY->andHaving(...,$SINK,...)"
-      - pattern-inside: "$QUERY->orHaving(...,$SINK,...)"
-      - pattern-inside: "$QUERY->orderBy(...,$SINK,...)"
-      - pattern-inside: "$QUERY->addOrderBy(...,$SINK,...)"
-      - pattern-inside: "$QUERY->set($SINK,...)"
-      - pattern-inside: "$QUERY->setValue($SINK,...)"
+      - pattern: "$QUERY->add(...,$SINK,...)"
+      - pattern: "$QUERY->select(...,$SINK,...)"
+      - pattern: "$QUERY->addSelect(...,$SINK,...)"
+      - pattern: "$QUERY->delete(...,$SINK,...)"
+      - pattern: "$QUERY->update(...,$SINK,...)"
+      - pattern: "$QUERY->insert(...,$SINK,...)"
+      - pattern: "$QUERY->from(...,$SINK,...)"
+      - pattern: "$QUERY->join(...,$SINK,...)"
+      - pattern: "$QUERY->innerJoin(...,$SINK,...)"
+      - pattern: "$QUERY->leftJoin(...,$SINK,...)"
+      - pattern: "$QUERY->rightJoin(...,$SINK,...)"
+      - pattern: "$QUERY->where(...,$SINK,...)"
+      - pattern: "$QUERY->andWhere(...,$SINK,...)"
+      - pattern: "$QUERY->orWhere(...,$SINK,...)"
+      - pattern: "$QUERY->groupBy(...,$SINK,...)"
+      - pattern: "$QUERY->addGroupBy(...,$SINK,...)"
+      - pattern: "$QUERY->having(...,$SINK,...)"
+      - pattern: "$QUERY->andHaving(...,$SINK,...)"
+      - pattern: "$QUERY->orHaving(...,$SINK,...)"
+      - pattern: "$QUERY->orderBy(...,$SINK,...)"
+      - pattern: "$QUERY->addOrderBy(...,$SINK,...)"
+      - pattern: "$QUERY->set($SINK,...)"
+      - pattern: "$QUERY->setValue($SINK,...)"
     - pattern-either:
       - pattern-inside: |
           $Q = $X->createQueryBuilder();
@@ -18549,7 +18597,7 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
-    - pattern: "$ARG"
+    - focus-metavariable: "$ARG"
     - pattern-inside: 'Route::$METHOD($ROUTE_NAME, function(...,$ARG,...){...})
 
         '
@@ -18594,8 +18642,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUln0
-        version_id: JdTA5x
-        url: https://semgrep.dev/playground/r/JdTA5x/php.laravel.security.laravel-api-route-sql-injection.laravel-api-route-sql-injection
+        version_id: kbT1l8
+        url: https://semgrep.dev/playground/r/kbT1l8/php.laravel.security.laravel-api-route-sql-injection.laravel-api-route-sql-injection
         origin: community
 - id: php.laravel.security.laravel-sql-injection.laravel-sql-injection
   metadata:
@@ -19041,7 +19089,7 @@ rules:
 - id: problem-based-packs.insecure-transport.go-stdlib.http-customized-request.http-customized-request
   message: Checks for requests sent via http.NewRequest to http:// URLS. This is dangerous
     because the server is attempting to connect to a website that does not encrypt
-    traffic with TLS. Instead,    send requests only to https:// URLS.
+    traffic with TLS. Instead, send requests only to https:// URLS.
   severity: WARNING
   metadata:
     likelihood: MEDIUM
@@ -19063,8 +19111,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU90n
-        version_id: ExT3XA
-        url: https://semgrep.dev/playground/r/ExT3XA/problem-based-packs.insecure-transport.go-stdlib.http-customized-request.http-customized-request
+        version_id: K3TW54
+        url: https://semgrep.dev/playground/r/K3TW54/problem-based-packs.insecure-transport.go-stdlib.http-customized-request.http-customized-request
         origin: community
   languages:
   - go
@@ -20281,7 +20329,7 @@ rules:
     - pattern: "$SERVER.createServer(...)\n"
 - id: problem-based-packs.insecure-transport.ruby-stdlib.http-client-requests.http-client-requests
   message: Checks for requests to http (unencrypted) sites using some of ruby's most
-    popular REST/HTTP       libraries, including httparty and restclient.
+    popular REST/HTTP libraries, including httparty and restclient.
   severity: WARNING
   metadata:
     likelihood: MEDIUM
@@ -20305,8 +20353,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UyKG
-        version_id: RGTZrz
-        url: https://semgrep.dev/playground/r/RGTZrz/problem-based-packs.insecure-transport.ruby-stdlib.http-client-requests.http-client-requests
+        version_id: qkT8Wb
+        url: https://semgrep.dev/playground/r/qkT8Wb/problem-based-packs.insecure-transport.ruby-stdlib.http-client-requests.http-client-requests
         origin: community
   languages:
   - ruby
@@ -20326,7 +20374,7 @@ rules:
       '
 - id: problem-based-packs.insecure-transport.ruby-stdlib.net-ftp-request.net-ftp-request
   message: Checks for outgoing connections to ftp servers with the 'net/ftp' package.
-    FTP does not encrypt traffic,   possibly leading to PII being sent plaintext over
+    FTP does not encrypt traffic, possibly leading to PII being sent plaintext over
     the network. Instead, connect via the SFTP protocol.
   severity: WARNING
   metadata:
@@ -20349,8 +20397,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUj13
-        version_id: A8TZLA
-        url: https://semgrep.dev/playground/r/A8TZLA/problem-based-packs.insecure-transport.ruby-stdlib.net-ftp-request.net-ftp-request
+        version_id: l4TnW8
+        url: https://semgrep.dev/playground/r/l4TnW8/problem-based-packs.insecure-transport.ruby-stdlib.net-ftp-request.net-ftp-request
         origin: community
   languages:
   - ruby
@@ -20412,7 +20460,7 @@ rules:
       regex: "([gG]et|post_form|[pP]ost|get_response|get_print|Head|Patch|Put|Proppatch|Lock|Unlock|Options|Propfind|Delete|Move|Copy|Trace|Mkcol)"
 - id: problem-based-packs.insecure-transport.ruby-stdlib.net-telnet-request.net-telnet-request
   message: Checks for creation of telnet servers or attempts to connect through telnet.
-    This is insecure as     the telnet protocol supports no encryption, and data passes
+    This is insecure as the telnet protocol supports no encryption, and data passes
     through unencrypted.
   severity: WARNING
   metadata:
@@ -20436,8 +20484,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzo2
-        version_id: DkTZvQ
-        url: https://semgrep.dev/playground/r/DkTZvQ/problem-based-packs.insecure-transport.ruby-stdlib.net-telnet-request.net-telnet-request
+        version_id: YDT9AA
+        url: https://semgrep.dev/playground/r/YDT9AA/problem-based-packs.insecure-transport.ruby-stdlib.net-telnet-request.net-telnet-request
         origin: community
   languages:
   - ruby
@@ -20501,20 +20549,19 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, $CMD, ...)
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, [$CMD, ...], ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, $CMD, ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, [$CMD, ...],
-          ...)
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: asyncio.create_subprocess_exec($PROG, $CMD, ...)
+      - pattern: asyncio.create_subprocess_exec($PROG, [$CMD, ...], ...)
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, $CMD, ...)
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, [$CMD, ...], ...)
+      - pattern: asyncio.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...)
-      - pattern-inside: asyncio.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: asyncio.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...], ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...)
-      - pattern-inside: asyncio.subprocess.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: asyncio.subprocess.create_subprocess_exec($PROG, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...], ...)
   message: Detected 'create_subprocess_exec' function with argument tainted by `event`
     object. If this data can be controlled by a malicious actor, it may be an instance
@@ -20551,8 +20598,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUrX8
-        version_id: 1QTXlr
-        url: https://semgrep.dev/playground/r/1QTXlr/python.aws-lambda.security.dangerous-asyncio-create-exec.dangerous-asyncio-create-exec
+        version_id: w8TOxj
+        url: https://semgrep.dev/playground/r/w8TOxj/python.aws-lambda.security.dangerous-asyncio-create-exec.dangerous-asyncio-create-exec
         origin: community
   languages:
   - python
@@ -20567,13 +20614,13 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
-      - pattern-inside: "$LOOP.subprocess_exec($PROTOCOL, $CMD, ...)"
-      - pattern-inside: "$LOOP.subprocess_exec($PROTOCOL, [$CMD, ...], ...)"
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: "$LOOP.subprocess_exec($PROTOCOL, $CMD, ...)"
+      - pattern: "$LOOP.subprocess_exec($PROTOCOL, [$CMD, ...], ...)"
+      - pattern: $LOOP.subprocess_exec($PROTOCOL, "=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...)
-      - pattern-inside: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
+      - pattern: $LOOP.subprocess_exec($PROTOCOL, ["=~/(sh|bash|ksh|csh|tcsh|zsh)/",
           "-c", $CMD, ...], ...)
   message: Detected subprocess function '$LOOP.subprocess_exec' with argument tainted
     by `event` object. If this data can be controlled by a malicious actor, it may
@@ -20611,8 +20658,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUxXg
-        version_id: 9lTnB2
-        url: https://semgrep.dev/playground/r/9lTnB2/python.aws-lambda.security.dangerous-asyncio-exec.dangerous-asyncio-exec
+        version_id: xyTkeG
+        url: https://semgrep.dev/playground/r/xyTkeG/python.aws-lambda.security.dangerous-asyncio-exec.dangerous-asyncio-exec
         origin: community
   languages:
   - python
@@ -20627,11 +20674,11 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
-      - pattern-inside: "$LOOP.subprocess_shell($PROTOCOL, $CMD)"
-      - pattern-inside: asyncio.subprocess.create_subprocess_shell($CMD, ...)
-      - pattern-inside: asyncio.create_subprocess_shell($CMD, ...)
+      - pattern: "$LOOP.subprocess_shell($PROTOCOL, $CMD)"
+      - pattern: asyncio.subprocess.create_subprocess_shell($CMD, ...)
+      - pattern: asyncio.create_subprocess_shell($CMD, ...)
   message: Detected asyncio subprocess function with argument tainted by `event` object.
     If this data can be controlled by a malicious actor, it may be an instance of
     command injection. Audit the use of this call to ensure it is not controllable
@@ -20668,8 +20715,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UEl7
-        version_id: yeTdjl
-        url: https://semgrep.dev/playground/r/yeTdjl/python.aws-lambda.security.dangerous-asyncio-shell.dangerous-asyncio-shell
+        version_id: O9T5WJ
+        url: https://semgrep.dev/playground/r/O9T5WJ/python.aws-lambda.security.dangerous-asyncio-shell.dangerous-asyncio-shell
         origin: community
   languages:
   - python
@@ -20711,8 +20758,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUGBq
-        version_id: rxT83W
-        url: https://semgrep.dev/playground/r/rxT83W/python.aws-lambda.security.dangerous-spawn-process.dangerous-spawn-process
+        version_id: e1TJkZ
+        url: https://semgrep.dev/playground/r/e1TJkZ/python.aws-lambda.security.dangerous-spawn-process.dangerous-spawn-process
         origin: community
   languages:
   - python
@@ -20725,10 +20772,10 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
       - patterns:
-        - pattern-inside: os.$METHOD($MODE, $CMD, ...)
+        - pattern: os.$METHOD($MODE, $CMD, ...)
         - metavariable-regex:
             metavariable: "$METHOD"
             regex: "(spawnl|spawnle|spawnlp|spawnlpe|spawnv|spawnve|spawnvp|spawnvp|spawnvpe|posix_spawn|posix_spawnp|startfile)"
@@ -20786,8 +20833,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUyn1
-        version_id: bZT4v2
-        url: https://semgrep.dev/playground/r/bZT4v2/python.aws-lambda.security.dangerous-subprocess-use.dangerous-subprocess-use
+        version_id: vdTyzG
+        url: https://semgrep.dev/playground/r/vdTyzG/python.aws-lambda.security.dangerous-subprocess-use.dangerous-subprocess-use
         origin: community
   languages:
   - python
@@ -20800,16 +20847,15 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
-      - pattern-inside: subprocess.$FUNC($CMD, ...)
-      - pattern-inside: subprocess.$FUNC([$CMD,...], ...)
-      - pattern-inside: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD,
+      - pattern: subprocess.$FUNC($CMD, ...)
+      - pattern: subprocess.$FUNC([$CMD,...], ...)
+      - pattern: subprocess.$FUNC("=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD, ...)
+      - pattern: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c", $CMD, ...],
           ...)
-      - pattern-inside: subprocess.$FUNC(["=~/(sh|bash|ksh|csh|tcsh|zsh)/", "-c",
-          $CMD, ...], ...)
-      - pattern-inside: subprocess.$FUNC("=~/(python)/", $CMD, ...)
-      - pattern-inside: subprocess.$FUNC(["=~/(python)/",$CMD,...],...)
+      - pattern: subprocess.$FUNC("=~/(python)/", $CMD, ...)
+      - pattern: subprocess.$FUNC(["=~/(python)/",$CMD,...],...)
   pattern-sanitizers:
   - pattern: shlex.escape(...)
 - id: python.aws-lambda.security.dangerous-system-call.dangerous-system-call
@@ -20849,8 +20895,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUkg6
-        version_id: NdTQlw
-        url: https://semgrep.dev/playground/r/NdTQlw/python.aws-lambda.security.dangerous-system-call.dangerous-system-call
+        version_id: d6TJGA
+        url: https://semgrep.dev/playground/r/d6TJGA/python.aws-lambda.security.dangerous-system-call.dangerous-system-call
         origin: community
   languages:
   - python
@@ -20863,7 +20909,7 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$CMD"
+    - focus-metavariable: "$CMD"
     - pattern-either:
       - pattern: os.system($CMD,...)
       - pattern: os.popen($CMD,...)
@@ -20896,8 +20942,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUJ2B
-        version_id: kbTZXl
-        url: https://semgrep.dev/playground/r/kbTZXl/python.aws-lambda.security.dynamodb-filter-injection.dynamodb-filter-injection
+        version_id: ZRToPp
+        url: https://semgrep.dev/playground/r/ZRToPp/python.aws-lambda.security.dynamodb-filter-injection.dynamodb-filter-injection
         origin: community
   message: Detected DynamoDB query filter that is tainted by `$EVENT` object. This
     could lead to NoSQL injection if the variable is user-controlled and not properly
@@ -20914,10 +20960,10 @@ rules:
     - pattern: "{...}\n"
   pattern-sinks:
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-either:
-      - pattern-inside: "$TABLE.scan(..., ScanFilter = $SINK, ...)"
-      - pattern-inside: "$TABLE.query(..., QueryFilter = $SINK, ...)"
+      - pattern: "$TABLE.scan(..., ScanFilter = $SINK, ...)"
+      - pattern: "$TABLE.query(..., QueryFilter = $SINK, ...)"
     - pattern-either:
       - patterns:
         - pattern-inside: |
@@ -20937,7 +20983,7 @@ rules:
   - python
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `cursor.execute(''SELECT
     * FROM projects WHERE status = %s'', (''active''))`'
   mode: taint
@@ -20968,15 +21014,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qU3eE
-        version_id: w8T0wb
-        url: https://semgrep.dev/playground/r/w8T0wb/python.aws-lambda.security.mysql-sqli.mysql-sqli
+        version_id: nWTv42
+        url: https://semgrep.dev/playground/r/nWTv42/python.aws-lambda.security.mysql-sqli.mysql-sqli
         origin: community
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
-      - pattern-inside: "$CURSOR.execute($QUERY,...)"
-      - pattern-inside: "$CURSOR.executemany($QUERY,...)"
+      - pattern: "$CURSOR.execute($QUERY,...)"
+      - pattern: "$CURSOR.executemany($QUERY,...)"
     - pattern-either:
       - pattern-inside: |
           import mysql
@@ -20996,7 +21042,7 @@ rules:
   - python
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `cursor.execute(''SELECT
     * FROM projects WHERE status = %s'', ''active'')`'
   mode: taint
@@ -21029,16 +21075,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUQG1
-        version_id: xyT3oz
-        url: https://semgrep.dev/playground/r/xyT3oz/python.aws-lambda.security.psycopg-sqli.psycopg-sqli
+        version_id: ExTzDo
+        url: https://semgrep.dev/playground/r/ExTzDo/python.aws-lambda.security.psycopg-sqli.psycopg-sqli
         origin: community
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
+    - focus-metavariable: "$QUERY"
     - pattern-either:
-      - pattern-inside: "$CURSOR.execute($QUERY,...)"
-      - pattern-inside: "$CURSOR.executemany($QUERY,...)"
-      - pattern-inside: "$CURSOR.mogrify($QUERY,...)"
+      - pattern: "$CURSOR.execute($QUERY,...)"
+      - pattern: "$CURSOR.executemany($QUERY,...)"
+      - pattern: "$CURSOR.mogrify($QUERY,...)"
     - pattern-inside: |
         import psycopg2
         ...
@@ -21054,7 +21100,7 @@ rules:
   - python
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `cursor.execute(''SELECT
     * FROM projects WHERE status = %s'', ''active'')`'
   mode: taint
@@ -21084,13 +21130,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUxO0
-        version_id: O9TZYb
-        url: https://semgrep.dev/playground/r/O9TZYb/python.aws-lambda.security.pymssql-sqli.pymssql-sqli
+        version_id: 7ZTk9K
+        url: https://semgrep.dev/playground/r/7ZTk9K/python.aws-lambda.security.pymssql-sqli.pymssql-sqli
         origin: community
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
-    - pattern-inside: "$CURSOR.execute($QUERY,...)"
+    - focus-metavariable: "$QUERY"
+    - pattern: "$CURSOR.execute($QUERY,...)"
     - pattern-inside: |
         import pymssql
         ...
@@ -21106,7 +21152,7 @@ rules:
   - python
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `cursor.execute(''SELECT
     * FROM projects WHERE status = %s'', (''active''))`'
   mode: taint
@@ -21136,13 +21182,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUlel
-        version_id: e1TAnn
-        url: https://semgrep.dev/playground/r/e1TAnn/python.aws-lambda.security.pymysql-sqli.pymysql-sqli
+        version_id: LjTvb9
+        url: https://semgrep.dev/playground/r/LjTvb9/python.aws-lambda.security.pymysql-sqli.pymysql-sqli
         origin: community
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
-    - pattern-inside: "$CURSOR.execute($QUERY,...)"
+    - focus-metavariable: "$QUERY"
+    - pattern: "$CURSOR.execute($QUERY,...)"
     - pattern-either:
       - pattern-inside: |
           import pymysql
@@ -21162,7 +21208,7 @@ rules:
   - python
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `cursor.execute(''SELECT
     * FROM projects WHERE status = ?'', ''active'')`'
   mode: taint
@@ -21192,13 +21238,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUy3N
-        version_id: vdT3Pq
-        url: https://semgrep.dev/playground/r/vdT3Pq/python.aws-lambda.security.sqlalchemy-sqli.sqlalchemy-sqli
+        version_id: 8KTwkn
+        url: https://semgrep.dev/playground/r/8KTwkn/python.aws-lambda.security.sqlalchemy-sqli.sqlalchemy-sqli
         origin: community
   pattern-sinks:
   - patterns:
-    - pattern: "$QUERY"
-    - pattern-inside: "$CURSOR.execute($QUERY,...)"
+    - focus-metavariable: "$QUERY"
+    - pattern: "$CURSOR.execute($QUERY,...)"
     - pattern-inside: |
         import sqlalchemy
         ...
@@ -21387,17 +21433,17 @@ rules:
           ...
   pattern-sinks:
   - patterns:
-    - pattern: "$SINK"
+    - focus-metavariable: "$SINK"
     - pattern-either:
-      - pattern-inside: pickle.load($SINK,...)
-      - pattern-inside: pickle.loads($SINK,...)
-      - pattern-inside: _pickle.load($SINK,...)
-      - pattern-inside: _pickle.loads($SINK,...)
-      - pattern-inside: cPickle.load($SINK,...)
-      - pattern-inside: cPickle.loads($SINK,...)
-      - pattern-inside: dill.load($SINK,...)
-      - pattern-inside: dill.loads($SINK,...)
-      - pattern-inside: shelve.open($SINK,...)
+      - pattern: pickle.load($SINK,...)
+      - pattern: pickle.loads($SINK,...)
+      - pattern: _pickle.load($SINK,...)
+      - pattern: _pickle.loads($SINK,...)
+      - pattern: cPickle.load($SINK,...)
+      - pattern: cPickle.loads($SINK,...)
+      - pattern: dill.load($SINK,...)
+      - pattern: dill.loads($SINK,...)
+      - pattern: shelve.open($SINK,...)
   message: Avoid using `pickle`, which is known to lead to code execution vulnerabilities.
     When unpickling, the serialized data could be manipulated to run arbitrary code.
     Instead, consider serializing the relevant data as JSON or a similar text-based
@@ -21428,8 +21474,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUDQg
-        version_id: ExTYGB
-        url: https://semgrep.dev/playground/r/ExTYGB/python.aws-lambda.security.tainted-pickle-deserialization.tainted-pickle-deserialization
+        version_id: gETN2n
+        url: https://semgrep.dev/playground/r/gETN2n/python.aws-lambda.security.tainted-pickle-deserialization.tainted-pickle-deserialization
         origin: community
   languages:
   - python
@@ -21501,11 +21547,11 @@ rules:
           ...
   severity: ERROR
 - id: python.boto3.security.hardcoded-token.hardcoded-token
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -21532,8 +21578,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUOwK
-        version_id: LjTpwq
-        url: https://semgrep.dev/playground/r/LjTpwq/python.boto3.security.hardcoded-token.hardcoded-token
+        version_id: 6xTPED
+        url: https://semgrep.dev/playground/r/6xTPED/python.boto3.security.hardcoded-token.hardcoded-token
         origin: community
   languages:
   - python
@@ -23950,8 +23996,8 @@ rules:
       metavariable: "$W"
       regex: "(?!get_full_path)"
 - id: python.django.security.injection.path-traversal.path-traversal-file-name.path-traversal-file-name
-  message: Data from request is passed to a file name `$FILE`.  This is a path traversal
-    vulnerability, which can lead to sensitive data being leaked.  To mitigate, consider
+  message: Data from request is passed to a file name `$FILE`. This is a path traversal
+    vulnerability, which can lead to sensitive data being leaked. To mitigate, consider
     using os.path.abspath or os.path.realpath or the pathlib library.
   metadata:
     cwe:
@@ -23978,8 +24024,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUR36
-        version_id: 5PTYvy
-        url: https://semgrep.dev/playground/r/5PTYvy/python.django.security.injection.path-traversal.path-traversal-file-name.path-traversal-file-name
+        version_id: zyT7nl
+        url: https://semgrep.dev/playground/r/zyT7nl/python.django.security.injection.path-traversal.path-traversal-file-name.path-traversal-file-name
         origin: community
   patterns:
   - pattern-inside: |
@@ -24036,8 +24082,8 @@ rules:
   - python
   severity: WARNING
 - id: python.django.security.injection.path-traversal.path-traversal-open.path-traversal-open
-  message: Found request data in a call to 'open'.  Ensure the request data is validated
-    or sanitized,  otherwise it could result in path traversal attacks and  therefore
+  message: Found request data in a call to 'open'. Ensure the request data is validated
+    or sanitized, otherwise it could result in path traversal attacks and therefore
     sensitive data being leaked. To mitigate, consider using os.path.abspath or os.path.realpath
     or the pathlib library.
   metadata:
@@ -24065,8 +24111,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUe7z
-        version_id: RGTwXA
-        url: https://semgrep.dev/playground/r/RGTwXA/python.django.security.injection.path-traversal.path-traversal-open.path-traversal-open
+        version_id: 2KTJL3
+        url: https://semgrep.dev/playground/r/2KTJL3/python.django.security.injection.path-traversal.path-traversal-open.path-traversal-open
         origin: community
   languages:
   - python
@@ -25100,7 +25146,7 @@ rules:
     - pattern: return django.http.HttpResponseBadRequest(..., request.$W, ...)
 - id: python.django.security.injection.request-data-fileresponse.request-data-fileresponse
   message: Found user-controlled request data being passed into a file open, which
-    is them passed as an argument into  the FileResponse. This is dangerous because
+    is them passed as an argument into the FileResponse. This is dangerous because
     an attacker could specify an arbitrary file to read, which could result in leaking
     important data. Be sure to validate or sanitize the user-inputted filename in
     the request data before using it in FileResponse.
@@ -25129,8 +25175,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdU7QR
-        version_id: WrT6R8
-        url: https://semgrep.dev/playground/r/WrT6R8/python.django.security.injection.request-data-fileresponse.request-data-fileresponse
+        version_id: X0T6gz
+        url: https://semgrep.dev/playground/r/X0T6gz/python.django.security.injection.request-data-fileresponse.request-data-fileresponse
         origin: community
   languages:
   - python
@@ -27179,7 +27225,7 @@ rules:
     - pattern: return urllib.request.urlopen(..., request.$W, ...)
 - id: python.django.security.nan-injection.nan-injection
   message: Found user input going directly into typecast for bool(), float(), or complex().
-    This allows  an attacker to inject Python's not-a-number (NaN) into the typecast.
+    This allows an attacker to inject Python's not-a-number (NaN) into the typecast.
     This results in undefind behavior, particularly when doing comparisons. Either
     cast to a different type, or add a guard checking for all capitalizations of the
     string 'nan'.
@@ -27228,8 +27274,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUGvk
-        version_id: BjTG9n
-        url: https://semgrep.dev/playground/r/BjTG9n/python.django.security.nan-injection.nan-injection
+        version_id: jQT7QB
+        url: https://semgrep.dev/playground/r/jQT7QB/python.django.security.nan-injection.nan-injection
         origin: community
 - id: python.django.security.passwords.password-empty-string.password-empty-string
   message: "'$VAR' is the empty string and is being used to set the password on '$MODEL'.
@@ -27544,8 +27590,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UR2K
-        version_id: 1QTXDj
-        url: https://semgrep.dev/playground/r/1QTXDj/python.flask.security.injection.csv-writer-injection.csv-writer-injection
+        version_id: QkTxrQ
+        url: https://semgrep.dev/playground/r/QkTxrQ/python.flask.security.injection.csv-writer-injection.csv-writer-injection
         origin: community
   mode: taint
   pattern-sinks:
@@ -27584,7 +27630,7 @@ rules:
           - pattern: flask.request.view_args.get(...)
           - pattern: flask.request.view_args[...]
       - patterns:
-        - pattern: |
+        - pattern-inside: |
             @$APP.route($ROUTE, ...)
             def $FUNC(..., $ROUTEVAR, ...):
               ...
@@ -27592,7 +27638,7 @@ rules:
   severity: ERROR
 - id: python.flask.security.injection.nan-injection.nan-injection
   message: Found user input going directly into typecast for bool(), float(), or complex().
-    This allows  an attacker to inject Python's not-a-number (NaN) into the typecast.
+    This allows an attacker to inject Python's not-a-number (NaN) into the typecast.
     This results in undefind behavior, particularly when doing comparisons. Either
     cast to a different type, or add a guard checking for all capitalizations of the
     string 'nan'.
@@ -27638,8 +27684,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUdj7
-        version_id: 9lTnjK
-        url: https://semgrep.dev/playground/r/9lTnjK/python.flask.security.injection.nan-injection.nan-injection
+        version_id: 1QTq5E
+        url: https://semgrep.dev/playground/r/1QTq5E/python.flask.security.injection.nan-injection.nan-injection
         origin: community
 - id: python.flask.security.injection.raw-html-concat.raw-html-format
   languages:
@@ -27823,7 +27869,7 @@ rules:
         - pattern: flask.request.view_args.get(...)
         - pattern: flask.request.view_args[...]
     - patterns:
-      - pattern: |
+      - pattern-inside: |
           @$APP.route($ROUTE, ...)
           def $FUNC(..., $ROUTEVAR, ...):
             ...
@@ -27885,8 +27931,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GU3qp
-        version_id: kbTZ7j
-        url: https://semgrep.dev/playground/r/kbTZ7j/python.flask.security.injection.subprocess-injection.subprocess-injection
+        version_id: 3ZTyA7
+        url: https://semgrep.dev/playground/r/3ZTyA7/python.flask.security.injection.subprocess-injection.subprocess-injection
         origin: community
 - id: python.flask.security.injection.tainted-sql-string.tainted-sql-string
   message: Detected user input used to manually construct a SQL string. This is usually
@@ -29288,8 +29334,8 @@ rules:
     - pattern-not: 'test.support.run_in_subinterp("...", ...)
 
         '
-  message: Found user controlled content in `run_in_subinterp`. This is dangerous  because
-    it allows a malicious actor to run arbitrary Python code.
+  message: Found user controlled content in `run_in_subinterp`. This is dangerous
+    because it allows a malicious actor to run arbitrary Python code.
   metadata:
     cwe:
     - 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
@@ -29312,8 +29358,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUK7N
-        version_id: w8T02J
-        url: https://semgrep.dev/playground/r/w8T02J/python.lang.security.audit.dangerous-testcapi-run-in-subinterp-tainted-env-args.dangerous-testcapi-run-in-subinterp-tainted-env-args
+        version_id: 9lTPZq
+        url: https://semgrep.dev/playground/r/9lTPZq/python.lang.security.audit.dangerous-testcapi-run-in-subinterp-tainted-env-args.dangerous-testcapi-run-in-subinterp-tainted-env-args
         origin: community
   severity: WARNING
   languages:
@@ -29682,7 +29728,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: "$ROUTEVAR"
+            - focus-metavariable: "$ROUTEVAR"
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -29760,14 +29806,14 @@ rules:
           $X = code.InteractiveInterpreter(...)
           ...
     - pattern-either:
-      - pattern-inside: "$X.push($PAYLOAD,...)\n"
-      - pattern-inside: "$X.runsource($PAYLOAD,...)\n"
-      - pattern-inside: "$X.runcode(code.compile_command($PAYLOAD),...)\n"
-      - pattern-inside: |
+      - pattern: "$X.push($PAYLOAD,...)\n"
+      - pattern: "$X.runsource($PAYLOAD,...)\n"
+      - pattern: "$X.runcode(code.compile_command($PAYLOAD),...)\n"
+      - pattern: |
           $PL = code.compile_command($PAYLOAD,...)
           ...
           $X.runcode($PL,...)
-    - pattern: "$PAYLOAD"
+    - focus-metavariable: "$PAYLOAD"
     - pattern-not: '$X.push("...",...)
 
         '
@@ -29806,8 +29852,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUKzx
-        version_id: 2KT6WP
-        url: https://semgrep.dev/playground/r/2KT6WP/python.lang.security.dangerous-code-run.dangerous-interactive-code-run
+        version_id: 44TrPJ
+        url: https://semgrep.dev/playground/r/44TrPJ/python.lang.security.dangerous-code-run.dangerous-interactive-code-run
         origin: community
   severity: WARNING
   languages:
@@ -29844,7 +29890,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: "$ROUTEVAR"
+            - focus-metavariable: "$ROUTEVAR"
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -29973,8 +30019,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUR13
-        version_id: jQT9Or
-        url: https://semgrep.dev/playground/r/jQT9Or/python.lang.security.dangerous-os-exec.dangerous-os-exec
+        version_id: PkTNr7
+        url: https://semgrep.dev/playground/r/PkTNr7/python.lang.security.dangerous-os-exec.dangerous-os-exec
         origin: community
   languages:
   - python
@@ -30221,7 +30267,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: "$ROUTEVAR"
+            - focus-metavariable: "$ROUTEVAR"
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -30291,13 +30337,13 @@ rules:
         - pattern-not: "$REQ.dbsession"
   pattern-sinks:
   - patterns:
-    - pattern-inside: '_xxsubinterpreters.run_string($ID, $PAYLOAD, ...)
+    - pattern: '_xxsubinterpreters.run_string($ID, $PAYLOAD, ...)
 
         '
     - pattern-not: '_xxsubinterpreters.run_string($ID, "...", ...)
 
         '
-    - pattern: "$PAYLOAD"
+    - focus-metavariable: "$PAYLOAD"
   message: Found user controlled content in `run_string`. This is dangerous because
     it allows a malicious actor to run arbitrary Python code.
   metadata:
@@ -30323,8 +30369,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeURWr
-        version_id: 9lTnDy
-        url: https://semgrep.dev/playground/r/9lTnDy/python.lang.security.dangerous-subinterpreters-run-string.dangerous-subinterpreters-run-string
+        version_id: JdT8rw
+        url: https://semgrep.dev/playground/r/JdT8rw/python.lang.security.dangerous-subinterpreters-run-string.dangerous-subinterpreters-run-string
         origin: community
   severity: WARNING
   languages:
@@ -30361,7 +30407,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: "$ROUTEVAR"
+            - focus-metavariable: "$ROUTEVAR"
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -30496,8 +30542,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUz3R
-        version_id: X0Tekk
-        url: https://semgrep.dev/playground/r/X0Tekk/python.lang.security.dangerous-subprocess-use.dangerous-subprocess-use
+        version_id: 5PTbD0
+        url: https://semgrep.dev/playground/r/5PTbD0/python.lang.security.dangerous-subprocess-use.dangerous-subprocess-use
         origin: community
   languages:
   - python
@@ -30534,7 +30580,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: "$ROUTEVAR"
+            - focus-metavariable: "$ROUTEVAR"
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -30666,8 +30712,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUoP1
-        version_id: rxT8P4
-        url: https://semgrep.dev/playground/r/rxT8P4/python.lang.security.dangerous-system-call.dangerous-system-call
+        version_id: GxTpEK
+        url: https://semgrep.dev/playground/r/GxTpEK/python.lang.security.dangerous-system-call.dangerous-system-call
         origin: community
   languages:
   - python
@@ -30704,7 +30750,7 @@ rules:
                 @$APP.route(...)
                 def $FUNC(..., $ROUTEVAR, ...):
                   ...
-            - pattern: "$ROUTEVAR"
+            - focus-metavariable: "$ROUTEVAR"
       - patterns:
         - pattern-inside: |
             def $FUNC(request, ...):
@@ -30775,21 +30821,21 @@ rules:
   pattern-sinks:
   - patterns:
     - pattern-either:
-      - pattern-inside: '_testcapi.run_in_subinterp($PAYLOAD, ...)
+      - pattern: '_testcapi.run_in_subinterp($PAYLOAD, ...)
 
           '
-      - pattern-inside: 'test.support.run_in_subinterp($PAYLOAD, ...)
+      - pattern: 'test.support.run_in_subinterp($PAYLOAD, ...)
 
           '
-    - pattern: "$PAYLOAD"
+    - focus-metavariable: "$PAYLOAD"
     - pattern-not: '_testcapi.run_in_subinterp("...", ...)
 
         '
     - pattern-not: 'test.support.run_in_subinterp("...", ...)
 
         '
-  message: Found user controlled content in `run_in_subinterp`. This is dangerous  because
-    it allows a malicious actor to run arbitrary Python code.
+  message: Found user controlled content in `run_in_subinterp`. This is dangerous
+    because it allows a malicious actor to run arbitrary Python code.
   metadata:
     cwe:
     - 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
@@ -30812,8 +30858,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUkxR
-        version_id: bZT405
-        url: https://semgrep.dev/playground/r/bZT405/python.lang.security.dangerous-testcapi-run-in-subinterp.dangerous-testcapi-run-in-subinterp
+        version_id: yeT7Ae
+        url: https://semgrep.dev/playground/r/yeT7Ae/python.lang.security.dangerous-testcapi-run-in-subinterp.dangerous-testcapi-run-in-subinterp
         origin: community
   severity: WARNING
   languages:
@@ -31402,9 +31448,9 @@ rules:
   - python
   severity: WARNING
 - id: python.pycryptodome.security.mode-without-authentication.crypto-mode-without-authentication
-  message: 'An encryption mode of operation is being used without proper message authentication.  This
-    can potentially result in the encrypted content to be decrypted by an attacker.  Consider
-    instead use an AEAD mode of operation like GCM. '
+  message: 'An encryption mode of operation is being used without proper message authentication.
+    This can potentially result in the encrypted content to be decrypted by an attacker.
+    Consider instead use an AEAD mode of operation like GCM. '
   languages:
   - python
   severity: ERROR
@@ -31430,8 +31476,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUw8w
-        version_id: A8Tnb4
-        url: https://semgrep.dev/playground/r/A8Tnb4/python.pycryptodome.security.mode-without-authentication.crypto-mode-without-authentication
+        version_id: rxT72G
+        url: https://semgrep.dev/playground/r/rxT72G/python.pycryptodome.security.mode-without-authentication.crypto-mode-without-authentication
         origin: community
   patterns:
   - pattern-either:
@@ -32377,7 +32423,7 @@ rules:
   - ruby
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `Example.find_by_sql ["SELECT
     title FROM posts WHERE author = ? AND created > ?", author_id, start_date]`'
   mode: taint
@@ -32407,8 +32453,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUw9g
-        version_id: GxT4W4
-        url: https://semgrep.dev/playground/r/GxT4W4/ruby.aws-lambda.security.activerecord-sqli.activerecord-sqli
+        version_id: JdT83X
+        url: https://semgrep.dev/playground/r/JdT83X/ruby.aws-lambda.security.activerecord-sqli.activerecord-sqli
         origin: community
   pattern-sinks:
   - patterns:
@@ -32433,7 +32479,7 @@ rules:
   - ruby
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use sanitize statements like so: `escaped = client.escape(user_input)`'
   mode: taint
   metadata:
@@ -32462,8 +32508,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUrQ3
-        version_id: RGTBwd
-        url: https://semgrep.dev/playground/r/RGTBwd/ruby.aws-lambda.security.mysql2-sqli.mysql2-sqli
+        version_id: 5PTbPb
+        url: https://semgrep.dev/playground/r/5PTbPb/ruby.aws-lambda.security.mysql2-sqli.mysql2-sqli
         origin: community
   pattern-sinks:
   - patterns:
@@ -32489,7 +32535,7 @@ rules:
   - ruby
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `conn.exec_params(''SELECT
     $1 AS a, $2 AS b, $3 AS c'', [1, 2, nil])`'
   mode: taint
@@ -32520,8 +32566,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUQee
-        version_id: A8Tynv
-        url: https://semgrep.dev/playground/r/A8Tynv/ruby.aws-lambda.security.pg-sqli.pg-sqli
+        version_id: GxTpxd
+        url: https://semgrep.dev/playground/r/GxTpxd/ruby.aws-lambda.security.pg-sqli.pg-sqli
         origin: community
   pattern-sinks:
   - patterns:
@@ -32549,7 +32595,7 @@ rules:
   - ruby
   message: 'Detected SQL statement that is tainted by `event` object. This could lead
     to SQL injection if the variable is user-controlled and not properly sanitized.
-    In order to prevent SQL injection, used parameterized queries or prepared statements
+    In order to prevent SQL injection, use parameterized queries or prepared statements
     instead. You can use parameterized statements like so: `DB[''select * from items
     where name = ?'', name]`'
   mode: taint
@@ -32579,8 +32625,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUy2N
-        version_id: BjTQGj
-        url: https://semgrep.dev/playground/r/BjTQGj/ruby.aws-lambda.security.sequel-sqli.sequel-sqli
+        version_id: RGTjQG
+        url: https://semgrep.dev/playground/r/RGTjQG/ruby.aws-lambda.security.sequel-sqli.sequel-sqli
         origin: community
   pattern-sinks:
   - patterns:
@@ -32928,7 +32974,7 @@ rules:
     replacement: "= true"
 - id: ruby.lang.security.hardcoded-secret-rsa-passphrase.hardcoded-secret-rsa-passphrase
   message: Found the use of an hardcoded passphrase for RSA. The passphrase can be
-    easily discovered, and therefore should not be stored in source-code.  It is recommended
+    easily discovered, and therefore should not be stored in source-code. It is recommended
     to remove the passphrase from source-code, and use system environment variables
     or a restricted configuration file.
   languages:
@@ -32958,8 +33004,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwULyN
-        version_id: NdTWGW
-        url: https://semgrep.dev/playground/r/NdTWGW/ruby.lang.security.hardcoded-secret-rsa-passphrase.hardcoded-secret-rsa-passphrase
+        version_id: bZTjz4
+        url: https://semgrep.dev/playground/r/bZTjz4/ruby.lang.security.hardcoded-secret-rsa-passphrase.hardcoded-secret-rsa-passphrase
         origin: community
   patterns:
   - pattern-either:
@@ -33804,12 +33850,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUAl9
-        version_id: GxT44E
-        url: https://semgrep.dev/playground/r/GxT44E/ruby.rails.security.audit.number-to-currency.number-to-currency
+        version_id: O9TglK
+        url: https://semgrep.dev/playground/r/O9TglK/ruby.rails.security.audit.number-to-currency.number-to-currency
         origin: community
   message: Detected user input flowing into number_to_currency helper. One of the
-    parameters to the helper (unit) is  not escaped correctly and could  lead to XSS,
-    which in turn could lead to  sensitive data being exfiltrated. Instead, sanitize
+    parameters to the helper (unit) is not escaped correctly and could lead to XSS,
+    which in turn could lead to sensitive data being exfiltrated. Instead, sanitize
     data before passing it into `number_to_currency` with the html_escape (h) function
     or upgrade to Rails 4.0.2 or 3.2.16.
   languages:
@@ -33906,7 +33952,7 @@ rules:
   - ruby
   message: 'Detected string concatenation with a non-literal variable in a pg Ruby
     SQL statement. This could lead to SQL injection if the variable is user-controlled
-    and not properly sanitized. In order to prevent SQL injection, used parameterized
+    and not properly sanitized. In order to prevent SQL injection, use parameterized
     queries or prepared statements instead. You can use parameterized queries like
     so: `conn.exec_params(''SELECT $1 AS a, $2 AS b, $3 AS c'', [1, 2, nil])` And
     you can use prepared statements with `exec_prepared`.'
@@ -33935,8 +33981,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUAz7
-        version_id: l4TeeB
-        url: https://semgrep.dev/playground/r/l4TeeB/ruby.rails.security.audit.sqli.ruby-pg-sqli.ruby-pg-sqli
+        version_id: A8Twrl
+        url: https://semgrep.dev/playground/r/A8Twrl/ruby.rails.security.audit.sqli.ruby-pg-sqli.ruby-pg-sqli
         origin: community
   severity: WARNING
 - id: ruby.rails.security.audit.xss.avoid-link-to.avoid-link-to
@@ -34129,7 +34175,7 @@ rules:
 
         '
   message: 'Disabled-by-default Rails controller checks make it much easier to introduce
-    access control mistakes.  Prefer an allowlist approach with `:only => [...]` rather
+    access control mistakes. Prefer an allowlist approach with `:only => [...]` rather
     than `except: => [...]`'
   languages:
   - ruby
@@ -34158,8 +34204,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUkBP
-        version_id: d6TnEb
-        url: https://semgrep.dev/playground/r/d6TnEb/ruby.rails.security.brakeman.check-before-filter.check-before-filter
+        version_id: vdT74w
+        url: https://semgrep.dev/playground/r/vdT74w/ruby.rails.security.brakeman.check-before-filter.check-before-filter
         origin: community
 - id: ruby.rails.security.brakeman.check-dynamic-render-local-file-include.check-dynamic-render-local-file-include
   mode: search
@@ -34277,8 +34323,8 @@ rules:
       regex: "^secret(_(token|key_base))?$"
   message: Found a string literal assignment to a Rails session secret `$KEY`. Do
     not commit secret values to source control! Any user in possession of this value
-    may falsify arbitrary session data in your application.  Read this value from
-    an environment variable, KMS, or file on disk outside of source control.
+    may falsify arbitrary session data in your application. Read this value from an
+    environment variable, KMS, or file on disk outside of source control.
   languages:
   - ruby
   severity: WARNING
@@ -34307,8 +34353,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUX1r
-        version_id: gETLpR
-        url: https://semgrep.dev/playground/r/gETLpR/ruby.rails.security.brakeman.check-rails-session-secret-handling.check-rails-session-secret-handling
+        version_id: ZRTYGn
+        url: https://semgrep.dev/playground/r/ZRTYGn/ruby.rails.security.brakeman.check-rails-session-secret-handling.check-rails-session-secret-handling
         origin: community
 - id: ruby.rails.security.brakeman.check-redirect-to.check-redirect-to
   mode: taint
@@ -34480,9 +34526,22 @@ rules:
     - pattern: params[...]
   pattern-sinks:
   - patterns:
-    - pattern: 'render ...
+    - pattern-either:
+      - pattern: 'render ..., file: ...
 
-        '
+          '
+      - pattern: 'render ..., inline: ...
+
+          '
+      - pattern: 'render ..., template: ...
+
+          '
+      - pattern: 'render ..., action: ...
+
+          '
+      - pattern: 'render $FILE, ...
+
+          '
   pattern-sanitizers:
   - patterns:
     - pattern: "$MAP[...]"
@@ -34526,8 +34585,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReU2pZ
-        version_id: xyT100
-        url: https://semgrep.dev/playground/r/xyT100/ruby.rails.security.brakeman.check-render-local-file-include.check-render-local-file-include
+        version_id: A8Tw7K
+        url: https://semgrep.dev/playground/r/A8Tw7K/ruby.rails.security.brakeman.check-render-local-file-include.check-render-local-file-include
         origin: community
 - id: ruby.rails.security.brakeman.check-reverse-tabnabbing.check-reverse-tabnabbing
   mode: search
@@ -34838,10 +34897,10 @@ rules:
       - pattern-inside: "$X. ... .to_proc\n"
       - pattern-inside: "$Y.method(...)\n"
       - pattern-inside: "$Y.tap(...)\n"
-  message: Found user-controllable input to a reflection method.  This may allow a
+  message: Found user-controllable input to a reflection method. This may allow a
     user to alter program behavior and potentially execute arbitrary instructions
-    in the context of the process.  Do not provide arbitrary user input to `tap`,
-    `method`, or `to_proc`
+    in the context of the process. Do not provide arbitrary user input to `tap`, `method`,
+    or `to_proc`
   languages:
   - ruby
   severity: ERROR
@@ -34869,8 +34928,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUZ2Q
-        version_id: RGTBdx
-        url: https://semgrep.dev/playground/r/RGTBdx/ruby.rails.security.brakeman.check-unsafe-reflection-methods.check-unsafe-reflection-methods
+        version_id: nWTgGX
+        url: https://semgrep.dev/playground/r/nWTgGX/ruby.rails.security.brakeman.check-unsafe-reflection-methods.check-unsafe-reflection-methods
         origin: community
 - id: ruby.rails.security.brakeman.check-unsafe-reflection.check-unsafe-reflection
   mode: taint
@@ -34904,7 +34963,7 @@ rules:
       - pattern-inside: 'qualified_const_get(...)
 
           '
-  message: Found user-controllable input to Ruby reflection functionality.  This allows
+  message: Found user-controllable input to Ruby reflection functionality. This allows
     a remote user to influence runtime behavior, up to and including arbitrary remote
     code execution. Do not provide user-controllable input to reflection functionality.
     Do not call symbol conversion on user-controllable input.
@@ -34935,8 +34994,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUkYA
-        version_id: A8Tyxd
-        url: https://semgrep.dev/playground/r/A8Tyxd/ruby.rails.security.brakeman.check-unsafe-reflection.check-unsafe-reflection
+        version_id: ExT0qZ
+        url: https://semgrep.dev/playground/r/ExT0qZ/ruby.rails.security.brakeman.check-unsafe-reflection.check-unsafe-reflection
         origin: community
 - id: ruby.rails.security.brakeman.check-unscoped-find.check-unscoped-find
   mode: taint
@@ -35785,12 +35844,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUwn2
-        version_id: RGTBv3
-        url: https://semgrep.dev/playground/r/RGTBv3/scala.play.security.tainted-html-response.tainted-html-response
+        version_id: LjT8P8
+        url: https://semgrep.dev/playground/r/LjT8P8/scala.play.security.tainted-html-response.tainted-html-response
         origin: community
-  message: Detected a request with potential user-input going into an `Ok()` response.  This
-    bypasses any view or template environments, including HTML escaping, which may
-    expose this application to cross-site scripting (XSS) vulnerabilities. Consider
+  message: Detected a request with potential user-input going into an `Ok()` response.
+    This bypasses any view or template environments, including HTML escaping, which
+    may expose this application to cross-site scripting (XSS) vulnerabilities. Consider
     using a view technology such as Twirl which automatically escapes HTML views.
   pattern-sources:
   - patterns:
@@ -36089,8 +36148,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU6A8
-        version_id: 6xTA4v
-        url: https://semgrep.dev/playground/r/6xTA4v/terraform.aws.security.aws-cloudfront-insecure-tls.aws-insecure-cloudfront-distribution-tls-version
+        version_id: d6TYg1
+        url: https://semgrep.dev/playground/r/d6TYg1/terraform.aws.security.aws-cloudfront-insecure-tls.aws-insecure-cloudfront-distribution-tls-version
         origin: community
   languages:
   - hcl
@@ -36134,8 +36193,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UGBG
-        version_id: zyTX6A
-        url: https://semgrep.dev/playground/r/zyTX6A/terraform.aws.security.aws-cloudwatch-log-group-no-retention.aws-cloudwatch-log-group-no-retention
+        version_id: nWT3N3
+        url: https://semgrep.dev/playground/r/nWT3N3/terraform.aws.security.aws-cloudwatch-log-group-no-retention.aws-cloudwatch-log-group-no-retention
         origin: community
 - id: terraform.aws.security.aws-codebuild-project-unencrypted.aws-codebuild-project-unencrypted
   patterns:
@@ -36177,8 +36236,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8U4kG
-        version_id: X0ToG7
-        url: https://semgrep.dev/playground/r/X0ToG7/terraform.aws.security.aws-codebuild-project-unencrypted.aws-codebuild-project-unencrypted
+        version_id: LjTjeb
+        url: https://semgrep.dev/playground/r/LjTjeb/terraform.aws.security.aws-codebuild-project-unencrypted.aws-codebuild-project-unencrypted
         origin: community
 - id: terraform.aws.security.aws-db-instance-no-logging.aws-db-instance-no-logging
   patterns:
@@ -36220,8 +36279,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8U4RA
-        version_id: jQTLG3
-        url: https://semgrep.dev/playground/r/jQTLG3/terraform.aws.security.aws-db-instance-no-logging.aws-db-instance-no-logging
+        version_id: gETKX7
+        url: https://semgrep.dev/playground/r/gETKX7/terraform.aws.security.aws-db-instance-no-logging.aws-db-instance-no-logging
         origin: community
 - id: terraform.aws.security.aws-dynamodb-table-unencrypted.aws-dynamodb-table-unencrypted
   patterns:
@@ -36268,8 +36327,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUGe2
-        version_id: LjTOOO
-        url: https://semgrep.dev/playground/r/LjTOOO/terraform.aws.security.aws-dynamodb-table-unencrypted.aws-dynamodb-table-unencrypted
+        version_id: JdTXRq
+        url: https://semgrep.dev/playground/r/JdTXRq/terraform.aws.security.aws-dynamodb-table-unencrypted.aws-dynamodb-table-unencrypted
         origin: community
 - id: terraform.aws.security.aws-ebs-snapshot-encrypted-with-cmk.aws-ebs-snapshot-encrypted-with-cmk
   patterns:
@@ -36310,8 +36369,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUqko
-        version_id: yeTQYD
-        url: https://semgrep.dev/playground/r/yeTQYD/terraform.aws.security.aws-ebs-snapshot-encrypted-with-cmk.aws-ebs-snapshot-encrypted-with-cmk
+        version_id: 5PTZG5
+        url: https://semgrep.dev/playground/r/5PTZG5/terraform.aws.security.aws-ebs-snapshot-encrypted-with-cmk.aws-ebs-snapshot-encrypted-with-cmk
         origin: community
   languages:
   - hcl
@@ -36351,8 +36410,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUW7K
-        version_id: rxTbB6
-        url: https://semgrep.dev/playground/r/rxTbB6/terraform.aws.security.aws-ebs-unencrypted.aws-ebs-unencrypted
+        version_id: GxT1X9
+        url: https://semgrep.dev/playground/r/GxT1X9/terraform.aws.security.aws-ebs-unencrypted.aws-ebs-unencrypted
         origin: community
 - id: terraform.aws.security.aws-ec2-has-public-ip.aws-ec2-has-public-ip
   patterns:
@@ -36399,8 +36458,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUA2n
-        version_id: NdT5vo
-        url: https://semgrep.dev/playground/r/NdT5vo/terraform.aws.security.aws-ec2-has-public-ip.aws-ec2-has-public-ip
+        version_id: BjTRZx
+        url: https://semgrep.dev/playground/r/BjTRZx/terraform.aws.security.aws-ec2-has-public-ip.aws-ec2-has-public-ip
         origin: community
   languages:
   - hcl
@@ -36481,8 +36540,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUzov
-        version_id: JdT0Oj
-        url: https://semgrep.dev/playground/r/JdT0Oj/terraform.aws.security.aws-ecr-repository-wildcard-principal.aws-ecr-repository-wildcard-principal
+        version_id: YDTLel
+        url: https://semgrep.dev/playground/r/YDTLel/terraform.aws.security.aws-ecr-repository-wildcard-principal.aws-ecr-repository-wildcard-principal
         origin: community
   languages:
   - hcl
@@ -36527,8 +36586,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUle7
-        version_id: xyT9lR
-        url: https://semgrep.dev/playground/r/xyT9lR/terraform.aws.security.aws-elasticsearch-insecure-tls-version.aws-elasticsearch-insecure-tls-version
+        version_id: GxT1e6
+        url: https://semgrep.dev/playground/r/GxT1e6/terraform.aws.security.aws-elasticsearch-insecure-tls-version.aws-elasticsearch-insecure-tls-version
         origin: community
 - id: terraform.aws.security.aws-elasticsearch-nodetonode-encryption.aws-elasticsearch-nodetonode-encryption-not-enabled
   patterns:
@@ -36593,8 +36652,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qU6J7
-        version_id: O9T4AE
-        url: https://semgrep.dev/playground/r/O9T4AE/terraform.aws.security.aws-elasticsearch-nodetonode-encryption.aws-elasticsearch-nodetonode-encryption-not-enabled
+        version_id: RGTyLR
+        url: https://semgrep.dev/playground/r/RGTyLR/terraform.aws.security.aws-elasticsearch-nodetonode-encryption.aws-elasticsearch-nodetonode-encryption-not-enabled
         origin: community
   languages:
   - hcl
@@ -36651,8 +36710,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUeYK
-        version_id: 7ZT5J6
-        url: https://semgrep.dev/playground/r/7ZT5J6/terraform.aws.security.aws-glacier-vault-any-principal.aws-glacier-vault-any-principal
+        version_id: K3TxkQ
+        url: https://semgrep.dev/playground/r/K3TxkQ/terraform.aws.security.aws-glacier-vault-any-principal.aws-glacier-vault-any-principal
         origin: community
   languages:
   - hcl
@@ -36710,8 +36769,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUzY5
-        version_id: LjTxLD
-        url: https://semgrep.dev/playground/r/LjTxLD/terraform.aws.security.aws-iam-admin-policy-ssoadmin.aws-iam-admin-policy-ssoadmin
+        version_id: qkTD7K
+        url: https://semgrep.dev/playground/r/qkTD7K/terraform.aws.security.aws-iam-admin-policy-ssoadmin.aws-iam-admin-policy-ssoadmin
         origin: community
   languages:
   - hcl
@@ -36770,8 +36829,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUx8l
-        version_id: 8KTWP7
-        url: https://semgrep.dev/playground/r/8KTWP7/terraform.aws.security.aws-iam-admin-policy.aws-iam-admin-policy
+        version_id: l4TERe
+        url: https://semgrep.dev/playground/r/l4TERe/terraform.aws.security.aws-iam-admin-policy.aws-iam-admin-policy
         origin: community
   languages:
   - hcl
@@ -36834,8 +36893,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8UOle
-        version_id: QkTBR5
-        url: https://semgrep.dev/playground/r/QkTBR5/terraform.aws.security.aws-insecure-api-gateway-tls-version.aws-insecure-api-gateway-tls-version
+        version_id: 6xTB94
+        url: https://semgrep.dev/playground/r/6xTB94/terraform.aws.security.aws-insecure-api-gateway-tls-version.aws-insecure-api-gateway-tls-version
         origin: community
 - id: terraform.aws.security.aws-insecure-redshift-ssl-configuration.aws-insecure-redshift-ssl-configuration
   patterns:
@@ -36886,8 +36945,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUrOj
-        version_id: 3ZT75n
-        url: https://semgrep.dev/playground/r/3ZT75n/terraform.aws.security.aws-insecure-redshift-ssl-configuration.aws-insecure-redshift-ssl-configuration
+        version_id: o5TADQ
+        url: https://semgrep.dev/playground/r/o5TADQ/terraform.aws.security.aws-insecure-redshift-ssl-configuration.aws-insecure-redshift-ssl-configuration
         origin: community
   languages:
   - hcl
@@ -36948,8 +37007,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUWPD
-        version_id: JdT2O8
-        url: https://semgrep.dev/playground/r/JdT2O8/terraform.aws.security.aws-kms-key-wildcard-principal.aws-kms-key-wildcard-principal
+        version_id: 2KT82k
+        url: https://semgrep.dev/playground/r/2KT82k/terraform.aws.security.aws-kms-key-wildcard-principal.aws-kms-key-wildcard-principal
         origin: community
   languages:
   - hcl
@@ -37014,8 +37073,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeU0L3
-        version_id: 5PTBKg
-        url: https://semgrep.dev/playground/r/5PTBKg/terraform.aws.security.aws-kms-no-rotation.aws-kms-no-rotation
+        version_id: X0TRy1
+        url: https://semgrep.dev/playground/r/X0TRy1/terraform.aws.security.aws-kms-no-rotation.aws-kms-no-rotation
         origin: community
 - id: terraform.aws.security.aws-lambda-environment-credentials.aws-lambda-environment-credentials
   patterns:
@@ -37039,11 +37098,11 @@ rules:
         '
     - pattern-regex: "(?<![A-Za-z0-9/+=])[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])\n"
   - focus-metavariable: "$Y"
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   metadata:
     category: security
     references:
@@ -37068,8 +37127,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDU6gj
-        version_id: kbTv30
-        url: https://semgrep.dev/playground/r/kbTv30/terraform.aws.security.aws-lambda-environment-credentials.aws-lambda-environment-credentials
+        version_id: 8KT8Ak
+        url: https://semgrep.dev/playground/r/8KT8Ak/terraform.aws.security.aws-lambda-environment-credentials.aws-lambda-environment-credentials
         origin: community
   languages:
   - hcl
@@ -37082,11 +37141,11 @@ rules:
           secret_key = "$SECRET"
       }
   - focus-metavariable: "$SECRET"
-  message: A hard-coded credential was detected. It is not recommended  to store credentials
+  message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
-    or external malicious adversary.  It is recommended to use environment variables
-    to  securely provide credentials or retrieve credentials from  a secure vault
-    or HSM (Hardware Security Module).
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
   languages:
   - hcl
   severity: WARNING
@@ -37115,8 +37174,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8U4n0
-        version_id: A8Tyvd
-        url: https://semgrep.dev/playground/r/A8Tyvd/terraform.aws.security.aws-provider-static-credentials.aws-provider-static-credentials
+        version_id: gETQJX
+        url: https://semgrep.dev/playground/r/gETQJX/terraform.aws.security.aws-provider-static-credentials.aws-provider-static-credentials
         origin: community
 - id: terraform.aws.security.aws-rds-backup-no-retention.aws-rds-backup-no-retention
   patterns:
@@ -37160,8 +37219,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUzwQ
-        version_id: BjTQ4A
-        url: https://semgrep.dev/playground/r/BjTQ4A/terraform.aws.security.aws-rds-backup-no-retention.aws-rds-backup-no-retention
+        version_id: rxTWK7
+        url: https://semgrep.dev/playground/r/rxTWK7/terraform.aws.security.aws-rds-backup-no-retention.aws-rds-backup-no-retention
         origin: community
 - id: terraform.aws.security.insecure-load-balancer-tls-version.insecure-load-balancer-tls-version
   patterns:
@@ -37228,8 +37287,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUP9K
-        version_id: PkT40P
-        url: https://semgrep.dev/playground/r/PkT40P/terraform.aws.security.insecure-load-balancer-tls-version.insecure-load-balancer-tls-version
+        version_id: 7ZT8yD
+        url: https://semgrep.dev/playground/r/7ZT8yD/terraform.aws.security.insecure-load-balancer-tls-version.insecure-load-balancer-tls-version
         origin: community
   languages:
   - hcl
@@ -37277,8 +37336,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUL1P
-        version_id: BjTQj7
-        url: https://semgrep.dev/playground/r/BjTQj7/terraform.aws.security.wildcard-assume-role.wildcard-assume-role
+        version_id: 8KTDZj
+        url: https://semgrep.dev/playground/r/8KTDZj/terraform.aws.security.wildcard-assume-role.wildcard-assume-role
         origin: community
   languages:
   - hcl
@@ -37339,8 +37398,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU23p
-        version_id: YDTzGn
-        url: https://semgrep.dev/playground/r/YDTzGn/terraform.azure.security.appservice.appservice-authentication-enabled.appservice-authentication-enabled
+        version_id: l4TEje
+        url: https://semgrep.dev/playground/r/l4TEje/terraform.azure.security.appservice.appservice-authentication-enabled.appservice-authentication-enabled
         origin: community
   languages:
   - hcl
@@ -37398,8 +37457,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU7LJ
-        version_id: 6xTA72
-        url: https://semgrep.dev/playground/r/6xTA72/terraform.azure.security.appservice.appservice-enable-http2.appservice-enable-http2
+        version_id: YDTLyx
+        url: https://semgrep.dev/playground/r/YDTLyx/terraform.azure.security.appservice.appservice-enable-http2.appservice-enable-http2
         origin: community
   languages:
   - hcl
@@ -37450,8 +37509,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUXwx
-        version_id: o5TWQd
-        url: https://semgrep.dev/playground/r/o5TWQd/terraform.azure.security.appservice.appservice-enable-https-only.appservice-enable-https-only
+        version_id: JdTXWO
+        url: https://semgrep.dev/playground/r/JdTXWO/terraform.azure.security.appservice.appservice-enable-https-only.appservice-enable-https-only
         origin: community
   languages:
   - hcl
@@ -37501,8 +37560,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU8D6
-        version_id: zyTXgB
-        url: https://semgrep.dev/playground/r/zyTXgB/terraform.azure.security.appservice.appservice-require-client-cert.appservice-require-client-cert
+        version_id: 5PTZwl
+        url: https://semgrep.dev/playground/r/5PTZwl/terraform.azure.security.appservice.appservice-require-client-cert.appservice-require-client-cert
         origin: community
   languages:
   - hcl
@@ -37540,8 +37599,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUDbZ
-        version_id: O9TrEB
-        url: https://semgrep.dev/playground/r/O9TrEB/terraform.azure.security.appservice.appservice-use-secure-tls-policy.appservice-use-secure-tls-policy
+        version_id: GxT1A5
+        url: https://semgrep.dev/playground/r/GxT1A5/terraform.azure.security.appservice.appservice-use-secure-tls-policy.appservice-use-secure-tls-policy
         origin: community
   languages:
   - hcl
@@ -37587,8 +37646,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwU1Eg
-        version_id: jQTLe9
-        url: https://semgrep.dev/playground/r/jQTLe9/terraform.azure.security.appservice.azure-appservice-detailed-errormessages-enabled.azure-appservice-detailed-errormessages-enabled
+        version_id: BjTRPl
+        url: https://semgrep.dev/playground/r/BjTRPl/terraform.azure.security.appservice.azure-appservice-detailed-errormessages-enabled.azure-appservice-detailed-errormessages-enabled
         origin: community
   languages:
   - hcl
@@ -37631,8 +37690,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UZRP
-        version_id: rxTbgg
-        url: https://semgrep.dev/playground/r/rxTbgg/terraform.azure.security.appservice.azure-appservice-https-only.azure-appservice-https-only
+        version_id: K3Tx01
+        url: https://semgrep.dev/playground/r/K3Tx01/terraform.azure.security.appservice.azure-appservice-https-only.azure-appservice-https-only
         origin: community
   languages:
   - hcl
@@ -37673,8 +37732,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUlgp
-        version_id: RGTBYg
-        url: https://semgrep.dev/playground/r/RGTBYg/terraform.azure.security.azure-key-no-expiration-date.azure-key-no-expiration-date
+        version_id: ZRTbzN
+        url: https://semgrep.dev/playground/r/ZRTbzN/terraform.azure.security.azure-key-no-expiration-date.azure-key-no-expiration-date
         origin: community
   languages:
   - hcl
@@ -37717,8 +37776,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUJG8
-        version_id: WrTk2N
-        url: https://semgrep.dev/playground/r/WrTk2N/terraform.azure.security.azure-mssql-service-mintls-version.azure-mssql-service-mintls-version
+        version_id: 8KTDpg
+        url: https://semgrep.dev/playground/r/8KTDpg/terraform.azure.security.azure-mssql-service-mintls-version.azure-mssql-service-mintls-version
         origin: community
   languages:
   - hcl
@@ -37759,8 +37818,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUloL
-        version_id: 0bTQRw
-        url: https://semgrep.dev/playground/r/0bTQRw/terraform.azure.security.azure-mysql-encryption-enabled.azure-mysql-encryption-enabled
+        version_id: gETKw0
+        url: https://semgrep.dev/playground/r/gETKw0/terraform.azure.security.azure-mysql-encryption-enabled.azure-mysql-encryption-enabled
         origin: community
   languages:
   - hcl
@@ -37803,8 +37862,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU8NN
-        version_id: K3TPBw
-        url: https://semgrep.dev/playground/r/K3TPBw/terraform.azure.security.azure-mysql-mintls-version.azure-mysql-mintls-version
+        version_id: QkT9bg
+        url: https://semgrep.dev/playground/r/QkT9bg/terraform.azure.security.azure-mysql-mintls-version.azure-mysql-mintls-version
         origin: community
   languages:
   - hcl
@@ -37844,8 +37903,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUgXq
-        version_id: e1TEXB
-        url: https://semgrep.dev/playground/r/e1TEXB/terraform.azure.security.keyvault.keyvault-ensure-key-expires.keyvault-ensure-key-expires
+        version_id: X0TRbP
+        url: https://semgrep.dev/playground/r/X0TRbP/terraform.azure.security.keyvault.keyvault-ensure-key-expires.keyvault-ensure-key-expires
         origin: community
   languages:
   - hcl
@@ -37885,8 +37944,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUdNy
-        version_id: vdTDxy
-        url: https://semgrep.dev/playground/r/vdTDxy/terraform.azure.security.keyvault.keyvault-ensure-secret-expires.keyvault-ensure-secret-expires
+        version_id: jQTPbZ
+        url: https://semgrep.dev/playground/r/jQTPbZ/terraform.azure.security.keyvault.keyvault-ensure-secret-expires.keyvault-ensure-secret-expires
         origin: community
   languages:
   - hcl
@@ -37933,8 +37992,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUjw9
-        version_id: d6Tn2d
-        url: https://semgrep.dev/playground/r/d6Tn2d/terraform.azure.security.keyvault.keyvault-purge-enabled.keyvault-purge-enabled
+        version_id: 1QTG9g
+        url: https://semgrep.dev/playground/r/1QTG9g/terraform.azure.security.keyvault.keyvault-purge-enabled.keyvault-purge-enabled
         origin: community
   languages:
   - hcl
@@ -37979,8 +38038,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUpDA
-        version_id: 7ZT5qy
-        url: https://semgrep.dev/playground/r/7ZT5qy/terraform.azure.security.storage.storage-enforce-https.storage-enforce-https
+        version_id: bZTyYK
+        url: https://semgrep.dev/playground/r/bZTyYK/terraform.azure.security.storage.storage-enforce-https.storage-enforce-https
         origin: community
   languages:
   - hcl
@@ -38032,8 +38091,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUQdL
-        version_id: 8KTWOp
-        url: https://semgrep.dev/playground/r/8KTWOp/terraform.azure.security.storage.storage-use-secure-tls-policy.storage-use-secure-tls-policy
+        version_id: kbTJoR
+        url: https://semgrep.dev/playground/r/kbTJoR/terraform.azure.security.storage.storage-use-secure-tls-policy.storage-use-secure-tls-policy
         origin: community
   languages:
   - hcl
@@ -38073,8 +38132,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUrdg
-        version_id: A8TyZW
-        url: https://semgrep.dev/playground/r/A8TyZW/terraform.gcp.security.gcp-cloud-storage-logging.gcp-cloud-storage-logging
+        version_id: RGTyX5
+        url: https://semgrep.dev/playground/r/RGTyX5/terraform.gcp.security.gcp-cloud-storage-logging.gcp-cloud-storage-logging
         origin: community
 - id: terraform.gcp.security.gcp-dns-key-specs-rsasha1.gcp-dns-key-specs-rsasha1
   patterns:
@@ -38134,8 +38193,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUZZb
-        version_id: 2KTAo8
-        url: https://semgrep.dev/playground/r/2KTAo8/terraform.gcp.security.gcp-dns-key-specs-rsasha1.gcp-dns-key-specs-rsasha1
+        version_id: O9T1y4
+        url: https://semgrep.dev/playground/r/O9T1y4/terraform.gcp.security.gcp-dns-key-specs-rsasha1.gcp-dns-key-specs-rsasha1
         origin: community
   languages:
   - hcl
@@ -38182,8 +38241,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8Uod5
-        version_id: YDTz1K
-        url: https://semgrep.dev/playground/r/YDTz1K/terraform.gcp.security.gcp-sql-database-require-ssl.gcp-sql-database-require-ssl
+        version_id: NdT4OG
+        url: https://semgrep.dev/playground/r/NdT4OG/terraform.gcp.security.gcp-sql-database-require-ssl.gcp-sql-database-require-ssl
         origin: community
   languages:
   - hcl
@@ -38248,8 +38307,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8U7Ll
-        version_id: 6xTAll
-        url: https://semgrep.dev/playground/r/6xTAll/terraform.gcp.security.gcp-sql-public-database.gcp-sql-public-database
+        version_id: kbTJA5
+        url: https://semgrep.dev/playground/r/kbTJA5/terraform.gcp.security.gcp-sql-public-database.gcp-sql-public-database
         origin: community
   languages:
   - hcl
@@ -38290,8 +38349,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUZW5
-        version_id: rxTbpe
-        url: https://semgrep.dev/playground/r/rxTbpe/terraform.lang.security.ebs-unencrypted-volume.unencrypted-ebs-volume
+        version_id: 7ZT87G
+        url: https://semgrep.dev/playground/r/7ZT87G/terraform.lang.security.ebs-unencrypted-volume.unencrypted-ebs-volume
         origin: community
 - id: terraform.lang.security.ec2-imdsv1-optional.ec2-imdsv1-optional
   languages:
@@ -38322,8 +38381,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdU0eA
-        version_id: BjTgXd
-        url: https://semgrep.dev/playground/r/BjTgXd/terraform.lang.security.ec2-imdsv1-optional.ec2-imdsv1-optional
+        version_id: LjTjYO
+        url: https://semgrep.dev/playground/r/LjTjYO/terraform.lang.security.ec2-imdsv1-optional.ec2-imdsv1-optional
         origin: community
   pattern-either:
   - patterns:
@@ -38414,8 +38473,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUl6W
-        version_id: DkTZ5d
-        url: https://semgrep.dev/playground/r/DkTZ5d/terraform.lang.security.rds-insecure-password-storage-in-source-code.rds-insecure-password-storage-in-source-code
+        version_id: DkTE88
+        url: https://semgrep.dev/playground/r/DkTE88/terraform.lang.security.rds-insecure-password-storage-in-source-code.rds-insecure-password-storage-in-source-code
         origin: community
 - id: terraform.lang.security.s3-public-rw-bucket.s3-public-rw-bucket
   pattern: acl = "public-read-write"
@@ -38447,29 +38506,19 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUqvn
-        version_id: 3ZT7ZO
-        url: https://semgrep.dev/playground/r/3ZT7ZO/terraform.lang.security.s3-public-rw-bucket.s3-public-rw-bucket
+        version_id: qkTDl5
+        url: https://semgrep.dev/playground/r/qkTDl5/terraform.lang.security.s3-public-rw-bucket.s3-public-rw-bucket
         origin: community
 - id: terraform.lang.security.s3-unencrypted-bucket.s3-unencrypted-bucket
   patterns:
-  - pattern: 'bucket = "..."
-
-      '
-  - pattern-inside: |
-      resource "aws_s3_bucket" "..." {
-        ...
-      }
-  - pattern-not-inside: |
-      resource "aws_s3_bucket" "..." {
-        ...
-        server_side_encryption_configuration {
-          ...
-        }
-      }
+  - pattern: a
+  - pattern: b
   languages:
   - hcl
   severity: INFO
-  message: S3 bucket without encryption at rest detected.
+  message: This rule has been deprecated, as all s3 buckets are encrypted by default
+    with no way to disable it. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration
+    for more info.
   metadata:
     references:
     - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket#server_side_encryption_configuration
@@ -38488,14 +38537,15 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    deprecated: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/terraform.lang.security.s3-unencrypted-bucket.s3-unencrypted-bucket
     shortlink: https://sg.run/Jezw
     semgrep.dev:
       rule:
         rule_id: 3qU62L
-        version_id: 44TxBl
-        url: https://semgrep.dev/playground/r/44TxBl/terraform.lang.security.s3-unencrypted-bucket.s3-unencrypted-bucket
+        version_id: WrT0pL
+        url: https://semgrep.dev/playground/r/WrT0pL/terraform.lang.security.s3-unencrypted-bucket.s3-unencrypted-bucket
         origin: community
 - id: trailofbits.go.anonymous-race-condition.anonymous-race-condition
   message: Possible race condition due to memory aliasing of variable `$X`
@@ -40093,9 +40143,9 @@ rules:
         '
 - id: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
   message: Detection of dangerouslySetInnerHTML from non-constant definition. This
-    can inadvertently expose users to cross-site scripting (XSS) attacks if this comes  from
-    user-provided input. If you have to use dangerouslySetInnerHTML, consider using
-    a sanitization library such as DOMPurify to sanitize your HTML.
+    can inadvertently expose users to cross-site scripting (XSS) attacks if this comes
+    from user-provided input. If you have to use dangerouslySetInnerHTML, consider
+    using a sanitization library such as DOMPurify to sanitize your HTML.
   metadata:
     cwe:
     - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
@@ -40121,8 +40171,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UWvK
-        version_id: 0bTYdy
-        url: https://semgrep.dev/playground/r/0bTYdy/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
+        version_id: QkTenq
+        url: https://semgrep.dev/playground/r/QkTenq/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
         origin: community
   languages:
   - typescript
@@ -41376,8 +41426,9 @@ rules:
   - metavariable-analysis:
       analyzer: entropy
       metavariable: "$VALUE"
-  message: 'Secrets ($VALUE) should not be stored in infrastructure as code files.  Use
-    an alternative such as Bitnami Sealed Secrets or KSOPS to encrypt Kubernetes Secrets. '
+  message: 'Secrets ($VALUE) should not be stored in infrastructure as code files.
+    Use an alternative such as Bitnami Sealed Secrets or KSOPS to encrypt Kubernetes
+    Secrets. '
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -41407,8 +41458,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUYEb
-        version_id: 0bTQD3
-        url: https://semgrep.dev/playground/r/0bTQD3/yaml.kubernetes.security.secrets-in-config-file.secrets-in-config-file
+        version_id: 3ZT061
+        url: https://semgrep.dev/playground/r/3ZT061/yaml.kubernetes.security.secrets-in-config-file.secrets-in-config-file
         origin: community
   languages:
   - yaml
