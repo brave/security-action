@@ -1,0 +1,3 @@
+# Also alter semgrep self test yml
+semgrep~=1.17.0
+pip-audit~=2.5.0
