@@ -8,7 +8,7 @@ def main():
     with open(path.join(environ["SCRIPTPATH"], "all_changed_files.txt")) as all_changed_files:
         files = all_changed_files.read()
         changed_lock_files = [
-            f for f in files.split("\x00")
+            f for f in files.split("\n")
             if f.endswith("package-lock.json")
         ]
     for lock_path in changed_lock_files:
