@@ -10,7 +10,7 @@ RUNNERS="safesvg tfsec semgrep brakeman npm-audit pip-audit"
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
-        reviewdog -filter-mode=nofilter -tee -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log
+        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log
     done
 
     for runner in $RUNNERS; do
@@ -28,7 +28,8 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     fi
 else
     find $SCRIPTPATH/../t3sts/ | sed "s|$SCRIPTPATH/../||g" | tr '\n' '\0' > $SCRIPTPATH/all_changed_files.txt
-    GITHUB_BASE_REF=initial-commit reviewdog -filter-mode=nofilter -tee -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
+    GITHUB_BASE_REF=initial-commit reviewdog -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
 fi
 
+cat reviewdog.log
 find reviewdog.log -type f -empty -delete
