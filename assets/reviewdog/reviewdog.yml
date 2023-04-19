@@ -24,7 +24,7 @@ runner:
     cmd: |
       set -xe
       python3 $SCRIPTPATH/changed.py --suffix .svg \
-      | xargs -r -n1 $SCRIPTPATH/xmllint.sh \
+      | xargs -d '\n' -r -n1 $SCRIPTPATH/xmllint.sh \
       | egrep -f $SCRIPTPATH/dtd/blocklist.txt -v \
       | sort -u \
       | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
@@ -35,7 +35,7 @@ runner:
     cmd: |
       set -e
       python3 $SCRIPTPATH/changed.py --regex '.*\.tf[a-z]*' \
-      | xargs -r -n1 $SCRIPTPATH/tfsec.sh \
+      | xargs -d '\n' -r -n1 $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message)<br><br>source: \(.code.url)<br><br>"' \
       | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
