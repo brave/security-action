@@ -138,6 +138,9 @@ runs:
         set -e
         printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
         cat ${{ github.action_path }}/assets/all_changed_files.txt
+        echo "--"
+        SCRIPTPATH=${{ github.action_path }}/assets python3 ${{ github.action_path }}/assets/changed.py --suffix .svg
+        SCRIPTPATH=${{ github.action_path }}/assets python3 ${{ github.action_path }}/assets/changed.py --regex '.*\.tf[a-z]*'
 # REVIEWDOG Steps
 # REVIEWDOG Setup
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
