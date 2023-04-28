@@ -462,7 +462,6 @@ rules:
     - 'CWE-352: Cross-Site Request Forgery (CSRF)'
     cwe2021-top25: true
     cwe2022-top25: true
-    license: MIT
     owasp:
     - A01:2021 - Broken Access Control
     references:
@@ -473,13 +472,14 @@ rules:
     technology:
     - ".net"
     - mvc
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
     shortlink: https://sg.run/Y0Jy
     semgrep.dev:
       rule:
         rule_id: ZqUlxE
-        version_id: JdTwk7
-        url: https://semgrep.dev/playground/r/JdTwk7/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
+        version_id: JdTre1
+        url: https://semgrep.dev/playground/r/JdTre1/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
         origin: community
   languages:
   - csharp
@@ -600,7 +600,6 @@ rules:
     category: security
     cwe:
     - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
-    license: MIT
     owasp:
     - A05:2021 - Security Misconfiguration
     references:
@@ -613,13 +612,14 @@ rules:
     - ".net"
     - asp
     - webforms
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
     shortlink: https://sg.run/z1jd
     semgrep.dev:
       rule:
         rule_id: 7KUxPg
-        version_id: 0bTkG2
-        url: https://semgrep.dev/playground/r/0bTkG2/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
+        version_id: GxTEJj
+        url: https://semgrep.dev/playground/r/GxTEJj/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
         origin: community
   languages:
   - generic
@@ -985,20 +985,20 @@ rules:
     - newtonsoft
     - json
     confidence: LOW
-    license: MIT
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
     - audit
     likelihood: LOW
     impact: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
     shortlink: https://sg.run/8n2g
     semgrep.dev:
       rule:
         rule_id: OrUGgl
-        version_id: 9lTPR1
-        url: https://semgrep.dev/playground/r/9lTPR1/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
+        version_id: A8T7Lz
+        url: https://semgrep.dev/playground/r/A8T7Lz/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
         origin: community
 - id: csharp.lang.security.memory.memory-marshal-create-span.memory-marshal-create-span
   severity: WARNING
@@ -2529,8 +2529,11 @@ rules:
         origin: community
 - id: generic.secrets.security.detected-aws-session-token.detected-aws-session-token
   patterns:
-  - pattern-regex: (("|'|`)?((?i)aws)?_?((?i)session)_?((?i)token)("|'|`)?\s{0,50}(:|=>|=)\s{0,50}("|'|`)?[A-Za-z0-9/+=]{16,}("|'|`)?)
+  - pattern-regex: "((?i)AWS_SESSION_TOKEN)\\s*(:|=>|=)\\s*([A-Za-z0-9/+=]{16,})"
   - pattern-not-regex: "(?i)example|sample|test|fake"
+  - metavariable-analysis:
+      analyzer: entropy
+      metavariable: "$3"
   languages:
   - regex
   message: AWS Session Token detected
@@ -2560,8 +2563,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5U8Er
-        version_id: rxTbWG
-        url: https://semgrep.dev/playground/r/rxTbWG/generic.secrets.security.detected-aws-session-token.detected-aws-session-token
+        version_id: RGT4LN
+        url: https://semgrep.dev/playground/r/RGT4LN/generic.secrets.security.detected-aws-session-token.detected-aws-session-token
         origin: community
 - id: generic.secrets.security.detected-bcrypt-hash.detected-bcrypt-hash
   pattern-regex: "\\$2[aby]?\\$[\\d]+\\$[./A-Za-z0-9]{53}"
@@ -3926,6 +3929,40 @@ rules:
         version_id: 7ZT0Jd
         url: https://semgrep.dev/playground/r/7ZT0Jd/generic.secrets.security.detected-twitter-oauth.detected-twitter-oauth
         origin: community
+- id: generic.secrets.security.google-maps-apikeyleak.google-maps-apikeyleak
+  patterns:
+  - pattern-regex: "^(AIza[0-9A-Za-z_-]{35}(?!\\S))$"
+  message: Detects potential Google Maps API keys in code
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    description: Detects potential Google Maps API keys in code
+    severity: MEDIUM
+    category: security
+    confidence: MEDIUM
+    impact: HIGH
+    likelihood: MEDIUM
+    subcategory:
+    - audit
+    owasp:
+    - A3:2017 Sensitive Data Exposure
+    references:
+    - https://ozguralp.medium.com/unauthorized-google-maps-api-key-usage-cases-and-why-you-need-to-care-1ccb28bf21e
+    cwe:
+    - 'CWE-538: Insertion of Sensitive Information into Externally-Accessible File
+      or Directory'
+    technology:
+    - Google Maps
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/generic.secrets.security.google-maps-apikeyleak.google-maps-apikeyleak
+    shortlink: https://sg.run/DL5d
+    semgrep.dev:
+      rule:
+        rule_id: EwU3kN
+        version_id: JdT89w
+        url: https://semgrep.dev/playground/r/JdT89w/generic.secrets.security.google-maps-apikeyleak.google-maps-apikeyleak
+        origin: community
 - id: generic.unicode.security.bidi.contains-bidirectional-characters
   patterns:
   - pattern-either:
@@ -4433,8 +4470,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUk4X
-        version_id: gETLNX
-        url: https://semgrep.dev/playground/r/gETLNX/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
+        version_id: jQTXwz
+        url: https://semgrep.dev/playground/r/jQTXwz/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
         origin: community
   languages:
   - go
@@ -4444,7 +4481,7 @@ rules:
   - pattern-not-inside: 'tls.Config{..., MinVersion: ..., ...}'
   fix-regex:
     regex: Config\s*\{
-    replacement: 'Config{MinVersion: SSL.VersionTLS13,'
+    replacement: 'Config{MinVersion: tls.VersionTLS13,'
 - id: go.lang.security.audit.crypto.use_of_weak_rsa_key.use-of-weak-rsa-key
   message: RSA keys should be at least 2048 bits
   languages:
@@ -10015,12 +10052,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUo5X
-        version_id: DkTe0A
-        url: https://semgrep.dev/playground/r/DkTe0A/javascript.ajv.security.audit.ajv-allerrors-true.ajv-allerrors-true
+        version_id: 5PTGO0
+        url: https://semgrep.dev/playground/r/5PTGO0/javascript.ajv.security.audit.ajv-allerrors-true.ajv-allerrors-true
         origin: community
   languages:
-  - js
-  - ts
+  - javascript
+  - typescript
   severity: WARNING
   pattern-either:
   - pattern: 'new Ajv({...,allErrors: true,...},...)
@@ -10425,11 +10462,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUGBR
-        version_id: jQT9jg
-        url: https://semgrep.dev/playground/r/jQT9jg/javascript.apollo.security.apollo-axios-ssrf.apollo-axios-ssrf
+        version_id: GxTX7K
+        url: https://semgrep.dev/playground/r/GxTX7K/javascript.apollo.security.apollo-axios-ssrf.apollo-axios-ssrf
         origin: community
   languages:
-  - js
+  - javascript
   severity: WARNING
   patterns:
   - pattern: const $RESPONSE = await axios.request($INNERARG,...)
@@ -10925,12 +10962,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU5xj
-        version_id: 3ZT5EX
-        url: https://semgrep.dev/playground/r/3ZT5EX/javascript.dompurify.harden-dompurify-usage
+        version_id: RGTxg6
+        url: https://semgrep.dev/playground/r/RGTxg6/javascript.dompurify.harden-dompurify-usage
         origin: community
   languages:
-  - js
-  - ts
+  - javascript
+  - typescript
   severity: ERROR
   patterns:
   - pattern: DOMPurify.sanitize($X, ...)
@@ -12137,12 +12174,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UlRq
-        version_id: ExTPRL
-        url: https://semgrep.dev/playground/r/ExTPRL/javascript.lang.security.audit.incomplete-sanitization.incomplete-sanitization
+        version_id: 0bT35j
+        url: https://semgrep.dev/playground/r/0bT35j/javascript.lang.security.audit.incomplete-sanitization.incomplete-sanitization
         origin: community
   languages:
-  - js
-  - ts
+  - javascript
+  - typescript
   severity: WARNING
   patterns:
   - pattern: "$STR.replace(($CHAR: string), ...)\n"
@@ -23575,6 +23612,8 @@ rules:
         ...
         free($PTR);
     - pattern-not-inside: "$PTR = ($CAST)realloc(...);\n...\nfree($PTR); \n"
+    - pattern-not-inside: "$PTR = strdup(...);\n...\nfree($PTR); \n"
+    - pattern-not-inside: "$PTR = strndup(...);\n...\nfree($PTR); \n"
 - id: raptor-mismatched-memory-management-cpp
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -23624,6 +23663,8 @@ rules:
         ...
         free($PTR);
     - pattern-not-inside: "$PTR = ($CAST)realloc(...);\n...\nfree($PTR); \n"
+    - pattern-not-inside: "$PTR = strdup(...);\n...\nfree($PTR); \n"
+    - pattern-not-inside: "$PTR = strndup(...);\n...\nfree($PTR); \n"
   - patterns:
     - pattern: delete[]($PTR);
     - pattern-not-inside: |
@@ -23642,55 +23683,6 @@ rules:
         $PTR = new $OBJ[$SIZE];
         ...
         delete($PTR);
-- id: raptor-missing-break-in-switch
-  metadata:
-    author: Marco Ivaldi <raptor@0xdeadbeef.info>
-    references:
-    - https://cwe.mitre.org/data/definitions/484
-    - https://g.co/kgs/PCHQjJ
-    - https://github.com/struct/mms
-    - https://github.com/returntocorp/semgrep/issues/4939
-    confidence: MEDIUM
-    license: MIT
-    category: security
-    subcategory:
-    - audit
-    source: https://github.com/0xdea/semgrep-rules/blob/main/c/missing-break-in-switch.yaml
-  message: The software omits a break statement within a switch or similar construct,
-    causing code associated with multiple conditions to execute. This can cause problems
-    when the programmer only intended to execute code associated with one condition.
-  severity: INFO
-  languages:
-  - c
-  - cpp
-  patterns:
-  - pattern: 'switch ($VAR) { case $VAL1: ... case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: ... break; case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: break; case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: ... exit($RET); case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: exit($RET); case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: ... return; case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: return; case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: ... return $RET; case $VAL2: ... }
-
-      '
-  - pattern-not: 'switch ($VAR) { case $VAL1: return $RET; case $VAL2: ... }
-
-      '
 - id: raptor-off-by-one
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -28589,7 +28581,7 @@ rules:
       }
   message: The ECR repository allows tag mutability. Image tags could be overwritten
     with compromised images. ECR images should be set to IMMUTABLE to prevent code
-    injection through image mutation. This can be done by setting image_tab_mutability
+    injection through image mutation. This can be done by setting `image_tag_mutability`
     to IMMUTABLE.
   languages:
   - hcl
@@ -28617,8 +28609,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUB4o
-        version_id: l4TERW
-        url: https://semgrep.dev/playground/r/l4TERW/terraform.aws.security.aws-ecr-mutable-image-tags.aws-ecr-mutable-image-tags
+        version_id: l4TO2x
+        url: https://semgrep.dev/playground/r/l4TO2x/terraform.aws.security.aws-ecr-mutable-image-tags.aws-ecr-mutable-image-tags
         origin: community
 - id: terraform.aws.security.aws-efs-filesystem-encrypted-with-cmk.aws-efs-filesystem-encrypted-with-cmk
   patterns:
@@ -29050,6 +29042,53 @@ rules:
   languages:
   - hcl
   severity: WARNING
+- id: terraform.aws.security.aws-kinesis-stream-unencrypted.aws-kinesis-stream-unencrypted
+  patterns:
+  - pattern: |
+      resource "aws_kinesis_stream" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_kinesis_stream" $ANYTHING {
+        ...
+        encryption_type = "KMS"
+        ...
+      }
+  message: The AWS Kinesis stream does not encrypt data at rest. The data could be
+    read if the Kinesis stream storage layer is compromised. Enable Kinesis stream
+    server-side encryption.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    references:
+    - https://owasp.org/Top10/A04_2021-Insecure_Design
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kinesis_stream#encryption_type
+    - https://docs.aws.amazon.com/streams/latest/dev/server-side-encryption.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+    rule-origin-note: published from /src/aws-kinesis-stream-unencrypted.yml in None
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-kinesis-stream-unencrypted.aws-kinesis-stream-unencrypted
+    shortlink: https://sg.run/KZ0L
+    semgrep.dev:
+      rule:
+        rule_id: 8GU72N
+        version_id: DkTA0l
+        url: https://semgrep.dev/playground/r/DkTA0l/terraform.aws.security.aws-kinesis-stream-unencrypted.aws-kinesis-stream-unencrypted
+        origin: community
 - id: terraform.aws.security.aws-kinesis-video-stream-encrypted-with-cmk.aws-kinesis-video-stream-encrypted-with-cmk
   patterns:
   - pattern: |
@@ -29152,6 +29191,56 @@ rules:
         rule_id: 5rUp5w
         version_id: 1QTGp6
         url: https://semgrep.dev/playground/r/1QTGp6/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
+        origin: community
+- id: terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
+  patterns:
+  - pattern: |
+      resource "aws_lambda_function" $ANYTHING {
+        ...
+      }
+  - pattern-not: |
+      resource "aws_lambda_function" $ANYTHING {
+        ...
+        tracing_config {
+          ...
+          mode = "Active"
+          ...
+        }
+        ...
+      }
+  message: The AWS Lambda function does not have active X-Ray tracing enabled. X-Ray
+    tracing enables end-to-end debugging and analysis of all function activity. This
+    makes it easier to trace the flow of logs and identify bottlenecks, slow downs
+    and timeouts.
+  languages:
+  - hcl
+  severity: INFO
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A09:2021 Security Logging and Monitoring Failures
+    cwe:
+    - 'CWE-778: Insufficient Logging'
+    references:
+    - https://cwe.mitre.org/data/definitions/778.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#mode
+    - https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
+    shortlink: https://sg.run/wO2Y
+    semgrep.dev:
+      rule:
+        rule_id: eqUl1O
+        version_id: 9lT0A5
+        url: https://semgrep.dev/playground/r/9lT0A5/terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
         origin: community
 - id: terraform.aws.security.aws-redshift-cluster-encrypted-with-cmk.aws-redshift-cluster-encrypted-with-cmk
   patterns:
@@ -33349,8 +33438,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUGkk
-        version_id: K3T60z
-        url: https://semgrep.dev/playground/r/K3T60z/typescript.react.security.audit.react-href-var.react-href-var
+        version_id: BjT3ZO
+        url: https://semgrep.dev/playground/r/BjT3ZO/typescript.react.security.audit.react-href-var.react-href-var
         origin: community
   languages:
   - typescript
@@ -33358,7 +33447,8 @@ rules:
   severity: WARNING
   mode: taint
   pattern-sources:
-  - patterns:
+  - label: TAINTED
+    patterns:
     - pattern-either:
       - pattern-inside: 'function ...({..., $X, ...}) { ... }
 
@@ -33370,96 +33460,44 @@ rules:
     - pattern-either:
       - pattern: "$X.$Y"
       - pattern: "$X[...]"
+    - pattern-not-inside: "$F. ... .$SANITIZEUNC(...)\n"
+  - label: CONCAT
+    requires: TAINTED
+    patterns:
+    - pattern-either:
+      - pattern: "`...${$X}...`\n"
+      - pattern: "$SANITIZE + <... $X ...>\n"
+    - pattern-not: "`${$X}...`\n"
+    - pattern-not: "$X + ...\n"
+    - focus-metavariable: "$X"
+  - label: CLEAN
+    by-side-effect: true
+    patterns:
+    - pattern-either:
+      - pattern: "$A($SOURCE)"
+      - pattern: "$SANITIZE. ... .$A($SOURCE)"
+      - pattern: "$A. ... .$SANITIZE($SOURCE)"
+    - focus-metavariable: "$SOURCE"
+    - metavariable-regex:
+        metavariable: "$A"
+        regex: "(?i)(.*valid|.*sanitiz)"
   pattern-sinks:
-  - patterns:
+  - requires: TAINTED and not CONCAT and not CLEAN
+    patterns:
+    - focus-metavariable: "$X"
     - pattern-either:
-      - patterns:
-        - focus-metavariable: "$X"
-        - pattern-not-inside: |
-            import {
-              ...,$X,...
-            } from "..."
-            ...
-        - pattern-not-inside: "<Buttons .../>\n"
-        - pattern-not-inside: "<Button .../>\n"
-        - pattern-not-inside: "<AnchorButton .../>\n"
-        - pattern-not-inside: "<$EL ... href={$FUNC($X)}></$EL>\n"
-        - pattern-not-inside: |
-            import $X from "..."
-            ...
-        - pattern-not-inside: |
-            import $X from "..."
-            ...
-        - pattern-not-inside: |
-            import * as $X from "..."
-            ...
-        - pattern-not-inside: |
-            $X = require(...)
-            ...
-        - pattern-either:
-          - pattern: "<$EL href={$X} />\n"
-          - pattern: "<$EL href={`${$X}...`} />\n"
-          - pattern: 'React.createElement($EL, {href: $X})
+      - pattern: "<$EL href={$X} />\n"
+      - pattern: 'React.createElement($EL, {href: $X})
 
-              '
-          - pattern-inside: |
-              $PARAMS = {href: $X};
-              ...
-              React.createElement($EL, $PARAMS);
-        - pattern-not: '<$EL href="..." />
-
-            '
-        - pattern-not: '<$EL href={"..."+$X} />
-
-            '
-        - pattern-not: "React.createElement($EL, {href: \"...\"})        \n"
-        - pattern-not: '$PARAMS = {href: "..."};
-
-            '
-        - metavariable-pattern:
-            patterns:
-            - pattern-not: "$FOO + $VALUE\n"
-            - pattern-not: '"..." + $F
-
-                '
-            - pattern-not: "`...${$F}...`\n"
-            metavariable: "$X"
-  pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern: "$A ? $VAL1 : $VAL2\n"
-      - pattern: "$A ? $VAL2 : $VAL1\n"
+          '
+      - pattern-inside: |
+          $PARAMS = {href: $X};
+          ...
+          React.createElement($EL, $PARAMS);
     - metavariable-pattern:
         patterns:
-        - pattern: "`${...}...`\n"
-        - pattern-not: '"..."
-
-            '
-        - pattern-not: '"..." + $V
-
-            '
-        - pattern-not: "`...${...}...`\n"
-        metavariable: "$VAL1"
-    - focus-metavariable: "$VAL1"
-  - patterns:
-    - pattern-either:
-      - pattern: validateUrl(...)
-      - pattern: getSanitizedUrl(...)
-  - patterns:
-    - pattern: "`...${$X}...`\n"
-    - pattern-not: "`${$X}...`\n"
-    - focus-metavariable: "$X"
-  - patterns:
-    - pattern: '"..." + $VALUE
-
-        '
-  - patterns:
-    - pattern-inside: "if (<... $SOURCE.startsWith(\"$REGEX\") ...>) { \n    ... \n}\n"
-  - patterns:
-    - pattern-inside: |
-        $X = [{...}];
-        ...
-    - pattern: "$X.map(...)"
+        - pattern-not-regex: "(?i)(button)"
+        metavariable: "$EL"
 - id: typescript.react.security.audit.react-http-leak.react-http-leak
   message: this rule has been deprecated.
   metadata:

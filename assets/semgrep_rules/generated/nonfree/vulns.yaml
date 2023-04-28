@@ -178,6 +178,48 @@ rules:
   languages:
   - c
   severity: WARNING
+- id: clojure.lang.security.use-of-md5.use-of-md5
+  languages:
+  - clojure
+  severity: WARNING
+  message: MD5 hash algorithm detected. This is not collision resistant and leads
+    to easily-cracked password hashes. Replace with current recommended hashing algorithms.
+  metadata:
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+    - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+    technology:
+    - clojure
+    source-rule-url: https://github.com/clj-holmes/clj-holmes-rules/blob/main/security/weak-hash-function-md5.yml
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A02:2021 - Cryptographic Failures
+    cwe:
+    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    - 'CWE-328: Use of Weak Hash'
+    author: Gabriel Marquet <gab.marquet@gmail.com>
+    category: security
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/clojure.lang.security.use-of-md5.use-of-md5
+    shortlink: https://sg.run/BgPx
+    semgrep.dev:
+      rule:
+        rule_id: nJU1ep
+        version_id: A8Twoq
+        url: https://semgrep.dev/playground/r/A8Twoq/clojure.lang.security.use-of-md5.use-of-md5
+        origin: community
+  pattern-either:
+  - pattern: (MessageDigest/getInstance "MD5")
+  - pattern: "(MessageDigest/getInstance MessageDigestAlgorithms/MD5)"
+  - pattern: "(MessageDigest/getInstance org.apache.commons.codec.digest.MessageDigestAlgorithms/MD5)"
+  - pattern: (java.security.MessageDigest/getInstance "MD5")
+  - pattern: "(java.security.MessageDigest/getInstance MessageDigestAlgorithms/MD5)"
+  - pattern: "(java.security.MessageDigest/getInstance org.apache.commons.codec.digest.MessageDigestAlgorithms/MD5)"
 - id: csharp.dotnet.security.audit.ldap-injection.ldap-injection
   message: LDAP queries are constructed dynamically on user-controlled input. This
     vulnerability in code could lead to an arbitrary LDAP query execution.
@@ -441,6 +483,53 @@ rules:
     - pattern: var $NODE = $NAV.Select("..." + $INPUT + "...");
     - pattern: Object $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
     - pattern: var $OBJ = $NAV.Evaluate("..." + $INPUT + "...");
+- id: csharp.dotnet.security.razor-template-injection.razor-template-injection
+  message: User-controllable string passed to Razor.Parse. This leads directly to
+    code execution in the context of the process.
+  severity: WARNING
+  metadata:
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    cwe2022-top25: true
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://clement.notin.org/blog/2020/04/15/Server-Side-Template-Injection-(SSTI)-in-ASP.NET-Razor/
+    subcategory:
+    - vuln
+    technology:
+    - ".net"
+    - razor
+    - asp
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/csharp.dotnet.security.razor-template-injection.razor-template-injection
+    shortlink: https://sg.run/oyj0
+    semgrep.dev:
+      rule:
+        rule_id: EwUr68
+        version_id: 5PTD3d
+        url: https://semgrep.dev/playground/r/5PTD3d/csharp.dotnet.security.razor-template-injection.razor-template-injection
+        origin: community
+  languages:
+  - csharp
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - focus-metavariable: "$ARG"
+    - pattern-inside: 'public ActionResult $METHOD(..., string $ARG,...){...}
+
+        '
+  pattern-sinks:
+  - pattern: 'Razor.Parse(...)
+
+      '
+  pattern-sanitizers:
+  - not_conflicting: true
+    pattern: "$F(...)"
 - id: csharp.dotnet.security.use_deprecated_cipher_algorithm.use_deprecated_cipher_algorithm
   message: Usage of deprecated cipher algorithm detected. Use Aes or ChaCha20Poly1305
     instead.
@@ -742,6 +831,79 @@ rules:
         - pattern: "$TOK.Certificate.SubjectName.Name"
         - pattern: "$CERT.SubjectName.Name"
         - pattern: "$CERT.GetNameInfo(...)"
+- id: csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: "$A"
+    - pattern-inside: 'Path.Combine(...,$A,...)
+
+        '
+    - pattern-inside: 'public $TYPE $M(...,$A,...){...}
+
+        '
+    - pattern-not-inside: "<... Path.GetFileName($A) != $A ...>\n"
+  pattern-sinks:
+  - patterns:
+    - focus-metavariable: "$X"
+    - pattern: 'File.$METHOD($X,...)
+
+        '
+    - metavariable-regex:
+        metavariable: "$METHOD"
+        regex: "(?i)^(read|write)"
+  pattern-sanitizers:
+  - pattern: 'Path.GetFileName(...)
+
+      '
+  - patterns:
+    - pattern-inside: |
+        $X = Path.GetFileName(...);
+        ...
+    - pattern: "$X"
+  - patterns:
+    - pattern: "$X"
+    - pattern-inside: |
+        if(<... Path.GetFileName($X) != $X ...>){
+          ...
+          throw new $EXCEPTION(...);
+        }
+        ...
+  message: String argument $A is used to read or write data from a file via Path.Combine
+    without direct sanitization via Path.GetFileName. If the path is user-supplied
+    data this can lead to path traversal.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    confidence: MEDIUM
+    references:
+    - https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/
+    - https://docs.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-6.0#remarks
+    technology:
+    - ".net"
+    cwe:
+    - 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    owasp:
+    - A05:2017 - Broken Access Control
+    - A01:2021 - Broken Access Control
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine
+    shortlink: https://sg.run/1RvG
+    semgrep.dev:
+      rule:
+        rule_id: 3qU3bE
+        version_id: RGTGrQ
+        url: https://semgrep.dev/playground/r/RGTGrQ/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine
+        origin: community
 - id: csharp.lang.security.http.http-listener-wildcard-bindings.http-listener-wildcard-bindings
   severity: WARNING
   languages:
@@ -990,6 +1152,159 @@ rules:
   - pattern: 'new SoapFormatter();
 
       '
+- id: csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - focus-metavariable: "$ARG"
+    - pattern-inside: 'public $T $M(...,string $ARG,...){...}
+
+        '
+  pattern-sinks:
+  - patterns:
+    - pattern: "$XMLDOCUMENT.$METHOD(...)\n"
+    - pattern-inside: "XmlDocument $XMLDOCUMENT = new XmlDocument(...);\n...\n$XMLDOCUMENT.XmlResolver
+        = new XmlUrlResolver(...);\n...  \n"
+  message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling
+    a string argument from a public method. Enabling Document Type Definition (DTD)
+    parsing may cause XML External Entity (XXE) injection if supplied with user-controllable
+    data.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    references:
+    - https://www.jardinesoftware.net/2016/05/26/xxe-and-net/
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.xmlresolver?view=net-6.0#remarks
+    technology:
+    - ".net"
+    - xml
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: LOW
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
+    shortlink: https://sg.run/k98P
+    semgrep.dev:
+      rule:
+        rule_id: ReUK9k
+        version_id: BjT08B
+        url: https://semgrep.dev/playground/r/BjT08B/csharp.lang.security.xxe.xmldocument-unsafe-parser-override.xmldocument-unsafe-parser-override
+        origin: community
+- id: csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - focus-metavariable: "$ARG"
+    - pattern-inside: 'public $T $M(...,string $ARG,...){...}
+
+        '
+  pattern-sinks:
+  - patterns:
+    - pattern: 'XmlReader $READER = XmlReader.Create(...,$RS,...);
+
+        '
+    - pattern-inside: "XmlReaderSettings $RS = new XmlReaderSettings();\n...\n$RS.DtdProcessing
+        = DtdProcessing.Parse;\n...        \n"
+  message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling
+    a string argument from a public method. Enabling Document Type Definition (DTD)
+    parsing may cause XML External Entity (XXE) injection if supplied with user-controllable
+    data.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    references:
+    - https://www.jardinesoftware.net/2016/05/26/xxe-and-net/
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.xmlresolver?view=net-6.0#remarks
+    technology:
+    - ".net"
+    - xml
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: LOW
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
+    shortlink: https://sg.run/wXjA
+    semgrep.dev:
+      rule:
+        rule_id: AbU3pX
+        version_id: DkT0vK
+        url: https://semgrep.dev/playground/r/DkT0vK/csharp.lang.security.xxe.xmlreadersettings-unsafe-parser-override.xmlreadersettings-unsafe-parser-override
+        origin: community
+- id: csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - focus-metavariable: "$ARG"
+    - pattern-inside: 'public $T $M(...,string $ARG,...){...}
+
+        '
+  pattern-sinks:
+  - patterns:
+    - pattern: "$READER.$METHOD(...)\n"
+    - pattern-not-inside: |
+        $READER.DtdProcessing = DtdProcessing.Prohibit;
+        ...
+    - pattern-inside: |
+        XmlTextReader $READER = new XmlTextReader(...);
+        ...
+  message: XmlReaderSettings found with DtdProcessing.Parse on an XmlReader handling
+    a string argument from a public method. Enabling Document Type Definition (DTD)
+    parsing may cause XML External Entity (XXE) injection if supplied with user-controllable
+    data.
+  languages:
+  - csharp
+  severity: WARNING
+  metadata:
+    category: security
+    references:
+    - https://www.jardinesoftware.net/2016/05/26/xxe-and-net/
+    - https://docs.microsoft.com/en-us/dotnet/api/system.xml.xmldocument.xmlresolver?view=net-6.0#remarks
+    technology:
+    - ".net"
+    - xml
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: LOW
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
+    shortlink: https://sg.run/xXjL
+    semgrep.dev:
+      rule:
+        rule_id: BYUevk
+        version_id: WrTpjy
+        url: https://semgrep.dev/playground/r/WrTpjy/csharp.lang.security.xxe.xmltextreader-unsafe-defaults.xmltextreader-unsafe-defaults
+        origin: community
 - id: generic.secrets.gitleaks.adafruit-api-key.adafruit-api-key
   message: A gitleaks adafruit-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -9581,8 +9896,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzxR
-        version_id: LjT85p
-        url: https://semgrep.dev/playground/r/LjT85p/java.lang.security.audit.formatted-sql-string.formatted-sql-string
+        version_id: 0bTb9r
+        url: https://semgrep.dev/playground/r/0bTb9r/java.lang.security.audit.formatted-sql-string.formatted-sql-string
         origin: community
   message: Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized. Use a
@@ -9613,6 +9928,8 @@ rules:
         metavariable: "$SQLFUNC"
         regex: execute|executeQuery|createQuery|query
   pattern-sanitizers:
+  - patterns:
+    - pattern: "(CriteriaBuilder $CB).$ANY(...)"
   - patterns:
     - focus-metavariable: "$...X"
     - pattern-either:
@@ -14771,8 +15088,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUPA1
-        version_id: bZTnzw
-        url: https://semgrep.dev/playground/r/bZTnzw/javascript.express.security.audit.xss.direct-response-write.direct-response-write
+        version_id: X0T6Xk
+        url: https://semgrep.dev/playground/r/X0T6Xk/javascript.express.security.audit.xss.direct-response-write.direct-response-write
         origin: community
   languages:
   - javascript
@@ -14968,6 +15285,17 @@ rules:
     - metavariable-regex:
         metavariable: "$F"
         regex: "(?!.*text/html)"
+  - patterns:
+    - pattern-inside: |
+        $X = [...];
+        ...
+    - pattern: |
+        if(<... !$X.includes($SOURCE)...>) {
+            ...
+            return ...
+        }
+        ...
+    - pattern: "$SOURCE"
 - id: javascript.express.security.cors-misconfiguration.cors-misconfiguration
   message: By letting user input control CORS parameters, there is a risk that software
     does not properly verify that the source of data or communication is valid. Use
@@ -16219,11 +16547,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUrLy
-        version_id: QkTQqN
-        url: https://semgrep.dev/playground/r/QkTQqN/javascript.express.security.x-frame-options-misconfiguration.x-frame-options-misconfiguration
+        version_id: A8TlzK
+        url: https://semgrep.dev/playground/r/A8TlzK/javascript.express.security.x-frame-options-misconfiguration.x-frame-options-misconfiguration
         origin: community
   languages:
-  - js
+  - javascript
   - typescript
   severity: WARNING
   mode: taint
@@ -16306,8 +16634,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUyRl
-        version_id: K3TW7k
-        url: https://semgrep.dev/playground/r/K3TW7k/javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret
+        version_id: jQT7AJ
+        url: https://semgrep.dev/playground/r/jQT7AJ/javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret
         origin: community
   languages:
   - javascript
@@ -16315,7 +16643,7 @@ rules:
   severity: WARNING
   patterns:
   - pattern-inside: |
-      var $JOSE = require("jose");
+      $JOSE = require("jose");
       ...
   - pattern-either:
     - pattern-inside: |
@@ -16323,6 +16651,18 @@ rules:
         ...
     - pattern-inside: |
         var {JWK, JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        const {JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        const {JWK, JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        let {JWT} = $JOSE;
+        ...
+    - pattern-inside: |
+        let {JWK, JWT} = $JOSE;
         ...
   - pattern-either:
     - pattern: 'JWT.verify($P, "...", ...);
@@ -17136,8 +17476,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUPN9
-        version_id: 5PTbP3
-        url: https://semgrep.dev/playground/r/5PTbP3/javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli
+        version_id: 1QTqAk
+        url: https://semgrep.dev/playground/r/1QTqAk/javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli
         origin: community
   languages:
   - javascript
@@ -17151,18 +17491,25 @@ rules:
           ...
         }
     - focus-metavariable: "$FUNC"
+    - pattern-not-inside: "$F. ... .$SOURCE(...)\n"
   pattern-sinks:
   - patterns:
     - pattern-either:
       - pattern-inside: |
           const { $CLIENT } = require('pg')
-          ...
+           ...
+      - pattern-inside: |
+          var { $CLIENT } = require('pg')
+           ...
+      - pattern-inside: |
+          let { $CLIENT } = require('pg')
+           ...
+    - pattern-either:
+      - pattern-inside: |
           $DB = new $CLIENT(...)
           ...
       - pattern-inside: |
-          const { $POOL } = require('pg')
-          ...
-          const $NEWPOOL = new $POOL(...)
+          $NEWPOOL = new $CLIENT(...)
           ...
           $NEWPOOL.connect((..., $DB, ...) => {
               ...
@@ -18036,6 +18383,49 @@ rules:
   languages:
   - php
   severity: ERROR
+- id: php.lang.security.deserialization.extract-user-data
+  mode: taint
+  pattern-sources:
+  - pattern-either:
+    - pattern: "$_GET[...]"
+    - pattern: "$_FILES[...]"
+    - pattern: "$_POST[...]"
+  pattern-sinks:
+  - pattern: extract(...)
+  pattern-sanitizers:
+  - pattern: extract($VAR, EXTR_SKIP,...)
+  message: Do not call 'extract()' on user-controllable data. If you must, then you
+    must also provide the EXTR_SKIP flag to prevent overwriting existing variables.
+  languages:
+  - php
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    owasp:
+    - A08:2017 - Insecure Deserialization
+    - A08:2021 - Software and Data Integrity Failures
+    technology:
+    - php
+    references:
+    - https://www.php.net/manual/en/function.extract.php#refsect1-function.extract-notes
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.lang.security.deserialization.extract-user-data
+    shortlink: https://sg.run/6bv1
+    semgrep.dev:
+      rule:
+        rule_id: nJUykq
+        version_id: K3TqQr
+        url: https://semgrep.dev/playground/r/K3TqQr/php.lang.security.deserialization.extract-user-data
+        origin: community
+  severity: ERROR
 - id: php.lang.security.injection.echoed-request.echoed-request
   mode: taint
   message: "`Echo`ing user input risks cross-site scripting vulnerability. You should
@@ -18516,6 +18906,44 @@ rules:
     - metavariable-regex:
         metavariable: "$FUNCTION"
         regex: "(?i)(.*password.*)"
+- id: php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
+  patterns:
+  - pattern-either:
+    - pattern: openssl_encrypt($D, $M, $K, $FLAGS, "...",...);
+    - pattern: openssl_decrypt($D, $M, $K, $FLAGS, "...",...);
+  - metavariable-comparison:
+      metavariable: "$M"
+      comparison: re.match(".*-CBC",$M)
+  message: Static IV used with AES in CBC mode. Static IVs enable chosen-plaintext
+    attacks against encrypted data.
+  languages:
+  - php
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-329: Generation of Predictable IV with CBC Mode'
+    references:
+    - https://csrc.nist.gov/publications/detail/sp/800-38a/final
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    technology:
+    - php
+    - openssl
+    category: security
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
+    shortlink: https://sg.run/LgWJ
+    semgrep.dev:
+      rule:
+        rule_id: DbUGbE
+        version_id: qkTnep
+        url: https://semgrep.dev/playground/r/qkTnep/php.lang.security.openssl-cbc-static-iv.openssl-cbc-static-iv
+        origin: community
 - id: php.lang.security.phpinfo-use.phpinfo-use
   pattern: phpinfo(...);
   message: The 'phpinfo' function may reveal sensitive information about your environment.
@@ -37133,6 +37561,59 @@ rules:
   languages:
   - hcl
   severity: ERROR
+- id: terraform.aws.security.aws-lambda-permission-unrestricted-source-arn.aws-lambda-permission-unrestricted-source-arn
+  patterns:
+  - pattern: |
+      resource "aws_lambda_permission" $ANYTHING {
+        ...
+        principal = "$PRINCIPAL"
+        ...
+      }
+  - pattern-not: |
+      resource "aws_lambda_permission" $ANYTHING {
+        ...
+        source_arn = ...
+        ...
+      }
+  - metavariable-regex:
+      metavariable: "$PRINCIPAL"
+      regex: ".*[.]amazonaws[.]com$"
+  message: The AWS Lambda permission has an AWS service principal but does not specify
+    a source ARN. If you grant permission to a service principal without specifying
+    the source, other accounts could potentially configure resources in their account
+    to invoke your Lambda function. Set the source_arn value to the ARN of the AWS
+    resource that invokes the function, eg. an S3 bucket, CloudWatch Events Rule,
+    API Gateway, or SNS topic.
+  languages:
+  - hcl
+  severity: ERROR
+  metadata:
+    category: security
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-lambda-permission-unrestricted-source-arn.aws-lambda-permission-unrestricted-source-arn
+    shortlink: https://sg.run/kOP7
+    semgrep.dev:
+      rule:
+        rule_id: OrU9Ox
+        version_id: 1QTL4Y
+        url: https://semgrep.dev/playground/r/1QTL4Y/terraform.aws.security.aws-lambda-permission-unrestricted-source-arn.aws-lambda-permission-unrestricted-source-arn
+        origin: community
 - id: terraform.aws.security.aws-provider-static-credentials.aws-provider-static-credentials
   patterns:
   - pattern-inside: |
@@ -37222,6 +37703,95 @@ rules:
         version_id: rxTWK7
         url: https://semgrep.dev/playground/r/rxTWK7/terraform.aws.security.aws-rds-backup-no-retention.aws-rds-backup-no-retention
         origin: community
+- id: terraform.aws.security.aws-sqs-queue-policy-wildcard-principal.aws-sqs-queue-policy-wildcard-principal
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        resource "aws_sqs_queue_policy" $ANYTHING {
+          ...
+        }
+    - pattern-inside: |
+        resource "aws_sqs_queue" $ANYTHING {
+          ...
+        }
+  - pattern-either:
+    - patterns:
+      - pattern: policy = "$JSONPOLICY"
+      - metavariable-pattern:
+          metavariable: "$JSONPOLICY"
+          language: json
+          patterns:
+          - pattern-not-inside: '{..., "Effect": "Deny", ...}
+
+              '
+          - pattern-either:
+            - pattern: '{..., "Principal": "*", ...}
+
+                '
+            - pattern: '{..., "Principal": [..., "*", ...], ...}
+
+                '
+            - pattern: '{..., "Principal": { "AWS": "*" }, ...}
+
+                '
+            - pattern: '{..., "Principal": { "AWS": [..., "*", ...] }, ...}
+
+                '
+    - patterns:
+      - pattern-inside: policy = jsonencode(...)
+      - pattern-not-inside: '{..., Effect = "Deny", ...}
+
+          '
+      - pattern-either:
+        - pattern: '{..., Principal = "*", ...}
+
+            '
+        - pattern: '{..., Principal = [..., "*", ...], ...}
+
+            '
+        - pattern: '{..., Principal = { AWS = "*" }, ...}
+
+            '
+        - pattern: '{..., Principal = { AWS = [..., "*", ...] }, ...}
+
+            '
+  message: Wildcard used in your SQS queue policy principal. This grants access to
+    all users, including anonymous users (public access). Unless you explicitly require
+    anyone on the internet to be able to read or write to your queue, limit principals,
+    actions and resources to what you need according to least privilege.
+  metadata:
+    category: security
+    technology:
+    - aws
+    - terraform
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    cwe:
+    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    references:
+    - https://cwe.mitre.org/data/definitions/732.html
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue
+    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue_policy
+    - https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-security-best-practices.html
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    rule-origin-note: published from /src/aws-sqs-queue-policy-wildcard-principal.yml
+      in None
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/terraform.aws.security.aws-sqs-queue-policy-wildcard-principal.aws-sqs-queue-policy-wildcard-principal
+    shortlink: https://sg.run/z3eW
+    semgrep.dev:
+      rule:
+        rule_id: PeUl9d
+        version_id: yeT79Q
+        url: https://semgrep.dev/playground/r/yeT79Q/terraform.aws.security.aws-sqs-queue-policy-wildcard-principal.aws-sqs-queue-policy-wildcard-principal
+        origin: community
+  languages:
+  - hcl
+  severity: ERROR
 - id: terraform.aws.security.insecure-load-balancer-tls-version.insecure-load-balancer-tls-version
   patterns:
   - pattern-either:
@@ -40171,8 +40741,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UWvK
-        version_id: QkTenq
-        url: https://semgrep.dev/playground/r/QkTenq/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
+        version_id: A8TodP
+        url: https://semgrep.dev/playground/r/A8TodP/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
         origin: community
   languages:
   - typescript
@@ -40189,9 +40759,7 @@ rules:
 
           '
     - focus-metavariable: "$X"
-    - pattern-either:
-      - pattern: "$X.$Y"
-      - pattern: "$X[...]"
+    - pattern-not-inside: "$F. ... .$SANITIZEUNC(...)\n"
   pattern-sinks:
   - patterns:
     - focus-metavariable: "$X"

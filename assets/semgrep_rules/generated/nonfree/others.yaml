@@ -76,7 +76,7 @@ rules:
   message: Calling setState on the current state is always a no-op. Did you mean to
     change the state like $Y(!$X) instead?
   languages:
-  - js
+  - javascript
   severity: ERROR
   metadata:
     technology:
@@ -88,8 +88,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUz1k
-        version_id: vdTvgW
-        url: https://semgrep.dev/playground/r/vdTvgW/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
+        version_id: qkTwjn
+        url: https://semgrep.dev/playground/r/qkTwjn/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
         origin: community
 - id: ocaml.lang.compatibility.deprecated.deprecated-pervasives
   pattern: Pervasives.$X
@@ -1235,7 +1235,7 @@ rules:
     to an HTML element, which can cause console warnings or worse, give malicious
     actors a way to inject unexpected attributes.
   languages:
-  - js
+  - javascript
   severity: WARNING
   metadata:
     source-rule-url: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-props-no-spreading.md
@@ -1250,8 +1250,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6Uky5
-        version_id: kbTWvY
-        url: https://semgrep.dev/playground/r/kbTWvY/typescript.react.best-practice.react-props-spreading.react-props-spreading
+        version_id: JdTRyj
+        url: https://semgrep.dev/playground/r/JdTRyj/typescript.react.best-practice.react-props-spreading.react-props-spreading
         origin: community
 - id: typescript.react.portability.i18next.i18next-key-format.i18next-key-format
   patterns:
@@ -1296,8 +1296,8 @@ rules:
           regex: "(?!^[`][a-z0-9-]+[.][a-z0-9-]+[.]\\S+$)"
   message: Translation key '$KEY' should match format 'MODULE.FEATURE.*'
   languages:
-  - ts
-  - js
+  - typescript
+  - javascript
   severity: WARNING
   metadata:
     category: portability
@@ -1315,8 +1315,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUKJr
-        version_id: X0T226
-        url: https://semgrep.dev/playground/r/X0T226/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+        version_id: 5PTGOw
+        url: https://semgrep.dev/playground/r/5PTGOw/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
         origin: community
 - id: typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
   patterns:
@@ -1330,8 +1330,8 @@ rules:
   - pattern-not: "<$ELEMENT ... label={t($KEY, ...)} ... />"
   message: 'JSX Component label not internationalized: ''$MESSAGE'''
   languages:
-  - ts
-  - js
+  - typescript
+  - javascript
   severity: WARNING
   metadata:
     category: portability
@@ -1349,8 +1349,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUGrY
-        version_id: jQTyyX
-        url: https://semgrep.dev/playground/r/jQTyyX/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
+        version_id: GxTX7Q
+        url: https://semgrep.dev/playground/r/GxTX7Q/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
         origin: community
 - id: typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
   patterns:
@@ -1363,8 +1363,8 @@ rules:
     languages in your website or app with internationalization. Instead, use packages
     such as `i18next` in order to internationalize your elements.'
   languages:
-  - ts
-  - js
+  - typescript
+  - javascript
   severity: WARNING
   metadata:
     category: portability
@@ -1382,8 +1382,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUwo1
-        version_id: pZTv6z
-        url: https://semgrep.dev/playground/r/pZTv6z/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
+        version_id: RGTxgX
+        url: https://semgrep.dev/playground/r/RGTxgX/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
         origin: community
 - id: typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
   patterns:
@@ -1391,8 +1391,8 @@ rules:
   - pattern-not: enqueueSnackbar(t($KEY), $X2)
   message: 'React MUI enqueueSnackbar() title is not internationalized: ''$MESSAGE'''
   languages:
-  - ts
-  - js
+  - typescript
+  - javascript
   severity: WARNING
   metadata:
     category: portability
@@ -1410,8 +1410,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUpO8
-        version_id: 5PTe9P
-        url: https://semgrep.dev/playground/r/5PTe9P/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
+        version_id: A8TlzR
+        url: https://semgrep.dev/playground/r/A8TlzR/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
         origin: community
 - id: typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
   patterns:
@@ -1424,8 +1424,8 @@ rules:
     support different langauges in your website or app with internationalization.
     Instead, use packages such as `i18next` to internationalize your elements.
   languages:
-  - ts
-  - js
+  - typescript
+  - javascript
   severity: WARNING
   metadata:
     category: portability
@@ -1442,8 +1442,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUPJL
-        version_id: vdTXdP
-        url: https://semgrep.dev/playground/r/vdTXdP/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
+        version_id: BjTLNY
+        url: https://semgrep.dev/playground/r/BjTLNY/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
         origin: community
 - id: typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
   patterns:
