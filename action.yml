@@ -161,17 +161,12 @@ runs:
           packages: libxml2-utils
           version: 1.0
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      name: Cache go binaries
-      id: cache-go
-      uses: actions/cache@v3
-      with:
-        path: ~/go/bin
-        key: ${{ runner.os }}-go
-    - if: ${{ steps.cache-go.outputs.cache-hit != 'true' && inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install tfsec
-      shell: bash
-      run: |
-        go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
+      uses: jaxxstorm/action-install-gh-release@v1.10.0
+      with: # Grab a specific tag with caching
+        repo: aquasecurity/tfsec
+        tag: v1.28.1
+        cache: enable
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install brakeman
       shell: bash
