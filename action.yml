@@ -147,8 +147,11 @@ runs:
       name: Setup Ruby
       id: ruby
       uses: ruby/setup-ruby@7d546f4868fb108ed378764d873683f920672ae2
+      env:
+        BUNDLE_GEMFILE: ${{ github.action_path }}/Gemfile
       with:
         ruby-version: '2.7'
+        bundler-cache: true
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       uses: actions/setup-python@v2
       with:
@@ -172,11 +175,6 @@ runs:
         repo: aquasecurity/tfsec
         tag: v1.28.1
         cache: enable
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      name: Install brakeman
-      shell: bash
-      run: |
-        gem install brakeman --version 5.4.0
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
