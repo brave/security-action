@@ -153,15 +153,10 @@ runs:
         ruby-version: '2.7'
         bundler-cache: true
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-        cache: 'pip'
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install semgrep & pip-audit
       shell: bash
       run: |
-        pip install -r ${{ github.action_path }}/requirements.txt
+        python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/requirements.txt
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install xmllint for safesvg
       uses: awalsh128/cache-apt-pkgs-action@1850ee53f6e706525805321a3f2f863dcf73c962
