@@ -36,8 +36,41 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Get changed files
+      if: ${{ inputs.enabled && github.event_name == 'pull_request' }}
+      id: changed-files
+      uses: tj-actions/changed-files@v35
+      with:
+        separator: '\\0'
+    - name: Store reviewdog enabled
+      if: ${{ inputs.enabled && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      id: reviewdog-enabled
+      shell: bash
+      run: |
+        set -x
+        echo "value=true" >> $GITHUB_OUTPUT
+    - name: Store codeql enabled
+      if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && matrix.language && matrix.language != 'generic' }}
+      id: codeql-enabled
+      shell: bash
+      run: |
+        set -x
+        # enable codeql only if it's a public repo
+        if curl --retry 5 -s -I ${{github.event.repository.url}} | head -n1 | grep 200 >/dev/null  ; then
+          echo "value=true" >> $GITHUB_OUTPUT
+        fi
+# REVIEWDOG Steps
+# REVIEWDOG Setup
+    - name: Write changed files to file
+      if: ${{ steps.reviewdog-enabled.outputs.value }}
+      id: write-changed-files
+      shell: bash
+      run: |
+        set -e
+        printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
+        printf '${{ steps.changed-files.outputs.any_changed }}'
     - id: comments-before
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ steps.reviewdog-enabled.outputs.value }}
       uses: actions/github-script@v6
       with:
           script: |
@@ -103,47 +136,24 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
 
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Cache pip cache
       id: cache-pip
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip/
         key: ${{ runner.os }}-pip
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       id: assignees
       env:
         ASSIGNEES: ${{inputs.assignees}}
       run: echo "value=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
       shell: bash
-    - if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
-      id: public
-      shell: bash
-      run: |
-        set -x
-        if curl --retry 5 -s -I ${{github.event.repository.url}} | head -n1 | grep 200 >/dev/null  ; then
-          echo "value=true" >> $GITHUB_OUTPUT
-        fi
-    - name: Get changed files
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' }}
-      id: changed-files
-      uses: tj-actions/changed-files@v35
-      with:
-        separator: '\\0'
-    - name: Write changed files to file
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' }}
-      id: write-changed-files
-      shell: bash
-      run: |
-        set -e
-        printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
-# REVIEWDOG Steps
-# REVIEWDOG Setup
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Setup Ruby
       id: ruby
       uses: ruby/setup-ruby@7d546f4868fb108ed378764d873683f920672ae2
@@ -152,31 +162,31 @@ runs:
       with:
         ruby-version: '2.7'
         bundler-cache: true
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Install semgrep & pip-audit
       shell: bash
       run: |
         python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/requirements.txt
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Install xmllint for safesvg
       uses: awalsh128/cache-apt-pkgs-action@1850ee53f6e706525805321a3f2f863dcf73c962
       with:
           packages: libxml2-utils
           version: 1.0
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Install tfsec
       uses: jaxxstorm/action-install-gh-release@v1.10.0
       with: # Grab a specific tag with caching
         repo: aquasecurity/tfsec
         tag: v1.28.1
         cache: enable
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.debug}}
+    - if: ${{ steps.reviewdog-enabled.outputs.value && inputs.debug}}
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
 # REVIEWDOG Run
-    - if: ${{ steps.changed-files.outputs.any_changed == 'true' && inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Run reviewdog
       shell: bash
       env:
@@ -184,7 +194,7 @@ runs:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
     - id: comments-after
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ steps.reviewdog-enabled.outputs.value }}
       uses: actions/github-script@v6
       with:
           script: |
@@ -225,17 +235,17 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') && inputs.slack_token && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && inputs.slack_token && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
@@ -244,24 +254,21 @@ runs:
         color: green
         verbose: true
 # CodeQL Steps
-    - if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && !steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
-      shell: bash
-      run: echo "Not public, not running CodeQL here!"
-    - if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' && hashFiles(inputs.codeql_config) }}
+    - if: ${{ steps.codeql-enabled.outputs.value && hashFiles(inputs.codeql_config) }}
       name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
         config-file: ${{ inputs.codeql_config }}
-    - if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' && !hashFiles(inputs.codeql_config)}}
+    - if: ${{ steps.codeql-enabled.outputs.value && !hashFiles(inputs.codeql_config)}}
       name: Initialize CodeQL (without config)
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-    - if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ steps.codeql-enabled.outputs.value }}
       name: Autobuild
       uses: github/codeql-action/autobuild@v2
-    - if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && steps.public.outputs.value && matrix.language && matrix.language != 'generic' }}
+    - if: ${{ steps.codeql-enabled.outputs.value }}
       name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
 #    - run: echo ${{ inputs.in-name }}
