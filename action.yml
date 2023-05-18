@@ -102,14 +102,6 @@ runs:
             ).length;
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
-
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
-      name: Cache pip cache
-      id: cache-pip
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip/
-        key: ${{ runner.os }}-pip
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
       id: assignees
       env:
@@ -157,6 +149,7 @@ runs:
       with:
         python-version: '3.9'
         cache: 'pip'
+        cache-dependency-path: '${{ github.action_path }}/requirements.txt'
     - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Install semgrep & pip-audit
       shell: bash
