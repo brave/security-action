@@ -3,7 +3,6 @@ runner:
     name: semgrep
     cmd: |
       set -xe
-      [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       semgrep \
         -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
         -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
@@ -33,7 +32,6 @@ runner:
     name: tfsec
     cmd: |
       set -e
-      [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message)<br><br>source: \(.code.url)<br><br>"' \
@@ -43,7 +41,6 @@ runner:
   brakeman:
     name: brakeman
     cmd: |
-      [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       cat $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$' &&\
       brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
       | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
