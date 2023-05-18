@@ -32,12 +32,12 @@ runner:
   tfsec:
     name: tfsec
     cmd: |
-      set -e
       [ -f "$(find $SCRIPTPATH -type f -size +0 -name all_changed_files.txt)" ] &&\
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message)<br><br>source: \(.code.url)<br><br>"' \
-      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
+      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
+      || true
     errorformat:
       - "%t:%f:%l %m"
   brakeman:
