@@ -176,7 +176,7 @@ runs:
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
 # REVIEWDOG Run
-    - if: ${{ inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+    - if: ${{ steps.changed-files.outputs.any_changed == 'true' && inputs.enabled && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       name: Run reviewdog
       shell: bash
       env:
