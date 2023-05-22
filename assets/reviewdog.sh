@@ -14,9 +14,22 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     done
 
     for runner in $RUNNERS; do
-        cat $runner.log | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
-          || cat $runner.log >> reviewdog.fail.log
-        cat $runner.log >> reviewdog.log
+        if [[ -f "$runner.log" ]]; then
+            unset SHOULDSLEEP
+            split -l 30 $runner.log
+            for f in $(find . -name 'x??'); do
+                if [ -z ${SHOULDSLEEP+x} ]; then
+                    SHOULDSLEEP=1
+                else
+                    echo Sleeping
+                    sleep 10
+                fi
+                cat $f | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
+                || cat $f >> reviewdog.fail.log
+                cat $f >> reviewdog.log
+                rm $f
+            done
+        fi
     done
 
     if [[ -f "reviewdog.fail.log" ]]; then
@@ -31,4 +44,4 @@ else
     GITHUB_BASE_REF=initial-commit reviewdog  -runners=semgrep,safesvg -conf="$SCRIPTPATH/reviewdog/reviewdog.yml"  -diff="git diff origin/$GITHUB_BASE_REF" -reporter=local -tee
 fi
 
-find reviewdog.log -type f -empty -delete
+find reviewdog.log -type f -empty -delete || true
