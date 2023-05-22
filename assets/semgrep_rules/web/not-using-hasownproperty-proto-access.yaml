@@ -1,0 +1,19 @@
+rules:
+  - id: not-using-hasownproperty-proto-access
+    pattern: |
+      if ($X in $OBJ) {
+          ...
+          $OBJ[$X]
+          ...
+      }
+    message: This allows $X to be `__proto__` or `toString`. To prevent prototype
+      access use $OBJ.hasOwnProperty($X) or Object.hasOwn($OBJ, $X) or use a Map.
+    languages:
+      - js
+      - ts
+    severity: WARNING
+    metadata:
+      category: security
+      references:
+        - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
+
