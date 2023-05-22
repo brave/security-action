@@ -18,6 +18,40 @@ runner:
         | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"
+  sveltegrep:
+    name: sveltegrep
+    cmd: |
+      set -xe
+      python3 $SCRIPTPATH/scripttagextractor.py \
+        --suffix .extractedscript.js \
+        --ignore-no-files \
+        --all-changed-files-suffix .html && \
+      python3 $SCRIPTPATH/scripttagextractor.py \
+        --add-suffix-to-original .extractedscript.html \
+        --suffix .extractedscript.ts \
+        --ignore-no-files \
+        --all-changed-files-suffix .svelte && \
+      semgrep \
+        -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
+        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
+        $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+        --metrics=off \
+        --json \
+        --no-git-ignore \
+        '--include=*.extractedscript.ts' \
+        '--include=*.extractedscript.js' \
+        '--include=*.extractedscript.html' \
+        ./ \
+        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
+        | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
+        | sed "s/>Source: null</>Source: Brave</g" \
+        | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
+        | sed 's/\.extractedscript\.[htmls]*:/:/' && \
+      find . -type f -name '*.extractedscript.*' -delete || true
+    errorformat:
+      - "%t:%f:%l %m"
   safesvg:
     name: safesvg
     cmd: |
