@@ -27,15 +27,22 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
                 cat $f | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
                 || cat $f >> reviewdog.fail.log
                 cat $f >> reviewdog.log
+                wc -l $f
                 rm $f
             done
         fi
     done
 
     if [[ -f "reviewdog.fail.log" ]]; then
+        sleep 10
+        tac reviewdog.fail.log | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
+            || cat $f >> reviewdog.fail2.log
+    fi
+
+    if [[ -f "reviewdog.fail2.log" ]]; then
         set +x
         echo -e '\033[0;31mThis action encountered an error while reporting the following findings via the Github API:'
-        cat reviewdog.fail.log | sed 's/^/\x1B[0;34m/'
+        cat reviewdog.fail2.log | sed 's/^/\x1B[0;34m/'
         echo -e '\033[0;31mThe failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action \033[0m'
         exit 1
     fi
