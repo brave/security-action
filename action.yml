@@ -244,14 +244,16 @@ runs:
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
-    - if: ${{ steps.reviewdog-enabled.outputs.value && !inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.value && hashFiles('reviewdog.fail.log') }}
       shell: bash
       run: |
         set +x
         echo -e '\033[0;31mThis action encountered an error while reporting the following findings via the Github API:'
         cat reviewdog.fail.log | sed 's/^/\x1B[0;34m/'
         echo -e '\033[0;31mThe failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action \033[0m'
-        exit 1
+    - if: ${{ steps.reviewdog-enabled.outputs.value && !inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+      shell: bash
+      run: exit 1
     - uses: actions-ecosystem/action-slack-notifier@v1
       if: ${{ steps.reviewdog-enabled.outputs.value && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
