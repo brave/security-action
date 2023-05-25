@@ -1737,7 +1737,7 @@ rules:
   metadata:
     category: security
     cwe: 'CWE-20: Improper Input Validation'
-    owasp: 'OWASP: Cross-Site Request Forgery'
+    owasp: A5:2017-Broken Access Control
     technology:
     - java
     primary_identifier: find_sec_bugs.JAXWS_ENDPOINT-1
@@ -1751,8 +1751,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUewk
-        version_id: RGT7wy
-        url: https://semgrep.dev/playground/r/RGT7wy/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
+        version_id: 8KTr9G
+        url: https://semgrep.dev/playground/r/8KTr9G/gitlab.find_sec_bugs.JAXWS_ENDPOINT-1
         origin: custom
 - id: gitlab.find_sec_bugs.LDAP_ANONYMOUS-1
   patterns:

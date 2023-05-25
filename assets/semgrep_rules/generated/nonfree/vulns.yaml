@@ -93,6 +93,49 @@ rules:
   languages:
   - c
   severity: ERROR
+- id: c.lang.security.function-use-after-free.function-use-after-free
+  patterns:
+  - pattern-either:
+    - pattern: "$FUNC(..., <... $VAR ...>, ...)"
+    - pattern: "$FUNC(..., <... $VAR->$ACCESSOR ...>, ...)"
+    - pattern: "$FUNC(..., <... (*$VAR).$ACCESSOR ...>, ...)"
+    - pattern: "$FUNC(..., <... $VAR[$NUM] ...>, ...)"
+  - metavariable-regex:
+      metavariable: "$FUNC"
+      regex: "(?!^free$)"
+  - pattern-inside: free($VAR); ...
+  - pattern-not-inside: "$VAR = NULL; ..."
+  - pattern-not-inside: free($VAR); ... $VAR = malloc(...); ...
+  message: Variable '$VAR' was passed to a function after being freed. This can lead
+    to undefined behavior.
+  metadata:
+    cwe:
+    - 'CWE-416: Use After Free'
+    references:
+    - https://cwe.mitre.org/data/definitions/416.html
+    - https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/use_after_free/
+    category: security
+    technology:
+    - c
+    confidence: MEDIUM
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/c.lang.security.function-use-after-free.function-use-after-free
+    shortlink: https://sg.run/eWyZ
+    semgrep.dev:
+      rule:
+        rule_id: WAU9Dz
+        version_id: RGTLOb
+        url: https://semgrep.dev/playground/r/RGTLOb/c.lang.security.function-use-after-free.function-use-after-free
+        origin: community
+  languages:
+  - c
+  severity: WARNING
 - id: c.lang.security.insecure-use-printf-fn.insecure-use-printf-fn
   message: Avoid using user-controlled format strings passed into 'sprintf', 'printf'
     and 'vsprintf'. These functions put you at risk of buffer overflow vulnerabilities
@@ -145,9 +188,13 @@ rules:
       comparison: int($NUM) > 0
 - id: c.lang.security.use-after-free.use-after-free
   patterns:
-  - pattern: "$VAR->$ACCESSOR"
+  - pattern-either:
+    - pattern: "$VAR->$ACCESSOR"
+    - pattern: "(*$VAR).$ACCESSOR"
+    - pattern: "$VAR[$NUM]"
   - pattern-inside: free($VAR); ...
   - pattern-not-inside: "$VAR = NULL; ..."
+  - pattern-not-inside: free($VAR); ... $VAR = malloc(...); ...
   message: Variable '$VAR' was used after being freed. This can lead to undefined
     behavior.
   metadata:
@@ -172,8 +219,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUb9l
-        version_id: PkTXe0
-        url: https://semgrep.dev/playground/r/PkTXe0/c.lang.security.use-after-free.use-after-free
+        version_id: A8TdjY
+        url: https://semgrep.dev/playground/r/A8TdjY/c.lang.security.use-after-free.use-after-free
         origin: community
   languages:
   - c
@@ -7189,6 +7236,13 @@ rules:
     - metavariable-regex:
         metavariable: "$METHOD"
         regex: "^(Order|Exec|Raw|Group|Having|Distinct|Select|Pluck)$"
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: strconv.Atoi(...)
+    - patterns:
+      - pattern-either:
+        - pattern: "$X != $Y"
+        - pattern: "$X == $Y"
   metadata:
     category: security
     technology:
@@ -7202,21 +7256,22 @@ rules:
     references:
     - https://gorm.io/docs/security.html#SQL-injection-Methods
     - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-    confidence: MEDIUM
+    confidence: HIGH
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
     - vuln
     likelihood: HIGH
     impact: MEDIUM
+    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/go.gorm.security.audit.gorm-dangerous-methods-usage.gorm-dangerous-method-usage
     shortlink: https://sg.run/R4qg
     semgrep.dev:
       rule:
         rule_id: AbU5o3
-        version_id: 6xTOZq
-        url: https://semgrep.dev/playground/r/6xTOZq/go.gorm.security.audit.gorm-dangerous-methods-usage.gorm-dangerous-method-usage
+        version_id: d6Txgr
+        url: https://semgrep.dev/playground/r/d6Txgr/go.gorm.security.audit.gorm-dangerous-methods-usage.gorm-dangerous-method-usage
         origin: community
 - id: go.jwt-go.security.jwt.hardcoded-jwt-key
   message: A hard-coded credential was detected. It is not recommended to store credentials
@@ -7242,14 +7297,15 @@ rules:
     - vuln
     likelihood: HIGH
     impact: MEDIUM
+    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/go.jwt-go.security.jwt.hardcoded-jwt-key
     shortlink: https://sg.run/Rod2
     semgrep.dev:
       rule:
         rule_id: GdU7Ny
-        version_id: xyT7xq
-        url: https://semgrep.dev/playground/r/xyT7xq/go.jwt-go.security.jwt.hardcoded-jwt-key
+        version_id: PkTGNW
+        url: https://semgrep.dev/playground/r/PkTGNW/go.jwt-go.security.jwt.hardcoded-jwt-key
         origin: community
   severity: WARNING
   languages:
@@ -7287,31 +7343,36 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUwy8
-        version_id: 8KTWwk
-        url: https://semgrep.dev/playground/r/8KTWwk/go.lang.security.audit.crypto.math_random.math-random-used
+        version_id: K3Tk4e
+        url: https://semgrep.dev/playground/r/K3Tk4e/go.lang.security.audit.crypto.math_random.math-random-used
         origin: community
   message: Do not use `math/rand`. Use `crypto/rand` instead.
   languages:
   - go
   severity: WARNING
-  pattern-either:
-  - patterns:
+  patterns:
+  - pattern-either:
+    - pattern: 'import $RAND "$MATH"
+
+        '
+    - pattern: 'import "$MATH"
+
+        '
+  - metavariable-regex:
+      metavariable: "$MATH"
+      regex: "^(math/rand)$"
+  - pattern-either:
     - pattern-inside: |
-        import mrand "math/rand"
         ...
-    - pattern-either:
-      - pattern: mrand.Int()
-      - pattern: mrand.Read(...)
-  - patterns:
+        rand.$FUNC(...)
     - pattern-inside: |
-        import "math/rand"
         ...
-    - pattern-not-inside: |
-        import "crypto/rand"
-        ...
-    - pattern-either:
-      - pattern: rand.Int()
-      - pattern: rand.Read(...)
+        $RAND.$FUNC(...)
+  - focus-metavariable:
+    - "$MATH"
+  fix: 'crypto/rand
+
+    '
 - id: go.lang.security.audit.crypto.ssl.ssl-v3-is-insecure
   message: SSLv3 is insecure because it has known vulnerabilities. Starting with go1.14,
     SSLv3 will be removed. Instead, use 'tls.VersionTLS13'.
@@ -7469,16 +7530,20 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqU8B3
-        version_id: JdT28J
-        url: https://semgrep.dev/playground/r/JdT28J/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-DES
+        version_id: 6xT9qP
+        url: https://semgrep.dev/playground/r/6xT9qP/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-DES
         origin: community
-  pattern-either:
-  - pattern: 'des.NewTripleDESCipher(...)
+  patterns:
+  - pattern-inside: |
+      import "crypto/des"
+      ...
+  - pattern-either:
+    - pattern: 'des.NewTripleDESCipher(...)
 
-      '
-  - pattern: 'des.NewCipher(...)
+        '
+    - pattern: 'des.NewCipher(...)
 
-      '
+        '
 - id: go.lang.security.audit.crypto.use_of_weak_crypto.use-of-md5
   message: Detected MD5 hash algorithm which is considered insecure. MD5 is not collision
     resistant and is therefore not suitable as a cryptographic signature. Use SHA256
@@ -7509,16 +7574,20 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8Un6q
-        version_id: 44TxrO
-        url: https://semgrep.dev/playground/r/44TxrO/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-md5
+        version_id: l4TRdE
+        url: https://semgrep.dev/playground/r/l4TRdE/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-md5
         origin: community
-  pattern-either:
-  - pattern: 'md5.New()
+  patterns:
+  - pattern-inside: |
+      import "crypto/md5"
+      ...
+  - pattern-either:
+    - pattern: 'md5.New()
 
-      '
-  - pattern: 'md5.Sum(...)
+        '
+    - pattern: 'md5.Sum(...)
 
-      '
+        '
 - id: go.lang.security.audit.crypto.use_of_weak_crypto.use-of-rc4
   message: Detected RC4 cipher algorithm which is insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
@@ -7548,10 +7617,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8Unl0
-        version_id: 5PTBb6
-        url: https://semgrep.dev/playground/r/5PTBb6/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-rc4
+        version_id: o5TDzE
+        url: https://semgrep.dev/playground/r/o5TDzE/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-rc4
         origin: community
-  pattern: rc4.NewCipher(...)
+  patterns:
+  - pattern-inside: |
+      import "crypto/rc4"
+      ...
+  - pattern: rc4.NewCipher(...)
 - id: go.lang.security.audit.crypto.use_of_weak_crypto.use-of-sha1
   message: Detected SHA1 hash algorithm which is considered insecure. SHA1 is not
     collision resistant and is therefore not suitable as a cryptographic signature.
@@ -7582,16 +7655,20 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU31O
-        version_id: PkTENg
-        url: https://semgrep.dev/playground/r/PkTENg/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-sha1
+        version_id: YDTerd
+        url: https://semgrep.dev/playground/r/YDTerd/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-sha1
         origin: community
-  pattern-either:
-  - pattern: 'sha1.New()
+  patterns:
+  - pattern-inside: |
+      import "crypto/sha1"
+      ...
+  - pattern-either:
+    - pattern: 'sha1.New()
 
-      '
-  - pattern: 'sha1.Sum(...)
+        '
+    - pattern: 'sha1.Sum(...)
 
-      '
+        '
 - id: go.lang.security.audit.md5-used-as-password.md5-used-as-password
   languages:
   - go
@@ -7619,14 +7696,15 @@ rules:
     - vuln
     likelihood: MEDIUM
     impact: MEDIUM
+    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/go.lang.security.audit.md5-used-as-password.md5-used-as-password
     shortlink: https://sg.run/4eOE
     semgrep.dev:
       rule:
         rule_id: 4bU1Wj
-        version_id: 0bTQP5
-        url: https://semgrep.dev/playground/r/0bTQP5/go.lang.security.audit.md5-used-as-password.md5-used-as-password
+        version_id: JdTR8y
+        url: https://semgrep.dev/playground/r/JdTR8y/go.lang.security.audit.md5-used-as-password.md5-used-as-password
         origin: community
   mode: taint
   pattern-sources:
@@ -8284,14 +8362,15 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/go.lang.security.filepath-clean-misuse.filepath-clean-misuse
     shortlink: https://sg.run/ZKzw
     semgrep.dev:
       rule:
         rule_id: qNUQJe
-        version_id: kbTrnP
-        url: https://semgrep.dev/playground/r/kbTrnP/go.lang.security.filepath-clean-misuse.filepath-clean-misuse
+        version_id: 5PTGb4
+        url: https://semgrep.dev/playground/r/5PTGb4/go.lang.security.filepath-clean-misuse.filepath-clean-misuse
         origin: community
 - id: go.lang.security.injection.raw-html-format.raw-html-format
   languages:
@@ -8381,14 +8460,15 @@ rules:
     - vuln
     likelihood: HIGH
     impact: MEDIUM
+    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/go.lang.security.injection.tainted-sql-string.tainted-sql-string
     shortlink: https://sg.run/PbEq
     semgrep.dev:
       rule:
         rule_id: PeUoqy
-        version_id: xyT975
-        url: https://semgrep.dev/playground/r/xyT975/go.lang.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: ZRTAd6
+        url: https://semgrep.dev/playground/r/ZRTAd6/go.lang.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   severity: ERROR
@@ -8404,9 +8484,24 @@ rules:
   - patterns:
     - pattern-either:
       - patterns:
-        - pattern: '"$SQLSTR" + ...
+        - pattern-either:
+          - pattern: '"$SQLSTR" + ...
 
-            '
+              '
+          - patterns:
+            - pattern-inside: |
+                $VAR = "$SQLSTR";
+                ...
+            - pattern: "$VAR += ..."
+          - patterns:
+            - pattern-inside: |
+                var $SB strings.Builder
+                ...
+            - pattern-inside: |
+                $SB.WriteString("$SQLSTR")
+                ...
+                $SB.String(...)
+            - pattern: "$SB.WriteString(...)\n"
         - metavariable-regex:
             metavariable: "$SQLSTR"
             regex: "(?i)(select|delete|insert|create|update|alter|drop).*"
@@ -8419,17 +8514,21 @@ rules:
             metavariable: "$SQLSTR"
             regex: "\\s*(?i)(select|delete|insert|create|update|alter|drop)\\b.*%(v|s|q).*"
   pattern-sanitizers:
-  - pattern: strconv.Atoi(...)
+  - pattern-either:
+    - pattern: strconv.Atoi(...)
+    - patterns:
+      - pattern-either:
+        - pattern: "$X != $Y"
+        - pattern: "$X == $Y"
 - id: go.lang.security.injection.tainted-url-host.tainted-url-host
   languages:
   - go
-  message: User data flows into the host portion of this manually-constructed URL.
-    This could allow an attacker to send data to their own server, potentially exposing
-    sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig
-    this code can access. (This is called server-side request forgery, or SSRF.) Do
-    not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
-    the correct host.
+  message: A request was found to be crafted from user-input `$REQUEST`. This can
+    lead to Server-Side Request Forgery (SSRF) vulnerabilities, potentially exposing
+    sensitive data. It is recommend where possible to not allow user-input to craft
+    the base request, but to be treated as part of the path or query parameter. When
+    user-input is necessary to craft the request, it is recommended to follow OWASP
+    best practices to prevent abuse, including using an allowlist.
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -8441,46 +8540,71 @@ rules:
     technology:
     - go
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    confidence: MEDIUM
+    confidence: HIGH
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
     - vuln
     impact: MEDIUM
     likelihood: MEDIUM
+    interfile: true
     source: https://semgrep.dev/r/go.lang.security.injection.tainted-url-host.tainted-url-host
     shortlink: https://sg.run/5DjW
     semgrep.dev:
       rule:
         rule_id: AbUQLr
-        version_id: O9T4gY
-        url: https://semgrep.dev/playground/r/O9T4gY/go.lang.security.injection.tainted-url-host.tainted-url-host
+        version_id: pZT3rg
+        url: https://semgrep.dev/playground/r/pZT3rg/go.lang.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - patterns:
-        - pattern-either:
-          - pattern: fmt.Fprintf($F, "$URLSTR", ...)
-          - pattern: fmt.Sprintf("$URLSTR", ...)
-          - pattern: fmt.Printf("$URLSTR", ...)
-        - metavariable-regex:
-            metavariable: "$URLSTR"
-            regex: http(s?)://%(v|s|q).*
-      - patterns:
-        - pattern: '"$URLSTR" + ...'
-        - metavariable-regex:
-            metavariable: "$URLSTR"
-            regex: "\\w+://.*"
   pattern-sources:
-  - patterns:
+  - label: INPUT
+    patterns:
     - pattern-either:
       - pattern: "($REQUEST : *http.Request).$ANYTHING\n"
       - pattern: "($REQUEST : http.Request).$ANYTHING\n"
     - metavariable-regex:
         metavariable: "$ANYTHING"
         regex: "^(BasicAuth|Body|Cookie|Cookies|Form|FormValue|GetBody|Host|MultipartReader|ParseForm|ParseMultipartForm|PostForm|PostFormValue|Referer|RequestURI|Trailer|TransferEncoding|UserAgent|URL)$"
+  - label: CLEAN
+    requires: INPUT
+    patterns:
+    - pattern-either:
+      - pattern: '"$URLSTR" + $INPUT
+
+          '
+      - patterns:
+        - pattern-either:
+          - pattern: fmt.Fprintf($F, "$URLSTR", $INPUT, ...)
+          - pattern: fmt.Sprintf("$URLSTR", $INPUT, ...)
+          - pattern: fmt.Printf("$URLSTR", $INPUT, ...)
+    - metavariable-regex:
+        metavariable: "$URLSTR"
+        regex: ".*//[a-zA-Z0-10]+\\..*"
+  pattern-sinks:
+  - requires: INPUT and not CLEAN
+    patterns:
+    - pattern-either:
+      - patterns:
+        - pattern-either:
+          - patterns:
+            - pattern-inside: |
+                $CLIENT := &http.Client{...}
+                ...
+            - pattern: "$CLIENT.$METHOD($URL, ...)"
+          - pattern: http.$METHOD($URL, ...)
+        - metavariable-regex:
+            metavariable: "$METHOD"
+            regex: "^(Get|Head|Post|PostForm)$"
+      - pattern: http.Redirect($W, $REQ, $URL, ...)
+      - patterns:
+        - pattern: 'http.NewRequest("$METHOD", $URL, ...)
+
+            '
+        - metavariable-regex:
+            metavariable: "$METHOD"
+            regex: "^(GET|HEAD|POST|POSTFORM)$"
+    - focus-metavariable: "$URL"
   severity: WARNING
 - id: go.template.security.ssti.go-ssti
   patterns:
@@ -9896,8 +10020,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzxR
-        version_id: 0bTb9r
-        url: https://semgrep.dev/playground/r/0bTb9r/java.lang.security.audit.formatted-sql-string.formatted-sql-string
+        version_id: ExTxW2
+        url: https://semgrep.dev/playground/r/ExTxW2/java.lang.security.audit.formatted-sql-string.formatted-sql-string
         origin: community
   message: Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized. Use a
@@ -9913,30 +10037,49 @@ rules:
             $ANNOT $FUNC (..., $INPUT, ...) {
               ...
             }
-        - pattern-either:
-          - pattern: "(String $INPUT)"
-          - pattern: String.format(..., (String $INPUT), ...)
+        - pattern: "(String $INPUT)"
+    - focus-metavariable: "$INPUT"
+    label: INPUT
+  - patterns:
+    - pattern-either:
+      - pattern: "$X + $INPUT"
+      - pattern: "$X += $INPUT"
+      - pattern: "$STRB.append($INPUT)"
+      - pattern: String.format(..., $INPUT, ...)
+      - pattern: String.join(..., $INPUT, ...)
+      - pattern: "(String $STR).concat($INPUT)"
+      - pattern: "$INPUT.concat(...)"
+      - pattern: new $STRB(..., $INPUT, ...)
+    label: CONCAT
+    requires: INPUT
+  pattern-propagators:
+  - pattern: "(StringBuffer $S).append($X)"
+    from: "$X"
+    to: "$S"
+  - pattern: "(StringBuilder $S).append($X)"
+    from: "$X"
+    to: "$S"
   pattern-sinks:
   - patterns:
     - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE *$/" ...>)
     - pattern-not: $S.$SQLFUNC(<... "=~/.*TABLE %s$/" ...>)
     - pattern-either:
       - pattern: "(Statement $S).$SQLFUNC(...)"
+      - pattern: "(PreparedStatement $P).$SQLFUNC(...)"
       - pattern: "(Connection $C).createStatement(...).$SQLFUNC(...)"
+      - pattern: "(Connection $C).prepareStatement(...).$SQLFUNC(...)"
       - pattern: "(EntityManager $EM).$SQLFUNC(...)"
     - metavariable-regex:
         metavariable: "$SQLFUNC"
-        regex: execute|executeQuery|createQuery|query
+        regex: execute|executeQuery|createQuery|query|addBatch|nativeSQL|create|prepare
+    requires: CONCAT
   pattern-sanitizers:
   - patterns:
     - pattern: "(CriteriaBuilder $CB).$ANY(...)"
   - patterns:
-    - focus-metavariable: "$...X"
     - pattern-either:
-      - pattern: "<... $...X != $...Y ...>"
-      - pattern: "<... $...Y != $...X ...>"
-      - pattern: "<... $...X == $...Y ...>"
-      - pattern: "<... $...Y == $...X ...>"
+      - pattern: "$X != $Y"
+      - pattern: "$X == $Y"
   severity: ERROR
   languages:
   - java
@@ -10084,22 +10227,50 @@ rules:
   message: Detected input from a HTTPServletRequest going into a SQL sink or statement.
     This could lead to SQL injection if variables in the SQL statement are not properly
     sanitized. Use parameterized SQL queries or properly sanitize user input instead.
+  severity: WARNING
+  metadata:
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A01:2017 - Injection
+    - A03:2021 - Injection
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    subcategory:
+    - vuln
+    technology:
+    - sql
+    - java
+    - servlets
+    - spring
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
+    shortlink: https://sg.run/Lg56
+    semgrep.dev:
+      rule:
+        rule_id: oqUBJG
+        version_id: 7ZT3Re
+        url: https://semgrep.dev/playground/r/7ZT3Re/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
+        origin: community
   languages:
   - java
-  severity: WARNING
   mode: taint
   pattern-sources:
   - patterns:
     - pattern-either:
-      - pattern: "(HttpServletRequest $REQ).$REQFUNC(...) \n"
-      - patterns:
-        - pattern-inside: |
-            (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
-            ...
-            for (javax.servlet.http.Cookie $COOKIE: $COOKIES) {
-              ...
-            }
-        - pattern: "$COOKIE.getValue(...)\n"
+      - pattern: "(HttpServletRequest $REQ).$REQFUNC(...)\n"
+      - pattern: "(ServletRequest $REQ).$REQFUNC(...) \n"
+    - metavariable-regex:
+        metavariable: "$REQFUNC"
+        regex: "(getInputStream|getParameter|getParameterMap|getParameterValues|getReader|getCookies|getHeader|getHeaderNames|getHeaders|getPart|getParts|getQueryString)"
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -10126,41 +10297,9 @@ rules:
             regex: "(execute|query|executeUpdate)"
   pattern-sanitizers:
   - patterns:
-    - focus-metavariable: "$...X"
     - pattern-either:
-      - pattern: "<... $...X != $...Y ...>"
-      - pattern: "<... $...Y != $...X ...>"
-      - pattern: "<... $...X == $...Y ...>"
-      - pattern: "<... $...Y == $...X ...>"
-  metadata:
-    category: security
-    technology:
-    - sql
-    - java
-    cwe:
-    - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-      (''SQL Injection'')'
-    owasp:
-    - A01:2017 - Injection
-    - A03:2021 - Injection
-    references:
-    - https://owasp.org/Top10/A03_2021-Injection
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: HIGH
-    confidence: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
-    shortlink: https://sg.run/Lg56
-    semgrep.dev:
-      rule:
-        rule_id: oqUBJG
-        version_id: 8KT8zW
-        url: https://semgrep.dev/playground/r/8KT8zW/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
-        origin: community
+      - pattern: "$X != $Y"
+      - pattern: "$X == $Y"
 - id: java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request
   message: Detected input from a HTTPServletRequest going into a 'ProcessBuilder'
     or 'exec' command. This could lead to command injection if variables passed into
@@ -10608,59 +10747,6 @@ rules:
         $RES.encodeRedirectUrl(...);
         ...
       }
-- id: java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern: "(HttpServletRequest $REQ)"
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern: "(HttpServletResponse $RESPONSE).getWriter(...).$WRITE(..., $SINK,
-          ...)\n"
-      - pattern: "(HttpServletResponse $RESPONSE).getOutputStream(...).$WRITE(...,
-          $SINK, ...)\n"
-      - pattern: "(java.io.PrintWriter $WRITER).$WRITE(..., $SINK, ...)\n"
-      - pattern: "(javax.servlet.ServletOutputStream $WRITER).$WRITE(..., $SINK, ...)\n"
-      - pattern: "(java.io.OutputStream $WRITER).$WRITE(..., $SINK, ...)\n"
-    - focus-metavariable: "$SINK"
-  message: Detected a request with potential user-input going into a OutputStream
-    or Writer object. This bypasses any view or template environments, including HTML
-    escaping, which may expose this application to cross-site scripting (XSS) vulnerabilities.
-    Consider using a view technology such as JavaServer Faces (JSFs) which automatically
-    escapes HTML views.
-  metadata:
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    cwe:
-    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
-    references:
-    - https://www3.ntu.edu.sg/home/ehchua/programming/java/JavaServerFaces.html
-    category: security
-    technology:
-    - java
-    - servlets
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - vuln
-    likelihood: HIGH
-    impact: MEDIUM
-    confidence: MEDIUM
-    source: https://semgrep.dev/r/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
-    shortlink: https://sg.run/KlRL
-    semgrep.dev:
-      rule:
-        rule_id: j2Uv7B
-        version_id: 44T01W
-        url: https://semgrep.dev/playground/r/44T01W/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
-        origin: community
-  severity: WARNING
-  languages:
-  - java
 - id: java.lang.security.audit.xxe.documentbuilderfactory-disallow-doctype-decl-false.documentbuilderfactory-disallow-doctype-decl-false
   severity: ERROR
   metadata:
@@ -10696,12 +10782,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UrJ8
-        version_id: QkTjOr
-        url: https://semgrep.dev/playground/r/QkTjOr/java.lang.security.audit.xxe.documentbuilderfactory-disallow-doctype-decl-false.documentbuilderfactory-disallow-doctype-decl-false
+        version_id: l4T04G
+        url: https://semgrep.dev/playground/r/l4T04G/java.lang.security.audit.xxe.documentbuilderfactory-disallow-doctype-decl-false.documentbuilderfactory-disallow-doctype-decl-false
         origin: community
-  message: DOCTYPE declarations are enabled for this DocumentBuilderFactory. Without
-    prohibiting external entity declarations, this is vulnerable to XML external entity
-    attacks. Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl"
+  message: DOCTYPE declarations are enabled for $DBFACTORY. Without prohibiting external
+    entity declarations, this is vulnerable to XML external entity attacks. Disable
+    this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl"
     to true. Alternatively, allow DOCTYPE declarations and only prohibit external
     entities declarations. This can be done by setting the features "http://xml.org/sax/features/external-general-entities"
     and "http://xml.org/sax/features/external-parameter-entities" to false.
@@ -10936,12 +11022,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUJ6r
-        version_id: 44Twdj
-        url: https://semgrep.dev/playground/r/44Twdj/java.lang.security.audit.xxe.documentbuilderfactory-external-general-entities-true.documentbuilderfactory-external-general-entities-true
+        version_id: YDT7p9
+        url: https://semgrep.dev/playground/r/YDT7p9/java.lang.security.audit.xxe.documentbuilderfactory-external-general-entities-true.documentbuilderfactory-external-general-entities-true
         origin: community
-  message: External entities are allowed for this DocumentBuilderFactory. This is
-    vulnerable to XML external entity attacks. Disable this by setting the feature
-    "http://xml.org/sax/features/external-general-entities" to false.
+  message: External entities are allowed for $DBFACTORY. This is vulnerable to XML
+    external entity attacks. Disable this by setting the feature "http://xml.org/sax/features/external-general-entities"
+    to false.
   pattern: $DBFACTORY.setFeature("http://xml.org/sax/features/external-general-entities",
     true);
   fix: $DBFACTORY.setFeature("http://xml.org/sax/features/external-general-entities",
@@ -10982,16 +11068,175 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUNeo
-        version_id: PkTXyy
-        url: https://semgrep.dev/playground/r/PkTXyy/java.lang.security.audit.xxe.documentbuilderfactory-external-parameter-entities-true.documentbuilderfactory-external-parameter-entities-true
+        version_id: JdTjNr
+        url: https://semgrep.dev/playground/r/JdTjNr/java.lang.security.audit.xxe.documentbuilderfactory-external-parameter-entities-true.documentbuilderfactory-external-parameter-entities-true
         origin: community
-  message: External entities are allowed for this DocumentBuilderFactory. This is
-    vulnerable to XML external entity attacks. Disable this by setting the feature
-    "http://xml.org/sax/features/external-parameter-entities" to false.
+  message: External entities are allowed for $DBFACTORY. This is vulnerable to XML
+    external entity attacks. Disable this by setting the feature "http://xml.org/sax/features/external-parameter-entities"
+    to false.
   pattern: $DBFACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities",
     true);
   fix: $DBFACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities",
     false);
+  languages:
+  - java
+- id: java.lang.security.audit.xxe.saxparserfactory-disallow-doctype-decl-missing.saxparserfactory-disallow-doctype-decl-missing
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    references:
+    - https://semgrep.dev/blog/2022/xml-security-in-java
+    - https://semgrep.dev/docs/cheat-sheets/java-xxe/
+    - https://blog.sonarsource.com/secure-xml-processor
+    - https://xerces.apache.org/xerces2-j/features.html
+    category: security
+    technology:
+    - java
+    - xml
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.lang.security.audit.xxe.saxparserfactory-disallow-doctype-decl-missing.saxparserfactory-disallow-doctype-decl-missing
+    shortlink: https://sg.run/Gj32
+    semgrep.dev:
+      rule:
+        rule_id: j2Udpk
+        version_id: 5PTzdG
+        url: https://semgrep.dev/playground/r/5PTzdG/java.lang.security.audit.xxe.saxparserfactory-disallow-doctype-decl-missing.saxparserfactory-disallow-doctype-decl-missing
+        origin: community
+  message: DOCTYPE declarations are enabled for this SAXParserFactory. This is vulnerable
+    to XML external entity attacks. Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl"
+    to true. Alternatively, allow DOCTYPE declarations and only prohibit external
+    entities declarations. This can be done by setting the features "http://xml.org/sax/features/external-general-entities"
+    and "http://xml.org/sax/features/external-parameter-entities" to false.
+  mode: taint
+  pattern-sources:
+  - by-side-effect: true
+    patterns:
+    - pattern-either:
+      - pattern: "$FACTORY = SAXParserFactory.newInstance();\n"
+      - patterns:
+        - pattern: "$FACTORY"
+        - pattern-inside: |
+            class $C {
+              ...
+              $V $FACTORY = SAXParserFactory.newInstance();
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = SAXParserFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                ...
+              }
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = SAXParserFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                ...
+              }
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = SAXParserFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                ...
+              }
+              ...
+            }
+  pattern-sinks:
+  - patterns:
+    - pattern: "$FACTORY.newSAXParser();"
+  pattern-sanitizers:
+  - by-side-effect: true
+    pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: '$FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl",
+            true);
+
+            '
+        - pattern: |
+            $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            ...
+            $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        - pattern: |
+            $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            ...
+            $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      - focus-metavariable: "$FACTORY"
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl",
+                true);
+                ...
+              }
+              ...
+            }
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                ...
+              }
+              ...
+            }
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                ...
+                $FACTORY.setFeature("http://xml.org/sax/features/external-general-entities",false);
+                ...
+              }
+              ...
+            }
+      - pattern: "$M($X)"
+      - focus-metavariable: "$X"
+  fix: |
+    $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    $FACTORY.newSAXParser();
   languages:
   - java
 - id: java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal
@@ -11418,12 +11663,9 @@ rules:
 
           '
     - patterns:
-      - focus-metavariable: "$...X"
       - pattern-either:
-        - pattern: "<... $...X != $...Y ...>"
-        - pattern: "<... $...Y != $...X ...>"
-        - pattern: "<... $...X == $...Y ...>"
-        - pattern: "<... $...Y == $...X ...>"
+        - pattern: "$X != $Y"
+        - pattern: "$X == $Y"
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -11480,8 +11722,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqU8N2
-        version_id: PkTPoX
-        url: https://semgrep.dev/playground/r/PkTPoX/java.spring.security.audit.spring-sqli.spring-sqli
+        version_id: LjTger
+        url: https://semgrep.dev/playground/r/LjTger/java.spring.security.audit.spring-sqli.spring-sqli
         origin: community
 - id: java.spring.security.audit.spring-unvalidated-redirect.spring-unvalidated-redirect
   message: Application redirects a user to a destination URL specified by a user supplied
@@ -11649,15 +11891,14 @@ rules:
     likelihood: HIGH
     impact: MEDIUM
     confidence: MEDIUM
-    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/java.spring.security.injection.tainted-html-string.tainted-html-string
     shortlink: https://sg.run/ObdR
     semgrep.dev:
       rule:
         rule_id: YGUvkL
-        version_id: jQTWQ0
-        url: https://semgrep.dev/playground/r/jQTWQ0/java.spring.security.injection.tainted-html-string.tainted-html-string
+        version_id: 8KTrlz
+        url: https://semgrep.dev/playground/r/8KTrlz/java.spring.security.injection.tainted-html-string.tainted-html-string
         origin: community
   mode: taint
   pattern-sources:
@@ -11769,8 +12010,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UdRR
-        version_id: JdT9LB
-        url: https://semgrep.dev/playground/r/JdT9LB/java.spring.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: gET7XJ
+        url: https://semgrep.dev/playground/r/gET7XJ/java.spring.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sources:
@@ -11828,12 +12069,9 @@ rules:
         regex: "(?i)(select|delete|insert|create|update|alter|drop)\\b"
   pattern-sanitizers:
   - patterns:
-    - focus-metavariable: "$...X"
     - pattern-either:
-      - pattern: "<... $...X != $...Y ...>"
-      - pattern: "<... $...Y != $...X ...>"
-      - pattern: "<... $...X == $...Y ...>"
-      - pattern: "<... $...Y == $...X ...>"
+      - pattern: "$X != $Y"
+      - pattern: "$X == $Y"
 - id: java.spring.security.injection.tainted-system-command.tainted-system-command
   languages:
   - java
@@ -11868,7 +12106,7 @@ rules:
       - pattern: String.join("...", ..., $SOURCE, ...)
       - pattern: "(String $STR).concat($SOURCE)"
       - pattern: "$SOURCE.concat(...)"
-      - pattern: "$X += SOURCE"
+      - pattern: "$X += $SOURCE"
       - pattern: "$SOURCE += $X"
     label: CONCAT
     requires: INPUT
@@ -11931,15 +12169,14 @@ rules:
     - vuln
     likelihood: HIGH
     impact: HIGH
-    interfile: true
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     source: https://semgrep.dev/r/java.spring.security.injection.tainted-system-command.tainted-system-command
     shortlink: https://sg.run/epY0
     semgrep.dev:
       rule:
         rule_id: 6JUxGN
-        version_id: BjT635
-        url: https://semgrep.dev/playground/r/BjT635/java.spring.security.injection.tainted-system-command.tainted-system-command
+        version_id: QkTqNk
+        url: https://semgrep.dev/playground/r/QkTqNk/java.spring.security.injection.tainted-system-command.tainted-system-command
         origin: community
 - id: java.spring.security.injection.tainted-url-host.tainted-url-host
   languages:
@@ -15088,8 +15325,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUPA1
-        version_id: X0T6Xk
-        url: https://semgrep.dev/playground/r/X0T6Xk/javascript.express.security.audit.xss.direct-response-write.direct-response-write
+        version_id: d6TxQk
+        url: https://semgrep.dev/playground/r/d6TxQk/javascript.express.security.audit.xss.direct-response-write.direct-response-write
         origin: community
   languages:
   - javascript
@@ -15170,6 +15407,7 @@ rules:
       - pattern: body
   pattern-sinks:
   - patterns:
+    - pattern-inside: function ... (..., $RES,...) {...}
     - pattern-either:
       - pattern: "$RES.write($ARG)"
       - pattern: "$RES.send($ARG)"
@@ -16313,8 +16551,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUL0X
-        version_id: 0bTP23
-        url: https://semgrep.dev/playground/r/0bTP23/javascript.express.security.injection.raw-html-format.raw-html-format
+        version_id: qkTw3R
+        url: https://semgrep.dev/playground/r/qkTw3R/javascript.express.security.injection.raw-html-format.raw-html-format
         origin: community
   languages:
   - javascript
@@ -16322,7 +16560,8 @@ rules:
   severity: WARNING
   mode: taint
   pattern-sources:
-  - patterns:
+  - label: EXPRESS
+    patterns:
     - pattern-either:
       - pattern-inside: function ... ($REQ, $RES) {...}
       - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
@@ -16339,7 +16578,8 @@ rules:
       - pattern: "$REQ.params"
       - pattern: "$REQ.cookies"
       - pattern: "$REQ.headers"
-  - patterns:
+  - label: EXPRESSTS
+    patterns:
     - pattern-either:
       - pattern-inside: |
           ({ $REQ }: Request,$RES: Response, $NEXT: NextFunction) =>
@@ -16352,8 +16592,20 @@ rules:
       - pattern: cookies
       - pattern: headers
       - pattern: body
+  - label: CLEAN
+    by-side-effect: true
+    patterns:
+    - pattern-either:
+      - pattern: "$A($SOURCE)"
+      - pattern: "$SANITIZE. ... .$A($SOURCE)"
+      - pattern: "$A. ... .$SANITIZE($SOURCE)"
+    - focus-metavariable: "$SOURCE"
+    - metavariable-regex:
+        metavariable: "$A"
+        regex: "(?i)(.*valid|.*sanitiz)"
   pattern-sinks:
-  - patterns:
+  - requires: "(EXPRESS and not CLEAN) or (EXPRESSTS and not CLEAN)"
+    patterns:
     - pattern-either:
       - patterns:
         - pattern-either:
@@ -17035,8 +17287,11 @@ rules:
     - focus-metavariable: "$ARG"
 - id: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   message: RegExp() called with a `$ARG` function argument, this might allow an attacker
-    to cause a Denial of Service (DoS) within your application as RegExP which blocks
-    the main thread.
+    to cause a Regular Expression Denial-of-Service (ReDoS) within your application
+    as RegExP blocks the main thread. For this reason, it is recommended to use hardcoded
+    regexes instead. If your regex is run on user-controlled input, consider performing
+    input validation or use a regex checking/sanitization library such as https://www.npmjs.com/package/recheck
+    to verify that the regex does not appear vulnerable to ReDoS.
   metadata:
     owasp:
     - A05:2021 - Security Misconfiguration
@@ -17060,8 +17315,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU1gD
-        version_id: YDT9DJ
-        url: https://semgrep.dev/playground/r/YDT9DJ/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
+        version_id: K3TkwJ
+        url: https://semgrep.dev/playground/r/K3TkwJ/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
         origin: community
   languages:
   - javascript
@@ -23866,8 +24121,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUZgr
-        version_id: JdTZJ6
-        url: https://semgrep.dev/playground/r/JdTZJ6/python.django.security.injection.open-redirect.open-redirect
+        version_id: l4TDGZ
+        url: https://semgrep.dev/playground/r/l4TDGZ/python.django.security.injection.open-redirect.open-redirect
         origin: community
   languages:
   - python
@@ -23885,6 +24140,16 @@ rules:
       def $FUNC(...):
         ...
         if <... django.utils.http.is_safe_url(...) ...>:
+          ...
+  - pattern-not-inside: |
+      def $FUNC(...):
+        ...
+        django.utils.http.url_has_allowed_host_and_scheme(...)
+        ...
+  - pattern-not-inside: |
+      def $FUNC(...):
+        ...
+        if <... django.utils.http.url_has_allowed_host_and_scheme(...) ...>:
           ...
   - pattern-either:
     - pattern: django.shortcuts.redirect(..., request.$W.get(...), ...)
