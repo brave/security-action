@@ -160,7 +160,7 @@ runs:
       env:
         BUNDLE_GEMFILE: ${{ github.action_path }}/Gemfile
       with:
-        ruby-version: '2.7'
+        ruby-version: '3.2'
         bundler-cache: true
     - if: ${{ steps.reviewdog-enabled.outputs.value }}
       name: Install semgrep & pip-audit
