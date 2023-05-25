@@ -2320,6 +2320,7 @@ rules:
   - pattern-not-regex: 'sha(128|256|512).*
 
       '
+  - pattern-not-regex: "(?s)---BEGIN.*---\\Z"
   languages:
   - regex
   message: Artifactory token detected
@@ -2349,8 +2350,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUR5K
-        version_id: 2KTA83
-        url: https://semgrep.dev/playground/r/2KTA83/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
+        version_id: DkTbWZ
+        url: https://semgrep.dev/playground/r/DkTbWZ/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
         origin: community
 - id: generic.secrets.security.detected-artifactory-token.detected-artifactory-token
   patterns:
@@ -2358,6 +2359,7 @@ rules:
   - pattern-not-regex: 'sha(128|256|512).*
 
       '
+  - pattern-not-regex: "(?s)---BEGIN.*---\\Z"
   languages:
   - regex
   message: Artifactory token detected
@@ -2387,8 +2389,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUj3l
-        version_id: X0ToRz
-        url: https://semgrep.dev/playground/r/X0ToRz/generic.secrets.security.detected-artifactory-token.detected-artifactory-token
+        version_id: 3ZTwyk
+        url: https://semgrep.dev/playground/r/3ZTwyk/generic.secrets.security.detected-artifactory-token.detected-artifactory-token
         origin: community
 - id: generic.secrets.security.detected-aws-account-id.detected-aws-account-id
   patterns:
@@ -4339,8 +4341,9 @@ rules:
         '
     - pattern: jwt.UnsafeAllowNoneSignatureType
 - id: go.lang.security.audit.crypto.bad_imports.insecure-module-used
-  message: Detected use of an insecure cryptographic hashing method. This method is
-    known to be broken and easily compromised. Use SHA256 or SHA3 instead.
+  message: The package `net/http/cgi` is on the import blocklist.  The package is
+    vulnerable to httpoxy attacks (CVE-2015-5386). It is recommended to use `net/http`
+    or a web framework to build a web application instead.
   metadata:
     owasp:
     - A03:2017 - Sensitive Data Exposure
@@ -4364,41 +4367,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUnov
-        version_id: 7ZT5kk
-        url: https://semgrep.dev/playground/r/7ZT5kk/go.lang.security.audit.crypto.bad_imports.insecure-module-used
+        version_id: 0bTzED
+        url: https://semgrep.dev/playground/r/0bTzED/go.lang.security.audit.crypto.bad_imports.insecure-module-used
         origin: community
   languages:
   - go
   severity: WARNING
   pattern-either:
-  - patterns:
-    - pattern-inside: |
-        import "crypto/md5"
-        ...
-    - pattern: 'md5.$FUNC(...)
-
-        '
-  - patterns:
-    - pattern-inside: |
-        import "crypto/des"
-        ...
-    - pattern: 'des.$FUNC(...)
-
-        '
-  - patterns:
-    - pattern-inside: |
-        import "crypto/sha1"
-        ...
-    - pattern: 'sha1.$FUNC(...)
-
-        '
-  - patterns:
-    - pattern-inside: |
-        import "crypto/rc4"
-        ...
-    - pattern: 'rc4.$FUNC(...)
-
-        '
   - patterns:
     - pattern-inside: |
         import "net/http/cgi"
@@ -4441,47 +4416,6 @@ rules:
   - go
   severity: WARNING
   pattern: ssh.InsecureIgnoreHostKey()
-- id: go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
-  message: "`MinVersion` is missing from this TLS configuration. The default value
-    is TLS1.0 which is considered insecure. Explicitly set the `MinVersion` to a secure
-    version of TLS, such as `VersionTLS13`."
-  metadata:
-    cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    source-rule-url: https://github.com/securego/gosec/blob/master/rules/tls_config.go
-    references:
-    - https://golang.org/doc/go1.14#crypto/tls
-    - https://golang.org/pkg/crypto/tls/#:~:text=MinVersion
-    - https://www.us-cert.gov/ncas/alerts/TA14-290A
-    category: security
-    technology:
-    - go
-    confidence: HIGH
-    subcategory:
-    - audit
-    likelihood: MEDIUM
-    impact: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
-    shortlink: https://sg.run/oxEN
-    semgrep.dev:
-      rule:
-        rule_id: NbUk4X
-        version_id: jQTXwz
-        url: https://semgrep.dev/playground/r/jQTXwz/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
-        origin: community
-  languages:
-  - go
-  severity: WARNING
-  patterns:
-  - pattern: tls.Config{...}
-  - pattern-not-inside: 'tls.Config{..., MinVersion: ..., ...}'
-  fix-regex:
-    regex: Config\s*\{
-    replacement: 'Config{MinVersion: tls.VersionTLS13,'
 - id: go.lang.security.audit.crypto.use_of_weak_rsa_key.use-of-weak-rsa-key
   message: RSA keys should be at least 2048 bits
   languages:
@@ -4510,8 +4444,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UjY3
-        version_id: GxT4pw
-        url: https://semgrep.dev/playground/r/GxT4pw/go.lang.security.audit.crypto.use_of_weak_rsa_key.use-of-weak-rsa-key
+        version_id: zyT2y3
+        url: https://semgrep.dev/playground/r/zyT2y3/go.lang.security.audit.crypto.use_of_weak_rsa_key.use-of-weak-rsa-key
         origin: community
   patterns:
   - pattern-either:
@@ -4524,6 +4458,11 @@ rules:
   - metavariable-comparison:
       metavariable: "$BITS"
       comparison: "$BITS < 2048"
+  - focus-metavariable:
+    - "$BITS"
+  fix: '2048
+
+    '
 - id: go.lang.security.audit.dangerous-command-write.dangerous-command-write
   patterns:
   - pattern: "$CW.Write($BYTE)\n"
@@ -4905,10 +4844,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqU5bD
-        version_id: WrTk4l
-        url: https://semgrep.dev/playground/r/WrTk4l/go.lang.security.audit.database.string-formatted-query.string-formatted-query
+        version_id: zyT256
+        url: https://semgrep.dev/playground/r/zyT256/go.lang.security.audit.database.string-formatted-query.string-formatted-query
         origin: community
   patterns:
+  - metavariable-regex:
+      metavariable: "$OBJ"
+      regex: "(?i).*(db|database)"
   - pattern-not-inside: |
       $VAR = "..." + "..."
       ...
@@ -6850,24 +6792,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUQkX
-        version_id: 1QTWEk
-        url: https://semgrep.dev/playground/r/1QTWEk/java.lang.security.audit.cookie-missing-samesite.cookie-missing-samesite
+        version_id: A8Tlwe
+        url: https://semgrep.dev/playground/r/A8Tlwe/java.lang.security.audit.cookie-missing-samesite.cookie-missing-samesite
         origin: community
   message: Detected cookie without the SameSite attribute.
   severity: WARNING
   languages:
   - java
   patterns:
-  - pattern-not-inside: |
-      $RETURNTYPE $METHOD(..., HttpServletResponse $RESP, ...) {
-        ...
-        $RESP.setHeader("Set-Cookie", "=~/.*SameSite=.*/");
-        ...
-      }
-  - pattern-either:
-    - pattern: "$RESP.addCookie(...);"
-    - pattern: $RESP.setHeader("Set-Cookie", ...);
-  - pattern-not: $RESP.setHeader("Set-Cookie", null);
+  - pattern: a()
+  - pattern: b()
 - id: java.lang.security.audit.cookie-missing-secure-flag.cookie-missing-secure-flag
   metadata:
     cwe:
@@ -9543,6 +9477,83 @@ rules:
   - pattern-either:
     - pattern: AccessController.doPrivileged(...);
     - pattern: class $ACTION implements PrivilegedAction<Void> { ... }
+- id: java.lang.security.jackson-unsafe-deserialization.jackson-unsafe-deserialization
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          ObjectMapper $OM = new ObjectMapper(...);
+          ...
+      - pattern-inside: |
+          $OM.enableDefaultTyping();
+          ...
+      - pattern: "$OM.readValue($JSON, ...);"
+    - patterns:
+      - pattern-inside: |
+          class $CLASS {
+            ...
+            @JsonTypeInfo(use = Id.CLASS,...)
+            $TYPE $VAR;
+            ...
+          }
+      - metavariable-regex:
+          metavariable: "$TYPE"
+          regex: "(Object|Serializable|Comparable)"
+      - pattern: "$OM.readValue($JSON, $CLASS.class);"
+    - patterns:
+      - pattern-inside: |
+          class $CLASS {
+            ...
+            ObjectMapper $OM;
+            ...
+            $INITMETHODTYPE $INITMETHOD(...) {
+              ...
+              $OM = new ObjectMapper();
+              ...
+              $OM.enableDefaultTyping();
+              ...
+            }
+            ...
+          }
+      - pattern-inside: "$METHODTYPE $METHOD(...) {\n  ...  \n}\n"
+      - pattern: "$OM.readValue($JSON, ...);"
+  message: When using Jackson to marshall/unmarshall JSON to Java objects, enabling
+    default typing is dangerous and can lead to RCE. If an attacker can control `$JSON`
+    it might be possible to provide a malicious JSON which can be used to exploit
+    unsecure deserialization. In order to prevent this issue, avoid to enable default
+    typing (globally or by using "Per-class" annotations) and avoid using `Object`
+    and other dangerous types for member variable declaration which creating classes
+    for Jackson based deserialization.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe:
+    - 'CWE-502: Deserialization of Untrusted Data'
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: HIGH
+    owasp:
+    - A8:2017 Insecure Deserialization
+    - A8:2021 Software and Data Integrity Failures
+    references:
+    - https://swapneildash.medium.com/understanding-insecure-implementation-of-jackson-deserialization-7b3d409d2038
+    - https://cowtowncoder.medium.com/on-jackson-cves-dont-panic-here-is-what-you-need-to-know-54cd0d6e8062
+    - https://adamcaudill.com/2017/10/04/exploiting-jackson-rce-cve-2017-7525/
+    technology:
+    - jackson
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.lang.security.jackson-unsafe-deserialization.jackson-unsafe-deserialization
+    shortlink: https://sg.run/GDop
+    semgrep.dev:
+      rule:
+        rule_id: QrUD20
+        version_id: 2KT21B
+        url: https://semgrep.dev/playground/r/2KT21B/java.lang.security.jackson-unsafe-deserialization.jackson-unsafe-deserialization
+        origin: community
 - id: java.lang.security.use-snakeyaml-constructor.use-snakeyaml-constructor
   languages:
   - java
@@ -22704,7 +22715,7 @@ rules:
     input from an upstream component, but it does not neutralize or incorrectly neutralizes
     special elements that could modify the intended OS command when it is sent to
     a downstream component.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -22859,7 +22870,7 @@ rules:
     elevated group privileges if set(e)gid() is called after set(e)uid(). A similar
     case is when privileges are temporarily dropped with seteuid() and then setuid()
     or seteuid() are called from while under unprivileged user.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23020,7 +23031,7 @@ rules:
     remaining in the buffer. A more subtle mistake can be made. The size parameter
     needs to be the amount of space left in the buffer less one; otherwise, the NUL
     byte is written one byte past the end of the buffer.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23053,7 +23064,7 @@ rules:
     to a destination buffer, which may cause it to access memory that is outside of
     the bounds of the buffer. When the size of the destination is smaller than the
     size of the source, a buffer overflow could occur.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23128,7 +23139,7 @@ rules:
     pointer returned points to a valid and usable block of memory. The allocation
     made may exceed the bounds of the stack, or even go further into other objects
     in memory, and alloca() cannot determine such an error.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23252,7 +23263,7 @@ rules:
     copies the buffer without restricting how much is copied. Other variants exist,
     but the existence of a classic overflow strongly suggests that the programmer
     is not considering even the most basic of security protections.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23296,7 +23307,7 @@ rules:
     copies the buffer without restricting how much is copied. Other variants exist,
     but the existence of a classic overflow strongly suggests that the programmer
     is not considering even the most basic of security protections.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23330,7 +23341,7 @@ rules:
     copies the buffer without restricting how much is copied. Other variants exist,
     but the existence of a classic overflow strongly suggests that the programmer
     is not considering even the most basic of security protections.
-  severity: WARNING
+  severity: ERROR
   languages:
   - c
   - cpp
@@ -23531,7 +23542,7 @@ rules:
   message: The software generates an error message that includes sensitive information
     about its environment, users, or associated data. In particular, exposure of memory
     addresses might defeat ASLR.
-  severity: WARNING
+  severity: INFO
   languages:
   - c
   - cpp
@@ -23584,7 +23595,7 @@ rules:
     of the routines and the object being managed. Due to inherent limitations of Semgrep,
     this rule might generate many false positives and should therefore be customized
     for your codebase.
-  severity: WARNING
+  severity: INFO
   languages:
   - c
   - cpp
@@ -23636,7 +23647,7 @@ rules:
     of the routines and the object being managed. Due to inherent limitations of Semgrep,
     this rule might generate many false positives and should therefore be customized
     for your codebase.
-  severity: WARNING
+  severity: INFO
   languages:
   - cpp
   pattern-either:
@@ -23691,7 +23702,7 @@ rules:
     - https://cwe.mitre.org/data/definitions/787
     - https://g.co/kgs/PCHQjJ
     - https://github.com/struct/mms
-    confidence: MEDIUM
+    confidence: LOW
     license: MIT
     category: security
     subcategory:
@@ -23699,7 +23710,7 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/off-by-one.yaml
   message: The software calculates or uses an incorrect maximum or minimum value that
     is 1 more, or 1 less, than the correct value.
-  severity: WARNING
+  severity: INFO
   languages:
   - c
   - cpp
@@ -23787,7 +23798,7 @@ rules:
     - https://www.sei.cmu.edu/downloads/sei-cert-c-coding-standard-2016-v01.pdf
     - https://docs.microsoft.com/en-us/cpp/sanitizers/asan-error-examples
     - https://rules.sonarsource.com/c/type/Bug/RSPEC-946
-    confidence: MEDIUM
+    confidence: LOW
     license: MIT
     category: security
     subcategory:
@@ -24245,7 +24256,7 @@ rules:
     references:
     - https://cwe.mitre.org/data/definitions/121
     - https://github.com/googleprojectzero/weggli
-    confidence: LOW
+    confidence: MEDIUM
     license: MIT
     category: security
     subcategory:
@@ -24253,7 +24264,7 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/write-into-stack-buffer.yaml
   message: The software directly writes into a stack buffer. This might lead to a
     stack-based buffer overflow.
-  severity: INFO
+  severity: WARNING
   languages:
   - c
   - cpp
