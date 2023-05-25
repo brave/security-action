@@ -1,2 +1,2 @@
 source "https://rubygems.org"
-gem 'brakeman', '5.4.1'
+gem 'brakeman', '6.0.0'
