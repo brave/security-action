@@ -7,7 +7,7 @@ rules:
           ...
       }
     message: This allows $X to be `__proto__` or `toString`. To prevent prototype
-      access use $OBJ.hasOwnProperty($X) or Object.hasOwn($OBJ, $X) or use a Map.
+      access use Object.prototype.hasOwnProperty.call($OBJ, $X) or use a Map.
     languages:
       - js
       - ts
