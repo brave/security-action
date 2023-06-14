@@ -1,0 +1,16 @@
+rules:
+- id: chromium-bind-uaf
+  patterns:
+    - patterns:
+      - pattern-either:
+        - pattern: $BASE::BindOnce($...ARGS)
+        - pattern: BindOnce($...ARGS)
+        - pattern: $BASE::BindRepeating($...ARGS)
+        - pattern: BindRepeating($...ARGS)
+      - metavariable-comparison:
+          comparison: not re.match("base::Unretained\(this\)", str($...ARGS))
+  message: 
+    BindOnce/BindRepeating may allow JS to bind to objects which may already be freed in the C++ lifecycle. Verify the occurrences manually
+  languages: [cpp, c]
+  severity: WARNING
+
