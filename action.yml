@@ -242,6 +242,7 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - id: assignee-removed-label
+      if: ${{ steps.reviewdog-enabled.outputs.value }}
       uses: actions/github-script@v6
       env:
         ASSIGNEES: ${{ inputs.assignees }}
@@ -285,6 +286,7 @@ runs:
             return removedByAssigneeEvents > 0;
 
     - id: description-contains-hotwords
+      if: ${{ steps.reviewdog-enabled.outputs.value }}
       uses: actions/github-script@v6
       env:
         HOTWORDS: ${{ inputs.hotwords }}
