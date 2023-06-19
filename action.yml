@@ -19,6 +19,13 @@ inputs:
     default: |
       thypon
       bcaller
+  hotwords:
+    description: body hotwords which should trigger the action
+    default: |
+      password
+      crypto
+      login
+      policy
   debug:
     description: enables debug output for this action
     required: false
@@ -234,8 +241,40 @@ runs:
             ).length;
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
+    - id: description-contains-hotwords
+      uses: actions/github-script@v6
+      env:
+        HOTWORDS: ${{ inputs.hotwords }}
+      with:
+        script: |
+              const { HOTWORDS } = process.env;
+              const hotwords = HOTWORDS.split(/\s+/).filter((str) => str !== '');
+
+              console.log("hotwords: %s", hotwords);
+
+              var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+                repository(owner:$owner, name:$name) { 
+                  pullRequest(number:$prnumber) {
+                    title
+                    body
+                  }
+                }
+              }`;
+              const variables = {
+                owner: context.repo.owner,
+                name: context.repo.repo,
+                prnumber: context.issue.number
+              };
+              const result = await github.graphql(query, variables);
+              const body = result.repository.pullRequest.body;
+              console.log("Body: %s", body);
+
+              const ret = hotwords.some((word) => body.includes(word));
+              console.log("hotword hit: %s", ret);
+
+              return ret;
     - id: should-trigger 
-      if: ${{ steps.comments-before.outputs.result != steps.comments-after.outputs.result }}
+      if: ${{ (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result }}
       shell: bash
       run: |
         set -x
