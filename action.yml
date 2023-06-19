@@ -234,13 +234,19 @@ runs:
             ).length;
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
+    - id: should-trigger 
+      if: ${{ steps.comments-before.outputs.result != steps.comments-after.outputs.result }}
+      shell: bash
+      run: |
+        set -x
+        echo "value=true" >> $GITHUB_OUTPUT
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && steps.should-trigger.outputs.value }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && steps.should-trigger.outputs.value }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
@@ -264,7 +270,7 @@ runs:
         color: red
         verbose: true
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && inputs.slack_token && (steps.comments-before.outputs.result != steps.comments-after.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && inputs.slack_token && steps.should-trigger.outputs.value }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
