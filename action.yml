@@ -241,6 +241,49 @@ runs:
             ).length;
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
+    - id: assignee-removed-label
+      uses: actions/github-script@v6
+      env:
+        ASSIGNEES: ${{ inputs.assignees }}
+      with:
+        script: |
+            const { ASSIGNEES } = process.env;
+            const assignees = ASSIGNEES.split(/\s+/).filter((str) => str !== '');
+            var query = `query ($owner: String!, $name: String!, $prnumber: Int!) {
+              repository(owner: $owner, name: $name) {
+                pullRequest(number: $prnumber) {
+                  timelineItems(last: 100, itemTypes: UNLABELED_EVENT) {
+                    nodes {
+                      ... on UnlabeledEvent {
+                        label {
+                          name
+                        }
+                        actor {
+                          login
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            const timelineItems = result.repository.pullRequest.timelineItems;
+            console.log("timelineItems: %o", timelineItems);
+            var removedByAssigneeEvents = timelineItems.nodes.filter(
+              timelineItem => (
+                timelineItem.label.name === "needs-security-review" &&
+                assignees.some((a) => timelineItem.actor.login === a)
+              )
+            ).length;
+            console.log("RemovedByAssigneeEvents: %d", removedByAssigneeEvents);
+            return removedByAssigneeEvents > 0;
+
     - id: description-contains-hotwords
       uses: actions/github-script@v6
       env:
@@ -266,15 +309,15 @@ runs:
                 prnumber: context.issue.number
               };
               const result = await github.graphql(query, variables);
-              const body = result.repository.pullRequest.body;
-              console.log("Body: %s", body);
+              const content = result.repository.pullRequest.title + result.repository.pullRequest.body;
+              console.log("Body: %s", content);
 
-              const ret = hotwords.some((word) => body.includes(word));
+              const ret = hotwords.some((word) => content.includes(word));
               console.log("hotword hit: %s", ret);
 
               return ret;
     - id: should-trigger 
-      if: ${{ (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result }}
+      if: ${{ steps.reviewdog-enabled.outputs.value && !steps.assignee-removed-label.outputs.result && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result) }}
       shell: bash
       run: |
         set -x
