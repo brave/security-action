@@ -37,4 +37,9 @@ jobs:
             echo "Semgrep rule / version issue: $BADERRS"
             exit 123
           fi
+          RESULTCOUNT=$(echo "$JSON" | tr '\n' ' ' | tr '\t' ' ' | jq '.results | length')
+          if [[ "$RESULTCOUNT" -lt "3" ]]; then
+            echo "Found fewer than 3 semgrep results"
+            exit 122
+          fi
         shell: bash
