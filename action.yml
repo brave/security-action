@@ -28,6 +28,7 @@ inputs:
       policy
       safebrowsing
       safe browsing
+      csp
   debug:
     description: enables debug output for this action
     required: false
