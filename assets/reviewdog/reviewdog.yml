@@ -59,7 +59,7 @@ runner:
         | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
         | sed "s/>Source: null</>Source: Brave</g" \
         | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
-        | sed 's/\.extractedscript\.[htmls]*:/:/' && \
+        | sed 's/\.extractedscript\.[hjlmst]*:/:/' && \
       find . -type f -name '*.extractedscript.*' -delete || true
     errorformat:
       - "%t:%f:%l %m"
