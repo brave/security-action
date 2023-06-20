@@ -26,6 +26,7 @@ inputs:
       crypto
       login
       policy
+      safebrowsing
   debug:
     description: enables debug output for this action
     required: false
