@@ -1,0 +1,61 @@
+name: Check New Repos
+on:
+  schedule:
+    # nightly (0th hour 0th minute of every day)
+    - cron:  '0 0 * * *'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check New Repos
+      id: check-new-repos
+      uses: actions/github-script@v6
+      with:
+          script: |
+            var query = `query ($owner: String!) {
+              repositoryOwner(login: $owner) {
+                repositories(last: 100) {
+                  totalCount
+                  nodes {
+                    name
+                    createdAt
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner
+            }
+            const result = await github.graphql(query, variables);
+            const totalCount = result.repositoryOwner.repositories.totalCount;
+            const repositories = result.repositoryOwner.repositories;
+            const yesterday = ((d) => d.setDate(d.getDate() - 1))(new Date());
+            var newerThanADay = repositories.nodes.filter(
+              repo => new Date(repo.createdAt) > yesterday
+            );
+            console.log("NewerThanADay: %o", newerThanADay);
+            const ret = { notEmpty: newerThanADay.length > 0 };
+            if (ret.notEmpty) {
+              ret.message = `${newerThanADay.length} new repos in ${variables.owner}:\n\n`;
+              for (let i = 0; i < newerThanADay.length; i++) {
+                ret.message += `- ${newerThanADay[i].name}\n`;
+              }
+              ret.message += `\nTotal repositories in ${variables.owner}: ${totalCount}`;
+            }
+            return ret;
+
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions-ecosystem/action-slack-notifier@v1
+      if: ${{ steps.check-new-repos.outputs.result.notEmpty }}
+      with:
+        slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
+        message: |
+          [check-new-repos] ${{ steps.check-new-repos.outputs.result.message }}
+        channel: secops-hotspots
+        color: yellow
+        verbose: false
