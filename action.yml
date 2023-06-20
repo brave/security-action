@@ -27,6 +27,7 @@ inputs:
       login
       policy
       safebrowsing
+      safe browsing
   debug:
     description: enables debug output for this action
     required: false
@@ -294,7 +295,7 @@ runs:
       with:
         script: |
               const { HOTWORDS } = process.env;
-              const hotwords = HOTWORDS.split(/\s+/).filter((str) => str !== '');
+              const hotwords = HOTWORDS.split('\n').map(s => s.trim()).filter((s) => s !== '');
 
               console.log("hotwords: %s", hotwords);
 
