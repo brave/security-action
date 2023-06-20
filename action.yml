@@ -42,10 +42,10 @@ inputs:
   baseline_scan_only:
     description: compare changed files with the base ref, do not scan the entire repo with reviewdog
     default: true
-# outputs:
-#   out-name:
-#     description: yadda yadda
-#     value: ${{ steps.output-step-id.outputs.output-name }}
+outputs:
+  reviewdog-findings:
+    description: number of reviewdog findings
+    value: ${{ steps.run-reviewdog-pr.outputs.findings }}${{ steps.run-reviewdog-full.outputs.findings }}
 runs:
   using: 'composite'
   steps:
@@ -212,16 +212,19 @@ runs:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
+
 # REVIEWDOG Run
     - if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       name: Run reviewdog
+      id: run-reviewdog-pr
       shell: bash
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
     - if: ${{ steps.reviewdog-enabled-full.outputs.value }}
-      name: Run reviewdog
+      name: Run reviewdog full
+      id: run-reviewdog-full
       shell: bash
       run: unset GITHUB_BASE_REF && ${{ github.action_path }}/assets/reviewdog.sh
 

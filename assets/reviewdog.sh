@@ -34,7 +34,10 @@ fi
 
 FAIL=$(cat reviewdog.log | grep 'failed with zero findings: The command itself failed' || true)
 if [[ -n "$FAIL" ]]; then
+    cat reviewdog.log | grep 'failed with zero findings: The command itself failed'
     exit 101
 fi
+
+echo "findings=$(cat reviewdog.log | grep '^[A-Z]:[^:]*:' | wc -l)" >> $GITHUB_OUTPUT
 
 find reviewdog.log -type f -empty -delete

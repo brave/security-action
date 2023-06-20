@@ -16,7 +16,17 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./
+        name: Run action on full security-action repo
+        id: action
         with:
           debug: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           baseline_scan_only: false
+      - run: |
+          echo ${{ steps.action.outputs.reviewdog-findings }}
+          if [[ "${{ steps.action.outputs.reviewdog-findings }}" -lt "70" ]]; then
+            echo "Too few reviewdog findings"
+            exit 123
+          fi
+        shell: bash
+        name: Check number of findings
