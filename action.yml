@@ -39,6 +39,9 @@ inputs:
     type: boolean
     description: may disable the whole action, big red button for emergency cases
     default: true
+  baseline_scan_only:
+    description: compare changed files with the base ref, do not scan the entire repo with reviewdog
+    default: true
 # outputs:
 #   out-name:
 #     description: yadda yadda
@@ -52,8 +55,22 @@ runs:
       uses: tj-actions/changed-files@v36
       with:
         separator: '\\0'
+    - name: Store reviewdog enabled for PR
+      if: ${{ inputs.enabled && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      id: reviewdog-enabled-pr
+      shell: bash
+      run: |
+        set -x
+        echo "value=true" >> $GITHUB_OUTPUT
+    - name: Store reviewdog enabled for full repo manual run
+      if: ${{ inputs.enabled && !steps.reviewdog-enabled-pr.outputs.value && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') && (!matrix.language || matrix.language == 'generic') }}
+      id: reviewdog-enabled-full
+      shell: bash
+      run: |
+        set -x
+        echo "value=true" >> $GITHUB_OUTPUT
     - name: Store reviewdog enabled
-      if: ${{ inputs.enabled && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value || steps.reviewdog-enabled-full.outputs.value }}
       id: reviewdog-enabled
       shell: bash
       run: |
@@ -72,7 +89,7 @@ runs:
 # REVIEWDOG Steps
 # REVIEWDOG Setup
     - name: Write changed files to file
-      if: ${{ steps.reviewdog-enabled.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       id: write-changed-files
       shell: bash
       run: |
@@ -80,7 +97,7 @@ runs:
         printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
         printf '${{ steps.changed-files.outputs.any_changed }}'
     - id: comments-before
-      if: ${{ steps.reviewdog-enabled.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       uses: actions/github-script@v6
       with:
           script: |
@@ -153,7 +170,7 @@ runs:
       with:
         path: ~/.cache/pip/
         key: ${{ runner.os }}-pip
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       id: assignees
       env:
         ASSIGNEES: ${{inputs.assignees}}
@@ -196,15 +213,20 @@ runs:
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
 # REVIEWDOG Run
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       name: Run reviewdog
       shell: bash
       env:
         ASSIGNEES: ${{steps.assignees.outputs.value}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
+    - if: ${{ steps.reviewdog-enabled-full.outputs.value }}
+      name: Run reviewdog
+      shell: bash
+      run: unset GITHUB_BASE_REF && ${{ github.action_path }}/assets/reviewdog.sh
+
     - id: comments-after
-      if: ${{ steps.reviewdog-enabled.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       uses: actions/github-script@v6
       with:
           script: |
@@ -245,7 +267,7 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - id: assignee-removed-label
-      if: ${{ steps.reviewdog-enabled.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       uses: actions/github-script@v6
       env:
         ASSIGNEES: ${{ inputs.assignees }}
@@ -289,7 +311,7 @@ runs:
             return removedByAssigneeEvents > 0;
 
     - id: description-contains-hotwords
-      if: ${{ steps.reviewdog-enabled.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
       uses: actions/github-script@v6
       env:
         HOTWORDS: ${{ inputs.hotwords }}
@@ -322,22 +344,22 @@ runs:
 
               return ret;
     - id: should-trigger 
-      if: ${{ steps.reviewdog-enabled.outputs.value && !steps.assignee-removed-label.outputs.result && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value && !steps.assignee-removed-label.outputs.result && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result) }}
       shell: bash
       run: |
         set -x
         echo "value=true" >> $GITHUB_OUTPUT
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && steps.should-trigger.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value && steps.should-trigger.outputs.value }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && steps.should-trigger.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value && steps.should-trigger.outputs.value }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
-    - if: ${{ steps.reviewdog-enabled.outputs.value && hashFiles('reviewdog.fail.log') }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.value && hashFiles('reviewdog.fail.log') }}
       shell: bash
       run: |
         set +x
@@ -348,7 +370,7 @@ runs:
       shell: bash
       run: exit 1
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
@@ -357,7 +379,7 @@ runs:
         color: red
         verbose: true
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ steps.reviewdog-enabled.outputs.value && inputs.slack_token && steps.should-trigger.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.value && inputs.slack_token && steps.should-trigger.outputs.value }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |

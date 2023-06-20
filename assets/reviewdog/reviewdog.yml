@@ -3,19 +3,30 @@ runner:
     name: semgrep
     cmd: |
       set -xe
-      semgrep \
-        -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
-        $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
-        --metrics=off \
-        --baseline-commit origin/${GITHUB_BASE_REF:-main} \
-        --json \
-        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
-        | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
-        | sed "s/>Source: null</>Source: Brave</g" \
-        | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
+      (if [[ -n "${GITHUB_BASE_REF+set}" ]]; then
+        semgrep \
+          -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
+          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
+          -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
+          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
+          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+          --metrics=off \
+          --baseline-commit origin/${GITHUB_BASE_REF:-main} \
+          --json
+      else
+        semgrep \
+          -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
+          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
+          -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
+          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
+          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+          --metrics=off \
+          --json
+      fi) \
+      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
+      | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
+      | sed "s/>Source: null</>Source: Brave</g" \
+      | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"
   sveltegrep:
