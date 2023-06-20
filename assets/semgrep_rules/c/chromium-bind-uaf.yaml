@@ -10,7 +10,7 @@ rules:
       - metavariable-comparison:
           comparison: not re.match("base::Unretained\(this\)", str($...ARGS))
   message: 
-    BindOnce/BindRepeating may allow JS to bind to objects which may already be freed in the C++ lifecycle. Verify the occurrences manually
+    BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle. Verify the occurrences manually
   languages: [cpp, c]
   severity: WARNING
 
