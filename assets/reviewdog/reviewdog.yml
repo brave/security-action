@@ -3,26 +3,15 @@ runner:
     name: semgrep
     cmd: |
       set -xe
-      (if [[ -n "${GITHUB_BASE_REF+set}" ]]; then
-        semgrep \
+      semgrep \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
           $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
           --metrics=off \
-          --baseline-commit origin/${GITHUB_BASE_REF:-main} \
+          $([[ -n "${GITHUB_BASE_REF+set}" ]] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
           --json
-      else
-        semgrep \
-          -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
-          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
-          -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
-          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
-          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
-          --metrics=off \
-          --json
-      fi) \
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
       | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
       | sed "s/>Source: null</>Source: Brave</g" \
@@ -60,7 +49,7 @@ runner:
         | sed "s/>Source: null</>Source: Brave</g" \
         | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
         | sed 's/\.extractedscript\.[hjlmst]*:/:/' && \
-      find . -type f -name '*.extractedscript.*' -delete || true
+      find . -type f -name '*.extractedscript.*' -delete
     errorformat:
       - "%t:%f:%l %m"
   safesvg:
@@ -89,8 +78,7 @@ runner:
       xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$' &&\
       bundle exec brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
       | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
-      | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g" \
-      || true
+      | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
     errorformat:
       - "%t:%f:%l %m"
   npm-audit:
