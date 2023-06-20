@@ -76,10 +76,11 @@ runner:
     name: brakeman
     cmd: |
       set -xe
-      xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$' &&\
-      bundle exec brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
-      | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
-      | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
+      if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$'; then
+        bundle exec brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
+        | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
+        | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
+      fi
     errorformat:
       - "%t:%f:%l %m"
   npm-audit:
