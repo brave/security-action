@@ -10,7 +10,7 @@ RUNNERS="safesvg tfsec semgrep sveltegrep brakeman npm-audit pip-audit"
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
-        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log &>> reviewdog.fail.log || true
+        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.fail.log || true
     done
 
     for runner in $RUNNERS; do
@@ -32,11 +32,7 @@ else
       | tee reviewdog.log
 fi
 
-FAIL=$(cat reviewdog.log | grep 'failed with zero findings: The command itself failed' || true)
-if [[ -n "$FAIL" ]]; then
-    cat reviewdog.log | grep 'failed with zero findings: The command itself failed'
-    exit 101
-fi
+cat reviewdog.log | grep 'failed with zero findings: The command itself failed' >> reviewdog.fail.log
 
 echo "findings=$(cat reviewdog.log | grep '^[A-Z]:[^:]*:' | wc -l)" >> $GITHUB_OUTPUT
 
