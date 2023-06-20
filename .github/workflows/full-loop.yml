@@ -1,0 +1,22 @@
+name: full-loop
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main]
+
+jobs:
+  full-loop:
+    name: full-loop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: ./
+        with:
+          debug: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          baseline_scan_only: false
