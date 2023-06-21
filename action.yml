@@ -50,46 +50,46 @@ runs:
   using: 'composite'
   steps:
     - name: Get changed files
-      if: ${{ inputs.enabled && github.event_name == 'pull_request' }}
+      if: ${{ inputs.enabled == 'true' && github.event_name == 'pull_request' }}
       id: changed-files
       uses: tj-actions/changed-files@v36
       with:
         separator: '\0'
     - name: Store reviewdog enabled for PR
-      if: ${{ inputs.enabled && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       id: reviewdog-enabled-pr
       shell: bash
       run: |
         set -x
-        echo "value=true" >> $GITHUB_OUTPUT
+        echo "result=true" >> $GITHUB_OUTPUT
     - name: Store reviewdog enabled for full repo manual run
-      if: ${{ inputs.enabled && !steps.reviewdog-enabled-pr.outputs.value && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') && (!matrix.language || matrix.language == 'generic') }}
       id: reviewdog-enabled-full
       shell: bash
       run: |
         set -x
-        echo "value=true" >> $GITHUB_OUTPUT
+        echo "result=true" >> $GITHUB_OUTPUT
     - name: Store reviewdog enabled
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value || steps.reviewdog-enabled-full.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' || steps.reviewdog-enabled-full.outputs.result == 'true' }}
       id: reviewdog-enabled
       shell: bash
       run: |
         set -x
-        echo "value=true" >> $GITHUB_OUTPUT
+        echo "result=true" >> $GITHUB_OUTPUT
     - name: Store codeql enabled
-      if: ${{ inputs.enabled && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && matrix.language && matrix.language != 'generic' }}
+      if: ${{ inputs.enabled == 'true' && github.event.pull_request.draft == 'false' && github.actor != 'dependabot[bot]' && matrix.language && matrix.language != 'generic' }}
       id: codeql-enabled
       shell: bash
       run: |
         set -x
         # enable codeql only if it's a public repo
         if curl --retry 5 -s -I ${{github.event.repository.url}} | head -n1 | grep 200 >/dev/null  ; then
-          echo "value=true" >> $GITHUB_OUTPUT
+          echo "result=true" >> $GITHUB_OUTPUT
         fi
 # REVIEWDOG Steps
 # REVIEWDOG Setup
     - name: Write changed files to file
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       id: write-changed-files
       shell: bash
       run: |
@@ -97,7 +97,7 @@ runs:
         printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
         printf '${{ steps.changed-files.outputs.any_changed }}'
     - id: comments-before
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       with:
           script: |
@@ -163,24 +163,24 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
 
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Cache pip cache
       id: cache-pip
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip/
         key: ${{ runner.os }}-pip
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       id: assignees
       env:
         ASSIGNEES: ${{inputs.assignees}}
-      run: echo "value=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
+      run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
       shell: bash
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: reviewdog/action-setup@v1
       with:
         reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Setup Ruby
       id: ruby
       uses: ruby/setup-ruby@250fcd6a742febb1123a77a841497ccaa8b9e939
@@ -189,48 +189,48 @@ runs:
       with:
         ruby-version: '3.2'
         bundler-cache: true
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install semgrep & pip-audit
       shell: bash
       run: |
         python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/requirements.txt
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install xmllint for safesvg
       uses: awalsh128/cache-apt-pkgs-action@1850ee53f6e706525805321a3f2f863dcf73c962
       with:
           packages: libxml2-utils
           version: 1.0
-    - if: ${{ steps.reviewdog-enabled.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install tfsec
       uses: jaxxstorm/action-install-gh-release@v1.10.0
       with: # Grab a specific tag with caching
         repo: aquasecurity/tfsec
         tag: v1.28.1
         cache: enable
-    - if: ${{ steps.reviewdog-enabled.outputs.value && inputs.debug}}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && inputs.debug == 'true'}}
       env:
-        ASSIGNEES: ${{steps.assignees.outputs.value}}
+        ASSIGNEES: ${{steps.assignees.outputs.result}}
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
 
 # REVIEWDOG Run
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       name: Run reviewdog
       id: run-reviewdog-pr
       shell: bash
       env:
-        ASSIGNEES: ${{steps.assignees.outputs.value}}
+        ASSIGNEES: ${{steps.assignees.outputs.result}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
         DEBUG: ${{ inputs.debug }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
-    - if: ${{ steps.reviewdog-enabled-full.outputs.value }}
+    - if: ${{ steps.reviewdog-enabled-full.outputs.result == 'true' }}
       name: Run reviewdog full
       id: run-reviewdog-full
       shell: bash
       run: unset GITHUB_BASE_REF && ${{ github.action_path }}/assets/reviewdog.sh
 
     - id: comments-after
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       with:
           script: |
@@ -271,7 +271,7 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - id: assignee-removed-label
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       env:
         ASSIGNEES: ${{ inputs.assignees }}
@@ -315,7 +315,7 @@ runs:
             return removedByAssigneeEvents > 0;
 
     - id: description-contains-hotwords
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       env:
         HOTWORDS: ${{ inputs.hotwords }}
@@ -348,65 +348,65 @@ runs:
 
               return ret;
     - id: should-trigger 
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value && !steps.assignee-removed-label.outputs.result && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result) }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && !(steps.assignee-removed-label.outputs.result  == 'true') && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result == 'true') }}
       shell: bash
       run: |
         set -x
-        echo "value=true" >> $GITHUB_OUTPUT
+        echo "result=true" >> $GITHUB_OUTPUT
     - uses: actions-ecosystem/action-add-labels@v1
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value && steps.should-trigger.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
     - uses: actions-ecosystem/action-add-assignees@v1
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value && steps.should-trigger.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
       with:
         github_token: ${{ inputs.github_token }}
         assignees: ${{ inputs.assignees }}
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.value && hashFiles('reviewdog.fail.log') }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && hashFiles('reviewdog.fail.log') }}
       shell: bash
       run: |
         set +x
         echo -e '\033[0;31mThis action encountered an error while reporting the following findings via the Github API:'
         cat reviewdog.fail.log | sed 's/^/\x1B[0;34m/'
         echo -e '\033[0;31mThe failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action \033[0m'
-    - if: ${{ steps.reviewdog-enabled.outputs.value && !inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && !inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       shell: bash
       run: exit 1
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees.outputs.value}}
+          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees.outputs.result}}
         channel: secops-hotspots
         color: red
         verbose: true
     - uses: actions-ecosystem/action-slack-notifier@v1
-      if: ${{ steps.reviewdog-enabled-pr.outputs.value && inputs.slack_token && steps.should-trigger.outputs.value }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && steps.should-trigger.outputs.result == 'true' }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees.outputs.value}}
+          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees.outputs.result}}
         channel: secops-hotspots
         color: green
         verbose: true
 # CodeQL Steps
-    - if: ${{ steps.codeql-enabled.outputs.value && hashFiles(inputs.codeql_config) }}
+    - if: ${{ steps.codeql-enabled.outputs.result == 'true' && hashFiles(inputs.codeql_config) }}
       name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
         config-file: ${{ inputs.codeql_config }}
-    - if: ${{ steps.codeql-enabled.outputs.value && !hashFiles(inputs.codeql_config)}}
+    - if: ${{ steps.codeql-enabled.outputs.result == 'true' && !hashFiles(inputs.codeql_config)}}
       name: Initialize CodeQL (without config)
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-    - if: ${{ steps.codeql-enabled.outputs.value }}
+    - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
       name: Autobuild
       uses: github/codeql-action/autobuild@v2
-    - if: ${{ steps.codeql-enabled.outputs.value }}
+    - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
       name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
 #    - run: echo ${{ inputs.in-name }}
