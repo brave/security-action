@@ -44,5 +44,6 @@ cat reviewdog.log | grep 'failed with zero findings: The command itself failed' 
 
 echo "findings=$(cat reviewdog.log | grep '^[A-Z]:[^:]*:' | wc -l)" >> $GITHUB_OUTPUT
 
+sed -i '/^$/d' reviewdog.log reviewdog.fail.log
 find reviewdog.log -type f -empty -delete
 find reviewdog.fail.log -type f -empty -delete
