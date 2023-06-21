@@ -3,7 +3,7 @@ runner:
     name: semgrep
     cmd: |
       set -xe
-      semgrep \
+      (semgrep \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
@@ -15,14 +15,14 @@ runner:
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
       | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
       | sed "s/>Source: null</>Source: Brave</g" \
-      | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
+      | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.semgrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   sveltegrep:
     name: sveltegrep
     cmd: |
       set -xe
-      python3 $SCRIPTPATH/scripttagextractor.py \
+      (python3 $SCRIPTPATH/scripttagextractor.py \
         --suffix .extractedscript.js \
         --ignore-no-files \
         --all-changed-files-suffix .html && \
@@ -49,53 +49,53 @@ runner:
         | sed "s/>Source: null</>Source: Brave</g" \
         | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
         | sed 's/\.extractedscript\.[hjlmst]*:/:/' && \
-      find . -type f -name '*.extractedscript.*' -delete
+      find . -type f -name '*.extractedscript.*' -delete) 2> /tmp/reviewdog.sveltegrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   safesvg:
     name: safesvg
     cmd: |
       set -xe
-      xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
+      (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
       | egrep -f $SCRIPTPATH/dtd/blocklist.txt -v \
       | sort -u \
-      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
+      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.safesvg.stderr.log
     errorformat:
       - "%f:%l: %m"
   tfsec:
     name: tfsec
     cmd: |
       set -e
-      xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
+      (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message)<br><br>source: \(.code.url)<br><br>"' \
-      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
+      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.tfsec.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   brakeman:
     name: brakeman
     cmd: |
       set -xe
-      if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$'; then
+      (if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$'; then
         bundle exec brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
         | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
         | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
-      fi
+      fi) 2> /tmp/reviewdog.brakeman.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
   npm-audit:
     name: npm-audit
     cmd: |
       set -e
-      python3 $SCRIPTPATH/npm-audit.py \
-      | sort -u | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
+      (python3 $SCRIPTPATH/npm-audit.py \
+      | sort -u | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.npm-audit.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   pip-audit:
     name: pip-audit
     cmd: |
       set -e
-      python3 $SCRIPTPATH/pip-audit.py \
-      | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g"
+      (python3 $SCRIPTPATH/pip-audit.py \
+      | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.pip-audit.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
