@@ -14,7 +14,7 @@ def main():
     for lock_path in changed_lock_files:
         with open(lock_path) as lock_file:
             lock_file_lines = lock_file.readlines()
-        cwd = path.split(lock_path)[0]
+        cwd = path.split(lock_path)[0] or '.'
         stdout = subprocess.run(
             ["npm", "audit", "--package-lock-only", "--json"],
             cwd=cwd,
