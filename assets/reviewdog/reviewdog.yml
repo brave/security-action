@@ -2,7 +2,7 @@ runner:
   semgrep:
     name: semgrep
     cmd: |
-      set -xe
+      set -e
       (semgrep \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
@@ -21,7 +21,7 @@ runner:
   sveltegrep:
     name: sveltegrep
     cmd: |
-      set -xe
+      set -e
       (python3 $SCRIPTPATH/scripttagextractor.py \
         --suffix .extractedscript.js \
         --ignore-no-files \
@@ -55,7 +55,7 @@ runner:
   safesvg:
     name: safesvg
     cmd: |
-      set -xe
+      set -e
       (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
       | egrep -f $SCRIPTPATH/dtd/blocklist.txt -v \
       | sort -u \
@@ -75,7 +75,7 @@ runner:
   brakeman:
     name: brakeman
     cmd: |
-      set -xe
+      set -e
       (if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$'; then
         bundle exec brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
         | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
