@@ -12,15 +12,16 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
         reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.log || true
         cat /tmp/reviewdog.$runner.stderr.log >> reviewdog.fail.log
+        [[ ${DEBUG:-false} == 'true' ]] && cat /tmp/reviewdog.$runner.stderr.log
     done
-
-    cat reviewdog.log # print progress
 
     for runner in $RUNNERS; do
         cat $runner.log | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
           || cat $runner.log >> reviewdog.fail.log
         cat $runner.log >> reviewdog.log
+        echo -n "$runner: "
         wc -l $runner.log
+        [[ ${DEBUG:-false} == 'true' ]] && cat $runner.log
     done
 
 else
@@ -33,6 +34,8 @@ else
       -tee \
       | sed 's/<br><br>Cc @brave\/sec-team[ ]*//' \
       | tee reviewdog.log
+    # TODO: in the future send reviewdog.log to a database and just print out errors with
+    # [[ ${DEBUG:-false} == 'true' ]] && somethingsomething
     cat /tmp/reviewdog.*.stderr.log >> reviewdog.fail.log
 fi
 
