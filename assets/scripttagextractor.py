@@ -3,6 +3,7 @@ from glob import glob
 from html.parser import HTMLParser
 from os import environ, path
 from shutil import copyfile
+from sys import stderr
 from typing import List
 
 
@@ -51,17 +52,15 @@ def main(source_file, suffix, add_suffix_to_original, dry_run=False):
             current_line_number += add_lines + s.new_lines()
 
         output_file = f"{source_file}{suffix}"
-        if dry_run:
-            print("Writing", source_file, "to", output_file, f"<<<{script_data}>>>")
-        else:
+        print("Extracting", source_file, "to", output_file, file=stderr)
+        if not dry_run:
             with open(output_file, "w") as f:
                 f.write(script_data)
 
     if add_suffix_to_original:
         destination = f"{source_file}{add_suffix_to_original}"
-        if dry_run:
-            print("copying", source_file, destination)
-        else:
+        print("Copying", source_file, destination, file=stderr)
+        if not dry_run:
             copyfile(source_file, destination)
 
 
@@ -101,6 +100,7 @@ if __name__ == "__main__":
         and not (args.add_suffix_to_original and f.endswith(args.add_suffix_to_original))
     ]
 
+    print("Files to process:", files, file=stderr)
     if not files and not args.ignore_no_files:
         print("No files to process")
         parser.print_help()
