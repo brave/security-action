@@ -1,17 +1,12 @@
 rules:
 - id: chromium-unretained-uaf
-  pattern: base::Unretained(...)
+  patterns:
+    - pattern: base::Unretained(...)
+    - pattern-not: base::Unretained(browser)
   message: |
     base::Unretained is most of the time unrequired and a weak reference is better suited for secure coding.
-    Consider swapping Unretained for a weak reference.
-
-    base::Unretained usage may be fine when a callback owner is guaranteed
-    to be destroyed with the object base::Unretained is pointing to, for example:
-
-    - PrefChangeRegistrar
-    - base::*Timer
-    - mojo::Receiver
-    - any other class member destroyed when the class is deallocated
+    Consider swapping Unretained for a weak reference.<br/>base::Unretained usage may be fine when a callback owner is guaranteed
+    to be destroyed with the object base::Unretained is pointing to, for example:<br/><br/>- PrefChangeRegistrar<br/>- base::*Timer<br/>- mojo::Receiver<br/>- any other class member destroyed when the class is deallocated
   languages: [cpp, c]
   severity: WARNING
 - id: chromium-bind-uaf
@@ -22,8 +17,7 @@ rules:
         - pattern: base::BindRepeating($FIRST_ARG, $...REST_ARGS)
       - metavariable-comparison:
           comparison: not re.match("::", str($FIRST_ARG)) and re.match("this", str($...REST_ARGS))
-  message: 
-    BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle.
-    Verify the occurrences manually.
+  message: |
+    BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle.<br/>Verify the occurrences manually.
   languages: [cpp, c]
   severity: WARNING
