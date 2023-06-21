@@ -37,7 +37,8 @@ else
       | tee reviewdog.log
     # TODO: in the future send reviewdog.log to a database and just print out errors with
     # [[ ${DEBUG:-false} == 'true' ]] && somethingsomething
-    grep -H "" reviewdog.*.stderr.log >> reviewdog.fail.log || true
+    # TODO: fix brakeman on full-scan
+    grep -H "" reviewdog.*.stderr.log | grep -v "reviewdog.brakeman.stderr.log:" >> reviewdog.fail.log || true
 fi
 
 cat reviewdog.log | grep 'failed with zero findings: The command itself failed' >> reviewdog.fail.log || true

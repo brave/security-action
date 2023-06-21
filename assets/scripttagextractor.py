@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
     print("Files to process:", files, file=out)
     if not files and not args.ignore_no_files:
-        print("No files to process")
+        print("No files to process", file=stderr)
         parser.print_help()
         parser.exit(1)
 
