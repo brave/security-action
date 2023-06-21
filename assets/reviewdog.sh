@@ -12,17 +12,17 @@ RUNNERS="safesvg tfsec semgrep sveltegrep brakeman npm-audit pip-audit"
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
         reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.log || true
-        cat /tmp/reviewdog.$runner.stderr.log >> reviewdog.fail.log
-        [[ ${DEBUG:-false} == 'true' ]] && cat /tmp/reviewdog.$runner.stderr.log
+        grep -H "" /tmp/reviewdog.$runner.stderr.log >> reviewdog.fail.log || true
+        [[ ${DEBUG:-false} == 'true' ]] && grep -H "" /tmp/reviewdog.$runner.stderr.log || true
     done
 
     for runner in $RUNNERS; do
         cat $runner.log | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
           || cat $runner.log >> reviewdog.fail.log
-        cat $runner.log >> reviewdog.log
+        grep -H "" $runner.log >> reviewdog.log || true
         echo -n "$runner: "
         wc -l $runner.log
-        [[ ${DEBUG:-false} == 'true' ]] && cat $runner.log
+        [[ ${DEBUG:-false} == 'true' ]] && grep -H "" $runner.log || true
     done
 
 else
@@ -37,13 +37,10 @@ else
       | tee reviewdog.log
     # TODO: in the future send reviewdog.log to a database and just print out errors with
     # [[ ${DEBUG:-false} == 'true' ]] && somethingsomething
-    cat /tmp/reviewdog.*.stderr.log >> reviewdog.fail.log
+    grep -H "" /tmp/reviewdog.*.stderr.log >> reviewdog.fail.log || true
 fi
 
-FAIL=$(cat reviewdog.log | grep 'failed with zero findings: The command itself failed' || true)
-if [[ -n "$FAIL" ]]; then
-    cat reviewdog.log | grep 'failed with zero findings: The command itself failed' >> reviewdog.fail.log
-fi
+cat reviewdog.log | grep 'failed with zero findings: The command itself failed' >> reviewdog.fail.log || true
 
 echo "findings=$(cat reviewdog.log | grep '^[A-Z]:[^:]*:' | wc -l)" >> $GITHUB_OUTPUT
 
