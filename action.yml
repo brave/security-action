@@ -54,7 +54,7 @@ runs:
       id: changed-files
       uses: tj-actions/changed-files@v36
       with:
-        separator: '\\0'
+        separator: '\0'
     - name: Store reviewdog enabled for PR
       if: ${{ inputs.enabled && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
       id: reviewdog-enabled-pr
