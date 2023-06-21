@@ -16,7 +16,7 @@ runner:
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message)<br><br>Source: \(.extra.metadata.source)<br><br>"' \
       | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
       | sed "s/>Source: null</>Source: Brave</g" \
-      | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.semgrep.stderr.log
+      | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.semgrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   sveltegrep:
@@ -51,7 +51,7 @@ runner:
         | sed "s/>Source: null</>Source: Brave</g" \
         | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
         | sed 's/\.extractedscript\.[hjlmst]*:/:/' && \
-      find . -type f -name '*.extractedscript.*' -delete) 2> /tmp/reviewdog.sveltegrep.stderr.log
+      find . -type f -name '*.extractedscript.*' -delete) 2> reviewdog.sveltegrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   safesvg:
@@ -61,7 +61,7 @@ runner:
       (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
       | egrep -f $SCRIPTPATH/dtd/blocklist.txt -v \
       | sort -u \
-      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.safesvg.stderr.log
+      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.safesvg.stderr.log
     errorformat:
       - "%f:%l: %m"
   tfsec:
@@ -71,7 +71,7 @@ runner:
       (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message)<br><br>source: \(.code.url)<br><br>"' \
-      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.tfsec.stderr.log
+      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.tfsec.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   brakeman:
@@ -82,7 +82,7 @@ runner:
         bundle exec brakeman --quiet --no-exit-on-warn --no-exit-on-error --force --format json \
         | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message)<br><br>Source: \(.link)"' \
         | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
-      fi) 2> /tmp/reviewdog.brakeman.stderr.log 
+      fi) 2> reviewdog.brakeman.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
   npm-audit:
@@ -90,7 +90,7 @@ runner:
     cmd: |
       set -e
       (python3 $SCRIPTPATH/npm-audit.py \
-      | sort -u | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.npm-audit.stderr.log
+      | sort -u | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.npm-audit.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   pip-audit:
@@ -98,6 +98,6 @@ runner:
     cmd: |
       set -e
       (python3 $SCRIPTPATH/pip-audit.py \
-      | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> /tmp/reviewdog.pip-audit.stderr.log 
+      | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.pip-audit.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
