@@ -8,7 +8,7 @@ rules:
         - pattern: $BASE::BindRepeating($...ARGS)
         - pattern: BindRepeating($...ARGS)
       - metavariable-comparison:
-          comparison: not re.match("base::Unretained\(this\)", str($...ARGS)) and re.match("base::Unretained", str($...ARGS))
+          comparison: re.match("base::Unretained", str($...ARGS))
   message: 
     BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle. Verify the occurrences manually
   languages: [cpp, c]
