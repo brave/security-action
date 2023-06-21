@@ -5,6 +5,7 @@ SCRIPT=$(readlink -f $0)
 export SCRIPTPATH=`dirname $SCRIPT`
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export DEBUG=$DEBUG
 
 RUNNERS="safesvg tfsec semgrep sveltegrep brakeman npm-audit pip-audit"
 
