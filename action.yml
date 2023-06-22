@@ -378,7 +378,7 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          return '\n'+fs.readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
+          return '\n'+require('fs').readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
     - uses: actions-ecosystem/action-slack-notifier@v1
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
