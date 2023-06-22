@@ -1,8 +1,6 @@
 rules:
 - id: chromium-unretained-uaf
-  patterns:
-    - pattern: base::Unretained(...)
-    - pattern-not: base::Unretained(browser)
+  pattern: base::Unretained(...)
   message: |
     base::Unretained is most of the time unrequired and a weak reference is better suited for secure coding.
     Consider swapping Unretained for a weak reference.<br/>base::Unretained usage may be fine when a callback owner is guaranteed
