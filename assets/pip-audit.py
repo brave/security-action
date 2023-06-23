@@ -40,7 +40,7 @@ def main():
         zero_indexed_lineno = 0
         while zero_indexed_lineno < len(lock_file_lines):
             line = lock_file_lines[zero_indexed_lineno]
-            if line and line in diff_lines and not line.startswith(("#", "--")):
+            if line and line in diff_lines and not line.startswith(("#", "--", "-e ")):
                 while line.endswith("\\"):
                     zero_indexed_lineno += 1
                     line = line[:-1].strip() + " " + lock_file_lines[zero_indexed_lineno]
