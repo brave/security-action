@@ -78,8 +78,8 @@ runner:
     name: brakeman
     cmd: |
       set -e
-      (if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$'; then
-        bundle exec brakeman --quiet \
+      (if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.rb$'; then
+        brakeman --quiet \
           --no-exit-on-warn \
           --no-exit-on-error \
           --skip-files vendor/ \
