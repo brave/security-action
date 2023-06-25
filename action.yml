@@ -223,7 +223,7 @@ runs:
       env:
         ASSIGNEES: ${{steps.assignees.outputs.result}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
-        DEBUG: ${{ inputs.debug }}
+        SECURITY_ACTION_DEBUG: ${{ inputs.debug }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
     - if: ${{ steps.reviewdog-enabled-full.outputs.result == 'true' }}
       name: Run reviewdog full
