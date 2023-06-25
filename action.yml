@@ -184,11 +184,13 @@ runs:
       name: Setup Ruby
       id: ruby
       uses: ruby/setup-ruby@250fcd6a742febb1123a77a841497ccaa8b9e939
-      env:
-        BUNDLE_GEMFILE: ${{ github.action_path }}/Gemfile
       with:
         ruby-version: '3.2'
-        bundler-cache: true
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Install brakeman
+      shell: bash
+      run: |
+        gem install brakeman --version 6.0.0
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install semgrep & pip-audit
       shell: bash
