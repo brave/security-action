@@ -5,7 +5,7 @@ SCRIPT=$(readlink -f $0)
 export SCRIPTPATH=`dirname $SCRIPT`
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-export DEBUG=$DEBUG
+export SEC_ACTION_DEBUG=$SEC_ACTION_DEBUG
 
 RUNNERS="safesvg tfsec semgrep sveltegrep brakeman npm-audit pip-audit"
 
@@ -13,7 +13,7 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
         reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.log || true
         grep -H "" reviewdog.$runner.stderr.log >> reviewdog.fail.log || true
-        [[ ${DEBUG:-false} == 'true' ]] && grep -H "" reviewdog.$runner.stderr.log || true
+        [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" reviewdog.$runner.stderr.log || true
     done
 
     for runner in $RUNNERS; do
@@ -22,7 +22,7 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
         grep -H "" $runner.log >> reviewdog.log || true
         echo -n "$runner: "
         wc -l $runner.log
-        [[ ${DEBUG:-false} == 'true' ]] && grep -H "" $runner.log || true
+        [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" $runner.log || true
     done
 
 else
@@ -36,7 +36,7 @@ else
       | sed 's/<br><br>Cc @brave\/sec-team[ ]*//' \
       | tee reviewdog.log
     # TODO: in the future send reviewdog.log to a database and just print out errors with
-    # [[ ${DEBUG:-false} == 'true' ]] && somethingsomething
+    # [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && somethingsomething
     # TODO: fix brakeman on full-scan
     grep -H "" reviewdog.*.stderr.log | grep -v "reviewdog.brakeman.stderr.log:" >> reviewdog.fail.log || true
 fi
