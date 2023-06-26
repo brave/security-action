@@ -315,7 +315,7 @@ runs:
             return removedByAssigneeEvents > 0;
 
     - id: description-contains-hotwords
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && github.actor != 'renovate[bot]' }}
       uses: actions/github-script@v6
       env:
         HOTWORDS: ${{ inputs.hotwords }}
