@@ -1108,8 +1108,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bU2gd
-        version_id: GxTKBO
-        url: https://semgrep.dev/playground/r/GxTKBO/csharp.lang.security.regular-expression-dos.regular-expression-dos.regular-expression-dos
+        version_id: RGTzvG
+        url: https://semgrep.dev/playground/r/RGTzvG/csharp.lang.security.regular-expression-dos.regular-expression-dos.regular-expression-dos
         origin: community
   message: An attacker can then cause a program using a regular expression to enter
     these extreme situations and then hang for a very long time.
@@ -1123,14 +1123,14 @@ rules:
         {
           Regex $Y = new Regex($P);
           ...
-          $Y.Match($X)
+          $Y.Match($X);
         }
     - pattern: |
         public $T $F($X)
         {
           Regex $Y = new Regex($P, $O);
           ...
-          $Y.Match($X)
+          $Y.Match($X);
         }
     - pattern: |
         public $T $F($X)
@@ -1200,7 +1200,7 @@ rules:
       '
   - pattern-not-inside: |
       ...
-      $S.Parameters
+      <... $S.Parameters ...>;
   message: Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized. Use a
     prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand'
@@ -1230,8 +1230,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UxeP
-        version_id: e1TEqj
-        url: https://semgrep.dev/playground/r/e1TEqj/csharp.lang.security.sqli.csharp-sqli.csharp-sqli
+        version_id: A8T4Yl
+        url: https://semgrep.dev/playground/r/A8T4Yl/csharp.lang.security.sqli.csharp-sqli.csharp-sqli
         origin: community
   languages:
   - csharp
@@ -1263,8 +1263,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UdbE
-        version_id: vdTDdR
-        url: https://semgrep.dev/playground/r/vdTDdR/csharp.lang.security.ssrf.http-client.ssrf
+        version_id: BjTPYZ
+        url: https://semgrep.dev/playground/r/BjTPYZ/csharp.lang.security.ssrf.http-client.ssrf
         origin: community
   message: SSRF is an attack vector that abuses an application to interact with the
     internal/external network or the machine itself.
@@ -1279,7 +1279,7 @@ rules:
         ...
         HttpClient $Y = new HttpClient();
         ...
-        ... $Y.GetAsync(<... $X ...>, ...)
+        ... $Y.GetAsync(<... $X ...>, ...);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1289,7 +1289,7 @@ rules:
         ...
         HttpClient $Y = new HttpClient();
         ...
-        ... $Y.GetAsync($B, ...)
+        ... $Y.GetAsync($B, ...);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1297,7 +1297,7 @@ rules:
         ...
         HttpClient $Y = new HttpClient();
         ...
-        ... $Y.GetStringAsync(<... $X ...>)
+        ... $Y.GetStringAsync(<... $X ...>);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1307,7 +1307,7 @@ rules:
         ...
         HttpClient $Y = new HttpClient();
         ...
-        ... $Y.GetStringAsync($B)
+        ... $Y.GetStringAsync($B);
         }
 - id: csharp.lang.security.ssrf.rest-client.ssrf
   severity: ERROR
@@ -1336,8 +1336,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AURoq
-        version_id: d6TnLZ
-        url: https://semgrep.dev/playground/r/d6TnLZ/csharp.lang.security.ssrf.rest-client.ssrf
+        version_id: DkT58j
+        url: https://semgrep.dev/playground/r/DkT58j/csharp.lang.security.ssrf.rest-client.ssrf
         origin: community
   message: SSRF is an attack vector that abuses an application to interact with the
     internal/external network or the machine itself.
@@ -1350,7 +1350,7 @@ rules:
         $T $F(..., $X, ...)
         {
         ...
-        ... new RestClient(<... $X ...>)
+        ... new RestClient(<... $X ...>);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1358,7 +1358,7 @@ rules:
         ...
         $A $B = <... $X ...>;
         ...
-        ... new RestClient($B)
+        ... new RestClient($B);
         }
 - id: csharp.lang.security.ssrf.web-client.ssrf
   severity: ERROR
@@ -1387,8 +1387,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUPBe
-        version_id: ZRTBWz
-        url: https://semgrep.dev/playground/r/ZRTBWz/csharp.lang.security.ssrf.web-client.ssrf
+        version_id: WrT1x1
+        url: https://semgrep.dev/playground/r/WrT1x1/csharp.lang.security.ssrf.web-client.ssrf
         origin: community
   message: SSRF is an attack vector that abuses an application to interact with the
     internal/external network or the machine itself.
@@ -1403,7 +1403,7 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.OpenRead(<... $X ...>)
+        ... $Y.OpenRead(<... $X ...>);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1413,7 +1413,7 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.OpenRead($B)
+        ... $Y.OpenRead($B);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1421,25 +1421,7 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.OpenReadAsync(<... $X ...>, ...)
-        }
-    - pattern: |
-        $T $F(..., $X, ...)
-        {
-        ...
-        $A $B = <... $X ...>;
-        ...
-        WebClient $Y = new WebClient();
-        ...
-        ... $Y.OpenReadAsync($B, ...)
-        }
-    - pattern: |
-        $T $F(..., $X, ...)
-        {
-        ...
-        WebClient $Y = new WebClient();
-        ...
-        ... $Y.DownloadString(<... $X ...>)
+        ... $Y.OpenReadAsync(<... $X ...>, ...);
         }
     - pattern: |
         $T $F(..., $X, ...)
@@ -1449,7 +1431,25 @@ rules:
         ...
         WebClient $Y = new WebClient();
         ...
-        ... $Y.DownloadString($B)
+        ... $Y.OpenReadAsync($B, ...);
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.DownloadString(<... $X ...>);
+        }
+    - pattern: |
+        $T $F(..., $X, ...)
+        {
+        ...
+        $A $B = <... $X ...>;
+        ...
+        WebClient $Y = new WebClient();
+        ...
+        ... $Y.DownloadString($B);
         }
 - id: csharp.lang.security.ssrf.web-request.ssrf
   severity: ERROR
@@ -2315,14 +2315,42 @@ rules:
         url: https://semgrep.dev/playground/r/pZTqEy/generic.secrets.security.detected-amazon-mws-auth-token.detected-amazon-mws-auth-token
         origin: community
 - id: generic.secrets.security.detected-artifactory-password.detected-artifactory-password
+  options:
+    generic_engine: aliengrep
+    generic_multiline: false
+    generic_caseless: true
   patterns:
-  - pattern-regex: "\\bAP[\\dABCDEF][a-zA-Z0-9]{8,}\n"
-  - pattern-not-regex: 'sha(128|256|512).*
+  - pattern: "$ITEM"
+  - metavariable-regex:
+      metavariable: "$ITEM"
+      regex: "\\bAP[\\dABCDEF][a-zA-Z0-9]{8,}"
+  - pattern-not-inside: 'sha1...
 
       '
-  - pattern-not-regex: "(?s)---BEGIN.*---\\Z"
+  - pattern-not-inside: 'sha2...
+
+      '
+  - pattern-not-inside: 'sha3...
+
+      '
+  - pattern-not-inside: 'sha118...
+
+      '
+  - pattern-not-inside: 'sha256...
+
+      '
+  - pattern-not-inside: 'sha512...
+
+      '
+  - pattern-not-inside: |
+      -BEGIN ...-
+      ....
+      ...-END ...-
+  - metavariable-analysis:
+      analyzer: entropy
+      metavariable: "$ITEM"
   languages:
-  - regex
+  - generic
   message: Artifactory token detected
   severity: ERROR
   metadata:
@@ -2350,8 +2378,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUR5K
-        version_id: DkTbWZ
-        url: https://semgrep.dev/playground/r/DkTbWZ/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
+        version_id: gETw8D
+        url: https://semgrep.dev/playground/r/gETw8D/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
         origin: community
 - id: generic.secrets.security.detected-artifactory-token.detected-artifactory-token
   patterns:
@@ -4227,8 +4255,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUy0B
-        version_id: d6TnJo
-        url: https://semgrep.dev/playground/r/d6TnJo/go.grpc.security.grpc-server-insecure-connection.grpc-server-insecure-connection
+        version_id: NdTjwX
+        url: https://semgrep.dev/playground/r/NdTjwX/go.grpc.security.grpc-server-insecure-connection.grpc-server-insecure-connection
         origin: community
   message: Found an insecure gRPC server without 'grpc.Creds()' or options with credentials.
     This allows for a connection without encryption to this server. A malicious attacker
@@ -4239,25 +4267,19 @@ rules:
   languages:
   - go
   severity: ERROR
-  patterns:
-  - pattern-not: grpc.NewServer(..., grpc.Creds(...), ...)
-  - pattern-not-inside: |
-      $OPTS := []grpc.ServerOption{
-        ...,
-        grpc.Creds(credentials.NewClientTLSFromCert(...)),
-        ...,
-      }
-      grpc.NewServer($OPTS...)
-  - pattern-not-inside: |
-      $CREDS := credentials.NewClientTLSFromCert(...)
-      ...
-      $OPTS := []grpc.ServerOption{
-        ...,
-        $CREDS,
-        ...,
-      }
-      grpc.NewServer($OPTS...)
-  - pattern: grpc.NewServer(...)
+  mode: taint
+  pattern-sinks:
+  - requires: OPTIONS and not CREDS
+    pattern: grpc.NewServer($OPT, ...)
+  - requires: EMPTY_CONSTRUCTOR
+    pattern: grpc.NewServer()
+  pattern-sources:
+  - label: OPTIONS
+    pattern: grpc.ServerOption{ ... }
+  - label: CREDS
+    pattern: grpc.Creds(...)
+  - label: EMPTY_CONSTRUCTOR
+    pattern: grpc.NewServer()
 - id: go.jwt-go.security.audit.jwt-parse-unverified.jwt-go-parse-unverified
   message: Detected the decoding of a JWT token without a verify step. Don't use `ParseUnverified`
     unless you know what you're doing This method parses the token but doesn't validate
@@ -9662,22 +9684,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUZeQ
-        version_id: 0bTn3E
-        url: https://semgrep.dev/playground/r/0bTn3E/java.log4j.security.log4j-message-lookup-injection.log4j-message-lookup-injection
+        version_id: RGT5AA
+        url: https://semgrep.dev/playground/r/RGT5AA/java.log4j.security.log4j-message-lookup-injection.log4j-message-lookup-injection
         origin: community
-  message: Possible Lookup injection into Log4j messages. Lookups provide a way to
-    add values to the Log4j messages at arbitrary places. If the message parameter
-    contains an attacker controlled string, the attacker could inject arbitrary lookups,
-    for instance '${java:runtime}'. This could lead to information disclosure or even
-    remote code execution if 'log4j2.formatMsgNoLookups' is disabled. This was disabled
-    by default until version 2.15.0.
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern: public $T $M(...)
-  pattern-sinks:
-  - patterns:
-    - pattern: "(org.apache.log4j.Logger $L).$M(...)\n"
+  message: This rule is deprecated.
+  patterns:
+  - pattern: a()
+  - pattern: b()
   severity: WARNING
   languages:
   - java
@@ -15561,7 +15574,7 @@ rules:
     statements. Consider enforcing authentication for LDAP.
   metadata:
     references:
-    - https://www.php.net/manual/ru/function.ldap-bind.php
+    - https://www.php.net/manual/en/function.ldap-bind.php
     cwe:
     - 'CWE-287: Improper Authentication'
     owasp:
@@ -15583,8 +15596,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUjA5
-        version_id: X0Tolq
-        url: https://semgrep.dev/playground/r/X0Tolq/php.lang.security.ldap-bind-without-password.ldap-bind-without-password
+        version_id: K3T0EY
+        url: https://semgrep.dev/playground/r/K3T0EY/php.lang.security.ldap-bind-without-password.ldap-bind-without-password
         origin: community
   languages:
   - php
@@ -15706,7 +15719,7 @@ rules:
     inside `header()`: ''[^\s]+''.'
   metadata:
     references:
-    - https://www.php.net/manual/ru/function.header.php
+    - https://www.php.net/manual/en/function.header.php
     - https://owasp.org/www-community/attacks/HTTP_Response_Splitting
     category: security
     technology:
@@ -15727,8 +15740,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UxNQ
-        version_id: rxTbGY
-        url: https://semgrep.dev/playground/r/rxTbGY/php.lang.security.non-literal-header.non-literal-header
+        version_id: qkTZ6X
+        url: https://semgrep.dev/playground/r/qkTZ6X/php.lang.security.non-literal-header.non-literal-header
         origin: community
   languages:
   - php
@@ -15857,7 +15870,7 @@ rules:
     Protocol Buffers).
   metadata:
     references:
-    - https://www.php.net/manual/ru/function.unserialize.php
+    - https://www.php.net/manual/en/function.unserialize.php
     - https://owasp.org/www-project-top-ten/2017/A8_2017-Insecure_Deserialization.html
     category: security
     technology:
@@ -15880,8 +15893,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8U9OJ
-        version_id: O9T4Z3
-        url: https://semgrep.dev/playground/r/O9T4Z3/php.lang.security.unserialize-use.unserialize-use
+        version_id: l4TjkW
+        url: https://semgrep.dev/playground/r/l4TjkW/php.lang.security.unserialize-use.unserialize-use
         origin: community
   languages:
   - php
@@ -20195,9 +20208,13 @@ rules:
   languages:
   - python
   severity: WARNING
-  pattern: |
-    def $FUNC(..., password="...", ...):
-      ...
+  patterns:
+  - pattern: |
+      def $FUNC(..., password="...", ...):
+        ...
+  - pattern-not: |
+      def $FUNC(..., password="", ...):
+        ...
   metadata:
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
@@ -20221,8 +20238,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUZAW
-        version_id: ZRTyEe
-        url: https://semgrep.dev/playground/r/ZRTyEe/python.lang.security.audit.hardcoded-password-default-argument.hardcoded-password-default-argument
+        version_id: 9lTwgD
+        url: https://semgrep.dev/playground/r/9lTwgD/python.lang.security.audit.hardcoded-password-default-argument.hardcoded-password-default-argument
         origin: community
 - id: python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
   message: The HTTPSConnection API has changed frequently with minor releases of Python.
@@ -23275,16 +23292,9 @@ rules:
   - ruby
 - id: ruby.lang.security.jruby-xml.jruby-xml
   patterns:
-  - pattern: 'XmlMini.backend = $STR
-
-      '
-  - pattern-not: 'XmlMini.backend = "REXML"
-
-      '
-  message: The JDOM backend for XmlMini has a vulnerability that lets an attacker
-    perform a denial of service attack or gain access to files on the application
-    server. This affects versions 3.0, but is fixed in versions 3.1.12 and 3.2.13.
-    To fix, either upgrade or use XmlMini.backend="REXML".
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-611: Improper Restriction of XML External Entity Reference'
@@ -23309,8 +23319,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Uqk5
-        version_id: O9T443
-        url: https://semgrep.dev/playground/r/O9T443/ruby.lang.security.jruby-xml.jruby-xml
+        version_id: l4T72K
+        url: https://semgrep.dev/playground/r/l4T72K/ruby.lang.security.jruby-xml.jruby-xml
         origin: community
   languages:
   - ruby
@@ -23542,17 +23552,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUADO
-        version_id: 7ZT55r
-        url: https://semgrep.dev/playground/r/7ZT55r/ruby.lang.security.model-attributes-attr-accessible.model-attributes-attr-accessible
+        version_id: w8TL7k
+        url: https://semgrep.dev/playground/r/w8TL7k/ruby.lang.security.model-attributes-attr-accessible.model-attributes-attr-accessible
         origin: community
   languages:
   - ruby
   severity: ERROR
 - id: ruby.lang.security.model-attributes-attr-protected.model-attributes-attr-protected
-  message: 'Checks for models that use attr_protected, as use of allowlist instead
-    of denylist is better practice. Attr_protected was also found to be vulnerable
-    to bypass. The fixed versions of Rails are: 3.2.12, 3.1.11, 2.3.17. To prevent
-    bypass, use attr_accessible instead.'
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-284: Improper Access Control'
@@ -23576,19 +23583,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxURK4
-        version_id: LjTxxQ
-        url: https://semgrep.dev/playground/r/LjTxxQ/ruby.lang.security.model-attributes-attr-protected.model-attributes-attr-protected
+        version_id: 6xTdz3
+        url: https://semgrep.dev/playground/r/6xTdz3/ruby.lang.security.model-attributes-attr-protected.model-attributes-attr-protected
         origin: community
   languages:
   - ruby
   severity: WARNING
-  pattern: attr_protected
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: ruby.lang.security.nested-attributes-bypass.nested-attributes-bypass
-  message: 'Checks for nested attributes vulnerability (CVE-2015-7577). Setting allow_destroy:
-    false in accepts_nested_attributes_for can lead to attackers setting attributes
-    to invalid values and clearing all attributes. This affects versions 3.1.0 and
-    newer, with fixed versions 5.0.0.beta1.1, 4.2.5.1, 4.1.14.1, 3.2.22.1. To fix,
-    upgrade to a newer version or use the initializer specified in the google groups.'
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-915: Improperly Controlled Modification of Dynamically-Determined Object
@@ -23612,18 +23617,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdU891
-        version_id: 8KTWWy
-        url: https://semgrep.dev/playground/r/8KTWWy/ruby.lang.security.nested-attributes-bypass.nested-attributes-bypass
+        version_id: A8TAJ5
+        url: https://semgrep.dev/playground/r/A8TAJ5/ruby.lang.security.nested-attributes-bypass.nested-attributes-bypass
         origin: community
   languages:
   - ruby
   severity: WARNING
-  pattern: 'accepts_nested_attributes_for ..., allow_destroy: false, ...'
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: ruby.lang.security.nested-attributes.nested-attributes
-  message: 'Checks for models that enable nested attributes. A vulnerability in nested_attributes_for
-    results in an attacker begin able to change parameters apart from the ones intended
-    by the developer. Affected Rails versions: 3.0.0, 2.3.9. Fix: don''t use accepts_nested_attributes_for
-    or upgrade Rails version.'
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-20: Improper Input Validation'
@@ -23648,14 +23652,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UWKK
-        version_id: gETLLB
-        url: https://semgrep.dev/playground/r/gETLLB/ruby.lang.security.nested-attributes.nested-attributes
+        version_id: o5T0Rq
+        url: https://semgrep.dev/playground/r/o5T0Rq/ruby.lang.security.nested-attributes.nested-attributes
         origin: community
   languages:
   - ruby
   severity: WARNING
   patterns:
-  - pattern: accepts_nested_attributes_for
+  - pattern: a()
+  - pattern: b()
 - id: ruby.lang.security.no-send.bad-send
   message: Checks for unsafe use of Object#send, try, __send__, and public_send. These
     only account for unsafe use of a method, not target. This can lead to arbitrary
@@ -23708,10 +23713,7 @@ rules:
       ...
       $RES = $MOD.public_send($PARAM.$FUNC)
 - id: ruby.lang.security.timing-attack.timing-attack
-  message: 'Checks for unsafe use of method http_basic_authenticate_with, which is
-    vulnerable to timing attacks as it does not use constant-time checking when comparing
-    passwords. Affected Rails versions include: 5.0.0.beta1.1, 4.2.5.1, 4.1.14.1,
-    3.2.22.1. Avoid this function if possible.'
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-208: Observable Timing Discrepancy'
@@ -23732,13 +23734,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8Uzrz
-        version_id: PkTEEb
-        url: https://semgrep.dev/playground/r/PkTEEb/ruby.lang.security.timing-attack.timing-attack
+        version_id: zyTpQz
+        url: https://semgrep.dev/playground/r/zyTpQz/ruby.lang.security.timing-attack.timing-attack
         origin: community
   languages:
   - ruby
   severity: ERROR
-  pattern: http_basic_authenticate_with ...
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: ruby.lang.security.unprotected-mass-assign.mass-assignment-vuln
   patterns:
   - pattern-either:
@@ -23900,32 +23904,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUn3z
-        version_id: l4Teek
-        url: https://semgrep.dev/playground/r/l4Teek/ruby.rails.security.audit.mail-to-erb.mail-to-erb
+        version_id: pZTKx5
+        url: https://semgrep.dev/playground/r/pZTKx5/ruby.rails.security.audit.mail-to-erb.mail-to-erb
         origin: community
-  message: Detected use of mail_to helper used with the `:encode => :javascript option`.
-    The attacker could specify a malicious name or email value that could lead to
-    a XSS attack. Instead, use `:encode => :hex` or patch to Rails 3.0.4 or 2.3.11.
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - "*.erb"
   patterns:
-  - pattern-either:
-    - pattern: "<%= mail_to ..., ..., :encode => :javascript %>\n"
-    - pattern: "<%= mail_to ..., ..., :encode => :javascript, ... %>\n"
-  - pattern-not: "<%= mail_to escape_javascript(...), escape_javascript(...), ...
-      :encode => :javascript %>\n"
-  - pattern-not: "<%= mail_to escape_javascript(...), escape_javascript(...), ...
-      :encode => :javascript, ... %>\n"
-  - pattern-not: '<%= mail_to "...", "...", ... :encode => :javascript %>
-
-      '
-  - pattern-not: '<%= mail_to "...", "...", ... :encode => :javascript, ... %>
-
-      '
+  - pattern: a()
+  - pattern: b()
 - id: ruby.rails.security.audit.mail-to.mail-to
   metadata:
     owasp:
@@ -23953,26 +23941,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qU6KB
-        version_id: YDTzzL
-        url: https://semgrep.dev/playground/r/YDTzzL/ruby.rails.security.audit.mail-to.mail-to
+        version_id: 2KTgwJ
+        url: https://semgrep.dev/playground/r/2KTgwJ/ruby.rails.security.audit.mail-to.mail-to
         origin: community
-  message: Detected use of mail_to helper used with the `:encode => :javascript option`.
-    The attacker could specify a malicious name or email value that could lead to
-    a XSS attack. Instead, use `:encode => :hex` or patch to Rails 3.0.4 or 2.3.11.
+  message: This rule is deprecated.
   languages:
   - ruby
   severity: WARNING
   patterns:
-  - pattern: 'mail_to ..., :encode => "javascript", ...
-
-      '
-  - pattern-not: 'mail_to escape_javascript(...), escape_javascript(...), ..., :encode
-      => "javascript", ...
-
-      '
-  - pattern-not: 'mail_to "...", "...", ..., :encode => "javascript", ...
-
-      '
+  - pattern: a()
+  - pattern: b()
 - id: ruby.rails.security.audit.mime-type-dos.mime-type-dos
   metadata:
     owasp: A05:2021 - Security Misconfiguration
@@ -23996,21 +23974,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10U56J
-        version_id: w8T7lq
-        url: https://semgrep.dev/playground/r/w8T7lq/ruby.rails.security.audit.mime-type-dos.mime-type-dos
+        version_id: BjTw1p
+        url: https://semgrep.dev/playground/r/BjTw1p/ruby.rails.security.audit.mime-type-dos.mime-type-dos
         origin: community
-  message: Detected usage of `Mime.const_set`. This could lead to a Denial of Service
-    attack, as an attacker could send lots of different mime types to the server,
-    causing the cache to grow large and use all available RAM. Make sure you are using
-    5.0.0.beta1.1, 4.2.5.1, 4.1.14.1, 3.2.22.1 or higher. If this is not possible,
-    use the workaround with "Mime.const_set :LOOKUP, Hash.new { |h,k| Mime::Type.new(k)
-    unless k.blank? }"
+  message: This rule is deprecated.
   languages:
   - ruby
   severity: WARNING
   patterns:
-  - pattern: "Mime.const_set ... \n"
-  - pattern-not: "Mime.const_set :LOOKUP, ... \n"
+  - pattern: a()
+  - pattern: b()
 - id: ruby.rails.security.audit.number-to-currency-erb.number-to-currency-erb
   metadata:
     owasp:
@@ -24038,54 +24011,23 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUZrN
-        version_id: xyT7Gb
-        url: https://semgrep.dev/playground/r/xyT7Gb/ruby.rails.security.audit.number-to-currency-erb.number-to-currency-erb
+        version_id: X0TblN
+        url: https://semgrep.dev/playground/r/X0TblN/ruby.rails.security.audit.number-to-currency-erb.number-to-currency-erb
         origin: community
-  message: Detected user input flowing into number_to_currency helper. One of the
-    parameters to the helper (unit) is not escaped correctly and could lead to XSS,
-    which in turn could lead to sensitive data being exfiltrated. Instead, sanitize
-    data with the 'html_escape' or 'h' function before passing it into `number_to_currency`
-    or upgrade to Rails 4.0.2 or 3.2.16.
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - "*.erb"
   patterns:
-  - pattern-either:
-    - pattern: "<%= ... number_to_currency(..., unit: params[:$UNIT], ...) ... %>\n"
-    - pattern: "<%= ... number_to_currency(..., unit: params[:$UNIT]) ... %>\n"
-  - pattern-not: "<%= ... number_to_currency(..., h(unit: params[:$UNIT]), ...) ...
-      %>\n"
-  - pattern-not: "<%= ... number_to_currency(..., h(unit: params[:$UNIT])) ... %>\n"
+  - pattern: a()
+  - pattern: b()
 - id: ruby.rails.security.audit.rails-check-header-dos.rails-check-header-dos
   languages:
   - generic
   patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: gem 'rails', '3.$Y'
-      - metavariable-comparison:
-          metavariable: "$Y"
-          comparison: "$Y <= 2"
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '3.0.$Z'
-        - pattern: gem 'rails', '3.1.$Z'
-    - patterns:
-      - pattern: gem 'rails', '3.2.$Z'
-      - metavariable-comparison:
-          metavariable: "$Z"
-          comparison: "$Z < 16"
-    - patterns:
-      - pattern: gem 'rails', '4.0.$Z'
-      - metavariable-comparison:
-          metavariable: "$Z"
-          comparison: "$Z == 0 or $Z == 1"
-  message: Rails versions 3.0.0 - 3.2.15 and 4.0.0 and 4.0.1 are vulnerable to a DoS
-    attack (CVE-2013-6414). This can cause your service to be taken down for substantial
-    amount of time. Instead, upgrade to 4.0.2 or 3.2.16 or higher.
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   severity: WARNING
   metadata:
     technology:
@@ -24111,25 +24053,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUDRY
-        version_id: e1TNr2
-        url: https://semgrep.dev/playground/r/e1TNr2/ruby.rails.security.audit.rails-check-header-dos.rails-check-header-dos
+        version_id: 9lTgXw
+        url: https://semgrep.dev/playground/r/9lTgXw/ruby.rails.security.audit.rails-check-header-dos.rails-check-header-dos
         origin: community
-  paths:
-    include:
-    - "*Gemfile"
-    - gems.rb
 - id: ruby.rails.security.audit.rails-check-page-caching-cve.rails-check-page-caching-cve
   patterns:
-  - pattern-inside: |
-      class $CONTROLLER < $BIGCONTROLLER
-      ...
-      end
-  - pattern: 'caches_page :$ACTION
-
-      '
-  message: All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable
-    to arbitrary file write and remote code execution (CVE-2020-8159) when using caching
-    methods. Update to version 1.2.1 or greater or remove calls to 'caches_page'.
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - ruby
   severity: WARNING
@@ -24160,47 +24091,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8UOrb
-        version_id: BjTQQA
-        url: https://semgrep.dev/playground/r/BjTQQA/ruby.rails.security.audit.rails-check-page-caching-cve.rails-check-page-caching-cve
+        version_id: DkTDNR
+        url: https://semgrep.dev/playground/r/DkTDNR/ruby.rails.security.audit.rails-check-page-caching-cve.rails-check-page-caching-cve
         origin: community
 - id: ruby.rails.security.audit.rails-check-page-caching-gem.rails-check-page-caching-gem
-  pattern-either:
-  - patterns:
-    - pattern: gem 'actionpack_page-caching', '1.$MIN'
-    - metavariable-comparison:
-        metavariable: "$MIN"
-        comparison: "$MIN <= 2"
-  - patterns:
-    - pattern: gem 'actionpack_page-caching', '1.$MIN.$PATCH'
-    - metavariable-comparison:
-        metavariable: "$MIN"
-        comparison: "$MIN < 2"
-  - patterns:
-    - patterns:
-      - pattern: gem 'actionpack_page-caching', '1.2.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH < 1"
-  - pattern-either:
-    - pattern: gem 'actionpack_page-caching', '~> 0.$MIN'
-    - pattern: gem 'actionpack_page-caching', '~> 0.$MIN.$PATCH'
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'actionpack_page-caching', '~> 1.$MIN'
-        - pattern: gem 'actionpack_page-caching', '~> 1.$MIN.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$MIN"
-          comparison: "$MIN < 2"
-  message: All versions below 1.2.1 of the 'actionpack_page-caching' gem are vulnerable
-    to arbitrary file write and remote code execution (CVE-2020-8159). Update to version
-    1.2.1 or greater or remove calls to 'caches_page'.
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - "*Gemfile"
-    - gems.rb
   metadata:
     cwe:
     - 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
@@ -24228,21 +24129,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UKw2
-        version_id: DkT335
-        url: https://semgrep.dev/playground/r/DkT335/ruby.rails.security.audit.rails-check-page-caching-gem.rails-check-page-caching-gem
+        version_id: yeTJ5j
+        url: https://semgrep.dev/playground/r/yeTJ5j/ruby.rails.security.audit.rails-check-page-caching-gem.rails-check-page-caching-gem
         origin: community
 - id: ruby.rails.security.audit.rails-check-render-dos-cve.rails-check-render-dos
   patterns:
-  - pattern-inside: |
-      class $CONTROLLER < $BIGCONTROLLER
-      ...
-      end
-  - pattern: 'render :$TEXT
-
-      '
-  message: The render method in Rails versions 3.0.0 - 3.0.20, 3.1.0 - 3.1.12, and
-    3.2.0 - 3.2.16 are vulnerable to a denial of service attack (CVE-2014-0082), which
-    could lead to service downtime. Upgrade to 3.2.17 or higher instead.
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
@@ -24271,48 +24165,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUl4v
-        version_id: WrTkkv
-        url: https://semgrep.dev/playground/r/WrTkkv/ruby.rails.security.audit.rails-check-render-dos-cve.rails-check-render-dos
+        version_id: WrTvE8
+        url: https://semgrep.dev/playground/r/WrTvE8/ruby.rails.security.audit.rails-check-render-dos-cve.rails-check-render-dos
         origin: community
 - id: ruby.rails.security.audit.rails-check-render-dos-gem.rails-check-render-dos
-  pattern-either:
-  - pattern-either:
-    - patterns:
-      - pattern: gem 'rails', '3.$VER'
-      - metavariable-comparison:
-          metavariable: "$VER"
-          comparison: "$VER <= 2"
-    - patterns:
-      - pattern: gem 'rails', '~> 3.$VER'
-      - metavariable-comparison:
-          metavariable: "$VER"
-          comparison: "$VER < 2"
-  - pattern-either:
-    - patterns:
-      - pattern: gem 'rails', '3.0.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH <= 20"
-    - patterns:
-      - pattern: gem 'rails', '3.1.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH <= 12"
-    - patterns:
-      - pattern: gem 'rails', '3.2.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH <= 16"
-  message: Rails versions 3.0.0 - 3.0.20, 3.1.0 - 3.1.12, and 3.2.0 - 3.2.16 are vulnerable
-    to a denial of service attack (CVE-2014-0082), which could lead to service downtime.
-    Upgrade to 3.2.17 or higher instead.
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - "*Gemfile"
-    - gems.rb
   metadata:
     cwe:
     - 'CWE-20: Improper Input Validation'
@@ -24338,29 +24201,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUyWb
-        version_id: 0bTQQ4
-        url: https://semgrep.dev/playground/r/0bTQQ4/ruby.rails.security.audit.rails-check-render-dos-gem.rails-check-render-dos
+        version_id: rxTZGZ
+        url: https://semgrep.dev/playground/r/rxTZGZ/ruby.rails.security.audit.rails-check-render-dos-gem.rails-check-render-dos
         origin: community
 - id: ruby.rails.security.audit.rails-check-response-splitting.rails-check-response-splitting
-  pattern-either:
-  - pattern-either:
-    - pattern: gem 'rails', '2.3'
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '2.3.$PATCH'
-        - pattern: gem 'rails', '~> 2.3.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH < 14"
-  message: Rails versions 2.3.14 are vulnerable to response splitting, allowing header
-    injection (CVE-2011-3186). Upgrade to 2.3.14 or greater.
+  patterns:
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - "*Gemfile"
-    - gems.rb
   metadata:
     cwe:
     - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
@@ -24384,8 +24235,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUr8l
-        version_id: K3TPPl
-        url: https://semgrep.dev/playground/r/K3TPPl/ruby.rails.security.audit.rails-check-response-splitting.rails-check-response-splitting
+        version_id: bZTq6Y
+        url: https://semgrep.dev/playground/r/bZTq6Y/ruby.rails.security.audit.rails-check-response-splitting.rails-check-response-splitting
         origin: community
 - id: ruby.rails.security.audit.rails-skip-forgery-protection.rails-skip-forgery-protection
   pattern: skip_forgery_protection
@@ -25020,13 +24871,10 @@ rules:
       - pattern-inside: 'ActionController::Base.session = {...}
 
           '
-    - pattern: 'Rails3::Application.config.session_store :cookie_store, ..., :$KEY
-        => false, ...
-
-        '
-    - pattern: 'Rails.application.config.session_store :cookie_store, ..., $KEY: false
-
-        '
+    - pattern: "$MODULE::Application.config.session_store :cookie_store, ..., :$KEY
+        => false, ...\n"
+    - pattern: "$CLASS.application.config.session_store :cookie_store, ..., $KEY:
+        false, ...\n"
   - metavariable-regex:
       metavariable: "$KEY"
       regex: "^(session_)?(http_?only|secure)$"
@@ -25059,8 +24907,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUw3v
-        version_id: ZRTBJB
-        url: https://semgrep.dev/playground/r/ZRTBJB/ruby.rails.security.brakeman.check-cookie-store-session-security-attributes.check-cookie-store-session-security-attributes
+        version_id: kbTXXJ
+        url: https://semgrep.dev/playground/r/kbTXXJ/ruby.rails.security.brakeman.check-cookie-store-session-security-attributes.check-cookie-store-session-security-attributes
         origin: community
 - id: ruby.rails.security.brakeman.check-permit-attributes-high.check-permit-attributes-high
   patterns:
@@ -25191,57 +25039,12 @@ rules:
         origin: community
 - id: ruby.rails.security.injection.rails-check-json-parsing-rce.rails-check-json-parsing-rce
   patterns:
-  - pattern-either:
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '$MAJ'
-        - pattern: gem 'rails', '$MAJ.$MIN'
-        - pattern: gem 'rails', '$MAJ.$MIN.$PATCH'
-        - pattern: gem 'rails', '~> $MAJ'
-        - pattern: gem 'rails', '~> $MAJ.$MIN'
-        - pattern: gem 'rails', '~> $MAJ.$MIN.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$MAJ"
-          comparison: "$MAJ < 2"
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '2.$MAJ'
-        - pattern: gem 'rails', '2.$MAJ.$PATCH'
-        - pattern: gem 'rails', '~> 2.$MAJ'
-        - pattern: gem 'rails', '~> 2.$MAJ.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$MAJ"
-          comparison: "$MAJ < 3"
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '2.3.$PATCH'
-        - pattern: gem 'rails', '~> 2.3.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH <= 14"
-    - patterns:
-      - pattern-either:
-        - pattern: gem 'rails', '3.0.$PATCH'
-        - pattern: gem 'rails', '~> 3.0.$PATCH'
-      - metavariable-comparison:
-          metavariable: "$PATCH"
-          comparison: "$PATCH <= 19"
-  - pattern-not-inside: |
-      source '...'
-      ...
-      gem 'yajl' ...
-      ...
-  message: Rails versions 0.0.0 - 2.3.14 and 3.0.0 - 3.0.19 are vulnerable to a Remote
-    Code Execution attack via JSON parsing (CVE-2013-0333). Either use the 'yajl'
-    gem or update to Rails 2.3.16 or greater if using Rails 0.0.0 - 2.3.14 and Rails
-    3.0.20 or greater if using Rails 3.0.0 - 3.0.19
+  - pattern: a()
+  - pattern: b()
+  message: This rule is deprecated.
   languages:
   - generic
   severity: WARNING
-  paths:
-    include:
-    - "*Gemfile"
-    - gems.rb
   metadata:
     cwe:
     - 'CWE-74: Improper Neutralization of Special Elements in Output Used by a Downstream
@@ -25266,8 +25069,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUxzd
-        version_id: WrTkgv
-        url: https://semgrep.dev/playground/r/WrTkgv/ruby.rails.security.injection.rails-check-json-parsing-rce.rails-check-json-parsing-rce
+        version_id: NdT8r1
+        url: https://semgrep.dev/playground/r/NdT8r1/ruby.rails.security.injection.rails-check-json-parsing-rce.rails-check-json-parsing-rce
         origin: community
 - id: rust.lang.security.args-os.args-os
   message: 'args_os should not be used for security operations. From the docs: "The
@@ -27027,59 +26830,6 @@ rules:
   languages:
   - hcl
   severity: WARNING
-- id: terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
-  patterns:
-  - pattern-either:
-    - pattern: |
-        resource "aws_lb" $ANYTHING {
-          ...
-        }
-    - pattern: |
-        resource "aws_alb" $ANYTHING {
-          ...
-        }
-  - pattern-not-inside: |
-      resource $ANYLB $ANYTHING {
-        ...
-        access_logs {
-          ...
-          enabled = true
-          ...
-        }
-        ...
-      }
-  - pattern-not-inside: "resource $ANYLB $ANYTHING {\n  ...\n  subnet_mapping {\n
-      \   ...\n  }\n  ...\n} \n"
-  message: ELB has no logging. Missing logs can cause missing important event information.
-  languages:
-  - hcl
-  severity: WARNING
-  metadata:
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    cwe:
-    - 'CWE-326: Inadequate Encryption Strength'
-    technology:
-    - aws
-    - terraform
-    category: security
-    references:
-    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
-    shortlink: https://sg.run/Yrye
-    semgrep.dev:
-      rule:
-        rule_id: 4bUg3J
-        version_id: A8TBdg
-        url: https://semgrep.dev/playground/r/A8TBdg/terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
-        origin: community
 - id: terraform.aws.security.aws-emr-encrypted-with-cmk.aws-emr-encrypted-with-cmk
   patterns:
   - pattern-inside: |
@@ -31094,6 +30844,55 @@ rules:
       $X, ... = strconv.ParseUint(..., ..., 8)
       ...
       int8($X)
+- id: trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server is setup with a CORS policy that does not deny
+    all origins. Carefully review the origins to see if any of them are incorrectly
+    setup (third-party websites, bad regexes, functions that reflect every origin,
+    etc.).
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Potentially bad CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+    shortlink: https://sg.run/ORxR
+    semgrep.dev:
+      rule:
+        rule_id: v8UlNl
+        version_id: zyT4zv
+        url: https://semgrep.dev/playground/r/zyT4zv/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+        origin: community
+  mode: taint
+  pattern-sources:
+  - pattern: "{ origin: function(...) {...} }\n"
+  - patterns:
+    - pattern-inside: "{ origin: $NOT_KNOWN_GOOD_CORS_ORIGIN }\n"
+    - metavariable-pattern:
+        metavariable: "$NOT_KNOWN_GOOD_CORS_ORIGIN"
+        patterns:
+        - pattern-not: 'false
+
+            '
+        - pattern-not: "[]\n"
+  pattern-sinks:
+  - patterns:
+    - pattern: "{..., cors: $CORS_ORIGIN, ...}\n"
+    - focus-metavariable: "$CORS_ORIGIN"
 - id: trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
   message: 'If possible, it is better to rely on automatic pinning in PyTorch to avoid
     undefined behavior and for efficiency '
