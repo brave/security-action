@@ -148,6 +148,67 @@ rules:
 
       '
   - pattern: "$DU.getSha1Digest().digest(...)\n"
+- id: javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
+  patterns:
+  - pattern-either:
+    - pattern: 'window.intercomSettings = {..., email: $EMAIL, ...};
+
+        '
+    - pattern: 'window.intercomSettings = {..., user_id: $USER_ID, ...};
+
+        '
+    - pattern: 'Intercom(''boot'', {..., email: $EMAIL, ...});
+
+        '
+    - pattern: 'Intercom(''boot'', {..., user_id: $USER_ID, ...});
+
+        '
+    - pattern: |
+        $VAR = {..., email: $EMAIL, ...};
+        ...
+        Intercom('boot', $VAR);
+    - pattern: |
+        $VAR = {..., user_id: $EMAIL, ...};
+        ...
+        Intercom('boot', $VAR);
+  - pattern-not: 'window.intercomSettings = {..., user_hash: $USER_HASH, ...};
+
+      '
+  - pattern-not: 'Intercom(''boot'', {..., user_hash: $USER_HASH, ...});
+
+      '
+  - pattern-not: |
+      $VAR = {..., user_hash: $USER_HASH, ...};
+      ...
+      Intercom('boot', $VAR);
+  message: Found an initialization of the Intercom Messenger that identifies a User,
+    but does not specify a `user_hash`.This configuration allows users to impersonate
+    one another. See the Intercom Identity Verification docs for more context https://www.intercom.com/help/en/articles/183-set-up-identity-verification-for-web-and-mobile
+  languages:
+  - js
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - guardrail
+    cwe:
+    - 'CWE-287: Improper Authentication'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - intercom
+    references:
+    - https://www.intercom.com/help/en/articles/183-set-up-identity-verification-for-web-and-mobile
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
+    shortlink: https://sg.run/Eb5w
+    semgrep.dev:
+      rule:
+        rule_id: QrU96W
+        version_id: BjTPr2
+        url: https://semgrep.dev/playground/r/BjTPr2/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
+        origin: community
 - id: python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-blowfish
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
   message: Detected Blowfish cipher algorithm which is considered insecure. The algorithm

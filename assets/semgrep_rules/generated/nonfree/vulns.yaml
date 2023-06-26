@@ -104,7 +104,7 @@ rules:
       metavariable: "$FUNC"
       regex: "(?!^free$)"
   - pattern-inside: free($VAR); ...
-  - pattern-not-inside: "$VAR = NULL; ..."
+  - pattern-not-inside: free($VAR); ... $VAR = NULL; ...
   - pattern-not-inside: free($VAR); ... $VAR = malloc(...); ...
   message: Variable '$VAR' was passed to a function after being freed. This can lead
     to undefined behavior.
@@ -130,8 +130,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAU9Dz
-        version_id: RGTLOb
-        url: https://semgrep.dev/playground/r/RGTLOb/c.lang.security.function-use-after-free.function-use-after-free
+        version_id: o5TN8w
+        url: https://semgrep.dev/playground/r/o5TN8w/c.lang.security.function-use-after-free.function-use-after-free
         origin: community
   languages:
   - c
@@ -7239,10 +7239,7 @@ rules:
   pattern-sanitizers:
   - pattern-either:
     - pattern: strconv.Atoi(...)
-    - patterns:
-      - pattern-either:
-        - pattern: "$X != $Y"
-        - pattern: "$X == $Y"
+    - pattern: "($X: bool)\n"
   metadata:
     category: security
     technology:
@@ -7270,8 +7267,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbU5o3
-        version_id: d6Txgr
-        url: https://semgrep.dev/playground/r/d6Txgr/go.gorm.security.audit.gorm-dangerous-methods-usage.gorm-dangerous-method-usage
+        version_id: YDT7J0
+        url: https://semgrep.dev/playground/r/YDT7J0/go.gorm.security.audit.gorm-dangerous-methods-usage.gorm-dangerous-method-usage
         origin: community
 - id: go.jwt-go.security.jwt.hardcoded-jwt-key
   message: A hard-coded credential was detected. It is not recommended to store credentials
@@ -8467,8 +8464,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUoqy
-        version_id: ZRTAd6
-        url: https://semgrep.dev/playground/r/ZRTAd6/go.lang.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: 6xTodX
+        url: https://semgrep.dev/playground/r/6xTodX/go.lang.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   severity: ERROR
@@ -8516,10 +8513,7 @@ rules:
   pattern-sanitizers:
   - pattern-either:
     - pattern: strconv.Atoi(...)
-    - patterns:
-      - pattern-either:
-        - pattern: "$X != $Y"
-        - pattern: "$X == $Y"
+    - pattern: "($X: bool)\n"
 - id: go.lang.security.injection.tainted-url-host.tainted-url-host
   languages:
   - go
@@ -8706,6 +8700,56 @@ rules:
   severity: WARNING
   languages:
   - html
+- id: java.android.security.exported_activity.exported_activity
+  patterns:
+  - pattern-not-inside: <activity ... android:exported="false" ... />
+  - pattern-inside: "<activity  ... /> \n"
+  - pattern-either:
+    - pattern: '<activity ... android:exported="true" ... />
+
+        '
+    - pattern: "<activity ... <intent-filter> ... />\n"
+  message: Use of Exported Activity
+  languages:
+  - generic
+  severity: WARNING
+  paths:
+    exclude:
+    - sources/
+    - classes3.dex
+    - "*.so"
+    include:
+    - "*AndroidManifest.xml"
+  metadata:
+    vulnerability: Use of exported components
+    Description: The application exports an activity. Any application on the device
+      can launch the exported activity which may compromise the integrity of your
+      application or its data.  Ensure that any exported activities do not have privileged
+      access to your application's control plane.
+    Severity: HIGH
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-926: Improper Export of Android Application Components'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    owasp:
+    - A5:2021 Security Misconfiguration
+    technology:
+    - Android
+    references:
+    - https://cwe.mitre.org/data/definitions/926.html
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.android.security.exported_activity.exported_activity
+    shortlink: https://sg.run/eNGZ
+    semgrep.dev:
+      rule:
+        rule_id: v8Ul0r
+        version_id: zyT474
+        url: https://semgrep.dev/playground/r/zyT474/java.android.security.exported_activity.exported_activity
+        origin: community
 - id: java.aws-lambda.security.tainted-sql-string.tainted-sql-string
   languages:
   - java
@@ -9498,8 +9542,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUgj1
-        version_id: xyT3k4
-        url: https://semgrep.dev/playground/r/xyT3k4/java.lang.security.audit.crypto.no-static-initialization-vector.no-static-initialization-vector
+        version_id: QkTb3o
+        url: https://semgrep.dev/playground/r/QkTb3o/java.lang.security.audit.crypto.no-static-initialization-vector.no-static-initialization-vector
         origin: community
   severity: WARNING
   languages:
@@ -10020,9 +10064,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzxR
-        version_id: ExTxW2
-        url: https://semgrep.dev/playground/r/ExTxW2/java.lang.security.audit.formatted-sql-string.formatted-sql-string
+        version_id: K3T0yp
+        url: https://semgrep.dev/playground/r/K3T0yp/java.lang.security.audit.formatted-sql-string.formatted-sql-string
         origin: community
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   message: Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized. Use a
     prepared statements (java.sql.PreparedStatement) instead. You can obtain a PreparedStatement
@@ -10076,10 +10123,6 @@ rules:
   pattern-sanitizers:
   - patterns:
     - pattern: "(CriteriaBuilder $CB).$ANY(...)"
-  - patterns:
-    - pattern-either:
-      - pattern: "$X != $Y"
-      - pattern: "$X == $Y"
   severity: ERROR
   languages:
   - java
@@ -10230,8 +10273,8 @@ rules:
   severity: WARNING
   metadata:
     likelihood: HIGH
-    impact: HIGH
-    confidence: MEDIUM
+    impact: MEDIUM
+    confidence: HIGH
     category: security
     cwe:
     - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
@@ -10257,12 +10300,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUBJG
-        version_id: 7ZT3Re
-        url: https://semgrep.dev/playground/r/7ZT3Re/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
+        version_id: 3ZTvKv
+        url: https://semgrep.dev/playground/r/3ZTvKv/java.lang.security.audit.sqli.tainted-sql-from-http-request.tainted-sql-from-http-request
         origin: community
   languages:
   - java
   mode: taint
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -10295,11 +10341,6 @@ rules:
         - metavariable-regex:
             metavariable: "$SQLCMD"
             regex: "(execute|query|executeUpdate)"
-  pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern: "$X != $Y"
-      - pattern: "$X == $Y"
 - id: java.lang.security.audit.tainted-cmd-from-http-request.tainted-cmd-from-http-request
   message: Detected input from a HTTPServletRequest going into a 'ProcessBuilder'
     or 'exec' command. This could lead to command injection if variables passed into
@@ -11115,14 +11156,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Udpk
-        version_id: 5PTzdG
-        url: https://semgrep.dev/playground/r/5PTzdG/java.lang.security.audit.xxe.saxparserfactory-disallow-doctype-decl-missing.saxparserfactory-disallow-doctype-decl-missing
+        version_id: 44TnNX
+        url: https://semgrep.dev/playground/r/44TnNX/java.lang.security.audit.xxe.saxparserfactory-disallow-doctype-decl-missing.saxparserfactory-disallow-doctype-decl-missing
         origin: community
   message: DOCTYPE declarations are enabled for this SAXParserFactory. This is vulnerable
-    to XML external entity attacks. Disable this by setting the feature "http://apache.org/xml/features/disallow-doctype-decl"
+    to XML external entity attacks. Disable this by setting the feature `http://apache.org/xml/features/disallow-doctype-decl`
     to true. Alternatively, allow DOCTYPE declarations and only prohibit external
-    entities declarations. This can be done by setting the features "http://xml.org/sax/features/external-general-entities"
-    and "http://xml.org/sax/features/external-parameter-entities" to false.
+    entities declarations. This can be done by setting the features `http://xml.org/sax/features/external-general-entities`
+    and `http://xml.org/sax/features/external-parameter-entities` to false. NOTE -
+    The previous links are not meant to be clicked. They are the literal config key
+    values that are supposed to be used to disable these features. For more information,
+    see https://semgrep.dev/docs/cheat-sheets/java-xxe/#3a-documentbuilderfactory.
   mode: taint
   pattern-sources:
   - by-side-effect: true
@@ -11237,6 +11281,193 @@ rules:
   fix: |
     $FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
     $FACTORY.newSAXParser();
+  languages:
+  - java
+- id: java.lang.security.audit.xxe.transformerfactory-dtds-not-disabled.transformerfactory-dtds-not-disabled
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-611: Improper Restriction of XML External Entity Reference'
+    owasp:
+    - A04:2017 - XML External Entities (XXE)
+    - A05:2021 - Security Misconfiguration
+    asvs:
+      section: V5 Validation, Sanitization and Encoding
+      control_id: 5.5.2 Insecue XML Deserialization
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x13-V5-Validation-Sanitization-Encoding.md#v55-deserialization-prevention
+      version: '4'
+    references:
+    - https://semgrep.dev/blog/2022/xml-security-in-java
+    - https://semgrep.dev/docs/cheat-sheets/java-xxe/
+    - https://blog.sonarsource.com/secure-xml-processor
+    - https://xerces.apache.org/xerces2-j/features.html
+    category: security
+    technology:
+    - java
+    - xml
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    likelihood: LOW
+    impact: HIGH
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/java.lang.security.audit.xxe.transformerfactory-dtds-not-disabled.transformerfactory-dtds-not-disabled
+    shortlink: https://sg.run/1wyQ
+    semgrep.dev:
+      rule:
+        rule_id: v8UeQ1
+        version_id: 7ZTyKK
+        url: https://semgrep.dev/playground/r/7ZTyKK/java.lang.security.audit.xxe.transformerfactory-dtds-not-disabled.transformerfactory-dtds-not-disabled
+        origin: community
+  message: DOCTYPE declarations are enabled for this TransformerFactory. This is vulnerable
+    to XML external entity attacks. Disable this by setting the attributes "accessExternalDTD"
+    and "accessExternalStylesheet" to "".
+  mode: taint
+  pattern-sources:
+  - by-side-effect: true
+    patterns:
+    - pattern-either:
+      - pattern: "$FACTORY = TransformerFactory.newInstance();\n"
+      - patterns:
+        - pattern: "$FACTORY"
+        - pattern-inside: |
+            class $C {
+              ...
+              $V $FACTORY = TransformerFactory.newInstance();
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = TransformerFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                ...
+              }
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = TransformerFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                ...
+              }
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = TransformerFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                ...
+              }
+              ...
+            }
+        - pattern-not-inside: |
+            class $C {
+              ...
+              $V $FACTORY = TransformerFactory.newInstance();
+              static {
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                ...
+              }
+              ...
+            }
+  pattern-sinks:
+  - patterns:
+    - pattern: "$FACTORY.newTransformer(...);"
+  pattern-sanitizers:
+  - by-side-effect: true
+    pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: |
+            $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); ...
+            $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        - pattern: |
+            $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            ...
+            $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+        - pattern: |
+            $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", ""); ...
+            $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+        - pattern: |
+            $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+            ...
+            $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+      - focus-metavariable: "$FACTORY"
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                ...
+              }
+              ...
+            }
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                ...
+                $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                ...
+              }
+              ...
+            }
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                ...
+              }
+              ...
+            }
+        - pattern-inside: |
+            class $C {
+              ...
+              $T $M(...) {
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalDTD.*/", "");
+                ...
+                $FACTORY.setAttribute("=~/.*accessExternalStylesheet.*/", "");
+                ...
+              }
+              ...
+            }
+      - pattern: "$M($X)"
+      - focus-metavariable: "$X"
+  fix: |
+    $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); $FACTORY.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+    $FACTORY.newTransformer(...);
   languages:
   - java
 - id: java.lang.security.httpservlet-path-traversal.httpservlet-path-traversal
@@ -11662,10 +11893,6 @@ rules:
       - pattern-inside: 'new $TYPE(...,$A,...);
 
           '
-    - patterns:
-      - pattern-either:
-        - pattern: "$X != $Y"
-        - pattern: "$X == $Y"
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -11697,6 +11924,9 @@ rules:
   languages:
   - java
   severity: WARNING
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   metadata:
     cwe:
     - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
@@ -11722,8 +11952,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqU8N2
-        version_id: LjTger
-        url: https://semgrep.dev/playground/r/LjTger/java.spring.security.audit.spring-sqli.spring-sqli
+        version_id: l4TjPP
+        url: https://semgrep.dev/playground/r/l4TjPP/java.spring.security.audit.spring-sqli.spring-sqli
         origin: community
 - id: java.spring.security.audit.spring-unvalidated-redirect.spring-unvalidated-redirect
   message: Application redirects a user to a destination URL specified by a user supplied
@@ -11815,8 +12045,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUxok
-        version_id: RGTj46
-        url: https://semgrep.dev/playground/r/RGTj46/java.spring.security.injection.tainted-file-path.tainted-file-path
+        version_id: pZTYKW
+        url: https://semgrep.dev/playground/r/pZTYKW/java.spring.security.injection.tainted-file-path.tainted-file-path
         origin: community
   mode: taint
   pattern-sources:
@@ -11830,6 +12060,9 @@ rules:
           $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
             ...
           }
+    - metavariable-regex:
+        metavariable: "$TYPE"
+        regex: "^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))"
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)"
@@ -11897,8 +12130,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUvkL
-        version_id: 8KTrlz
-        url: https://semgrep.dev/playground/r/8KTrlz/java.spring.security.injection.tainted-html-string.tainted-html-string
+        version_id: 2KTjgg
+        url: https://semgrep.dev/playground/r/2KTjgg/java.spring.security.injection.tainted-html-string.tainted-html-string
         origin: community
   mode: taint
   pattern-sources:
@@ -11914,8 +12147,11 @@ rules:
             ...
           }
     - metavariable-regex:
+        metavariable: "$TYPE"
+        regex: "^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))"
+    - metavariable-regex:
         metavariable: "$REQ"
-        regex: "(RequestBody|PathVariable|RequestParam)"
+        regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)"
     - focus-metavariable: "$SOURCE"
   - label: CONCAT
     by-side-effect: true
@@ -12010,9 +12246,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UdRR
-        version_id: gET7XJ
-        url: https://semgrep.dev/playground/r/gET7XJ/java.spring.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: rxTZn4
+        url: https://semgrep.dev/playground/r/rxTZn4/java.spring.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
+  options:
+    taint_assume_safe_numbers: true
+    taint_assume_safe_booleans: true
   mode: taint
   pattern-sources:
   - patterns:
@@ -12064,14 +12303,11 @@ rules:
     - pattern-not-inside: "$LOG.debug(...)"
     - pattern-not-inside: "$LOG.debugging(...)"
     - pattern-not-inside: "$LOG.error(...)"
+    - pattern-not-inside: new Exception(...)
+    - pattern-not-inside: throw ...;
     - metavariable-regex:
         metavariable: "$SQLSTR"
         regex: "(?i)(select|delete|insert|create|update|alter|drop)\\b"
-  pattern-sanitizers:
-  - patterns:
-    - pattern-either:
-      - pattern: "$X != $Y"
-      - pattern: "$X == $Y"
 - id: java.spring.security.injection.tainted-system-command.tainted-system-command
   languages:
   - java
@@ -12092,6 +12328,9 @@ rules:
           $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
             ...
           }
+    - metavariable-regex:
+        metavariable: "$TYPE"
+        regex: "^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))"
     - metavariable-regex:
         metavariable: "$REQ"
         regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)"
@@ -12175,8 +12414,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUxGN
-        version_id: QkTqNk
-        url: https://semgrep.dev/playground/r/QkTqNk/java.spring.security.injection.tainted-system-command.tainted-system-command
+        version_id: jQT2bK
+        url: https://semgrep.dev/playground/r/jQT2bK/java.spring.security.injection.tainted-system-command.tainted-system-command
         origin: community
 - id: java.spring.security.injection.tainted-url-host.tainted-url-host
   languages:
@@ -12214,8 +12453,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUZo8
-        version_id: K3TxLY
-        url: https://semgrep.dev/playground/r/K3TxLY/java.spring.security.injection.tainted-url-host.tainted-url-host
+        version_id: 1QTv9x
+        url: https://semgrep.dev/playground/r/1QTv9x/java.spring.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sources:
@@ -12230,8 +12469,11 @@ rules:
             ...
           }
     - metavariable-regex:
+        metavariable: "$TYPE"
+        regex: "^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))"
+    - metavariable-regex:
         metavariable: "$REQ"
-        regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue)"
+        regex: "(RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)"
     - focus-metavariable: "$SOURCE"
   pattern-sinks:
   - pattern-either:
@@ -18713,9 +18955,9 @@ rules:
     category: security
     references:
     - https://www.php.net/manual/en/function.htmlentities.php
-    - https://www.php.net/manual/ru/reserved.variables.request.php
-    - https://www.php.net/manual/ru/reserved.variables.post.php
-    - https://www.php.net/manual/ru/reserved.variables.get.php
+    - https://www.php.net/manual/en/reserved.variables.request.php
+    - https://www.php.net/manual/en/reserved.variables.post.php
+    - https://www.php.net/manual/en/reserved.variables.get.php
     - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
     cwe2022-top25: true
     cwe2021-top25: true
@@ -18730,8 +18972,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUyyg
-        version_id: LjTZLZ
-        url: https://semgrep.dev/playground/r/LjTZLZ/php.lang.security.injection.echoed-request.echoed-request
+        version_id: 0bTdNE
+        url: https://semgrep.dev/playground/r/0bTdNE/php.lang.security.injection.echoed-request.echoed-request
         origin: community
 - id: php.lang.security.injection.tainted-filename.tainted-filename
   severity: WARNING
@@ -30224,8 +30466,8 @@ rules:
         metavariable: "$FUNCTION"
         regex: "(?i)(.*password.*)"
 - id: python.lang.security.audit.network.bind.avoid-bind-to-all-interfaces
-  message: Running `socket.bind` to 0.0.0.0, ::, or empty string could unexpectedly
-    expose the server publicly as it binds to all available interfaces. Consider instead
+  message: Running `socket.bind` to 0.0.0.0, or empty string could unexpectedly expose
+    the server publicly as it binds to all available interfaces. Consider instead
     getting correct address from an environment variable or configuration file.
   metadata:
     cwe:
@@ -30249,8 +30491,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU3og
-        version_id: 5PTY5G
-        url: https://semgrep.dev/playground/r/5PTY5G/python.lang.security.audit.network.bind.avoid-bind-to-all-interfaces
+        version_id: WrT13W
+        url: https://semgrep.dev/playground/r/WrT13W/python.lang.security.audit.network.bind.avoid-bind-to-all-interfaces
         origin: community
   languages:
   - python
@@ -33844,10 +34086,7 @@ rules:
       metavariable: "$SIZE"
       comparison: "$SIZE < 2048"
 - id: ruby.lang.security.json-encoding.json-encoding
-  message: When a 'Hash' with user-supplied input is encoded in JSON, Rails doesn't
-    provide adequate escaping. If the JSON string is supplied into HTML, the page
-    will be vulnerable to XXS attacks. The affected Rails versions are 3.0.x, 3.1.x,
-    3.2.x, 4.1.x, 4.2.x. To fix, either upgrade or add an initializer.
+  message: This rule is deprecated.
   metadata:
     cwe:
     - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
@@ -33874,29 +34113,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UZ8v
-        version_id: w8T43Y
-        url: https://semgrep.dev/playground/r/w8T43Y/ruby.lang.security.json-encoding.json-encoding
+        version_id: YDTJOB
+        url: https://semgrep.dev/playground/r/YDTJOB/ruby.lang.security.json-encoding.json-encoding
         origin: community
   languages:
   - ruby
   severity: WARNING
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern: 'params
-
-        '
-    - pattern-not: 'cookies
-
-        '
-  pattern-sinks:
-  - pattern-either:
-    - patterns:
-      - focus-metavariable: "$X"
-      - pattern: "$X.to_json\n"
-    - pattern: 'JSON.encode(...)
-
-        '
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: ruby.lang.security.md5-used-as-password.md5-used-as-password
   languages:
   - ruby
@@ -34543,28 +34768,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUAl9
-        version_id: O9TglK
-        url: https://semgrep.dev/playground/r/O9TglK/ruby.rails.security.audit.number-to-currency.number-to-currency
+        version_id: jQTbNj
+        url: https://semgrep.dev/playground/r/jQTbNj/ruby.rails.security.audit.number-to-currency.number-to-currency
         origin: community
-  message: Detected user input flowing into number_to_currency helper. One of the
-    parameters to the helper (unit) is not escaped correctly and could lead to XSS,
-    which in turn could lead to sensitive data being exfiltrated. Instead, sanitize
-    data before passing it into `number_to_currency` with the html_escape (h) function
-    or upgrade to Rails 4.0.2 or 3.2.16.
+  message: This rule is deprecated.
   languages:
   - ruby
   severity: WARNING
-  mode: taint
-  pattern-sources:
-  - pattern: params[$X]
-  pattern-sinks:
-  - patterns:
-    - pattern: "$UNIT"
-    - pattern-inside: 'number_to_currency(..., unit: $UNIT, ...)
-
-        '
-  pattern-sanitizers:
-  - pattern: h(...)
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: ruby.rails.security.audit.quote-table-name.quote-table-name
   metadata:
     owasp:
@@ -34592,22 +34805,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6U2dJ
-        version_id: YDTj6R
-        url: https://semgrep.dev/playground/r/YDTj6R/ruby.rails.security.audit.quote-table-name.quote-table-name
+        version_id: 1QT9kp
+        url: https://semgrep.dev/playground/r/1QT9kp/ruby.rails.security.audit.quote-table-name.quote-table-name
         origin: community
-  message: Detected usage of `quote_table_name`, which has a vulnerability allowing
-    malicious users to inject arbitrary SQL into a query. This is fixed in Rails versions
-    3.0.10, 2.3.13, and 3.1.0.rc5 and above. If updating your Rails version is not
-    possible, sanitize input thoroughly before passing it to a `quote_table_name`
-    call.
+  message: This rule is deprecated.
   languages:
   - ruby
   severity: WARNING
-  mode: taint
-  pattern-sources:
-  - pattern: params[$X]
-  pattern-sinks:
-  - pattern: quote_table_name(...)
+  patterns:
+  - pattern: a()
+  - pattern: b()
 - id: ruby.rails.security.audit.sqli.ruby-pg-sqli.ruby-pg-sqli
   mode: taint
   pattern-propagators:
@@ -35906,8 +36113,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwU8gl
-        version_id: K3TPRl
-        url: https://semgrep.dev/playground/r/K3TPRl/ruby.rails.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: bZTqE5
+        url: https://semgrep.dev/playground/r/bZTqE5/ruby.rails.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sources:
@@ -35915,12 +36122,15 @@ rules:
     - pattern-either:
       - pattern: params
       - pattern: request
+  pattern-sanitizers:
+  - pattern: "$PARAMS.slice(...)\n"
   pattern-sinks:
   - patterns:
     - pattern-either:
       - patterns:
         - pattern-either:
-          - pattern: "$RECORD.where($X,...)\n"
+          - patterns:
+            - pattern: "$RECORD.where($X,...)\n"
           - pattern: "$RECORD.find(..., :conditions => $X,...)\n"
         - focus-metavariable: "$X"
       - patterns:
@@ -40177,6 +40387,367 @@ rules:
           $WG.Wait()
           ...
         }
+- id: trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+  message: 'The Apollo GraphQL uses the ''schemaDirectives'' option. This works in
+    ApolloServer v2, but does nothing in version >=3. Depending on what the directives
+    are used for, this can expose authenticated endpoints, disable rate limiting,
+    and more. See the references on how to create custom directives in v3 and v4. '
+  languages:
+  - js
+  - ts
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-686: Function Call With Incorrect Argument Type'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - graphql
+    - apollo-graphql-server
+    description: Use of outdated ApolloServer option 'schemaDirectives'
+    references:
+    - https://www.apollographql.com/docs/apollo-server/schema/directives/#custom-directives
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+    shortlink: https://sg.run/wE2N
+    semgrep.dev:
+      rule:
+        rule_id: OrU1Oz
+        version_id: 6xTYB4
+        url: https://semgrep.dev/playground/r/6xTYB4/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+        origin: community
+  pattern-either:
+  - pattern: 'new ApolloServer({..., schemaDirectives: ..., ...})'
+- id: trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+  languages:
+  - js
+  - ts
+  message: 'The Apollo GraphQL server is using the graphql-upload library. This library
+    allows file uploads using POSTs with content-type: multipart/form-data, which
+    can enable to CSRF attacks. Ensure that you are enabling CSRF protection if you
+    really need to use graphql-upload .'
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    subcategory:
+    - vuln
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    description: Use of the graphql-upload library
+    references:
+    - https://github.com/apollographql/apollo-server/security/advisories/GHSA-2p3c-p3qw-69r4
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+    shortlink: https://sg.run/xE20
+    semgrep.dev:
+      rule:
+        rule_id: eqUB1Q
+        version_id: o5TNAQ
+        url: https://semgrep.dev/playground/r/o5TNAQ/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+        origin: community
+  patterns:
+  - pattern: app.use(graphqlUploadExpress());
+- id: trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server is setup with a CORS policy that reflects any
+    origin, or with a regex that has known flaws.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Bad CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+    shortlink: https://sg.run/vE1n
+    semgrep.dev:
+      rule:
+        rule_id: ZqUbNY
+        version_id: 2KTq8k
+        url: https://semgrep.dev/playground/r/2KTq8k/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+        origin: community
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "{ origin: $BAD_CORS_ORIGIN }\n"
+    - metavariable-pattern:
+        metavariable: "$BAD_CORS_ORIGIN"
+        pattern-either:
+        - pattern: 'true
+
+            '
+        - patterns:
+          - pattern-either:
+            - pattern: "$CORS_SINGLE_ORIGIN\n"
+            - pattern: "[..., $CORS_SINGLE_ORIGIN, ...]\n"
+          - metavariable-pattern:
+              metavariable: "$CORS_SINGLE_ORIGIN"
+              pattern-either:
+              - pattern-regex: "^/.*[^\\\\]\\..*/$"
+              - pattern-regex: "^/.*[^$]/$"
+              - pattern: "'null'\n"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $X = require('apollo-server-express');
+          ...
+      - pattern-inside: |
+          import 'apollo-server-express';
+          ...
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $X = new ApolloServer({...})
+            ...
+            $X.applyMiddleware({...})
+        - pattern: "$X.applyMiddleware({..., cors: $CORS_ORIGIN, ...})\n"
+    - focus-metavariable: "$CORS_ORIGIN"
+- id: trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server lacks a CORS policy. By default, the server uses
+    the Access-Control-Allow-Origin HTTP header with the wildcard value (*).
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Lack of CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+    shortlink: https://sg.run/eNE0
+    semgrep.dev:
+      rule:
+        rule_id: d8UYAJ
+        version_id: pZTWE4
+        url: https://semgrep.dev/playground/r/pZTWE4/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $X = require('apollo-server-express');
+        ...
+    - pattern-inside: |
+        import 'apollo-server-express';
+        ...
+  - pattern: "$X = new ApolloServer({...})\n"
+  - pattern-not-inside: |
+      $X = new ApolloServer({...})
+      ...
+      $X.applyMiddleware({..., cors: ..., ...})
+- id: trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server is setup with a CORS policy that reflects any
+    origin, or with a regex that has known flaws.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - graphql
+    - apollo-graphql-server
+    description: Bad CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+    shortlink: https://sg.run/Zo3x
+    semgrep.dev:
+      rule:
+        rule_id: EwUZNW
+        version_id: jQTxPW
+        url: https://semgrep.dev/playground/r/jQTxPW/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+        origin: community
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "{ origin: $BAD_CORS_ORIGIN }\n"
+    - metavariable-pattern:
+        metavariable: "$BAD_CORS_ORIGIN"
+        pattern-either:
+        - pattern: 'true
+
+            '
+        - patterns:
+          - pattern-either:
+            - pattern: "$CORS_SINGLE_ORIGIN\n"
+            - pattern: "[..., $CORS_SINGLE_ORIGIN, ...]\n"
+          - metavariable-pattern:
+              metavariable: "$CORS_SINGLE_ORIGIN"
+              pattern-either:
+              - pattern-regex: "^/.*[^\\\\]\\..*/$"
+              - pattern-regex: "^/.*[^$]/$"
+              - pattern: "'null'\n"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $X = require('apollo-server');
+          ...
+      - pattern-inside: |
+          import 'apollo-server';
+          ...
+    - pattern: 'new ApolloServer({..., cors: $CORS_ORIGIN, ...})
+
+        '
+    - focus-metavariable: "$CORS_ORIGIN"
+- id: trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server lacks a CORS policy. By default, the batteries-included
+    apollo-server package serves the Access-Control-Allow-Origin HTTP header with
+    the wildcard value (*).
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Lack of CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+    shortlink: https://sg.run/dbNX
+    semgrep.dev:
+      rule:
+        rule_id: nJU3P4
+        version_id: X0T9R1
+        url: https://semgrep.dev/playground/r/X0T9R1/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $X = require('apollo-server');
+        ...
+    - pattern-inside: |
+        import 'apollo-server';
+        ...
+  - pattern: 'new ApolloServer({...})
+
+      '
+  - pattern-not: 'new ApolloServer({..., cors: ..., ...})
+
+      '
+- id: trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server lacks the 'csrfPrevention' option. This option
+    is 'false' by the default in v3 of the Apollo GraphQL v3, which can enable CSRF
+    attacks.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Lack of CSRF prevention
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors/#preventing-cross-site-request-forgery-csrf
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+    shortlink: https://sg.run/nEGg
+    semgrep.dev:
+      rule:
+        rule_id: 7KU8o3
+        version_id: 1QTlG6
+        url: https://semgrep.dev/playground/r/1QTlG6/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+        origin: community
+  patterns:
+  - pattern: new ApolloServer({...})
+  - pattern-not: 'new ApolloServer({..., csrfPrevention: true, ...})
+
+      '
+- id: trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server sets the 'csrfPrevention' option to false. This
+    can enable CSRF attacks.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v4
+    description: CSRF protection disabled
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors/#preventing-cross-site-request-forgery-csrf
+    license: CC-BY-NC-SA-4.0
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+    shortlink: https://sg.run/Eb1P
+    semgrep.dev:
+      rule:
+        rule_id: L1UjQ3
+        version_id: 9lTBpp
+        url: https://semgrep.dev/playground/r/9lTBpp/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+        origin: community
+  patterns:
+  - pattern: 'new ApolloServer({..., csrfPrevention: false, ...})
+
+      '
 - id: trailofbits.python.lxml-in-pandas.lxml-in-pandas
   message: Found usage of the `$FLAVOR` library, which is vulnerable to attacks such
     as XML external entity (XXE) attacks

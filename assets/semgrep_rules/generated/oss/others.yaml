@@ -13,7 +13,8 @@ rules:
     Use of assert detected. The enclosed code will be removed when
     compiling to optimised byte code.
   metadata:
-    cwe: 'CWE-754: Improper Check for Unusual or Exceptional Conditions'
+    shortDescription: Improper Check for Unusual or Exceptional Conditions
+    cwe: CWE-754
     primary_identifier: bandit.B101
     secondary_identifiers:
     - name: Bandit Test ID B101
@@ -25,9 +26,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU4lp
-        version_id: rxTqOv
-        url: https://semgrep.dev/playground/r/rxTqOv/gitlab.bandit.B101
-        origin: custom
+        version_id: O9TbgO
+        url: https://semgrep.dev/playground/r/O9TbgO/gitlab.bandit.B101
+        origin: community
   severity: INFO
   languages:
   - python
@@ -39,8 +40,9 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
+    cwe: CWE-78
     owasp: A1:2017-Injection
     primary_identifier: bandit.B102
     secondary_identifiers:
@@ -53,9 +55,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUoNN
-        version_id: qkT7px
-        url: https://semgrep.dev/playground/r/qkT7px/gitlab.bandit.B102
-        origin: custom
+        version_id: e1TON3
+        url: https://semgrep.dev/playground/r/e1TON3/gitlab.bandit.B102
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -67,7 +69,8 @@ rules:
       regex: "(0x..f|0o..[2,3,7]|stat.S_IXGRP|stat.S_IWOTH)"
   message: Chmod setting a permissive mask on file.
   metadata:
-    cwe: 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+    shortDescription: Incorrect Permission Assignment for Critical Resource
+    cwe: CWE-732
     owasp: A6:2017-Security Misconfiguration
     primary_identifier: bandit.B103
     secondary_identifiers:
@@ -80,9 +83,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUd5P
-        version_id: l4TRX6
-        url: https://semgrep.dev/playground/r/l4TRX6/gitlab.bandit.B103
-        origin: custom
+        version_id: vdTR70
+        url: https://semgrep.dev/playground/r/vdTR70/gitlab.bandit.B103
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -107,7 +110,8 @@ rules:
     instead getting correct address from an environment variable or
     configuration file.
   metadata:
-    cwe: 'CWE-200: Exposure of Sensitive Information to an Unauthorized Actor'
+    shortDescription: Exposure of Sensitive Information to an Unauthorized Actor
+    cwe: CWE-200
     owasp: A6:2017-Security Misconfiguration
     primary_identifier: bandit.B104
     secondary_identifiers:
@@ -120,9 +124,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUroX
-        version_id: YDTeYZ
-        url: https://semgrep.dev/playground/r/YDTeYZ/gitlab.bandit.B104
-        origin: custom
+        version_id: d6TWd3
+        url: https://semgrep.dev/playground/r/d6TWd3/gitlab.bandit.B104
+        origin: community
   severity: INFO
   languages:
   - python
@@ -138,7 +142,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-259: Use of Hard-coded Password'
+    shortDescription: Use of Hard-coded Password
+    cwe: CWE-259
     owasp: A2:2017-Broken Authentication
     primary_identifier: bandit.B105
     secondary_identifiers:
@@ -151,9 +156,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUqKb
-        version_id: 6xT9y8
-        url: https://semgrep.dev/playground/r/6xT9y8/gitlab.bandit.B105
-        origin: custom
+        version_id: ZRTZYD
+        url: https://semgrep.dev/playground/r/ZRTZYD/gitlab.bandit.B105
+        origin: community
   severity: INFO
   languages:
   - python
@@ -167,7 +172,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-259: Use of Hard-coded Password'
+    shortDescription: Use of Hard-coded Password
+    cwe: CWE-259
     owasp: A2:2017-Broken Authentication
     primary_identifier: bandit.B106
     secondary_identifiers:
@@ -180,9 +186,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUzxg
-        version_id: o5TDKL
-        url: https://semgrep.dev/playground/r/o5TDKL/gitlab.bandit.B106
-        origin: custom
+        version_id: nWTRgJ
+        url: https://semgrep.dev/playground/r/nWTRgJ/gitlab.bandit.B106
+        origin: community
   severity: INFO
   languages:
   - python
@@ -195,7 +201,8 @@ rules:
     Hardcoded password is used as a default argument to '$FUNC'. This could be dangerous if
     a real password is not supplied.
   metadata:
-    cwe: 'CWE-259: Use of Hard-coded Password'
+    cwe: CWE-259
+    shortDescription: Use of Hard-coded Password
     owasp: A2:2017-Broken Authentication
     primary_identifier: bandit.B107
     secondary_identifiers:
@@ -208,9 +215,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUyRj
-        version_id: zyT2GN
-        url: https://semgrep.dev/playground/r/zyT2GN/gitlab.bandit.B107
-        origin: custom
+        version_id: 7ZTy4X
+        url: https://semgrep.dev/playground/r/7ZTy4X/gitlab.bandit.B107
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -221,7 +228,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-377: Insecure Temporary File'
+    cwe: CWE-377
+    shortDescription: Insecure Temporary File
     primary_identifier: bandit.B108
     secondary_identifiers:
     - name: Bandit Test ID B108
@@ -233,9 +241,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU6oJ
-        version_id: e1T5Rd
-        url: https://semgrep.dev/playground/r/e1T5Rd/gitlab.bandit.B108
-        origin: custom
+        version_id: LjT38p
+        url: https://semgrep.dev/playground/r/LjT38p/gitlab.bandit.B108
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -255,7 +263,7 @@ rules:
         rule_id: 6JU6qd
         version_id: l4TzRP
         url: https://semgrep.dev/playground/r/l4TzRP/gitlab.bandit.B108-1
-        origin: custom
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -269,7 +277,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-377: Insecure Temporary File'
+    cwe: CWE-377
+    shortDescription: Insecure Temporary File
     primary_identifier: bandit.B108-2
     secondary_identifiers:
     - name: Bandit Test ID B108
@@ -281,9 +290,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUGl6
-        version_id: vdTgrW
-        url: https://semgrep.dev/playground/r/vdTgrW/gitlab.bandit.B108-2
-        origin: custom
+        version_id: 8KTZ8W
+        url: https://semgrep.dev/playground/r/8KTZ8W/gitlab.bandit.B108-2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -405,7 +414,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-703: Improper Check or Handling of Exceptional Conditions'
+    cwe: CWE-703
+    shortDescription: Improper Check or Handling of Exceptional Conditions
     primary_identifier: bandit.B110
     secondary_identifiers:
     - name: Bandit Test ID B110
@@ -417,9 +427,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZU40b
-        version_id: nWTjxO
-        url: https://semgrep.dev/playground/r/nWTjxO/gitlab.bandit.B110
-        origin: custom
+        version_id: 44Td0W
+        url: https://semgrep.dev/playground/r/44Td0W/gitlab.bandit.B110
+        origin: community
   severity: INFO
   languages:
   - python
@@ -541,7 +551,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-703: Improper Check or Handling of Exceptional Conditions'
+    cwe: CWE-703
+    shortDescription: Improper Check or Handling of Exceptional Conditions
     primary_identifier: bandit.B112
     secondary_identifiers:
     - name: Bandit Test ID B112
@@ -553,9 +564,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5UZ3Z
-        version_id: ZRTnQQ
-        url: https://semgrep.dev/playground/r/ZRTnQQ/gitlab.bandit.B112
-        origin: custom
+        version_id: 3ZT10K
+        url: https://semgrep.dev/playground/r/3ZT10K/gitlab.bandit.B112
+        origin: community
   severity: INFO
   languages:
   - python
@@ -584,7 +595,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-400: Uncontrolled Resource Consumption'
+    cwe: CWE-400
+    shortDescription: Uncontrolled Resource Consumption
     primary_identifier: bandit.B113
     secondary_identifiers:
     - name: Bandit Test ID B113
@@ -596,9 +608,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrULKb
-        version_id: YDTLXR
-        url: https://semgrep.dev/playground/r/YDTLXR/gitlab.bandit.B113
-        origin: custom
+        version_id: ExTw06
+        url: https://semgrep.dev/playground/r/ExTw06/gitlab.bandit.B113
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -613,7 +625,8 @@ rules:
     as it will leak sensitive information. Instead, consider using Flask configuration
     variables or setting 'debug' using system environment variables.
   metadata:
-    cwe: 'CWE-489: Active Debug Code'
+    cwe: CWE-489
+    shortDescription: Active Debug Code
     owasp: A6:2017-Security Misconfiguration
     primary_identifier: bandit.B201
     secondary_identifiers:
@@ -626,9 +639,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUrz7
-        version_id: pZT3bA
-        url: https://semgrep.dev/playground/r/pZT3bA/gitlab.bandit.B201
-        origin: custom
+        version_id: QkTOeR
+        url: https://semgrep.dev/playground/r/QkTOeR/gitlab.bandit.B201
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -653,8 +666,9 @@ rules:
     tarfile.extractall used without any validation. You should check members and discard dangerous
     ones.
   metadata:
-    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
-      Traversal'')'
+    cwe: CWE-22
+    shortDescription: Improper Limitation of a Pathname to a Restricted Directory
+      ('Path Traversal')
     primary_identifier: bandit.B202
     secondary_identifiers:
     - name: Bandit Test ID B202
@@ -666,9 +680,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUPXn
-        version_id: NdTLj0
-        url: https://semgrep.dev/playground/r/NdTLj0/gitlab.bandit.B202
-        origin: custom
+        version_id: gETDQp
+        url: https://semgrep.dev/playground/r/gETDQp/gitlab.bandit.B202
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -682,7 +696,8 @@ rules:
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B301-1
     secondary_identifiers:
@@ -695,9 +710,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU1y5
-        version_id: 2KT2dw
-        url: https://semgrep.dev/playground/r/2KT2dw/gitlab.bandit.B301-1
-        origin: custom
+        version_id: JdTj9B
+        url: https://semgrep.dev/playground/r/JdTj9B/gitlab.bandit.B301-1
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -709,7 +724,8 @@ rules:
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B301-2
     secondary_identifiers:
@@ -722,9 +738,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUwGl
-        version_id: X0TyAJ
-        url: https://semgrep.dev/playground/r/X0TyAJ/gitlab.bandit.B301-2
-        origin: custom
+        version_id: 5PTzgQ
+        url: https://semgrep.dev/playground/r/5PTzgQ/gitlab.bandit.B301-2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -737,7 +753,8 @@ rules:
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B301-3
     secondary_identifiers:
@@ -750,9 +767,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UqZR
-        version_id: jQT5wL
-        url: https://semgrep.dev/playground/r/jQT5wL/gitlab.bandit.B301-3
-        origin: custom
+        version_id: GxTRdy
+        url: https://semgrep.dev/playground/r/GxTRdy/gitlab.bandit.B301-3
+        origin: community
   languages:
   - python
   severity: WARNING
@@ -765,7 +782,8 @@ rules:
     Instead, consider serializing the relevant data as JSON or a similar text-based
     serialization format.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B301-4
     secondary_identifiers:
@@ -778,9 +796,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UZxd
-        version_id: 1QTp4n
-        url: https://semgrep.dev/playground/r/1QTp4n/gitlab.bandit.B301-4
-        origin: custom
+        version_id: RGTl4J
+        url: https://semgrep.dev/playground/r/RGTl4J/gitlab.bandit.B301-4
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -795,7 +813,8 @@ rules:
     Never unmarshal data received from an untrusted or unauthenticated source.
     See more details: https://docs.python.org/3/library/marshal.html?highlight=security
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B302
     secondary_identifiers:
@@ -808,9 +827,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUK4W
-        version_id: 9lTbA8
-        url: https://semgrep.dev/playground/r/9lTbA8/gitlab.bandit.B302
-        origin: custom
+        version_id: A8T2oB
+        url: https://semgrep.dev/playground/r/A8T2oB/gitlab.bandit.B302
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -821,7 +840,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-1
     secondary_identifiers:
@@ -834,9 +854,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5U77W
-        version_id: yeTpDb
-        url: https://semgrep.dev/playground/r/yeTpDb/gitlab.bandit.B303-1
-        origin: custom
+        version_id: BjTA36
+        url: https://semgrep.dev/playground/r/BjTA36/gitlab.bandit.B303-1
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -847,7 +867,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-2
     secondary_identifiers:
@@ -860,9 +881,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2URRg
-        version_id: rxTKjR
-        url: https://semgrep.dev/playground/r/rxTKjR/gitlab.bandit.B303-2
-        origin: custom
+        version_id: DkTjrr
+        url: https://semgrep.dev/playground/r/DkTjrr/gitlab.bandit.B303-2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -875,7 +896,8 @@ rules:
     Detected MD2 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-3
     secondary_identifiers:
@@ -888,9 +910,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUOKZ
-        version_id: bZT3Lg
-        url: https://semgrep.dev/playground/r/bZT3Lg/gitlab.bandit.B303-3
-        origin: custom
+        version_id: WrTw4p
+        url: https://semgrep.dev/playground/r/WrTw4p/gitlab.bandit.B303-3
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -903,7 +925,8 @@ rules:
     Detected MD4 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-4
     secondary_identifiers:
@@ -916,9 +939,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUvLN
-        version_id: NdTyeK
-        url: https://semgrep.dev/playground/r/NdTyeK/gitlab.bandit.B303-4
-        origin: custom
+        version_id: 0bTXP3
+        url: https://semgrep.dev/playground/r/0bTXP3/gitlab.bandit.B303-4
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -932,7 +955,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-5
     secondary_identifiers:
@@ -945,9 +969,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6UkYj
-        version_id: kbTGOE
-        url: https://semgrep.dev/playground/r/kbTGOE/gitlab.bandit.B303-5
-        origin: custom
+        version_id: K3TXWk
+        url: https://semgrep.dev/playground/r/K3TXWk/gitlab.bandit.B303-5
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -961,7 +985,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-6
     secondary_identifiers:
@@ -974,9 +999,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUOkX
-        version_id: w8Tokr
-        url: https://semgrep.dev/playground/r/w8Tokr/gitlab.bandit.B303-6
-        origin: custom
+        version_id: qkTy8y
+        url: https://semgrep.dev/playground/r/qkTy8y/gitlab.bandit.B303-6
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -987,7 +1012,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-7
     secondary_identifiers:
@@ -1000,9 +1026,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10Ueez
-        version_id: xyTzdP
-        url: https://semgrep.dev/playground/r/xyTzdP/gitlab.bandit.B303-7
-        origin: custom
+        version_id: l4T0nj
+        url: https://semgrep.dev/playground/r/l4T0nj/gitlab.bandit.B303-7
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1013,7 +1039,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B303-8
     secondary_identifiers:
@@ -1026,9 +1053,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUkko
-        version_id: O9Txv1
-        url: https://semgrep.dev/playground/r/O9Txv1/gitlab.bandit.B303-8
-        origin: custom
+        version_id: YDT79J
+        url: https://semgrep.dev/playground/r/YDT79J/gitlab.bandit.B303-8
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1041,7 +1068,8 @@ rules:
     Detected MD2 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-1
     secondary_identifiers:
@@ -1054,9 +1082,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUyyn
-        version_id: e1TjZJ
-        url: https://semgrep.dev/playground/r/e1TjZJ/gitlab.bandit.B304-1
-        origin: custom
+        version_id: JdTj9J
+        url: https://semgrep.dev/playground/r/JdTj9J/gitlab.bandit.B304-1
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1066,7 +1094,8 @@ rules:
     Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-10
     secondary_identifiers:
@@ -1079,9 +1108,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU886
-        version_id: gET7kq
-        url: https://semgrep.dev/playground/r/gET7kq/gitlab.bandit.B304-10
-        origin: custom
+        version_id: K3TXq4
+        url: https://semgrep.dev/playground/r/K3TXq4/gitlab.bandit.B304-10
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1091,7 +1120,8 @@ rules:
     Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-11
     secondary_identifiers:
@@ -1104,9 +1134,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUGGA
-        version_id: QkTq1y
-        url: https://semgrep.dev/playground/r/QkTq1y/gitlab.bandit.B304-11
-        origin: custom
+        version_id: qkTynb
+        url: https://semgrep.dev/playground/r/qkTynb/gitlab.bandit.B304-11
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1116,7 +1146,8 @@ rules:
     Detected IDEA cipher algorithm which is considered insecure. The algorithm is
     considered weak and has been deprecated. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-12
     secondary_identifiers:
@@ -1129,9 +1160,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8U22d
-        version_id: 3ZTXL9
-        url: https://semgrep.dev/playground/r/3ZTXL9/gitlab.bandit.B304-12
-        origin: custom
+        version_id: l4T0O8
+        url: https://semgrep.dev/playground/r/l4T0O8/gitlab.bandit.B304-12
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1144,7 +1175,8 @@ rules:
     Detected MD4 hash algorithm which is considered insecure. This algorithm
     has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-2
     secondary_identifiers:
@@ -1157,9 +1189,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6U99k
-        version_id: vdT6v7
-        url: https://semgrep.dev/playground/r/vdT6v7/gitlab.bandit.B304-2
-        origin: custom
+        version_id: 5PTzg6
+        url: https://semgrep.dev/playground/r/5PTzg6/gitlab.bandit.B304-2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1173,7 +1205,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-3
     secondary_identifiers:
@@ -1186,9 +1219,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUNNN
-        version_id: d6Tx6G
-        url: https://semgrep.dev/playground/r/d6Tx6G/gitlab.bandit.B304-3
-        origin: custom
+        version_id: GxTRdw
+        url: https://semgrep.dev/playground/r/GxTRdw/gitlab.bandit.B304-3
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1202,7 +1235,8 @@ rules:
     collision resistant and is therefore not suitable as a cryptographic
     signature. Use SHA256 or SHA3 instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-4
     secondary_identifiers:
@@ -1215,9 +1249,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUYYN
-        version_id: ZRTAed
-        url: https://semgrep.dev/playground/r/ZRTAed/gitlab.bandit.B304-4
-        origin: custom
+        version_id: RGTl41
+        url: https://semgrep.dev/playground/r/RGTl41/gitlab.bandit.B304-4
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1231,7 +1265,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-5
     secondary_identifiers:
@@ -1244,9 +1279,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUAOd
-        version_id: nWTLnL
-        url: https://semgrep.dev/playground/r/nWTLnL/gitlab.bandit.B304-5
-        origin: custom
+        version_id: A8T27j
+        url: https://semgrep.dev/playground/r/A8T27j/gitlab.bandit.B304-5
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1259,7 +1294,8 @@ rules:
     Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-6
     secondary_identifiers:
@@ -1272,9 +1308,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxURAL
-        version_id: ExTx1w
-        url: https://semgrep.dev/playground/r/ExTx1w/gitlab.bandit.B304-6
-        origin: custom
+        version_id: BjTA0X
+        url: https://semgrep.dev/playground/r/BjTA0X/gitlab.bandit.B304-6
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1287,7 +1323,8 @@ rules:
     Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
     known vulnerabilities. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-7
     secondary_identifiers:
@@ -1300,9 +1337,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdU82R
-        version_id: 7ZT3bA
-        url: https://semgrep.dev/playground/r/7ZT3bA/gitlab.bandit.B304-7
-        origin: custom
+        version_id: DkTj0q
+        url: https://semgrep.dev/playground/r/DkTj0q/gitlab.bandit.B304-7
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1315,7 +1352,8 @@ rules:
     Detected DES cipher algorithm which is considered insecure. The algorithm is
     considered weak and has been deprecated. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-8
     secondary_identifiers:
@@ -1328,9 +1366,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UWB8
-        version_id: LjTgzw
-        url: https://semgrep.dev/playground/r/LjTgzw/gitlab.bandit.B304-8
-        origin: custom
+        version_id: WrTwpl
+        url: https://semgrep.dev/playground/r/WrTwpl/gitlab.bandit.B304-8
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1343,7 +1381,8 @@ rules:
     Detected XOR cipher algorithm which is considered insecure. This algorithm
     is not cryptographically secure and can be reversed easily. Use AES instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B304-9
     secondary_identifiers:
@@ -1356,9 +1395,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUG0Q
-        version_id: 8KTrvd
-        url: https://semgrep.dev/playground/r/8KTrvd/gitlab.bandit.B304-9
-        origin: custom
+        version_id: 0bTXb5
+        url: https://semgrep.dev/playground/r/0bTXb5/gitlab.bandit.B304-9
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1368,7 +1407,8 @@ rules:
     Detected ECB cipher mode which is considered insecure. The algorithm can
     potentially leak information about the plaintext. Use CBC mode instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B305
     secondary_identifiers:
@@ -1381,9 +1421,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUDDX
-        version_id: 44TjZy
-        url: https://semgrep.dev/playground/r/44TjZy/gitlab.bandit.B305
-        origin: custom
+        version_id: YDT70A
+        url: https://semgrep.dev/playground/r/YDT70A/gitlab.bandit.B305
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1394,7 +1434,8 @@ rules:
     NOT BE USED. The file name may refer to a file that did not exist at some point, but by the time you get around to creating
     it, someone else may have beaten you to the punch.
   metadata:
-    cwe: 'CWE-377: Insecure Temporary File'
+    cwe: CWE-377
+    shortDescription: Insecure Temporary File
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B306
     secondary_identifiers:
@@ -1407,9 +1448,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUvdb
-        version_id: PkT3QJ
-        url: https://semgrep.dev/playground/r/PkT3QJ/gitlab.bandit.B306
-        origin: custom
+        version_id: 6xTogD
+        url: https://semgrep.dev/playground/r/6xTogD/gitlab.bandit.B306
+        origin: community
   languages:
   - python
   severity: ERROR
@@ -1422,8 +1463,9 @@ rules:
     may be a code injection vulnerability. Ensure evaluated content is not definable
     by external sources. Consider using safer ast.literal_eval.
   metadata:
-    cwe: 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
-      (''Eval Injection'')'
+    cwe: CWE-95
+    shortDescription: Improper Neutralization of Directives in Dynamically Evaluated
+      Code ('Eval Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B307
     secondary_identifiers:
@@ -1436,9 +1478,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8U5kd
-        version_id: JdTxD5
-        url: https://semgrep.dev/playground/r/JdTxD5/gitlab.bandit.B307
-        origin: custom
+        version_id: o5TwEK
+        url: https://semgrep.dev/playground/r/o5TwEK/gitlab.bandit.B307
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1463,7 +1505,7 @@ rules:
         rule_id: d8UzRp
         version_id: JdTQjX
         url: https://semgrep.dev/playground/r/JdTQjX/gitlab.bandit.B308.B703
-        origin: custom
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1480,7 +1522,8 @@ rules:
     See https://docs.python.org/3/library/http.client.html#http.client.HTTPSConnection
     for more information.
   metadata:
-    cwe: 'CWE-295: Improper Certificate Validation'
+    cwe: CWE-295
+    shortDescription: Improper Certificate Validation
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B309
     secondary_identifiers:
@@ -1493,9 +1536,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUqEy
-        version_id: GxTeP7
-        url: https://semgrep.dev/playground/r/GxTeP7/gitlab.bandit.B309
-        origin: custom
+        version_id: pZTYjy
+        url: https://semgrep.dev/playground/r/pZTYjy/gitlab.bandit.B309
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1533,7 +1576,8 @@ rules:
     read arbitrary files. Audit uses of urllib calls to ensure user data cannot control
     the URLs, or consider using the 'requests' library instead.
   metadata:
-    cwe: 'CWE-939: Improper Authorization in Handler for Custom URL Scheme'
+    cwe: CWE-939
+    shortDescription: Improper Authorization in Handler for Custom URL Scheme
     owasp: A5:2017-Broken Access Control
     primary_identifier: bandit.B310-1
     secondary_identifiers:
@@ -1546,9 +1590,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUYed
-        version_id: RGTLAP
-        url: https://semgrep.dev/playground/r/RGTLAP/gitlab.bandit.B310-1
-        origin: custom
+        version_id: 2KTjx3
+        url: https://semgrep.dev/playground/r/2KTjx3/gitlab.bandit.B310-1
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1570,7 +1614,8 @@ rules:
     read arbitrary files. Audit uses of urllib calls to ensure user data cannot control
     the URLs, or consider using the 'requests' library instead.
   metadata:
-    cwe: 'CWE-939: Improper Authorization in Handler for Custom URL Scheme'
+    cwe: CWE-939
+    shortDescription: Improper Authorization in Handler for Custom URL Scheme
     owasp: A5:2017-Broken Access Control
     primary_identifier: bandit.B310-2
     secondary_identifiers:
@@ -1583,9 +1628,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwU4kb
-        version_id: A8TdJG
-        url: https://semgrep.dev/playground/r/A8TdJG/gitlab.bandit.B310-2
-        origin: custom
+        version_id: X0TqNz
+        url: https://semgrep.dev/playground/r/X0TqNz/gitlab.bandit.B310-2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1602,7 +1647,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-330: Use of Insufficiently Random Values'
+    cwe: CWE-330
+    shortDescription: Use of Insufficiently Random Values
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B311
     secondary_identifiers:
@@ -1615,9 +1661,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUe7J
-        version_id: BjTZ1d
-        url: https://semgrep.dev/playground/r/BjTZ1d/gitlab.bandit.B311
-        origin: custom
+        version_id: 1QTvLE
+        url: https://semgrep.dev/playground/r/1QTvLE/gitlab.bandit.B311
+        origin: community
   severity: INFO
   languages:
   - python
@@ -1627,7 +1673,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    cwe: CWE-319
+    shortDescription: Cleartext Transmission of Sensitive Information
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B312
     secondary_identifiers:
@@ -1640,9 +1687,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUpp1
-        version_id: DkTbNx
-        url: https://semgrep.dev/playground/r/DkTbNx/gitlab.bandit.B312
-        origin: custom
+        version_id: 9lTw0q
+        url: https://semgrep.dev/playground/r/9lTw0q/gitlab.bandit.B312
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1655,7 +1702,8 @@ rules:
   - pattern: xml.etree.cElementTree.iterparse(...)
   - pattern: xml.etree.cElementTree.XMLParser(...)
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B313
     secondary_identifiers:
@@ -1668,9 +1716,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUOo7
-        version_id: WrTKEd
-        url: https://semgrep.dev/playground/r/WrTKEd/gitlab.bandit.B313
-        origin: custom
+        version_id: yeTr1e
+        url: https://semgrep.dev/playground/r/yeTr1e/gitlab.bandit.B313
+        origin: community
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1713,7 +1761,7 @@ rules:
         rule_id: L1U4Yd
         version_id: DkTKjj
         url: https://semgrep.dev/playground/r/DkTKjj/gitlab.bandit.B313.B314.B315.B316.B318.B319.B320.B405.B406.B407.B408.B409.B410
-        origin: custom
+        origin: community
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the 'defusedxml' library instead. Use 'defusedxml'.
@@ -1730,7 +1778,8 @@ rules:
   - pattern: xml.etree.ElementTree.iterparse(...)
   - pattern: xml.etree.ElementTree.XMLParser(...)
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B314
     secondary_identifiers:
@@ -1743,9 +1792,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUKOW
-        version_id: 0bTz1p
-        url: https://semgrep.dev/playground/r/0bTz1p/gitlab.bandit.B314
-        origin: custom
+        version_id: rxTezG
+        url: https://semgrep.dev/playground/r/rxTezG/gitlab.bandit.B314
+        origin: community
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1765,7 +1814,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B315
     secondary_identifiers:
@@ -1778,9 +1828,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUZkD
-        version_id: l4TRx6
-        url: https://semgrep.dev/playground/r/l4TRx6/gitlab.bandit.B315
-        origin: custom
+        version_id: kbTbl9
+        url: https://semgrep.dev/playground/r/kbTbl9/gitlab.bandit.B315
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1794,7 +1844,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B316
     secondary_identifiers:
@@ -1807,9 +1858,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUnzj
-        version_id: qkT74x
-        url: https://semgrep.dev/playground/r/qkT74x/gitlab.bandit.B316
-        origin: custom
+        version_id: NdTj25
+        url: https://semgrep.dev/playground/r/NdTj25/gitlab.bandit.B316
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1824,7 +1875,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B317
     secondary_identifiers:
@@ -1837,9 +1889,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8Ujj8
-        version_id: BjTZ1G
-        url: https://semgrep.dev/playground/r/BjTZ1G/gitlab.bandit.B317
-        origin: custom
+        version_id: ZRTZPn
+        url: https://semgrep.dev/playground/r/ZRTZPn/gitlab.bandit.B317
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1854,7 +1906,8 @@ rules:
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
     'defusedxml'. See https://github.com/tiran/defusedxml for more information.
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B318
     secondary_identifiers:
@@ -1867,9 +1920,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAU68J
-        version_id: DkTbN3
-        url: https://semgrep.dev/playground/r/DkTbN3/gitlab.bandit.B318
-        origin: custom
+        version_id: nWTR4X
+        url: https://semgrep.dev/playground/r/nWTR4X/gitlab.bandit.B318
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1880,7 +1933,8 @@ rules:
     - pattern-not: xml.dom.pulldom.parseString("...")
   - pattern: xml.dom.pulldom.parse(...)
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B319
     secondary_identifiers:
@@ -1893,9 +1947,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU6o9
-        version_id: WrTKEg
-        url: https://semgrep.dev/playground/r/WrTKEg/gitlab.bandit.B319
-        origin: custom
+        version_id: ExTwDZ
+        url: https://semgrep.dev/playground/r/ExTwDZ/gitlab.bandit.B319
+        origin: community
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1914,7 +1968,8 @@ rules:
   - pattern: lxml.etree.getDefaultParser(...)
   - pattern: lxml.etree.check_docinfo(...)
   metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    cwe: CWE-611
+    shortDescription: Improper Restriction of XML External Entity Reference
     owasp: A4:2017-XML External Entities (XXE)
     primary_identifier: bandit.B320
     secondary_identifiers:
@@ -1927,9 +1982,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUNZy
-        version_id: K3TkJJ
-        url: https://semgrep.dev/playground/r/K3TkJJ/gitlab.bandit.B320
-        origin: custom
+        version_id: bZTde4
+        url: https://semgrep.dev/playground/r/bZTde4/gitlab.bandit.B320
+        origin: community
   message: |
     Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE)
     attacks. The Python documentation recommends the `defusedxml` library instead. Use
@@ -1943,7 +1998,8 @@ rules:
     FTP does not encrypt communications by default. This can lead to sensitive
     data being exposed. Ensure use of FTP here does not expose sensitive data.
   metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    cwe: CWE-319
+    shortDescription: Cleartext Transmission of Sensitive Information
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B321
     secondary_identifiers:
@@ -1956,9 +2012,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8Ully
-        version_id: 0bTz10
-        url: https://semgrep.dev/playground/r/0bTz10/gitlab.bandit.B321
-        origin: custom
+        version_id: 7ZTy9k
+        url: https://semgrep.dev/playground/r/7ZTy9k/gitlab.bandit.B321
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -1968,7 +2024,8 @@ rules:
     Unverified SSL context detected. This will permit insecure connections without verifying
     SSL certificates. Use 'ssl.create_default_context()' instead.
   metadata:
-    cwe: 'CWE-295: Improper Certificate Validation'
+    cwe: CWE-295
+    shortDescription: Improper Certificate Validation
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B323
     secondary_identifiers:
@@ -1981,9 +2038,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUgg2
-        version_id: K3TkJ9
-        url: https://semgrep.dev/playground/r/K3TkJ9/gitlab.bandit.B323
-        origin: custom
+        version_id: LjT3b8
+        url: https://semgrep.dev/playground/r/LjT3b8/gitlab.bandit.B323
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2001,7 +2058,8 @@ rules:
     These functions have known vulnerabilities and are considered deprecated.
     Consider using 'SHA256' or a similar function instead.
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B324
     secondary_identifiers:
@@ -2014,9 +2072,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUE2O
-        version_id: qkT74z
-        url: https://semgrep.dev/playground/r/qkT74z/gitlab.bandit.B324
-        origin: custom
+        version_id: 8KTZkk
+        url: https://semgrep.dev/playground/r/8KTZkk/gitlab.bandit.B324
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2026,7 +2084,8 @@ rules:
   - pattern: os.tmpnam(...)
   message: The Python 'os' tempnam|tmpnam functions are vulnerable to symlink attacks
   metadata:
-    cwe: 'CWE-377: Insecure Temporary File'
+    cwe: CWE-377
+    shortDescription: Insecure Temporary File
     primary_identifier: bandit.B325
     secondary_identifiers:
     - name: Bandit Test ID B325
@@ -2038,9 +2097,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUrrQ
-        version_id: 44Tp7e
-        url: https://semgrep.dev/playground/r/44Tp7e/gitlab.bandit.B325
-        origin: custom
+        version_id: gETD2X
+        url: https://semgrep.dev/playground/r/gETD2X/gitlab.bandit.B325
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2052,7 +2111,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    cwe: CWE-319
+    shortDescription: Cleartext Transmission of Sensitive Information
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B401
     secondary_identifiers:
@@ -2065,9 +2125,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUW4o
-        version_id: l4TRxA
-        url: https://semgrep.dev/playground/r/l4TRxA/gitlab.bandit.B401
-        origin: custom
+        version_id: QkTOrq
+        url: https://semgrep.dev/playground/r/QkTOrq/gitlab.bandit.B401
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2082,7 +2142,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    cwe: CWE-319
+    shortDescription: Cleartext Transmission of Sensitive Information
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B402
     secondary_identifiers:
@@ -2095,9 +2156,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrU6yY
-        version_id: YDTev1
-        url: https://semgrep.dev/playground/r/YDTev1/gitlab.bandit.B402
-        origin: custom
+        version_id: 3ZT1A1
+        url: https://semgrep.dev/playground/r/3ZT1A1/gitlab.bandit.B402
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2111,7 +2172,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B403
     secondary_identifiers:
@@ -2124,9 +2186,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUBJZ
-        version_id: 6xT9xr
-        url: https://semgrep.dev/playground/r/6xT9xr/gitlab.bandit.B403
-        origin: custom
+        version_id: 44TdPO
+        url: https://semgrep.dev/playground/r/44TdPO/gitlab.bandit.B403
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2137,8 +2199,9 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B404
     secondary_identifiers:
@@ -2151,9 +2214,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUz3p
-        version_id: o5TDZv
-        url: https://semgrep.dev/playground/r/o5TDZv/gitlab.bandit.B404
-        origin: custom
+        version_id: PkTyrg
+        url: https://semgrep.dev/playground/r/PkTyrg/gitlab.bandit.B404
+        origin: community
   languages:
   - python
   severity: WARNING
@@ -2166,7 +2229,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B405
     secondary_identifiers:
@@ -2179,9 +2243,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUYqA
-        version_id: YDTevZ
-        url: https://semgrep.dev/playground/r/YDTevZ/gitlab.bandit.B405
-        origin: custom
+        version_id: w8TLxq
+        url: https://semgrep.dev/playground/r/w8TLxq/gitlab.bandit.B405
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2194,7 +2258,8 @@ rules:
     XML attacks. Replace vulnerable imports with the equivalent defusedxml package,
     or make sure defusedxml.defuse_stdlib() is called.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B406
     secondary_identifiers:
@@ -2207,9 +2272,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUWq8
-        version_id: JdTxDk
-        url: https://semgrep.dev/playground/r/JdTxDk/gitlab.bandit.B406
-        origin: custom
+        version_id: xyT5eb
+        url: https://semgrep.dev/playground/r/xyT5eb/gitlab.bandit.B406
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2222,7 +2287,8 @@ rules:
     XML attacks. Replace vulnerable imports with the equivalent defusedxml package,
     or make sure defusedxml.defuse_stdlib() is called.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B407
     secondary_identifiers:
@@ -2235,9 +2301,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUwp0
-        version_id: 5PT197
-        url: https://semgrep.dev/playground/r/5PT197/gitlab.bandit.B407
-        origin: custom
+        version_id: O9TbWK
+        url: https://semgrep.dev/playground/r/O9TbWK/gitlab.bandit.B407
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2250,7 +2316,8 @@ rules:
     to XML attacks. Replace vulnerable imports with the equivalent defusedxml
     package, or make sure defusedxml.defuse_stdlib() is called.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B408
     secondary_identifiers:
@@ -2263,9 +2330,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUekX
-        version_id: A8TdJL
-        url: https://semgrep.dev/playground/r/A8TdJL/gitlab.bandit.B408
-        origin: custom
+        version_id: d6TWGo
+        url: https://semgrep.dev/playground/r/d6TWGo/gitlab.bandit.B408
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2278,7 +2345,8 @@ rules:
     XML attacks. Replace vulnerable imports with the equivalent defusedxml package,
     or make sure defusedxml.defuse_stdlib() is called.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B409
     secondary_identifiers:
@@ -2291,9 +2359,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUnqq
-        version_id: GxTePY
-        url: https://semgrep.dev/playground/r/GxTePY/gitlab.bandit.B409
-        origin: custom
+        version_id: e1TOk2
+        url: https://semgrep.dev/playground/r/e1TOk2/gitlab.bandit.B409
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2305,7 +2373,8 @@ rules:
     Using various methods to parse untrusted XML data is known to be vulnerable to
     XML attacks. Replace vulnerable imports with the equivalent defusedxml package.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B410
     secondary_identifiers:
@@ -2318,9 +2387,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUGby
-        version_id: RGTLA9
-        url: https://semgrep.dev/playground/r/RGTLA9/gitlab.bandit.B410
-        origin: custom
+        version_id: vdTRzw
+        url: https://semgrep.dev/playground/r/vdTRzw/gitlab.bandit.B410
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2331,7 +2400,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B411
     secondary_identifiers:
@@ -2344,9 +2414,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUkL4
-        version_id: zyT2lo
-        url: https://semgrep.dev/playground/r/zyT2lo/gitlab.bandit.B411
-        origin: custom
+        version_id: JdTjrJ
+        url: https://semgrep.dev/playground/r/JdTjrJ/gitlab.bandit.B411
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2358,7 +2428,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-284: Improper Access Control'
+    cwe: CWE-284
+    shortDescription: Improper Access Control
     owasp: A5:2017-Broken Access Control
     primary_identifier: bandit.B412
     secondary_identifiers:
@@ -2371,9 +2442,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUPgX
-        version_id: pZT3NE
-        url: https://semgrep.dev/playground/r/pZT3NE/gitlab.bandit.B412
-        origin: custom
+        version_id: 5PTzD6
+        url: https://semgrep.dev/playground/r/5PTzD6/gitlab.bandit.B412
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2392,7 +2463,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    cwe: CWE-327
+    shortDescription: Use of a Broken or Risky Cryptographic Algorithm
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B413
     secondary_identifiers:
@@ -2405,34 +2477,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rU45b
-        version_id: 2KT2Y9
-        url: https://semgrep.dev/playground/r/2KT2Y9/gitlab.bandit.B413
-        origin: custom
-  severity: ERROR
-  languages:
-  - python
-- id: gitlab.bandit.B415
-  pattern-either:
-  - pattern: import pyghmi
-  message: |
-    An IPMI-related module is being imported. IPMI is considered insecure. Use an encrypted
-    protocol.
-  metadata:
-    cisa: https://www.cisa.gov/uscert/ncas/alerts/TA13-207A
-    primary_identifier: bandit.B415
-    secondary_identifiers:
-    - name: Bandit Test ID B415
-      type: bandit_test_id
-      value: B415
-    license: MIT
-    source: https://semgrep.dev/r/gitlab.bandit.B415
-    shortlink: https://sg.run/5NO3
-    semgrep.dev:
-      rule:
-        rule_id: v8Ubxq
-        version_id: kbTpby
-        url: https://semgrep.dev/playground/r/kbTpby/gitlab.bandit.B415
-        origin: custom
+        version_id: GxTREw
+        url: https://semgrep.dev/playground/r/GxTREw/gitlab.bandit.B413
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2452,7 +2499,8 @@ rules:
     permits insecure connections to insecure servers. Re-enable
     certification validation.
   metadata:
-    cwe: 'CWE-295: Improper Certificate Validation'
+    cwe: CWE-295
+    shortDescription: Improper Certificate Validation
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B501
     secondary_identifiers:
@@ -2465,9 +2513,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdU0wd
-        version_id: X0TyL6
-        url: https://semgrep.dev/playground/r/X0TyL6/gitlab.bandit.B501
-        origin: custom
+        version_id: RGTlG1
+        url: https://semgrep.dev/playground/r/RGTlG1/gitlab.bandit.B501
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2488,7 +2536,8 @@ rules:
     are considered weak encryption and are deprecated.
     Use 'ssl.PROTOCOL_TLSv1_2' or higher.
   metadata:
-    cwe: 'CWE-326: Inadequate Encryption Strength'
+    cwe: CWE-326
+    shortDescription: Inadequate Encryption Strength
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B502
     secondary_identifiers:
@@ -2501,9 +2550,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUOoO
-        version_id: jQT5zX
-        url: https://semgrep.dev/playground/r/jQT5zX/gitlab.bandit.B502
-        origin: custom
+        version_id: A8T2lj
+        url: https://semgrep.dev/playground/r/A8T2lj/gitlab.bandit.B502
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2534,7 +2583,7 @@ rules:
         rule_id: ReUPvG
         version_id: 1QTeld
         url: https://semgrep.dev/playground/r/1QTeld/gitlab.bandit.B502.B503
-        origin: custom
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2546,7 +2595,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-326: Inadequate Encryption Strength'
+    cwe: CWE-326
+    shortDescription: Inadequate Encryption Strength
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B504
     secondary_identifiers:
@@ -2559,9 +2609,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUWYl
-        version_id: 1QTpoN
-        url: https://semgrep.dev/playground/r/1QTpoN/gitlab.bandit.B504
-        origin: custom
+        version_id: BjTALX
+        url: https://semgrep.dev/playground/r/BjTALX/gitlab.bandit.B504
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2599,7 +2649,8 @@ rules:
     Detected an insufficient key size for DSA. NIST recommends
     a key size of 2048 or higher.
   metadata:
-    cwe: 'CWE-326: Inadequate Encryption Strength'
+    cwe: CWE-326
+    shortDescription: Inadequate Encryption Strength
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B505-1
     secondary_identifiers:
@@ -2612,9 +2663,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUBYZ
-        version_id: 9lTbyb
-        url: https://semgrep.dev/playground/r/9lTbyb/gitlab.bandit.B505-1
-        origin: custom
+        version_id: DkTjyq
+        url: https://semgrep.dev/playground/r/DkTjyq/gitlab.bandit.B505-1
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2625,7 +2676,8 @@ rules:
     Detected an insufficient curve size for EC. NIST recommends
     a key size of 224 or higher. For example, use 'ec.SECP256R1'.
   metadata:
-    cwe: 'CWE-326: Inadequate Encryption Strength'
+    cwe: CWE-326
+    shortDescription: Inadequate Encryption Strength
     owasp: A3:2017-Sensitive Data Exposure
     primary_identifier: bandit.B505-2
     secondary_identifiers:
@@ -2638,9 +2690,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUW8j
-        version_id: yeTp0r
-        url: https://semgrep.dev/playground/r/yeTp0r/gitlab.bandit.B505-2
-        origin: custom
+        version_id: WrTwnl
+        url: https://semgrep.dev/playground/r/WrTwnl/gitlab.bandit.B505-2
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2668,7 +2720,8 @@ rules:
     `SafeLoader`
     when loading yaml.
   metadata:
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    cwe: CWE-502
+    shortDescription: Deserialization of Untrusted Data
     owasp: A8:2017-Insecure Deserialization
     primary_identifier: bandit.B506
     secondary_identifiers:
@@ -2681,9 +2734,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUZx1
-        version_id: 44TjBb
-        url: https://semgrep.dev/playground/r/44TjBb/gitlab.bandit.B506
-        origin: custom
+        version_id: 0bTX35
+        url: https://semgrep.dev/playground/r/0bTX35/gitlab.bandit.B506
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2702,7 +2755,8 @@ rules:
     is not to a malicious server. Use RejectPolicy or a custom subclass
     instead.
   metadata:
-    cwe: 'CWE-322: Key Exchange without Entity Authentication'
+    cwe: CWE-322
+    shortDescription: Key Exchange without Entity Authentication
     owasp: A5:2017-Broken Access Control
     primary_identifier: bandit.B507
     secondary_identifiers:
@@ -2715,9 +2769,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUQQv
-        version_id: bZT3Xq
-        url: https://semgrep.dev/playground/r/bZT3Xq/gitlab.bandit.B507
-        origin: custom
+        version_id: K3TXL4
+        url: https://semgrep.dev/playground/r/K3TXL4/gitlab.bandit.B507
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2729,7 +2783,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    cwe: CWE-319
+    shortDescription: Cleartext Transmission of Sensitive Information
     primary_identifier: bandit.B508
     secondary_identifiers:
     - name: Bandit Test ID B508
@@ -2741,9 +2796,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUR1w
-        version_id: xyTO5E
-        url: https://semgrep.dev/playground/r/xyTO5E/gitlab.bandit.B508
-        origin: custom
+        version_id: 2KTjO3
+        url: https://semgrep.dev/playground/r/2KTjO3/gitlab.bandit.B508
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2758,7 +2813,8 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    cwe: CWE-319
+    shortDescription: Cleartext Transmission of Sensitive Information
     primary_identifier: bandit.B509
     secondary_identifiers:
     - name: Bandit Test ID B509
@@ -2770,9 +2826,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUDAe
-        version_id: O9Tzbz
-        url: https://semgrep.dev/playground/r/O9Tzbz/gitlab.bandit.B509
-        origin: custom
+        version_id: X0TqKz
+        url: https://semgrep.dev/playground/r/X0TqKz/gitlab.bandit.B509
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2786,8 +2842,9 @@ rules:
     Unverified SSL context detected. This will permit insecure connections without verifying
     SSL certificates. Use 'ssl.create_default_context()' instead.
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B601
     secondary_identifiers:
@@ -2800,9 +2857,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUEOA
-        version_id: NdTyqx
-        url: https://semgrep.dev/playground/r/NdTyqx/gitlab.bandit.B601
-        origin: custom
+        version_id: qkTywb
+        url: https://semgrep.dev/playground/r/qkTywb/gitlab.bandit.B601
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2825,8 +2882,9 @@ rules:
     the command using a shell process. Doing so propagates current shell settings and variables, which
     makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B602
     secondary_identifiers:
@@ -2839,9 +2897,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU4yp
-        version_id: kbTGY7
-        url: https://semgrep.dev/playground/r/kbTGY7/gitlab.bandit.B602
-        origin: custom
+        version_id: l4T0D8
+        url: https://semgrep.dev/playground/r/l4T0D8/gitlab.bandit.B602
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -2876,8 +2934,9 @@ rules:
     vulnerable to shell injection attacks, but care should still be taken to
     ensure validity of input.
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B603
     secondary_identifiers:
@@ -2890,9 +2949,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUoqN
-        version_id: w8ToK2
-        url: https://semgrep.dev/playground/r/w8ToK2/gitlab.bandit.B603
-        origin: custom
+        version_id: YDT7bA
+        url: https://semgrep.dev/playground/r/YDT7bA/gitlab.bandit.B603
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -2904,8 +2963,9 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B604
     secondary_identifiers:
@@ -2918,9 +2978,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUdPP
-        version_id: xyTzqJ
-        url: https://semgrep.dev/playground/r/xyTzqJ/gitlab.bandit.B604
-        origin: custom
+        version_id: 6xToXD
+        url: https://semgrep.dev/playground/r/6xToXD/gitlab.bandit.B604
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2943,8 +3003,9 @@ rules:
     Starting a process with a shell: Seems safe, but may be changed in the
     future, consider rewriting without shell
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B605
     secondary_identifiers:
@@ -2957,9 +3018,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUrPX
-        version_id: O9TxOj
-        url: https://semgrep.dev/playground/r/O9TxOj/gitlab.bandit.B605
-        origin: custom
+        version_id: o5Tw1K
+        url: https://semgrep.dev/playground/r/o5Tw1K/gitlab.bandit.B605
+        origin: community
   severity: INFO
   languages:
   - python
@@ -2994,8 +3055,9 @@ rules:
     data can reach this function call because it allows a malicious actor to
     execute commands. Ensure no external data reaches here.
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B606
     secondary_identifiers:
@@ -3008,9 +3070,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUqpb
-        version_id: e1Tj10
-        url: https://semgrep.dev/playground/r/e1Tj10/gitlab.bandit.B606
-        origin: custom
+        version_id: zyTZ3l
+        url: https://semgrep.dev/playground/r/zyTZ3l/gitlab.bandit.B606
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -3027,8 +3089,9 @@ rules:
     Starting a process with a shell; seems safe, but may be changed in the future, consider
     rewriting without shell
   metadata:
-    cwe: 'CWE-78: Improper Neutralization of Special Elements used in an OS Command
-      (''OS Command Injection'')'
+    cwe: CWE-78
+    shortDescription: Improper Neutralization of Special Elements used in an OS Command
+      ('OS Command Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B607
     secondary_identifiers:
@@ -3041,9 +3104,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUzYg
-        version_id: vdT6N1
-        url: https://semgrep.dev/playground/r/vdT6N1/gitlab.bandit.B607
-        origin: custom
+        version_id: pZTYDy
+        url: https://semgrep.dev/playground/r/pZTYDy/gitlab.bandit.B607
+        origin: community
   severity: INFO
   languages:
   - python
@@ -3070,8 +3133,9 @@ rules:
 
     '
   metadata:
-    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-      (''SQL Injection'')'
+    cwe: CWE-89
+    shortDescription: Improper Neutralization of Special Elements used in an SQL Command
+      ('SQL Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B608
     secondary_identifiers:
@@ -3084,9 +3148,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUyPj
-        version_id: d6TxAQ
-        url: https://semgrep.dev/playground/r/d6TxAQ/gitlab.bandit.B608
-        origin: custom
+        version_id: jQT2jB
+        url: https://semgrep.dev/playground/r/jQT2jB/gitlab.bandit.B608
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -3108,7 +3172,8 @@ rules:
     https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt
     for more information.
   metadata:
-    cwe: 'CWE-155: Improper Neutralization of Wildcards or Matching Symbols'
+    cwe: CWE-155
+    shortDescription: Improper Neutralization of Wildcards or Matching Symbols
     owasp: A1:2017-Injection
     primary_identifier: bandit.B609
     secondary_identifiers:
@@ -3121,9 +3186,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUppP
-        version_id: ZRTAN5
-        url: https://semgrep.dev/playground/r/ZRTAN5/gitlab.bandit.B609
-        origin: custom
+        version_id: 1QTvNE
+        url: https://semgrep.dev/playground/r/1QTvNE/gitlab.bandit.B609
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -3148,8 +3213,9 @@ rules:
     This is a last resort. You should be careful when using `QuerySet.extra` due
     to SQLi.
   metadata:
-    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-      (''SQL Injection'')'
+    cwe: CWE-89
+    shortDescription: Improper Neutralization of Special Elements used in an SQL Command
+      ('SQL Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B610
     secondary_identifiers:
@@ -3162,9 +3228,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUG96
-        version_id: nWTLPY
-        url: https://semgrep.dev/playground/r/nWTLPY/gitlab.bandit.B610
-        origin: custom
+        version_id: 9lTw7q
+        url: https://semgrep.dev/playground/r/9lTw7q/gitlab.bandit.B610
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -3176,8 +3242,9 @@ rules:
   message: You should be very careful whenever you write raw SQL. Consider using Django
     ORM before raw SQL. See https://docs.djangoproject.com/en/3.0/topics/db/sql/#passing-parameters-into-raw
   metadata:
-    cwe: 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
-      (''SQL Injection'')'
+    cwe: CWE-89
+    shortDescription: Improper Neutralization of Special Elements used in an SQL Command
+      ('SQL Injection')
     owasp: A1:2017-Injection
     primary_identifier: bandit.B611
     secondary_identifiers:
@@ -3190,9 +3257,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZU4Wb
-        version_id: ExTxNQ
-        url: https://semgrep.dev/playground/r/ExTxNQ/gitlab.bandit.B611
-        origin: custom
+        version_id: yeTrge
+        url: https://semgrep.dev/playground/r/yeTrge/gitlab.bandit.B611
+        origin: community
   severity: ERROR
   languages:
   - python
@@ -3208,7 +3275,8 @@ rules:
     listen(). logging.config.listen provides the ability to verify bytes received across the socket
     with signature verification or encryption/decryption.
   metadata:
-    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    cwe: CWE-94
+    shortDescription: Improper Control of Generation of Code ('Code Injection')
     primary_identifier: bandit.B612
     secondary_identifiers:
     - name: Bandit Test ID B612
@@ -3220,9 +3288,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8UN2B
-        version_id: w8TrLP
-        url: https://semgrep.dev/playground/r/w8TrLP/gitlab.bandit.B612
-        origin: custom
+        version_id: jQT2XB
+        url: https://semgrep.dev/playground/r/jQT2XB/gitlab.bandit.B612
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -3238,7 +3306,8 @@ rules:
     by setting 'autoescape=True.' You may also consider using 'jinja2.select_autoescape()'
     to only enable automatic escaping for certain file extensions.
   metadata:
-    cwe: 'CWE-116: Improper Encoding or Escaping of Output'
+    cwe: CWE-116
+    shortDescription: Improper Encoding or Escaping of Output
     owasp: A7:2017-Cross-Site Scripting (XSS)
     primary_identifier: bandit.B701
     secondary_identifiers:
@@ -3251,9 +3320,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5UZBZ
-        version_id: 7ZT3ov
-        url: https://semgrep.dev/playground/r/7ZT3ov/gitlab.bandit.B701
-        origin: custom
+        version_id: rxTevG
+        url: https://semgrep.dev/playground/r/rxTevG/gitlab.bandit.B701
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -3266,8 +3335,9 @@ rules:
     If you are using Mako to serve web content, consider using
     a system such as Jinja2 which enables global escaping.
   metadata:
-    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
+    cwe: CWE-79
+    shortDescription: Improper Neutralization of Input During Web Page Generation
+      ('Cross-site Scripting')
     owasp: A7:2017-Cross-Site Scripting (XSS)
     primary_identifier: bandit.B702
     secondary_identifiers:
@@ -3280,9 +3350,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1Urrl
-        version_id: LjTgQP
-        url: https://semgrep.dev/playground/r/LjTgQP/gitlab.bandit.B702
-        origin: custom
+        version_id: bZTdo4
+        url: https://semgrep.dev/playground/r/bZTdo4/gitlab.bandit.B702
+        origin: community
   severity: INFO
   languages:
   - python
@@ -3299,8 +3369,9 @@ rules:
     XSS attacks. Use 'django.utils.html.format_html()' to build HTML
     for rendering instead.
   metadata:
-    cwe: 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
+    cwe: CWE-79
+    shortDescription: Improper Neutralization of Input During Web Page Generation
+      ('Cross-site Scripting')
     owasp: A7:2017-Cross-Site Scripting (XSS)
     primary_identifier: bandit.B703
     secondary_identifiers:
@@ -3313,9 +3384,9 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UqOR
-        version_id: 5PT19P
-        url: https://semgrep.dev/playground/r/5PT19P/gitlab.bandit.B703
-        origin: custom
+        version_id: zyTZJl
+        url: https://semgrep.dev/playground/r/zyTZJl/gitlab.bandit.B703
+        origin: community
   severity: WARNING
   languages:
   - python
@@ -3337,7 +3408,7 @@ rules:
         rule_id: yyUvwN
         version_id: jQTW6k
         url: https://semgrep.dev/playground/r/jQTW6k/gitlab.eslint.detect-buffer-noassert
-        origin: custom
+        origin: community
   message: |
     Detected usage of noassert in Buffer API, which allows the offset the be beyond the
     end of the buffer. This could result in writing or reading beyond the end of the buffer.
@@ -3393,7 +3464,7 @@ rules:
         rule_id: 9AUODZ
         version_id: zyTdjx
         url: https://semgrep.dev/playground/r/zyTdjx/gitlab.eslint.detect-child-process
-        origin: custom
+        origin: community
   message: |
     Detected non-literal calls to child_process.exec(). This could lead to a command
     injection vulnerability.
@@ -3422,7 +3493,7 @@ rules:
         rule_id: QrUppL
         version_id: 2KTeG0
         url: https://semgrep.dev/playground/r/2KTeG0/gitlab.eslint.detect-disable-mustache-escape
-        origin: custom
+        origin: community
   message: |
     Markup escaping disabled. This can be used with some template engines to escape
     disabling of HTML entities, which can lead to XSS attacks.
@@ -3450,7 +3521,7 @@ rules:
         rule_id: 10UZgd
         version_id: o5Tvk0
         url: https://semgrep.dev/playground/r/o5Tvk0/gitlab.eslint.detect-eval-with-expression
-        origin: custom
+        origin: community
   message: 'Detected eval(variable), which could allow a malicious actor to run arbitrary
     code.
 
@@ -3478,7 +3549,7 @@ rules:
         rule_id: EwU5PB
         version_id: e1T5OQ
         url: https://semgrep.dev/playground/r/e1T5OQ/gitlab.eslint.detect-new-buffer
-        origin: custom
+        origin: community
   patterns:
   - patterns:
     - pattern-not-inside: |-
@@ -3521,7 +3592,7 @@ rules:
         rule_id: 8GUxxL
         version_id: 6xT3ZY
         url: https://semgrep.dev/playground/r/6xT3ZY/gitlab.eslint.detect-no-csrf-before-method-override
-        origin: custom
+        origin: community
   message: |
     Detected use of express.csrf() middleware before express.methodOverride(). This can
     allow GET requests (which are not checked by csrf) to turn into POST requests later.
@@ -3658,7 +3729,7 @@ rules:
         rule_id: bwUO0X
         version_id: yeT8BB
         url: https://semgrep.dev/playground/r/yeT8BB/gitlab.eslint.detect-non-literal-fs-filename
-        origin: custom
+        origin: community
 - id: gitlab.eslint.detect-non-literal-regexp
   patterns:
   - pattern: 'new RegExp($ARG, ...)
@@ -3690,7 +3761,7 @@ rules:
         rule_id: r6UkPj
         version_id: 9lT2oe
         url: https://semgrep.dev/playground/r/9lT2oe/gitlab.eslint.detect-non-literal-regexp
-        origin: custom
+        origin: community
 - id: gitlab.eslint.detect-non-literal-require
   metadata:
     cwe: 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
@@ -3710,7 +3781,7 @@ rules:
         rule_id: 3qUEE5
         version_id: X0TEOB
         url: https://semgrep.dev/playground/r/X0TEOB/gitlab.eslint.detect-non-literal-require
-        origin: custom
+        origin: community
   message: |
     Detected the use of require(variable). Calling require with a non-literal argument might
     allow an attacker to load an run arbitrary code, or access arbitrary files.
@@ -3759,7 +3830,7 @@ rules:
         rule_id: NbUAnd
         version_id: rxTqor
         url: https://semgrep.dev/playground/r/rxTqor/gitlab.eslint.detect-object-injection
-        origin: custom
+        origin: community
 - id: gitlab.eslint.detect-possible-timing-attacks
   patterns:
   - pattern-not: if ($Z == null) { ... };
@@ -4351,7 +4422,7 @@ rules:
         rule_id: 4bU22N
         version_id: 1QTBbO
         url: https://semgrep.dev/playground/r/1QTBbO/gitlab.eslint.detect-possible-timing-attacks
-        origin: custom
+        origin: community
 - id: gitlab.eslint.detect-pseudoRandomBytes
   metadata:
     cwe: 'CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)'
@@ -4369,7 +4440,7 @@ rules:
         rule_id: gxUYYL
         version_id: pZTokr
         url: https://semgrep.dev/playground/r/pZTokr/gitlab.eslint.detect-pseudoRandomBytes
-        origin: custom
+        origin: community
   message: 'Detected usage of crypto.pseudoRandomBytes, which does not produce secure
     random numbers.
 
@@ -4405,7 +4476,7 @@ rules:
         rule_id: JDUQQY
         version_id: NdTL9Y
         url: https://semgrep.dev/playground/r/NdTL9Y/gitlab.eslint.react-dangerouslysetinnerhtml
-        origin: custom
+        origin: community
   languages:
   - typescript
   - javascript
@@ -4478,7 +4549,7 @@ rules:
         rule_id: PeUBBq
         version_id: bZTrKO
         url: https://semgrep.dev/playground/r/bZTrKO/gitlab.eslint.react-missing-noopener
-        origin: custom
+        origin: community
   languages:
   - typescript
   - javascript
@@ -4523,7 +4594,7 @@ rules:
         rule_id: oqUKxo
         version_id: bZTrxx
         url: https://semgrep.dev/playground/r/bZTrxx/gitlab.find_sec_bugs.INSECURE_SMTP_SSL-1
-        origin: custom
+        origin: community
   severity: ERROR
   languages:
   - java
@@ -4551,7 +4622,7 @@ rules:
         rule_id: x8Ud4w
         version_id: 44TpYw
         url: https://semgrep.dev/playground/r/44TpYw/gitlab.find_sec_bugs.RSA_NO_PADDING-1
-        origin: custom
+        origin: community
   severity: WARNING
   languages:
   - java
@@ -4591,7 +4662,7 @@ rules:
         rule_id: YGUYPE
         version_id: yeT8Q5
         url: https://semgrep.dev/playground/r/yeT8Q5/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-1.SPEL_INJECTION-1.EL_INJECTION-2.SEAM_LOG_INJECTION-1
-        origin: custom
+        origin: community
 - id: gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
   patterns:
   - pattern: "(org.springframework.expression.spel.standard.SpelExpressionParser $P).parseExpression($ARG);"
@@ -4620,7 +4691,7 @@ rules:
         rule_id: 6JUyKR
         version_id: rxTqb8
         url: https://semgrep.dev/playground/r/rxTqb8/gitlab.find_sec_bugs.SCRIPT_ENGINE_INJECTION-2
-        origin: custom
+        origin: community
 - id: gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
   patterns:
   - pattern: new java.net.Socket(...)
@@ -4649,7 +4720,7 @@ rules:
         rule_id: nJUn7D
         version_id: A8T8nw
         url: https://semgrep.dev/playground/r/A8T8nw/gitlab.find_sec_bugs.UNENCRYPTED_SOCKET-1.UNENCRYPTED_SERVER_SOCKET-1
-        origin: custom
+        origin: community
   severity: WARNING
 - id: gitlab.flawfinder.AddAccessAllowedAce-1
   languages:
@@ -4673,7 +4744,7 @@ rules:
         rule_id: 7KUpk7
         version_id: RGT7NO
         url: https://semgrep.dev/playground/r/RGT7NO/gitlab.flawfinder.AddAccessAllowedAce-1
-        origin: custom
+        origin: community
   pattern: AddAccessAllowedAce(...)
   severity: WARNING
 - id: gitlab.flawfinder.CreateProcess-1
@@ -4698,7 +4769,7 @@ rules:
         rule_id: YGUQ94
         version_id: qkTGAK
         url: https://semgrep.dev/playground/r/qkTGAK/gitlab.flawfinder.CreateProcess-1
-        origin: custom
+        origin: community
   pattern: CreateProcess(...)
   severity: WARNING
 - id: gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
@@ -4726,7 +4797,7 @@ rules:
         rule_id: 6JU6Pz
         version_id: l4Tb3e
         url: https://semgrep.dev/playground/r/l4Tb3e/gitlab.flawfinder.CreateProcessAsUser-1.CreateProcessWithLogon-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: CreateProcessAsUser(...)
   - pattern: CreateProcessWithLogon(...)
@@ -4766,7 +4837,7 @@ rules:
         rule_id: wdUGO7
         version_id: 8KTX0l
         url: https://semgrep.dev/playground/r/8KTX0l/gitlab.flawfinder.EVP_des_ecb-1.EVP_des_cbc-1.EVP_des_cfb-1.EVP_des_ofb-1.EVP_desx_cbc-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: EVP_des_ecb(...)
   - pattern: EVP_des_cbc(...)
@@ -4802,7 +4873,7 @@ rules:
         rule_id: x8U2ke
         version_id: gETjp7
         url: https://semgrep.dev/playground/r/gETjp7/gitlab.flawfinder.EVP_rc4_40-1.EVP_rc2_40_cbc-1.EVP_rc2_64_cbc-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: EVP_rc4_40(...)
   - pattern: EVP_rc2_40_cbc(...)
@@ -4830,7 +4901,7 @@ rules:
         rule_id: pKUw7J
         version_id: o5TvGQ
         url: https://semgrep.dev/playground/r/o5TvGQ/gitlab.flawfinder.GetTempFileName-1
-        origin: custom
+        origin: community
   pattern: GetTempFileName(...)
   severity: WARNING
 - id: gitlab.flawfinder.InitializeCriticalSection-1
@@ -4854,7 +4925,7 @@ rules:
         rule_id: L1Urv6
         version_id: A8T8v9
         url: https://semgrep.dev/playground/r/A8T8v9/gitlab.flawfinder.InitializeCriticalSection-1
-        origin: custom
+        origin: community
   pattern: InitializeCriticalSection(...)
   severity: WARNING
 - id: gitlab.flawfinder.LoadLibrary-1
@@ -4879,7 +4950,7 @@ rules:
         rule_id: 8GUx8Y
         version_id: BjT54x
         url: https://semgrep.dev/playground/r/BjT54x/gitlab.flawfinder.LoadLibrary-1
-        origin: custom
+        origin: community
   pattern: LoadLibrary(...)
   severity: WARNING
 - id: gitlab.flawfinder.LoadLibraryEx-1
@@ -4904,7 +4975,7 @@ rules:
         rule_id: gxUYQ3
         version_id: DkTJB9
         url: https://semgrep.dev/playground/r/DkTJB9/gitlab.flawfinder.LoadLibraryEx-1
-        origin: custom
+        origin: community
   pattern: LoadLibraryEx(...)
   severity: WARNING
 - id: gitlab.flawfinder.MultiByteToWideChar-1
@@ -4928,7 +4999,7 @@ rules:
         rule_id: qNUb31
         version_id: 0bTBZE
         url: https://semgrep.dev/playground/r/0bTBZE/gitlab.flawfinder.MultiByteToWideChar-1
-        origin: custom
+        origin: community
   pattern: MultiByteToWideChar(...)
   severity: INFO
 - id: gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
@@ -4972,7 +5043,7 @@ rules:
         rule_id: 0oUJjL
         version_id: DkTJL9
         url: https://semgrep.dev/playground/r/DkTJL9/gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoImpersonateClient-1.ImpersonateNamedPipeClient-1.ImpersonateDdeClientWindow-1.ImpersonateSecurityContext-1.SetThreadToken-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: RpcImpersonateClient(...)
   - pattern: ImpersonateLoggedOnUser(...)
@@ -5004,7 +5075,7 @@ rules:
         rule_id: QrUpe8
         version_id: WrT9eo
         url: https://semgrep.dev/playground/r/WrT9eo/gitlab.flawfinder.SetSecurityDescriptorDacl-1
-        origin: custom
+        origin: community
   pattern: SetSecurityDescriptorDacl(...)
   severity: ERROR
 - id: gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
@@ -5089,7 +5160,7 @@ rules:
         rule_id: lBUzG9
         version_id: K3TeRY
         url: https://semgrep.dev/playground/r/K3TeRY/gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.strCatBuff-1.StrCatBuffA-1.StrCatBuffW-1.StrCatChainW-1._tccat-1._mbccat-1._ftcscat-1.StrCatN-1.StrCatNA-1.StrCatNW-1.StrNCat-1.StrNCatA-1.StrNCatW-1.lstrncat-1.lstrcatnA-1.lstrcatnW-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: StrCat(...)
   - pattern: StrCatA(...)
@@ -5137,7 +5208,7 @@ rules:
         rule_id: BYU731
         version_id: RGT7NR
         url: https://semgrep.dev/playground/r/RGT7NR/gitlab.flawfinder.access-1
-        origin: custom
+        origin: community
   pattern: access(...)
   severity: ERROR
 - id: gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
@@ -5172,7 +5243,7 @@ rules:
         rule_id: EwUQzn
         version_id: GxTyg9
         url: https://semgrep.dev/playground/r/GxTyg9/gitlab.flawfinder.atoi-1.atol-1._wtoi-1._wtoi64-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: atoi(...)
   - pattern: atol(...)
@@ -5207,7 +5278,7 @@ rules:
         rule_id: PeUBNk
         version_id: qkTGrX
         url: https://semgrep.dev/playground/r/qkTGrX/gitlab.flawfinder.char-1.TCHAR-1.wchar_t-1
-        origin: custom
+        origin: community
   pattern-either:
   - patterns:
     - pattern-regex: "(wchar_t) *[a-zA-Z0-9_]+\\[.*\\]"
@@ -5245,7 +5316,7 @@ rules:
         rule_id: DbUKrn
         version_id: A8T8vg
         url: https://semgrep.dev/playground/r/A8T8vg/gitlab.flawfinder.chgrp-1
-        origin: custom
+        origin: community
   pattern: chgrp(...)
   severity: ERROR
 - id: gitlab.flawfinder.chmod-1
@@ -5270,7 +5341,7 @@ rules:
         rule_id: WAUP43
         version_id: BjT54b
         url: https://semgrep.dev/playground/r/BjT54b/gitlab.flawfinder.chmod-1
-        origin: custom
+        origin: community
   pattern: chmod(...)
   severity: ERROR
 - id: gitlab.flawfinder.chown-1
@@ -5295,7 +5366,7 @@ rules:
         rule_id: 0oUJPK
         version_id: DkTJBw
         url: https://semgrep.dev/playground/r/DkTJBw/gitlab.flawfinder.chown-1
-        origin: custom
+        origin: community
   pattern: chown(...)
   severity: ERROR
 - id: gitlab.flawfinder.chroot-1
@@ -5320,7 +5391,7 @@ rules:
         rule_id: 3qUE0p
         version_id: 0bTB0E
         url: https://semgrep.dev/playground/r/0bTB0E/gitlab.flawfinder.chroot-1
-        origin: custom
+        origin: community
   pattern: chroot(...)
   severity: WARNING
 - id: gitlab.flawfinder.crypt-1.crypt_r-1
@@ -5351,7 +5422,7 @@ rules:
         rule_id: OrUD57
         version_id: QkTDLO
         url: https://semgrep.dev/playground/r/QkTDLO/gitlab.flawfinder.crypt-1.crypt_r-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: crypt(...)
   - pattern: crypt_r(...)
@@ -5382,7 +5453,7 @@ rules:
         rule_id: 4bU20k
         version_id: K3TeAY
         url: https://semgrep.dev/playground/r/K3TeAY/gitlab.flawfinder.cuserid-1
-        origin: custom
+        origin: community
   pattern: cuserid(...)
   severity: ERROR
 - id: gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
@@ -5473,7 +5544,7 @@ rules:
         rule_id: lBUzno
         version_id: K3TeAQ
         url: https://semgrep.dev/playground/r/K3TeAQ/gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mrand48-1.nrand48-1.random-1.seed48-1.setstate-1.srand-1.strfry-1.srandom-1.g_rand_boolean-1.g_rand_int-1.g_rand_int_range-1.g_rand_double-1.g_rand_double_range-1.g_random_boolean-1.g_random_int-1.g_random_int_range-1.g_random_double-1.g_random_double_range-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: drand48(...)
   - pattern: erand48(...)
@@ -5529,7 +5600,7 @@ rules:
         rule_id: JDUQ8Q
         version_id: l4TbYW
         url: https://semgrep.dev/playground/r/l4TbYW/gitlab.flawfinder.equal-1.mismatch-1.is_permutation-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: equal(...)
   - pattern: mismatch(...)
@@ -5578,7 +5649,7 @@ rules:
         rule_id: oqUr85
         version_id: YDT5gx
         url: https://semgrep.dev/playground/r/YDT5gx/gitlab.flawfinder.execl-1.execlp-1.execle-1.execv-1.execvp-1.popen-1.WinExec-1.ShellExecute-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: execl(...)
   - pattern: execlp(...)
@@ -5615,7 +5686,7 @@ rules:
         rule_id: PeUBPk
         version_id: qkTGAX
         url: https://semgrep.dev/playground/r/qkTGAX/gitlab.flawfinder.fopen-1.open-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: fopen(...)
   - pattern: open(...)
@@ -5657,7 +5728,7 @@ rules:
         rule_id: eqUpJj
         version_id: 3ZTngN
         url: https://semgrep.dev/playground/r/3ZTngN/gitlab.flawfinder.fprintf-1.vfprintf-1._ftprintf-1._vftprintf-1.fwprintf-1.fvwprintf-1
-        origin: custom
+        origin: community
   pattern-either:
   - patterns:
     - pattern: fprintf($FD, $FMT, ...)
@@ -5718,7 +5789,7 @@ rules:
         rule_id: 5rU8bL
         version_id: YDT5xl
         url: https://semgrep.dev/playground/r/YDT5xl/gitlab.flawfinder.fscanf-1.sscanf-1.vsscanf-1.vfscanf-1._ftscanf-1.fwscanf-1.vfwscanf-1.vswscanf-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: fscanf(...)
   - pattern: sscanf(...)
@@ -5752,7 +5823,7 @@ rules:
         rule_id: GdUZpz
         version_id: 6xT3ky
         url: https://semgrep.dev/playground/r/6xT3ky/gitlab.flawfinder.g_get_home_dir-1
-        origin: custom
+        origin: community
   pattern: g_get_home_dir(...)
   severity: WARNING
 - id: gitlab.flawfinder.g_get_tmp_dir-1
@@ -5778,7 +5849,7 @@ rules:
         rule_id: ReUojK
         version_id: o5TvPZ
         url: https://semgrep.dev/playground/r/o5TvPZ/gitlab.flawfinder.g_get_tmp_dir-1
-        origin: custom
+        origin: community
   pattern: g_get_tmp_dir(...)
   severity: WARNING
 - id: gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
@@ -5816,7 +5887,7 @@ rules:
         rule_id: AbUGwN
         version_id: zyTd98
         url: https://semgrep.dev/playground/r/zyTd98/gitlab.flawfinder.getchar-1.fgetc-1.getc-1.read-1._gettc-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: getchar(...)
   - pattern: fgetc(...)
@@ -5850,7 +5921,7 @@ rules:
         rule_id: BYU761
         version_id: pZToJL
         url: https://semgrep.dev/playground/r/pZToJL/gitlab.flawfinder.getenv-1.curl_getenv-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: getenv(...)
   - pattern: curl_getenv(...)
@@ -5880,7 +5951,7 @@ rules:
         rule_id: JDUQ9Q
         version_id: l4Tb3W
         url: https://semgrep.dev/playground/r/l4Tb3W/gitlab.flawfinder.getlogin-1
-        origin: custom
+        origin: community
   pattern: getlogin(...)
   severity: ERROR
 - id: gitlab.flawfinder.getopt-1.getopt_long-1
@@ -5909,7 +5980,7 @@ rules:
         rule_id: DbUKAn
         version_id: 2KTeXv
         url: https://semgrep.dev/playground/r/2KTeXv/gitlab.flawfinder.getopt-1.getopt_long-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: getopt(...)
   - pattern: getopt_long(...)
@@ -5940,7 +6011,7 @@ rules:
         rule_id: 5rU8gL
         version_id: YDT5gl
         url: https://semgrep.dev/playground/r/YDT5gl/gitlab.flawfinder.getpass-1
-        origin: custom
+        origin: community
   pattern: getpass(...)
   severity: ERROR
 - id: gitlab.flawfinder.getpw-1
@@ -5967,7 +6038,7 @@ rules:
         rule_id: WAUP03
         version_id: X0TEp4
         url: https://semgrep.dev/playground/r/X0TEp4/gitlab.flawfinder.getpw-1
-        origin: custom
+        origin: community
   pattern: getpw(...)
   severity: ERROR
 - id: gitlab.flawfinder.gets-1._getts-1
@@ -5994,7 +6065,7 @@ rules:
         rule_id: 0oUJjK
         version_id: jQTWp1
         url: https://semgrep.dev/playground/r/jQTWp1/gitlab.flawfinder.gets-1._getts-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: gets(...)
   - pattern: _getts(...)
@@ -6021,7 +6092,7 @@ rules:
         rule_id: KxUY1o
         version_id: 1QTBn3
         url: https://semgrep.dev/playground/r/1QTBn3/gitlab.flawfinder.getwd-1
-        origin: custom
+        origin: community
   pattern: getwd(...)
   severity: WARNING
 - id: gitlab.flawfinder.gsignal-1.ssignal-1
@@ -6051,7 +6122,7 @@ rules:
         rule_id: GdUZdz
         version_id: JdTbOo
         url: https://semgrep.dev/playground/r/JdTbOo/gitlab.flawfinder.gsignal-1.ssignal-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: gsignal(...)
   - pattern: ssignal(...)
@@ -6087,7 +6158,7 @@ rules:
         rule_id: qNUb3v
         version_id: 9lT2L6
         url: https://semgrep.dev/playground/r/9lT2L6/gitlab.flawfinder.lstrcat-1.wcscat-1._tcscat-1._mbscat-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: lstrcat(...)
   - pattern: wcscat(...)
@@ -6125,7 +6196,7 @@ rules:
         rule_id: lBUzGo
         version_id: yeT8z5
         url: https://semgrep.dev/playground/r/yeT8z5/gitlab.flawfinder.lstrcatn-1.wcsncat-1._tcsncat-1._mbsnbcat-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: lstrcatn(...)
   - pattern: wcsncat(...)
@@ -6164,7 +6235,7 @@ rules:
         rule_id: YGUQd4
         version_id: rxTqX8
         url: https://semgrep.dev/playground/r/rxTqX8/gitlab.flawfinder.lstrcpy-1.wcscpy-1._tcscpy-1._mbscpy-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: lstrcpy(...)
   - pattern: wcscpy(...)
@@ -6202,7 +6273,7 @@ rules:
         rule_id: 6JU6Nz
         version_id: bZTrJx
         url: https://semgrep.dev/playground/r/bZTrJx/gitlab.flawfinder.lstrcpyn-1.wcsncpy-1._tcsncpy-1._mbsnbcpy-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: lstrcpyn(...)
   - pattern: wcsncpy(...)
@@ -6233,7 +6304,7 @@ rules:
         rule_id: nJUrv6
         version_id: 5PTjx5
         url: https://semgrep.dev/playground/r/5PTjx5/gitlab.flawfinder.memalign-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: memalign(...)
   - pattern-regex: "(void)\\s\\*(\\s|)(memalign)\\;"
@@ -6266,7 +6337,7 @@ rules:
         rule_id: oqUr65
         version_id: NdTLEE
         url: https://semgrep.dev/playground/r/NdTLEE/gitlab.flawfinder.memcpy-1.CopyMemory-1.bcopy-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: memcpy(...)
   - pattern: CopyMemory(...)
@@ -6295,7 +6366,7 @@ rules:
         rule_id: 2ZUKJn
         version_id: zyTd6v
         url: https://semgrep.dev/playground/r/zyTd6v/gitlab.flawfinder.mkstemp-1
-        origin: custom
+        origin: community
   pattern: mkstemp(...)
   severity: INFO
 - id: gitlab.flawfinder.mktemp-1
@@ -6319,7 +6390,7 @@ rules:
         rule_id: X5U76e
         version_id: pZToR4
         url: https://semgrep.dev/playground/r/pZToR4/gitlab.flawfinder.mktemp-1
-        origin: custom
+        origin: community
   pattern: mktemp(...)
   severity: ERROR
 - id: gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
@@ -6359,7 +6430,7 @@ rules:
         rule_id: v8UjyR
         version_id: 44TpJn
         url: https://semgrep.dev/playground/r/44TpJn/gitlab.flawfinder.printf-1.vprintf-1.vwprintf-1.vfwprintf-1._vtprintf-1.wprintf-1
-        origin: custom
+        origin: community
   pattern-either:
   - patterns:
     - pattern: printf(...)
@@ -6403,7 +6474,7 @@ rules:
         rule_id: KxUYWo
         version_id: WrT9eG
         url: https://semgrep.dev/playground/r/WrT9eG/gitlab.flawfinder.readlink-1
-        origin: custom
+        origin: community
   pattern: readlink(...)
   severity: ERROR
 - id: gitlab.flawfinder.realpath-1
@@ -6429,7 +6500,7 @@ rules:
         rule_id: zdU1EX
         version_id: kbTp9Q
         url: https://semgrep.dev/playground/r/kbTp9Q/gitlab.flawfinder.realpath-1
-        origin: custom
+        origin: community
   pattern: realpath(...)
   severity: WARNING
 - id: gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
@@ -6466,7 +6537,7 @@ rules:
         rule_id: pKUw5J
         version_id: w8Trvg
         url: https://semgrep.dev/playground/r/w8Trvg/gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1._tscanf-1.vwscanf-1
-        origin: custom
+        origin: community
   pattern-either:
   - patterns:
     - pattern: scanf($FMT, ...)
@@ -6518,7 +6589,7 @@ rules:
         rule_id: d8UlJZ
         version_id: PkTvKp
         url: https://semgrep.dev/playground/r/PkTvKp/gitlab.flawfinder.snprintf-1.vsnprintf-1._snprintf-1._sntprintf-1._vsntprintf-1
-        origin: custom
+        origin: community
   pattern-either:
   - patterns:
     - pattern: snprintf($BUF,$SIZ,$FMT,...)
@@ -6572,7 +6643,7 @@ rules:
         rule_id: 2ZUK9n
         version_id: xyTO1y
         url: https://semgrep.dev/playground/r/xyTO1y/gitlab.flawfinder.sprintf-1.vsprintf-1.swprintf-1.vswprintf-1._stprintf-1._vstprintf-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: sprintf(...)
   - pattern: vsprintf(...)
@@ -6604,7 +6675,7 @@ rules:
         rule_id: X5U7re
         version_id: O9Tzr2
         url: https://semgrep.dev/playground/r/O9Tzr2/gitlab.flawfinder.strcat-1
-        origin: custom
+        origin: community
   pattern: strcat(...)
   severity: ERROR
 - id: gitlab.flawfinder.strccpy-1.strcadd-1
@@ -6631,7 +6702,7 @@ rules:
         rule_id: j2URoA
         version_id: e1T5wo
         url: https://semgrep.dev/playground/r/e1T5wo/gitlab.flawfinder.strccpy-1.strcadd-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: strccpy(...)
   - pattern: strcadd(...)
@@ -6659,7 +6730,7 @@ rules:
         rule_id: 10Ue1w
         version_id: vdTgJE
         url: https://semgrep.dev/playground/r/vdTgJE/gitlab.flawfinder.strcpy-1
-        origin: custom
+        origin: community
   pattern: strcpy(...)
   severity: ERROR
 - id: gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
@@ -6739,7 +6810,7 @@ rules:
         rule_id: 9AUkxG
         version_id: d6T1E1
         url: https://semgrep.dev/playground/r/d6T1E1/gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.lstrcpyW-1._tccpy-1._mbccpy-1._ftcscpy-1._mbsncpy-1.StrCpyN-1.StrCpyNA-1.StrCpyNW-1.StrNCpy-1.strcpynA-1.StrNCpyA-1.StrNCpyW-1.lstrcpynA-1.lstrcpynW-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: strcpyA(...)
   - pattern: strcpyW(...)
@@ -6786,7 +6857,7 @@ rules:
         rule_id: yyUyKE
         version_id: ZRTnJ0
         url: https://semgrep.dev/playground/r/ZRTnJ0/gitlab.flawfinder.streadd-1.strecpy-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: streadd(...)
   - pattern: strecpy(...)
@@ -6822,7 +6893,7 @@ rules:
         rule_id: r6U9Qq
         version_id: nWTjl3
         url: https://semgrep.dev/playground/r/nWTjl3/gitlab.flawfinder.strlen-1.wcslen-1._tcslen-1._mbslen-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: strlen(...)
   - pattern: wcslen(...)
@@ -6851,7 +6922,7 @@ rules:
         rule_id: bwUN2p
         version_id: ExTObz
         url: https://semgrep.dev/playground/r/ExTObz/gitlab.flawfinder.strncat-1
-        origin: custom
+        origin: community
   pattern: strncat(...)
   severity: INFO
 - id: gitlab.flawfinder.strncpy-1
@@ -6876,7 +6947,7 @@ rules:
         rule_id: NbUY74
         version_id: 7ZTdw4
         url: https://semgrep.dev/playground/r/7ZTdw4/gitlab.flawfinder.strncpy-1
-        origin: custom
+        origin: community
   pattern: strncpy(...)
   severity: INFO
 - id: gitlab.flawfinder.strtrns-1
@@ -6900,7 +6971,7 @@ rules:
         rule_id: kxU811
         version_id: LjTOJb
         url: https://semgrep.dev/playground/r/LjTOJb/gitlab.flawfinder.strtrns-1
-        origin: custom
+        origin: community
   pattern: strtrns(...)
   severity: WARNING
 - id: gitlab.flawfinder.syslog-1
@@ -6925,7 +6996,7 @@ rules:
         rule_id: ZqUgoz
         version_id: JdTb4q
         url: https://semgrep.dev/playground/r/JdTb4q/gitlab.flawfinder.syslog-1
-        origin: custom
+        origin: community
   pattern-either:
   - patterns:
     - pattern: syslog($FUNC,...)
@@ -6953,7 +7024,7 @@ rules:
         rule_id: zdU17X
         version_id: 6xT344
         url: https://semgrep.dev/playground/r/6xT344/gitlab.flawfinder.system-1
-        origin: custom
+        origin: community
   pattern: system(...)
   severity: ERROR
 - id: gitlab.flawfinder.tmpfile-1
@@ -6978,7 +7049,7 @@ rules:
         rule_id: j2UR7A
         version_id: 2KTenk
         url: https://semgrep.dev/playground/r/2KTenk/gitlab.flawfinder.tmpfile-1
-        origin: custom
+        origin: community
   pattern: tmpfile(...)
   severity: INFO
 - id: gitlab.flawfinder.tmpnam-1.tempnam-1
@@ -7005,7 +7076,7 @@ rules:
         rule_id: 10Ueqw
         version_id: X0TEG1
         url: https://semgrep.dev/playground/r/X0TEG1/gitlab.flawfinder.tmpnam-1.tempnam-1
-        origin: custom
+        origin: community
   pattern-either:
   - pattern: tmpnam(...)
   - pattern: tempnam(...)
@@ -7032,7 +7103,7 @@ rules:
         rule_id: ReUo4K
         version_id: 5PTjK9
         url: https://semgrep.dev/playground/r/5PTjK9/gitlab.flawfinder.ulimit-1
-        origin: custom
+        origin: community
   pattern: ulimit(...)
   severity: INFO
 - id: gitlab.flawfinder.umask-1
@@ -7057,7 +7128,7 @@ rules:
         rule_id: KxUY1n
         version_id: WrT9go
         url: https://semgrep.dev/playground/r/WrT9go/gitlab.flawfinder.umask-1
-        origin: custom
+        origin: community
   pattern: umask(...)
   severity: INFO
 - id: gitlab.flawfinder.usleep-1
@@ -7084,7 +7155,7 @@ rules:
         rule_id: AbUGoN
         version_id: GxTyb6
         url: https://semgrep.dev/playground/r/GxTyb6/gitlab.flawfinder.usleep-1
-        origin: custom
+        origin: community
   pattern: usleep(...)
   severity: INFO
 - id: gitlab.flawfinder.vfork-1
@@ -7109,7 +7180,7 @@ rules:
         rule_id: qNUb8v
         version_id: 0bTB0q
         url: https://semgrep.dev/playground/r/0bTB0q/gitlab.flawfinder.vfork-1
-        origin: custom
+        origin: community
   pattern: vfork(...)
   severity: INFO
 - id: gitlab.security_code_scan.SCS0018-1
@@ -7221,7 +7292,7 @@ rules:
         rule_id: BYUy1X
         version_id: rxTqg7
         url: https://semgrep.dev/playground/r/rxTqg7/gitlab.security_code_scan.SCS0018-1
-        origin: custom
+        origin: community
   severity: WARNING
   languages:
   - csharp
