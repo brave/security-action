@@ -1,5 +1,6 @@
 import json
 import subprocess
+import sys
 
 from os import environ, path
 
@@ -25,15 +26,19 @@ def main():
             if not isinstance(vulnerability["via"][0], str):
                 severity = vulnerability["severity"][0].upper()
                 search_for = f'"{vulnerability["nodes"][0]}": {{'
-                line = next(
-                    lineno for lineno, line in enumerate(lock_file_lines)
-                    if line.strip() == search_for
-                ) + 2
-                via = vulnerability["via"][0]
-                source = via.get("url", "")
-                if source:
-                    source = f"<br /><br />See {source}"
-                print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}")
+                try:
+                    line = next(
+                        lineno for lineno, line in enumerate(lock_file_lines)
+                        if line.strip() == search_for
+                    ) + 2
+                    via = vulnerability["via"][0]
+                    source = via.get("url", "")
+                    if source:
+                        source = f"<br /><br />See {source}"
+                    print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}")
+                except StopIteration:
+                    print(f"{search_for}, {vulnerability}", file=sys.stderr)
+                    raise
 
 
 if __name__ == "__main__":
