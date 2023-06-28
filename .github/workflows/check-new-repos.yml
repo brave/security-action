@@ -30,7 +30,9 @@ jobs:
             const variables = {
               owner: context.repo.owner
             }
+            const result = await github.graphql(query, variables);
             const totalCount = result.repositoryOwner.repositories.totalCount;
+            const repositories = result.repositoryOwner.repositories;
             const yesterday = ((d) => d.setDate(d.getDate() - 1))(new Date());
             var newerThanADay = repositories.nodes.filter(
               repo => new Date(repo.createdAt) > yesterday
