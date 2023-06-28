@@ -384,7 +384,7 @@ runs:
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees.outputs.result}} ${{ steps.reviewdog-fail-log-head.outputs.result }}
+          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees.outputs.result}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
         channel: secops-hotspots
         color: red
         verbose: true
