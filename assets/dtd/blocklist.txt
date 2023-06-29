@@ -1,2 +1,3 @@
 element [^:]+: validity error : ID [^ ]+ already defined
 element [^:]+: validity error : No declaration for attribute data-[^ ]+ of element [^:]+
+third_party\/rust\/[^.]+\.svg
