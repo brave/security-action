@@ -49,7 +49,7 @@ jobs:
             return message;
 
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
     - uses: actions-ecosystem/action-slack-notifier@v1
       if: ${{ fromJson(steps.check-new-repos.outputs.result) != '' }}
       with:
