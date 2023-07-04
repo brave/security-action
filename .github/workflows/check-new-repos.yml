@@ -15,6 +15,7 @@ jobs:
       id: check-new-repos
       uses: actions/github-script@v6
       with:
+          github-token: ${{ secrets.GH_PAT }}
           script: |
             var query = `query ($owner: String!) {
               repositoryOwner(login: $owner) {
@@ -48,9 +49,6 @@ jobs:
               message += `\nTotal repositories in ${variables.owner}: ${totalCount}`;
             }
             return message;
-
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
     - uses: actions-ecosystem/action-slack-notifier@v1
       if: ${{ fromJson(steps.check-new-repos.outputs.result) != '' }}
       with:
