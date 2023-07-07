@@ -13,10 +13,9 @@ runner:
           --quiet \
           $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
           --json \
-      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br>"' \
+      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br>,\(if .extra.metadata.assignees then .extra.metadata.assingnees else "null" end | sub("\n";"<br/>";"g"))"' \
       | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
-      | sed "s/>Source: null</>Source: Brave</g" \
-      | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.semgrep.stderr.log
+      | $SCRIPTPATH/cleaner.rb --assignees) 2> reviewdog.semgrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   sveltegrep:
@@ -46,11 +45,9 @@ runner:
         '--include=*.extractedscript.js' \
         '--include=*.extractedscript.html' \
         ./ \
-        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br>"' \
+        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br>,\(if .extra.metadata.assignees then .extra.metadata.assingnees else "null" end | sub("\n";"<br/>";"g"))"' \
         | grep -f $SCRIPTPATH/semgrep_rules/blocklist.txt -v \
-        | sed "s/>Source: null</>Source: Brave</g" \
-        | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g" \
-        | sed 's/\.extractedscript\.[hjlmst]*:/:/' && \
+        | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep && \
       find . -type f -name '*.extractedscript.*' -delete) 2> reviewdog.sveltegrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
@@ -60,8 +57,7 @@ runner:
       set -e
       (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
       | egrep -f $SCRIPTPATH/dtd/blocklist.txt -v \
-      | sort -u \
-      | sed "s/$/<br><br>Run SVGO on your assets<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.safesvg.stderr.log
+      | $SCRIPTPATH/cleaner.rb --svgo) 2> reviewdog.safesvg.stderr.log
     errorformat:
       - "%f:%l: %m"
   tfsec:
@@ -71,7 +67,7 @@ runner:
       (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message  | sub("\n";"<br/>";"g"))<br><br>source: \(.code.url)<br><br>"' \
-      | sed "s|$PWD/||g" | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.tfsec.stderr.log
+      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.tfsec.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   brakeman:
@@ -87,7 +83,7 @@ runner:
           --force \
           --format json \
         | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.link)"' \
-        | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g"
+        | $SCRIPTPATH/cleaner.rb
       fi) 2> reviewdog.brakeman.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
@@ -96,7 +92,7 @@ runner:
     cmd: |
       set -e
       (python3 $SCRIPTPATH/npm-audit.py \
-      | sort -u | sed "s/$/<br><br>Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.npm-audit.stderr.log
+      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.npm-audit.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   pip-audit:
@@ -104,6 +100,6 @@ runner:
     cmd: |
       set -e
       (python3 $SCRIPTPATH/pip-audit.py \
-      | sort -u | sed "s/$/Cc @brave\/sec-team $ASSIGNEES/g") 2> reviewdog.pip-audit.stderr.log 
+      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.pip-audit.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
