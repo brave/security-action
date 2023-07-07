@@ -46,6 +46,24 @@ outputs:
   reviewdog-findings:
     description: number of reviewdog findings
     value: ${{ steps.run-reviewdog-pr.outputs.findings }}${{ steps.run-reviewdog-full.outputs.findings }}
+  safesvg-count:
+    description: number of safesvg findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.safesvg_count }}${{ steps.run-reviewdog-full.outputs.safesvg_count }}
+  tfsec-count:
+    description: number of tfsec findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.tfsec_count }}${{ steps.run-reviewdog-full.outputs.tfsec_count }}
+  semgrep-count:
+    description: number of semgrep findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.semgrep_count }}${{ steps.run-reviewdog-full.outputs.semgrep_count }}
+  sveltegrep-count:
+    description: number of sveltegrep findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.sveltegrep_count }}${{ steps.run-reviewdog-full.outputs.sveltegrep_count }}
+  npm-audit-count:
+    description: number of npm-audit findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.npm_audit_count }}${{ steps.run-reviewdog-full.outputs.npm_audit_count }}
+  pip-audit-count:
+    description: number of pip-audit findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.pip_audit_count }}${{ steps.run-reviewdog-full.outputs.pip_audit_count }}
 runs:
   using: 'composite'
   steps:

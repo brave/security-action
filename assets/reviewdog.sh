@@ -21,7 +21,7 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
           || cat $runner.log >> reviewdog.fail.log
         grep -H "" $runner.log >> reviewdog.log || true
         echo -n "$runner: "
-        wc -l $runner.log
+        echo "${runner//-/_}_count=$(grep -c "^" $runner.log)" >> $GITHUB_OUTPUT || true
         [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" $runner.log || true
     done
 
@@ -39,6 +39,9 @@ else
     # [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && somethingsomething
     # TODO: fix brakeman on full-scan
     grep -H "" reviewdog.*.stderr.log | grep -v "reviewdog.brakeman.stderr.log:" >> reviewdog.fail.log || true
+    for runner in $RUNNERS; do
+      echo "${runner//-/_}_count=$(grep -c ": \[${runner}\] .*$" reviewdog.log)" >> $GITHUB_OUTPUT || true
+    done
 fi
 
 cat reviewdog.log | grep 'failed with zero findings: The command itself failed' >> reviewdog.fail.log || true
