@@ -31,12 +31,12 @@ STDIN.each_line(chomp: true).sort.uniq.to_a.each do |l|
 
   if options[:assignees]
     if l =~ /,null$/
-      l.gsub!(/,null$/, "Cc @brave\/sec-team #{ENV['ASSIGNEES']}")
+      l.gsub!(/,null$/, "<br/>Cc #{ENV['ASSIGNEES']}")
     else
-      l.gsub!(/,([^,]+)$/) { |_| "Cc #{$1.split.map { |s| "@"+s }.join(' ')}" }
+      l.gsub!(/,([^,]+)$/) { |_| "<br/>Cc #{$1.split.map { |s| "@"+s }.join(' ')}" }
     end
   else
-    l.gsub!(/$/, "Cc @brave\/sec-team #{ENV['ASSIGNEES']}")
+    l.gsub!(/$/, "<br/>Cc #{ENV['ASSIGNEES']}")
   end
 
   puts l
