@@ -1,13 +1,33 @@
 rules:
 - id: chromium-unretained-uaf
   pattern: base::Unretained(...)
+  metadata:
+    author: Andrea Brancaleoni <abc@pompel.me>
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-uaf.yaml
+    assignees: |
+      thypon
+      goodov
+      iefremov
   message: |
-    base::Unretained is most of the time unrequired and a weak reference is better suited for secure coding.
-    Consider swapping Unretained for a weak reference.<br/>base::Unretained usage may be fine when a callback owner is guaranteed
-    to be destroyed with the object base::Unretained is pointing to, for example:<br/><br/>- PrefChangeRegistrar<br/>- base::*Timer<br/>- mojo::Receiver<br/>- any other class member destroyed when the class is deallocated
+    base::Unretained is most of the time unrequited, and a weak reference is better suited for secure coding.
+    Consider swapping Unretained for a weak reference.
+    base::Unretained usage may be acceptable when a callback owner is guaranteed
+    to be destroyed with the object base::Unretained is pointing to, for example:
+    
+    - PrefChangeRegistrar
+    - base::*Timer
+    - mojo::Receiver
+    - any other class member destroyed when the class is deallocated
   languages: [cpp, c]
   severity: WARNING
 - id: chromium-bind-uaf
+  metadata:
+    author: Andrea Brancaleoni <abc@pompel.me>
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-uaf.yaml
+    assignees: |
+      thypon
+      goodov
+      iefremov
   patterns:
     - patterns:
       - pattern-either:
