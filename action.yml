@@ -114,7 +114,7 @@ runs:
                           author {
                             login
                           }
-                          bodyText
+                          body
                         }
                       }
                     }
@@ -134,7 +134,7 @@ runs:
                 reviewThread.isOutdated === true &&
                 reviewThread.comments.totalCount === 1 &&
                 reviewThread.comments.nodes[0].author.login === "github-actions" &&
-                reviewThread.comments.nodes[0].bodyText.includes("<br/>Cc ")
+                reviewThread.comments.nodes[0].body.includes("<br/>Cc ")
               )
             ).map(
               reviewThread => (
@@ -157,7 +157,7 @@ runs:
               reviewThread => (
                 !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
                 reviewThread.comments.nodes[0].author.login === "github-actions" &&
-                reviewThread.comments.nodes[0].bodyText.includes("<br/>Cc ")
+                reviewThread.comments.nodes[0].body.includes("<br/>Cc ")
               )
             ).length;
             console.log("Comments: %d", commentsNumber);
@@ -246,7 +246,7 @@ runs:
                           author {
                             login
                           }
-                          bodyText
+                          body
                         }
                       }
                     }
@@ -265,7 +265,7 @@ runs:
               reviewThread => (
                 !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
                 reviewThread.comments.nodes[0].author.login === "github-actions" &&
-                reviewThread.comments.nodes[0].bodyText.includes("<br/>Cc ")
+                reviewThread.comments.nodes[0].body.includes("<br/>Cc ")
               )
             ).length;
             console.log("Comments: %d", commentsNumber);
