@@ -270,14 +270,62 @@ runs:
             ).length;
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
+
+    - id: assignees-after
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      uses: actions/github-script@v6
+      with:
+          script: |
+            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+              repository(owner:$owner, name:$name) { 
+                pullRequest(number:$prnumber) {
+                  reviewThreads(last:100) {
+                    nodes {
+                      comments(first:1) {
+                        totalCount
+                        nodes {
+                          id
+                          author {
+                            login
+                          }
+                          body
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            const threads = result.repository.pullRequest.reviewThreads;
+            var assignees = [...new Set(threads.nodes.filter(
+              reviewThread => (
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
+              )
+            ).map(
+              e => e.comments.nodes[0].body
+                    .replace(/.*<br>Cc(.*)/, '$1')
+                    .replaceAll('@', '').trim().split(' ')
+            ).flat())]
+            
+            console.log("assignees: %o", assignees);
+            return assignees.join('\n');
+
     - id: assignee-removed-label
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       env:
-        ASSIGNEES: ${{ inputs.assignees }}
+        ASSIGNEES: ${{ fromJson(steps.assignees-after.outputs.result) }}
       with:
         script: |
             const { ASSIGNEES } = process.env;
+            console.log("assignees: %o", ASSIGNEES);
             const assignees = ASSIGNEES.split(/\s+/).filter((str) => str !== '');
             var query = `query ($owner: String!, $name: String!, $prnumber: Int!) {
               repository(owner: $owner, name: $name) {
@@ -362,7 +410,7 @@ runs:
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
       with:
         github_token: ${{ inputs.github_token }}
-        assignees: ${{ inputs.assignees }}
+        assignees: ${{ fromJson(steps.assignees-after.outputs.result) }}
     - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && hashFiles('reviewdog.fail.log') }}
       shell: bash
       run: |
