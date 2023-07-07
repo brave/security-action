@@ -26,7 +26,31 @@ jobs:
           echo ${{ steps.action.outputs.reviewdog-findings }}
           if [[ "${{ steps.action.outputs.reviewdog-findings }}" -lt "70" ]]; then
             echo "Too few reviewdog findings"
-            exit 123
+            exit 1
+          fi
+          if [[ "${{ steps.action.outputs.safesvg-count }}" -lt "1" ]]; then
+            echo "Too few safesvg findings"
+            exit 1
+          fi
+          if [[ "${{ steps.action.outputs.tfsec-count }}" -lt "2" ]]; then
+            echo "Too few tfsec findings"
+            exit 1
+          fi
+          if [[ "${{ steps.action.outputs.semgrep-count }}" -lt "50" ]]; then
+            echo "Too few semgrep findings"
+            exit 1
+          fi
+          if [[ "${{ steps.action.outputs.sveltegrep-count }}" -lt "4" ]]; then
+            echo "Too few sveltegrep findings"
+            exit 1
+          fi
+          if [[ "${{ steps.action.outputs.npm-audit-count }}" -lt "1" ]]; then
+            echo "Too few npm-audit findings"
+            exit 1
+          fi
+          if [[ "${{ steps.action.outputs.pip-audit-count }}" -lt "1" ]]; then
+            echo "Too few pip-audit findings"
+            exit 1
           fi
         shell: bash
         name: Check number of findings
