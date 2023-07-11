@@ -25,20 +25,28 @@ def main():
         for vulnerability in output["vulnerabilities"].values():
             if not isinstance(vulnerability["via"][0], str):
                 severity = vulnerability["severity"][0].upper()
-                search_for = f'"{vulnerability["nodes"][0]}": {{'
+                via = vulnerability["via"][0]
+                source = via.get("url", "")
+                node_name = vulnerability["nodes"][0]
+                search_for = f'"{node_name}": {{'
                 try:
                     line = next(
                         lineno for lineno, line in enumerate(lock_file_lines)
                         if line.strip() == search_for
                     ) + 2
-                    via = vulnerability["via"][0]
-                    source = via.get("url", "")
-                    if source:
-                        source = f"<br /><br />See {source}"
-                    print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}")
                 except StopIteration:
-                    print(f"{search_for}, {vulnerability}", file=sys.stderr)
-                    raise
+                    if node_name.startswith("node_modules/"):
+                        search_for = f'"{node_name[len("node_modules/"):]}": {{'
+                        line = next(
+                            lineno for lineno, line in enumerate(lock_file_lines)
+                            if line.strip() == search_for
+                        ) + 2
+                    else:
+                        print("Cannot find", search_for, vulnerability, file=sys.stderr)
+                        raise
+                if source:
+                    source = f"<br /><br />See {source}"
+                print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}")
 
 
 if __name__ == "__main__":
