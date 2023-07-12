@@ -1,6 +1,8 @@
 rules:
 - id: chromium-unretained-uaf
-  pattern: base::Unretained(...)
+  patterns:
+    - pattern: base::Unretained(...)
+    - pattern-not-inside: web_ui()->RegisterMessageCallback(...)
   metadata:
     author: Andrea Brancaleoni <abc@pompel.me>
     source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-uaf.yaml
