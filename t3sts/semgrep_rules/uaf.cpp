@@ -37,5 +37,12 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
   base::BindOnce(&func, this);
 
   // ok: chromium-bind-uaf
-  base::BindOnce(&MyClass::DoSomethingConditionally, weak_ptr_factory_.GetWeakPtr());  
+  base::BindOnce(&MyClass::DoSomethingConditionally, weak_ptr_factory_.GetWeakPtr());
+
+  // ok: chromium-unretained-uaf
+  web_ui()->RegisterMessageCallback(
+      "initLeoAssistant",
+      base::BindRepeating(&BraveLeoAssistantHandler::HandleInitLeoAssistant,
+                          base::Unretained(this)));
+
 }
