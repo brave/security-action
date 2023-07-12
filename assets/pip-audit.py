@@ -28,10 +28,16 @@ def main():
             f for f in files.split("\x00")
             if path.basename(f).startswith("requirements") and path.basename(f).endswith(".txt")
         ]
+
     index_url = environ.get("PYPI_INDEX_URL") or None
+    extra_install_args = []
+    if (trusted_hosts := environ.get("PYPI_INSECURE_HOSTS")):
+        for host in trusted_hosts.split(","):
+            extra_install_args.extend(["--trusted-host", host])
+
     for lock_path in changed_lock_files:
         for install_cmd, line_number in install_commands(lock_path):
-            venv = VirtualEnv(install_cmd, index_url=index_url)
+            venv = VirtualEnv(install_cmd + extra_install_args, index_url=index_url)
             try:
                 venv.create("./.venv-deleteme")
             except VirtualEnvError as e:

@@ -45,6 +45,9 @@ inputs:
   pip_audit_pypi_index_url:
     description: Pypi index for pip-audit to use in case you have a private index
     required: false
+  pip_audit_pypi_insecure_hosts:
+    description: Hosts for --trusted-host in pip-audit in case you have an untrusted private index, comma separated
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
@@ -244,6 +247,7 @@ runs:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
         SEC_ACTION_DEBUG: ${{ inputs.debug }}
         PYPI_INDEX_URL: ${{ inputs.pip_audit_pypi_index_url }}
+        PYPI_INSECURE_HOSTS: ${{ inputs.pip_audit_pypi_insecure_hosts }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
     - if: ${{ steps.reviewdog-enabled-full.outputs.result == 'true' }}
       name: Run reviewdog full
