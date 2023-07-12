@@ -42,6 +42,9 @@ inputs:
   baseline_scan_only:
     description: compare changed files with the base ref, do not scan the entire repo with reviewdog
     default: true
+  pip_audit_pypi_index_url:
+    description: Pypi index for pip-audit to use in case you have a private index
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
@@ -240,6 +243,7 @@ runs:
         ASSIGNEES: ${{steps.assignees.outputs.result}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
         SEC_ACTION_DEBUG: ${{ inputs.debug }}
+        PYPI_INDEX_URL: ${{ inputs.pip_audit_pypi_index_url }}
       run: ${{ github.action_path }}/assets/reviewdog.sh
     - if: ${{ steps.reviewdog-enabled-full.outputs.result == 'true' }}
       name: Run reviewdog full

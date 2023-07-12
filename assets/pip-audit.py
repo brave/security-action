@@ -28,9 +28,10 @@ def main():
             f for f in files.split("\x00")
             if path.basename(f).startswith("requirements") and path.basename(f).endswith(".txt")
         ]
+    index_url = environ.get("PYPI_INDEX_URL") or None
     for lock_path in changed_lock_files:
         for install_cmd, line_number in install_commands(lock_path):
-            venv = VirtualEnv(install_cmd)
+            venv = VirtualEnv(install_cmd, index_url=index_url)
             try:
                 venv.create("./.venv-deleteme")
             except VirtualEnvError as e:
