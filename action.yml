@@ -347,7 +347,7 @@ runs:
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       env:
-        ASSIGNEES: ${{ fromJson(steps.assignees-after.outputs.result) }}
+        ASSIGNEES: ${{ steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result) }}
       with:
         script: |
             const { ASSIGNEES } = process.env;
