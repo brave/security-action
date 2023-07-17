@@ -1,5 +1,5 @@
 int main() {
-    // chromium-insecure-gurl
+    // ok: chromium-insecure-gurl
     GURL url = ...;
     // chromium-insecure-gurl
     GURL origin = url.DeprecatedGetOriginAsURL();
@@ -14,7 +14,7 @@ int main() {
     //       represent origins" section below.
 
     // Blink-specific example:
-    // chromium-insecure-gurl
+    // ok: chromium-insecure-gurl
     KURL url = ...;
     // chromium-insecure-gurl
     scoped_refptr<SecurityOrigin> origin = SecurityOrigin::Create(url);
