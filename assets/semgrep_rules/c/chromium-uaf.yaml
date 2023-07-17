@@ -4,6 +4,11 @@ rules:
     - pattern: base::Unretained(...)
     - pattern-not-inside: web_ui()->RegisterMessageCallback(...)
     - pattern-not-inside: pref_change_registrar_.Add(...)
+    - pattern-not-inside: receiver_.set_disconnect_handler(...)
+    - pattern-not-inside: receiver_.set_disconnect_with_reason_handler(...)
+    - pattern-not-inside: remote_.set_disconnect_handler(...)
+    - pattern-not-inside: remote_.set_disconnect_with_reason_handler(...)
+
   metadata:
     author: Andrea Brancaleoni <abc@pompel.me>
     source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-uaf.yaml

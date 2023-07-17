@@ -50,4 +50,20 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
       prefs::kEnabled,
       base::BindRepeating(&AdsServiceImpl::OnEnabledPrefChanged,
                           base::Unretained(this)));
+
+  // ok: chromium-unretained-uaf
+  receiver_.set_disconnect_handler(
+      base::BindOnce(&LoggerImpl::OnError, base::Unretained(this)));
+
+  // ok: chromium-unretained-uaf
+  remote_.set_disconnect_handler(
+      base::BindOnce(&LoggerImpl::OnError, base::Unretained(this)));
+
+  // ok: chromium-unretained-uaf
+  receiver_.set_disconnect_with_reason_handler(
+      base::BindOnce(&LoggerImpl::OnError, base::Unretained(this)));
+
+  // ok: chromium-unretained-uaf
+  remote_.set_disconnect_with_reason_handler(
+      base::BindOnce(&LoggerImpl::OnError, base::Unretained(this)));
 }
