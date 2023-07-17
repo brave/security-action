@@ -66,4 +66,9 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
   // ok: chromium-unretained-uaf
   remote_.set_disconnect_with_reason_handler(
       base::BindOnce(&LoggerImpl::OnError, base::Unretained(this)));
+
+  // ok: chromium-unretained-uaf
+  timer_.Start(FROM_HERE, base::Seconds(1),
+    base::BindRepeating(base::Unretained(this), 42));
+
 }
