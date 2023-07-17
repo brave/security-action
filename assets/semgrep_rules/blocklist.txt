@@ -20,3 +20,4 @@ https://semgrep.dev/r/generic.secrets.security.detected-aws-access-key-id-value.
 https://semgrep.dev/r/generic.secrets.gitleaks.aws-access-token.aws-access-token
 https://github.com/0xdea/semgrep-rules/blob/main/c/missing-break-in-switch.yaml
 https://semgrep.dev/r/terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
+https://github.com/0xdea/semgrep-rules/blob/main/c/mismatched-memory-management-cpp.yaml
