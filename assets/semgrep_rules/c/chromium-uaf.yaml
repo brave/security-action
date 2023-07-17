@@ -8,6 +8,7 @@ rules:
     - pattern-not-inside: receiver_.set_disconnect_with_reason_handler(...)
     - pattern-not-inside: remote_.set_disconnect_handler(...)
     - pattern-not-inside: remote_.set_disconnect_with_reason_handler(...)
+    - pattern-not-inside: timer_.Start(...)
 
   metadata:
     author: Andrea Brancaleoni <abc@pompel.me>
