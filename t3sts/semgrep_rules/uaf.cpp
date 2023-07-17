@@ -19,7 +19,7 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
       base::BindOnce(&PageContentExtractor::OnDistillResult,
                      weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
 	// ok: chromium-bind-uaf
-  // chromium-unretained-uaf
+  // ruleid: chromium-unretained-uaf
   DistillPageText(
       render_frame(),
       base::BindOnce(&PageContentExtractor::OnDistillResult,
@@ -33,7 +33,7 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
       c->DoSomethingElse();
     }
   };
-  // chromium-bind-uaf
+  // ruleid: chromium-bind-uaf
   base::BindOnce(&func, this);
 
   // ok: chromium-bind-uaf
