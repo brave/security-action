@@ -5,4 +5,6 @@ constexpr int kBraveAdsIsolatedWorldId =
 int main() {
     // ruleid: brave-isolated-world-id-content-end
    int a = content::ISOLATED_WORLD_ID_CONTENT_END;
+    // ruleid: brave-isolated-world-id-content-end
+   int a = content::ISOLATED_WORLD_ID_BRAVE_INTERNAL;
 }
