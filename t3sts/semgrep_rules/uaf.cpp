@@ -45,4 +45,9 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
       base::BindRepeating(&BraveLeoAssistantHandler::HandleInitLeoAssistant,
                           base::Unretained(this)));
 
+  // ok: chromium-unretained-uaf
+  pref_change_registrar_.Add(
+      prefs::kEnabled,
+      base::BindRepeating(&AdsServiceImpl::OnEnabledPrefChanged,
+                          base::Unretained(this)));
 }
