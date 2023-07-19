@@ -194,12 +194,6 @@ runs:
       with:
         path: ~/.cache/pip/
         key: ${{ runner.os }}-pip
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      id: assignees
-      env:
-        ASSIGNEES: ${{inputs.assignees}}
-      run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
-      shell: bash
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: reviewdog/action-setup@v1
       with:
@@ -233,7 +227,7 @@ runs:
         cache: enable
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && inputs.debug == 'true'}}
       env:
-        ASSIGNEES: ${{steps.assignees.outputs.result}}
+        ASSIGNEES: ${{inputs.assignees}}
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
 
@@ -243,7 +237,7 @@ runs:
       id: run-reviewdog-pr
       shell: bash
       env:
-        ASSIGNEES: ${{steps.assignees.outputs.result}}
+        ASSIGNEES: ${{inputs.assignees}}
         REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
         SEC_ACTION_DEBUG: ${{ inputs.debug }}
         PYPI_INDEX_URL: ${{ inputs.pip_audit_pypi_index_url }}
@@ -300,6 +294,8 @@ runs:
     - id: assignees-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
+      env:
+        ASSIGNEES: ${{ inputs.assignees }}
       with:
           script: |
             var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
@@ -341,13 +337,17 @@ runs:
             ).flat())]
             
             console.log("assignees: %o", assignees);
-            return assignees.join('\n');
+            if (assignees.length > 0) {
+              return assignees.join('\n');
+            } else {
+              return process.env.ASSIGNEES.split(/\s+/).filter((str) => str !== '').join('\n');
+            }
 
     - id: assignee-removed-label
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       env:
-        ASSIGNEES: ${{ steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result) }}
+        ASSIGNEES: ${{ fromJson(steps.assignees-after.outputs.result) }}
       with:
         script: |
             const { ASSIGNEES } = process.env;
@@ -453,12 +453,18 @@ runs:
       with:
         script: |
           return '\n'+require('fs').readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      id: assignees-slack
+      env:
+        ASSIGNEES: ${{fromJson(steps.assignees-after.outputs.result)}}
+      run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
+      shell: bash
     - uses: actions-ecosystem/action-slack-notifier@v1
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees.outputs.result}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
+          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees-slack.outputs.result}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
         channel: secops-hotspots
         color: red
         verbose: true
@@ -467,7 +473,7 @@ runs:
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees.outputs.result}}
+          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees-slack.outputs.result}}
         channel: secops-hotspots
         color: green
         verbose: true
