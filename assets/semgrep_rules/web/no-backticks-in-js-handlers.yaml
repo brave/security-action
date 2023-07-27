@@ -1,0 +1,17 @@
+rules:
+  - id: no-backticks-in-js-handlers
+    patterns:
+      - pattern-either:
+        - pattern-inside: $HANDLER="..."
+        - pattern-inside: $HANDLER='...'
+        - pattern-inside: $HANDLER=...
+      - pattern-regex: '`{{[^}]+}}`'
+      - metavariable-regex:
+          metavariable: $HANDLER
+          regex: on(abort|auxclick|beforeinput|beforematch|beforetoggle|cancel|canplay|canplaythrough|change|click|close|contextlost|contextmenu|contextrestored|copy|cuechange|cut|dblclick|drag|dragend|dragenter|dragleave|dragover|dragstart|drop|durationchange|emptied|ended|formdata|input|invalid|keydown|keypress|keyup|loadeddata|loadedmetadata|loadstart|mousedown|mouseenter|mouseleave|mousemove|mouseout|mouseover|mouseup|paste|pause|play|playing|progress|ratechange|reset|securitypolicyviolation|seeked|seeking|select|slotchange|stalled|submit|suspend|timeupdate|toggle|volumechange|waiting|webkitAnimationEnd|webkitAnimationIteration|webkitAnimationStart|webkitTransitionEnd|wheel)
+    message: |
+      Backtick in JS handler may cause XSS since they are typically not auto escaped in variables.
+
+      Consider using single or double apices, instead of backticks.
+    languages: [generic]
+    severity: WARNING
