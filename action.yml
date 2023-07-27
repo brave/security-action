@@ -23,7 +23,7 @@ inputs:
     description: body hotwords which should trigger the action
     default: |
       password
-      crypto
+      cryptography
       login
       policy
       safebrowsing
