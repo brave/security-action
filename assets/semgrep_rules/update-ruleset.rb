@@ -3,6 +3,7 @@ require 'json'
 require 'set'
 require 'fileutils'
 require 'yaml'
+require 'pp'
 
 SEMGREP_VERSION = `semgrep --version`.strip
 RULESETS = [
@@ -52,47 +53,186 @@ RULESETS = [
 	'wordpress',
 	'react-best-practices',
 	'trailofbits',
-     'rust'
+    'rust'
 ]
 
 HOST = 'https://semgrep.dev'
 GENERATED_DIR = "#{__dir__}/generated/"
-NONFREE_LICENSES = Set.new ['CC-BY-NC-SA-4.0', 'Commons Clause License Condition v1.0[LGPL-2.1-only]']
 
 FileUtils.mkdir_p GENERATED_DIR
 
-rules = {}
-nonfree_rules = {}
-vuln_rules = Set.new
-nonfree_vuln_rules = Set.new
-audit_rules = Set.new
-nonfree_audit_rules = Set.new
-security_noaudit_novuln_rules = Set.new
-nonfree_security_noaudit_novuln_rules = Set.new
-others_rules = Set.new
-nonfree_others_rules = Set.new
-
 BLOCKLIST = Set.new File.readlines("#{__dir__}/blocklist.txt").map(&:strip)
+
+class Hash
+	def recurse_add(*keys)
+		if keys.length > 2
+			k = keys.shift
+			self[k] = {} unless self[k]
+			self[k].recurse_add(*keys)
+		elsif keys.length == 2
+			self[keys[0]] = keys[1] 
+		else
+			raise NotImplementedError
+		end
+	end
+end
+
+class Categoriser
+	attr_reader :categories
+
+	NONFREE_LICENSES = Set.new ['CC-BY-NC-SA-4.0', 'Commons Clause License Condition v1.0[LGPL-2.1-only]']
+
+	CATEGORIZER = {
+		:security_noaudit_novuln => {
+			rule: lambda { |rule| rule['metadata']['category'] == 'security' && rule['metadata']['subcategory'] != ['vuln'] && rule['metadata']['subcategory'] != ['audit'] && rule['metadata']['subcategory'] != 'vuln' && rule['metadata']['subcategory'] != 'audit' }
+		},
+		:vulns => {
+			rule: lambda { |rule| rule['metadata']['category'] == 'security' && (rule['metadata']['subcategory'] == ['vuln'] || rule['metadata']['subcategory'] == 'vuln') }
+		},
+		:audit => {
+			rule: lambda { |rule| rule['metadata']['category'] == 'security' && (rule['metadata']['subcategory'] == ['audit'] || rule['metadata']['subcategory'] == 'audit')}
+		},
+		:others => {
+			rule: lambda { |_| true },
+		} 
+	}
+	
+	LICENSE_CATEGORIZER = {
+		:nonfree => {
+			rule: lambda { |rule| Categoriser::NONFREE_LICENSES.include? rule['metadata']['license'] },
+			inner: Categoriser::CATEGORIZER
+		},
+		:oss => {
+			rule: lambda { |_| true },
+			inner: Categoriser::CATEGORIZER
+		}
+	}
+
+	def initialize
+		@categories = {}
+	end
+
+	def <<(other)
+		recurse_add(other, LICENSE_CATEGORIZER, @categories)
+	end
+
+	def Categoriser.from_files(directory, filenames)
+		c = Categoriser.new
+		Dir.chdir(directory) do
+			Dir[filenames].each do |fname|
+				keys = fname[0..-6].split('/').map { |token| token.to_sym }	
+				pp keys			
+				keys << YAML.load(File.read(fname))['rules']
+				c.categories.recurse_add(*keys)
+			end
+		end
+		c
+	end
+
+	def write_files(directory, c=nil)
+		Dir.chdir(directory) do
+			c = @categories if c == nil
+
+			c.each do |key, value|
+				if value.is_a? Set
+					File.write("#{key}.yaml", YAML.dump({"rules" => value.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+				elsif value.is_a? Hash
+					FileUtils.mkdir_p(key.to_s)
+					self.write_files(key.to_s, c[key])
+				end
+			end
+		end
+	end
+
+	# diff string
+	def diff(other, base=nil, d=nil)
+		other = other.categories if other.is_a? Categoriser
+		base = @categories unless base
+		d = {} unless d
+
+		other.each do |key, value|
+			d[key] = {} unless d[key]
+
+			if value.is_a?(Set) or value.is_a?(Array)
+				d[key]['+'] = Set.new(base[key]).map { |o| o['id'] } - Set.new(value).map { |o| o['id'] }
+				d[key]['-'] = Set.new(value).map { |o| o['id'] } - Set.new(base[key]).map { |o| o['id'] }
+			elsif value.is_a? Hash
+				d[key].merge self.diff(value, base[key], d[key])
+			end
+		end
+		
+		d
+	end
+
+	private
+	def recurse_add(other, categorizer, c)
+
+		categorizer.each do |key, value|
+			if value[:rule][other]
+				if value[:inner]
+					c[key] = {} unless c[key]
+
+					recurse_add(other, value[:inner], c[key])
+				else
+					c[key] = Set.new unless c[key]
+
+					c[key] << other
+				end
+
+				break
+			end
+		end
+	end
+end
+
+def flatten_diff(hash)
+	hash.each_with_object({}) do |(k, v), h|
+		if v.is_a? Hash and not v.keys.include?('+')
+			flatten_diff(v).map do |h_k, h_v|
+				h["#{k}.#{h_k}".to_sym] = h_v
+			end
+		else 
+			h[k] = v
+		end
+	end
+end
+
+def fmt_diff(diff)
+	flat = flatten_diff(diff)
+	s = ""
+
+	flat.each do |key, value|
+		s += "@ #{key} (+#{value['+'].length}, -#{value['-'].length})\n"
+		['+', '-'].each do |sign|
+			value[sign].each do |change|
+				s += "#{sign} #{change}\n"
+			end
+		end
+	end
+
+	s
+end
 
 # 0xdea C++ ruleset
 CPP_GITHUB_REPO = "0xdea/semgrep-rules"
 CPP_GITHUB_REPO_API = "https://api.github.com/repos/#{CPP_GITHUB_REPO}/git/trees/main?recursive=0"
 CPP_YAML_FILES = JSON.parse(URI.open(CPP_GITHUB_REPO_API).read)['tree'].map { |e| e['path'] }.select { |c| c =~ /^c\/.*\.yaml$/ }
 
+categoriser = Categoriser.new
+
 CPP_YAML_FILES.each do |cpp_yaml_file|
 	puts "Downloading ruleset for 0xdea/#{cpp_yaml_file}"
 	ret = YAML.load(URI.open("https://raw.githubusercontent.com/#{CPP_GITHUB_REPO}/main/#{cpp_yaml_file}").read)['rules']
 
 	ret.each do |rule|
+		next if BLOCKLIST.include?(rule['metadata']['source'])
+
 		rule['metadata']['license'] = 'MIT' unless rule['metadata']['license']
 		rule['metadata']['category'] = 'security'
 		rule['metadata']['subcategory'] = ['audit'] unless rule['metadata']['subcategory']
 		rule['metadata']['source'] = "https://github.com/0xdea/semgrep-rules/blob/main/#{cpp_yaml_file}"
-		if NONFREE_LICENSES.include? rule['metadata']['license']
-			nonfree_rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
-		else 
-			rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
-		end
+
+		categoriser << rule
 	end
 end
 
@@ -102,133 +242,20 @@ RULESETS.each do |ruleset|
 		"User-Agent" => "Semgrep/#{SEMGREP_VERSION} (command/unset)",
 		"Accept" => "application/json",
 		"Connection" => "keep-alive").read)['rules']
-        puts ret.length
+	puts ret.length
 
 	ret.each do |rule|
-		if NONFREE_LICENSES.include? rule['metadata']['license']
-			nonfree_rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
-		else 
-			rules[rule['id']] = rule unless BLOCKLIST.include?(rule['metadata']['source'])
-		end
+		next if BLOCKLIST.include?(rule['metadata']['source'])
+
+		categoriser << rule
 	end
 end
 
-rules.each do |k, v|
-	if v['metadata']['category'] == 'security' && v['metadata']['subcategory'] != ['vuln'] && v['metadata']['subcategory'] != ['audit'] && v['metadata']['subcategory'] != 'vuln' && v['metadata']['subcategory'] != 'audit'
-		security_noaudit_novuln_rules << v
-	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['vuln'] || v['metadata']['subcategory'] == 'vuln')
-		vuln_rules << v
-	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['audit'] || v['metadata']['subcategory'] == 'audit')
-		audit_rules << v
-	else
-		others_rules << v
-	end
-end
+old_categories = Categoriser.from_files(GENERATED_DIR, "**/*.yaml")
 
-nonfree_rules.each do |k, v|
-	if v['metadata']['category'] == 'security' && v['metadata']['subcategory'] != ['vuln'] && v['metadata']['subcategory'] != ['audit'] && v['metadata']['subcategory'] != 'vuln' && v['metadata']['subcategory'] != 'audit'
-		nonfree_security_noaudit_novuln_rules << v
-	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['vuln'] || v['metadata']['subcategory'] == 'vuln')
-		nonfree_vuln_rules << v
-	elsif v['metadata']['category'] == 'security' && (v['metadata']['subcategory'] == ['audit'] || v['metadata']['subcategory'] == 'audit')
-		audit_rules << v
-		nonfree_audit_rules << v
-	else
-		nonfree_others_rules << v
-	end
-end
+puts fmt_diff(categoriser.diff(old_categories))
 
-OSS = "oss"
-NONFREE = "nonfree"
-
-VULNS_FILE = "vulns.yaml"
-SECURITY_NOAUDIT_NOVULN_FILE = "security_noaudit_novuln.yaml"
-AUDIT_FILE = "audit.yaml"
-OTHERS_FILE = "others.yaml"
-
-vuln_rules_id = Set.new vuln_rules.map { |o| o['id'] }
-security_noaudit_novuln_rules_id = Set.new security_noaudit_novuln_rules.map { |o| o['id'] }
-audit_rules_id = Set.new audit_rules.map { |o| o['id'] }
-others_rules_id = Set.new others_rules.map { |o| o['id'] }
-
-old_vuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{VULNS_FILE}"))['rules'].map { |o| o['id'] }
-old_security_noaudit_novuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{SECURITY_NOAUDIT_NOVULN_FILE}"))['rules'].map { |o| o['id'] }
-old_audit_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{AUDIT_FILE}"))['rules'].map { |o| o['id'] }
-old_others_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{OTHERS_FILE}"))['rules'].map { |o| o['id'] }
-
-nonfree_vuln_rules_id = Set.new nonfree_vuln_rules.map { |o| o['id'] }
-nonfree_security_noaudit_novuln_rules_id = Set.new nonfree_security_noaudit_novuln_rules.map { |o| o['id'] }
-nonfree_audit_rules_id = Set.new nonfree_audit_rules.map { |o| o['id'] }
-nonfree_others_rules_id = Set.new nonfree_others_rules.map { |o| o['id'] }
-
-old_nonfree_vuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{VULNS_FILE}"))['rules'].map { |o| o['id'] }
-old_nonfree_security_noaudit_novuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{SECURITY_NOAUDIT_NOVULN_FILE}"))['rules'].map { |o| o['id'] }
-old_nonfree_audit_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{AUDIT_FILE}"))['rules'].map { |o| o['id'] }
-old_nonfree_others_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{OTHERS_FILE}"))['rules'].map { |o| o['id'] }
-
-def format_diff(math_sym, diff)
-	output = ""
-	if diff.length > 0
-		output += "\n#{diff.length} #{math_sym}\n"
-	end
-	output += diff.map { |elem| "#{math_sym} #{elem}" }.join("\n")
-	output
-end
-
-puts """
-# OSS Rules
-
-vulns:
-#{format_diff('-', old_vuln_rules_id - vuln_rules_id)}
-#{format_diff('+', vuln_rules_id - old_vuln_rules_id)}
-
-security noaudit novulns:
-#{format_diff('-', old_security_noaudit_novuln_rules_id - security_noaudit_novuln_rules_id)}
-#{format_diff('+', security_noaudit_novuln_rules_id - old_security_noaudit_novuln_rules_id)}
-
-audit:
-#{format_diff('-', old_audit_rules_id - audit_rules_id)}
-#{format_diff('+', audit_rules_id - old_audit_rules_id)}
-
-others:
-#{format_diff('-', old_others_rules_id - others_rules_id)}
-#{format_diff('+', others_rules_id - old_others_rules_id)}
-"""
-
-puts """
-# Nonfree Rules
-
-vulns:
-#{format_diff('-', old_nonfree_vuln_rules_id - nonfree_vuln_rules_id)}
-#{format_diff('+', nonfree_vuln_rules_id - old_nonfree_vuln_rules_id)}
-
-security noaudit novulns:
-#{format_diff('-', old_nonfree_security_noaudit_novuln_rules_id - nonfree_security_noaudit_novuln_rules_id)}
-#{format_diff('+', nonfree_security_noaudit_novuln_rules_id - old_nonfree_security_noaudit_novuln_rules_id)}
-
-audit:
-#{format_diff('-', old_nonfree_audit_rules_id - nonfree_audit_rules_id)}
-#{format_diff('+', nonfree_audit_rules_id - old_nonfree_audit_rules_id)}
-
-others:
-#{format_diff('-', old_nonfree_others_rules_id - nonfree_others_rules_id)}
-#{format_diff('+', nonfree_others_rules_id - old_nonfree_others_rules_id)}
-
-"""
-
-FileUtils.mkdir_p("#{GENERATED_DIR}/#{OSS}")
-
-File.write("#{GENERATED_DIR}/#{OSS}/#{VULNS_FILE}", YAML.dump({"rules" => vuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/#{OSS}/#{SECURITY_NOAUDIT_NOVULN_FILE}", YAML.dump({"rules" => security_noaudit_novuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/#{OSS}/#{AUDIT_FILE}", YAML.dump({"rules" => audit_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/#{OSS}/#{OTHERS_FILE}", YAML.dump({"rules" => others_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-
-FileUtils.mkdir_p("#{GENERATED_DIR}/#{NONFREE}")
-
-File.write("#{GENERATED_DIR}/#{NONFREE}/#{VULNS_FILE}", YAML.dump({"rules" => nonfree_vuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/#{NONFREE}/#{SECURITY_NOAUDIT_NOVULN_FILE}", YAML.dump({"rules" => nonfree_security_noaudit_novuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/#{NONFREE}/#{AUDIT_FILE}", YAML.dump({"rules" => nonfree_audit_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/#{NONFREE}/#{OTHERS_FILE}", YAML.dump({"rules" => nonfree_others_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+categoriser.write_files(GENERATED_DIR)
 
 # require 'pry'
 # binding.pry
