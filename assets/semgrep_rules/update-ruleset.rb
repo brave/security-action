@@ -245,6 +245,8 @@ RULESETS.each do |ruleset|
 
 	ret.each do |rule|
 		next if BLOCKLIST.include?(rule['metadata']['source'])
+		next if rule['patterns'] && rule['patterns'][0]['pattern'] == 'a()' && rule['patterns'][1]['pattern'] == 'b()'
+		next if rule['patterns'] && rule['patterns'][0]['pattern'] == 'a' && rule['patterns'][1]['pattern'] == 'b'
 
 		categoriser << rule
 	end
