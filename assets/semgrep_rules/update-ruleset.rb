@@ -52,7 +52,7 @@ RULESETS = [
 	'wordpress',
 	'react-best-practices',
 	'trailofbits',
-        'rust'
+     'rust'
 ]
 
 HOST = 'https://semgrep.dev'
@@ -138,29 +138,97 @@ nonfree_rules.each do |k, v|
 	end
 end
 
-puts "oss/vulns.yaml containing #{vuln_rules.length} rules"
-puts "oss/audit.yaml containing #{audit_rules.length} rules"
-puts "oss/others.yaml containing #{others_rules.length} rules"
-puts "oss/security_noaudit_novuln.yaml containing #{security_noaudit_novuln_rules.length} rules"
+OSS = "oss"
+NONFREE = "nonfree"
 
-FileUtils.mkdir_p("#{GENERATED_DIR}/oss")
+VULNS_FILE = "vulns.yaml"
+SECURITY_NOAUDIT_NOVULN_FILE = "security_noaudit_novuln.yaml"
+AUDIT_FILE = "audit.yaml"
+OTHERS_FILE = "others.yaml"
 
-File.write("#{GENERATED_DIR}/oss/vulns.yaml", YAML.dump({"rules" => vuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/oss/security_noaudit_novuln.yaml", YAML.dump({"rules" => security_noaudit_novuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/oss/audit.yaml", YAML.dump({"rules" => audit_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/oss/others.yaml", YAML.dump({"rules" => others_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+vuln_rules_id = Set.new vuln_rules.map { |o| o['id'] }
+security_noaudit_novuln_rules_id = Set.new security_noaudit_novuln_rules.map { |o| o['id'] }
+audit_rules_id = Set.new audit_rules.map { |o| o['id'] }
+others_rules_id = Set.new others_rules.map { |o| o['id'] }
 
-puts "nonfree/vulns.yaml containing #{nonfree_vuln_rules.length} rules"
-puts "nonfree/audit.yaml containing #{nonfree_audit_rules.length} rules"
-puts "nonfree/others.yaml containing #{nonfree_others_rules.length} rules"
-puts "nonfree/security_noaudit_novuln.yaml containing #{nonfree_security_noaudit_novuln_rules.length} rules"
+old_vuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{VULNS_FILE}"))['rules'].map { |o| o['id'] }
+old_security_noaudit_novuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{SECURITY_NOAUDIT_NOVULN_FILE}"))['rules'].map { |o| o['id'] }
+old_audit_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{AUDIT_FILE}"))['rules'].map { |o| o['id'] }
+old_others_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{OSS}/#{OTHERS_FILE}"))['rules'].map { |o| o['id'] }
 
-FileUtils.mkdir_p("#{GENERATED_DIR}/nonfree")
+nonfree_vuln_rules_id = Set.new nonfree_vuln_rules.map { |o| o['id'] }
+nonfree_security_noaudit_novuln_rules_id = Set.new nonfree_security_noaudit_novuln_rules.map { |o| o['id'] }
+nonfree_audit_rules_id = Set.new nonfree_audit_rules.map { |o| o['id'] }
+nonfree_others_rules_id = Set.new nonfree_others_rules.map { |o| o['id'] }
 
-File.write("#{GENERATED_DIR}/nonfree/vulns.yaml", YAML.dump({"rules" => nonfree_vuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/nonfree/security_noaudit_novuln.yaml", YAML.dump({"rules" => nonfree_security_noaudit_novuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/nonfree/audit.yaml", YAML.dump({"rules" => nonfree_audit_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
-File.write("#{GENERATED_DIR}/nonfree/others.yaml", YAML.dump({"rules" => nonfree_others_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+old_nonfree_vuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{VULNS_FILE}"))['rules'].map { |o| o['id'] }
+old_nonfree_security_noaudit_novuln_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{SECURITY_NOAUDIT_NOVULN_FILE}"))['rules'].map { |o| o['id'] }
+old_nonfree_audit_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{AUDIT_FILE}"))['rules'].map { |o| o['id'] }
+old_nonfree_others_rules_id = Set.new YAML.load(File.read("#{GENERATED_DIR}/#{NONFREE}/#{OTHERS_FILE}"))['rules'].map { |o| o['id'] }
+
+def format_diff(math_sym, diff)
+	output = ""
+	if diff.length > 0
+		output += "\n#{diff.length} #{math_sym}\n"
+	end
+	output += diff.map { |elem| "#{math_sym} #{elem}" }.join("\n")
+	output
+end
+
+puts """
+# OSS Rules
+
+vulns:
+#{format_diff('-', old_vuln_rules_id - vuln_rules_id)}
+#{format_diff('+', vuln_rules_id - old_vuln_rules_id)}
+
+security noaudit novulns:
+#{format_diff('-', old_security_noaudit_novuln_rules_id - security_noaudit_novuln_rules_id)}
+#{format_diff('+', security_noaudit_novuln_rules_id - old_security_noaudit_novuln_rules_id)}
+
+audit:
+#{format_diff('-', old_audit_rules_id - audit_rules_id)}
+#{format_diff('+', audit_rules_id - old_audit_rules_id)}
+
+others:
+#{format_diff('-', old_others_rules_id - others_rules_id)}
+#{format_diff('+', others_rules_id - old_others_rules_id)}
+"""
+
+puts """
+# Nonfree Rules
+
+vulns:
+#{format_diff('-', old_nonfree_vuln_rules_id - nonfree_vuln_rules_id)}
+#{format_diff('+', nonfree_vuln_rules_id - old_nonfree_vuln_rules_id)}
+
+security noaudit novulns:
+#{format_diff('-', old_nonfree_security_noaudit_novuln_rules_id - nonfree_security_noaudit_novuln_rules_id)}
+#{format_diff('+', nonfree_security_noaudit_novuln_rules_id - old_nonfree_security_noaudit_novuln_rules_id)}
+
+audit:
+#{format_diff('-', old_nonfree_audit_rules_id - nonfree_audit_rules_id)}
+#{format_diff('+', nonfree_audit_rules_id - old_nonfree_audit_rules_id)}
+
+others:
+#{format_diff('-', old_nonfree_others_rules_id - nonfree_others_rules_id)}
+#{format_diff('+', nonfree_others_rules_id - old_nonfree_others_rules_id)}
+
+"""
+
+FileUtils.mkdir_p("#{GENERATED_DIR}/#{OSS}")
+
+File.write("#{GENERATED_DIR}/#{OSS}/#{VULNS_FILE}", YAML.dump({"rules" => vuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+File.write("#{GENERATED_DIR}/#{OSS}/#{SECURITY_NOAUDIT_NOVULN_FILE}", YAML.dump({"rules" => security_noaudit_novuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+File.write("#{GENERATED_DIR}/#{OSS}/#{AUDIT_FILE}", YAML.dump({"rules" => audit_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+File.write("#{GENERATED_DIR}/#{OSS}/#{OTHERS_FILE}", YAML.dump({"rules" => others_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+
+FileUtils.mkdir_p("#{GENERATED_DIR}/#{NONFREE}")
+
+File.write("#{GENERATED_DIR}/#{NONFREE}/#{VULNS_FILE}", YAML.dump({"rules" => nonfree_vuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+File.write("#{GENERATED_DIR}/#{NONFREE}/#{SECURITY_NOAUDIT_NOVULN_FILE}", YAML.dump({"rules" => nonfree_security_noaudit_novuln_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+File.write("#{GENERATED_DIR}/#{NONFREE}/#{AUDIT_FILE}", YAML.dump({"rules" => nonfree_audit_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
+File.write("#{GENERATED_DIR}/#{NONFREE}/#{OTHERS_FILE}", YAML.dump({"rules" => nonfree_others_rules.to_a.sort {|a,b| a['id'] <=> b['id']}}))
 
 # require 'pry'
 # binding.pry
