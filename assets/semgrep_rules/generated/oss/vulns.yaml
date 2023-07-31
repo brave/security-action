@@ -28,14 +28,16 @@ rules:
     - java
     - servlets
     interfile: true
-    license: proprietary license - copyright © r2c
+    license: proprietary license - copyright © Semgrep, Inc.
+    vulnerability_class:
+    - Cross-Site-Scripting (XSS)
     source: https://semgrep.dev/r/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
     shortlink: https://sg.run/KlRL
     semgrep.dev:
       rule:
         rule_id: j2Uv7B
-        version_id: WrTn0E
-        url: https://semgrep.dev/playground/r/WrTn0E/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
+        version_id: RGTb2B
+        url: https://semgrep.dev/playground/r/RGTb2B/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
         origin: community
   languages:
   - java

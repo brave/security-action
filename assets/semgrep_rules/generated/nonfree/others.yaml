@@ -49,13 +49,15 @@ rules:
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     references:
     - https://chromestatus.com/feature/6140064063029248
+    vulnerability_class:
+    - Improper Validation
     source: https://semgrep.dev/r/html.security.missing-noreferrer.missing-noreferrer
     shortlink: https://sg.run/Gekn
     semgrep.dev:
       rule:
         rule_id: 6JUjBL
-        version_id: 6xTrvK
-        url: https://semgrep.dev/playground/r/6xTrvK/html.security.missing-noreferrer.missing-noreferrer
+        version_id: yeTXA4
+        url: https://semgrep.dev/playground/r/yeTXA4/html.security.missing-noreferrer.missing-noreferrer
         origin: community
   patterns:
   - pattern: a()
@@ -810,174 +812,6 @@ rules:
   languages:
   - hcl
   severity: INFO
-- id: trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
-  patterns:
-  - pattern: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $C[$X] = $V
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $C[$X]++
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $C[$X]--
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $CODEC.Unmarshal($C)
-      ...
-      for $K := range $C { ... }
-  message: 'Iteration over a possibly empty map `$C`. This is likely a bug or redundant
-    code.
-
-    '
-  languages:
-  - go
-  severity: ERROR
-  metadata:
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
-    shortlink: https://sg.run/WOeg
-    semgrep.dev:
-      rule:
-        rule_id: 7KUp1e
-        version_id: GxTZ6g
-        url: https://semgrep.dev/playground/r/GxTZ6g/trailofbits.go.iterate-over-empty-map.iterate-over-empty-collection
-        origin: community
-- id: trailofbits.go.nondeterministic-select.nondeterministic-select
-  patterns:
-  - pattern: |
-      $TICKER := time.NewTicker(...)
-      ...
-      for {
-        ...
-        select {
-          case <- $DONECHAN: return
-          case <- $TICKER.C: ...
-        }
-      }
-  - pattern-not: |
-      $TICKER := time.NewTicker(...)
-      ...
-      for {
-        select {
-          case <-$DONECHAN: return
-          default:
-        }
-        ...
-        select {
-          case <- $DONECHAN: return
-          case <- $TICKER.C: ...
-        }
-      }
-  message: |
-    Logic executed as a result of ticker `$TICKER` may execute more times than desired.
-    When both `$TICKER` and `$DONECHAN` are written to at the same time, the scheduler randomly picks a
-    case to execute. As a result, the `$TICKER.C` may excute one more time than expected.
-  severity: WARNING
-  languages:
-  - go
-  metadata:
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.go.nondeterministic-select.nondeterministic-select
-    shortlink: https://sg.run/K8dX
-    semgrep.dev:
-      rule:
-        rule_id: 8GUxqz
-        version_id: A8TG5P
-        url: https://semgrep.dev/playground/r/A8TG5P/trailofbits.go.nondeterministic-select.nondeterministic-select
-        origin: community
-- id: trailofbits.go.questionable-assignment.questionable-assignment
-  patterns:
-  - pattern-either:
-    - pattern: "..., $X . $Y, ..., err = ..."
-    - pattern: "..., $X . $Y, ..., err := ..."
-  message: Should `$X` be modified when an error could be returned?
-  languages:
-  - go
-  severity: WARNING
-  metadata:
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.go.questionable-assignment.questionable-assignment
-    shortlink: https://sg.run/qq6y
-    semgrep.dev:
-      rule:
-        rule_id: gxUYAJ
-        version_id: BjT7rO
-        url: https://semgrep.dev/playground/r/BjT7rO/trailofbits.go.questionable-assignment.questionable-assignment
-        origin: community
-- id: trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
-  patterns:
-  - pattern-either:
-    - pattern: |
-        ...
-        go func(...) {
-        ...
-        }(...)
-        time.Sleep(...)
-        ...
-    - pattern: |
-        ...
-        go $FOO(...)
-        time.Sleep(...)
-        ...
-  - pattern-inside: func $FUNC(...){ ... }
-  message: Using `time.Sleep` for synchronizations is generally considered bad practice.
-  languages:
-  - go
-  severity: WARNING
-  metadata:
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
-    shortlink: https://sg.run/YXK4
-    semgrep.dev:
-      rule:
-        rule_id: 3qUEpL
-        version_id: K3TYje
-        url: https://semgrep.dev/playground/r/K3TYje/trailofbits.go.sleep-used-for-synchronizations.sleep-used-for-synchronizations
-        origin: community
-- id: trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern: "$FOO, $A := <... $X.($TYPE) ...>\n"
-      - metavariable-regex:
-          metavariable: "$A"
-          regex: "^_$"
-    - patterns:
-      - pattern: "$FOO := <... $X.($TYPE) ...>\n"
-      - metavariable-regex:
-          metavariable: "$FOO"
-          regex: "^[^,]*$"
-  message: 'Unchecked type assertion.
-
-    '
-  severity: ERROR
-  languages:
-  - go
-  metadata:
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
-    shortlink: https://sg.run/054W
-    semgrep.dev:
-      rule:
-        rule_id: ZqUgpe
-        version_id: zyT183
-        url: https://semgrep.dev/playground/r/zyT183/trailofbits.go.unchecked-type-assertion.unchecked-type-assertion
-        origin: community
 - id: trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
   message: Usage of NumPy library inside PyTorch `$MODULE` module was found. Avoid
     mixing these libraries for efficiency and proper ONNX loading
@@ -1033,29 +867,6 @@ rules:
         rule_id: JDU4RQ
         version_id: nWTbb8
         url: https://semgrep.dev/playground/r/nWTbb8/trailofbits.python.pytorch-tensor.pytorch-tensor
-        origin: community
-  pattern: torch.Tensor(...)
-- id: trailofbits.python.torch-tensor.torch-tensor
-  message: Avoid using `torch.Tensor()` to directly create a tensor for efficiency
-    and proper parsing
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: performance
-    subcategory:
-    - audit
-    confidence: HIGH
-    references:
-    - https://pytorch.org/docs/stable/tensors.html
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.python.torch-tensor.torch-tensor
-    shortlink: https://sg.run/x4zL
-    semgrep.dev:
-      rule:
-        rule_id: ReUqz0
-        version_id: 7ZTq5z
-        url: https://semgrep.dev/playground/r/7ZTq5z/trailofbits.python.torch-tensor.torch-tensor
         origin: community
   pattern: torch.Tensor(...)
 - id: typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level

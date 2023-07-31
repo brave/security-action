@@ -18,13 +18,15 @@ rules:
     cwe:
     - 'CWE-611: Improper Restriction of XML External Entity Reference'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - XML Injection
     source: https://semgrep.dev/r/contrib.dlint.dlint-equivalent.insecure-xml-use
     shortlink: https://sg.run/5QOW
     semgrep.dev:
       rule:
         rule_id: zdUkvA
-        version_id: 0bToER
-        url: https://semgrep.dev/playground/r/0bToER/contrib.dlint.dlint-equivalent.insecure-xml-use
+        version_id: BjT9E3
+        url: https://semgrep.dev/playground/r/BjT9E3/contrib.dlint.dlint-equivalent.insecure-xml-use
         origin: community
   pattern-either:
   - patterns:
@@ -62,13 +64,15 @@ rules:
     likelihood: MEDIUM
     impact: LOW
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
     source: https://semgrep.dev/r/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
     shortlink: https://sg.run/oxEN
     semgrep.dev:
       rule:
         rule_id: NbUk4X
-        version_id: qkT7o6
-        url: https://semgrep.dev/playground/r/qkT7o6/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
+        version_id: l4T58p
+        url: https://semgrep.dev/playground/r/l4T58p/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
         origin: community
   languages:
   - go
@@ -201,13 +205,15 @@ rules:
     references:
     - https://www.intercom.com/help/en/articles/183-set-up-identity-verification-for-web-and-mobile
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Authentication
     source: https://semgrep.dev/r/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
     shortlink: https://sg.run/Eb5w
     semgrep.dev:
       rule:
         rule_id: QrU96W
-        version_id: BjTPr2
-        url: https://semgrep.dev/playground/r/BjTPr2/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
+        version_id: gETqOo
+        url: https://semgrep.dev/playground/r/gETqOo/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
         origin: community
 - id: python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-blowfish
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)

@@ -7476,13 +7476,15 @@ rules:
     masvs: storage-7
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#checking-for-sensitive-data-disclosure-through-the-user-interface-mstg-storage-7
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
     shortlink: https://sg.run/YeEe
     semgrep.dev:
       rule:
         rule_id: L1UJDJ
-        version_id: w8TPz2
-        url: https://semgrep.dev/playground/r/w8TPz2/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
+        version_id: PkTpOL
+        url: https://semgrep.dev/playground/r/PkTpOL/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
         origin: community
 - id: mobsf.mobsfscan.android.logging.android_logging
   patterns:
@@ -7533,13 +7535,15 @@ rules:
     masvs: storage-3
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#logs
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.logging.android_logging
     shortlink: https://sg.run/6pQo
     semgrep.dev:
       rule:
         rule_id: 8GU0OP
-        version_id: xyTgAJ
-        url: https://semgrep.dev/playground/r/xyTgAJ/mobsf.mobsfscan.android.logging.android_logging
+        version_id: JdTJe7
+        url: https://semgrep.dev/playground/r/JdTJe7/mobsf.mobsfscan.android.logging.android_logging
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_api_key
   patterns:
@@ -7565,13 +7569,15 @@ rules:
     masvs: storage-14
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#storing-a-key---example
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.secrets.hardcoded_api_key
     shortlink: https://sg.run/p02g
     semgrep.dev:
       rule:
         rule_id: 3qUgDz
-        version_id: vdTwn1
-        url: https://semgrep.dev/playground/r/vdTwn1/mobsf.mobsfscan.android.secrets.hardcoded_api_key
+        version_id: RGTXwe
+        url: https://semgrep.dev/playground/r/RGTXwe/mobsf.mobsfscan.android.secrets.hardcoded_api_key
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_password
   patterns:
@@ -7597,13 +7603,15 @@ rules:
     masvs: storage-14
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#storing-a-key---example
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.secrets.hardcoded_password
     shortlink: https://sg.run/oWp9
     semgrep.dev:
       rule:
         rule_id: gxUpG8
-        version_id: O9Tq3j
-        url: https://semgrep.dev/playground/r/O9Tq3j/mobsf.mobsfscan.android.secrets.hardcoded_password
+        version_id: 5PTvYJ
+        url: https://semgrep.dev/playground/r/5PTvYJ/mobsf.mobsfscan.android.secrets.hardcoded_password
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_secret
   patterns:
@@ -7629,13 +7637,15 @@ rules:
     masvs: storage-14
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#storing-a-key---example
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.secrets.hardcoded_secret
     shortlink: https://sg.run/23O0
     semgrep.dev:
       rule:
         rule_id: 4bUJWL
-        version_id: d6T0jQ
-        url: https://semgrep.dev/playground/r/d6T0jQ/mobsf.mobsfscan.android.secrets.hardcoded_secret
+        version_id: A8T6nr
+        url: https://semgrep.dev/playground/r/A8T6nr/mobsf.mobsfscan.android.secrets.hardcoded_secret
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_username
   patterns:
@@ -7661,13 +7671,15 @@ rules:
     masvs: storage-14
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#storing-a-key---example
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.secrets.hardcoded_username
     shortlink: https://sg.run/zXGG
     semgrep.dev:
       rule:
         rule_id: QrULll
-        version_id: e1To80
-        url: https://semgrep.dev/playground/r/e1To80/mobsf.mobsfscan.android.secrets.hardcoded_username
+        version_id: GxTGWv
+        url: https://semgrep.dev/playground/r/GxTGWv/mobsf.mobsfscan.android.secrets.hardcoded_username
         origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_readable
   patterns:
@@ -7685,13 +7697,15 @@ rules:
     masvs: storage-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#testing-local-storage-for-sensitive-data-mstg-storage-1-and-mstg-storage-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.word_readable_writable.world_readable
     shortlink: https://sg.run/XxEK
     semgrep.dev:
       rule:
         rule_id: PeUKq9
-        version_id: ZRT955
-        url: https://semgrep.dev/playground/r/ZRT955/mobsf.mobsfscan.android.word_readable_writable.world_readable
+        version_id: BjT9GN
+        url: https://semgrep.dev/playground/r/BjT9GN/mobsf.mobsfscan.android.word_readable_writable.world_readable
         origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_writeable
   patterns:
@@ -7710,13 +7724,15 @@ rules:
     masvs: storage-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#testing-local-storage-for-sensitive-data-mstg-storage-1-and-mstg-storage-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.android.word_readable_writable.world_writeable
     shortlink: https://sg.run/jGlY
     semgrep.dev:
       rule:
         rule_id: JDU4Ab
-        version_id: nWTbzY
-        url: https://semgrep.dev/playground/r/nWTbzY/mobsf.mobsfscan.android.word_readable_writable.world_writeable
+        version_id: DkTOeW
+        url: https://semgrep.dev/playground/r/DkTOeW/mobsf.mobsfscan.android.word_readable_writable.world_writeable
         origin: community
 - id: mobsf.mobsfscan.android_safetynetapi.android_safetynet_api
   patterns:
@@ -7778,13 +7794,15 @@ rules:
     masvs: resilience-1
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05j-Testing-Resiliency-Against-Reverse-Engineering.md#testing-root-detection-mstg-resilience-1
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
     shortlink: https://sg.run/1lOw
     semgrep.dev:
       rule:
         rule_id: 5rUx0W
-        version_id: ExTL2Q
-        url: https://semgrep.dev/playground/r/ExTL2Q/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
+        version_id: WrTR6P
+        url: https://semgrep.dev/playground/r/WrTR6P/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
         origin: community
 - id: mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
   patterns:
@@ -7824,13 +7842,15 @@ rules:
     masvs: storage-9
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05d-Testing-Data-Storage.md#finding-sensitive-information-in-auto-generated-screenshots-mstg-storage-9
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
     shortlink: https://sg.run/9jOY
     semgrep.dev:
       rule:
         rule_id: GdUg51
-        version_id: 7ZTlQv
-        url: https://semgrep.dev/playground/r/7ZTlQv/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
+        version_id: 0bT462
+        url: https://semgrep.dev/playground/r/0bT462/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
         origin: community
 - id: mobsf.mobsfscan.best_practices.root_detection.android_root_detection
   patterns:
@@ -7856,13 +7876,15 @@ rules:
     masvs: resilience-1
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05j-Testing-Resiliency-Against-Reverse-Engineering.md#testing-root-detection-mstg-resilience-1
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
     shortlink: https://sg.run/y25x
     semgrep.dev:
       rule:
         rule_id: ReUdYj
-        version_id: LjTWyP
-        url: https://semgrep.dev/playground/r/LjTWyP/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
+        version_id: K3TpO5
+        url: https://semgrep.dev/playground/r/K3TpO5/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
         origin: community
 - id: mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
   patterns:
@@ -7880,13 +7902,15 @@ rules:
     masvs: platform-9
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#testing-for-overlay-attacks-mstg-platform-9
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
     shortlink: https://sg.run/rqjn
     semgrep.dev:
       rule:
         rule_id: AbUx1o
-        version_id: 8KTJjG
-        url: https://semgrep.dev/playground/r/8KTJjG/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
+        version_id: qkT0KQ
+        url: https://semgrep.dev/playground/r/qkT0KQ/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
         origin: community
 - id: mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
   patterns:
@@ -7912,13 +7936,15 @@ rules:
     masvs: network-4
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05g-Testing-Network-Communication.md#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
     shortlink: https://sg.run/bERp
     semgrep.dev:
       rule:
         rule_id: BYUoO0
-        version_id: gETR1k
-        url: https://semgrep.dev/playground/r/gETR1k/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
+        version_id: l4TLNX
+        url: https://semgrep.dev/playground/r/l4TLNX/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
         origin: community
 - id: mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
   patterns:
@@ -7980,13 +8006,15 @@ rules:
     masvs: network-4
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05g-Testing-Network-Communication.md#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
     shortlink: https://sg.run/NXEp
     semgrep.dev:
       rule:
         rule_id: DbUL4y
-        version_id: QkTYzZ
-        url: https://semgrep.dev/playground/r/QkTYzZ/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
+        version_id: YDT38v
+        url: https://semgrep.dev/playground/r/YDT38v/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
         origin: community
 - id: mobsf.mobsfscan.cbc_padding_oracle.cbc_padding_oracle
   patterns:
@@ -8176,13 +8204,15 @@ rules:
     masvs: crypto-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#weak-block-cipher-mode
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
     shortlink: https://sg.run/kRY7
     semgrep.dev:
       rule:
         rule_id: WAUg2K
-        version_id: 3ZTGPQ
-        url: https://semgrep.dev/playground/r/3ZTGPQ/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
+        version_id: 6xTL0J
+        url: https://semgrep.dev/playground/r/6xTL0J/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
         origin: community
 - id: mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
   patterns:
@@ -8202,13 +8232,15 @@ rules:
     masvs: crypto-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#weak-block-cipher-mode
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
     shortlink: https://sg.run/wzPY
     semgrep.dev:
       rule:
         rule_id: 0oUZRX
-        version_id: 44TLk6
-        url: https://semgrep.dev/playground/r/44TLk6/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
+        version_id: o5T759
+        url: https://semgrep.dev/playground/r/o5T759/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
         origin: community
 - id: mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
   patterns:
@@ -8232,13 +8264,15 @@ rules:
     masvs: crypto-1
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#common-configuration-issues-mstg-crypto-1-mstg-crypto-2-and-mstg-crypto-3
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
     shortlink: https://sg.run/xpJz
     semgrep.dev:
       rule:
         rule_id: KxURB0
-        version_id: PkTlZR
-        url: https://semgrep.dev/playground/r/PkTlZR/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
+        version_id: zyTxeb
+        url: https://semgrep.dev/playground/r/zyTxeb/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
         origin: community
 - id: mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
   patterns:
@@ -8272,13 +8306,15 @@ rules:
     masvs: crypto-3
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#padding-oracle-attacks-due-to-weaker-padding-or-block-operation-implementations
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
     shortlink: https://sg.run/OjEB
     semgrep.dev:
       rule:
         rule_id: qNUrzk
-        version_id: JdTByk
-        url: https://semgrep.dev/playground/r/JdTByk/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
+        version_id: pZTBQn
+        url: https://semgrep.dev/playground/r/pZTBQn/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
         origin: community
 - id: mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
   patterns:
@@ -8306,13 +8342,15 @@ rules:
     masvs: crypto-5
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#predictable-initialization-vector
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
     shortlink: https://sg.run/egDb
     semgrep.dev:
       rule:
         rule_id: lBUYwL
-        version_id: 5PTRO7
-        url: https://semgrep.dev/playground/r/5PTRO7/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
+        version_id: 2KTD6R
+        url: https://semgrep.dev/playground/r/2KTD6R/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
         origin: community
 - id: mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
   patterns:
@@ -8333,13 +8371,15 @@ rules:
     masvs: crypto-6
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#weak-random-number-generators
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
     shortlink: https://sg.run/vo4A
     semgrep.dev:
       rule:
         rule_id: PeUKqY
-        version_id: GxTn7Y
-        url: https://semgrep.dev/playground/r/GxTn7Y/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
+        version_id: X0TvJk
+        url: https://semgrep.dev/playground/r/X0TvJk/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
         origin: community
 - id: mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
   patterns:
@@ -8357,13 +8397,15 @@ rules:
     masvs: crypto-4
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#identifying-insecure-andor-deprecated-cryptographic-algorithms-mstg-crypto-4
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
     shortlink: https://sg.run/dnBZ
     semgrep.dev:
       rule:
         rule_id: JDU4Ag
-        version_id: RGT6g9
-        url: https://semgrep.dev/playground/r/RGT6g9/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
+        version_id: jQTE9J
+        url: https://semgrep.dev/playground/r/jQTE9J/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
         origin: community
 - id: mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
   patterns:
@@ -8389,13 +8431,15 @@ rules:
     masvs: crypto-3
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#mobile-app-cryptography
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
     shortlink: https://sg.run/ZZED
     semgrep.dev:
       rule:
         rule_id: 5rUx0n
-        version_id: A8TOzL
-        url: https://semgrep.dev/playground/r/A8TOzL/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
+        version_id: 1QTDXk
+        url: https://semgrep.dev/playground/r/1QTDXk/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
         origin: community
 - id: mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
   patterns:
@@ -8422,13 +8466,15 @@ rules:
     masvs: crypto-4
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#identifying-insecure-andor-deprecated-cryptographic-algorithms-mstg-crypto-4
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
     shortlink: https://sg.run/nDyX
     semgrep.dev:
       rule:
         rule_id: GdUgKL
-        version_id: BjTgNG
-        url: https://semgrep.dev/playground/r/BjTgNG/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
+        version_id: 9lTjnn
+        url: https://semgrep.dev/playground/r/9lTjnn/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
   patterns:
@@ -8448,13 +8494,15 @@ rules:
     masvs: crypto-4
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#identifying-insecure-andor-deprecated-cryptographic-algorithms-mstg-crypto-4
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
     shortlink: https://sg.run/EKZw
     semgrep.dev:
       rule:
         rule_id: ReUdZD
-        version_id: DkTPp3
-        url: https://semgrep.dev/playground/r/DkTPp3/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
+        version_id: yeT6dQ
+        url: https://semgrep.dev/playground/r/yeT6dQ/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_hashes.weak_hash
   patterns:
@@ -8482,13 +8530,15 @@ rules:
     masvs: crypto-4
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#identifying-insecure-andor-deprecated-cryptographic-algorithms-mstg-crypto-4
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
     shortlink: https://sg.run/72wZ
     semgrep.dev:
       rule:
         rule_id: AbUxZk
-        version_id: WrTXog
-        url: https://semgrep.dev/playground/r/WrTXog/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
+        version_id: rxT58X
+        url: https://semgrep.dev/playground/r/rxT58X/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_iv.weak_iv
   patterns:
@@ -8517,13 +8567,15 @@ rules:
     masvs: crypto-5
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#mobile-app-cryptography
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.weak_iv.weak_iv
     shortlink: https://sg.run/LpZr
     semgrep.dev:
       rule:
         rule_id: BYUonD
-        version_id: 0bT850
-        url: https://semgrep.dev/playground/r/0bT850/mobsf.mobsfscan.crypto.weak_iv.weak_iv
+        version_id: bZTY4P
+        url: https://semgrep.dev/playground/r/bZTY4P/mobsf.mobsfscan.crypto.weak_iv.weak_iv
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
   patterns:
@@ -8575,13 +8627,15 @@ rules:
     masvs: crypto-3
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04g-Testing-Cryptography.md#common-configuration-issues-mstg-crypto-1-mstg-crypto-2-and-mstg-crypto-3
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
     shortlink: https://sg.run/8Xey
     semgrep.dev:
       rule:
         rule_id: DbULZp
-        version_id: K3TDb9
-        url: https://semgrep.dev/playground/r/K3TDb9/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
+        version_id: NdTxQW
+        url: https://semgrep.dev/playground/r/NdTxQW/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
         origin: community
 - id: mobsf.mobsfscan.default_http_client_tls.default_http_client_tls
   patterns:
@@ -8628,13 +8682,15 @@ rules:
     masvs: platform-8
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#testing-object-persistence-mstg-platform-8
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
     shortlink: https://sg.run/gPzJ
     semgrep.dev:
       rule:
         rule_id: WAUgAZ
-        version_id: qkTdjz
-        url: https://semgrep.dev/playground/r/qkTdjz/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
+        version_id: kbToZ0
+        url: https://semgrep.dev/playground/r/kbToZ0/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
         origin: community
 - id: mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
   patterns:
@@ -8656,13 +8712,15 @@ rules:
     masvs: platform-8
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#testing-object-persistence-mstg-platform-8
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
     shortlink: https://sg.run/QxZ4
     semgrep.dev:
       rule:
         rule_id: 0oUZYJ
-        version_id: l4TK9A
-        url: https://semgrep.dev/playground/r/l4TK9A/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
+        version_id: w8Te0B
+        url: https://semgrep.dev/playground/r/w8Te0B/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
         origin: community
 - id: mobsf.mobsfscan.flag_secure.android_prevent_screenshot
   patterns:
@@ -8760,13 +8818,15 @@ rules:
     masvs: platform-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04h-Testing-Code-Quality.md#injection-flaws-mstg-arch-2-and-mstg-platform-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.injection.command_injection.command_injection
     shortlink: https://sg.run/36wr
     semgrep.dev:
       rule:
         rule_id: KxUR67
-        version_id: YDT1R1
-        url: https://semgrep.dev/playground/r/YDT1R1/mobsf.mobsfscan.injection.command_injection.command_injection
+        version_id: xyTY3g
+        url: https://semgrep.dev/playground/r/xyTY3g/mobsf.mobsfscan.injection.command_injection.command_injection
         origin: community
 - id: mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
   patterns:
@@ -8830,13 +8890,15 @@ rules:
     masvs: platform-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04h-Testing-Code-Quality.md#injection-flaws-mstg-arch-2-and-mstg-platform-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
     shortlink: https://sg.run/4oQl
     semgrep.dev:
       rule:
         rule_id: qNUrPW
-        version_id: 6xTljr
-        url: https://semgrep.dev/playground/r/6xTljr/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
+        version_id: O9TPZ9
+        url: https://semgrep.dev/playground/r/O9TPZ9/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
         origin: community
 - id: mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
   patterns:
@@ -8879,13 +8941,15 @@ rules:
     masvs: platform-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04h-Testing-Code-Quality.md#injection-flaws-mstg-arch-2-and-mstg-platform-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
     shortlink: https://sg.run/PxZY
     semgrep.dev:
       rule:
         rule_id: lBUYAy
-        version_id: o5T3ev
-        url: https://semgrep.dev/playground/r/o5T3ev/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
+        version_id: e1T6A5
+        url: https://semgrep.dev/playground/r/e1T6A5/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
         origin: community
 - id: mobsf.mobsfscan.insecure_random.java_insecure_random
   patterns:
@@ -9089,13 +9153,15 @@ rules:
     masvs: network-3
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05g-Testing-Network-Communication.md#testing-endpoint-identify-verification-mstg-network-3
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
     shortlink: https://sg.run/JoZw
     semgrep.dev:
       rule:
         rule_id: YGUxKY
-        version_id: zyTwko
-        url: https://semgrep.dev/playground/r/zyTwko/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
+        version_id: vdTZ3e
+        url: https://semgrep.dev/playground/r/vdTZ3e/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
         origin: community
 - id: mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
   patterns:
@@ -9114,13 +9180,15 @@ rules:
     masvs: network-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04f-Testing-Network-Communication.md#verifying-data-encryption-on-the-network-mstg-network-1-and-mstg-network-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
     shortlink: https://sg.run/5zwA
     semgrep.dev:
       rule:
         rule_id: 6JUkwx
-        version_id: pZTdOE
-        url: https://semgrep.dev/playground/r/pZTdOE/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
+        version_id: d6TBbY
+        url: https://semgrep.dev/playground/r/d6TBbY/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
         origin: community
 - id: mobsf.mobsfscan.object_deserialization.object_deserialization
   patterns:
@@ -9720,13 +9788,15 @@ rules:
     masvs: resilience-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05j-Testing-Resiliency-Against-Reverse-Engineering.md#testing-anti-debugging-detection-mstg-resilience-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
     shortlink: https://sg.run/G3Zp
     semgrep.dev:
       rule:
         rule_id: oqUPpl
-        version_id: 2KTkb9
-        url: https://semgrep.dev/playground/r/2KTkb9/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
+        version_id: ZRTLyo
+        url: https://semgrep.dev/playground/r/ZRTLyo/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
         origin: community
 - id: mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
   patterns:
@@ -9755,13 +9825,15 @@ rules:
     masvs: platform-6
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#testing-webview-protocol-handlers-mstg-platform-6
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
     shortlink: https://sg.run/Rx3O
     semgrep.dev:
       rule:
         rule_id: zdU90D
-        version_id: X0Tj86
-        url: https://semgrep.dev/playground/r/X0Tj86/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
+        version_id: nWT6wg
+        url: https://semgrep.dev/playground/r/nWT6wg/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
         origin: community
 - id: mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
   patterns:
@@ -9778,13 +9850,15 @@ rules:
     masvs: platform-6
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md/#testing-webview-protocol-handlers-mstg-platform-6
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
     shortlink: https://sg.run/ABgp
     semgrep.dev:
       rule:
         rule_id: pKUJ40
-        version_id: jQT4vX
-        url: https://semgrep.dev/playground/r/jQT4vX/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
+        version_id: ExT9YD
+        url: https://semgrep.dev/playground/r/ExT9YD/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
         origin: community
 - id: mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
   patterns:
@@ -9805,13 +9879,15 @@ rules:
     masvs: network-3
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05g-Testing-Network-Communication.md#webview-server-certificate-verification
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
     shortlink: https://sg.run/BDgW
     semgrep.dev:
       rule:
         rule_id: 2ZUXop
-        version_id: 1QTRKN
-        url: https://semgrep.dev/playground/r/1QTRKN/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
+        version_id: 7ZTLYR
+        url: https://semgrep.dev/playground/r/7ZTLYR/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
         origin: community
 - id: mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
   patterns:
@@ -9831,13 +9907,15 @@ rules:
     masvs: platform-7
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#determining-whether-java-objects-are-exposed-through-webviews-mstg-platform-7
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
     shortlink: https://sg.run/D0LY
     semgrep.dev:
       rule:
         rule_id: X5Up0Y
-        version_id: 9lTG1b
-        url: https://semgrep.dev/playground/r/9lTG1b/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
+        version_id: LjT1pg
+        url: https://semgrep.dev/playground/r/LjT1pg/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
         origin: community
 - id: mobsf.mobsfscan.webview_debugging.webview_debugging
   patterns:
@@ -10169,13 +10247,15 @@ rules:
     masvs: platform-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04h-Testing-Code-Quality.md#injection-flaws-mstg-arch-2-and-mstg-platform-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
     shortlink: https://sg.run/WxP4
     semgrep.dev:
       rule:
         rule_id: j2Up0D
-        version_id: yeT4nr
-        url: https://semgrep.dev/playground/r/yeT4nr/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
+        version_id: 8KTdLZ
+        url: https://semgrep.dev/playground/r/8KTdLZ/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
         origin: community
 - id: mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
   pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities",
@@ -10194,13 +10274,15 @@ rules:
     masvs: platform-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04h-Testing-Code-Quality.md#injection-flaws-mstg-arch-2-and-mstg-platform-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
     shortlink: https://sg.run/0qwv
     semgrep.dev:
       rule:
         rule_id: 10UnwQ
-        version_id: rxTpr3
-        url: https://semgrep.dev/playground/r/rxTpr3/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
+        version_id: gETb5l
+        url: https://semgrep.dev/playground/r/gETb5l/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
         origin: community
 - id: mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
   patterns:
@@ -10234,11 +10316,13 @@ rules:
     masvs: platform-2
     reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x04h-Testing-Code-Quality.md#injection-flaws-mstg-arch-2-and-mstg-platform-2
     license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
     source: https://semgrep.dev/r/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
     shortlink: https://sg.run/KzZ7
     semgrep.dev:
       rule:
         rule_id: 9AUL9X
-        version_id: bZT7wq
-        url: https://semgrep.dev/playground/r/bZT7wq/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
+        version_id: QkT4Qb
+        url: https://semgrep.dev/playground/r/QkT4Qb/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
         origin: community
