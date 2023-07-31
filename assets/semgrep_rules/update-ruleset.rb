@@ -121,7 +121,6 @@ class Categoriser
 		Dir.chdir(directory) do
 			Dir[filenames].each do |fname|
 				keys = fname[0..-6].split('/').map { |token| token.to_sym }	
-				pp keys			
 				keys << YAML.load(File.read(fname))['rules']
 				c.categories.recurse_add(*keys)
 			end
