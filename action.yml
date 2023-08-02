@@ -347,7 +347,7 @@ runs:
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@v6
       env:
-        ASSIGNEES: ${{ fromJson(steps.assignees-after.outputs.result) }}
+        ASSIGNEES: ${{ steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result) }}
       with:
         script: |
             const { ASSIGNEES } = process.env;
@@ -456,7 +456,7 @@ runs:
     - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       id: assignees-slack
       env:
-        ASSIGNEES: ${{fromJson(steps.assignees-after.outputs.result)}}
+        ASSIGNEES: ${{steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result)}}
       run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
       shell: bash
     - uses: actions-ecosystem/action-slack-notifier@v1
