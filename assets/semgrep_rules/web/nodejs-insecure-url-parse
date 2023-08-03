@@ -1,0 +1,12 @@
+rules:
+  - id: nodejs-insecure-url-parse
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/nodejs-insecure-url-parse.yaml
+      assignees: |
+        thypon
+        fmarier
+    pattern: url.parse(...)
+    message: Avoid using url.parse() as it may cause security issues. Consider using the URL class instead.
+    languages:
+      - javascript
