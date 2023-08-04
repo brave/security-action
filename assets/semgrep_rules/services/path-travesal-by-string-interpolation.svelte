@@ -1,11 +1,3 @@
-<script>
-function getThing(thing) {
-    if (thing in thingContainer) {
-        return thingContainer[thing];
-    }
-}
-</script>
-
 x
 
 <script>
