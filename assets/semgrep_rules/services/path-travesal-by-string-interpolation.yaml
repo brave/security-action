@@ -11,11 +11,13 @@ rules:
     languages:
       - ts
       - js
+      - html
     paths:
       include:
         - "*.server.ts"
         - "*.server.js"
         - path-travesal-by-string-interpolation.ts
+        - '*.svelte'
     patterns:
       - pattern: fetch($URL, ...)
       - metavariable-regex:
