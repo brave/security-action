@@ -20,6 +20,6 @@ rules:
         - "*.h"
         - "*.hh"
         - "*.hcc" 
-    patterns:
+    pattern-either:
       - pattern-regex: ISOLATED_WORLD_ID_CONTENT_END
       - pattern-regex: ISOLATED_WORLD_ID_BRAVE_INTERNAL
