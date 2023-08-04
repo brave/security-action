@@ -15,6 +15,7 @@ rules:
       include:
         - "*.server.ts"
         - "*.server.js"
+        - path-travesal-by-string-interpolation.ts
     patterns:
       - pattern: fetch($URL, ...)
       - metavariable-regex:
