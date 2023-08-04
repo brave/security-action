@@ -24,31 +24,31 @@ jobs:
           baseline_scan_only: false
       - run: |
           echo ${{ steps.action.outputs.reviewdog-findings }}
-          if [[ "${{ steps.action.outputs.reviewdog-findings }}" -lt "70" ]]; then
+          if ((${{ steps.action.outputs.reviewdog-findings }} < 109)); then
             echo "Too few reviewdog findings"
             exit 1
           fi
-          if [[ "${{ steps.action.outputs.safesvg-count }}" -lt "1" ]]; then
+          if ((${{ steps.action.outputs.safesvg-count }} < 2)); then
             echo "Too few safesvg findings"
             exit 1
           fi
-          if [[ "${{ steps.action.outputs.tfsec-count }}" -lt "2" ]]; then
+          if ((${{ steps.action.outputs.tfsec-count }} < 4)); then
             echo "Too few tfsec findings"
             exit 1
           fi
-          if [[ "${{ steps.action.outputs.semgrep-count }}" -lt "50" ]]; then
+          if ((${{ steps.action.outputs.semgrep-count }} < 97)); then
             echo "Too few semgrep findings"
             exit 1
           fi
-          if [[ "${{ steps.action.outputs.sveltegrep-count }}" -lt "4" ]]; then
+          if ((${{ steps.action.outputs.sveltegrep-count }} < 3)); then
             echo "Too few sveltegrep findings"
             exit 1
           fi
-          if [[ "${{ steps.action.outputs.npm-audit-count }}" -lt "1" ]]; then
+          if ((${{ steps.action.outputs.npm-audit-count }} < 3)); then
             echo "Too few npm-audit findings"
             exit 1
           fi
-          if [[ "${{ steps.action.outputs.pip-audit-count }}" -lt "1" ]]; then
+          if ((${{ steps.action.outputs.pip-audit-count }} < 2)); then
             echo "Too few pip-audit findings"
             exit 1
           fi
