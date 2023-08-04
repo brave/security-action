@@ -6,7 +6,9 @@ rules:
       assignees: |
         thypon
         fmarier
-    pattern: url.parse(...)
+    pattern-either:
+      - pattern: url.parse(...)
+      - pattern: require('url').parse(...)
     message: Avoid using url.parse() as it may cause security issues. Consider using the URL class instead.
     languages:
       - javascript
