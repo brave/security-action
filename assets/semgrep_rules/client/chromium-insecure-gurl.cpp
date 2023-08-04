@@ -1,7 +1,7 @@
 int main() {
     // ok: chromium-insecure-gurl
     GURL url = ...;
-    // chromium-insecure-gurl
+    // ruleid: chromium-insecure-gurl
     GURL origin = url.DeprecatedGetOriginAsURL();
     // BUG: `origin` will be incorrect if `url` is an "about:blank" URL
     // BUG: `origin` will be incorrect if `url` came from a sandboxed frame.
@@ -16,7 +16,7 @@ int main() {
     // Blink-specific example:
     // ok: chromium-insecure-gurl
     KURL url = ...;
-    // chromium-insecure-gurl
+    // ruleid: chromium-insecure-gurl
     scoped_refptr<SecurityOrigin> origin = SecurityOrigin::Create(url);
     // BUG: `origin` will be incorrect if `url` is an "about:blank" URL
     // BUG: `origin` will be incorrect if `url` came from a sandboxed frame.
