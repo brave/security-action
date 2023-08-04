@@ -4,6 +4,7 @@
     "config:base"
   ],
   "ignorePaths": [
-    "t3sts/"
+    "t3sts/",
+    "assets/semgrep_rules/"
   ]
 }
