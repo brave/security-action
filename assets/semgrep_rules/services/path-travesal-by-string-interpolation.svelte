@@ -10,7 +10,3 @@ x
     await fetch(`${env.API_HOSTNAME}/api/subscriptions/?s=${subscriptionId}`, 123);
 }
 </script>
-
-<script>var unsafe = new URL(`${variable}/xyz`, constantOrVariable);</script>
-
-<a href="{{ result.url }}">link</a>
