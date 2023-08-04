@@ -163,3 +163,5 @@ int main(int argc, char *argv[])
 	// ...
 	return 0;
 }
+// ok: raptor-typos
+void TearDown() { settings_map_->ShutdownOnUIThread(); }

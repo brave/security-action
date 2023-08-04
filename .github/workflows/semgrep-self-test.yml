@@ -17,20 +17,13 @@ jobs:
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
       - run: |
-          semgrep --test --disable-version-check --strict --metrics=off \
-            --config assets/semgrep_rules/web/ \
-            t3sts/semgrep_rules/
-        shell: bash
-      - run: |
-          semgrep --test --disable-version-check --strict --metrics=off \
-            --config assets/semgrep_rules/c/ \
-            t3sts/semgrep_rules/
+          semgrep --test --disable-version-check --strict --metrics=off
         shell: bash
       - run: |
           JSON=$(semgrep \
             --disable-version-check --strict --metrics=off --json \
             $(find assets/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "assets/semgrep_rules/generated/*" | sed 's/^/-c /g') \
-            t3sts/semgrep_rules/ || true)
+            assets/semgrep_rules/{client,services} || true)
           ERRORS=$(echo "$JSON" | jq '.errors' || true)
           BADERRS=$(echo "$ERRORS" | jq '.[] | select(.level == "error")' || true)
           if [[ -n "$BADERRS" ]]; then
@@ -38,8 +31,9 @@ jobs:
             exit 123
           fi
           RESULTCOUNT=$(echo "$JSON" | tr '\n' ' ' | tr '\t' ' ' | jq '.results | length')
-          if [[ "$RESULTCOUNT" -lt "3" ]]; then
-            echo "Found fewer than 3 semgrep results"
+          NUMRESULTS=$(grep -R ruleid: | wc -l)
+          if [[ "$RESULTCOUNT" -lt "$NUMRESULTS" ]]; then
+            echo "Found fewer than $NUMRESULTS semgrep results"
             exit 122
           fi
         shell: bash
