@@ -24,7 +24,7 @@ rules:
       impact: MEDIUM
       confidence: LOW
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/jinja-safe-usages.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/jinja-safe-usages.yaml
     languages:
       - regex
     paths:

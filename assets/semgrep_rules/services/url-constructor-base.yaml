@@ -5,7 +5,7 @@ rules:
       confidence: LOW
       references:
         - https://developer.mozilla.org/en-US/docs/Web/API/URL/URL#parameters
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/url-constructor-base.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/url-constructor-base.yaml
       assignees: |
         bcaller
         thypon
