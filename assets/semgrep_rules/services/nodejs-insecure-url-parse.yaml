@@ -2,7 +2,7 @@ rules:
   - id: nodejs-insecure-url-parse
     metadata:
       author: Andrea Brancaleoni <abc@pompel.me>
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/web/nodejs-insecure-url-parse.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/nodejs-insecure-url-parse.yaml
       assignees: |
         thypon
         fmarier
