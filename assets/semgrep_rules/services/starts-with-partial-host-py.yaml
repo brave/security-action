@@ -1,0 +1,20 @@
+rules:
+  - id: starts-with-partial-host-py
+    metadata:
+      author: Ben Caller
+      confidence: LOW
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/starts-with-partial-host-py.yaml
+    patterns:
+      - pattern: $URL.startswith("$PREFIX")
+      - metavariable-regex:
+          metavariable: $PREFIX
+          regex: (?i)^https?://[^/]+$
+      - metavariable-regex:
+          # Avoid false positives where we actually have an origin or hostname
+          metavariable: $URL
+          regex: (?i).*ur[li].*
+    message: |
+        Add a forward-slash at the end to prevent matching `$PREFIX.e.vil` or `$PREFIX@e.vil`.
+        Even better, properly parse the URL and match a list of origins/hosts.
+    languages: [python]
+    severity: WARNING
