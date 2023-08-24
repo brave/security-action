@@ -76,7 +76,7 @@ runs:
     - name: Get changed files
       if: ${{ inputs.enabled == 'true' && github.event_name == 'pull_request' }}
       id: changed-files
-      uses: tj-actions/changed-files@v37
+      uses: tj-actions/changed-files@2fc6aa80df596875e0f74f1df939e72b7627e867
       with:
         separator: '\0'
     - name: Store reviewdog enabled for PR
