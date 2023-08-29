@@ -34,8 +34,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUXrw
-        version_id: NdTx1B
-        url: https://semgrep.dev/playground/r/NdTx1B/bash.curl.security.curl-pipe-bash.curl-pipe-bash
+        version_id: vdTWQA
+        url: https://semgrep.dev/playground/r/vdTWQA/bash.curl.security.curl-pipe-bash.curl-pipe-bash
         origin: community
   patterns:
   - pattern-either:
@@ -43,6 +43,8 @@ rules:
     - pattern: curl ... | ... /bin/bash ...
     - pattern: "... bash <(curl ...)"
     - pattern: "... /bin/bash <(curl ...)"
+    - pattern: '... bash -c "$(curl ...)"'
+    - pattern: '... /bin/bash -c "$(curl ...)"'
 - id: bash.lang.security.ifs-tampering.ifs-tampering
   languages:
   - bash
@@ -1801,6 +1803,43 @@ rules:
         version_id: O9TyNe
         url: https://semgrep.dev/playground/r/O9TyNe/dockerfile.security.missing-user.missing-user
         origin: community
+- id: dockerfile.security.no-sudo-in-dockerfile.no-sudo-in-dockerfile
+  patterns:
+  - pattern: 'RUN sudo ...
+
+      '
+  message: Avoid using sudo in Dockerfiles. Running processes as a non-root user can
+    help  reduce the potential impact of configuration errors and security vulnerabilities.
+  metadata:
+    category: security
+    technology:
+    - dockerfile
+    cwe:
+    - 'CWE-250: Execution with Unnecessary Privileges'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://cwe.mitre.org/data/definitions/250.html
+    - https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/dockerfile.security.no-sudo-in-dockerfile.no-sudo-in-dockerfile
+    shortlink: https://sg.run/80Q7
+    semgrep.dev:
+      rule:
+        rule_id: kxUlx1
+        version_id: qkT25pY
+        url: https://semgrep.dev/playground/r/qkT25pY/dockerfile.security.no-sudo-in-dockerfile.no-sudo-in-dockerfile
+        origin: community
+  languages:
+  - dockerfile
+  severity: WARNING
 - id: generic.ci.security.bash-reverse-shell.bash_reverse_shell
   metadata:
     cwe:
@@ -2134,6 +2173,7 @@ rules:
     - pattern: rewrite ... permanent
   - pattern-not-inside: rewrite ... https ... $host ... redirect
   - pattern-not-inside: rewrite ... https ... $host ... permanent
+  - pattern-not-regex: "(?i)https:\\/\\/"
   paths:
     include:
     - "*.conf"
@@ -2170,8 +2210,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUpJe
-        version_id: RGTbeR
-        url: https://semgrep.dev/playground/r/RGTbeR/generic.nginx.security.insecure-redirect.insecure-redirect
+        version_id: e1T0Lzk
+        url: https://semgrep.dev/playground/r/e1T0Lzk/generic.nginx.security.insecure-redirect.insecure-redirect
         origin: community
 - id: generic.nginx.security.insecure-ssl-version.insecure-ssl-version
   patterns:
@@ -2452,6 +2492,15 @@ rules:
   paths:
     exclude:
     - "*.svg"
+    - "*go.sum"
+    - "*package.json"
+    - "*cargo.lock"
+    - "*package-lock.json"
+    - "*bundle.js"
+    - "*pnpm-lock*"
+    - "*Podfile.lock"
+    - "*/openssl/*.h"
+    - "*.xcscmblueprint"
   message: Artifactory token detected
   severity: ERROR
   metadata:
@@ -2481,8 +2530,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUR5K
-        version_id: 44T34B
-        url: https://semgrep.dev/playground/r/44T34B/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
+        version_id: 6xTvZBN
+        url: https://semgrep.dev/playground/r/6xTvZBN/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
         origin: community
 - id: generic.secrets.security.detected-artifactory-token.detected-artifactory-token
   patterns:
@@ -2493,6 +2542,18 @@ rules:
   - pattern-not-regex: "(?s)---BEGIN.*---\\Z"
   languages:
   - regex
+  paths:
+    exclude:
+    - "*.svg"
+    - "*go.sum"
+    - "*package.json"
+    - "*package-lock.json"
+    - "*bundle.js"
+    - "*pnpm-lock*"
+    - "*Podfile.lock"
+    - "*/openssl/*.h"
+    - "*.xcscmblueprint"
+    - "*cargo.lock"
   message: Artifactory token detected
   severity: ERROR
   metadata:
@@ -2522,8 +2583,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JUj3l
-        version_id: JdTqPx
-        url: https://semgrep.dev/playground/r/JdTqPx/generic.secrets.security.detected-artifactory-token.detected-artifactory-token
+        version_id: o5TgkA8
+        url: https://semgrep.dev/playground/r/o5TgkA8/generic.secrets.security.detected-artifactory-token.detected-artifactory-token
         origin: community
 - id: generic.secrets.security.detected-aws-account-id.detected-aws-account-id
   patterns:
@@ -12367,8 +12428,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU37Y
-        version_id: o5Tnbb
-        url: https://semgrep.dev/playground/r/o5Tnbb/javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag
+        version_id: vdTYp9Q
+        url: https://semgrep.dev/playground/r/vdTYp9Q/javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag
         origin: community
   languages:
   - javascript
@@ -12381,65 +12442,6 @@ rules:
       $OTHERFUNC(..., <... $UNK ...>, ...);
   - pattern: $OTHERFUNC(..., <... "=~/.*<script.*/" ...>, ...)
   - pattern: "$UNK"
-- id: javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
-  message: Detected string concatenation with a non-literal variable in a util.format
-    / console.log function. If an attacker injects a format specifier in the string,
-    it will forge the log message. Try to use constant values for the format string.
-  metadata:
-    cwe:
-    - 'CWE-134: Use of Externally-Controlled Format String'
-    owasp:
-    - A01:2021 - Broken Access Control
-    category: security
-    technology:
-    - javascript
-    subcategory:
-    - audit
-    likelihood: MEDIUM
-    impact: LOW
-    confidence: LOW
-    references:
-    - https://cwe.mitre.org/data/definitions/134.html
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Improper Validation
-    source: https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
-    shortlink: https://sg.run/7Y5R
-    semgrep.dev:
-      rule:
-        rule_id: ReU3OJ
-        version_id: pZTr02
-        url: https://semgrep.dev/playground/r/pZTr02/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
-        origin: community
-  languages:
-  - javascript
-  - typescript
-  severity: INFO
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: "$X + $Y"
-      - pattern: "$X.concat($Y)"
-      - pattern: "`...${...}...`\n"
-    - pattern-not: '"..." + "..."
-
-        '
-    - pattern-not: '$X.concat("...")
-
-        '
-  pattern-sinks:
-  - patterns:
-    - focus-metavariable: "$STR"
-    - pattern-either:
-      - pattern: 'console.$LOG($STR,$PARAM,...)
-
-          '
-      - patterns:
-        - pattern-inside: |
-            $UTIL = require('util')
-            ...
-        - pattern: "$UTIL.format($STR,$PARAM,...)\n"
 - id: javascript.lang.security.audit.vm-injection.vm-runincontext-context-injection
   message: Make sure that unverified user data can not reach vm.runInContext.
   severity: WARNING
@@ -12719,13 +12721,16 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUWeE
-        version_id: e1TxyQ
-        url: https://semgrep.dev/playground/r/e1TxyQ/javascript.lang.security.detect-insecure-websocket.detect-insecure-websocket
+        version_id: 0bTL79P
+        url: https://semgrep.dev/playground/r/0bTL79P/javascript.lang.security.detect-insecure-websocket.detect-insecure-websocket
         origin: community
   languages:
   - regex
   severity: ERROR
-  pattern-regex: "\\bws:\\/\\/"
+  patterns:
+  - pattern-regex: "\\bws:\\/\\/"
+  - pattern-not-inside: "\\bws:\\/\\/localhost.*"
+  - pattern-not-inside: "\\bws:\\/\\/127.0.0.1.*"
 - id: javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override
   message: Detected use of express.csrf() middleware before express.methodOverride().
     This can allow GET requests (which are not checked by csrf) to turn into POST
@@ -15359,8 +15364,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUjA5
-        version_id: GxT2lq
-        url: https://semgrep.dev/playground/r/GxT2lq/php.lang.security.ldap-bind-without-password.ldap-bind-without-password
+        version_id: zyTKjzJ
+        url: https://semgrep.dev/playground/r/zyTKjzJ/php.lang.security.ldap-bind-without-password.ldap-bind-without-password
         origin: community
   languages:
   - php
@@ -15553,8 +15558,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU6JZ
-        version_id: K3TlgR
-        url: https://semgrep.dev/playground/r/K3TlgR/php.lang.security.php-permissive-cors.php-permissive-cors
+        version_id: pZT1kED
+        url: https://semgrep.dev/playground/r/pZT1kED/php.lang.security.php-permissive-cors.php-permissive-cors
         origin: community
   languages:
   - php
@@ -15824,8 +15829,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUOlR
-        version_id: e1Tx47
-        url: https://semgrep.dev/playground/r/e1Tx47/php.symfony.security.audit.symfony-permissive-cors.symfony-permissive-cors
+        version_id: 2KTzG82
+        url: https://semgrep.dev/playground/r/2KTzG82/php.symfony.security.audit.symfony-permissive-cors.symfony-permissive-cors
         origin: community
   languages:
   - php
@@ -21564,8 +21569,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUZqq
-        version_id: vdT2JA
-        url: https://semgrep.dev/playground/r/vdT2JA/python.lang.security.audit.sqli.asyncpg-sqli.asyncpg-sqli
+        version_id: 3ZTkkNZ
+        url: https://semgrep.dev/playground/r/3ZTkkNZ/python.lang.security.audit.sqli.asyncpg-sqli.asyncpg-sqli
         origin: community
   patterns:
   - pattern-either:
@@ -21600,6 +21605,7 @@ rules:
           $QUERY = '...' % ()
           ...
     - pattern: "$CONN.$METHOD(..., $X + $Y, ...)"
+    - pattern: "$CONN.$METHOD(..., $Y.format(...), ...)"
     - pattern: "$CONN.$METHOD(..., '...'.format(...), ...)"
     - pattern: "$CONN.$METHOD(..., '...' % (...), ...)"
     - pattern: "$CONN.$METHOD(..., f'...{$USERINPUT}...', ...)"
@@ -21618,6 +21624,9 @@ rules:
         ...
     - pattern-inside: |
         def $FUNCNAME(..., $CONN: Connection, ...):
+            ...
+    - pattern-inside: |
+        def $FUNCNAME(..., $CONN: asyncpg.Connection, ...):
             ...
   - pattern-not: $CONN.$METHOD(..., "..." + "...", ...)
   - pattern-not: "$CONN.$METHOD(..., '...'.format(), ...)"
@@ -25628,6 +25637,70 @@ rules:
         version_id: 44ToLG
         url: https://semgrep.dev/playground/r/44ToLG/scala.slick.security.scala-slick-sql-non-literal.scala-slick-sql-non-literal
         origin: community
+- id: swift.webview.webview-js-window.swift-webview-config-allows-js-open-windows
+  message: Webviews were observed that explictly allow JavaScript in an WKWebview
+    to open windows automatically. Consider disabling this functionality if not required,
+    following the principle of least privelege.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+    category: security
+    cwe:
+    - 'CWE-272: Least Privilege Violation'
+    masvs:
+    - 'MASVS-PLATFORM-2: The app uses WebViews securely'
+    references:
+    - https://mas.owasp.org/MASVS/controls/MASVS-PLATFORM-2/
+    - https://developer.apple.com/documentation/webkit/wkpreferences/1536573-javascriptcanopenwindowsautomati
+    subcategory:
+    - audit
+    technology:
+    - ios
+    - macos
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/swift.webview.webview-js-window.swift-webview-config-allows-js-open-windows
+    shortlink: https://sg.run/YWLd
+    semgrep.dev:
+      rule:
+        rule_id: lBUOZk
+        version_id: DkT6qwy
+        url: https://semgrep.dev/playground/r/DkT6qwy/swift.webview.webview-js-window.swift-webview-config-allows-js-open-windows
+        origin: community
+  languages:
+  - swift
+  patterns:
+  - pattern: |
+      $P = WKPreferences()
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern-inside: |
+          $P.JavaScriptCanOpenWindowsAutomatically  = $FALSE
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = $TRUE
+      - pattern-not-inside: |
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = $TRUE
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically = $FALSE
+      - pattern: "$P.JavaScriptCanOpenWindowsAutomatically  = true\n"
+      - metavariable-regex:
+          metavariable: "$TRUE"
+          regex: "^(true)$"
+      - metavariable-regex:
+          metavariable: "$TRUE"
+          regex: "(.*(?!true))"
+    - patterns:
+      - pattern: "$P.JavaScriptCanOpenWindowsAutomatically  = true\n"
+      - pattern-not-inside: |
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = ...
+          ...
+          $P.JavaScriptCanOpenWindowsAutomatically  = ...
 - id: terraform.aws.security.aws-athena-workgroup-unencrypted.aws-athena-workgroup-unencrypted
   patterns:
   - pattern: |

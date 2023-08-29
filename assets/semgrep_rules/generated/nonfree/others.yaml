@@ -892,7 +892,7 @@ rules:
     component abstraction.
   metadata:
     references:
-    - https://reactjs.org/docs/react-dom.html#finddomnode
+    - https://react.dev/reference/react-dom/findDOMNode
     - https://github.com/yannickcr/eslint-plugin-react/issues/678#issue-165177220
     category: best-practice
     technology:
@@ -903,8 +903,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UZOv
-        version_id: 1QT4xn
-        url: https://semgrep.dev/playground/r/1QT4xn/typescript.react.best-practice.react-find-dom.react-find-dom
+        version_id: X0TQORq
+        url: https://semgrep.dev/playground/r/X0TQORq/typescript.react.best-practice.react-find-dom.react-find-dom
         origin: community
   languages:
   - typescript
