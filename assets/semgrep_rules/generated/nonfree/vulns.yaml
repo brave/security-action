@@ -263,15 +263,15 @@ rules:
     impact: HIGH
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Insecure Hashing Algorithm
     - Cryptographic Issues
+    - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/clojure.lang.security.use-of-md5.use-of-md5
     shortlink: https://sg.run/BgPx
     semgrep.dev:
       rule:
         rule_id: nJU1ep
-        version_id: d6TRAq
-        url: https://semgrep.dev/playground/r/d6TRAq/clojure.lang.security.use-of-md5.use-of-md5
+        version_id: QkT4J3
+        url: https://semgrep.dev/playground/r/QkT4J3/clojure.lang.security.use-of-md5.use-of-md5
         origin: community
   pattern-either:
   - pattern: (MessageDigest/getInstance "MD5")
@@ -1445,11 +1445,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUQj2
-        version_id: K3TlnQ
-        url: https://semgrep.dev/playground/r/K3TlnQ/generic.secrets.gitleaks.adafruit-api-key.adafruit-api-key
+        version_id: l4T4lbo
+        url: https://semgrep.dev/playground/r/l4T4lbo/generic.secrets.gitleaks.adafruit-api-key.adafruit-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:adafruit)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:adafruit)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.adobe-client-id.adobe-client-id
   message: A gitleaks adobe-client-id was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -1486,11 +1486,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUqzk
-        version_id: qkTN5K
-        url: https://semgrep.dev/playground/r/qkTN5K/generic.secrets.gitleaks.adobe-client-id.adobe-client-id
+        version_id: YDTpN54
+        url: https://semgrep.dev/playground/r/YDTpN54/generic.secrets.gitleaks.adobe-client-id.adobe-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:adobe)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:adobe)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.adobe-client-secret.adobe-client-secret
   message: A gitleaks adobe-client-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -1609,11 +1609,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUYL3
-        version_id: JdTq5O
-        url: https://semgrep.dev/playground/r/JdTq5O/generic.secrets.gitleaks.airtable-api-key.airtable-api-key
+        version_id: 6xTvZ3z
+        url: https://semgrep.dev/playground/r/6xTvZ3z/generic.secrets.gitleaks.airtable-api-key.airtable-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:airtable)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{17})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:airtable)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{17})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.algolia-api-key.algolia-api-key
   message: A gitleaks algolia-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -1650,11 +1650,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8UKp0
-        version_id: 5PT6kl
-        url: https://semgrep.dev/playground/r/5PT6kl/generic.secrets.gitleaks.algolia-api-key.algolia-api-key
+        version_id: o5Tgkv5
+        url: https://semgrep.dev/playground/r/o5Tgkv5/generic.secrets.gitleaks.algolia-api-key.algolia-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:algolia)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:algolia)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.alibaba-access-key-id.alibaba-access-key-id
   message: A gitleaks alibaba-access-key-id was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -1732,11 +1732,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUk7D
-        version_id: RGTbeZ
-        url: https://semgrep.dev/playground/r/RGTbeZ/generic.secrets.gitleaks.alibaba-secret-key.alibaba-secret-key
+        version_id: zyTKjdX
+        url: https://semgrep.dev/playground/r/zyTKjdX/generic.secrets.gitleaks.alibaba-secret-key.alibaba-secret-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:alibaba)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:alibaba)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.asana-client-id.asana-client-id
   message: A gitleaks asana-client-id was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -1773,11 +1773,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJU58J
-        version_id: A8TRkO
-        url: https://semgrep.dev/playground/r/A8TRkO/generic.secrets.gitleaks.asana-client-id.asana-client-id
+        version_id: pZT1koJ
+        url: https://semgrep.dev/playground/r/pZT1koJ/generic.secrets.gitleaks.asana-client-id.asana-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:asana)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9]{16})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:asana)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9]{16})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.asana-client-secret.asana-client-secret
   message: A gitleaks asana-client-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -1814,11 +1814,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUyp6
-        version_id: BjTExl
-        url: https://semgrep.dev/playground/r/BjTExl/generic.secrets.gitleaks.asana-client-secret.asana-client-secret
+        version_id: 2KTzGen
+        url: https://semgrep.dev/playground/r/2KTzGen/generic.secrets.gitleaks.asana-client-secret.asana-client-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:asana)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:asana)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.atlassian-api-token.atlassian-api-token
   message: A gitleaks atlassian-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -1855,11 +1855,52 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUJ1X
-        version_id: DkTQqJ
-        url: https://semgrep.dev/playground/r/DkTQqJ/generic.secrets.gitleaks.atlassian-api-token.atlassian-api-token
+        version_id: X0TQOEe
+        url: https://semgrep.dev/playground/r/X0TQOEe/generic.secrets.gitleaks.atlassian-api-token.atlassian-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:atlassian|confluence|jira)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:atlassian|confluence|jira)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.authress-service-client-access-key.authress-service-client-access-key
+  message: A gitleaks authress-service-client-access-key was detected which attempts
+    to identify hard-coded credentials. It is not recommended to store credentials
+    in source-code, as this risks secrets being leaked and used by either an internal
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.authress-service-client-access-key.authress-service-client-access-key
+    shortlink: https://sg.run/bpnE
+    semgrep.dev:
+      rule:
+        rule_id: 0oUbQZ
+        version_id: jQTglWA
+        url: https://semgrep.dev/playground/r/jQTglWA/generic.secrets.gitleaks.authress-service-client-access-key.authress-service-client-access-key
+        origin: community
+  patterns:
+  - pattern-regex: (?i)\b((?:sc|ext|scauth|authress)_[a-z0-9]{5,30}\.[a-z0-9]{4,6}\.acc_[a-z0-9-]{10,32}\.[a-z0-9+/_=-]{30,120})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.beamer-api-token.beamer-api-token
   message: A gitleaks beamer-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -1896,11 +1937,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUPqW
-        version_id: 0bTvyn
-        url: https://semgrep.dev/playground/r/0bTvyn/generic.secrets.gitleaks.beamer-api-token.beamer-api-token
+        version_id: 1QTOzBw
+        url: https://semgrep.dev/playground/r/1QTOzBw/generic.secrets.gitleaks.beamer-api-token.beamer-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:beamer)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(b_[a-z0-9=_\-]{44})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:beamer)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(b_[a-z0-9=_\-]{44})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.bitbucket-client-id.bitbucket-client-id
   message: A gitleaks bitbucket-client-id was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -1937,11 +1978,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUvAp
-        version_id: K3Tln1
-        url: https://semgrep.dev/playground/r/K3Tln1/generic.secrets.gitleaks.bitbucket-client-id.bitbucket-client-id
+        version_id: 9lTde2G
+        url: https://semgrep.dev/playground/r/9lTde2G/generic.secrets.gitleaks.bitbucket-client-id.bitbucket-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:bitbucket)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:bitbucket)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.bitbucket-client-secret.bitbucket-client-secret
   message: A gitleaks bitbucket-client-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -1978,11 +2019,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUR7R
-        version_id: qkTN58
-        url: https://semgrep.dev/playground/r/qkTN58/generic.secrets.gitleaks.bitbucket-client-secret.bitbucket-client-secret
+        version_id: yeTR38E
+        url: https://semgrep.dev/playground/r/yeTR38E/generic.secrets.gitleaks.bitbucket-client-secret.bitbucket-client-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:bitbucket)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:bitbucket)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.bittrex-access-key.bittrex-access-key
   message: A gitleaks bittrex-access-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2019,11 +2060,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qU5pK
-        version_id: l4T5lO
-        url: https://semgrep.dev/playground/r/l4T5lO/generic.secrets.gitleaks.bittrex-access-key.bittrex-access-key
+        version_id: rxTy0qq
+        url: https://semgrep.dev/playground/r/rxTy0qq/generic.secrets.gitleaks.bittrex-access-key.bittrex-access-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:bittrex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:bittrex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.bittrex-secret-key.bittrex-secret-key
   message: A gitleaks bittrex-secret-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2060,11 +2101,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUKAW
-        version_id: YDToNb
-        url: https://semgrep.dev/playground/r/YDToNb/generic.secrets.gitleaks.bittrex-secret-key.bittrex-secret-key
+        version_id: bZTbRrp
+        url: https://semgrep.dev/playground/r/bZTbRrp/generic.secrets.gitleaks.bittrex-secret-key.bittrex-secret-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:bittrex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:bittrex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.clojars-api-token.clojars-api-token
   message: A gitleaks clojars-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2142,11 +2183,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUO3B
-        version_id: o5Tnkw
-        url: https://semgrep.dev/playground/r/o5Tnkw/generic.secrets.gitleaks.codecov-access-token.codecov-access-token
+        version_id: NdT3gL4
+        url: https://semgrep.dev/playground/r/NdT3gL4/generic.secrets.gitleaks.codecov-access-token.codecov-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:codecov)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:codecov)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.coinbase-access-token.coinbase-access-token
   message: A gitleaks coinbase-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -2183,11 +2224,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUKPQ
-        version_id: zyT5j4
-        url: https://semgrep.dev/playground/r/zyT5j4/generic.secrets.gitleaks.coinbase-access-token.coinbase-access-token
+        version_id: kbTdgp1
+        url: https://semgrep.dev/playground/r/kbTdgp1/generic.secrets.gitleaks.coinbase-access-token.coinbase-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:coinbase)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:coinbase)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.confluent-access-token.confluent-access-token
   message: A gitleaks confluent-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -2224,11 +2265,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUbxy
-        version_id: pZTrkK
-        url: https://semgrep.dev/playground/r/pZTrkK/generic.secrets.gitleaks.confluent-access-token.confluent-access-token
+        version_id: w8T96r7
+        url: https://semgrep.dev/playground/r/w8T96r7/generic.secrets.gitleaks.confluent-access-token.confluent-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:confluent)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{16})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:confluent)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{16})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.confluent-secret-key.confluent-secret-key
   message: A gitleaks confluent-secret-key was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -2265,11 +2306,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUNQJ
-        version_id: 2KT1GD
-        url: https://semgrep.dev/playground/r/2KT1GD/generic.secrets.gitleaks.confluent-secret-key.confluent-secret-key
+        version_id: xyTKvOe
+        url: https://semgrep.dev/playground/r/xyTKvOe/generic.secrets.gitleaks.confluent-secret-key.confluent-secret-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:confluent)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:confluent)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.contentful-delivery-api-token.contentful-delivery-api-token
   message: A gitleaks contentful-delivery-api-token was detected which attempts to
     identify hard-coded credentials. It is not recommended to store credentials in
@@ -2306,11 +2347,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUvrB
-        version_id: X0TPOP
-        url: https://semgrep.dev/playground/r/X0TPOP/generic.secrets.gitleaks.contentful-delivery-api-token.contentful-delivery-api-token
+        version_id: O9TNkz7
+        url: https://semgrep.dev/playground/r/O9TNkz7/generic.secrets.gitleaks.contentful-delivery-api-token.contentful-delivery-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:contentful)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{43})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:contentful)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{43})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.databricks-api-token.databricks-api-token
   message: A gitleaks databricks-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -2388,11 +2429,52 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUB9r
-        version_id: 1QTjzg
-        url: https://semgrep.dev/playground/r/1QTjzg/generic.secrets.gitleaks.datadog-access-token.datadog-access-token
+        version_id: e1T0g5j
+        url: https://semgrep.dev/playground/r/e1T0g5j/generic.secrets.gitleaks.datadog-access-token.datadog-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:datadog)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:datadog)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.defined-networking-api-token.defined-networking-api-token
+  message: A gitleaks defined-networking-api-token was detected which attempts to
+    identify hard-coded credentials. It is not recommended to store credentials in
+    source-code, as this risks secrets being leaked and used by either an internal
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.defined-networking-api-token.defined-networking-api-token
+    shortlink: https://sg.run/Ne3z
+    semgrep.dev:
+      rule:
+        rule_id: KxUqPA
+        version_id: vdTY1gR
+        url: https://semgrep.dev/playground/r/vdTY1gR/generic.secrets.gitleaks.defined-networking-api-token.defined-networking-api-token
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:dnkey)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(dnkey-[a-z0-9=_\-]{26}-[a-z0-9=_\-]{52})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.digitalocean-access-token.digitalocean-access-token
   message: A gitleaks digitalocean-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -2552,11 +2634,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUA1y
-        version_id: bZTGKK
-        url: https://semgrep.dev/playground/r/bZTGKK/generic.secrets.gitleaks.discord-api-token.discord-api-token
+        version_id: d6Trq1Z
+        url: https://semgrep.dev/playground/r/d6Trq1Z/generic.secrets.gitleaks.discord-api-token.discord-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.discord-client-id.discord-client-id
   message: A gitleaks discord-client-id was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2593,11 +2675,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU3rj
-        version_id: NdT19k
-        url: https://semgrep.dev/playground/r/NdT19k/generic.secrets.gitleaks.discord-client-id.discord-client-id
+        version_id: ZRTQ6nz
+        url: https://semgrep.dev/playground/r/ZRTQ6nz/generic.secrets.gitleaks.discord-client-id.discord-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9]{18})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9]{18})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.discord-client-secret.discord-client-secret
   message: A gitleaks discord-client-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -2634,11 +2716,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUg6J
-        version_id: kbT7jR
-        url: https://semgrep.dev/playground/r/kbT7jR/generic.secrets.gitleaks.discord-client-secret.discord-client-secret
+        version_id: nWTxOj6
+        url: https://semgrep.dev/playground/r/nWTxOj6/generic.secrets.gitleaks.discord-client-secret.discord-client-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:discord)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.doppler-api-token.doppler-api-token
   message: A gitleaks doppler-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2716,11 +2798,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUGyn
-        version_id: xyT4Ax
-        url: https://semgrep.dev/playground/r/xyT4Ax/generic.secrets.gitleaks.droneci-access-token.droneci-access-token
+        version_id: ExTjROn
+        url: https://semgrep.dev/playground/r/ExTjROn/generic.secrets.gitleaks.droneci-access-token.droneci-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:droneci)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:droneci)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.dropbox-api-token.dropbox-api-token
   message: A gitleaks dropbox-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2757,11 +2839,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU6AR
-        version_id: O9Tynl
-        url: https://semgrep.dev/playground/r/O9Tynl/generic.secrets.gitleaks.dropbox-api-token.dropbox-api-token
+        version_id: 7ZTgDd7
+        url: https://semgrep.dev/playground/r/7ZTgDd7/generic.secrets.gitleaks.dropbox-api-token.dropbox-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:dropbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{15})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:dropbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{15})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.dropbox-long-lived-api-token.dropbox-long-lived-api-token
   message: A gitleaks dropbox-long-lived-api-token was detected which attempts to
     identify hard-coded credentials. It is not recommended to store credentials in
@@ -2798,11 +2880,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUR69
-        version_id: e1TxLD
-        url: https://semgrep.dev/playground/r/e1TxLD/generic.secrets.gitleaks.dropbox-long-lived-api-token.dropbox-long-lived-api-token
+        version_id: LjTq7O6
+        url: https://semgrep.dev/playground/r/LjTq7O6/generic.secrets.gitleaks.dropbox-long-lived-api-token.dropbox-long-lived-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:dropbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{11}(AAAAAAAAAA)[a-z0-9\-_=]{43})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:dropbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{11}(AAAAAAAAAA)[a-z0-9\-_=]{43})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.dropbox-short-lived-api-token.dropbox-short-lived-api-token
   message: A gitleaks dropbox-short-lived-api-token was detected which attempts to
     identify hard-coded credentials. It is not recommended to store credentials in
@@ -2839,11 +2921,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUnbl
-        version_id: vdT2pv
-        url: https://semgrep.dev/playground/r/vdT2pv/generic.secrets.gitleaks.dropbox-short-lived-api-token.dropbox-short-lived-api-token
+        version_id: 8KTQ4RY
+        url: https://semgrep.dev/playground/r/8KTQ4RY/generic.secrets.gitleaks.dropbox-short-lived-api-token.dropbox-short-lived-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:dropbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(sl\.[a-z0-9\-=_]{135})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:dropbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(sl\.[a-z0-9\-=_]{135})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.duffel-api-token.duffel-api-token
   message: A gitleaks duffel-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -2962,11 +3044,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UJKb
-        version_id: nWT78o
-        url: https://semgrep.dev/playground/r/nWT78o/generic.secrets.gitleaks.easypost-api-token.easypost-api-token
+        version_id: gET36d3
+        url: https://semgrep.dev/playground/r/gET36d3/generic.secrets.gitleaks.easypost-api-token.easypost-api-token
         origin: community
   patterns:
-  - pattern-regex: EZAK(?i)[a-z0-9]{54}
+  - pattern-regex: "\\bEZAK(?i)[a-z0-9]{54}"
 - id: generic.secrets.gitleaks.easypost-test-api-token.easypost-test-api-token
   message: A gitleaks easypost-test-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -3003,11 +3085,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AU811
-        version_id: ExTnpE
-        url: https://semgrep.dev/playground/r/ExTnpE/generic.secrets.gitleaks.easypost-test-api-token.easypost-test-api-token
+        version_id: QkTW8P8
+        url: https://semgrep.dev/playground/r/QkTW8P8/generic.secrets.gitleaks.easypost-test-api-token.easypost-test-api-token
         origin: community
   patterns:
-  - pattern-regex: EZTK(?i)[a-z0-9]{54}
+  - pattern-regex: "\\bEZTK(?i)[a-z0-9]{54}"
 - id: generic.secrets.gitleaks.etsy-access-token.etsy-access-token
   message: A gitleaks etsy-access-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -3044,11 +3126,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUYnv
-        version_id: 7ZTO1B
-        url: https://semgrep.dev/playground/r/7ZTO1B/generic.secrets.gitleaks.etsy-access-token.etsy-access-token
+        version_id: 3ZTklqp
+        url: https://semgrep.dev/playground/r/3ZTklqp/generic.secrets.gitleaks.etsy-access-token.etsy-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:etsy)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:etsy)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.facebook.facebook
   message: A gitleaks facebook was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -3085,11 +3167,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6UBr9
-        version_id: LjT02R
-        url: https://semgrep.dev/playground/r/LjT02R/generic.secrets.gitleaks.facebook.facebook
+        version_id: 44TR74k
+        url: https://semgrep.dev/playground/r/44TR74k/generic.secrets.gitleaks.facebook.facebook
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:facebook)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:facebook)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.fastly-api-token.fastly-api-token
   message: A gitleaks fastly-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -3126,11 +3208,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUPw8
-        version_id: 8KTbqg
-        url: https://semgrep.dev/playground/r/8KTbqg/generic.secrets.gitleaks.fastly-api-token.fastly-api-token
+        version_id: PkTJD4k
+        url: https://semgrep.dev/playground/r/PkTJD4k/generic.secrets.gitleaks.fastly-api-token.fastly-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:fastly)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:fastly)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.finicity-api-token.finicity-api-token
   message: A gitleaks finicity-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -3167,11 +3249,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUvkX
-        version_id: gETqA0
-        url: https://semgrep.dev/playground/r/gETqA0/generic.secrets.gitleaks.finicity-api-token.finicity-api-token
+        version_id: JdTN50Q
+        url: https://semgrep.dev/playground/r/JdTN50Q/generic.secrets.gitleaks.finicity-api-token.finicity-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:finicity)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:finicity)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.finicity-client-secret.finicity-client-secret
   message: A gitleaks finicity-client-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -3208,11 +3290,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUQk2
-        version_id: QkTJ7g
-        url: https://semgrep.dev/playground/r/QkTJ7g/generic.secrets.gitleaks.finicity-client-secret.finicity-client-secret
+        version_id: 5PTdkWL
+        url: https://semgrep.dev/playground/r/5PTdkWL/generic.secrets.gitleaks.finicity-client-secret.finicity-client-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:finicity)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:finicity)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.finnhub-access-token.finnhub-access-token
   message: A gitleaks finnhub-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -3249,11 +3331,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUqJk
-        version_id: 3ZTdpx
-        url: https://semgrep.dev/playground/r/3ZTdpx/generic.secrets.gitleaks.finnhub-access-token.finnhub-access-token
+        version_id: GxTvjNz
+        url: https://semgrep.dev/playground/r/GxTvjNz/generic.secrets.gitleaks.finnhub-access-token.finnhub-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:finnhub)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:finnhub)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.flickr-access-token.flickr-access-token
   message: A gitleaks flickr-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -3290,11 +3372,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8Ulnq
-        version_id: 44ToAx
-        url: https://semgrep.dev/playground/r/44ToAx/generic.secrets.gitleaks.flickr-access-token.flickr-access-token
+        version_id: RGTDeJK
+        url: https://semgrep.dev/playground/r/RGTDeJK/generic.secrets.gitleaks.flickr-access-token.flickr-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:flickr)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:flickr)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.flutterwave-encryption-key.flutterwave-encryption-key
   message: A gitleaks flutterwave-encryption-key was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -3495,11 +3577,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqUk5D
-        version_id: RGTbQZ
-        url: https://semgrep.dev/playground/r/RGTbQZ/generic.secrets.gitleaks.freshbooks-access-token.freshbooks-access-token
+        version_id: A8T9kDN
+        url: https://semgrep.dev/playground/r/A8T9kDN/generic.secrets.gitleaks.freshbooks-access-token.freshbooks-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:freshbooks)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:freshbooks)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.gcp-api-key.gcp-api-key
   message: A gitleaks gcp-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -3905,11 +3987,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUOyB
-        version_id: o5Tnyw
-        url: https://semgrep.dev/playground/r/o5Tnyw/generic.secrets.gitleaks.gitter-access-token.gitter-access-token
+        version_id: DkT6qln
+        url: https://semgrep.dev/playground/r/DkT6qln/generic.secrets.gitleaks.gitter-access-token.gitter-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:gitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:gitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.gocardless-api-token.gocardless-api-token
   message: A gitleaks gocardless-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -3946,11 +4028,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUKOQ
-        version_id: zyT5A4
-        url: https://semgrep.dev/playground/r/zyT5A4/generic.secrets.gitleaks.gocardless-api-token.gocardless-api-token
+        version_id: WrTWOB3
+        url: https://semgrep.dev/playground/r/WrTWOB3/generic.secrets.gitleaks.gocardless-api-token.gocardless-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:gocardless)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(live_(?i)[a-z0-9\-_=]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:gocardless)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(live_(?i)[a-z0-9\-_=]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.grafana-api-key.grafana-api-key
   message: A gitleaks grafana-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4151,11 +4233,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUBpr
-        version_id: 1QTjbg
-        url: https://semgrep.dev/playground/r/1QTjbg/generic.secrets.gitleaks.heroku-api-key.heroku-api-key
+        version_id: 0bTLyNK
+        url: https://semgrep.dev/playground/r/0bTLyNK/generic.secrets.gitleaks.heroku-api-key.heroku-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:heroku)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:heroku)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.hubspot-api-key.hubspot-api-key
   message: A gitleaks hubspot-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4192,11 +4274,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUeop
-        version_id: 9lTz1Q
-        url: https://semgrep.dev/playground/r/9lTz1Q/generic.secrets.gitleaks.hubspot-api-key.hubspot-api-key
+        version_id: K3TvnEo
+        url: https://semgrep.dev/playground/r/K3TvnEo/generic.secrets.gitleaks.hubspot-api-key.hubspot-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:hubspot)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:hubspot)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.intercom-api-key.intercom-api-key
   message: A gitleaks intercom-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4233,11 +4315,93 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU053
-        version_id: yeTXnR
-        url: https://semgrep.dev/playground/r/yeTXnR/generic.secrets.gitleaks.intercom-api-key.intercom-api-key
+        version_id: qkT256v
+        url: https://semgrep.dev/playground/r/qkT256v/generic.secrets.gitleaks.intercom-api-key.intercom-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:intercom)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{60})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:intercom)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{60})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.jfrog-api-key.jfrog-api-key
+  message: A gitleaks jfrog-api-key was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.jfrog-api-key.jfrog-api-key
+    shortlink: https://sg.run/kNy2
+    semgrep.dev:
+      rule:
+        rule_id: qNUn9g
+        version_id: l4T4lko
+        url: https://semgrep.dev/playground/r/l4T4lko/generic.secrets.gitleaks.jfrog-api-key.jfrog-api-key
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:jfrog|artifactory|bintray|xray)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{73})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.jfrog-identity-token.jfrog-identity-token
+  message: A gitleaks jfrog-identity-token was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.jfrog-identity-token.jfrog-identity-token
+    shortlink: https://sg.run/wR0P
+    semgrep.dev:
+      rule:
+        rule_id: lBUOew
+        version_id: YDTpNW4
+        url: https://semgrep.dev/playground/r/YDTpNW4/generic.secrets.gitleaks.jfrog-identity-token.jfrog-identity-token
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:jfrog|artifactory|bintray|xray)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.jwt.jwt
   message: A gitleaks jwt was detected which attempts to identify hard-coded credentials.
     It is not recommended to store credentials in source-code, as this risks secrets
@@ -4314,11 +4478,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUAjy
-        version_id: bZTGwK
-        url: https://semgrep.dev/playground/r/bZTGwK/generic.secrets.gitleaks.kraken-access-token.kraken-access-token
+        version_id: JdTN50e
+        url: https://semgrep.dev/playground/r/JdTN50e/generic.secrets.gitleaks.kraken-access-token.kraken-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:kraken)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9\/=_\+\-]{80,90})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:kraken)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9\/=_\+\-]{80,90})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.kucoin-access-token.kucoin-access-token
   message: A gitleaks kucoin-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4355,11 +4519,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU39j
-        version_id: NdT1kk
-        url: https://semgrep.dev/playground/r/NdT1kk/generic.secrets.gitleaks.kucoin-access-token.kucoin-access-token
+        version_id: 5PTdkWY
+        url: https://semgrep.dev/playground/r/5PTdkWY/generic.secrets.gitleaks.kucoin-access-token.kucoin-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:kucoin)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:kucoin)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.kucoin-secret-key.kucoin-secret-key
   message: A gitleaks kucoin-secret-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4396,11 +4560,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeU7Zg
-        version_id: kbT7kR
-        url: https://semgrep.dev/playground/r/kbT7kR/generic.secrets.gitleaks.kucoin-secret-key.kucoin-secret-key
+        version_id: GxTvjN4
+        url: https://semgrep.dev/playground/r/GxTvjN4/generic.secrets.gitleaks.kucoin-secret-key.kucoin-secret-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:kucoin)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:kucoin)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.launchdarkly-access-token.launchdarkly-access-token
   message: A gitleaks launchdarkly-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4437,11 +4601,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUOyJ
-        version_id: w8T3JG
-        url: https://semgrep.dev/playground/r/w8T3JG/generic.secrets.gitleaks.launchdarkly-access-token.launchdarkly-access-token
+        version_id: RGTDeJd
+        url: https://semgrep.dev/playground/r/RGTDeJd/generic.secrets.gitleaks.launchdarkly-access-token.launchdarkly-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:launchdarkly)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:launchdarkly)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.linear-api-key.linear-api-key
   message: A gitleaks linear-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4519,11 +4683,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdUb7w
-        version_id: O9Ty3l
-        url: https://semgrep.dev/playground/r/O9Ty3l/generic.secrets.gitleaks.linear-client-secret.linear-client-secret
+        version_id: A8T9kDv
+        url: https://semgrep.dev/playground/r/A8T9kDv/generic.secrets.gitleaks.linear-client-secret.linear-client-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:linear)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:linear)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.linkedin-client-id.linkedin-client-id
   message: A gitleaks linkedin-client-id was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4560,11 +4724,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUNg1
-        version_id: e1Tx8D
-        url: https://semgrep.dev/playground/r/e1Tx8D/generic.secrets.gitleaks.linkedin-client-id.linkedin-client-id
+        version_id: BjTXxqj
+        url: https://semgrep.dev/playground/r/BjTXxqj/generic.secrets.gitleaks.linkedin-client-id.linkedin-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:linkedin|linked-in)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{14})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:linkedin|linked-in)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{14})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.linkedin-client-secret.linkedin-client-secret
   message: A gitleaks linkedin-client-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4601,11 +4765,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUvWj
-        version_id: vdT2nv
-        url: https://semgrep.dev/playground/r/vdT2nv/generic.secrets.gitleaks.linkedin-client-secret.linkedin-client-secret
+        version_id: DkT6ql4
+        url: https://semgrep.dev/playground/r/DkT6ql4/generic.secrets.gitleaks.linkedin-client-secret.linkedin-client-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:linkedin|linked-in)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{16})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:linkedin|linked-in)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{16})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.lob-api-key.lob-api-key
   message: A gitleaks lob-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4642,11 +4806,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYU4BX
-        version_id: d6TDjP
-        url: https://semgrep.dev/playground/r/d6TDjP/generic.secrets.gitleaks.lob-api-key.lob-api-key
+        version_id: WrTWOBA
+        url: https://semgrep.dev/playground/r/WrTWOBA/generic.secrets.gitleaks.lob-api-key.lob-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:lob)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}((live|test)_[a-f0-9]{35})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:lob)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}((live|test)_[a-f0-9]{35})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.lob-pub-api-key.lob-pub-api-key
   message: A gitleaks lob-pub-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4683,11 +4847,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUBWq
-        version_id: ZRTw5N
-        url: https://semgrep.dev/playground/r/ZRTw5N/generic.secrets.gitleaks.lob-pub-api-key.lob-pub-api-key
+        version_id: 0bTLyN8
+        url: https://semgrep.dev/playground/r/0bTLyN8/generic.secrets.gitleaks.lob-pub-api-key.lob-pub-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:lob)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}((test|live)_pub_[a-f0-9]{31})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:lob)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}((test|live)_pub_[a-f0-9]{31})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mailchimp-api-key.mailchimp-api-key
   message: A gitleaks mailchimp-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4724,11 +4888,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUeZl
-        version_id: nWT7zo
-        url: https://semgrep.dev/playground/r/nWT7zo/generic.secrets.gitleaks.mailchimp-api-key.mailchimp-api-key
+        version_id: K3TvnEZ
+        url: https://semgrep.dev/playground/r/K3TvnEZ/generic.secrets.gitleaks.mailchimp-api-key.mailchimp-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mailchimp)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32}-us20)(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:mailchimp)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32}-us20)(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mailgun-private-api-token.mailgun-private-api-token
   message: A gitleaks mailgun-private-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4765,11 +4929,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU0E5
-        version_id: ExTn2E
-        url: https://semgrep.dev/playground/r/ExTn2E/generic.secrets.gitleaks.mailgun-private-api-token.mailgun-private-api-token
+        version_id: qkT256G
+        url: https://semgrep.dev/playground/r/qkT256G/generic.secrets.gitleaks.mailgun-private-api-token.mailgun-private-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mailgun)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(key-[a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:mailgun)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(key-[a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mailgun-pub-key.mailgun-pub-key
   message: A gitleaks mailgun-pub-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4806,11 +4970,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUA44
-        version_id: 7ZTOQB
-        url: https://semgrep.dev/playground/r/7ZTOQB/generic.secrets.gitleaks.mailgun-pub-key.mailgun-pub-key
+        version_id: l4T4lkk
+        url: https://semgrep.dev/playground/r/l4T4lkk/generic.secrets.gitleaks.mailgun-pub-key.mailgun-pub-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mailgun)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(pubkey-[a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:mailgun)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(pubkey-[a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mailgun-signing-key.mailgun-signing-key
   message: A gitleaks mailgun-signing-key was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4847,11 +5011,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUAob
-        version_id: LjT0yR
-        url: https://semgrep.dev/playground/r/LjT0yR/generic.secrets.gitleaks.mailgun-signing-key.mailgun-signing-key
+        version_id: YDTpNWL
+        url: https://semgrep.dev/playground/r/YDTpNWL/generic.secrets.gitleaks.mailgun-signing-key.mailgun-signing-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mailgun)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-h0-9]{32}-[a-h0-9]{8}-[a-h0-9]{8})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:mailgun)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-h0-9]{32}-[a-h0-9]{8}-[a-h0-9]{8})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mapbox-api-token.mapbox-api-token
   message: A gitleaks mapbox-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -4888,11 +5052,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU3d8
-        version_id: 8KTbjg
-        url: https://semgrep.dev/playground/r/8KTbjg/generic.secrets.gitleaks.mapbox-api-token.mapbox-api-token
+        version_id: 6xTvZnN
+        url: https://semgrep.dev/playground/r/6xTvZnN/generic.secrets.gitleaks.mapbox-api-token.mapbox-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mapbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(pk\.[a-z0-9]{60}\.[a-z0-9]{22})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:mapbox)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(pk\.[a-z0-9]{60}\.[a-z0-9]{22})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mattermost-access-token.mattermost-access-token
   message: A gitleaks mattermost-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4929,11 +5093,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUgrA
-        version_id: gETq10
-        url: https://semgrep.dev/playground/r/gETq10/generic.secrets.gitleaks.mattermost-access-token.mattermost-access-token
+        version_id: o5Tgkq8
+        url: https://semgrep.dev/playground/r/o5Tgkq8/generic.secrets.gitleaks.mattermost-access-token.mattermost-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mattermost)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{26})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:mattermost)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{26})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.messagebird-api-token.messagebird-api-token
   message: A gitleaks messagebird-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4970,11 +5134,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JU4qD
-        version_id: QkTJzg
-        url: https://semgrep.dev/playground/r/QkTJzg/generic.secrets.gitleaks.messagebird-api-token.messagebird-api-token
+        version_id: zyTKjoJ
+        url: https://semgrep.dev/playground/r/zyTKjoJ/generic.secrets.gitleaks.messagebird-api-token.messagebird-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:messagebird|message-bird|message_bird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{25})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:messagebird|message-bird|message_bird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{25})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.messagebird-client-id.messagebird-client-id
   message: A gitleaks messagebird-client-id was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5011,11 +5175,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUGzK
-        version_id: 3ZTdPx
-        url: https://semgrep.dev/playground/r/3ZTdPx/generic.secrets.gitleaks.messagebird-client-id.messagebird-client-id
+        version_id: pZT1kZD
+        url: https://semgrep.dev/playground/r/pZT1kZD/generic.secrets.gitleaks.messagebird-client-id.messagebird-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:messagebird|message-bird|message_bird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:messagebird|message-bird|message_bird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.microsoft-teams-webhook.microsoft-teams-webhook
   message: A gitleaks microsoft-teams-webhook was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5093,11 +5257,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKURGy
-        version_id: PkTYZK
-        url: https://semgrep.dev/playground/r/PkTYZK/generic.secrets.gitleaks.netlify-access-token.netlify-access-token
+        version_id: 2KTzGy2
+        url: https://semgrep.dev/playground/r/2KTzGy2/generic.secrets.gitleaks.netlify-access-token.netlify-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:netlify)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{40,46})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:netlify)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{40,46})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.new-relic-browser-api-token.new-relic-browser-api-token
   message: A gitleaks new-relic-browser-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5134,11 +5298,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUn43
-        version_id: JdTqyO
-        url: https://semgrep.dev/playground/r/JdTqyO/generic.secrets.gitleaks.new-relic-browser-api-token.new-relic-browser-api-token
+        version_id: X0TQODq
+        url: https://semgrep.dev/playground/r/X0TQODq/generic.secrets.gitleaks.new-relic-browser-api-token.new-relic-browser-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(NRJS-[a-f0-9]{19})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(NRJS-[a-f0-9]{19})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.new-relic-user-api-id.new-relic-user-api-id
   message: A gitleaks new-relic-user-api-id was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5175,11 +5339,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5UGZz
-        version_id: 5PT6Ol
-        url: https://semgrep.dev/playground/r/5PT6Ol/generic.secrets.gitleaks.new-relic-user-api-id.new-relic-user-api-id
+        version_id: jQTgldx
+        url: https://semgrep.dev/playground/r/jQTgldx/generic.secrets.gitleaks.new-relic-user-api-id.new-relic-user-api-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.new-relic-user-api-key.new-relic-user-api-key
   message: A gitleaks new-relic-user-api-key was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5216,11 +5380,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UGqB
-        version_id: GxT275
-        url: https://semgrep.dev/playground/r/GxT275/generic.secrets.gitleaks.new-relic-user-api-key.new-relic-user-api-key
+        version_id: 1QTOz69
+        url: https://semgrep.dev/playground/r/1QTOz69/generic.secrets.gitleaks.new-relic-user-api-key.new-relic-user-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(NRAK-[a-z0-9]{27})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(NRAK-[a-z0-9]{27})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.npm-access-token.npm-access-token
   message: A gitleaks npm-access-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5298,11 +5462,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AU8Oq
-        version_id: A8TRzO
-        url: https://semgrep.dev/playground/r/A8TRzO/generic.secrets.gitleaks.nytimes-access-token.nytimes-access-token
+        version_id: 9lTderj
+        url: https://semgrep.dev/playground/r/9lTderj/generic.secrets.gitleaks.nytimes-access-token.nytimes-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:nytimes|new-york-times,|newyorktimes)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:nytimes|new-york-times,|newyorktimes)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.okta-access-token.okta-access-token
   message: A gitleaks okta-access-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5339,11 +5503,52 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUYve
-        version_id: BjTENl
-        url: https://semgrep.dev/playground/r/BjTENl/generic.secrets.gitleaks.okta-access-token.okta-access-token
+        version_id: yeTR3lX
+        url: https://semgrep.dev/playground/r/yeTR3lX/generic.secrets.gitleaks.okta-access-token.okta-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:okta)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{42})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:okta)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{42})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.openai-api-key.openai-api-key
+  message: A gitleaks openai-api-key was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.openai-api-key.openai-api-key
+    shortlink: https://sg.run/xAKg
+    semgrep.dev:
+      rule:
+        rule_id: YGU0zK
+        version_id: rxTy0dY
+        url: https://semgrep.dev/playground/r/rxTy0dY/generic.secrets.gitleaks.openai-api-key.openai-api-key
+        origin: community
+  patterns:
+  - pattern-regex: (?i)\b(sk-[a-zA-Z0-9]{20}T3BlbkFJ[a-zA-Z0-9]{20})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.plaid-api-token.plaid-api-token
   message: A gitleaks plaid-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5380,11 +5585,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6UBkG
-        version_id: DkTQpJ
-        url: https://semgrep.dev/playground/r/DkTQpJ/generic.secrets.gitleaks.plaid-api-token.plaid-api-token
+        version_id: bZTbRp0
+        url: https://semgrep.dev/playground/r/bZTbRp0/generic.secrets.gitleaks.plaid-api-token.plaid-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:plaid)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(access-(?:sandbox|development|production)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:plaid)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(access-(?:sandbox|development|production)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.plaid-client-id.plaid-client-id
   message: A gitleaks plaid-client-id was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5421,11 +5626,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUPO4
-        version_id: WrTboB
-        url: https://semgrep.dev/playground/r/WrTboB/generic.secrets.gitleaks.plaid-client-id.plaid-client-id
+        version_id: NdT3g4D
+        url: https://semgrep.dev/playground/r/NdT3g4D/generic.secrets.gitleaks.plaid-client-id.plaid-client-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:plaid)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:plaid)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.plaid-secret-key.plaid-secret-key
   message: A gitleaks plaid-secret-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5462,11 +5667,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUvA5
-        version_id: 0bTv5n
-        url: https://semgrep.dev/playground/r/0bTv5n/generic.secrets.gitleaks.plaid-secret-key.plaid-secret-key
+        version_id: kbTdgJd
+        url: https://semgrep.dev/playground/r/kbTdgJd/generic.secrets.gitleaks.plaid-secret-key.plaid-secret-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:plaid)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:plaid)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.planetscale-api-token.planetscale-api-token
   message: A gitleaks planetscale-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5832,11 +6037,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJU5YX
-        version_id: A8TRz6
-        url: https://semgrep.dev/playground/r/A8TRz6/generic.secrets.gitleaks.rapidapi-access-token.rapidapi-access-token
+        version_id: w8T96Y6
+        url: https://semgrep.dev/playground/r/w8T96Y6/generic.secrets.gitleaks.rapidapi-access-token.rapidapi-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:rapidapi)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{50})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:rapidapi)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9_-]{50})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.readme-api-token.readme-api-token
   message: A gitleaks readme-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5955,11 +6160,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UL48
-        version_id: WrTbor
-        url: https://semgrep.dev/playground/r/WrTbor/generic.secrets.gitleaks.sendbird-access-id.sendbird-access-id
+        version_id: xyTKv6A
+        url: https://semgrep.dev/playground/r/xyTKv6A/generic.secrets.gitleaks.sendbird-access-id.sendbird-access-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:sendbird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:sendbird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.sendbird-access-token.sendbird-access-token
   message: A gitleaks sendbird-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5996,11 +6201,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUPEk
-        version_id: 0bTvEx
-        url: https://semgrep.dev/playground/r/0bTvEx/generic.secrets.gitleaks.sendbird-access-token.sendbird-access-token
+        version_id: O9TNk13
+        url: https://semgrep.dev/playground/r/O9TNk13/generic.secrets.gitleaks.sendbird-access-token.sendbird-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:sendbird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:sendbird)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.sendgrid-api-token.sendgrid-api-token
   message: A gitleaks sendgrid-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -6119,11 +6324,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qU5B1
-        version_id: l4T5dr
-        url: https://semgrep.dev/playground/r/l4T5dr/generic.secrets.gitleaks.sentry-access-token.sentry-access-token
+        version_id: e1T0gBv
+        url: https://semgrep.dev/playground/r/e1T0gBv/generic.secrets.gitleaks.sentry-access-token.sentry-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:sentry)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:sentry)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.shippo-api-token.shippo-api-token
   message: A gitleaks shippo-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -6365,12 +6570,12 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUNP1
-        version_id: 2KT147
-        url: https://semgrep.dev/playground/r/2KT147/generic.secrets.gitleaks.sidekiq-secret.sidekiq-secret
+        version_id: vdTY1lj
+        url: https://semgrep.dev/playground/r/vdTY1lj/generic.secrets.gitleaks.sidekiq-secret.sidekiq-secret
         origin: community
   patterns:
   - pattern-regex: (?i)(?:BUNDLE_ENTERPRISE__CONTRIBSYS__COM|BUNDLE_GEMS__CONTRIBSYS__COM)(?:[0-9a-z\-_\t
-      .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{8}:[a-f0-9]{8})(?:['|\"|\n|\r|\s|\x60|;]|$)
+      .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{8}:[a-f0-9]{8})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.sidekiq-sensitive-url.sidekiq-sensitive-url
   message: A gitleaks sidekiq-sensitive-url was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6412,8 +6617,8 @@ rules:
         origin: community
   patterns:
   - pattern-regex: "(?i)\\b(http(?:s??):\\/\\/)([a-f0-9]{8}:[a-f0-9]{8})@(?:gems.contribsys.com|enterprise.contribsys.com)(?:[\\/|\\#|\\?|:]|$)"
-- id: generic.secrets.gitleaks.slack-access-token.slack-access-token
-  message: A gitleaks slack-access-token was detected which attempts to identify hard-coded
+- id: generic.secrets.gitleaks.slack-app-token.slack-app-token
+  message: A gitleaks slack-app-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
     risks secrets being leaked and used by either an internal or external malicious
     adversary. It is recommended to use environment variables to securely provide
@@ -6443,18 +6648,18 @@ rules:
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-access-token.slack-access-token
-    shortlink: https://sg.run/RjPe
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-app-token.slack-app-token
+    shortlink: https://sg.run/OvNn
     semgrep.dev:
       rule:
-        rule_id: BYU47X
-        version_id: jQTKqz
-        url: https://semgrep.dev/playground/r/jQTKqz/generic.secrets.gitleaks.slack-access-token.slack-access-token
+        rule_id: 6JUgAl
+        version_id: d6TrqYe
+        url: https://semgrep.dev/playground/r/d6TrqYe/generic.secrets.gitleaks.slack-app-token.slack-app-token
         origin: community
   patterns:
-  - pattern-regex: xox[baprs]-([0-9a-zA-Z]{10,48})
-- id: generic.secrets.gitleaks.slack-web-hook.slack-web-hook
-  message: A gitleaks slack-web-hook was detected which attempts to identify hard-coded
+  - pattern-regex: "(?i)(xapp-\\d-[A-Z0-9]+-\\d+-[a-z0-9]+)"
+- id: generic.secrets.gitleaks.slack-bot-token.slack-bot-token
+  message: A gitleaks slack-bot-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
     risks secrets being leaked and used by either an internal or external malicious
     adversary. It is recommended to use environment variables to securely provide
@@ -6484,16 +6689,344 @@ rules:
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-web-hook.slack-web-hook
-    shortlink: https://sg.run/AGw8
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-bot-token.slack-bot-token
+    shortlink: https://sg.run/ejky
     semgrep.dev:
       rule:
-        rule_id: DbUBKq
-        version_id: 1QTjZY
-        url: https://semgrep.dev/playground/r/1QTjZY/generic.secrets.gitleaks.slack-web-hook.slack-web-hook
+        rule_id: oqUEWO
+        version_id: ZRTQ6bG
+        url: https://semgrep.dev/playground/r/ZRTQ6bG/generic.secrets.gitleaks.slack-bot-token.slack-bot-token
         origin: community
   patterns:
-  - pattern-regex: https:\/\/hooks.slack.com\/(services|workflows)\/[A-Za-z0-9+\/]{44,46}
+  - pattern-regex: "(xoxb-[0-9]{10,13}\\-[0-9]{10,13}[a-zA-Z0-9-]*)"
+- id: generic.secrets.gitleaks.slack-config-access-token.slack-config-access-token
+  message: A gitleaks slack-config-access-token was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-config-access-token.slack-config-access-token
+    shortlink: https://sg.run/vGWb
+    semgrep.dev:
+      rule:
+        rule_id: zdUJXd
+        version_id: nWTxO3y
+        url: https://semgrep.dev/playground/r/nWTxO3y/generic.secrets.gitleaks.slack-config-access-token.slack-config-access-token
+        origin: community
+  patterns:
+  - pattern-regex: "(?i)(xoxe.xox[bp]-\\d-[A-Z0-9]{163,166})"
+- id: generic.secrets.gitleaks.slack-config-refresh-token.slack-config-refresh-token
+  message: A gitleaks slack-config-refresh-token was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-config-refresh-token.slack-config-refresh-token
+    shortlink: https://sg.run/dXyd
+    semgrep.dev:
+      rule:
+        rule_id: pKUjqZ
+        version_id: ExTjRZ1
+        url: https://semgrep.dev/playground/r/ExTjRZ1/generic.secrets.gitleaks.slack-config-refresh-token.slack-config-refresh-token
+        origin: community
+  patterns:
+  - pattern-regex: "(?i)(xoxe-\\d-[A-Z0-9]{146})"
+- id: generic.secrets.gitleaks.slack-legacy-bot-token.slack-legacy-bot-token
+  message: A gitleaks slack-legacy-bot-token was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-legacy-bot-token.slack-legacy-bot-token
+    shortlink: https://sg.run/Z0yo
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUxA8
+        version_id: 7ZTgD8r
+        url: https://semgrep.dev/playground/r/7ZTgD8r/generic.secrets.gitleaks.slack-legacy-bot-token.slack-legacy-bot-token
+        origin: community
+  patterns:
+  - pattern-regex: "(xoxb-[0-9]{8,14}\\-[a-zA-Z0-9]{18,26})"
+- id: generic.secrets.gitleaks.slack-legacy-token.slack-legacy-token
+  message: A gitleaks slack-legacy-token was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-legacy-token.slack-legacy-token
+    shortlink: https://sg.run/nxP2
+    semgrep.dev:
+      rule:
+        rule_id: X5UNor
+        version_id: LjTq7jQ
+        url: https://semgrep.dev/playground/r/LjTq7jQ/generic.secrets.gitleaks.slack-legacy-token.slack-legacy-token
+        origin: community
+  patterns:
+  - pattern-regex: "(xox[os]-\\d+-\\d+-\\d+-[a-fA-F\\d]+)"
+- id: generic.secrets.gitleaks.slack-legacy-workspace-token.slack-legacy-workspace-token
+  message: A gitleaks slack-legacy-workspace-token was detected which attempts to
+    identify hard-coded credentials. It is not recommended to store credentials in
+    source-code, as this risks secrets being leaked and used by either an internal
+    or external malicious adversary. It is recommended to use environment variables
+    to securely provide credentials or retrieve credentials from a secure vault or
+    HSM (Hardware Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-legacy-workspace-token.slack-legacy-workspace-token
+    shortlink: https://sg.run/E9Ne
+    semgrep.dev:
+      rule:
+        rule_id: j2UXL7
+        version_id: 8KTQ4Dy
+        url: https://semgrep.dev/playground/r/8KTQ4Dy/generic.secrets.gitleaks.slack-legacy-workspace-token.slack-legacy-workspace-token
+        origin: community
+  patterns:
+  - pattern-regex: "(xox[ar]-(?:\\d-)?[0-9a-zA-Z]{8,48})"
+- id: generic.secrets.gitleaks.slack-user-token.slack-user-token
+  message: A gitleaks slack-user-token was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-user-token.slack-user-token
+    shortlink: https://sg.run/7WdW
+    semgrep.dev:
+      rule:
+        rule_id: 10UL0L
+        version_id: gET36KB
+        url: https://semgrep.dev/playground/r/gET36KB/generic.secrets.gitleaks.slack-user-token.slack-user-token
+        origin: community
+  patterns:
+  - pattern-regex: "(xox[pe](?:-[0-9]{10,13}){3}-[a-zA-Z0-9-]{28,34})"
+- id: generic.secrets.gitleaks.slack-webhook-url.slack-webhook-url
+  message: A gitleaks slack-webhook-url was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.slack-webhook-url.slack-webhook-url
+    shortlink: https://sg.run/Lxko
+    semgrep.dev:
+      rule:
+        rule_id: 9AU0E7
+        version_id: QkTW89X
+        url: https://semgrep.dev/playground/r/QkTW89X/generic.secrets.gitleaks.slack-webhook-url.slack-webhook-url
+        origin: community
+  patterns:
+  - pattern-regex: "(https?:\\/\\/)?hooks.slack.com\\/(services|workflows)\\/[A-Za-z0-9+\\/]{43,46}"
+- id: generic.secrets.gitleaks.snyk-api-token.snyk-api-token
+  message: A gitleaks snyk-api-token was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.snyk-api-token.snyk-api-token
+    shortlink: https://sg.run/80dE
+    semgrep.dev:
+      rule:
+        rule_id: yyU1Qp
+        version_id: 3ZTkl82
+        url: https://semgrep.dev/playground/r/3ZTkl82/generic.secrets.gitleaks.snyk-api-token.snyk-api-token
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:snyk)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.square-access-token.square-access-token
   message: A gitleaks square-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6571,11 +7104,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU0J5
-        version_id: yeTXvx
-        url: https://semgrep.dev/playground/r/yeTXvx/generic.secrets.gitleaks.squarespace-access-token.squarespace-access-token
+        version_id: 44TR7D5
+        url: https://semgrep.dev/playground/r/44TR7D5/generic.secrets.gitleaks.squarespace-access-token.squarespace-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:squarespace)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:squarespace)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.stripe-access-token.stripe-access-token
   message: A gitleaks stripe-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6653,11 +7186,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUAbb
-        version_id: bZTGOE
-        url: https://semgrep.dev/playground/r/bZTGOE/generic.secrets.gitleaks.sumologic-access-id.sumologic-access-id
+        version_id: PkTJD8b
+        url: https://semgrep.dev/playground/r/PkTJD8b/generic.secrets.gitleaks.sumologic-access-id.sumologic-access-id
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:sumo)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{14})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:sumo)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{14})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.sumologic-access-token.sumologic-access-token
   message: A gitleaks sumologic-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6694,11 +7227,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU3z8
-        version_id: NdT1AG
-        url: https://semgrep.dev/playground/r/NdT1AG/generic.secrets.gitleaks.sumologic-access-token.sumologic-access-token
+        version_id: JdTN5Xe
+        url: https://semgrep.dev/playground/r/JdTN5Xe/generic.secrets.gitleaks.sumologic-access-token.sumologic-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:sumo)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:sumo)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.telegram-bot-api-token.telegram-bot-api-token
   message: A gitleaks telegram-bot-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6776,11 +7309,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 6JU46D
-        version_id: w8T38y
-        url: https://semgrep.dev/playground/r/w8T38y/generic.secrets.gitleaks.travisci-access-token.travisci-access-token
+        version_id: 5PTdkZY
+        url: https://semgrep.dev/playground/r/5PTdkZY/generic.secrets.gitleaks.travisci-access-token.travisci-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:travis)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{22})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:travis)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{22})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.twilio-api-key.twilio-api-key
   message: A gitleaks twilio-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -6858,11 +7391,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU61l
-        version_id: O9TyG4
-        url: https://semgrep.dev/playground/r/O9TyG4/generic.secrets.gitleaks.twitch-api-token.twitch-api-token
+        version_id: GxTvj14
+        url: https://semgrep.dev/playground/r/GxTvj14/generic.secrets.gitleaks.twitch-api-token.twitch-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:twitch)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:twitch)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{30})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.twitter-access-secret.twitter-access-secret
   message: A gitleaks twitter-access-secret was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6899,11 +7432,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKURwy
-        version_id: e1Txvw
-        url: https://semgrep.dev/playground/r/e1Txvw/generic.secrets.gitleaks.twitter-access-secret.twitter-access-secret
+        version_id: RGTDeyd
+        url: https://semgrep.dev/playground/r/RGTDeyd/generic.secrets.gitleaks.twitter-access-secret.twitter-access-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{45})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{45})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.twitter-access-token.twitter-access-token
   message: A gitleaks twitter-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -6940,11 +7473,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 2ZUnK3
-        version_id: vdT25K
-        url: https://semgrep.dev/playground/r/vdT25K/generic.secrets.gitleaks.twitter-access-token.twitter-access-token
+        version_id: A8T9kBv
+        url: https://semgrep.dev/playground/r/A8T9kBv/generic.secrets.gitleaks.twitter-access-token.twitter-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([0-9]{15,25}-[a-zA-Z0-9]{20,40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([0-9]{15,25}-[a-zA-Z0-9]{20,40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.twitter-api-key.twitter-api-key
   message: A gitleaks twitter-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -6981,11 +7514,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5UG7z
-        version_id: d6TDzN
-        url: https://semgrep.dev/playground/r/d6TDzN/generic.secrets.gitleaks.twitter-api-key.twitter-api-key
+        version_id: BjTXxRj
+        url: https://semgrep.dev/playground/r/BjTXxRj/generic.secrets.gitleaks.twitter-api-key.twitter-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{25})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{25})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.twitter-api-secret.twitter-api-secret
   message: A gitleaks twitter-api-secret was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -7022,11 +7555,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2UGRB
-        version_id: ZRTwq1
-        url: https://semgrep.dev/playground/r/ZRTwq1/generic.secrets.gitleaks.twitter-api-secret.twitter-api-secret
+        version_id: DkT6qE4
+        url: https://semgrep.dev/playground/r/DkT6qE4/generic.secrets.gitleaks.twitter-api-secret.twitter-api-secret
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{50})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{50})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.twitter-bearer-token.twitter-bearer-token
   message: A gitleaks twitter-bearer-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -7063,11 +7596,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UJeE
-        version_id: nWT7Y1
-        url: https://semgrep.dev/playground/r/nWT7Y1/generic.secrets.gitleaks.twitter-bearer-token.twitter-bearer-token
+        version_id: WrTWOLA
+        url: https://semgrep.dev/playground/r/WrTWOLA/generic.secrets.gitleaks.twitter-bearer-token.twitter-bearer-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(A{22}[a-zA-Z0-9%]{80,100})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:twitter)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(A{22}[a-zA-Z0-9%]{80,100})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.typeform-api-token.typeform-api-token
   message: A gitleaks typeform-api-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -7104,11 +7637,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AU8kq
-        version_id: ExTn4L
-        url: https://semgrep.dev/playground/r/ExTn4L/generic.secrets.gitleaks.typeform-api-token.typeform-api-token
+        version_id: 0bTLyn8
+        url: https://semgrep.dev/playground/r/0bTLyn8/generic.secrets.gitleaks.typeform-api-token.typeform-api-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:typeform)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(tfp_[a-z0-9\-_\.=]{59})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:typeform)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(tfp_[a-z0-9\-_\.=]{59})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.vault-batch-token.vault-batch-token
   message: A gitleaks vault-batch-token was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -7227,11 +7760,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUPN4
-        version_id: 8KTbER
-        url: https://semgrep.dev/playground/r/8KTbER/generic.secrets.gitleaks.yandex-access-token.yandex-access-token
+        version_id: K3TvnxZ
+        url: https://semgrep.dev/playground/r/K3TvnxZ/generic.secrets.gitleaks.yandex-access-token.yandex-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:yandex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(t1\.[A-Z0-9a-z_-]+[=]{0,2}\.[A-Z0-9a-z_-]{86}[=]{0,2})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:yandex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(t1\.[A-Z0-9a-z_-]+[=]{0,2}\.[A-Z0-9a-z_-]{86}[=]{0,2})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.yandex-api-key.yandex-api-key
   message: A gitleaks yandex-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -7268,11 +7801,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUvY5
-        version_id: gETqWK
-        url: https://semgrep.dev/playground/r/gETqWK/generic.secrets.gitleaks.yandex-api-key.yandex-api-key
+        version_id: qkT25DG
+        url: https://semgrep.dev/playground/r/qkT25DG/generic.secrets.gitleaks.yandex-api-key.yandex-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:yandex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(AQVN[A-Za-z0-9_\-]{35,38})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:yandex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(AQVN[A-Za-z0-9_\-]{35,38})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.yandex-aws-access-token.yandex-aws-access-token
   message: A gitleaks yandex-aws-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -7309,11 +7842,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUQ89
-        version_id: QkTJ6x
-        url: https://semgrep.dev/playground/r/QkTJ6x/generic.secrets.gitleaks.yandex-aws-access-token.yandex-aws-access-token
+        version_id: l4T4lEk
+        url: https://semgrep.dev/playground/r/l4T4lEk/generic.secrets.gitleaks.yandex-aws-access-token.yandex-aws-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:yandex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}(YC[a-zA-Z0-9_\-]{38})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:yandex)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(YC[a-zA-Z0-9_\-]{38})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.zendesk-secret-key.zendesk-secret-key
   message: A gitleaks zendesk-secret-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -7350,11 +7883,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUqGq
-        version_id: 3ZTdB0
-        url: https://semgrep.dev/playground/r/3ZTdB0/generic.secrets.gitleaks.zendesk-secret-key.zendesk-secret-key
+        version_id: YDTpNLL
+        url: https://semgrep.dev/playground/r/YDTpNLL/generic.secrets.gitleaks.zendesk-secret-key.zendesk-secret-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:zendesk)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:=|\|\|:|<=|=>|:)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:zendesk)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.security.detected-username-and-password-in-uri.detected-username-and-password-in-uri
   patterns:
   - pattern: "$PROTOCOL://$...USERNAME:$...PASSWORD@$END"
@@ -37970,6 +38503,192 @@ rules:
         - pattern: s"..."
         - pattern-regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*\n"
     - pattern-not-inside: println(...)
+- id: swift.lang.storage.sensitive-storage-userdefaults.swift-user-defaults
+  message: Potentially sensitive data was observed to be stored in UserDefaults, which
+    is not adequate protection of sensitive information. For data of a sensitive nature,
+    applications should leverage the Keychain.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    cwe:
+    - 'CWE-311: Missing Encryption of Sensitive Data'
+    masvs:
+    - 'MASVS-STORAGE-1: The app securely stores sensitive data'
+    owasp:
+    - A03:2017 - Sensitive Data Exposure
+    - A04:2021 - Insecure Design
+    references:
+    - https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/Articles/ValidatingInput.html
+    - https://mas.owasp.org/MASVS/controls/MASVS-STORAGE-1/
+    subcategory:
+    - vuln
+    technology:
+    - ios
+    - macos
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/swift.lang.storage.sensitive-storage-userdefaults.swift-user-defaults
+    shortlink: https://sg.run/qvoO
+    semgrep.dev:
+      rule:
+        rule_id: KxUqoZ
+        version_id: A8T9kEo
+        url: https://semgrep.dev/playground/r/A8T9kEo/swift.lang.storage.sensitive-storage-userdefaults.swift-user-defaults
+        origin: community
+  languages:
+  - swift
+  options:
+    taint_propagation: true
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$VALUE"
+          regex: "(?i).*(passcode|password|pass_word|passphrase|pass_code|pass_word|pass_phrase)$"
+      - focus-metavariable: "$VALUE"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$KEY"
+          regex: "(?i).*(passcode|password|pass_word|passphrase|pass_code|pass_word|pass_phrase)$"
+      - focus-metavariable: "$KEY"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$VALUE"
+          regex: "(?i).*(api_key|apikey)$"
+      - focus-metavariable: "$VALUE"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$KEY"
+          regex: "(?i).*(api_key|apikey)$"
+      - focus-metavariable: "$KEY"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$VALUE"
+          regex: "(?i).*(secretkey|secret_key|secrettoken|secret_token|clientsecret|client_secret)$"
+      - focus-metavariable: "$VALUE"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$KEY"
+          regex: "(?i).*(secretkey|secret_key|secrettoken|secret_token|clientsecret|client_secret)$"
+      - focus-metavariable: "$KEY"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$VALUE"
+          regex: "(?i).*(cryptkey|cryptokey|crypto_key|cryptionkey|symmetrickey|privatekey|symmetric_key|private_key)$"
+      - focus-metavariable: "$VALUE"
+    - patterns:
+      - pattern-either:
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set("$VALUE", forKey: $KEY)
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: "$KEY")
+
+            '
+        - pattern: 'UserDefaults.standard.set($VALUE, forKey: $KEY)
+
+            '
+      - metavariable-regex:
+          metavariable: "$KEY"
+          regex: "(?i).*(cryptkey|cryptokey|crypto_key|cryptionkey|symmetrickey|privatekey|symmetric_key|private_key)$"
+      - focus-metavariable: "$KEY"
 - id: terraform.aws.security.aws-cloudfront-insecure-tls.aws-insecure-cloudfront-distribution-tls-version
   patterns:
   - pattern: |
@@ -40665,8 +41384,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUr88
-        version_id: LjTYl7
-        url: https://semgrep.dev/playground/r/LjTYl7/trailofbits.go.anonymous-race-condition.anonymous-race-condition
+        version_id: 5PTdkvQ
+        url: https://semgrep.dev/playground/r/5PTdkvQ/trailofbits.go.anonymous-race-condition.anonymous-race-condition
         origin: community
   patterns:
   - pattern-either:
@@ -40676,6 +41395,16 @@ rules:
           go func(...){
             ...
             $FOO(..., $X, ...)
+            ...
+          }(...)
+          ...
+        }
+    - pattern: |
+        for $Y, $X := range ... {
+          ...
+          go func(...){
+            ...
+            $FOO(..., $Y, ...)
             ...
           }(...)
           ...
@@ -40711,58 +41440,28 @@ rules:
           ...
         }
   - pattern-not: |
-      for $X, $Y := range ... {
+      for ..., $X := range ... {
         ...
-        go func(..., $V, ...){
-          ...
-          $FOO(..., $V, ...)
-          ...
-        }(..., $Y, ...)
-        ...
-      }
-  - pattern-not: |
-      for $Y, $X := range ... {
-        ...
-        go func(..., $CP, ...){
-          ...
-          $CP(...)
-          ...
-        }($X)
-        ...
-      }
-  - pattern-not: |
-      for $X:=...;$Y;$Z {
-        ...
-        go func(..., $V, ...) {
-          ...
-          $FOO(..., $V,...)
-          ...
-        }(..., $X, ...)
-        ...
-      }
-  - pattern-not: |
-      for $X, $Y := range ... {
-        ...
-        $COPY := $Y
+        ..., $X := ..., $X
         ...
         go func(...){
           ...
-          $FOO(..., $COPY, ...)
+          $FOO(..., $X, ...)
           ...
         }(...)
         ...
       }
   - pattern-not: |
-      for $X:=...;$Y;$Z {
-        ...
-        $COPY := $X
-        ...
-        go func(...) {
+      for ..., $X := range ... {
           ...
-          $FOO(..., $COPY,...)
+          $X, ... := $X, ...
           ...
-        }(...)
-        ...
+          go func(...){
+            ...
+            $FOO(..., $X, ...)
+            ...
+          }(...)
+          ...
       }
   - pattern-not: |
       for $Y, $X := range ... {
@@ -40771,18 +41470,8 @@ rules:
         ...
         go func(...){
           ...
-          <... $X.$VAR ...>
         }(...)
-      }
-  - pattern-not: |
-      for $Y, $X := range ... {
         ...
-        $Y, $X := $Y, $X
-        ...
-        go func(...){
-          ...
-          <... $Y.$VAR ...>
-        }(...)
       }
 - id: trailofbits.go.hanging-goroutine.hanging-goroutine
   message: Potential goroutine leak due to unbuffered channel send inside loop or
@@ -42635,7 +43324,7 @@ rules:
     - A07:2017 - Cross-Site Scripting (XSS)
     - A03:2021 - Injection
     references:
-    - https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
+    - https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html
     category: security
     confidence: MEDIUM
     technology:
@@ -42654,8 +43343,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UWvK
-        version_id: YDTo9B
-        url: https://semgrep.dev/playground/r/YDTo9B/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
+        version_id: jQTglPx
+        url: https://semgrep.dev/playground/r/jQTglPx/typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
         origin: community
   languages:
   - typescript
@@ -42944,7 +43633,7 @@ rules:
     - A07:2017 - Cross-Site Scripting (XSS)
     - A03:2021 - Injection
     references:
-    - https://reactjs.org/docs/dom-elements.html#dangerouslysetinnerhtml
+    - https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html
     category: security
     confidence: MEDIUM
     technology:
@@ -42963,8 +43652,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUBl4
-        version_id: NdT1w1
-        url: https://semgrep.dev/playground/r/NdT1w1/typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property
+        version_id: 1QTOzG9
+        url: https://semgrep.dev/playground/r/1QTOzG9/typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property
         origin: community
   languages:
   - typescript

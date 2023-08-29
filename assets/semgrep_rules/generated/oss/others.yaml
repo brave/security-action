@@ -7558,7 +7558,7 @@ rules:
         '
   - metavariable-regex:
       metavariable: "$X"
-      regex: "(?i:.*key.*)"
+      regex: "(?i:^.{0,100}key.{0,100})"
   message: A hardcoded Key is identified.
   languages:
   - java
@@ -7576,8 +7576,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUgDz
-        version_id: RGTXwe
-        url: https://semgrep.dev/playground/r/RGTXwe/mobsf.mobsfscan.android.secrets.hardcoded_api_key
+        version_id: WrTWOdb
+        url: https://semgrep.dev/playground/r/WrTWOdb/mobsf.mobsfscan.android.secrets.hardcoded_api_key
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_password
   patterns:
@@ -7592,7 +7592,7 @@ rules:
         '
   - metavariable-regex:
       metavariable: "$X"
-      regex: "(?i:.*pass.*)"
+      regex: "(?i:^.{0,100}pass.{0,100})"
   message: A hardcoded password in plain text is identified.
   languages:
   - java
@@ -7610,8 +7610,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUpG8
-        version_id: 5PTvYJ
-        url: https://semgrep.dev/playground/r/5PTvYJ/mobsf.mobsfscan.android.secrets.hardcoded_password
+        version_id: BjTXxew
+        url: https://semgrep.dev/playground/r/BjTXxew/mobsf.mobsfscan.android.secrets.hardcoded_password
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_secret
   patterns:
@@ -7626,7 +7626,7 @@ rules:
         '
   - metavariable-regex:
       metavariable: "$X"
-      regex: "(?i:.*secret)"
+      regex: "(?i:^.{0,100}secret.{0,100})"
   message: A hardcoded secret is identified.
   languages:
   - java
@@ -7644,8 +7644,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUJWL
-        version_id: A8T6nr
-        url: https://semgrep.dev/playground/r/A8T6nr/mobsf.mobsfscan.android.secrets.hardcoded_secret
+        version_id: 0bTLywO
+        url: https://semgrep.dev/playground/r/0bTLywO/mobsf.mobsfscan.android.secrets.hardcoded_secret
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_username
   patterns:
@@ -7660,7 +7660,7 @@ rules:
         '
   - metavariable-regex:
       metavariable: "$X"
-      regex: "(?i:.*user.*)"
+      regex: "(?i:^.{0,100}user.{0,100})"
   message: A hardcoded username in plain text is identified.
   languages:
   - java
@@ -7678,8 +7678,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrULll
-        version_id: GxTGWv
-        url: https://semgrep.dev/playground/r/GxTGWv/mobsf.mobsfscan.android.secrets.hardcoded_username
+        version_id: DkT6qGO
+        url: https://semgrep.dev/playground/r/DkT6qGO/mobsf.mobsfscan.android.secrets.hardcoded_username
         origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_readable
   patterns:
@@ -8418,7 +8418,7 @@ rules:
         '
   - metavariable-regex:
       metavariable: "$X"
-      regex: "(?i:.*rsa/.+/nopadding.*)"
+      regex: "(?i:^.{0,100}rsa/.{1,23}/nopadding.{0,100})"
   message: This App uses RSA Crypto without OAEP padding. The purpose of the padding
     scheme is to prevent a number of attacks on RSA that only work when the encryption
     is performed without padding.
@@ -8438,8 +8438,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUx0n
-        version_id: 1QTDXk
-        url: https://semgrep.dev/playground/r/1QTDXk/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
+        version_id: K3TvnrN
+        url: https://semgrep.dev/playground/r/K3TvnrN/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
         origin: community
 - id: mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
   patterns:

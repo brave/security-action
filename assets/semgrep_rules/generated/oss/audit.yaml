@@ -36,12 +36,9 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/command-injection.yaml
-  message: The program invokes a potentially dangerous function that could introduce
-    a vulnerability if it is used incorrectly, but the function can also be used safely.
-    The software constructs all or part of an OS command using externally-influenced
-    input from an upstream component, but it does not neutralize or incorrectly neutralizes
-    special elements that could modify the intended OS command when it is sent to
-    a downstream component.
+  message: The software constructs an OS command using externally-influenced input,  but
+    it does not neutralize or incorrectly neutralizes special elements  that could
+    modify the intended OS command.
   severity: ERROR
   languages:
   - c
@@ -66,14 +63,9 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/double-free.yaml
-  message: The software calls free() twice on the same memory address, potentially
-    leading to modification of unexpected memory locations. When a program calls free()
-    twice with the same argument, the program's memory management data structures
-    become corrupted. This corruption can cause the program to crash or, in some circumstances,
-    cause two later calls to malloc() to return the same pointer. If malloc() returns
-    the same value twice and the program later gives the attacker control over the
-    data that is written into this doubly-allocated memory, the program becomes vulnerable
-    to a buffer overflow attack.
+  message: The software calls free() twice on the same memory address, potentially  leading
+    to memory corruption. This corruption can cause the program to  crash or cause
+    two later calls to malloc() to return the same pointer.
   severity: ERROR
   languages:
   - c
@@ -105,13 +97,8 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/format-string-bugs.yaml
   message: The software uses a function that accepts a format string as an argument,
-    but the format string originates from an external source. When an attacker can
-    modify an externally-controlled format string, this can lead to buffer overflows,
-    denial of service, or data representation problems. It should be noted that in
-    some circumstances, such as internationalization, the set of format strings is
-    externally controlled by design. If the source of these format strings is trusted
-    (e.g. only contained in library files that are only modifiable by the system administrator),
-    then the external control might not itself pose a vulnerability.
+    but the format string originates from an external source. This can lead  to buffer
+    overflows, denial of service, or data representation problems.
   severity: ERROR
   languages:
   - c
@@ -190,13 +177,10 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-order-setuid-setgid-etc.yaml
-  message: The software performs multiple related behaviors, but the behaviors are
-    performed in the wrong order in ways which may produce resultant weaknesses. The
-    set(e)gid() function must be called as root, so the order of the set(e)uid() and
-    set(e)gid() calls is important. A compromised process might be able to regain
-    elevated group privileges if set(e)gid() is called after set(e)uid(). A similar
-    case is when privileges are temporarily dropped with seteuid() and then setuid()
-    or seteuid() are called from while under unprivileged user.
+  message: A compromised process might be able to regain elevated group privileges
+    if set(e)gid() is called after set(e)uid(). A similar case is when  privileges
+    are temporarily dropped with seteuid() and then setuid() or  seteuid() are called
+    from while under unprivileged user.
   severity: ERROR
   languages:
   - c
@@ -272,10 +256,8 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-unsigned-comparison.yaml
-  message: The software compares two entities in a security-relevant context, but
-    the comparison is incorrect, which may lead to resultant weaknesses. Checking
-    if an unsigned variable is negative makes no sense and is usually a good indication
-    that something is probably wrong with the code.
+  message: Checking if an unsigned variable is negative makes no sense and is usually
+    a good indication that something is probably wrong with the code.
   severity: WARNING
   languages:
   - c
@@ -315,10 +297,7 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-sizeof.yaml
   message: The code calls sizeof() on a malloced pointer type, which always returns
     the wordsize/8. This can produce an unexpected result if the programmer intended
-    to determine how much memory has been allocated. The use of sizeof() on a pointer
-    can sometimes generate useful information. An obvious case is to find out the
-    wordsize on a platform. More often than not, the appearance of sizeof(pointer)
-    indicates a bug.
+    to determine how much memory has been allocated.
   severity: WARNING
   languages:
   - c
@@ -350,14 +329,11 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-strncat.yaml
-  message: The strncat() function is intended to be a safe alternative to the strcat()
-    function. However, strncat() is nearly as dangerous as strcat(), in that it's
-    quite easy to misuse. Specifically, the size parameter can be confusing, as it
-    indicates the amount of space left in the buffer. The first common mistake application
-    developers make is supplying the size of the entire buffer instead of the size
-    remaining in the buffer. A more subtle mistake can be made. The size parameter
-    needs to be the amount of space left in the buffer less one; otherwise, the NUL
-    byte is written one byte past the end of the buffer.
+  message: 'The strncat() function is nearly as dangerous as strcat(), in that it''s
+    quite easy to misuse. The first common mistake is supplying the size of  the entire
+    buffer instead of the size remaining in the buffer. A more  subtle mistake can
+    be made: the size parameter needs to be the amount of space left in the buffer
+    less one; otherwise, the NUL byte is written  one byte past the end of the buffer.'
   severity: ERROR
   languages:
   - c
@@ -389,8 +365,7 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-strncpy-stpncpy-strlcpy.yaml
   message: The software uses the size of a source buffer when reading from or writing
     to a destination buffer, which may cause it to access memory that is outside of
-    the bounds of the buffer. When the size of the destination is smaller than the
-    size of the source, a buffer overflow could occur.
+    the bounds of the buffer.
   severity: ERROR
   languages:
   - c
@@ -431,13 +406,10 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-access-stat-lstat.yaml
-  message: The software checks the state of a resource before using that resource,
-    but the resource's state can change between the check and the use in a way that
-    invalidates the results of the check. This can cause the software to perform invalid
-    actions when the resource is in an unexpected state. This weakness can be security-relevant
-    when an attacker can influence the state of the resource between check and use.
-    This can happen with shared resources such as files, memory, or even variables
-    in multithreaded programs.
+  message: The software checks the state of a resource before using it, but the  resource's
+    state can change between the check and the use in a way that  invalidates the
+    results of the check. This canmcause the software to  perform invalid actions
+    when the resource is inman unexpected state.
   severity: WARNING
   languages:
   - c
@@ -460,12 +432,10 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-alloca.yaml
-  message: The program invokes a potentially dangerous function that could introduce
-    a vulnerability if it is used incorrectly, but the function can also be used safely.
-    Use of alloca() is discouraged. It is unsafe because it cannot ensure that the
-    pointer returned points to a valid and usable block of memory. The allocation
-    made may exceed the bounds of the stack, or even go further into other objects
-    in memory, and alloca() cannot determine such an error.
+  message: Use of alloca() is unsafe because it cannot ensure that the pointer  returned
+    points to a valid and usable block of memory. The allocation  made may exceed
+    the bounds of the stack, or even go further into other  objects in memory, and
+    alloca() cannot determine such an error.
   severity: ERROR
   languages:
   - c
@@ -476,15 +446,17 @@ rules:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
     references:
     - https://rules.sonarsource.com/c/type/Bug/RSPEC-989
+    - https://wiki.sei.cmu.edu/confluence/display/c/ERR34-C.+Detect+errors+when+converting+a+string+to+a+number
     confidence: HIGH
     license: MIT
     category: security
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-atoi-atol-atof.yaml
-  message: The atoi(), atol(), and atof() functions, which convert strings to numbers,
-    have undefined behavior when the strings cannot be converted, and should therefore
-    be avoided.
+  message: The atoi(), atol(), atof(), and similar functions have undefined  behavior
+    if the value of the result cannot be represented. They return  0 (or 0.0) if the
+    string does not represent an integer (or decimal),  which is indistinguishable
+    from a correctly formatted, zero-denoting  input string.
   severity: WARNING
   languages:
   - c
@@ -493,6 +465,7 @@ rules:
   - pattern: atoi(...)
   - pattern: atol(...)
   - pattern: atof(...)
+  - pattern: atoll(...)
 - id: raptor-insecure-api-gets
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -505,11 +478,8 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-gets.yaml
-  message: The program calls a function that can never be guaranteed to work safely.
-    Certain functions behave in dangerous ways regardless of how they are used. Functions
-    in this category were often implemented without taking security concerns into
-    account. The gets() function is unsafe because it does not perform bounds checking
-    on the size of its input. An attacker can easily send arbitrarily-sized input
+  message: The gets() function is always unsafe because it does not perform bounds  checking
+    on the size of its input. An attacker can easily send  arbitrarily-sized input
     to gets() and overflow the destination buffer.
   severity: ERROR
   languages:
@@ -551,15 +521,8 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-rand-srand.yaml
-  message: The software uses a Pseudo-Random Number Generator (PRNG) in a security
-    context, but the PRNG's algorithm is not cryptographically strong. When a non-cryptographic
-    PRNG is used in a cryptographic context, it can expose the cryptography to certain
-    types of attacks. Often a pseudo-random number generator (PRNG) is not designed
-    for cryptography. Sometimes a mediocre source of randomness is sufficient or preferable
-    for algorithms that use random numbers. Weak generators generally take less processing
-    power and/or do not use the precious, finite, entropy sources on a system. While
-    such PRNGs might have very useful features, these same features could be used
-    to break the cryptography.
+  message: The rand() PRNG should not be used in applications intended to be  portable
+    when good randomness is needed. Instead, the use of random()  is recommended.
   severity: WARNING
   languages:
   - c
@@ -581,15 +544,9 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-scanf-etc.yaml
-  message: The program invokes a potentially dangerous function that could introduce
-    a vulnerability if it is used incorrectly, but the function can also be used safely.
-    A buffer overflow condition exists when a program attempts to put more data in
-    a buffer than it can hold, or when a program attempts to put data in a memory
-    area outside of the boundaries of a buffer. The simplest type of error, and the
-    most common cause of buffer overflows, is the classic case in which the program
-    copies the buffer without restricting how much is copied. Other variants exist,
-    but the existence of a classic overflow strongly suggests that the programmer
-    is not considering even the most basic of security protections.
+  message: A buffer overflow condition exists when a program attempts to put more
+    data in a buffer than it can hold, or when a program attempts to put data in a
+    memory area outside of the boundaries of a buffer.
   severity: ERROR
   languages:
   - c
@@ -625,15 +582,9 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-sprintf-vsprintf.yaml
-  message: The program invokes a potentially dangerous function that could introduce
-    a vulnerability if it is used incorrectly, but the function can also be used safely.
-    A buffer overflow condition exists when a program attempts to put more data in
-    a buffer than it can hold, or when a program attempts to put data in a memory
-    area outside of the boundaries of a buffer. The simplest type of error, and the
-    most common cause of buffer overflows, is the classic case in which the program
-    copies the buffer without restricting how much is copied. Other variants exist,
-    but the existence of a classic overflow strongly suggests that the programmer
-    is not considering even the most basic of security protections.
+  message: A buffer overflow condition exists when a program attempts to put more
+    data in a buffer than it can hold, or when a program attempts to put data in a
+    memory area outside of the boundaries of a buffer.
   severity: ERROR
   languages:
   - c
@@ -659,15 +610,9 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-strcpy-stpcpy-strcat.yaml
-  message: The program invokes a potentially dangerous function that could introduce
-    a vulnerability if it is used incorrectly, but the function can also be used safely.
-    A buffer overflow condition exists when a program attempts to put more data in
-    a buffer than it can hold, or when a program attempts to put data in a memory
-    area outside of the boundaries of a buffer. The simplest type of error, and the
-    most common cause of buffer overflows, is the classic case in which the program
-    copies the buffer without restricting how much is copied. Other variants exist,
-    but the existence of a classic overflow strongly suggests that the programmer
-    is not considering even the most basic of security protections.
+  message: A buffer overflow condition exists when a program attempts to put more
+    data in a buffer than it can hold, or when a program attempts to put data in a
+    memory area outside of the boundaries of a buffer.
   severity: ERROR
   languages:
   - c
@@ -695,15 +640,9 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/integer-truncation.yaml
-  message: Truncation errors occur when a primitive is cast to a primitive of a smaller
-    size and data is lost in the conversion. When a primitive is cast to a smaller
-    primitive, the high order bits of the large value are lost in the conversion,
-    potentially resulting in an unexpected value that is not equal to the original
-    value. This value may be required as an index into a buffer, a loop iterator,
-    or simply necessary state data. In any case, the value cannot be trusted and the
-    system will be in an undefined state. While this method may be employed viably
-    to isolate the low bits of a value, this usage is rare, and truncation usually
-    implies that an implementation error has occurred.
+  message: Truncation errors occur when a primitive is cast to a primitive of a  smaller
+    size and data is lost in the conversion. The value cannot be  trusted and the
+    application will be in an undefined state.
   severity: WARNING
   languages:
   - c
@@ -800,15 +739,7 @@ rules:
   message: The software performs a calculation that can produce an integer overflow
     or wraparound, when the logic assumes that the resulting value will always be
     larger than the original value. This can introduce other weaknesses when the calculation
-    is used for resource management or execution control. An integer overflow or wraparound
-    occurs when an integer value is incremented to a value that is too large to store
-    in the associated representation. When this occurs, the value may wrap to become
-    a very small or negative number. While this may be intended behavior in circumstances
-    that rely on wrapping, it can have security consequences if the wrap is unexpected.
-    This is especially the case if the integer overflow can be triggered using user-supplied
-    inputs. This becomes security-critical when the result is used to control looping,
-    make a security decision, or determine the offset or size in behaviors such as
-    memory allocation, copying, concatenation, etc.
+    is used for resource management or execution control.
   severity: WARNING
   languages:
   - c
@@ -832,6 +763,23 @@ rules:
         - pattern: malloc
         - pattern: valloc
   - patterns:
+    - pattern: "$FUN($X + $Y)"
+    - metavariable-pattern:
+        metavariable: "$FUN"
+        pattern-either:
+        - pattern: malloc
+        - pattern: valloc
+  - patterns:
+    - pattern: "$FUN($N)"
+    - pattern-inside: |
+        $N = $X + $Y;
+        ...
+    - metavariable-pattern:
+        metavariable: "$FUN"
+        pattern-either:
+        - pattern: malloc
+        - pattern: valloc
+  - patterns:
     - pattern: "$FUN($ARG1, $X * $Y)"
     - metavariable-pattern:
         metavariable: "$FUN"
@@ -844,6 +792,27 @@ rules:
     - pattern: "$FUN($ARG1, $N)"
     - pattern-inside: |
         $N = $X * $Y;
+        ...
+    - metavariable-pattern:
+        metavariable: "$FUN"
+        pattern-either:
+        - pattern: calloc
+        - pattern: realloc
+        - pattern: reallocf
+        - pattern: aligned_alloc
+  - patterns:
+    - pattern: "$FUN($ARG1, $X + $Y)"
+    - metavariable-pattern:
+        metavariable: "$FUN"
+        pattern-either:
+        - pattern: calloc
+        - pattern: realloc
+        - pattern: reallocf
+        - pattern: aligned_alloc
+  - patterns:
+    - pattern: "$FUN($ARG1, $N)"
+    - pattern-inside: |
+        $N = $X + $Y;
         ...
     - metavariable-pattern:
         metavariable: "$FUN"
@@ -918,7 +887,7 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*alloca\\s*$"
+        regex: "^\\w*alloca?\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -1013,12 +982,9 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/mismatched-memory-management.yaml
   message: The software attempts to return a memory resource to the system, but it
     calls a release function that is not compatible with the function that was originally
-    used to allocate that resource. When the memory management functions are mismatched,
-    the consequences may be as severe as code execution, memory corruption, or program
-    crash. Consequences and ease of exploit will vary depending on the implementation
-    of the routines and the object being managed. Due to inherent limitations of Semgrep,
-    this rule might generate many false positives and should therefore be customized
-    for your codebase.
+    used to allocate that resource. Due to inherent limitations of Semgrep, this rule
+    might generate many false positives and should therefore be customized for your
+    codebase.
   severity: INFO
   languages:
   - c
@@ -1065,12 +1031,9 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/mismatched-memory-management-cpp.yaml
   message: The software attempts to return a memory resource to the system, but it
     calls a release function that is not compatible with the function that was originally
-    used to allocate that resource. When the memory management functions are mismatched,
-    the consequences may be as severe as code execution, memory corruption, or program
-    crash. Consequences and ease of exploit will vary depending on the implementation
-    of the routines and the object being managed. Due to inherent limitations of Semgrep,
-    this rule might generate many false positives and should therefore be customized
-    for your codebase.
+    used to allocate that resource. Due to inherent limitations of Semgrep, this rule
+    might generate many false positives and should therefore be customized for your
+    codebase.
   severity: INFO
   languages:
   - cpp
@@ -1313,13 +1276,7 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/ret-stack-address.yaml
   message: A function returns the address of a stack variable, which will cause unintended
-    program behavior, typically in the form of a crash. Because local variables are
-    allocated on the stack, when a program returns a pointer to a local variable,
-    it is returning a stack address. A subsequent function call is likely to re-use
-    this same stack address, thereby overwriting the value of the pointer, which no
-    longer corresponds to the same variable since a function's stack frame is invalidated
-    when it returns. At best this will cause the value of the pointer to change unexpectedly.
-    In many cases it causes the program to crash the next time the pointer is dereferenced.
+    program behavior, typically in the form of a crash.
   severity: WARNING
   languages:
   - c
@@ -1376,22 +1333,12 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/signed-unsigned-conversion.yaml
   message: The software uses a signed primitive and performs a cast to an unsigned
     primitive, or uses an unsigned primitive and performs a cast to a signed primitive,
-    which can produce an unexpected value if the value of the signed primitive cannot
-    be represented using an unsigned primitive, or if the value of the unsigned primitive
-    cannot be represented using a signed primitive. It is dangerous to rely on implicit
-    casts between signed and unsigned numbers because the result can take on an unexpected
-    value and violate assumptions made by the program. Often, functions will return
-    negative values to indicate a failure. When the result of a function is to be
-    used as a size parameter, using these negative return values can have unexpected
-    results. For example, if negative size values are passed to the standard memory
-    copy or allocation functions they will be implicitly cast to a large unsigned
-    value. This may lead to an exploitable buffer overflow or underflow condition.
-    Although less frequent an issue than signed-to-unsigned conversion, unsigned-to-signed
-    conversion can be the perfect precursor to dangerous buffer underwrite conditions
-    that allow attackers to move down the stack where they otherwise might not have
-    access in a normal buffer overflow condition. Buffer underwrites occur frequently
-    when large unsigned values are cast to signed values, and then used as indexes
-    into a buffer or for pointer arithmetic.
+    which can produce an unexpected value. When the result of a function is to be
+    used as a size parameter, using negative return values can have unexpected results.
+    Although less frequent an issue, unsigned-to-signed conversion can be  the precursor
+    to buffer underwrite conditions. Buffer underwrites  occur frequently when large
+    unsigned values are cast to signed values,  and then used as indexes into a buffer
+    or for pointer arithmetic.
   severity: WARNING
   languages:
   - c
@@ -1524,8 +1471,8 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/typos.yaml
   message: The programmer accidentally uses the wrong operator, which changes the
-    application logic in security-relevant ways. These types of errors are generally
-    the result of a typo. This rule also covers some other common typo patterns.
+    application logic in security-relevant ways. This rule also covers  some other
+    common typo patterns.
   severity: INFO
   languages:
   - c
@@ -1583,10 +1530,7 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/unchecked-ret-malloc-calloc-realloc.yaml
   message: The software does not check the return value from a method or function,
-    which can prevent it from detecting unexpected states and conditions. The software
-    does not check for an error after calling a function that can return with a NULL
-    pointer if the function fails, which leads to a resultant NULL pointer dereference
-    or, in some cases, even arbitrary code execution.
+    which can prevent it from detecting unexpected states and conditions.
   severity: WARNING
   languages:
   - c
@@ -1675,13 +1619,10 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/unchecked-ret-setuid-seteuid.yaml
   message: The software does not check the return value from a method or function,
-    which can prevent it from detecting unexpected states and conditions. If an attacker
-    can force the function to fail or otherwise return a value that is not expected,
-    then the subsequent program logic could lead to a vulnerability, because the software
-    is not in a state that the programmer assumes. For example, if the program calls
-    a function to drop privileges but does not check the return code to ensure that
-    privileges were successfully dropped, then the program will continue to operate
-    with the higher privileges.
+    which can prevent it from detecting unexpected states and conditions. If the program
+    calls a function to drop privileges but  does not check the return code to ensure
+    that privileges were  successfully dropped, then the program will continue to
+    operate with  the higher privileges.
   severity: WARNING
   languages:
   - c
@@ -1719,9 +1660,7 @@ rules:
   message: The snprintf() and vsnprintf() functions return the total length of the
     string they tried to create. Therefore, this return value can be larger than the
     size of the destination buffer. If it is used unsafely, e.g. as an index to write
-    to the destination buffer, memory corruption might occur. Vulnerabilities such
-    as this are not common because the return value is usually discarded. However,
-    ignoring the result of these functions can result in data truncation.
+    to the destination buffer, memory corruption might occur.
   severity: WARNING
   languages:
   - c
@@ -1748,9 +1687,7 @@ rules:
     For strlcat() that means the initial length of the destination string plus the
     length of of the source string. Therefore, this return value can be larger than
     the size of the destination buffer. If it is used unsafely, e.g. as an index to
-    write to the destination buffer, memory corruption might occur. Vulnerabilities
-    such as this are not common because the return value is usually discarded. However,
-    ignoring the result of these functions can result in data truncation.
+    write to the destination buffer, memory corruption might occur.
   severity: WARNING
   languages:
   - c
@@ -1780,16 +1717,8 @@ rules:
   message: The software performs a calculation that can produce an integer overflow
     or wraparound, when the logic assumes that the resulting value will always be
     larger than the original value. This can introduce other weaknesses when the calculation
-    is used for resource management or execution control. An integer overflow or wraparound
-    occurs when an integer value is incremented to a value that is too large to store
-    in the associated representation. When this occurs, the value may wrap to become
-    a very small or negative number. While this may be intended behavior in circumstances
-    that rely on wrapping, it can have security consequences if the wrap is unexpected.
-    This is especially the case if the integer overflow can be triggered using user-supplied
-    inputs. This becomes security-critical when the result is used to control looping,
-    make a security decision, or determine the offset or size in behaviors such as
-    memory allocation, copying, concatenation, etc. When influenced by the size of
-    an input it is often easier to overflow a short than an int.
+    is used for resource management or execution control. When influenced by the size
+    of an  input it is often easier to overflow a short than an int.
   severity: WARNING
   languages:
   - c
@@ -1817,12 +1746,10 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/unterminated-string-strncpy-stpncpy.yaml
-  message: The software does not terminate or incorrectly terminates a string or array
-    with a NUL character or equivalent terminator. If there is no NUL character byte
-    in the first n bytes of the source string, strncpy() and stpncpy() do not null-terminate
-    the destination buffer. If the program does not explicitly terminate the destination
-    buffer, this will almost certainly result in information disclosure, and possibly
-    a buffer overflow condition, which may be exploited to execute arbitrary code.
+  message: If there is no NUL character byte in the first n bytes of the source string,
+    strncpy() and stpncpy() do not null-terminate the destination buffer. If the program
+    does not explicitly terminate the destination buffer, this will almost certainly
+    result in information disclosure, and possibly a buffer overflow condition.
   severity: WARNING
   languages:
   - c
@@ -1898,16 +1825,10 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/use-after-free.yaml
-  message: Referencing memory after it has been freed can cause a program to crash,
-    use unexpected values, or execute code. The use of previously-freed memory can
-    have any number of adverse consequences, ranging from the corruption of valid
-    data to the execution of arbitrary code, depending on the instantiation and timing
-    of the flaw. The simplest way data corruption may occur involves the system's
-    reuse of the freed memory. In this scenario, the memory in question is allocated
-    to another pointer validly at some point after it has been freed. The original
-    pointer to the freed memory is used again and points to somewhere within the new
-    allocation. As the data is changed, it corrupts the validly used memory; this
-    induces undefined behavior in the process.
+  message: The use of previously-freed memory can have any number of adverse consequences,
+    ranging from the corruption of valid data to the execution of arbitrary code,
+    depending on the instantiation and timing of the flaw. The simplest way data corruption
+    may occur involves the system's reuse of the freed memory.
   severity: ERROR
   languages:
   - c
