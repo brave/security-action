@@ -22,7 +22,7 @@ jobs:
       - run: |
           JSON=$(semgrep \
             --disable-version-check --strict --metrics=off --json \
-            $(find assets/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "assets/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+            $(find assets/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name '*.test.yml' -not -name '*.test.yaml' -not -path "assets/semgrep_rules/generated/*" | sed 's/^/-c /g') \
             assets/semgrep_rules/{client,services} || true)
           ERRORS=$(echo "$JSON" | jq '.errors' || true)
           BADERRS=$(echo "$ERRORS" | jq '.[] | select(.level == "error")' || true)
