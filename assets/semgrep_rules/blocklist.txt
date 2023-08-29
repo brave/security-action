@@ -22,3 +22,4 @@ https://github.com/0xdea/semgrep-rules/blob/main/c/missing-break-in-switch.yaml
 https://semgrep.dev/r/terraform.aws.security.aws-elb-access-logs-not-enabled.aws-elb-access-logs-not-enabled
 https://github.com/0xdea/semgrep-rules/blob/main/c/mismatched-memory-management-cpp.yaml
 https://semgrep.dev/r/javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring
+https://semgrep.dev/r/yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha

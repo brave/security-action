@@ -8,7 +8,7 @@ runner:
           -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
-          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
           --metrics=off \
           --quiet \
           $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
@@ -36,7 +36,7 @@ runner:
         -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
         -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
         -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
-        $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+        $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
         --metrics=off \
         --json \
         --quiet \
