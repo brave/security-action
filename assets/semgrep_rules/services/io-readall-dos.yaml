@@ -1,0 +1,20 @@
+rules:
+  - id: io-readall-dos
+    metadata:
+      author: Ben Caller
+      confidence: LOW
+      references:
+        - https://pkg.go.dev/io#ReadAll
+        - https://pkg.go.dev/net/http#MaxBytesReader
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/io-readall-dos.yaml
+      assignees: |
+        bcaller
+        thypon
+    severity: INFO
+    languages:
+      - go
+    pattern: io.ReadAll($R.Body)
+    fix: io.ReadAll(http.MaxBytesReader(w, $R.Body, MAX_REQUEST_SIZE))
+    message: |
+        io.ReadAll is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body.
+        Wrapping $R.Body with http.MaxBytesReader prevents this wasting of server resources.
