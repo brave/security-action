@@ -52,6 +52,8 @@ jobs:
       - uses: aws-actions/test@v1
       # ok: brave-third-party-action-not-pinned-to-commit-sha
       - uses: github/test@v1
+      # ok: brave-third-party-action-not-pinned-to-commit-sha
+      - uses: ruby/setup-ruby@v1
  
       # ruleid: brave-third-party-action-not-pinned-to-commit-sha
       - uses: fakerepo/comment-on-pr
