@@ -33,13 +33,14 @@ jobs:
             }
             const result = await github.graphql(query, variables);
             const totalCount = result.repositoryOwner.repositories.totalCount;
-            console.log("totalCount: %s", totalCount);
+            
+            // DEBUG: console.log("totalCount: %s", totalCount);
             const repositories = result.repositoryOwner.repositories;
             const yesterday = ((d) => d.setDate(d.getDate() - 1))(new Date());
             var newerThanADay = repositories.nodes.filter(
               repo => new Date(repo.createdAt) > yesterday
             );
-            console.log("NewerThanADay: %o", newerThanADay);
+            // DEBUG: console.log("NewerThanADay: %o", newerThanADay);
             var message = "";
             if (newerThanADay.length > 0) {
               message += `${newerThanADay.length} new repos in ${variables.owner}:\n\n`;
@@ -47,7 +48,10 @@ jobs:
                 message += `- ${newerThanADay[i].name}\n`;
               }
               message += `\nTotal repositories in ${variables.owner}: ${totalCount}`;
+
+              core.setSecret(message);
             }
+            
             return message;
     - uses: actions-ecosystem/action-slack-notifier@v1
       if: ${{ fromJson(steps.check-new-repos.outputs.result) != '' }}
