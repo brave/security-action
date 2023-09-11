@@ -7,7 +7,7 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
 permissions:
-  contents: read
+  contents: none
 jobs:
   full-loop:
     name: full-loop
