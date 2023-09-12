@@ -7,8 +7,7 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
 permissions:
-  # Clear all permissions as none are required just to clone repo
-  contents: none
+  contents: read
 jobs:
   full-loop:
     name: full-loop
