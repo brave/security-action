@@ -6,9 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main]
-permissions:
-  # Clear all permissions as none are required just to clone repo
-  contents: none
+
 jobs:
   semgrep-self-test:
     name: semgrep-self-test

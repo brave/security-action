@@ -6,8 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main, master, staging, development, devel, dev]
-permissions:
-  pull-requests: write
+
 jobs:
   security:
     name: security
