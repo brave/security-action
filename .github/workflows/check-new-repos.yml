@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Check New Repos
       id: check-new-repos
-      uses: actions/github-script@v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
       with:
           github-token: ${{ secrets.GH_PAT }}
           script: |
@@ -53,7 +53,7 @@ jobs:
             }
             
             return message;
-    - uses: actions-ecosystem/action-slack-notifier@v1
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1
       if: ${{ fromJson(steps.check-new-repos.outputs.result) != '' }}
       with:
         slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
