@@ -11,3 +11,5 @@
 )}
 <!-- ok: svelte-html-usages -->
 {@html MyIcon}
+<!-- ok: svelte-html-usages -->
+{@html serializeJsonLD({})}
