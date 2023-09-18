@@ -7,7 +7,7 @@ rules:
         thypon
         goodov
         iefremov
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/brave-isolated-world-id-content-end.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-isolated-world-id-content-end.yaml
     message: Security hotspot found (`ISOLATED_WORLD`). A security-team member should analyze the code security for possible vulnerabilities.
     severity: WARNING
     languages:

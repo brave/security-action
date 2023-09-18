@@ -12,7 +12,7 @@ rules:
 
   metadata:
     author: Andrea Brancaleoni <abc@pompel.me>
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-uaf.yaml
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-uaf.yaml
     assignees: |
       thypon
       goodov
@@ -32,7 +32,7 @@ rules:
 - id: chromium-bind-uaf
   metadata:
     author: Andrea Brancaleoni <abc@pompel.me>
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-uaf.yaml
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-uaf.yaml
     assignees: |
       thypon
       goodov
