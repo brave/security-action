@@ -15,6 +15,7 @@ rules:
         - http://www.phrack.org/issues/60/10.html#article
         - https://docs.microsoft.com/en-us/cpp/sanitizers/asan-error-examples
       confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/signed-unsigned-conversion.yaml
     message: The software uses a signed primitive and performs a cast to an unsigned
       primitive, or uses an unsigned primitive and performs a cast to a signed
       primitive, which can produce an unexpected value if the value of the

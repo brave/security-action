@@ -15,6 +15,7 @@ rules:
     - audit
     likelihood: LOW
     impact: LOW
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/missing-integrity.yaml
   patterns:
   - pattern-either:
     - pattern: <script $...A >...</script>
