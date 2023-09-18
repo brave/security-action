@@ -427,7 +427,7 @@ runs:
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
-    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.0
+    - uses: actions-ecosystem/action-add-labels@bd52874380e3909a1ac983768df6976535ece7f8 # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
       with:
         github_token: ${{ inputs.github_token }}
