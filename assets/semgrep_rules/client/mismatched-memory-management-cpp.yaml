@@ -12,6 +12,7 @@ rules:
       # are not covered.
       # NOTE: overloaded operators, VirtualAlloc()/VirtualFree(),
       # mmap()/munmap() are not covered.
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/mismatched-memory-management-cpp.yaml
     message: >-
       The software attempts to return a memory resource to the system, but
       it calls a release function that is not compatible with the function
@@ -69,6 +70,9 @@ rules:
             ...
             delete[]($PTR);
         - pattern-not: delete[](this);
+        - metavariable-regex:
+            metavariable: $PTR
+            regex: .
       # delete
       - patterns:
         - pattern: delete($PTR);
@@ -77,6 +81,9 @@ rules:
             ...
             delete($PTR);
         - pattern-not: delete(this);
+        - metavariable-regex:
+            metavariable: $PTR
+            regex: .
       - patterns:
         - pattern: delete($PTR);
         - pattern-inside: |
@@ -84,3 +91,6 @@ rules:
             ...
             delete($PTR);
         - pattern-not: delete(this);
+        - metavariable-regex:
+            metavariable: $PTR
+            regex: .
