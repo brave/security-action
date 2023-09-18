@@ -2,6 +2,10 @@ rules:
 - id: cast-signed-to-unsigned
   metadata:
     source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/cast-signed-to-unsigned.yaml
+    assignees: |
+      fmarier
+      thypon
+      bridiver
   patterns:
     - pattern: ($CAST)($TYPE $X)
     - metavariable-regex:
@@ -10,7 +14,18 @@ rules:
     - metavariable-regex:
         metavariable: $TYPE
         regex: ^([^u].*)$
-  message: Semgrep found a cast from $TYPE (signed) to $CAST.
-    For arithmetic use `base::CheckAdd(value1, value2).AssignIfValid(&result)`
+  message: |
+    Semgrep found a cast from $TYPE (signed) to $CAST.
+    
+    For arithmetic use `base::CheckAdd(value1, value2).AssignIfValid(&result)`.
+    In case casting the value is required, consider using `base::checked_cast`,
+    or if your want to fail without a check `IsValueInRangeForNumericType`.
+
+    References:
+
+    - https://chromium.googlesource.com/chromium/src/+/main/docs/security/integer-semantics.md#be-aware-of-the-subtleties-of-integer-types
+    - https://chromium.googlesource.com/chromium/src/+/main/base/numerics/README.md
+    - https://google.github.io/styleguide/cppguide.html#Casting
+    - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++.md
   languages: [cpp, c]
   severity: WARNING
