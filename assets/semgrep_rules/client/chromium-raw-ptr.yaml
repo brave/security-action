@@ -2,7 +2,7 @@ rules:
   - id: chromium-raw-ptr
     metadata:
       author: Andrea Brancaleoni <abc@pompel.me>
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/c/chromium-raw-ptr.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-raw-ptr.yaml
       assignees: |
         thypon
         fmarier
