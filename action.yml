@@ -122,7 +122,7 @@ runs:
         printf '${{ steps.changed-files.outputs.any_changed }}'
     - id: comments-before
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       with:
           script: |
             var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
@@ -190,12 +190,12 @@ runs:
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Cache pip cache
       id: cache-pip
-      uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3
+      uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
       with:
         path: ~/.cache/pip/
         key: ${{ runner.os }}-pip
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      uses: reviewdog/action-setup@80a06617492b461a66508e2dedf16233f0506804 # v1
+      uses: reviewdog/action-setup@80a06617492b461a66508e2dedf16233f0506804 # v1.0.6
       with:
         reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
@@ -251,7 +251,7 @@ runs:
 
     - id: comments-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       with:
           script: |
             var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
@@ -293,7 +293,7 @@ runs:
 
     - id: assignees-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       env:
         ASSIGNEES: ${{ inputs.assignees }}
       with:
@@ -345,7 +345,7 @@ runs:
 
     - id: assignee-removed-label
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       env:
         ASSIGNEES: ${{ steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result) }}
       with:
@@ -390,7 +390,7 @@ runs:
 
     - id: description-contains-hotwords
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && github.actor != 'renovate[bot]' }}
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       env:
         HOTWORDS: ${{ inputs.hotwords }}
       with:
@@ -427,12 +427,12 @@ runs:
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
-    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1
+    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
       with:
         github_token: ${{ inputs.github_token }}
         labels: needs-security-review
-    - uses: actions-ecosystem/action-add-assignees@ce5019e63cc4f35aba27308dc88d19c8f3686747 # v1
+    - uses: actions-ecosystem/action-add-assignees@ce5019e63cc4f35aba27308dc88d19c8f3686747 # v1.0.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
       with:
         github_token: ${{ inputs.github_token }}
@@ -449,7 +449,7 @@ runs:
       run: exit 1
     - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       id: reviewdog-fail-log-head
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       with:
         script: |
           return '\n'+require('fs').readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
@@ -459,7 +459,7 @@ runs:
         ASSIGNEES: ${{steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result)}}
       run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
       shell: bash
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
@@ -468,7 +468,7 @@ runs:
         channel: secops-hotspots
         color: red
         verbose: true
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && steps.should-trigger.outputs.result == 'true' }}
       with:
         slack_token: ${{ inputs.slack_token }}
@@ -480,21 +480,21 @@ runs:
 # CodeQL Steps
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' && hashFiles(inputs.codeql_config) }}
       name: Initialize CodeQL
-      uses: github/codeql-action/init@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2
+      uses: github/codeql-action/init@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2.21.7
       with:
         languages: ${{ matrix.language }}
         config-file: ${{ inputs.codeql_config }}
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' && !hashFiles(inputs.codeql_config)}}
       name: Initialize CodeQL (without config)
-      uses: github/codeql-action/init@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2
+      uses: github/codeql-action/init@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2.21.7
       with:
         languages: ${{ matrix.language }}
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
       name: Autobuild
-      uses: github/codeql-action/autobuild@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2
+      uses: github/codeql-action/autobuild@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2.21.7
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
       name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2
+      uses: github/codeql-action/analyze@04daf014b50eaf774287bf3f0f1869d4b4c4b913 # v2.21.7
 #    - run: echo ${{ inputs.in-name }}
 #      shell: bash
 #    - id: output-step-id
