@@ -459,7 +459,7 @@ runs:
         ASSIGNEES: ${{steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result)}}
       run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
       shell: bash
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.3
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
@@ -468,7 +468,7 @@ runs:
         channel: secops-hotspots
         color: red
         verbose: true
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.3
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && steps.should-trigger.outputs.result == 'true' }}
       with:
         slack_token: ${{ inputs.slack_token }}
