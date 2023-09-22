@@ -3,9 +3,6 @@ on:
   schedule:
     # nightly (0th hour 0th minute of every day)
     - cron:  '0 0 * * *'
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
-    branches: [main]
   
 jobs:
   build:
