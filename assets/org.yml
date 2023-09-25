@@ -2,10 +2,11 @@ name: security
 on:
   workflow_dispatch:
   push:
-    branches: [main, master, staging, development, devel, dev]
+    branches: [main, master, staging, development, devel, dev, prod]
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [main, master, staging, development, devel, dev]
+  merge_group:
 permissions:
   contents: read
   pull-requests: write
