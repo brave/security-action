@@ -54,7 +54,9 @@ jobs:
       - uses: github/test@v1
       # ok: brave-third-party-action-not-pinned-to-commit-sha
       - uses: ruby/setup-ruby@v1
- 
+      # ok: brave-third-party-action-not-pinned-to-commit-sha
+      - uses: slackapi/slack-github-action@v1.24.0
+      
       # ruleid: brave-third-party-action-not-pinned-to-commit-sha
       - uses: fakerepo/comment-on-pr
         with:
