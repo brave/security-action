@@ -16,6 +16,7 @@ rules:
             - pattern-not-regex: ^github/
             - pattern-not-regex: ^aws-actions/
             - pattern-not-regex: ^ruby/
+            - pattern-not-regex: ^slackapi/
             - pattern-not-regex: "@[0-9a-f]{40}$"
             - pattern-not-regex: ^docker://.*@sha256:[0-9a-f]{64}$
     message: An action sourced from a third-party repository on GitHub is not pinned
