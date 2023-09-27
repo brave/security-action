@@ -53,3 +53,5 @@ rules:
           switch ($VAR) { case $VAL1: NOTREACHED_NORETURN(); case $VAL2: ... }
       - pattern-not: |
           switch ($VAR) { case $VAL1: ... NOTREACHED_NORETURN(); case $VAL2: ... }
+      # [[fallthrough]];
+      - pattern-not-regex: '\[\[fallthrough\]\];'
