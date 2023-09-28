@@ -29,6 +29,8 @@ inputs:
       safebrowsing
       safe browsing
       csp
+      url parse
+      urlparse
   debug:
     description: enables debug output for this action
     required: false
