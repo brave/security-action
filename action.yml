@@ -31,6 +31,7 @@ inputs:
       csp
       url parse
       urlparse
+      :disableDigestUpdates
   debug:
     description: enables debug output for this action
     required: false
