@@ -1,0 +1,100 @@
+rules:
+- id: integer-truncation
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://cwe.mitre.org/data/definitions/197
+    - https://cwe.mitre.org/data/definitions/681
+    - https://g.co/kgs/PCHQjJ
+    - https://github.com/struct/mms
+    - https://github.com/0xdea/semgrep-rules/blob/main/c/integer-truncation.yaml
+    confidence: MEDIUM
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/integer-truncation.yaml
+  message: Truncation errors occur when a primitive is cast to a primitive of a  smaller
+    size and data is lost in the conversion. The value cannot be  trusted and the
+    application will be in an undefined state.
+  severity: WARNING
+  languages:
+  - c
+  - cpp
+  patterns:
+    - pattern-either:
+      - pattern: (char $NARROW) = <... (short $LARGE) ...>
+      - pattern: (char $NARROW) = <... (short int $LARGE) ...>
+      - pattern: (char $NARROW) = <... (unsigned short $LARGE) ...>
+      - pattern: (char $NARROW) = <... (unsigned short int $LARGE) ...>
+      - pattern: (char $NARROW) = <... (int $LARGE) ...>
+      - pattern: (char $NARROW) = <... (unsigned $LARGE) ...>
+      - pattern: (char $NARROW) = <... (unsigned int $LARGE) ...>
+      - pattern: (char $NARROW) = <... (long $LARGE) ...>
+      - pattern: (char $NARROW) = <... (long int $LARGE) ...>
+      - pattern: (char $NARROW) = <... (unsigned long $LARGE) ...>
+      - pattern: (char $NARROW) = <... (unsigned long int $LARGE) ...>
+      - pattern: |
+          char $FUN(...)
+          {
+          ...
+          return (short $LARGE);
+          }
+      - pattern: |
+          char $FUN(...)
+          {
+          ...
+          return (int $LARGE);
+          }
+      - pattern: |
+          char $FUN(...)
+          {
+          ...
+          return (long $LARGE);
+          }
+      - pattern: (short $NARROW) = <... (unsigned short $LARGE) ...>
+      - pattern: (short int $NARROW) = <... (unsigned short int $LARGE) ...>
+      - pattern: (short $NARROW) = <... (int $LARGE) ...>
+      - pattern: (short $NARROW) = <... (unsigned $LARGE) ...>
+      - pattern: (short int $NARROW) = <... (unsigned int $LARGE) ...>
+      - pattern: (short $NARROW) = <... (long $LARGE) ...>
+      - pattern: (short int $NARROW) = <... (long int $LARGE) ...>
+      - pattern: (short $NARROW) = <... (unsigned long $LARGE) ...>
+      - pattern: (short int $NARROW) = <... (unsigned long int $LARGE) ...>
+      - pattern: (unsigned short $NARROW) = <... (int $LARGE) ...>
+      - pattern: (unsigned short $NARROW) = <... (unsigned $LARGE) ...>
+      - pattern: (unsigned short int $NARROW) = <... (unsigned int $LARGE) ...>
+      - pattern: (unsigned short $NARROW) = <... (long $LARGE) ...>
+      - pattern: (unsigned short int $NARROW) = <... (long int $LARGE) ...>
+      - pattern: (unsigned short $NARROW) = <... (unsigned long $LARGE) ...>
+      - pattern: (unsigned short int $NARROW) = <... (unsigned long int $LARGE) ...>
+      - pattern: |
+          short $FUN(...)
+          {
+          ...
+          return (int $LARGE);
+          }
+      - pattern: |
+          short $FUN(...)
+          {
+          ...
+          return (long $LARGE);
+          }
+      - pattern: (int $NARROW) = <... (unsigned $LARGE) ...>
+      - pattern: (int $NARROW) = <... (unsigned int $LARGE) ...>
+      - pattern: (int $NARROW) = <... (long $LARGE) ...>
+      - pattern: (int $NARROW) = <... (long int $LARGE) ...>
+      - pattern: (int $NARROW) = <... (unsigned long $LARGE) ...>
+      - pattern: (int $NARROW) = <... (unsigned long int $LARGE) ...>
+      - pattern: |
+          int $FUN(...)
+          {
+          ...
+          return (long $LARGE);
+          }
+      - pattern: (long $NARROW) = <... (unsigned long $LARGE) ...>
+      - pattern: (long int $NARROW) = <... (unsigned long int $LARGE) ...>
+    # (Ben Caller) Prevent false positive with `char x = 0;` by using regex:
+    - metavariable-regex:
+        metavariable: $LARGE
+        regex: '\A[^0-9]'
