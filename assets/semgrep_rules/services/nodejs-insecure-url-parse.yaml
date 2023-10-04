@@ -6,10 +6,13 @@ rules:
       assignees: |
         thypon
         fmarier
+      references:
+        - https://nodejs.org/api/url.html#urlparseurlstring-parsequerystring-slashesdenotehost
+        - https://nodejs.org/api/url.html#the-whatwg-url-api
     pattern-either:
       - pattern: url.parse(...)
       - pattern: require('url').parse(...)
-    message: Avoid using url.parse() as it may cause security issues. Consider using the URL class instead.
+    message: Avoid using url.parse() as it is prone to security issues such as hostname spoofing. Use the URL class instead.
     severity: ERROR
     languages:
       - javascript
