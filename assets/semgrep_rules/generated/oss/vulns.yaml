@@ -7,6 +7,8 @@ rules:
     Consider using a view technology such as JavaServer Faces (JSFs) which automatically
     escapes HTML views.
   severity: WARNING
+  options:
+    interfile: true
   metadata:
     likelihood: HIGH
     impact: MEDIUM
@@ -36,8 +38,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Uv7B
-        version_id: RGTb2B
-        url: https://semgrep.dev/playground/r/RGTb2B/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
+        version_id: bZTbzQz
+        url: https://semgrep.dev/playground/r/bZTbzQz/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
         origin: community
   languages:
   - java
@@ -67,3 +69,1536 @@ rules:
     - pattern: "(PolicyFactory $POLICY).sanitize(...)"
     - pattern: "(AntiSamy $AS).scan(...)"
     - pattern: JSoup.clean(...)
+    - pattern: org.apache.commons.lang.StringEscapeUtils.escapeHtml(...)
+    - pattern: org.springframework.web.util.HtmlUtils.htmlEscape(...)
+    - pattern: org.owasp.esapi.ESAPI.encoder().encodeForHTML(...)
+- id: trailofbits.go.anonymous-race-condition.anonymous-race-condition
+  message: Possible race condition due to memory aliasing of variable `$X`
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization
+      (''Race Condition'')'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Race conditions within anonymous goroutines
+    references:
+    - https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.anonymous-race-condition.anonymous-race-condition
+    shortlink: https://sg.run/BL22
+    semgrep.dev:
+      rule:
+        rule_id: nJUr88
+        version_id: LjTq4yK
+        url: https://semgrep.dev/playground/r/LjTq4yK/trailofbits.go.anonymous-race-condition.anonymous-race-condition
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        for $Y, $X := range ... {
+          ...
+          go func(...){
+            ...
+            $FOO(..., $X, ...)
+            ...
+          }(...)
+          ...
+        }
+    - pattern: |
+        for $Y, $X := range ... {
+          ...
+          go func(...){
+            ...
+            $FOO(..., $Y, ...)
+            ...
+          }(...)
+          ...
+        }
+    - pattern: |
+        for $Y, $X := range ... {
+          ...
+          go func(...){
+            ...
+            $X(...)
+            ...
+          }(...)
+          ...
+        }
+    - pattern: |
+        for $X:=...;$Y;$Z {
+          ...
+          go func(...) {
+            ...
+            $FOO(..., $X,...)
+            ...
+          }(...)
+          ...
+        }
+    - pattern: |
+        for $Y, $X := range ... {
+          ...
+          go func(...){
+            ...
+            $X. ... .$M(...)
+            ...
+          }(...)
+          ...
+        }
+  - pattern-not: |
+      for ..., $X := range ... {
+        ...
+        ..., $X := ..., $X
+        ...
+        go func(...){
+          ...
+          $FOO(..., $X, ...)
+          ...
+        }(...)
+        ...
+      }
+  - pattern-not: |
+      for ..., $X := range ... {
+          ...
+          $X, ... := $X, ...
+          ...
+          go func(...){
+            ...
+            $FOO(..., $X, ...)
+            ...
+          }(...)
+          ...
+      }
+  - pattern-not: |
+      for $Y, $X := range ... {
+        ...
+        $Y, $X := $Y, $X
+        ...
+        go func(...){
+          ...
+        }(...)
+        ...
+      }
+- id: trailofbits.go.hanging-goroutine.hanging-goroutine
+  message: Potential goroutine leak due to unbuffered channel send inside loop or
+    unbuffered channel receive in select block
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-833: Deadlock'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - "--no-technology--"
+    description: Goroutine leaks
+    references:
+    - https://blog.trailofbits.com/2021/11/08/discovering-goroutine-leaks-with-semgrep
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.hanging-goroutine.hanging-goroutine
+    shortlink: https://sg.run/Dw8o
+    semgrep.dev:
+      rule:
+        rule_id: EwUQp2
+        version_id: 8KTQEjp
+        url: https://semgrep.dev/playground/r/8KTQEjp/trailofbits.go.hanging-goroutine.hanging-goroutine
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        for ... {
+          ...
+          go func(...) {
+            ...
+            $CHANNEL <- $VAL
+            ...
+          }(...)
+        }
+        ...
+        $Y = <- $CHANNEL
+        ...
+    - pattern: |
+        for ... {
+          ...
+          go func(...) {
+            ...
+            $CHANNEL <- $VAL
+            ...
+          }(...)
+        }
+        ...
+        $Y := <- $CHANNEL
+        ...
+    - pattern: |
+        for ... {
+          ...
+          go func(...) {
+            ...
+            $CHANNEL <- $VAL
+            ...
+          }(...)
+        }
+        ...
+        return <- $CHANNEL
+    - pattern: |
+        for ... {
+          ...
+          go func(...) {
+            ...
+            select {
+              case ...
+              case $CHANNEL <- $VAL: ...
+              case ...
+            }
+            ...
+          }(...)
+        ...
+        }
+        ...
+        return <- $CHANNEL
+    - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
+        {\ncase ...\ncase $Y = <- $CHANNEL: \n...\n}\n"
+    - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
+        {\ncase ...\ncase $Y := <- $CHANNEL: \n...\n}\n"
+    - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
+        {\ncase ...\ncase <- $CHANNEL: \n...\n}\n"
+    - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
+        {\ncase ...\ncase $Y <- $CHANNEL: \n...\n}\n"
+  - pattern-not: |
+      for ... {
+        ...
+        go func(...) {
+          ...
+          $CHANNEL <- $VAL
+          ...
+        }(...)
+      }
+      ...
+      $Y = <- $CHANNEL
+      ...
+  - pattern-inside: |
+      $CHANNEL := make(...)
+      ...
+  - pattern-not-inside: "...\nselect {\ncase ...\ncase ...: \n  ...\n  ... =<- $CHANNEL\n
+      \ ...\n}\n"
+  - pattern-not-inside: "...\nselect {\ncase ...\ncase ...: \n  ...\n  <-$CHANNEL\n
+      \ ...\n}\n"
+  - pattern-not-inside: |
+      $CHANNEL := make(..., $T)
+      ...
+- id: trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+  message: Missing `RUnlock` on an `RWMutex` lock before returning from a function
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-667: Improper Locking'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Missing `RUnlock` on an `RWMutex` lock before returning from a function
+    references:
+    - https://pkg.go.dev/sync#RWMutex
+    - https://blog.trailofbits.com/2020/06/09/how-to-check-if-a-mutex-is-locked-in-go/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+    shortlink: https://sg.run/9r40
+    semgrep.dev:
+      rule:
+        rule_id: 8GUzNK
+        version_id: 3ZTkBPJ
+        url: https://semgrep.dev/playground/r/3ZTkBPJ/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: panic(...)
+    - pattern: return ...
+  - pattern-inside: |
+      $T.RLock()
+      ...
+  - pattern-not-inside: |
+      $T.RUnlock()
+      ...
+  - pattern-not-inside: |
+      defer $T.RUnlock()
+      ...
+  - pattern-not-inside: "$FOO(..., ..., func(...) { \n    ... \n})\n"
+- id: trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+  message: Missing mutex unlock before returning from a function.  This could result
+    in panics resulting from double lock operations
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-667: Improper Locking'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Missing `mutex` unlock before returning from a function
+    references:
+    - https://pkg.go.dev/sync#Mutex
+    - https://blog.trailofbits.com/2020/06/09/how-to-check-if-a-mutex-is-locked-in-go/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+    shortlink: https://sg.run/18Bk
+    semgrep.dev:
+      rule:
+        rule_id: L1U5Gz
+        version_id: 44TRzkv
+        url: https://semgrep.dev/playground/r/44TRzkv/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: panic(...)
+    - pattern: return ...
+  - pattern-inside: |
+      $T.Lock()
+      ...
+  - pattern-not-inside: |
+      $T.Unlock()
+      ...
+  - pattern-not-inside: |
+      defer $T.Unlock()
+      ...
+  - pattern-not-inside: "$FOO(..., ..., func(...) { \n    ... \n})\n"
+- id: trailofbits.go.nil-check-after-call.nil-check-after-call
+  message: Potential `$FOO` nil dereference when `$BAR` is called
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-253: Incorrect Check of Function Return Value'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Possible nil dereferences
+    references:
+    - https://blog.trailofbits.com/2019/11/07/attacking-go-vr-ttps/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.nil-check-after-call.nil-check-after-call
+    shortlink: https://sg.run/05g5
+    semgrep.dev:
+      rule:
+        rule_id: L1Ur2r
+        version_id: PkTJkk5
+        url: https://semgrep.dev/playground/r/PkTJkk5/trailofbits.go.nil-check-after-call.nil-check-after-call
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $FOO.$BAR(...)
+        ...
+        if $FOO != nil { ... }
+    - pattern: |
+        $FOO.$BAR(...)
+        ...
+        if $FOO == nil { ... }
+    - pattern: |
+        $FUNC(..., $FOO.$BAR(...), ...)
+        ...
+        if $FOO != nil { ... }
+    - pattern: |
+        $FUNC(..., $FOO.$BAR(...), ...)
+        ...
+        if $FOO == nil { ... }
+  - pattern-not: |
+      $FOO.$BAR(...)
+      ...
+      $FOO = ...
+      ...
+      if $FOO != nil { ... }
+  - pattern-not: |
+      $FOO.$BAR(...)
+      ...
+      ..., $FOO, ... = ...
+      ...
+      if $FOO == nil { ... }
+  - pattern-not: |
+      $FOO.$BAR(...)
+      ...
+      ..., $FOO, ... = ...
+      ...
+      if $FOO != nil { ... }
+  - pattern-not: |
+      $FOO.$BAR(...)
+      ...
+      $FOO = ...
+      ...
+      if $FOO == nil { ... }
+  - pattern-not: |
+      ..., $FOO = $FOO.$BAR(...)
+      ...
+      if $FOO == nil { ... }
+  - pattern-not: |
+      ..., $FOO = $FOO.$BAR(...)
+      ...
+      if $FOO != nil { ... }
+  - pattern-not: |
+      $FOO = $FOO.$BAR(...)
+      ...
+      if $FOO == nil { ... }
+  - pattern-not: |
+      $FOO = $FOO.$BAR(...)
+      ...
+      if $FOO != nil { ... }
+- id: trailofbits.go.racy-append-to-slice.racy-append-to-slice
+  message: Appending `$SLICE` from multiple goroutines is not concurrency safe
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization
+      (''Race Condition'')'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Concurrent calls to `append` from multiple goroutines
+    references:
+    - https://go.dev/blog/maps#concurrency
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.racy-append-to-slice.racy-append-to-slice
+    shortlink: https://sg.run/jkNY
+    semgrep.dev:
+      rule:
+        rule_id: ReUoP7
+        version_id: JdTNPPN
+        url: https://semgrep.dev/playground/r/JdTNPPN/trailofbits.go.racy-append-to-slice.racy-append-to-slice
+        origin: community
+  patterns:
+  - pattern: "$SLICE = append($SLICE, $ITEM)\n"
+  - pattern-either:
+    - pattern-inside: |
+        var $SLICE []$TYPE
+        ...
+        for ... {
+          ...
+          go func(...) {
+            ...
+            $SLICE = append($SLICE, ...)
+            ...
+          }(...)
+          ...
+        }
+    - pattern-inside: |
+        $SLICE := make([]$TYPE, ...)
+        ...
+        for ... {
+          ...
+          go func(...) {
+            ...
+            $SLICE = append($SLICE, ...)
+            ...
+          }(...)
+          ...
+        }
+  - pattern-not-inside: |
+      $MUTEX.Lock()
+      ...
+      $MUTEX.Unlock()
+- id: trailofbits.go.racy-write-to-map.racy-write-to-map
+  message: Writing `$MAP` from multiple goroutines is not concurrency safe
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization
+      (''Race Condition'')'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Concurrent writes to the same map in multiple goroutines
+    references:
+    - https://go.dev/blog/maps#concurrency
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.racy-write-to-map.racy-write-to-map
+    shortlink: https://sg.run/1Gnw
+    semgrep.dev:
+      rule:
+        rule_id: AbUGWD
+        version_id: 5PTd44k
+        url: https://semgrep.dev/playground/r/5PTd44k/trailofbits.go.racy-write-to-map.racy-write-to-map
+        origin: community
+  patterns:
+  - pattern: "$MAP[$KEY] = $VALUE\n"
+  - pattern-inside: |
+      $MAP = make(map[$KTYPE]$VTYPE)
+      ...
+      for ... {
+        ...
+        go func(...) {
+          ...
+          $MAP[$KEY] = $VALUE
+          ...
+        }(...)
+        ...
+      }
+  - pattern-not-inside: |
+      $MUTEX.Lock()
+      ...
+      $MUTEX.Unlock()
+- id: trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
+  message: The `func ($O *$CODEC) ReadRequestBody($ARG $TYPE) error` function does
+    not handle `nil` argument, as the `ServerCodec` interface requires. An incorrect
+    implementation could lead to denial of service
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-476: NULL Pointer Dereference'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - "--no-technology--"
+    description: Possible incorrect `ServerCodec` interface implementation
+    references:
+    - https://github.com/golang/go/blob/go1.15.2/src/net/rpc/server.go#L643-L658
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
+    shortlink: https://sg.run/lx09
+    semgrep.dev:
+      rule:
+        rule_id: QrUp7k
+        version_id: GxTv00x
+        url: https://semgrep.dev/playground/r/GxTv00x/trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
+        origin: community
+  patterns:
+  - pattern: |
+      func ($O *$CODEC) ReadRequestBody($ARG $TYPE) error {
+        ...
+      }
+  - pattern-not: |
+      func ($O *$CODEC) ReadRequestBody($ARG $TYPE) error {
+        ...
+        if $ARG == nil { ... }
+        ...
+      }
+  - pattern-not: |
+      func ($O *$CODEC) ReadRequestBody($ARG $TYPE) error {
+        ...
+        if $ARG != nil { ... }
+        ...
+      }
+- id: trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
+  message: A `sync.Mutex` is copied in function `$FUNC` given that `$T` is value receiver.  As
+    a result, the struct `$T` may not be locked as intended
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-688: Function Call With Incorrect Variable or Reference as Argument'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: HIGH
+    impact: LOW
+    technology:
+    - "--no-technology--"
+    description: Copying of `sync.Mutex` via value receivers
+    references:
+    - https://go101.org/article/concurrent-common-mistakes.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
+    shortlink: https://sg.run/owlR
+    semgrep.dev:
+      rule:
+        rule_id: PeUBW1
+        version_id: A8T9WWW
+        url: https://semgrep.dev/playground/r/A8T9WWW/trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        func ($T $TYPE) $FUNC(...){
+          ...
+          $T.Lock()
+          ...
+        }
+    - pattern: |
+        func ($T $TYPE) $FUNC(...){
+          ...
+          $T.RLock()
+          ...
+        }
+  - pattern-not: |
+      func ($T2 *$TYPE2) $FUNC(...){
+        ...
+      }
+- id: trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
+  message: The function is vulnerable to DLL hijacking attacks. Use `windows.NewLazySystemDLL()`
+    function to limit DLL search to the Windows directory
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-427: Uncontrolled Search Path Element'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - "--no-technology--"
+    description: Use of function vulnerable to DLL hijacking attacks
+    references:
+    - https://pkg.go.dev/golang.org/x/sys/windows#LazyDLL
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
+    shortlink: https://sg.run/poE3
+    semgrep.dev:
+      rule:
+        rule_id: pKUQBW
+        version_id: BjTXBB7
+        url: https://semgrep.dev/playground/r/BjTXBB7/trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: syscall.LoadDLL(...)
+    - pattern: syscall.LoadLibrary(...)
+    - pattern: windows.LoadDLL(...)
+    - pattern: windows.MustLoadDLL(...)
+    - pattern: syscall.NewLazyDLL(...)
+    - pattern: |
+        $X = windows.NewLazyDLL(...)
+        ...
+        $X.$Y()
+        ...
+        $X.System = true
+    - pattern: |
+        $X = windows.NewLazyDLL(...)
+        ...
+        $X.$Y()
+  - pattern-not: |
+      $X = windows.NewLazyDLL(...)
+      ...
+      $X.System = true
+      ...
+      $X.$Y()
+- id: trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-called-inside-goroutine
+  message: |
+    Calling `$WG.Add` inside of an anonymous goroutine may result in `$WG.Wait`
+    waiting for more or less calls to `$WG.Done()` than expected
+  languages:
+  - go
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-667: Improper Locking'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Calls to `sync.WaitGroup.Add` inside of anonymous goroutines
+    references:
+    - https://go101.org/article/concurrent-common-mistakes.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-called-inside-goroutine
+    shortlink: https://sg.run/z98W
+    semgrep.dev:
+      rule:
+        rule_id: JDUQ3v
+        version_id: DkT6WW1
+        url: https://semgrep.dev/playground/r/DkT6WW1/trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-called-inside-goroutine
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $WG := &sync.WaitGroup{}
+        ...
+        go func(...) {
+          ...
+          $WG.Add(...)
+          ...
+        }(...)
+        ...
+        $WG.Wait()
+    - pattern: |
+        var $WG sync.WaitGroup
+        ...
+        go func(...) {
+          ...
+          $WG.Add(...)
+          ...
+        }(...)
+        ...
+        $WG.Wait()
+  - pattern-not-inside: |
+      for ... {
+        ...
+        $WG.Add(...)
+        ...
+      }
+- id: trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
+  message: Calling `$WG.Wait()` inside a loop blocks the call to `$WG.Done()`
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-667: Improper Locking'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Calls to `sync.WaitGroup.Wait` inside a loop
+    references:
+    - https://go101.org/article/concurrent-common-mistakes.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
+    shortlink: https://sg.run/pkGL
+    semgrep.dev:
+      rule:
+        rule_id: 5rU8Po
+        version_id: WrTWZZN
+        url: https://semgrep.dev/playground/r/WrTWZZN/trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        var $WG sync.WaitGroup
+        ...
+        for ... {
+          ...
+          go func(...){
+            ...
+            defer $WG.Done()
+            ...
+          }()
+          ...
+          $WG.Wait()
+          ...
+        }
+    - pattern: |
+        $WG := &sync.WaitGroup{}
+        ...
+        for ... {
+          ...
+          go func(...){
+            ...
+            defer $WG.Done()
+            ...
+          }()
+          ...
+          $WG.Wait()
+          ...
+        }
+    - pattern: |
+        var $WG sync.WaitGroup
+        ...
+        for ... {
+          ...
+          go func(...){
+            ...
+            $WG.Done()
+            ...
+          }()
+          ...
+          $WG.Wait()
+          ...
+        }
+    - pattern: |
+        $WG := &sync.WaitGroup{}
+        ...
+        for ... {
+          ...
+          go func(...){
+            ...
+            $WG.Done()
+            ...
+          }()
+          ...
+          $WG.Wait()
+          ...
+        }
+- id: trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+  message: 'The Apollo GraphQL uses the ''schemaDirectives'' option. This works in
+    ApolloServer v2, but does nothing in version >=3. Depending on what the directives
+    are used for, this can expose authenticated endpoints, disable rate limiting,
+    and more. See the references on how to create custom directives in v3 and v4. '
+  languages:
+  - js
+  - ts
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-686: Function Call With Incorrect Argument Type'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - graphql
+    - apollo-graphql-server
+    description: Use of outdated ApolloServer option 'schemaDirectives'
+    references:
+    - https://www.apollographql.com/docs/apollo-server/schema/directives/#custom-directives
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+    shortlink: https://sg.run/wE2N
+    semgrep.dev:
+      rule:
+        rule_id: OrU1Oz
+        version_id: 0bTLEEw
+        url: https://semgrep.dev/playground/r/0bTLEEw/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+        origin: community
+  pattern-either:
+  - pattern: 'new ApolloServer({..., schemaDirectives: ..., ...})'
+- id: trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+  languages:
+  - js
+  - ts
+  message: 'The Apollo GraphQL server is using the graphql-upload library. This library
+    allows file uploads using POSTs with content-type: multipart/form-data, which
+    can enable to CSRF attacks. Ensure that you are enabling CSRF protection if you
+    really need to use graphql-upload .'
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    subcategory:
+    - vuln
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    description: Use of the graphql-upload library
+    references:
+    - https://github.com/apollographql/apollo-server/security/advisories/GHSA-2p3c-p3qw-69r4
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Cross-Site Request Forgery (CSRF)
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+    shortlink: https://sg.run/xE20
+    semgrep.dev:
+      rule:
+        rule_id: eqUB1Q
+        version_id: K3Tv44w
+        url: https://semgrep.dev/playground/r/K3Tv44w/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+        origin: community
+  patterns:
+  - pattern: app.use(graphqlUploadExpress());
+- id: trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server is setup with a CORS policy that reflects any
+    origin, or with a regex that has known flaws.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Bad CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Validation
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+    shortlink: https://sg.run/vE1n
+    semgrep.dev:
+      rule:
+        rule_id: ZqUbNY
+        version_id: YDTprrn
+        url: https://semgrep.dev/playground/r/YDTprrn/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+        origin: community
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "{ origin: $BAD_CORS_ORIGIN }\n"
+    - metavariable-pattern:
+        metavariable: "$BAD_CORS_ORIGIN"
+        pattern-either:
+        - pattern: 'true
+
+            '
+        - patterns:
+          - pattern-either:
+            - pattern: "$CORS_SINGLE_ORIGIN\n"
+            - pattern: "[..., $CORS_SINGLE_ORIGIN, ...]\n"
+          - metavariable-pattern:
+              metavariable: "$CORS_SINGLE_ORIGIN"
+              pattern-either:
+              - pattern-regex: "^/.*[^\\\\]\\..*/$"
+              - pattern-regex: "^/.*[^$]/$"
+              - pattern: "'null'\n"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $X = require('apollo-server-express');
+          ...
+      - pattern-inside: |
+          import 'apollo-server-express';
+          ...
+    - pattern-either:
+      - patterns:
+        - pattern-inside: |
+            $X = new ApolloServer({...})
+            ...
+            $X.applyMiddleware({...})
+        - pattern: "$X.applyMiddleware({..., cors: $CORS_ORIGIN, ...})\n"
+    - focus-metavariable: "$CORS_ORIGIN"
+- id: trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server lacks a CORS policy. By default, the server uses
+    the Access-Control-Allow-Origin HTTP header with the wildcard value (*).
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Lack of CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Validation
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+    shortlink: https://sg.run/eNE0
+    semgrep.dev:
+      rule:
+        rule_id: d8UYAJ
+        version_id: l4T4ddv
+        url: https://semgrep.dev/playground/r/l4T4ddv/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $X = require('apollo-server-express');
+        ...
+    - pattern-inside: |
+        import 'apollo-server-express';
+        ...
+  - pattern: "$X = new ApolloServer({...})\n"
+  - pattern-not-inside: |
+      $X = new ApolloServer({...})
+      ...
+      $X.applyMiddleware({..., cors: ..., ...})
+- id: trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server is setup with a CORS policy that reflects any
+    origin, or with a regex that has known flaws.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - graphql
+    - apollo-graphql-server
+    description: Bad CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Validation
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+    shortlink: https://sg.run/Zo3x
+    semgrep.dev:
+      rule:
+        rule_id: EwUZNW
+        version_id: o5Tgzzd
+        url: https://semgrep.dev/playground/r/o5Tgzzd/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+        origin: community
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-inside: "{ origin: $BAD_CORS_ORIGIN }\n"
+    - metavariable-pattern:
+        metavariable: "$BAD_CORS_ORIGIN"
+        pattern-either:
+        - pattern: 'true
+
+            '
+        - patterns:
+          - pattern-either:
+            - pattern: "$CORS_SINGLE_ORIGIN\n"
+            - pattern: "[..., $CORS_SINGLE_ORIGIN, ...]\n"
+          - metavariable-pattern:
+              metavariable: "$CORS_SINGLE_ORIGIN"
+              pattern-either:
+              - pattern-regex: "^/.*[^\\\\]\\..*/$"
+              - pattern-regex: "^/.*[^$]/$"
+              - pattern: "'null'\n"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $X = require('apollo-server');
+          ...
+      - pattern-inside: |
+          import 'apollo-server';
+          ...
+    - pattern: 'new ApolloServer({..., cors: $CORS_ORIGIN, ...})
+
+        '
+    - focus-metavariable: "$CORS_ORIGIN"
+- id: trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server lacks a CORS policy. By default, the batteries-included
+    apollo-server package serves the Access-Control-Allow-Origin HTTP header with
+    the wildcard value (*).
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Lack of CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Validation
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+    shortlink: https://sg.run/dbNX
+    semgrep.dev:
+      rule:
+        rule_id: nJU3P4
+        version_id: 6xTvqq2
+        url: https://semgrep.dev/playground/r/6xTvqq2/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern-inside: |
+        $X = require('apollo-server');
+        ...
+    - pattern-inside: |
+        import 'apollo-server';
+        ...
+  - pattern: 'new ApolloServer({...})
+
+      '
+  - pattern-not: 'new ApolloServer({..., cors: ..., ...})
+
+      '
+- id: trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server lacks the 'csrfPrevention' option. This option
+    is 'false' by the default in v3 of the Apollo GraphQL v3, which can enable CSRF
+    attacks.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Lack of CSRF prevention
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors/#preventing-cross-site-request-forgery-csrf
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Cross-Site Request Forgery (CSRF)
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+    shortlink: https://sg.run/nEGg
+    semgrep.dev:
+      rule:
+        rule_id: 7KU8o3
+        version_id: zyTKyyB
+        url: https://semgrep.dev/playground/r/zyTKyyB/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+        origin: community
+  patterns:
+  - pattern: new ApolloServer({...})
+  - pattern-not: 'new ApolloServer({..., csrfPrevention: true, ...})
+
+      '
+- id: trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server sets the 'csrfPrevention' option to false. This
+    can enable CSRF attacks.
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v4
+    description: CSRF protection disabled
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors/#preventing-cross-site-request-forgery-csrf
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Cross-Site Request Forgery (CSRF)
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+    shortlink: https://sg.run/Eb1P
+    semgrep.dev:
+      rule:
+        rule_id: L1UjQ3
+        version_id: pZT1GGe
+        url: https://semgrep.dev/playground/r/pZT1GGe/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+        origin: community
+  patterns:
+  - pattern: 'new ApolloServer({..., csrfPrevention: false, ...})
+
+      '
+- id: trailofbits.python.lxml-in-pandas.lxml-in-pandas
+  message: Found usage of the `$FLAVOR` library, which is vulnerable to attacks such
+    as XML external entity (XXE) attacks
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
+    subcategory:
+    - vuln
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - pandas
+    description: Potential XXE attacks from loading `lxml` in pandas
+    references:
+    - https://lxml.de/FAQ.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - XML Injection
+    source: https://semgrep.dev/r/trailofbits.python.lxml-in-pandas.lxml-in-pandas
+    shortlink: https://sg.run/1z1G
+    semgrep.dev:
+      rule:
+        rule_id: 0oUrdJ
+        version_id: X0TQZZl
+        url: https://semgrep.dev/playground/r/X0TQZZl/trailofbits.python.lxml-in-pandas.lxml-in-pandas
+        origin: community
+  pattern-either:
+  - patterns:
+    - pattern: pandas.read_html($IO)
+    - pattern-not: pandas.read_html(**$KWARGS)
+  - patterns:
+    - metavariable-pattern:
+        metavariable: "$FLAVOR"
+        patterns:
+        - pattern: "..."
+        - pattern-not: '"bs4"
+
+            '
+        - pattern-not: '"html5lib"
+
+            '
+    - pattern-either:
+      - pattern: pandas.read_html(..., flavor=$FLAVOR, ...)
+      - patterns:
+        - pattern-inside: |
+            $KWARGS = {..., "flavor": $FLAVOR, ...}
+            ...
+        - pattern: 'pandas.read_html(**$KWARGS)
+
+            '
+- id: trailofbits.python.pickles-in-numpy.pickles-in-numpy
+  message: Functions reliant on pickle can result in arbitrary code execution.  Consider
+    using fickling or switching to a safer serialization method
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - numpy
+    description: Potential arbitrary code execution from `NumPy` functions reliant
+      on pickling
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-numpy.pickles-in-numpy
+    shortlink: https://sg.run/ryKe
+    semgrep.dev:
+      rule:
+        rule_id: lBUWjy
+        version_id: NdT3AAp
+        url: https://semgrep.dev/playground/r/NdT3AAp/trailofbits.python.pickles-in-numpy.pickles-in-numpy
+        origin: community
+  patterns:
+  - pattern: numpy.load(..., allow_pickle=$VALUE, ...)
+  - pattern-not: numpy.load("...", ...)
+  - pattern-not: numpy.load(..., file="...", ...)
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      patterns:
+      - pattern-not: 'False
+
+          '
+      - pattern-not: "[]\n"
+      - pattern-not: 'None
+
+          '
+      - pattern-not: '""'
+- id: trailofbits.python.pickles-in-pandas.pickles-in-pandas
+  message: Functions reliant on pickle can result in arbitrary code execution. Consider
+    using fickling or switching to a safer serialization method
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pandas
+    description: Potential arbitrary code execution from `Pandas` functions reliant
+      on pickling
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-pandas.pickles-in-pandas
+    shortlink: https://sg.run/bXQW
+    semgrep.dev:
+      rule:
+        rule_id: PeU06j
+        version_id: kbTdRRB
+        url: https://semgrep.dev/playground/r/kbTdRRB/trailofbits.python.pickles-in-pandas.pickles-in-pandas
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: pandas.read_pickle(...)
+    - pattern: pandas.to_pickle(...)
+    - patterns:
+      - pattern-inside: |
+          import pandas
+          ...
+      - pattern: "$SMTH.to_pickle(...)"
+  - pattern-not: pandas.read_pickle("...")
+  - pattern-not: pandas.to_pickle(..., "...")
+  - pattern-not: $SMTH.to_pickle("...")
+- id: trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-distributed
+  message: Functions reliant on pickle can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pytorch
+    description: Potential arbitrary code execution from `PyTorch.Distributed` functions
+      reliant on pickling
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-distributed
+    shortlink: https://sg.run/ZZxW
+    semgrep.dev:
+      rule:
+        rule_id: qNUrw1
+        version_id: w8T988E
+        url: https://semgrep.dev/playground/r/w8T988E/trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-distributed
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: torch.distributed.broadcast_object_list(...)
+    - pattern: torch.distributed.all_gather_object(...)
+    - pattern: torch.distributed.gather_object(...)
+    - pattern: torch.distributed.scatter_object_list(...)
+- id: trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
+  message: Functions reliant on pickle can result in arbitrary code execution.  Consider
+    loading from `state_dict`, using fickling, or switching to a safer serialization
+    method like ONNX
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pytorch
+    description: Potential arbitrary code execution from `PyTorch` functions reliant
+      on pickling
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
+    shortlink: https://sg.run/NwQy
+    semgrep.dev:
+      rule:
+        rule_id: JDU6WD
+        version_id: xyTKWWO
+        url: https://semgrep.dev/playground/r/xyTKWWO/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: torch.save(...)
+    - pattern: torch.load(...)
+  - pattern-not: torch.load("...")
+  - pattern-not: torch.save(..., "...")
+  - pattern-not: torch.save($M.state_dict(), ...)
+  - pattern-not-inside: "$M.load_state_dict(torch.load(...))"
+- id: trailofbits.python.scikit-joblib-load.scikit-joblib-load
+  message: Scikit `joblib` uses pickle under the hood. Functions reliant on pickle
+    can result in arbitrary code execution. Consider using `skops` instead.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - scikit
+    description: Potential arbitrary code execution from `SciKit.Joblib` functions
+      reliant on pickling
+    references:
+    - https://scikit-learn.org/stable/model_persistence.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.scikit-joblib-load.scikit-joblib-load
+    shortlink: https://sg.run/wzW6
+    semgrep.dev:
+      rule:
+        rule_id: DbULlX
+        version_id: d6Trzzd
+        url: https://semgrep.dev/playground/r/d6Trzzd/trailofbits.python.scikit-joblib-load.scikit-joblib-load
+        origin: community
+  patterns:
+  - pattern: joblib.load(...)
+  - pattern-not: joblib.load("...")
+- id: trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-traversal
+  message: Possible path traversal through `tarfile.open($PATH).extractall()` if the
+    source tar is controlled by an attacker
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path
+      Traversal'')'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Potential path traversal in call to `extractall` for a `tarfile`
+    references:
+    - https://docs.python.org/3/library/tarfile.html#tarfile.TarFile.extractall
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Path Traversal
+    source: https://semgrep.dev/r/trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-traversal
+    shortlink: https://sg.run/2RLD
+    semgrep.dev:
+      rule:
+        rule_id: GdUZxq
+        version_id: ZRTQqqP
+        url: https://semgrep.dev/playground/r/ZRTQqqP/trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-traversal
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        with tarfile.open(...) as $TAR:
+            ...
+            $TAR.extractall(...)
+    - pattern: 'tarfile.open(...).extractall(...)
+
+        '
+    - pattern: |
+        $TAR = tarfile.open(...)
+        ...
+        $TAR.extractall(...)
+  - pattern-not: |
+      with tarfile.open(...) as $TAR:
+          ...
+          $TAR.extractall(..., members=$MEMBERS, ...)
+  - pattern-not: 'tarfile.open(...).extractall(..., members=$MEMBERS, ...)
+
+      '
+  - pattern-not: |
+      $TAR = tarfile.open(...)
+      ...
+      $TAR.extractall(..., members=$MEMBERS, ...)
+- id: trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytorch-distributed
+  message: Not waiting for requests is a source of undefined behavior
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-758: Reliance on Undefined, Unspecified, or Implementation-Defined Behavior'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - pytorch
+    description: Possible `PyTorch` undefined behavior when not waiting for requests
+    references:
+    - https://pytorch.org/docs/stable/distributed.html#torch.distributed.isend
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytorch-distributed
+    shortlink: https://sg.run/LpoX
+    semgrep.dev:
+      rule:
+        rule_id: 5rUxGL
+        version_id: ExTj44x
+        url: https://semgrep.dev/playground/r/ExTj44x/trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytorch-distributed
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: "$REQ = torch.distributed.irecv(...)"
+    - pattern: "$REQ = torch.distributed.isend(...)"
+  - pattern-not-inside: |
+      ...
+      $REQ.wait()

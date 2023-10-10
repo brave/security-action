@@ -281,6 +281,29 @@ rules:
   - pattern: "(unsigned long $UNSIGNED) >= 0"
   - pattern: "(unsigned long int $UNSIGNED) >= 0"
   - pattern: "(size_t $UNSIGNED) >= 0"
+- id: raptor-incorrect-use-of-memset
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://lkml.org/lkml/2009/11/11/336
+    - https://bugs.mysql.com/bug.php?id=23181
+    confidence: HIGH
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-memset.yaml
+  message: The invocation of memset() is easy to get wrong. The second argument is
+    the character and the third argument is the size, but sometimes these arguments
+    are in the wrong order. This results in a no-op.
+  severity: ERROR
+  languages:
+  - c
+  - cpp
+  pattern-either:
+  - pattern: memset($S, $C, 0);
+  - pattern: memset($S, $C, '\0');
+  - pattern: memset($S, sizeof(...), $N);
 - id: raptor-incorrect-use-of-sizeof
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -457,7 +480,7 @@ rules:
     if the value of the result cannot be represented. They return  0 (or 0.0) if the
     string does not represent an integer (or decimal),  which is indistinguishable
     from a correctly formatted, zero-denoting  input string.
-  severity: WARNING
+  severity: INFO
   languages:
   - c
   - cpp
@@ -730,7 +753,7 @@ rules:
     - http://www.phrack.org/issues/60/10.html#article
     - https://docs.microsoft.com/en-us/cpp/sanitizers/asan-error-examples
     - https://dustri.org/b/playing-with-weggli.html
-    confidence: MEDIUM
+    confidence: LOW
     license: MIT
     category: security
     subcategory:
@@ -821,6 +844,22 @@ rules:
         - pattern: realloc
         - pattern: reallocf
         - pattern: aligned_alloc
+  - pattern: "$X > $MAX || ($X + $Y) > $MAX"
+  - pattern: "$X >= $MAX || ($X + $Y) > $MAX"
+  - pattern: "$X > $MAX || ($X + $Y) >= $MAX"
+  - pattern: "$X >= $MAX || ($X + $Y) >= $MAX"
+  - pattern: "$X < $MAX && ($X + $Y) < $MAX"
+  - pattern: "$X <= $MAX && ($X + $Y) < $MAX"
+  - pattern: "$X < $MAX && ($X + $Y) <= $MAX"
+  - pattern: "$X <= $MAX && ($X + $Y) <= $MAX"
+  - pattern: "$X > $MAX || ($X * $Y) > $MAX"
+  - pattern: "$X >= $MAX || ($X * $Y) > $MAX"
+  - pattern: "$X > $MAX || ($X * $Y) >= $MAX"
+  - pattern: "$X >= $MAX || ($X * $Y) >= $MAX"
+  - pattern: "$X < $MAX && ($X * $Y) < $MAX"
+  - pattern: "$X <= $MAX && ($X * $Y) < $MAX"
+  - pattern: "$X < $MAX && ($X * $Y) <= $MAX"
+  - pattern: "$X <= $MAX && ($X * $Y) <= $MAX"
 - id: raptor-interesting-api-calls
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -867,7 +906,7 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*s\\w?printf\\w*\\s*$|^\\w*sn\\w?printf\\w*\\s*$"
+        regex: "^\\w*s\\w?printf\\w*\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -877,7 +916,12 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*get(s|c|char|pw|pass|wd|cwd|env|opt|opt_long)\\s*$"
+        regex: "^\\w*get(s|c|char|pw|pass|wd|cwd|opt|opt_long)\\s*$"
+  - patterns:
+    - pattern: "$FUN(...)"
+    - metavariable-regex:
+        metavariable: "$FUN"
+        regex: "^\\w*(get|set|put|unset)env\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -887,7 +931,7 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*alloca?\\s*$"
+        regex: "^\\w*alloc(a|f)?\\s*$|^\\w*alloc_?array\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -907,17 +951,22 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
+        regex: "^\\w*rand\\s*$"
+  - patterns:
+    - pattern: "$FUN(...)"
+    - metavariable-regex:
+        metavariable: "$FUN"
         regex: "^\\w*mk\\w?temp(64)?\\s*$|^\\w*te?mpnam\\s*$|^\\w*tmpfile\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*mkdir\\s*$|^\\w*creat\\s*$|^\\w*link(at)?\\s*$|^\\w*rename(at)?\\s*$|^\\w*access(at)?\\s*$|^\\w*stat(at)?\\s*$|^\\w*ch(own|mod)(at)?\\s*$"
+        regex: "^\\w*mkdir\\s*$|^\\w*creat\\s*$|^\\w*link(at)?\\s*$|^\\w*rename(at)?\\s*$|^\\w*access(at|_ok)?\\s*$|^\\w*stat(at)?\\s*$|^\\w*ch(own|mod)(at)?\\s*$|^\\w*realpath(at)?\\s*$|^\\w*readlink\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*rand\\s*$"
+        regex: "^\\w*copy_(from|to)_user\\s*$|^\\w*(get|put)_user\\s*$|^\\w*copy(in|out)\\s*$"
 - id: raptor-memory-address-exposure
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1207,6 +1256,8 @@ rules:
         metavariable: "$LEN"
         patterns:
         - pattern-not: "$VAL - 1"
+  - pattern: "$STR[strlen($STR) - 1]"
+  - pattern: malloc(strlen($STR))
 - id: raptor-pointer-subtraction
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1277,7 +1328,7 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/ret-stack-address.yaml
   message: A function returns the address of a stack variable, which will cause unintended
     program behavior, typically in the form of a crash.
-  severity: WARNING
+  severity: INFO
   languages:
   - c
   - cpp
@@ -1505,6 +1556,18 @@ rules:
     - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) > $EXPR ...>) ...
     - pattern-not-inside: if (<... ($EXPR1 | $EXPR2) >= $EXPR ...>) ...
   - pattern: "$EXPR1 =+ $EXPR2"
+  - pattern: "($EXPR && $EXPR)"
+  - pattern: "($EXPR || $EXPR)"
+  - pattern: "($EXPR == $EXPR)"
+  - pattern: "($EXPR != $EXPR)"
+  - pattern: "($EXPR < $EXPR)"
+  - pattern: "($EXPR <= $EXPR)"
+  - pattern: "($EXPR > $EXPR)"
+  - pattern: "($EXPR >= $EXPR)"
+  - pattern-either:
+    - pattern: "(char * $PTR) = '\\0'"
+    - pattern: "(char * $PTR) == '\\0'"
+    - pattern: "(char * $PTR) != '\\0'"
   - pattern: if ($COND);
   - pattern: for ($EXPR1; $EXPR2; $EXPR3);
   - patterns:
@@ -1907,7 +1970,7 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/write-into-stack-buffer.yaml
   message: The software directly writes into a stack buffer. This might lead to a
     stack-based buffer overflow.
-  severity: WARNING
+  severity: INFO
   languages:
   - c
   - cpp
@@ -2011,3 +2074,645 @@ rules:
         - pattern: pread
         - pattern: recv
         - pattern: recvfrom
+- id: trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+  message: 'Variable `$X` is likely modified and later used on error. In some cases
+    this could result  in panics due to a nil dereference  '
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-665: Improper Initialization'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Possible unintentional assignment when an error occurs
+    references:
+    - https://blog.trailofbits.com/2019/11/07/attacking-go-vr-ttps/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+    shortlink: https://sg.run/WWQ2
+    semgrep.dev:
+      rule:
+        rule_id: kxU6Xb
+        version_id: gET3W1b
+        url: https://semgrep.dev/playground/r/gET3W1b/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: |
+        $X, err = ...
+        if err != nil {
+          <... $X ...>
+        }
+    - pattern: |
+        $X, err := ...
+        if err != nil {
+          ...
+          <... $X.$Y ...>
+        }
+- id: trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
+  message: Iteration over a possibly empty map `$C`. This is likely a bug or redundant
+    code
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-665: Improper Initialization'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - "--no-technology--"
+    description: Probably redundant iteration over an empty map
+    references:
+    - https://blog.trailofbits.com/2019/11/07/attacking-go-vr-ttps/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
+    shortlink: https://sg.run/08jj
+    semgrep.dev:
+      rule:
+        rule_id: wdUlww
+        version_id: QkTW6zJ
+        url: https://semgrep.dev/playground/r/QkTW6zJ/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
+        origin: community
+  patterns:
+  - pattern: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $C[$X] = $V
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $C[$X]++
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $C[$X]--
+      ...
+      for $K := range $C { ... }
+  - pattern-not: |
+      $C = make(map[$T1] $T2, ...)
+      ...
+      $CODEC.Unmarshal($BYTES, &$C)
+      ...
+      for $K := range $C { ... }
+- id: trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
+  message: Downcasting or changing sign of an integer with `$CAST_METHOD` method
+  languages:
+  - go
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-681: Incorrect Conversion between Numeric Types'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: LOW
+    impact: MEDIUM
+    technology:
+    - "--no-technology--"
+    description: Integer underflows
+    references:
+    - https://github.com/golang/go/issues/30209
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
+    shortlink: https://sg.run/65WB
+    semgrep.dev:
+      rule:
+        rule_id: 4bU2AZ
+        version_id: RGTDPPg
+        url: https://semgrep.dev/playground/r/RGTDPPg/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
+        origin: community
+  pattern-either:
+  - patterns:
+    - metavariable-pattern:
+        metavariable: "$CAST_METHOD"
+        pattern-either:
+        - pattern: uint8
+        - pattern: uint16
+        - pattern: uint32
+        - pattern: int8
+        - pattern: int16
+        - pattern: int32
+    - pattern-either:
+      - pattern: |
+          $X, ... = strconv.Atoi(...)
+          ...
+          $CAST_METHOD($X)
+      - pattern: |
+          $X, ... = strconv.ParseInt(..., ..., 64)
+          ...
+          $CAST_METHOD($X)
+      - pattern: |
+          $X, ... = strconv.ParseUint(..., ..., 64)
+          ...
+          $CAST_METHOD($X)
+  - pattern: |
+      $X, ... = strconv.Atoi(...)
+      ...
+      uint64($X)
+  - pattern: |
+      $X, ... = strconv.ParseInt(..., ..., 64)
+      ...
+      uint64($X)
+  - pattern: |
+      $X, ... = strconv.ParseUint(..., ..., 64)
+      ...
+      int64($X)
+  - patterns:
+    - metavariable-pattern:
+        metavariable: "$CAST_METHOD"
+        pattern-either:
+        - pattern: uint8
+        - pattern: uint16
+        - pattern: int8
+        - pattern: int16
+    - pattern-either:
+      - pattern: |
+          $X, ... = strconv.ParseInt(..., ..., 32)
+          ...
+          $CAST_METHOD($X)
+      - pattern: |
+          $X, ... = strconv.ParseUint(..., ..., 32)
+          ...
+          $CAST_METHOD($X)
+  - pattern: |
+      $X, ... = strconv.ParseInt(..., ..., 32)
+      ...
+      uint32($X)
+  - pattern: |
+      $X, ... = strconv.ParseUint(..., ..., 32)
+      ...
+      int32($X)
+  - patterns:
+    - metavariable-pattern:
+        metavariable: "$CAST_METHOD"
+        pattern-either:
+        - pattern: uint8
+        - pattern: int8
+    - pattern-either:
+      - pattern: |
+          $X, ... = strconv.ParseInt(..., ..., 16)
+          ...
+          $CAST_METHOD($X)
+      - pattern: |
+          $X, ... = strconv.ParseUint(..., ..., 16)
+          ...
+          $CAST_METHOD($X)
+  - pattern: |
+      $X, ... = strconv.ParseInt(..., ..., 16)
+      ...
+      uint16($X)
+  - pattern: |
+      $X, ... = strconv.ParseUint(..., ..., 16)
+      ...
+      int16($X)
+  - pattern: |
+      $X, ... = strconv.ParseInt(..., ..., 8)
+      ...
+      uint8($X)
+  - pattern: |
+      $X, ... = strconv.ParseUint(..., ..., 8)
+      ...
+      int8($X)
+- id: trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+  languages:
+  - js
+  - ts
+  message: The Apollo GraphQL server is setup with a CORS policy that does not deny
+    all origins. Carefully review the origins to see if any of them are incorrectly
+    setup (third-party websites, bad regexes, functions that reflect every origin,
+    etc.).
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - graphql
+    - apollo-graphql-server
+    - apollo-graphql-server-v3
+    description: Potentially bad CORS policy
+    references:
+    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Validation
+    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+    shortlink: https://sg.run/ORxR
+    semgrep.dev:
+      rule:
+        rule_id: v8UlNl
+        version_id: qkT2oo4
+        url: https://semgrep.dev/playground/r/qkT2oo4/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+        origin: community
+  mode: taint
+  pattern-sources:
+  - pattern: "{ origin: function(...) {...} }\n"
+  - patterns:
+    - pattern-inside: "{ origin: $NOT_KNOWN_GOOD_CORS_ORIGIN }\n"
+    - metavariable-pattern:
+        metavariable: "$NOT_KNOWN_GOOD_CORS_ORIGIN"
+        patterns:
+        - pattern-not: 'false
+
+            '
+        - pattern-not: "[]\n"
+  pattern-sinks:
+  - patterns:
+    - pattern: "{..., cors: $CORS_ORIGIN, ...}\n"
+    - focus-metavariable: "$CORS_ORIGIN"
+- id: trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
+  message: 'If possible, it is better to rely on automatic pinning in PyTorch to avoid
+    undefined behavior and for efficiency '
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - pytorch
+    description: "`PyTorch` memory not automatically pinned"
+    references:
+    - https://pytorch.org/docs/stable/data.html#memory-pinning
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
+    shortlink: https://sg.run/jz5N
+    semgrep.dev:
+      rule:
+        rule_id: WAUN1Z
+        version_id: 2KTz44E
+        url: https://semgrep.dev/playground/r/2KTz44E/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
+        origin: community
+  pattern-either:
+  - patterns:
+    - pattern: torch.utils.data.DataLoader(...)
+    - pattern-not: torch.utils.data.DataLoader(..., pin_memory=$VALUE, ...)
+  - pattern: torch.utils.data.DataLoader(..., pin_memory=False, ...)
+- id: trailofbits.python.numpy-distutils.numpy-distutils
+  message: NumPy distutils is deprecated, and will be removed in the future
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - numpy
+    description: Use of deprecated `numpy.distutils`
+    references:
+    - https://numpy.org/doc/stable/reference/distutils.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.numpy-distutils.numpy-distutils
+    shortlink: https://sg.run/rqGP
+    semgrep.dev:
+      rule:
+        rule_id: GdUgN8
+        version_id: jQTgqq9
+        url: https://semgrep.dev/playground/r/jQTgqq9/trailofbits.python.numpy-distutils.numpy-distutils
+        origin: community
+  patterns:
+  - pattern: 'import numpy.distutils
+
+      '
+- id: trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+  message: Compiling arbitrary code can result in code execution. Ensure the source
+    code is from a trusted location
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - numpy
+    description: Potential arbitrary code execution from `NumPy` `f2py` compilation
+    references:
+    - https://numpy.org/doc/stable/f2py/usage.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+    shortlink: https://sg.run/bEdP
+    semgrep.dev:
+      rule:
+        rule_id: ReUdJ0
+        version_id: 1QTOZZ0
+        url: https://semgrep.dev/playground/r/1QTOZZ0/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+        origin: community
+  patterns:
+  - pattern: numpy.f2py.compile(...)
+  - pattern-not: numpy.f2py.compile("...", ...)
+- id: trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+  message: 'Using the NumPy RNG inside of a PyTorch dataset can lead to a number of
+    issues with loading data, including identical augmentations. Instead, use the
+    random number generators built into Python and PyTorch '
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-330: Use of Insufficiently Random Values'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - pytorch
+    - numpy
+    description: Calls to the `NumPy` RNG inside of a `Torch` dataset
+    references:
+    - https://tanelp.github.io/posts/a-bug-that-plagues-thousands-of-open-source-ml-projects
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+    shortlink: https://sg.run/dnR6
+    semgrep.dev:
+      rule:
+        rule_id: KxURLn
+        version_id: 9lTdOOL
+        url: https://semgrep.dev/playground/r/9lTdOOL/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+        origin: community
+  patterns:
+  - pattern: |
+      class $X(torch.utils.data.Dataset):
+        ...
+        def __getitem__(...):
+          ...
+          numpy.random.randint(...)
+          ...
+- id: trailofbits.python.numpy-load-library.numpy-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - numpy
+    description: Potential arbitrary code execution from `NumPy` library loading
+    references:
+    - https://numpy.org/doc/stable/reference/routines.ctypeslib.html#numpy.ctypeslib.load_library
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.numpy-load-library.numpy-load-library
+    shortlink: https://sg.run/NXkL
+    semgrep.dev:
+      rule:
+        rule_id: AbUxDq
+        version_id: rxTykkg
+        url: https://semgrep.dev/playground/r/rxTykkg/trailofbits.python.numpy-load-library.numpy-load-library
+        origin: community
+  patterns:
+  - pattern: numpy.ctypeslib.load_library(...)
+  - pattern-not: numpy.ctypeslib.load_library("...", "...")
+- id: trailofbits.python.onnx-session-options.onnx-session-options
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - onnx
+    description: Potential arbitrary code execution from `ONNX` library loading
+    references:
+    - https://onnxruntime.ai/docs/reference/operators/add-custom-op.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.onnx-session-options.onnx-session-options
+    shortlink: https://sg.run/kRd1
+    semgrep.dev:
+      rule:
+        rule_id: BYUoqy
+        version_id: bZTbOOD
+        url: https://semgrep.dev/playground/r/bZTbOOD/trailofbits.python.onnx-session-options.onnx-session-options
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $SESSION = onnxruntime.SessionOptions(...)
+      ...
+  - pattern: "$SESSION.register_custom_ops_library(...)"
+  - pattern-not: $SESSION.register_custom_ops_library("...")
+- id: trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pytorch
+    description: Potential arbitrary code execution from `PyTorch` library loading
+    references:
+    - https://pytorch.org/tutorials/advanced/torch_script_custom_classes.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+    shortlink: https://sg.run/nD6d
+    semgrep.dev:
+      rule:
+        rule_id: lBUYD9
+        version_id: O9TNGGw
+        url: https://semgrep.dev/playground/r/O9TNGGw/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+        origin: community
+  patterns:
+  - pattern: torch.classes.load_library(...)
+  - pattern-not: torch.classes.load_library("...")
+- id: trailofbits.python.pytorch-package.pytorch-package
+  message: Avoid importing torch.package - it can result in arbitrary code execution
+    via pickle
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - pytorch
+    description: Potential arbitrary code execution from `torch.package`
+    references:
+    - https://pytorch.org/docs/1.13/package.html#torch-package
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pytorch-package.pytorch-package
+    shortlink: https://sg.run/EK35
+    semgrep.dev:
+      rule:
+        rule_id: PeUKGk
+        version_id: e1T0vvB
+        url: https://semgrep.dev/playground/r/e1T0vvB/trailofbits.python.pytorch-package.pytorch-package
+        origin: community
+  pattern: import torch.package
+- id: trailofbits.python.tensorflow-load-library.tensorflow-load-library
+  message: Loading custom operator libraries can result in arbitrary code execution
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-676: Use of Potentially Dangerous Function'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - tensorflow
+    description: Potential arbitrary code execution from `TensorFlow` library loading
+    references:
+    - https://www.tensorflow.org/api_docs/python/tf/load_library
+    - https://www.tensorflow.org/api_docs/python/tf/load_op_library
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Dangerous Method or Function
+    source: https://semgrep.dev/r/trailofbits.python.tensorflow-load-library.tensorflow-load-library
+    shortlink: https://sg.run/xp0j
+    semgrep.dev:
+      rule:
+        rule_id: WAUgBJ
+        version_id: nWTxYYN
+        url: https://semgrep.dev/playground/r/nWTxYYN/trailofbits.python.tensorflow-load-library.tensorflow-load-library
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: tensorflow.load_library(...)
+    - pattern: tensorflow.load_op_library(...)
+  - pattern-not: tensorflow.load_library("...")
+  - pattern-not: tensorflow.load_op_library("...")
+- id: trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+  message: "`expect` or `unwrap` called in function returning a `Result`"
+  languages:
+  - rust
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-755: Improper Handling of Exceptional Conditions'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - "--no-technology--"
+    description: Calling `unwrap` or `expect` in a function returning a `Result`
+    references:
+    - https://doc.rust-lang.org/std/result/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+    shortlink: https://sg.run/WpeL
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUPQ3
+        version_id: 7ZTgeey
+        url: https://semgrep.dev/playground/r/7ZTgeey/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: "$EXPR.unwrap()"
+    - pattern: "$EXPR.expect(...)"
+  - pattern-either:
+    - pattern-inside: |
+        fn $FUNC(...) -> Result<$T1, $T2> {
+            ...
+        }
+    - pattern-inside: |
+        fn $FUNC(...) -> Result<$T> {
+            ...
+        }
+    - patterns:
+      - pattern-inside: |
+          fn $FUNC(...) -> $RETTYPE {
+              ...
+          }
+      - pattern-either:
+        - pattern-inside: |
+            type $RETTYPE = Result<$T>;
+            ...
+            fn $FUNC(...) -> $RETTYPE {
+                ...
+            }
+        - pattern-inside: |
+            type $RETTYPE = Result<$T1, $T2>;
+            ...
+            fn $FUNC(...) -> $RETTYPE {
+                ...
+            }
