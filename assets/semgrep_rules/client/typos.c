@@ -42,6 +42,26 @@ good1(char *path, char *dir, char *obj)
 	}
 }
 
+void
+good2(char *path, char *dir, char *obj)
+{
+	char *last;
+
+	// ok: raptor-typos
+   	if (char *last = strrchr(path,'/' )) {
+		strcpy(obj, last + 1);
+      		if (last == path) {
+			strcpy(dir, "/");
+		} else {
+			*last = '\0';
+			strcpy(dir, path);
+			*last = '/';
+		}
+   	} else {
+		dir[0] = dir[0] = '\0';
+	}
+}
+
 int bad2(char *username)
 {
 	int f;
@@ -67,8 +87,8 @@ int bad4(char *src, int len)
 {
 	char dst[256];
 
-	// ruleid: raptor-typos
-	if (len > 0 && len <= sizeof(dst)); 
+	// REMOVED, false positive on Chromium: raptor-typos
+	if (len > 0 && len <= sizeof(dst)); ti
 		memcpy(dst, src, len);
 }
 
