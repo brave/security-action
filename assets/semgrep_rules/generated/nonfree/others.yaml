@@ -779,63 +779,6 @@ rules:
   languages:
   - hcl
   severity: INFO
-- id: trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
-  message: Usage of NumPy library inside PyTorch `$MODULE` module was found. Avoid
-    mixing these libraries for efficiency and proper ONNX loading
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: performance
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    technology:
-    - pytorch
-    - numpy
-    description: Uses of `NumPy` functions inside `PyTorch` modules
-    references:
-    - https://tanelp.github.io/posts/a-bug-that-plagues-thousands-of-open-source-ml-projects
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
-    shortlink: https://sg.run/9vxr
-    semgrep.dev:
-      rule:
-        rule_id: KxU507
-        version_id: NdTKpl
-        url: https://semgrep.dev/playground/r/NdTKpl/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
-        origin: community
-  patterns:
-  - pattern: "$RESULT = numpy.$FUNCTION(...)"
-  - pattern-inside: |
-      class $MODULE(torch.nn.Module):
-          ...
-- id: trailofbits.python.pytorch-tensor.pytorch-tensor
-  message: Avoid using `torch.Tensor()` to directly create a tensor for efficiency
-    and proper parsing
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: performance
-    subcategory:
-    - audit
-    confidence: HIGH
-    technology:
-    - pytorch
-    description: Possible parsing issues and inefficiency from improper tensor creation
-    references:
-    - https://pytorch.org/docs/stable/tensors.html
-    license: CC-BY-NC-SA-4.0
-    source: https://semgrep.dev/r/trailofbits.python.pytorch-tensor.pytorch-tensor
-    shortlink: https://sg.run/72xG
-    semgrep.dev:
-      rule:
-        rule_id: JDU4RQ
-        version_id: nWTbb8
-        url: https://semgrep.dev/playground/r/nWTbb8/trailofbits.python.pytorch-tensor.pytorch-tensor
-        origin: community
-  pattern: torch.Tensor(...)
 - id: typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
   patterns:
   - pattern-inside: |
@@ -1013,6 +956,7 @@ rules:
     to an HTML element, which can cause console warnings or worse, give malicious
     actors a way to inject unexpected attributes.
   languages:
+  - typescript
   - javascript
   severity: WARNING
   metadata:
@@ -1028,8 +972,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6Uky5
-        version_id: JdTRyj
-        url: https://semgrep.dev/playground/r/JdTRyj/typescript.react.best-practice.react-props-spreading.react-props-spreading
+        version_id: K3Tvr5j
+        url: https://semgrep.dev/playground/r/K3Tvr5j/typescript.react.best-practice.react-props-spreading.react-props-spreading
         origin: community
 - id: typescript.react.portability.i18next.i18next-key-format.i18next-key-format
   patterns:
@@ -1222,29 +1166,4 @@ rules:
         rule_id: nJUPJL
         version_id: BjTLNY
         url: https://semgrep.dev/playground/r/BjTLNY/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
-        origin: community
-- id: typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
-  patterns:
-  - pattern: useSelect($X1, $X2, '$LABEL', $X4)
-  - pattern-not: useSelect($X1, $X2, t('...'), $X4)
-  message: React useSelect() label is not internationalized - '$LABEL'
-  languages:
-  - ts
-  - js
-  severity: WARNING
-  metadata:
-    category: portability
-    technology:
-    - react
-    references:
-    - https://hendyirawan.notion.site/Internationalization-Localization-Policy-318c21674e5f44c48d6f136a6eb2e024
-    - https://react.i18next.com/
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
-    shortlink: https://sg.run/0WAJ
-    semgrep.dev:
-      rule:
-        rule_id: lBUXZO
-        version_id: GxT8P7
-        url: https://semgrep.dev/playground/r/GxT8P7/typescript.react.portability.i18next.useselect.react-useselect-label-not-internationalized
         origin: community

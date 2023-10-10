@@ -980,8 +980,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUkrK
-        version_id: WrTbWG
-        url: https://semgrep.dev/playground/r/WrTbWG/csharp.lang.security.insecure-deserialization.javascript-serializer.insecure-javascriptserializer-deserialization
+        version_id: 0bTLrGz
+        url: https://semgrep.dev/playground/r/0bTLrGz/csharp.lang.security.insecure-deserialization.javascript-serializer.insecure-javascriptserializer-deserialization
         origin: community
   message: The SimpleTypeResolver class is insecure and should not be used. Using
     SimpleTypeResolver to deserialize JSON could allow the remote client to execute
@@ -990,7 +990,7 @@ rules:
   - pattern-inside: |
       using System.Web.Script.Serialization;
       ...
-  - pattern: 'new JavaScriptSerializer(new SimpleTypeResolver());
+  - pattern: 'new JavaScriptSerializer((SimpleTypeResolver $RESOLVER))
 
       '
 - id: csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
@@ -1925,12 +1925,14 @@ rules:
 - id: generic.nginx.security.alias-path-traversal.alias-path-traversal
   patterns:
   - pattern: |
-      location ... {
+      location $...LOCATION {
         ...
         alias .../;
         ...
       }
-  - pattern-not-inside: location /.../ { ... ... }
+  - metavariable-pattern:
+      metavariable: "$...LOCATION"
+      pattern-regex: "^.*[^/]$"
   paths:
     include:
     - "*.conf"
@@ -1960,6 +1962,9 @@ rules:
     - A01:2021 - Broken Access Control
     references:
     - https://owasp.org/Top10/A01_2021-Broken_Access_Control
+    - https://www.acunetix.com/vulnerabilities/web/path-traversal-via-misconfigured-nginx-alias/
+    - https://www.youtube.com/watch?v=CIhHpkybYsY
+    - https://github.com/orangetw/My-Presentation-Slides/blob/main/data/2018-Breaking-Parser-Logic-Take-Your-Path-Normalization-Off-And-Pop-0days-Out.pdf
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
@@ -1974,8 +1979,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUOjq
-        version_id: 44To7g
-        url: https://semgrep.dev/playground/r/44To7g/generic.nginx.security.alias-path-traversal.alias-path-traversal
+        version_id: K3TvbXW
+        url: https://semgrep.dev/playground/r/K3TvbXW/generic.nginx.security.alias-path-traversal.alias-path-traversal
         origin: community
 - id: generic.nginx.security.dynamic-proxy-host.dynamic-proxy-host
   paths:
@@ -2453,42 +2458,18 @@ rules:
         url: https://semgrep.dev/playground/r/44TozP/generic.secrets.security.detected-amazon-mws-auth-token.detected-amazon-mws-auth-token
         origin: community
 - id: generic.secrets.security.detected-artifactory-password.detected-artifactory-password
-  options:
-    generic_engine: aliengrep
-    generic_multiline: false
-    generic_caseless: true
   patterns:
-  - pattern: "$ITEM"
-  - metavariable-regex:
-      metavariable: "$ITEM"
-      regex: "\\bAP[\\dABCDEF][a-zA-Z0-9]{8,}"
-  - pattern-not-inside: 'sha1...
-
-      '
-  - pattern-not-inside: 'sha2...
-
-      '
-  - pattern-not-inside: 'sha3...
-
-      '
-  - pattern-not-inside: 'sha118...
-
-      '
-  - pattern-not-inside: 'sha256...
-
-      '
-  - pattern-not-inside: 'sha512...
-
-      '
-  - pattern-not-inside: |
-      -BEGIN ...-
-      ....
-      ...-END ...-
+  - pattern-regex: "(?<ITEM>\\bAP[\\dABCDEF][a-zA-Z0-9]{8,})"
+  - pattern-regex: ".*(?i)arti[-_]?factory.*"
+  - pattern-not-regex: ".*(?i)sha(1|2|3|118|256|512).*"
+  - pattern-not-regex: "(?i)-----\\s*?BEGIN[ A-Z0-9_-]*? KEY( BLOCK)?-----[\\s\\S]*?-----\\s*?END[
+      A-Z0-9_-]*?\\s*?-----"
   - metavariable-analysis:
       analyzer: entropy
       metavariable: "$ITEM"
+  - pattern-not-regex: "(\\w|\\.|\\*)\\1{4}"
   languages:
-  - generic
+  - regex
   paths:
     exclude:
     - "*.svg"
@@ -2530,8 +2511,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUR5K
-        version_id: 6xTvZBN
-        url: https://semgrep.dev/playground/r/6xTvZBN/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
+        version_id: l4T4Wp7
+        url: https://semgrep.dev/playground/r/l4T4Wp7/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
         origin: community
 - id: generic.secrets.security.detected-artifactory-token.detected-artifactory-token
   patterns:
@@ -2951,7 +2932,11 @@ rules:
         url: https://semgrep.dev/playground/r/qkTNb5/generic.secrets.security.detected-facebook-oauth.detected-facebook-oauth
         origin: community
 - id: generic.secrets.security.detected-generic-api-key.detected-generic-api-key
-  pattern-regex: '[aA][pP][iI]_?[kK][eE][yY][=_:\s-]+[''|"]?[0-9a-zA-Z]{32,45}[''|"]?'
+  patterns:
+  - pattern-regex: '[aA][pP][iI]_?[kK][eE][yY][=_:\s-]+[''|"]?(?<SECRET>[0-9a-zA-Z]{32,45})[''|"]?'
+  - metavariable-analysis:
+      analyzer: entropy
+      metavariable: "$SECRET"
   languages:
   - regex
   message: Generic API Key detected
@@ -2982,11 +2967,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUn8p
-        version_id: l4T5zr
-        url: https://semgrep.dev/playground/r/l4T5zr/generic.secrets.security.detected-generic-api-key.detected-generic-api-key
+        version_id: GxTv0Op
+        url: https://semgrep.dev/playground/r/GxTv0Op/generic.secrets.security.detected-generic-api-key.detected-generic-api-key
         origin: community
 - id: generic.secrets.security.detected-generic-secret.detected-generic-secret
-  pattern-regex: '[sS][eE][cC][rR][eE][tT][:= \t]*[''|\"]?[0-9a-zA-Z]{32,45}[''|\"]?'
+  patterns:
+  - pattern-regex: '[sS][eE][cC][rR][eE][tT][:= \t]*[''|\"]?(?<SECRET>[0-9a-zA-Z]{32,45})[''|\"]?'
+  - metavariable-analysis:
+      analyzer: entropy
+      metavariable: "$SECRET"
   languages:
   - regex
   message: Generic Secret detected
@@ -3017,8 +3006,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6Urqe
-        version_id: YDToQR
-        url: https://semgrep.dev/playground/r/YDToQR/generic.secrets.security.detected-generic-secret.detected-generic-secret
+        version_id: 9lTdJ3x
+        url: https://semgrep.dev/playground/r/9lTdJ3x/generic.secrets.security.detected-generic-secret.detected-generic-secret
         origin: community
 - id: generic.secrets.security.detected-github-token.detected-github-token
   patterns:
@@ -6397,52 +6386,6 @@ rules:
   - pattern: "$VM.Run(...)"
   languages:
   - go
-- id: go.template.security.insecure-types.go-insecure-templates
-  patterns:
-  - pattern-inside: |
-      import "html/template"
-      ...
-  - pattern-either:
-    - pattern: var $VAR template.HTML = $EXP
-    - pattern: var $VAR template.CSS = $EXP
-    - pattern: var $VAR template.HTMLAttr = $EXP
-    - pattern: var $VAR template.JS = $EXP
-    - pattern: var $VAR template.JSStr = $EXP
-    - pattern: var $VAR template.Srcset = $EXP
-  message: usage of insecure template types. They are documented as a security risk.
-    See https://golang.org/pkg/html/template/#HTML.
-  severity: WARNING
-  metadata:
-    cwe:
-    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
-    references:
-    - https://golang.org/pkg/html/template/#HTML
-    - https://twitter.com/empijei/status/1275177219011350528
-    category: security
-    technology:
-    - template
-    confidence: LOW
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    source: https://semgrep.dev/r/go.template.security.insecure-types.go-insecure-templates
-    shortlink: https://sg.run/PJAq
-    semgrep.dev:
-      rule:
-        rule_id: qNUjDy
-        version_id: d6TndD
-        url: https://semgrep.dev/playground/r/d6TndD/go.template.security.insecure-types.go-insecure-templates
-        origin: community
-  languages:
-  - go
 - id: java.jboss.security.seam-log-injection.seam-log-injection
   patterns:
   - pattern: "$LOG.$INFO($X + $Y,...)\n"
@@ -7108,6 +7051,49 @@ rules:
       - pattern-not-inside: "$COOKIE.setSecure(...); ..."
       - pattern-not-inside: "$COOKIE = ResponseCookie.from(...). ...; ..."
       - pattern: "$RESPONSE.addCookie($COOKIE);"
+- id: java.lang.security.audit.crypto.gcm-detection.gcm-detection
+  metadata:
+    category: security
+    cwe:
+    - 'CWE-323: Reusing a Nonce, Key Pair in Encryption'
+    references:
+    - https://cwe.mitre.org/data/definitions/323.html
+    technology:
+    - java
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/java.lang.security.audit.crypto.gcm-detection.gcm-detection
+    shortlink: https://sg.run/BLLb
+    semgrep.dev:
+      rule:
+        rule_id: 5rU88R
+        version_id: A8T93eQ
+        url: https://semgrep.dev/playground/r/A8T93eQ/java.lang.security.audit.crypto.gcm-detection.gcm-detection
+        origin: community
+  languages:
+  - java
+  message: GCM detected, please check that IV/nonce is not reused, an Initialization
+    Vector (IV) is a nonce used to randomize the encryption, so that even if multiple
+    messages with identical plaintext are encrypted, the generated corresponding ciphertexts
+    are different. Unlike the Key, the IV usually does not need to be secret, rather
+    it is important that it is random and unique. Certain encryption schemes the IV
+    is exchanged in public as part of the ciphertext. Reusing same Initialization
+    Vector with the same Key to encrypt multiple plaintext blocks allows an attacker
+    to compare the ciphertexts and then, with some assumptions on the content of the
+    messages, to gain important information about the data being encrypted.
+  patterns:
+  - pattern-either:
+    - pattern: $METHOD.getInstance("AES/GCM/NoPadding",...);
+    - pattern: new GCMParameterSpec(...);
+  severity: INFO
 - id: java.lang.security.audit.crypto.ssl.avoid-implementing-custom-digests.avoid-implementing-custom-digests
   metadata:
     cwe:
@@ -11863,12 +11849,14 @@ rules:
     or external malicious adversary. It is recommended to use environment variables
     to securely provide credentials or retrieve credentials from a secure vault or
     HSM (Hardware Security Module).
+  options:
+    interfile: true
   metadata:
     interfile: true
     cwe:
     - 'CWE-798: Use of Hard-coded Credentials'
     references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
     owasp:
     - A07:2021 - Identification and Authentication Failures
     category: security
@@ -11890,8 +11878,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: pKUOjy
-        version_id: bZTG9X
-        url: https://semgrep.dev/playground/r/bZTG9X/javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret
+        version_id: LjTqP9x
+        url: https://semgrep.dev/playground/r/LjTqP9x/javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret
         origin: community
   languages:
   - javascript
@@ -12185,6 +12173,8 @@ rules:
   message: Detected a hardcoded hmac key. Avoid hardcoding secrets and consider using
     an alternate option such as reading the secret from a config file or using an
     environment variable.
+  options:
+    interfile: true
   metadata:
     interfile: true
     category: security
@@ -12213,8 +12203,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8UGEw
-        version_id: 5PT6od
-        url: https://semgrep.dev/playground/r/5PT6od/javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key
+        version_id: 3ZTk6WD
+        url: https://semgrep.dev/playground/r/3ZTk6WD/javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key
         origin: community
   languages:
   - javascript
@@ -16119,15 +16109,15 @@ rules:
       (''PHP Remote File Inclusion'')'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Path Traversal
     - Code Injection
+    - Path Traversal
     source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
     shortlink: https://sg.run/PGPW
     semgrep.dev:
       rule:
         rule_id: YGU8Yo
-        version_id: ZRTEN7
-        url: https://semgrep.dev/playground/r/ZRTEN7/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
+        version_id: LjT09r
+        url: https://semgrep.dev/playground/r/LjT09r/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
         origin: community
 - id: php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
   patterns:
@@ -16165,15 +16155,15 @@ rules:
       (''PHP Remote File Inclusion'')'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Path Traversal
     - Code Injection
+    - Path Traversal
     source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
     shortlink: https://sg.run/JpwW
     semgrep.dev:
       rule:
         rule_id: 6JU0yK
-        version_id: nWTePz
-        url: https://semgrep.dev/playground/r/nWTePz/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
+        version_id: 8KTbgz
+        url: https://semgrep.dev/playground/r/8KTbgz/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
         origin: community
 - id: php.wordpress-plugins.security.audit.wp-open-redirect-audit.wp-open-redirect-audit
   pattern: wp_redirect(...)
@@ -17103,19 +17093,22 @@ rules:
   severity: WARNING
 - id: python.django.security.audit.templates.debug-template-tag.debug-template-tag
   languages:
-  - generic
+  - regex
   severity: WARNING
   message: Detected a debug template tag in a Django template. This dumps debugging
     information to the page when debug mode is enabled. Showing debug information
     to users is dangerous because it may reveal information about your environment
     that malicious actors can use to gain access to the system. Remove the debug tag.
-  pattern: "{% debug %}"
+  pattern-regex: "({% debug %})"
+  paths:
+    include:
+    - "*.html"
   metadata:
     owasp: A06:2017 - Security Misconfiguration
     cwe:
     - 'CWE-489: Active Debug Code'
     references:
-    - https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#debug
+    - https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#debug
     - https://stackoverflow.com/questions/2213977/django-debug-display-all-variables-of-a-page
     category: security
     technology:
@@ -17133,8 +17126,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzb2
-        version_id: jQTKNg
-        url: https://semgrep.dev/playground/r/jQTKNg/python.django.security.audit.templates.debug-template-tag.debug-template-tag
+        version_id: 44TRgoN
+        url: https://semgrep.dev/playground/r/44TRgoN/python.django.security.audit.templates.debug-template-tag.debug-template-tag
         origin: community
 - id: python.django.security.audit.unvalidated-password.unvalidated-password
   patterns:
@@ -22913,8 +22906,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: YGUrq5
-        version_id: l4T5q2
-        url: https://semgrep.dev/playground/r/l4T5q2/ruby.lang.security.cookie-serialization.cookie-serialization
+        version_id: RGTDg07
+        url: https://semgrep.dev/playground/r/RGTDg07/ruby.lang.security.cookie-serialization.cookie-serialization
         origin: community
   languages:
   - ruby
@@ -23232,7 +23225,7 @@ rules:
     owasp:
     - A07:2021 - Identification and Authentication Failures
     references:
-    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_CheatSheet.html
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
     source-rule-url: https://github.com/presidentbeef/brakeman/blob/main/docs/warning_types/basic_auth/index.markdown
     category: security
     technology:
@@ -23253,8 +23246,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: X5UZWK
-        version_id: yeTXbl
-        url: https://semgrep.dev/playground/r/yeTXbl/ruby.lang.security.hardcoded-http-auth-in-controller.hardcoded-http-auth-in-controller
+        version_id: 6xTvq7p
+        url: https://semgrep.dev/playground/r/6xTvq7p/ruby.lang.security.hardcoded-http-auth-in-controller.hardcoded-http-auth-in-controller
         origin: community
   languages:
   - ruby
@@ -23420,8 +23413,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: bwUOAG
-        version_id: vdT2bq
-        url: https://semgrep.dev/playground/r/vdT2bq/ruby.lang.security.model-attr-accessible.model-attr-accessible
+        version_id: A8T9zgD
+        url: https://semgrep.dev/playground/r/A8T9zgD/ruby.lang.security.model-attr-accessible.model-attr-accessible
         origin: community
   languages:
   - ruby
@@ -25637,6 +25630,45 @@ rules:
         version_id: 44ToLG
         url: https://semgrep.dev/playground/r/44ToLG/scala.slick.security.scala-slick-sql-non-literal.scala-slick-sql-non-literal
         origin: community
+- id: solidity.security.no-bidi-characters.no-bidi-characters
+  message: The code must not contain any of Unicode Direction Control Characters
+  metadata:
+    category: security
+    technology:
+    - solidity
+    cwe: 'CWE-837: Improper Enforcement of a Single, Unique Action'
+    confidence: HIGH
+    likelihood: LOW
+    impact: LOW
+    subcategory:
+    - audit
+    references:
+    - https://entethalliance.org/specs/ethtrust-sl/v1/#req-1-unicode-bdo
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/solidity.security.no-bidi-characters.no-bidi-characters
+    shortlink: https://sg.run/6DyK
+    semgrep.dev:
+      rule:
+        rule_id: 5rUD6Z
+        version_id: GxTv7q3
+        url: https://semgrep.dev/playground/r/GxTv7q3/solidity.security.no-bidi-characters.no-bidi-characters
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern-regex: "‪"
+    - pattern-regex: "‫"
+    - pattern-regex: "‭"
+    - pattern-regex: "‮"
+    - pattern-regex: "⁦"
+    - pattern-regex: "⁧"
+    - pattern-regex: "⁨"
+    - pattern-regex: "‬"
+    - pattern-regex: "⁩"
+  languages:
+  - solidity
+  severity: WARNING
 - id: swift.webview.webview-js-window.swift-webview-config-allows-js-open-windows
   message: Webviews were observed that explictly allow JavaScript in an WKWebview
     to open windows automatically. Consider disabling this functionality if not required,
@@ -27434,6 +27466,69 @@ rules:
         version_id: 1QTjB4
         url: https://semgrep.dev/playground/r/1QTjB4/terraform.aws.security.missing-athena-workgroup-encryption.missing-athena-workgroup-encryption
         origin: community
+- id: terraform.aws.security.unrestricted-github-oidc-policy.unrestricted-github-oidc-policy
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: MEDIUM
+    technology:
+    - terraform
+    - aws
+    owasp:
+    - A05:2017 - Sensitive Data Exposure
+    - A01:2021 - Broken Access Control
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    references:
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#configuring-the-role-and-trust-policy
+    - https://dagrz.com/writing/aws-security/hacking-github-aws-oidc/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/terraform.aws.security.unrestricted-github-oidc-policy.unrestricted-github-oidc-policy
+    shortlink: https://sg.run/LWlY
+    semgrep.dev:
+      rule:
+        rule_id: 7KU3dr
+        version_id: GxTvzYN
+        url: https://semgrep.dev/playground/r/GxTvzYN/terraform.aws.security.unrestricted-github-oidc-policy.unrestricted-github-oidc-policy
+        origin: community
+  message: "`$POLICY` is missing a `condition` block which scopes users of this policy
+    to specific GitHub repositories. Without this, `$POLICY` is open to all users
+    on GitHub. Add a `condition` block on the variable `token.actions.githubusercontent.com:sub`
+    which scopes it to prevent this."
+  languages:
+  - hcl
+  severity: WARNING
+  match:
+    where:
+    - metavariable: "$IDENTIFIER"
+      regex: ".*oidc-provider/token\\.actions\\.githubusercontent\\.com"
+    all:
+    - inside: |
+        data "aws_iam_policy_document" $POLICY {
+          ...
+        }
+    - |
+      statement {
+        ...
+        principals {
+          ...
+          type = "Federated"
+          identifiers = [..., $IDENTIFIER, ...]
+        }
+      }
+    - not: |
+        statement {
+          ...
+          condition {
+            ...
+            variable = "token.actions.githubusercontent.com:sub"
+          }
+        }
 - id: terraform.azure.security.appservice.appservice-account-identity-registered.appservice-account-identity-registered
   message: Registering the identity used by an App with AD allows it to interact with
     other services without using username and password. Set the `identity` block in
@@ -30244,648 +30339,6 @@ rules:
         version_id: 44To0E
         url: https://semgrep.dev/playground/r/44To0E/terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket
         origin: community
-- id: trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
-  message: 'Variable `$X` is likely modified and later used on error. In some cases
-    this could result  in panics due to a nil dereference  '
-  languages:
-  - go
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-665: Improper Initialization'
-    subcategory:
-    - audit
-    confidence: HIGH
-    likelihood: MEDIUM
-    impact: MEDIUM
-    technology:
-    - "--no-technology--"
-    description: Possible unintentional assignment when an error occurs
-    references:
-    - https://blog.trailofbits.com/2019/11/07/attacking-go-vr-ttps/
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
-    shortlink: https://sg.run/WWQ2
-    semgrep.dev:
-      rule:
-        rule_id: kxU6Xb
-        version_id: PkTpnL
-        url: https://semgrep.dev/playground/r/PkTpnL/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
-        origin: community
-  patterns:
-  - pattern-either:
-    - pattern: |
-        $X, err = ...
-        if err != nil {
-          <... $X ...>
-        }
-    - pattern: |
-        $X, err := ...
-        if err != nil {
-          ...
-          <... $X.$Y ...>
-        }
-- id: trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
-  message: Iteration over a possibly empty map `$C`. This is likely a bug or redundant
-    code
-  languages:
-  - go
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-665: Improper Initialization'
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    likelihood: LOW
-    impact: LOW
-    technology:
-    - "--no-technology--"
-    description: Probably redundant iteration over an empty map
-    references:
-    - https://blog.trailofbits.com/2019/11/07/attacking-go-vr-ttps/
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
-    shortlink: https://sg.run/08jj
-    semgrep.dev:
-      rule:
-        rule_id: wdUlww
-        version_id: JdTJZ7
-        url: https://semgrep.dev/playground/r/JdTJZ7/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
-        origin: community
-  patterns:
-  - pattern: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $C[$X] = $V
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $C[$X]++
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $C[$X]--
-      ...
-      for $K := range $C { ... }
-  - pattern-not: |
-      $C = make(map[$T1] $T2, ...)
-      ...
-      $CODEC.Unmarshal($BYTES, &$C)
-      ...
-      for $K := range $C { ... }
-- id: trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
-  message: Downcasting or changing sign of an integer with `$CAST_METHOD` method
-  languages:
-  - go
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-681: Incorrect Conversion between Numeric Types'
-    subcategory:
-    - audit
-    confidence: HIGH
-    likelihood: LOW
-    impact: MEDIUM
-    technology:
-    - "--no-technology--"
-    description: Integer underflows
-    references:
-    - https://github.com/golang/go/issues/30209
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
-    shortlink: https://sg.run/65WB
-    semgrep.dev:
-      rule:
-        rule_id: 4bU2AZ
-        version_id: WrTRkP
-        url: https://semgrep.dev/playground/r/WrTRkP/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
-        origin: community
-  pattern-either:
-  - patterns:
-    - metavariable-pattern:
-        metavariable: "$CAST_METHOD"
-        pattern-either:
-        - pattern: uint8
-        - pattern: uint16
-        - pattern: uint32
-        - pattern: int8
-        - pattern: int16
-        - pattern: int32
-    - pattern-either:
-      - pattern: |
-          $X, ... = strconv.Atoi(...)
-          ...
-          $CAST_METHOD($X)
-      - pattern: |
-          $X, ... = strconv.ParseInt(..., ..., 64)
-          ...
-          $CAST_METHOD($X)
-      - pattern: |
-          $X, ... = strconv.ParseUint(..., ..., 64)
-          ...
-          $CAST_METHOD($X)
-  - pattern: |
-      $X, ... = strconv.Atoi(...)
-      ...
-      uint64($X)
-  - pattern: |
-      $X, ... = strconv.ParseInt(..., ..., 64)
-      ...
-      uint64($X)
-  - pattern: |
-      $X, ... = strconv.ParseUint(..., ..., 64)
-      ...
-      int64($X)
-  - patterns:
-    - metavariable-pattern:
-        metavariable: "$CAST_METHOD"
-        pattern-either:
-        - pattern: uint8
-        - pattern: uint16
-        - pattern: int8
-        - pattern: int16
-    - pattern-either:
-      - pattern: |
-          $X, ... = strconv.ParseInt(..., ..., 32)
-          ...
-          $CAST_METHOD($X)
-      - pattern: |
-          $X, ... = strconv.ParseUint(..., ..., 32)
-          ...
-          $CAST_METHOD($X)
-  - pattern: |
-      $X, ... = strconv.ParseInt(..., ..., 32)
-      ...
-      uint32($X)
-  - pattern: |
-      $X, ... = strconv.ParseUint(..., ..., 32)
-      ...
-      int32($X)
-  - patterns:
-    - metavariable-pattern:
-        metavariable: "$CAST_METHOD"
-        pattern-either:
-        - pattern: uint8
-        - pattern: int8
-    - pattern-either:
-      - pattern: |
-          $X, ... = strconv.ParseInt(..., ..., 16)
-          ...
-          $CAST_METHOD($X)
-      - pattern: |
-          $X, ... = strconv.ParseUint(..., ..., 16)
-          ...
-          $CAST_METHOD($X)
-  - pattern: |
-      $X, ... = strconv.ParseInt(..., ..., 16)
-      ...
-      uint16($X)
-  - pattern: |
-      $X, ... = strconv.ParseUint(..., ..., 16)
-      ...
-      int16($X)
-  - pattern: |
-      $X, ... = strconv.ParseInt(..., ..., 8)
-      ...
-      uint8($X)
-  - pattern: |
-      $X, ... = strconv.ParseUint(..., ..., 8)
-      ...
-      int8($X)
-- id: trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
-  languages:
-  - js
-  - ts
-  message: The Apollo GraphQL server is setup with a CORS policy that does not deny
-    all origins. Carefully review the origins to see if any of them are incorrectly
-    setup (third-party websites, bad regexes, functions that reflect every origin,
-    etc.).
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-942: Permissive Cross-domain Policy with Untrusted Domains'
-    subcategory:
-    - audit
-    confidence: LOW
-    likelihood: MEDIUM
-    impact: MEDIUM
-    technology:
-    - graphql
-    - apollo-graphql-server
-    - apollo-graphql-server-v3
-    description: Potentially bad CORS policy
-    references:
-    - https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Improper Validation
-    source: https://semgrep.dev/r/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
-    shortlink: https://sg.run/ORxR
-    semgrep.dev:
-      rule:
-        rule_id: v8UlNl
-        version_id: 5PTvBe
-        url: https://semgrep.dev/playground/r/5PTvBe/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
-        origin: community
-  mode: taint
-  pattern-sources:
-  - pattern: "{ origin: function(...) {...} }\n"
-  - patterns:
-    - pattern-inside: "{ origin: $NOT_KNOWN_GOOD_CORS_ORIGIN }\n"
-    - metavariable-pattern:
-        metavariable: "$NOT_KNOWN_GOOD_CORS_ORIGIN"
-        patterns:
-        - pattern-not: 'false
-
-            '
-        - pattern-not: "[]\n"
-  pattern-sinks:
-  - patterns:
-    - pattern: "{..., cors: $CORS_ORIGIN, ...}\n"
-    - focus-metavariable: "$CORS_ORIGIN"
-- id: trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
-  message: 'If possible, it is better to rely on automatic pinning in PyTorch to avoid
-    undefined behavior and for efficiency '
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: HIGH
-    likelihood: LOW
-    impact: LOW
-    technology:
-    - pytorch
-    description: "`PyTorch` memory not automatically pinned"
-    references:
-    - https://pytorch.org/docs/stable/data.html#memory-pinning
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
-    shortlink: https://sg.run/jz5N
-    semgrep.dev:
-      rule:
-        rule_id: WAUN1Z
-        version_id: 0bT4Q6
-        url: https://semgrep.dev/playground/r/0bT4Q6/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
-        origin: community
-  pattern-either:
-  - patterns:
-    - pattern: torch.utils.data.DataLoader(...)
-    - pattern-not: torch.utils.data.DataLoader(..., pin_memory=$VALUE, ...)
-  - pattern: torch.utils.data.DataLoader(..., pin_memory=False, ...)
-- id: trailofbits.python.numpy-distutils.numpy-distutils
-  message: NumPy distutils is deprecated, and will be removed in the future
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: HIGH
-    likelihood: MEDIUM
-    impact: LOW
-    technology:
-    - numpy
-    description: Use of deprecated `numpy.distutils`
-    references:
-    - https://numpy.org/doc/stable/reference/distutils.html
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.numpy-distutils.numpy-distutils
-    shortlink: https://sg.run/rqGP
-    semgrep.dev:
-      rule:
-        rule_id: GdUgN8
-        version_id: qkT09r
-        url: https://semgrep.dev/playground/r/qkT09r/trailofbits.python.numpy-distutils.numpy-distutils
-        origin: community
-  patterns:
-  - pattern: 'import numpy.distutils
-
-      '
-- id: trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
-  message: Compiling arbitrary code can result in code execution. Ensure the source
-    code is from a trusted location
-  languages:
-  - python
-  severity: ERROR
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    likelihood: MEDIUM
-    impact: HIGH
-    technology:
-    - numpy
-    description: Potential arbitrary code execution from `NumPy` `f2py` compilation
-    references:
-    - https://numpy.org/doc/stable/f2py/usage.html
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
-    shortlink: https://sg.run/bEdP
-    semgrep.dev:
-      rule:
-        rule_id: ReUdJ0
-        version_id: l4TLe3
-        url: https://semgrep.dev/playground/r/l4TLe3/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
-        origin: community
-  patterns:
-  - pattern: numpy.f2py.compile(...)
-  - pattern-not: numpy.f2py.compile("...", ...)
-- id: trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
-  message: 'Using the NumPy RNG inside of a PyTorch dataset can lead to a number of
-    issues with loading data, including identical augmentations. Instead, use the
-    random number generators built into Python and PyTorch '
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-330: Use of Insufficiently Random Values'
-    subcategory:
-    - audit
-    confidence: HIGH
-    likelihood: MEDIUM
-    impact: LOW
-    technology:
-    - pytorch
-    - numpy
-    description: Calls to the `NumPy` RNG inside of a `Torch` dataset
-    references:
-    - https://tanelp.github.io/posts/a-bug-that-plagues-thousands-of-open-source-ml-projects
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Cryptographic Issues
-    source: https://semgrep.dev/r/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
-    shortlink: https://sg.run/dnR6
-    semgrep.dev:
-      rule:
-        rule_id: KxURLn
-        version_id: YDT3zG
-        url: https://semgrep.dev/playground/r/YDT3zG/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
-        origin: community
-  patterns:
-  - pattern: |
-      class $X(torch.utils.data.Dataset):
-        ...
-        def __getitem__(...):
-          ...
-          numpy.random.randint(...)
-          ...
-- id: trailofbits.python.numpy-load-library.numpy-load-library
-  message: Loading custom operator libraries can result in arbitrary code execution
-  languages:
-  - python
-  severity: ERROR
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    likelihood: MEDIUM
-    impact: HIGH
-    technology:
-    - numpy
-    description: Potential arbitrary code execution from `NumPy` library loading
-    references:
-    - https://numpy.org/doc/stable/reference/routines.ctypeslib.html#numpy.ctypeslib.load_library
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.numpy-load-library.numpy-load-library
-    shortlink: https://sg.run/NXkL
-    semgrep.dev:
-      rule:
-        rule_id: AbUxDq
-        version_id: 6xTLAO
-        url: https://semgrep.dev/playground/r/6xTLAO/trailofbits.python.numpy-load-library.numpy-load-library
-        origin: community
-  patterns:
-  - pattern: numpy.ctypeslib.load_library(...)
-  - pattern-not: numpy.ctypeslib.load_library("...", "...")
-- id: trailofbits.python.onnx-session-options.onnx-session-options
-  message: Loading custom operator libraries can result in arbitrary code execution
-  languages:
-  - python
-  severity: ERROR
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    likelihood: MEDIUM
-    impact: HIGH
-    technology:
-    - onnx
-    description: Potential arbitrary code execution from `ONNX` library loading
-    references:
-    - https://onnxruntime.ai/docs/reference/operators/add-custom-op.html
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.onnx-session-options.onnx-session-options
-    shortlink: https://sg.run/kRd1
-    semgrep.dev:
-      rule:
-        rule_id: BYUoqy
-        version_id: o5T7Wp
-        url: https://semgrep.dev/playground/r/o5T7Wp/trailofbits.python.onnx-session-options.onnx-session-options
-        origin: community
-  patterns:
-  - pattern-inside: |
-      $SESSION = onnxruntime.SessionOptions(...)
-      ...
-  - pattern: "$SESSION.register_custom_ops_library(...)"
-  - pattern-not: $SESSION.register_custom_ops_library("...")
-- id: trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
-  message: Loading custom operator libraries can result in arbitrary code execution
-  languages:
-  - python
-  severity: ERROR
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    likelihood: MEDIUM
-    impact: HIGH
-    technology:
-    - pytorch
-    description: Potential arbitrary code execution from `PyTorch` library loading
-    references:
-    - https://pytorch.org/tutorials/advanced/torch_script_custom_classes.html
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
-    shortlink: https://sg.run/nD6d
-    semgrep.dev:
-      rule:
-        rule_id: lBUYD9
-        version_id: jQTELP
-        url: https://semgrep.dev/playground/r/jQTELP/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
-        origin: community
-  patterns:
-  - pattern: torch.classes.load_library(...)
-  - pattern-not: torch.classes.load_library("...")
-- id: trailofbits.python.pytorch-package.pytorch-package
-  message: Avoid importing torch.package - it can result in arbitrary code execution
-    via pickle
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-502: Deserialization of Untrusted Data'
-    subcategory:
-    - audit
-    confidence: LOW
-    likelihood: MEDIUM
-    impact: HIGH
-    technology:
-    - pytorch
-    description: Potential arbitrary code execution from `torch.package`
-    references:
-    - https://pytorch.org/docs/1.13/package.html#torch-package
-    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - 'Insecure Deserialization '
-    source: https://semgrep.dev/r/trailofbits.python.pytorch-package.pytorch-package
-    shortlink: https://sg.run/EK35
-    semgrep.dev:
-      rule:
-        rule_id: PeUKGk
-        version_id: 1QTD01
-        url: https://semgrep.dev/playground/r/1QTD01/trailofbits.python.pytorch-package.pytorch-package
-        origin: community
-  pattern: import torch.package
-- id: trailofbits.python.tensorflow-load-library.tensorflow-load-library
-  message: Loading custom operator libraries can result in arbitrary code execution
-  languages:
-  - python
-  severity: ERROR
-  metadata:
-    category: security
-    cwe: 'CWE-676: Use of Potentially Dangerous Function'
-    subcategory:
-    - audit
-    confidence: MEDIUM
-    likelihood: MEDIUM
-    impact: HIGH
-    technology:
-    - tensorflow
-    description: Potential arbitrary code execution from `TensorFlow` library loading
-    references:
-    - https://www.tensorflow.org/api_docs/python/tf/load_library
-    - https://www.tensorflow.org/api_docs/python/tf/load_op_library
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Dangerous Method or Function
-    source: https://semgrep.dev/r/trailofbits.python.tensorflow-load-library.tensorflow-load-library
-    shortlink: https://sg.run/xp0j
-    semgrep.dev:
-      rule:
-        rule_id: WAUgBJ
-        version_id: rxT5bv
-        url: https://semgrep.dev/playground/r/rxT5bv/trailofbits.python.tensorflow-load-library.tensorflow-load-library
-        origin: community
-  patterns:
-  - pattern-either:
-    - pattern: tensorflow.load_library(...)
-    - pattern: tensorflow.load_op_library(...)
-  - pattern-not: tensorflow.load_library("...")
-  - pattern-not: tensorflow.load_op_library("...")
-- id: trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
-  message: "`expect` or `unwrap` called in function returning a `Result`"
-  languages:
-  - rust
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-755: Improper Handling of Exceptional Conditions'
-    subcategory:
-    - audit
-    confidence: HIGH
-    likelihood: MEDIUM
-    impact: LOW
-    technology:
-    - "--no-technology--"
-    description: Calling `unwrap` or `expect` in a function returning a `Result`
-    references:
-    - https://doc.rust-lang.org/std/result/
-    license: CC-BY-NC-SA-4.0
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
-    shortlink: https://sg.run/WpeL
-    semgrep.dev:
-      rule:
-        rule_id: 2ZUPQ3
-        version_id: NdTx5j
-        url: https://semgrep.dev/playground/r/NdTx5j/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
-        origin: community
-  patterns:
-  - pattern-either:
-    - pattern: "$EXPR.unwrap()"
-    - pattern: "$EXPR.expect(...)"
-  - pattern-either:
-    - pattern-inside: |
-        fn $FUNC(...) -> Result<$T1, $T2> {
-            ...
-        }
-    - pattern-inside: |
-        fn $FUNC(...) -> Result<$T> {
-            ...
-        }
-    - patterns:
-      - pattern-inside: |
-          fn $FUNC(...) -> $RETTYPE {
-              ...
-          }
-      - pattern-either:
-        - pattern-inside: |
-            type $RETTYPE = Result<$T>;
-            ...
-            fn $FUNC(...) -> $RETTYPE {
-                ...
-            }
-        - pattern-inside: |
-            type $RETTYPE = Result<$T1, $T2>;
-            ...
-            fn $FUNC(...) -> $RETTYPE {
-                ...
-            }
 - id: typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard
   message: 'Unescaped ''.'' character in CORS domain regex $CORS: $PATTERN'
   metadata:
@@ -30911,16 +30364,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUbXo
-        version_id: WrTb4e
-        url: https://semgrep.dev/playground/r/WrTb4e/typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard
+        version_id: PkTJ0Yq
+        url: https://semgrep.dev/playground/r/PkTJ0Yq/typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard
         origin: community
   languages:
   - ts
   severity: WARNING
   patterns:
   - pattern-either:
-    - pattern: const $CORS = [...,$PATTERN,...]
-    - pattern: const $CORS = $PATTERN
+    - pattern: "$CORS = [...,/$PATTERN/,...]"
+    - pattern: "$CORS = /$PATTERN/"
+  - focus-metavariable: "$PATTERN"
   - metavariable-regex:
       metavariable: "$PATTERN"
       regex: ".+?(?<!\\\\).\\..+(?<!\\\\)\\..+"
@@ -31409,6 +30863,7 @@ rules:
         security_opt:
           - ...
           - no-new-privileges:true
+          - ...
   - focus-metavariable: "$SERVICE"
   message: Service '$SERVICE' allows for privilege escalation via setuid or setgid
     binaries. Add 'no-new-privileges:true' in 'security_opt' to prevent this.
@@ -31439,8 +30894,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUoWr
-        version_id: vdT2zp
-        url: https://semgrep.dev/playground/r/vdT2zp/yaml.docker-compose.security.no-new-privileges.no-new-privileges
+        version_id: pZT1OYB
+        url: https://semgrep.dev/playground/r/pZT1OYB/yaml.docker-compose.security.no-new-privileges.no-new-privileges
         origin: community
   languages:
   - yaml
