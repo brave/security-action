@@ -20,7 +20,7 @@ rules:
       The programmer accidentally uses the wrong operator, which changes
       the application logic in security-relevant ways.
       These types of errors are generally the result of a typo.
-      This rule also covers some other common typo patterns.
+      This rule also covers some other common typo patterns. (see $EXPR1)
     severity: WARNING
     languages:
       - c
@@ -39,7 +39,8 @@ rules:
         - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) <= $EXPR ...>) ...
         - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) > $EXPR ...>) ...
         - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) >= $EXPR ...>) ...
-        - pattern-not-regex: "\\(\\s*[_a-zA-Z][_a-zA-Z0-9]{0,30}\\**\\s+\\**[_a-zA-Z][_a-zA-Z0-9]{0,30}\\s*="
+        - pattern-not-regex: "if\\s*\\(\\s*[_a-zA-Z][_a-zA-Z0-9:<>]{0,40}\\**\\s+\\**[_a-zA-Z][_a-zA-Z0-9]{0,30}\\s*"
+        - pattern-not-regex: "if\\s*\\(\\s*[_a-zA-Z][_a-zA-Z0-9*:]{0,40}<[_a-zA-Z][_a-zA-Z0-9:]{0,30}>\\s*"
       # REMOVED: False Positive on Chrome, & instead of && in comparison
       # - patterns:
       #  - pattern: if (<... $EXPR1 & $EXPR2 ...>) ...
