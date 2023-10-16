@@ -8,6 +8,9 @@ memset(str, 'x', 10);
 memsetnope();
 
 // ok:raptor-interesting-api-calls
+CalledOnValidThread();
+
+// ok:raptor-interesting-api-calls
 void MyService::MaybeReconnect(TaskList tasks, int reconnect) {
     return;
 }
