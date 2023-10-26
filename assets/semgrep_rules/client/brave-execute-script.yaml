@@ -1,0 +1,25 @@
+rules:
+  - id: brave-execute-script
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-execute-script.yaml
+      assignees: |
+        thypon
+        diracdeltas
+        bridiver
+    message: |
+      $FUNC usages should be vet by the security-team.
+
+      References:
+      - https://github.com/brave/brave-browser/wiki/Security-reviews (point 13)
+    severity: INFO
+    languages:
+      - cpp
+    patterns:
+      - pattern: $OBJ.$FUNC(...)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: ^(.*ExecuteScript.*|ExecuteMethodAndReturnValue|CallFunctionEvenIfScriptDisabled)$
