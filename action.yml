@@ -218,7 +218,7 @@ runs:
         python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/requirements.txt
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install xmllint for safesvg
-      uses: awalsh128/cache-apt-pkgs-action@6f9e6a86db4bfb31baf4c7f71526175bc054252e
+      uses: awalsh128/cache-apt-pkgs-action@44c33b32f808cdddd5ac0366d70595ed63661ed8
       with:
           packages: libxml2-utils
           version: 1.0
