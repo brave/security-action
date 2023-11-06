@@ -38,8 +38,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Uv7B
-        version_id: bZTbzQz
-        url: https://semgrep.dev/playground/r/bZTbzQz/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
+        version_id: jQTgYdy
+        url: https://semgrep.dev/playground/r/jQTgYdy/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
         origin: community
   languages:
   - java
@@ -504,8 +504,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUoP7
-        version_id: JdTNPPN
-        url: https://semgrep.dev/playground/r/JdTNPPN/trailofbits.go.racy-append-to-slice.racy-append-to-slice
+        version_id: WrTWdKp
+        url: https://semgrep.dev/playground/r/WrTWdKp/trailofbits.go.racy-append-to-slice.racy-append-to-slice
         origin: community
   patterns:
   - pattern: "$SLICE = append($SLICE, $ITEM)\n"
@@ -538,6 +538,11 @@ rules:
       $MUTEX.Lock()
       ...
       $MUTEX.Unlock()
+  - pattern-not-inside: |
+      $MUTEX.Lock()
+      ...
+      defer $MUTEX.Unlock()
+      ...
 - id: trailofbits.go.racy-write-to-map.racy-write-to-map
   message: Writing `$MAP` from multiple goroutines is not concurrency safe
   languages:
@@ -565,8 +570,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUGWD
-        version_id: 5PTd44k
-        url: https://semgrep.dev/playground/r/5PTd44k/trailofbits.go.racy-write-to-map.racy-write-to-map
+        version_id: 0bTLwz3
+        url: https://semgrep.dev/playground/r/0bTLwz3/trailofbits.go.racy-write-to-map.racy-write-to-map
         origin: community
   patterns:
   - pattern: "$MAP[$KEY] = $VALUE\n"
@@ -586,6 +591,11 @@ rules:
       $MUTEX.Lock()
       ...
       $MUTEX.Unlock()
+  - pattern-not-inside: |
+      $MUTEX.Lock()
+      ...
+      defer $MUTEX.Unlock()
+      ...
 - id: trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
   message: The `func ($O *$CODEC) ReadRequestBody($ARG $TYPE) error` function does
     not handle `nil` argument, as the `ServerCodec` interface requires. An incorrect

@@ -29,8 +29,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUKJE
-        version_id: GxT88Y
-        url: https://semgrep.dev/playground/r/GxT88Y/generic.dockerfile.missing-zypper-no-confirm-switch.missing-zypper-no-confirm-switch
+        version_id: K3TvjOd
+        url: https://semgrep.dev/playground/r/K3TvjOd/generic.dockerfile.missing-zypper-no-confirm-switch.missing-zypper-no-confirm-switch
         origin: community
   paths:
     include:
@@ -57,8 +57,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUz1k
-        version_id: qkTwjn
-        url: https://semgrep.dev/playground/r/qkTwjn/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
+        version_id: LjTqQeA
+        url: https://semgrep.dev/playground/r/LjTqQeA/javascript.react.correctness.hooks.set-state-no-op.calling-set-state-on-current-state
         origin: community
 - id: ocaml.lang.compatibility.deprecated.deprecated-pervasives
   pattern: Pervasives.$X
@@ -76,8 +76,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUP1E
-        version_id: X0TADB
-        url: https://semgrep.dev/playground/r/X0TADB/ocaml.lang.compatibility.deprecated.deprecated-pervasives
+        version_id: w8T9noW
+        url: https://semgrep.dev/playground/r/w8T9noW/ocaml.lang.compatibility.deprecated.deprecated-pervasives
         origin: community
 - id: ocaml.lang.portability.crlf-support.broken-input-line
   pattern: 'input_line
@@ -101,8 +101,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUKZX
-        version_id: kbTOJw
-        url: https://semgrep.dev/playground/r/kbTOJw/ocaml.lang.portability.crlf-support.broken-input-line
+        version_id: 7ZTgo3q
+        url: https://semgrep.dev/playground/r/7ZTgo3q/ocaml.lang.portability.crlf-support.broken-input-line
         origin: community
 - id: ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
   pattern: open_in
@@ -124,8 +124,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUPAJ
-        version_id: w8TkYl
-        url: https://semgrep.dev/playground/r/w8TkYl/ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
+        version_id: LjTqQgo
+        url: https://semgrep.dev/playground/r/LjTqQgo/ocaml.lang.portability.crlf-support.prefer-read-in-binary-mode
         origin: community
 - id: ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
   pattern: open_out
@@ -147,8 +147,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUJY9
-        version_id: xyTd6N
-        url: https://semgrep.dev/playground/r/xyTd6N/ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
+        version_id: 8KTQ9rJ
+        url: https://semgrep.dev/playground/r/8KTQ9rJ/ocaml.lang.portability.crlf-support.prefer-write-in-binary-mode
         origin: community
 - id: ocaml.lang.portability.slash-tmp.not-portable-tmp-string
   pattern: '"=~/\/tmp/"
@@ -168,8 +168,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdU100
-        version_id: O9Tv1v
-        url: https://semgrep.dev/playground/r/O9Tv1v/ocaml.lang.portability.slash-tmp.not-portable-tmp-string
+        version_id: gET3x7z
+        url: https://semgrep.dev/playground/r/gET3x7z/ocaml.lang.portability.slash-tmp.not-portable-tmp-string
         origin: community
 - id: python.flask.best-practice.use-jsonify.use-jsonify
   patterns:
@@ -210,8 +210,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUkx6
-        version_id: l4TqoX
-        url: https://semgrep.dev/playground/r/l4TqoX/python.flask.best-practice.use-jsonify.use-jsonify
+        version_id: 0bTLlv0
+        url: https://semgrep.dev/playground/r/0bTLlv0/python.flask.best-practice.use-jsonify.use-jsonify
         origin: community
 - id: python.flask.caching.query-string.flask-cache-query-string
   patterns:
@@ -263,8 +263,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUko3
-        version_id: 44TePj
-        url: https://semgrep.dev/playground/r/44TePj/python.flask.caching.query-string.flask-cache-query-string
+        version_id: K3Tvjl9
+        url: https://semgrep.dev/playground/r/K3Tvjl9/python.flask.caching.query-string.flask-cache-query-string
         origin: community
 - id: python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
   patterns:
@@ -291,8 +291,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUJe5
-        version_id: PkTjry
-        url: https://semgrep.dev/playground/r/PkTjry/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
+        version_id: qkT2xNz
+        url: https://semgrep.dev/playground/r/qkT2xNz/python.flask.correctness.access-request-in-wrong-handler.avoid-accessing-request-in-wrong-handler
         origin: community
 - id: python.lang.compatibility.python36.python36-compatibility-Popen1
   pattern: subprocess.Popen(errors=$X, ...)
@@ -310,8 +310,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUz7A
-        version_id: 44Tejz
-        url: https://semgrep.dev/playground/r/44Tejz/python.lang.compatibility.python36.python36-compatibility-Popen1
+        version_id: zyTK8RP
+        url: https://semgrep.dev/playground/r/zyTK8RP/python.lang.compatibility.python36.python36-compatibility-Popen1
         origin: community
 - id: python.lang.compatibility.python36.python36-compatibility-Popen2
   pattern: subprocess.Popen(encoding=$X, ...)
@@ -329,8 +329,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwU2n3
-        version_id: PkTj3B
-        url: https://semgrep.dev/playground/r/PkTj3B/python.lang.compatibility.python36.python36-compatibility-Popen2
+        version_id: pZT1y9P
+        url: https://semgrep.dev/playground/r/pZT1y9P/python.lang.compatibility.python36.python36-compatibility-Popen2
         origin: community
 - id: python.lang.compatibility.python36.python36-compatibility-ssl
   pattern: ssl.get_ciphers()
@@ -348,8 +348,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqU5wR
-        version_id: 3ZTLXP
-        url: https://semgrep.dev/playground/r/3ZTLXP/python.lang.compatibility.python36.python36-compatibility-ssl
+        version_id: o5Tglxx
+        url: https://semgrep.dev/playground/r/o5Tglxx/python.lang.compatibility.python36.python36-compatibility-ssl
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-httpconn
   pattern: http.client.HTTPConnection(blocksize=$X,...)
@@ -369,8 +369,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUjbX
-        version_id: GxToeD
-        url: https://semgrep.dev/playground/r/GxToeD/python.lang.compatibility.python37.python37-compatibility-httpconn
+        version_id: jQTgYO6
+        url: https://semgrep.dev/playground/r/jQTgYO6/python.lang.compatibility.python37.python37-compatibility-httpconn
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-httpsconn
   pattern: http.client.HTTPSConnection(blocksize=$X,...)
@@ -390,8 +390,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxU1qd
-        version_id: RGT2L2
-        url: https://semgrep.dev/playground/r/RGT2L2/python.lang.compatibility.python37.python37-compatibility-httpsconn
+        version_id: 1QTOYgK
+        url: https://semgrep.dev/playground/r/1QTOYgK/python.lang.compatibility.python37.python37-compatibility-httpsconn
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-importlib
   pattern: importlib.source_hash()
@@ -411,8 +411,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 7KUQOl
-        version_id: JdToxL
-        url: https://semgrep.dev/playground/r/JdToxL/python.lang.compatibility.python37.python37-compatibility-importlib
+        version_id: 2KTzrWz
+        url: https://semgrep.dev/playground/r/2KTzrWz/python.lang.compatibility.python37.python37-compatibility-importlib
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-importlib2
   pattern: import importlib.resources
@@ -432,8 +432,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1Uy0n
-        version_id: 5PTN1p
-        url: https://semgrep.dev/playground/r/5PTN1p/python.lang.compatibility.python37.python37-compatibility-importlib2
+        version_id: X0TQxBO
+        url: https://semgrep.dev/playground/r/X0TQxBO/python.lang.compatibility.python37.python37-compatibility-importlib2
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-importlib3
   pattern: import importlib.abc.ResourceReader
@@ -453,8 +453,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrUzJ9
-        version_id: A8TNdJ
-        url: https://semgrep.dev/playground/r/A8TNdJ/python.lang.compatibility.python37.python37-compatibility-importlib3
+        version_id: 9lTdWDO
+        url: https://semgrep.dev/playground/r/9lTdWDO/python.lang.compatibility.python37.python37-compatibility-importlib3
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv4network1
   pattern: ipaddress.IPv4Network.subnet_of($X)
@@ -473,8 +473,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUyqR
-        version_id: 0bTpzo
-        url: https://semgrep.dev/playground/r/0bTpzo/python.lang.compatibility.python37.python37-compatibility-ipv4network1
+        version_id: NdT3dnB
+        url: https://semgrep.dev/playground/r/NdT3dnB/python.lang.compatibility.python37.python37-compatibility-ipv4network1
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv4network2
   pattern: ipaddress.IPv4Network.supernet_of($X)
@@ -493,8 +493,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUO61
-        version_id: K3Twkg
-        url: https://semgrep.dev/playground/r/K3Twkg/python.lang.compatibility.python37.python37-compatibility-ipv4network2
+        version_id: kbTdx4O
+        url: https://semgrep.dev/playground/r/kbTdx4O/python.lang.compatibility.python37.python37-compatibility-ipv4network2
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv6network1
   pattern: ipaddress.IPv6Network.subnet_of($X)
@@ -513,8 +513,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 4bUko0
-        version_id: DkT2bY
-        url: https://semgrep.dev/playground/r/DkT2bY/python.lang.compatibility.python37.python37-compatibility-ipv6network1
+        version_id: rxTyLPw
+        url: https://semgrep.dev/playground/r/rxTyLPw/python.lang.compatibility.python37.python37-compatibility-ipv6network1
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-ipv6network2
   pattern: ipaddress.IPv6Network.supernet_of($X)
@@ -533,8 +533,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUZYr
-        version_id: WrTYKq
-        url: https://semgrep.dev/playground/r/WrTYKq/python.lang.compatibility.python37.python37-compatibility-ipv6network2
+        version_id: bZTb10z
+        url: https://semgrep.dev/playground/r/bZTb10z/python.lang.compatibility.python37.python37-compatibility-ipv6network2
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-locale1
   pattern: locale.format_string(monetary=$X, ...)
@@ -554,8 +554,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdU72R
-        version_id: qkTp7L
-        url: https://semgrep.dev/playground/r/qkTp7L/python.lang.compatibility.python37.python37-compatibility-locale1
+        version_id: w8T9nQK
+        url: https://semgrep.dev/playground/r/w8T9nQK/python.lang.compatibility.python37.python37-compatibility-locale1
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-math1
   pattern: math.remainder($X, $Y)
@@ -574,8 +574,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUgbz
-        version_id: l4TXR1
-        url: https://semgrep.dev/playground/r/l4TXR1/python.lang.compatibility.python37.python37-compatibility-math1
+        version_id: xyTKZJZ
+        url: https://semgrep.dev/playground/r/xyTKZJZ/python.lang.compatibility.python37.python37-compatibility-math1
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-multiprocess1
   pattern: multiprocessing.Process.close()
@@ -594,8 +594,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUzRA
-        version_id: YDTYeO
-        url: https://semgrep.dev/playground/r/YDTYeO/python.lang.compatibility.python37.python37-compatibility-multiprocess1
+        version_id: O9TNOod
+        url: https://semgrep.dev/playground/r/O9TNOod/python.lang.compatibility.python37.python37-compatibility-multiprocess1
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-multiprocess2
   pattern: multiprocessing.Process.kill()
@@ -614,8 +614,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUNE9
-        version_id: 6xTy90
-        url: https://semgrep.dev/playground/r/6xTy90/python.lang.compatibility.python37.python37-compatibility-multiprocess2
+        version_id: e1T017y
+        url: https://semgrep.dev/playground/r/e1T017y/python.lang.compatibility.python37.python37-compatibility-multiprocess2
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-os1
   pattern: os.preadv(...)
@@ -634,8 +634,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUpQQ
-        version_id: o5TKDW
-        url: https://semgrep.dev/playground/r/o5TKDW/python.lang.compatibility.python37.python37-compatibility-os1
+        version_id: vdTYNWX
+        url: https://semgrep.dev/playground/r/vdTYNWX/python.lang.compatibility.python37.python37-compatibility-os1
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-os2-ok2
   patterns:
@@ -658,8 +658,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU5vW
-        version_id: zyTG29
-        url: https://semgrep.dev/playground/r/zyTG29/python.lang.compatibility.python37.python37-compatibility-os2-ok2
+        version_id: d6TrA98
+        url: https://semgrep.dev/playground/r/d6TrA98/python.lang.compatibility.python37.python37-compatibility-os2-ok2
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-pdb
   pattern: pdb.set_trace(header=$X, ...)
@@ -679,8 +679,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUby2
-        version_id: pZTb3R
-        url: https://semgrep.dev/playground/r/pZTb3R/python.lang.compatibility.python37.python37-compatibility-pdb
+        version_id: ZRTQNjx
+        url: https://semgrep.dev/playground/r/ZRTQNjx/python.lang.compatibility.python37.python37-compatibility-pdb
         origin: community
 - id: python.lang.compatibility.python37.python37-compatibility-textiowrapper
   pattern: TextIOWrapper.reconfigure(...)
@@ -700,8 +700,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 3qUPdy
-        version_id: BjTKZr
-        url: https://semgrep.dev/playground/r/BjTKZr/python.lang.compatibility.python37.python37-compatibility-textiowrapper
+        version_id: yeTR2wy
+        url: https://semgrep.dev/playground/r/yeTR2wy/python.lang.compatibility.python37.python37-compatibility-textiowrapper
         origin: community
 - id: python.sqlalchemy.performance.performance-improvements.batch-import
   pattern: |
@@ -722,8 +722,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUWjy
-        version_id: JdTodZ
-        url: https://semgrep.dev/playground/r/JdTodZ/python.sqlalchemy.performance.performance-improvements.batch-import
+        version_id: GxTv8x6
+        url: https://semgrep.dev/playground/r/GxTv8x6/python.sqlalchemy.performance.performance-improvements.batch-import
         origin: community
 - id: python.sqlalchemy.performance.performance-improvements.len-all-count
   pattern: len($X.all())
@@ -742,8 +742,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUPOw
-        version_id: PkTjgO
-        url: https://semgrep.dev/playground/r/PkTjgO/python.sqlalchemy.performance.performance-improvements.len-all-count
+        version_id: 5PTdeP9
+        url: https://semgrep.dev/playground/r/5PTdeP9/python.sqlalchemy.performance.performance-improvements.len-all-count
         origin: community
 - id: terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
   message: Key vault Secret should have a content type set
@@ -773,8 +773,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUzld
-        version_id: 2KT8gD
-        url: https://semgrep.dev/playground/r/2KT8gD/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
+        version_id: e1T0338
+        url: https://semgrep.dev/playground/r/e1T0338/terraform.azure.security.keyvault.keyvault-content-type-for-secret.keyvault-content-type-for-secret
         origin: community
   languages:
   - hcl
@@ -817,8 +817,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Uqg5
-        version_id: jQTwZL
-        url: https://semgrep.dev/playground/r/jQTwZL/typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
+        version_id: LjTqARd
+        url: https://semgrep.dev/playground/r/LjTqARd/typescript.react.best-practice.define-styled-components-on-module-level.define-styled-components-on-module-level
         origin: community
   languages:
   - typescript
@@ -846,8 +846,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 10UZOv
-        version_id: X0TQORq
-        url: https://semgrep.dev/playground/r/X0TQORq/typescript.react.best-practice.react-find-dom.react-find-dom
+        version_id: 8KTQy3O
+        url: https://semgrep.dev/playground/r/8KTQy3O/typescript.react.best-practice.react-find-dom.react-find-dom
         origin: community
   languages:
   - typescript
@@ -877,8 +877,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUOdB
-        version_id: 9lTAK8
-        url: https://semgrep.dev/playground/r/9lTAK8/typescript.react.best-practice.react-legacy-component.react-legacy-component
+        version_id: gET3Oro
+        url: https://semgrep.dev/playground/r/gET3Oro/typescript.react.best-practice.react-legacy-component.react-legacy-component
         origin: community
 - id: typescript.react.best-practice.react-props-in-state.react-props-in-state
   pattern-either:
@@ -940,8 +940,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUvRJ
-        version_id: vdTJo3
-        url: https://semgrep.dev/playground/r/vdTJo3/typescript.react.best-practice.react-props-in-state.react-props-in-state
+        version_id: QkTWwEY
+        url: https://semgrep.dev/playground/r/QkTWwEY/typescript.react.best-practice.react-props-in-state.react-props-in-state
         origin: community
   languages:
   - typescript
@@ -972,8 +972,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6Uky5
-        version_id: K3Tvr5j
-        url: https://semgrep.dev/playground/r/K3Tvr5j/typescript.react.best-practice.react-props-spreading.react-props-spreading
+        version_id: 3ZTkr2Z
+        url: https://semgrep.dev/playground/r/3ZTkr2Z/typescript.react.best-practice.react-props-spreading.react-props-spreading
         origin: community
 - id: typescript.react.portability.i18next.i18next-key-format.i18next-key-format
   patterns:
@@ -1037,8 +1037,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUKJr
-        version_id: 5PTGOw
-        url: https://semgrep.dev/playground/r/5PTGOw/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+        version_id: 44TR6bp
+        url: https://semgrep.dev/playground/r/44TR6bp/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
         origin: community
 - id: typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
   patterns:
@@ -1071,8 +1071,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUGrY
-        version_id: GxTX7Q
-        url: https://semgrep.dev/playground/r/GxTX7Q/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
+        version_id: PkTJde4
+        url: https://semgrep.dev/playground/r/PkTJde4/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
         origin: community
 - id: typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
   patterns:
@@ -1104,8 +1104,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUwo1
-        version_id: RGTxgX
-        url: https://semgrep.dev/playground/r/RGTxgX/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
+        version_id: JdTNvnX
+        url: https://semgrep.dev/playground/r/JdTNvnX/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
         origin: community
 - id: typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
   patterns:
@@ -1132,8 +1132,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUpO8
-        version_id: A8TlzR
-        url: https://semgrep.dev/playground/r/A8TlzR/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
+        version_id: 5PTde7b
+        url: https://semgrep.dev/playground/r/5PTde7b/typescript.react.portability.i18next.mui-snackbar-message.mui-snackbar-message
         origin: community
 - id: typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
   patterns:
@@ -1164,6 +1164,6 @@ rules:
     semgrep.dev:
       rule:
         rule_id: nJUPJL
-        version_id: BjTLNY
-        url: https://semgrep.dev/playground/r/BjTLNY/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
+        version_id: GxTv8ld
+        url: https://semgrep.dev/playground/r/GxTv8ld/typescript.react.portability.i18next.useselect-label-not-i18n.useselect-label-not-i18n
         origin: community
