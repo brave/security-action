@@ -2596,68 +2596,6 @@ rules:
   - pattern: lxml.etree.getDefaultParser(...)
   - pattern: lxml.etree.check_docinfo(...)
   severity: WARNING
-- id: gitlab.bandit.B321
-  languages:
-  - python
-  message: |
-    The application was found using an FTP library. As FTP does not provide encryption, it is
-    strongly recommended that any file transfers be done over a more secure transport such as
-    SSH.
-
-    The [paramiko](https://www.paramiko.org/) library can be used with an SCP module to allow
-    secure file transfers.
-
-    Example using `paramiko` SSH client and the `scp` module:
-    ```
-    import paramiko
-    import scp
-
-    # Create an SSH client
-    with paramiko.SSHClient() as ssh:
-        # Load the system host keys so we can confirm the
-        # host we are connecting to is legitimate
-        ssh.load_system_host_keys('/home/appuser/.ssh/known_hosts')
-
-        # Connect to the remote host using our SSH private key
-        ssh.connect(hostname='example.org',
-                    port=22,
-                    username='appuser',
-                    key_filename='/home/appuser/.ssh/private_key')
-
-        # Create an SCP client with the ssh transport and copy files
-        with scp.SCPClient(ssh.get_transport()) as secure_copy:
-            secure_copy.get('remote/test.file', 'local/test.file')
-            secure_copy.put('local/some.file', 'remote/some.file')
-    ```
-
-    For more information on the paramiko module see:
-    - https://www.paramiko.org/
-
-    For more information on the scp module see:
-    - https://github.com/jbardin/scp.py
-  metadata:
-    cwe: CWE-319
-    owasp: A3:2017-Sensitive Data Exposure
-    category: security
-    shortDescription: Cleartext transmission of sensitive information
-    primary_identifier: bandit.B321
-    secondary_identifiers:
-    - name: Bandit Test ID B321
-      type: bandit_test_id
-      value: B321
-    license: MIT
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/gitlab.bandit.B321
-    shortlink: https://sg.run/Awwp
-    semgrep.dev:
-      rule:
-        rule_id: d8Ully
-        version_id: e1T0vjO
-        url: https://semgrep.dev/playground/r/e1T0vjO/gitlab.bandit.B321
-        origin: community
-  pattern: ftplib.$ANYTHING(...)
-  severity: WARNING
 - id: gitlab.bandit.B323
   languages:
   - python
@@ -2881,36 +2819,6 @@ rules:
   - pattern: import Crypto.Random
   - pattern: import Crypto.Signature
   - pattern: import Crypto.Util
-  severity: ERROR
-- id: gitlab.bandit.B415
-  languages:
-  - python
-  pattern-either:
-  - pattern: import pyghmi
-  message: |
-    An IPMI-related module is being imported. IPMI is considered insecure. Use an encrypted
-    protocol.
-  metadata:
-    shortDescription: Cryptographic issues
-    cwe: CWE-310
-    category: security
-    cisa: https://www.cisa.gov/uscert/ncas/alerts/TA13-207A
-    primary_identifier: bandit.B415
-    secondary_identifiers:
-    - name: Bandit Test ID B415
-      type: bandit_test_id
-      value: B415
-    license: MIT
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/gitlab.bandit.B415
-    shortlink: https://sg.run/5NO3
-    semgrep.dev:
-      rule:
-        rule_id: v8Ubxq
-        version_id: kbTdRGn
-        url: https://semgrep.dev/playground/r/kbTdRGn/gitlab.bandit.B415
-        origin: community
   severity: ERROR
 - id: gitlab.bandit.B501
   languages:
@@ -16578,70 +16486,68 @@ rules:
         origin: community
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0028-1
-  patterns:
-  - pattern-not: $OBJ.Deserialize("...")
-  - pattern-not: $OBJ.UnsafeDeserialize("...")
-  - pattern-not: $OBJ.UnsafeDeserializeMethodResponse("...")
-  - pattern-not: $OBJ.ReadObject("...")
-  - pattern-not: $OBJ.DeserializeFromString("...")
-  - pattern-not: $OBJ.DeserializeFromReader("...")
-  - pattern-not: $OBJ.DeserializeFromStream("...")
-  - pattern-not: $OBJ.DeserializeRequest("...")
-  - pattern-not: $OBJ.ToObject("...")
-  - pattern-not: $OBJ.DeserializeResponse("...")
-  - pattern-not: new System.Runtime.Serialization.DataContractSerializer("...")
-  - pattern-not: new System.Runtime.Serialization.Json.DataContractJsonSerializer("...")
-  - pattern-not: new System.Xml.Serialization.XmlSerializer("...")
-  - pattern-not: new System.Resources.ResourceReader("...")
-  - pattern-not: (System.Messaging.XmlMessageFormatter $E).Read("...")
-  - pattern-not: (System.Messaging.BinaryMessageFormatter $E).Read("...")
-  - pattern-either:
-    - pattern: "$OBJ.Deserialize(...)"
-    - pattern: "$OBJ.UnsafeDeserialize(...)"
-    - pattern: "$OBJ.UnsafeDeserializeMethodResponse(...)"
-    - pattern: "$OBJ.ReadObject(...)"
-    - pattern: "$OBJ.DeserializeFromString(...)"
-    - pattern: "$OBJ.DeserializeFromReader(...)"
-    - pattern: "$OBJ.DeserializeFromStream(...)"
-    - pattern: "$OBJ.DeserializeRequest(...)"
-    - pattern: "$OBJ.ToObject(...)"
-    - pattern: "$OBJ.DeserializeResponse(...)"
-    - pattern: new System.Runtime.Serialization.DataContractSerializer(...)
-    - pattern: new System.Runtime.Serialization.Json.DataContractJsonSerializer(...)
-    - pattern: new System.Xml.Serialization.XmlSerializer(...)
-    - pattern: new System.Resources.ResourceReader(...)
-    - pattern: "(System.Messaging.XmlMessageFormatter $E).Read(...)"
-    - pattern: "(System.Messaging.BinaryMessageFormatter $E).Read(...)"
+  mode: taint
+  pattern-sources:
+  - pattern: Request.Cookies[...]
+  - pattern: Request.Cookies.Get(...)
+  - pattern: Request.Form[...]
+  - pattern: Request.Form.Get(...)
+  - pattern: Request.Headers[...]
+  - pattern: Request.Headers.Get(...)
+  - pattern: Request.QueryString[...]
+  - pattern: Request.QueryString.Get(...)
+  - pattern: Request.Body
+  - pattern: "$CTX.Request.Cookies[...]"
+  - pattern: "$CTX.Request.Cookies.Get(...)"
+  - pattern: "$CTX.Request.Form[...]"
+  - pattern: "$CTX.Request.Form.Get(...)"
+  - pattern: "$CTX.Request.Headers[...]"
+  - pattern: "$CTX.Request.Headers.Get(...)"
+  - pattern: "$CTX.Request.QueryString[...]"
+  - pattern: "$CTX.Request.QueryString.Get(...)"
+  - pattern: "$CTX.Request.Body"
+  - pattern: System.IO.File.ReadAllText(...)
+  - pattern: System.IO.File.ReadAllTextAsync(...)
+  - pattern: System.IO.File.ReadAllLines(...)
+  - pattern: System.IO.File.ReadAllLinesAsync(...)
+  - pattern: System.IO.File.ReadAllBytes(...)
+  - pattern: System.IO.File.ReadAllBytesAsync(...)
+  - pattern: System.IO.File.ReadLines(...)
+  - pattern: System.IO.File.ReadLinesAsync(...)
+  - pattern: System.Environment.GetEnvironmentVariable(...)
+  pattern-sinks:
+  - pattern: "(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter $OBJ).Deserialize(...)"
+  - pattern: "(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter $OBJ).UnsafeDeserialize(...)"
+  - pattern: "(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter $OBJ).UnsafeDeserializeMethod(...)"
+  - pattern: "(System.Runtime.Serialization.Formatters.Soap.SoapFormatter $OBJ).Deserialize(...)"
+  - pattern: "(System.Runtime.Serialization.NetDataContractSerializer $OBJ).Deserialize(...)"
+  - pattern: "(System.Web.UI.LosFormatter $OBJ).Deserialize(...)"
   languages:
   - csharp
   message: |
-    Deserialization attacks exploit the process of reading serialized data and turning it back
-    into an object. By constructing malicious objects and serializing them, an adversary may
-    attempt to:
+    Deserialization attacks exploit the process of reading serialized data and turning it back into an
+    object. By constructing malicious objects and serializing them, an adversary may attempt to:
 
-    - Inject code that is executed upon object construction, which occurs during the
-    deserialization process.
-    - Exploit mass assignment by including fields that are not normally a part of the serialized
-    data but are read in during deserialization.
+    - Inject code that is executed upon object construction, which occurs during the deserialization process.
+    - Exploit mass assignment by including fields that are not normally a part of the serialized data but are
+      read in during deserialization.
 
     Microsoft recommends no longer using the following serialization formats:
+
     - BinaryFormatter
     - SoapFormatter
     - NetDataContractSerializer
     - LosFormatter
     - ObjectStateFormatter
 
-    Consider safer alternatives such as serializing data in the JSON format. Ensure any format
-    chosen allows
-    the application to specify exactly which object types are allowed to be deserialized.
-    Additionally, when
-    deserializing, never deserialize to base object types like `Object` and only cast to the exact
-    object
+    Consider safer alternatives such as serializing data in the JSON format. Ensure any format chosen allows
+    the application to specify exactly which object types are allowed to be deserialized. Additionally, when
+    deserializing, never deserialize to base object types like `Object` and only cast to the exact object
     type that is expected.
 
-    To protect against mass assignment, only allow deserialization of the specific fields that are
-    required. If this is not easily done, consider creating an intermediary type that
-    can be serialized with only the necessary fields exposed.
+    To protect against mass assignment, only allow deserialization of the specific fields that are required.
+    If this is not easily done, consider creating an intermediary type that can be serialized with only the
+    necessary fields exposed.
 
     For more information see Microsoft's deserialization security guide:
     https://learn.microsoft.com/en-us/dotnet/standard/serialization/binaryformatter-security-guide
@@ -16649,8 +16555,7 @@ rules:
     For more details on deserialization attacks in general, see OWASP's guide:
     https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
 
-    It should be noted that [tools exist](https://github.com/pwntester/ysoserial.net) to
-    automatically create
+    It should be noted that [tools exist](https://github.com/pwntester/ysoserial.net) to automatically create
     exploit code for these vulnerabilities.
   metadata:
     shortDescription: Deserialization of potentially untrusted data
@@ -16669,8 +16574,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: gxUrkX
-        version_id: o5Tgy7Q
-        url: https://semgrep.dev/playground/r/o5Tgy7Q/gitlab.security_code_scan.SCS0028-1
+        version_id: DkT6ND4
+        url: https://semgrep.dev/playground/r/DkT6ND4/gitlab.security_code_scan.SCS0028-1
         origin: community
   severity: WARNING
 - id: gitlab.security_code_scan.SCS0029-1

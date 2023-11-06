@@ -25,8 +25,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUkvA
-        version_id: BjT9E3
-        url: https://semgrep.dev/playground/r/BjT9E3/contrib.dlint.dlint-equivalent.insecure-xml-use
+        version_id: DkT6nYQ
+        url: https://semgrep.dev/playground/r/DkT6nYQ/contrib.dlint.dlint-equivalent.insecure-xml-use
         origin: community
   pattern-either:
   - patterns:
@@ -71,8 +71,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: NbUk4X
-        version_id: l4T58p
-        url: https://semgrep.dev/playground/r/l4T58p/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
+        version_id: o5Tglp0
+        url: https://semgrep.dev/playground/r/o5Tglp0/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
         origin: community
   languages:
   - go
@@ -147,8 +147,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: QrU96W
-        version_id: gETqOo
-        url: https://semgrep.dev/playground/r/gETqOo/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
+        version_id: l4T4vn1
+        url: https://semgrep.dev/playground/r/l4T4vn1/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
         origin: community
 - patterns:
   - pattern-either:
@@ -199,6 +199,6 @@ rules:
     semgrep.dev:
       rule:
         rule_id: EwUxO1
-        version_id: 5PTdprj
-        url: https://semgrep.dev/playground/r/5PTdprj/terraform.aws.security.aws-provisioner-exec.aws-provisioner-exec
+        version_id: JdTNvlx
+        url: https://semgrep.dev/playground/r/JdTNvlx/terraform.aws.security.aws-provisioner-exec.aws-provisioner-exec
         origin: community

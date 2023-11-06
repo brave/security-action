@@ -74,13 +74,17 @@ rules:
   - pattern: |
       free($PTR);
       ...
-      free($PTR);
+      $FREE($PTR);
   - pattern-not: |
       free($PTR);
       ...
       $PTR = $EXPR;
       ...
       free($PTR);
+  - metavariable-pattern:
+      metavariable: "$FREE"
+      pattern: free
+  - focus-metavariable: "$FREE"
 - id: raptor-format-string-bugs
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -281,6 +285,64 @@ rules:
   - pattern: "(unsigned long $UNSIGNED) >= 0"
   - pattern: "(unsigned long int $UNSIGNED) >= 0"
   - pattern: "(size_t $UNSIGNED) >= 0"
+- id: raptor-incorrect-use-of-free
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://cwe.mitre.org/data/definitions/590
+    - https://github.com/shellphish/how2heap/blob/master/glibc_2.23/house_of_spirit.c
+    confidence: MEDIUM
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-free.yaml
+  message: The software calls free() on a pointer to memory that has a short  lifetime
+    and was not allocated using associated heap allocation  functions such as malloc(),
+    calloc(), or realloc().
+  severity: ERROR
+  languages:
+  - c
+  - cpp
+  pattern-either:
+  - patterns:
+    - pattern: free($PTR)
+    - pattern-either:
+      - pattern-inside: |
+          $TYPE $PTR[$LEN];
+          ...
+      - pattern-inside: |
+          $TYPE $PTR[$LEN] = $EXPR;
+          ...
+      - pattern-inside: |
+          $TYPE $ARR[$LEN];
+          ...
+          $PTR = $ARR;
+          ...
+      - pattern-inside: |
+          $TYPE $ARR[$LEN] = $EXPR;
+          ...
+          $PTR = $ARR;
+          ...
+  - patterns:
+    - pattern: free(&$VAR)
+    - pattern-either:
+      - pattern-inside: |
+          $TYPE $VAR;
+          ...
+      - pattern-inside: "$TYPE $VAR = $EXPR;\n...          \n"
+      - pattern-inside: |
+          $TYPE $VAR[$LEN];
+          ...
+      - pattern-inside: |
+          $TYPE $VAR[$LEN] = $EXPR;
+          ...
+      - pattern-inside: |
+          $TYPE * $VAR;
+          ...
+      - pattern-inside: |
+          $TYPE * $VAR = $EXPR;
+          ...
 - id: raptor-incorrect-use-of-memset
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -341,6 +403,28 @@ rules:
       - pattern-inside: |
           $TYPE * $PTR = $EXPR;
           ...
+- id: raptor-incorrect-use-of-sprintf-snprintf
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://linux.die.net/man/3/sprintf
+    confidence: MEDIUM
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/incorrect-use-of-sprintf-snprintf.yaml
+  message: C standards specify that the results are undefined if a call to sprintf(),
+    snprintf(), vsprintf(), or vsnprintf() would cause copying to take place between
+    objects that overlap (e.g., if the target string array and one of the supplied
+    input arguments refer to the same buffer).
+  severity: WARNING
+  languages:
+  - c
+  - cpp
+  pattern-either:
+  - pattern: sprintf($DST, ..., $DST, ...)
+  - pattern: snprintf($DST, $N, ..., $DST, ...)
 - id: raptor-incorrect-use-of-strncat
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -372,6 +456,7 @@ rules:
           $TYPE $DST[$LEN] = $EXPR;
           ...
   - pattern: strncat($DST, $SRC, sizeof($DST))
+  - pattern: strncat($DST, $SRC, strlen($DST))
   - pattern: strncat($DST, $SRC, sizeof($DST) - strlen($DST))
 - id: raptor-incorrect-use-of-strncpy-stpncpy-strlcpy
   metadata:
@@ -476,10 +561,11 @@ rules:
     subcategory:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-atoi-atol-atof.yaml
-  message: The atoi(), atol(), atof(), and similar functions have undefined  behavior
-    if the value of the result cannot be represented. They return  0 (or 0.0) if the
-    string does not represent an integer (or decimal),  which is indistinguishable
-    from a correctly formatted, zero-denoting  input string.
+  message: The atoi(), atol(), atof(), and similar functions don't handle errors.
+    They don't check for integer overflow and can return a negative value.  They have
+    undefined behavior if the value of the result cannot be  represented. They return
+    0 (or 0.0) if the string does not represent  an integer (or decimal), which is
+    indistinguishable from a correctly  formatted, zero-denoting input string.
   severity: INFO
   languages:
   - c
@@ -591,6 +677,28 @@ rules:
   - metavariable-regex:
       metavariable: "$FMT"
       regex: (".*%l?s.*"|".*%S.*"|[a-zA-Z_][a-zA-Z0-9_]*)
+- id: raptor-insecure-api-signal
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://cwe.mitre.org/data/definitions/364
+    - https://cwe.mitre.org/data/definitions/479
+    - https://cwe.mitre.org/data/definitions/828
+    confidence: HIGH
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-signal.yaml
+  message: The signal() API should be regarded as deprecated. When possible, sigaction()
+    should be used instead, because it allows to precisely specify the desired behavior
+    in case two signals arrive shortly after each other thus preventing many race
+    conditions.
+  severity: WARNING
+  languages:
+  - c
+  - cpp
+  pattern: signal(...)
 - id: raptor-insecure-api-sprintf-vsprintf
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -975,7 +1083,7 @@ rules:
     - https://cwe.mitre.org/data/definitions/209
     - https://cwe.mitre.org/data/definitions/497
     - https://github.com/struct/mms
-    confidence: MEDIUM
+    confidence: LOW
     license: MIT
     category: security
     subcategory:
@@ -1206,6 +1314,30 @@ rules:
   - pattern-not: 'switch ($VAR) { default: ... }
 
       '
+- id: raptor-missing-return
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://cwe.mitre.org/data/definitions/393
+    - https://cwe.mitre.org/data/definitions/394
+    confidence: LOW
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/missing-return.yaml
+  message: A non-void function does not have a return statement. Hence, its return
+    value can be considered undefined.
+  severity: INFO
+  languages:
+  - c
+  - cpp
+  patterns:
+  - pattern: "$TYPE $FUN($ARG, ...) { ... }"
+  - pattern-not: "$TYPE $FUN(...);"
+  - pattern-not: "$TYPE $FUN(...) { ... return $RET; }"
+  - pattern-not: int main(...) { ... }
+  - pattern-not: void $FUN(...) { ... }
 - id: raptor-off-by-one
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1214,7 +1346,7 @@ rules:
     - https://cwe.mitre.org/data/definitions/787
     - https://g.co/kgs/PCHQjJ
     - https://github.com/struct/mms
-    confidence: LOW
+    confidence: MEDIUM
     license: MIT
     category: security
     subcategory:
@@ -1222,30 +1354,32 @@ rules:
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/off-by-one.yaml
   message: The software calculates or uses an incorrect maximum or minimum value that
     is 1 more, or 1 less, than the correct value.
-  severity: INFO
+  severity: WARNING
   languages:
   - c
   - cpp
   pattern-either:
   - pattern: "$BUF[sizeof($BUF)] = $EXPR"
   - patterns:
-    - pattern: "$BUF[$SIZE] = $EXPR"
+    - pattern: "$BUF[$LEN] = $EXPR"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
-        $BUF[$SIZE] = $EXPR;
+        $BUF[$LEN] = $EXPR;
   - patterns:
-    - pattern: "*($BUF + $SIZE) = $EXPR\n"
+    - pattern: "*($BUF + $LEN) = $EXPR\n"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
-        *($BUF + $SIZE) = $EXPR;
-  - pattern: for (<... $I = $NUM ...>; <... $I <= $SIZE ...>; <... $I++ ...>) ...
-  - pattern: for (<... $I = $NUM ...>; <... $I <= $SIZE ...>; <... ++$I ...>) ...
-  - pattern: for ($TYPE $I = $NUM; <... $I <= $SIZE ...>; <... $I++ ...>) ...
-  - pattern: for ($TYPE $I = $NUM; <... $I <= $SIZE ...>; <... ++$I ...>) ...
-  - pattern: while (<... $I <= $SIZE ...>) ...
-  - pattern: do ... while (<... $I <= $SIZE ...>);
+        *($BUF + $LEN) = $EXPR;
+  - patterns:
+    - pattern: "$BUF[$X][$Y] = $EXPR"
+    - pattern-either:
+      - pattern-inside: |
+          $TYPE $BUF[$A][$Y];
+          ...
+          $BUF[$X][$Y] = $EXPR;
+      - pattern-inside: "$TYPE $BUF[$X][$B];\n...\n$BUF[$X][$Y] = $EXPR;    \n"
   - pattern: strlen($SRC) > sizeof($DST)
   - pattern: strlen($SRC) <= sizeof($DST)
   - pattern: sizeof($DST) < strlen($SRC)
@@ -1311,6 +1445,45 @@ rules:
           $TYPE * $PTR2;
           $TYPE * $PTR3 = $PTR1;
           ...
+- id: raptor-putenv-stack-var
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://cwe.mitre.org/data/definitions/686
+    - https://cwe.mitre.org/data/definitions/562
+    - https://www.sei.cmu.edu/downloads/sei-cert-c-coding-standard-2016-v01.pdf
+    confidence: LOW
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/putenv-stack-var.yaml
+  message: The software calls putenv() with a variable that has a short lifetime,
+    such as a pointer to an automatic variable allocated on the stack. The correct
+    behavior is to call putenv() with a static/global string.
+  severity: INFO
+  languages:
+  - c
+  - cpp
+  patterns:
+  - pattern: putenv($PTR);
+  - pattern-either:
+    - pattern-inside: |
+        $TYPE $PTR[$LEN];
+        ...
+    - pattern-inside: |
+        $TYPE $PTR[$LEN] = $EXPR;
+        ...
+    - pattern-inside: |
+        $TYPE $ARR[$LEN];
+        ...
+        $PTR = $ARR;
+        ...
+    - pattern-inside: |
+        $TYPE $ARR[$LEN] = $EXPR;
+        ...
+        $PTR = $ARR;
+        ...
 - id: raptor-ret-stack-address
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1337,18 +1510,18 @@ rules:
     - pattern: return $PTR;
     - pattern-either:
       - pattern-inside: |
-          $TYPE $PTR[$SIZE];
+          $TYPE $PTR[$LEN];
           ...
       - pattern-inside: |
-          $TYPE $PTR[$SIZE] = $EXPR;
+          $TYPE $PTR[$LEN] = $EXPR;
           ...
       - pattern-inside: |
-          $TYPE $ARR[$SIZE];
+          $TYPE $ARR[$LEN];
           ...
           $PTR = $ARR;
           ...
       - pattern-inside: |
-          $TYPE $ARR[$SIZE] = $EXPR;
+          $TYPE $ARR[$LEN] = $EXPR;
           ...
           $PTR = $ARR;
           ...
@@ -1360,6 +1533,18 @@ rules:
           ...
       - pattern-inside: |
           $TYPE $VAR = $EXPR;
+          ...
+      - pattern-inside: |
+          $TYPE $VAR[$LEN];
+          ...
+      - pattern-inside: |
+          $TYPE $VAR[$LEN] = $EXPR;
+          ...
+      - pattern-inside: |
+          $TYPE * $VAR;
+          ...
+      - pattern-inside: |
+          $TYPE * $VAR = $EXPR;
           ...
 - id: raptor-signed-unsigned-conversion
   metadata:
@@ -1444,7 +1629,7 @@ rules:
   - pattern: read($FD, $BUF, (int $LEN))
   - pattern: recv($SD, $BUF, (int $LEN), $FL)
   - pattern: recvfrom($SD, $BUF, (int $LEN), $FL, ...)
-  - pattern: fread($PTR, (int $SIZE), $NITEMS, $FS)
+  - pattern: fread($PTR, (int $LEN), $NITEMS, $FS)
   - pattern: "(int $SIGNED) = <... (unsigned int $UNSIGNED) ...>"
   - pattern: |
       int $FUN(...)
@@ -1494,14 +1679,10 @@ rules:
   - cpp
   patterns:
   - pattern-either:
-    - pattern: "$ASSERT(<... $A < $B ...>)"
-    - pattern: "$ASSERT(<... $A < $B ...>, ...)"
-    - pattern: "$ASSERT(<... $A <= $B ...>)"
-    - pattern: "$ASSERT(<... $A <= $B ...>, ...)"
-    - pattern: "$ASSERT(<... $A > $B ...>)"
-    - pattern: "$ASSERT(<... $A > $B ...>, ...)"
-    - pattern: "$ASSERT(<... $A >= $B ...>)"
-    - pattern: "$ASSERT(<... $A >= $B ...>, ...)"
+    - pattern: "$ASSERT(..., <... $A < $B ...>, ...)"
+    - pattern: "$ASSERT(..., <... $A <= $B ...>, ...)"
+    - pattern: "$ASSERT(..., <... $A > $B ...>, ...)"
+    - pattern: "$ASSERT(..., <... $A >= $B ...>, ...)"
   - metavariable-regex:
       metavariable: "$ASSERT"
       regex: "(?i)^\\w*assert\\w*\\s*$"
@@ -1530,7 +1711,10 @@ rules:
   - cpp
   pattern-either:
   - pattern: for ($EXPR1 == $EXPR2; $EXPR3; $EXPR4) ...
-  - pattern: "$EXPR1 == $EXPR2;"
+  - patterns:
+    - pattern: "$EXPR1 == $EXPR2;"
+    - pattern-not-inside: return $EXPR;
+    - pattern-not-inside: assert(...);
   - patterns:
     - pattern: if (<... $EXPR1 = $EXPR2 ...>) ...
     - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) == $EXPR ...>) ...
@@ -1564,18 +1748,19 @@ rules:
   - pattern: "($EXPR <= $EXPR)"
   - pattern: "($EXPR > $EXPR)"
   - pattern: "($EXPR >= $EXPR)"
-  - pattern-either:
-    - pattern: "(char * $PTR) = '\\0'"
-    - pattern: "(char * $PTR) == '\\0'"
-    - pattern: "(char * $PTR) != '\\0'"
+  - pattern: "(char * $PTR) = '\\0'"
+  - pattern: "(char * $PTR) == '\\0'"
+  - pattern: "(char * $PTR) != '\\0'"
+  - pattern: if (<... strcpy(...) ...>) ...
+  - pattern: if (<... strncpy(...) ...>) ...
   - pattern: if ($COND);
   - pattern: for ($EXPR1; $EXPR2; $EXPR3);
   - patterns:
     - pattern-either:
-      - pattern: "$TYPE $ARR[$SIZE];"
-      - pattern: "$TYPE $ARR[$SIZE] = $EXPR;"
+      - pattern: "$TYPE $ARR[$LEN];"
+      - pattern: "$TYPE $ARR[$LEN] = $EXPR;"
     - metavariable-regex:
-        metavariable: "$SIZE"
+        metavariable: "$LEN"
         regex: "^0.*"
 - id: raptor-unchecked-ret-malloc-calloc-realloc
   metadata:
@@ -1668,6 +1853,49 @@ rules:
     - pattern-not-inside: "<... $ALLOC == NULL ...>"
     - pattern-not-inside: "<... $ALLOC != NULL ...>"
     - pattern-not-inside: "<... !$ALLOC ...>"
+- id: raptor-unchecked-ret-scanf-etc
+  metadata:
+    author: Marco Ivaldi <raptor@0xdeadbeef.info>
+    references:
+    - https://cwe.mitre.org/data/definitions/252
+    - https://codeql.github.com/codeql-query-help/cpp/cpp-missing-check-scanf/
+    confidence: MEDIUM
+    license: MIT
+    category: security
+    subcategory:
+    - audit
+    source: https://github.com/0xdea/semgrep-rules/blob/main/c/unchecked-ret-scanf-etc.yaml
+  message: The software does not check the return value from a method or function,
+    which can prevent it from detecting unexpected states and conditions.
+  severity: WARNING
+  languages:
+  - c
+  - cpp
+  patterns:
+  - pattern: "$FUN(...)"
+  - metavariable-pattern:
+      metavariable: "$FUN"
+      pattern-either:
+      - pattern: scanf
+      - pattern: vscanf
+      - pattern: fscanf
+      - pattern: vfscanf
+      - pattern: sscanf
+      - pattern: vsscanf
+      - pattern: wscanf
+      - pattern: vwscanf
+      - pattern: fwscanf
+      - pattern: vfwscanf
+      - pattern: swscanf
+      - pattern: vswscanf
+  - pattern-not-inside: "$RET = $FUN(...)"
+  - pattern-not-inside: "<... $FUN(...) == $VAL ...>"
+  - pattern-not-inside: "<... $FUN(...) != $VAL ...>"
+  - pattern-not-inside: "<... $FUN(...) < $VAL ...>"
+  - pattern-not-inside: "<... $FUN(...) <= $VAL ...>"
+  - pattern-not-inside: "<... $FUN(...) > $VAL ...>"
+  - pattern-not-inside: "<... $FUN(...) >= $VAL ...>"
+  - pattern-not-inside: return $FUN(...);
 - id: raptor-unchecked-ret-setuid-seteuid
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1896,66 +2124,26 @@ rules:
   languages:
   - c
   - cpp
-  pattern-either:
-  - patterns:
-    - pattern: |
-        free($PTR);
-        ...
-        $FUN(..., $PTR, ...);
-    - pattern-not: |
-        free($PTR);
-        ...
-        $PTR = $EXPR;
-        ...
-        $FUN(..., $PTR, ...);
-    - metavariable-pattern:
-        metavariable: "$FUN"
-        patterns:
-        - pattern-not: free
-  - patterns:
-    - pattern: |
-        free($PTR);
-        ...
-        $FUN(..., $PTR->$MEM, ...);
-    - pattern-not: |
-        free($PTR);
-        ...
-        $PTR = $EXPR;
-        ...
-        $FUN(..., $PTR->$MEM, ...);
-  - patterns:
-    - pattern: |
-        free($PTR);
-        ...
-        $PTR->$FUN(...);
-    - pattern-not: |
-        free($PTR);
-        ...
-        $PTR = $EXPR;
-        ...
-        $PTR->$FUN(...);
-  - patterns:
-    - pattern: |
-        free($PTR);
-        ...
-        return $PTR;
-    - pattern-not: |
-        free($PTR);
-        ...
-        $PTR = $EXPR;
-        ...
-        return $PTR;
-  - patterns:
-    - pattern: |
-        free($PTR);
-        ...
-        return $PTR[$POS];
-    - pattern-not: |
-        free($PTR);
-        ...
-        $PTR = $EXPR;
-        ...
-        return $PTR;
+  patterns:
+  - pattern-either:
+    - pattern: "$PTR->$MEM"
+    - pattern: "(*$PTR).$MEM"
+    - pattern: "$PTR[$POS]"
+    - pattern: return $PTR;
+    - pattern: return *$PTR;
+    - patterns:
+      - pattern-either:
+        - pattern: "$FUN(..., <... $PTR ...>, ...)"
+        - pattern: "$FUN(..., <... $PTR->$MEM ...>, ...)"
+        - pattern: "$FUN(..., <... (*$PTR).$MEM ...>, ...)"
+        - pattern: "$FUN(..., <... $PTR[$POS] ...>, ...)"
+        - pattern: "$PTR->$FUN(...)"
+      - metavariable-pattern:
+          metavariable: "$FUN"
+          patterns:
+          - pattern-not: free
+  - pattern-inside: free($PTR); ...
+  - pattern-not-inside: "free($PTR);\n...\n$PTR = $EXPR; \n...\n"
 - id: raptor-write-into-stack-buffer
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1978,7 +2166,7 @@ rules:
   - patterns:
     - pattern: "$FUN($BUF, ...)"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
         $FUN($BUF, ...);
     - pattern-not: $FUN($BUF, "...", ...)
@@ -2011,7 +2199,7 @@ rules:
   - patterns:
     - pattern: "$FUN($BUF, $FMT, ...)"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
         $FUN($BUF, $FMT, ...);
     - metavariable-regex:
@@ -2023,9 +2211,9 @@ rules:
         - pattern: sprintf
         - pattern: vsprintf
   - patterns:
-    - pattern: "$FUN($BUF, $LEN, $FMT, ...)"
+    - pattern: "$FUN($BUF, $N, $FMT, ...)"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
         $FUN($BUF, $LEN, $FMT, ...);
     - metavariable-regex:
@@ -2039,7 +2227,7 @@ rules:
   - patterns:
     - pattern: "$FUN($BUF, ...)"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
         $FUN($BUF, ...);
     - metavariable-pattern:
@@ -2053,7 +2241,7 @@ rules:
   - patterns:
     - pattern: "$FUN($ARG1, $BUF, ...)"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
         $FUN($ARG1, $BUF, ...);
     - pattern-not: $FUN("...", $BUF, ...)
@@ -2064,7 +2252,7 @@ rules:
   - patterns:
     - pattern: "$FUN($ARG1, $BUF, ...)"
     - pattern-inside: |
-        $TYPE $BUF[$SIZE];
+        $TYPE $BUF[$LEN];
         ...
         $FUN($ARG1, $BUF, ...);
     - metavariable-pattern:
@@ -2101,22 +2289,32 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU6Xb
-        version_id: gET3W1b
-        url: https://semgrep.dev/playground/r/gET3W1b/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+        version_id: DkT6Gbr
+        url: https://semgrep.dev/playground/r/DkT6Gbr/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
         origin: community
   patterns:
-  - pattern-either:
-    - pattern: |
-        $X, err = ...
-        if err != nil {
-          <... $X ...>
-        }
-    - pattern: |
-        $X, err := ...
-        if err != nil {
-          ...
-          <... $X.$Y ...>
-        }
+  - pattern: |
+      ..., $X, ..., $ERR = ...
+      if $ERR != nil {
+        ...
+        <... $X.$Y ...>
+      }
+  - pattern-not: |
+      ..., $X, ..., $ERR = ...
+      if $ERR != nil {
+        ...
+        $X, ... = ...
+        ...
+        <... $X.$Y ...>
+      }
+  - pattern-not: |
+      ..., $X, ..., $ERR = ...
+      if $ERR != nil {
+        ...
+        $X = ...
+        ...
+        <... $X.$Y ...>
+      }
 - id: trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
   message: Iteration over a possibly empty map `$C`. This is likely a bug or redundant
     code
