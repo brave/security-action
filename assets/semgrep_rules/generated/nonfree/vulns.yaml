@@ -338,15 +338,15 @@ rules:
     impact: HIGH
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Insecure Hashing Algorithm
     - Cryptographic Issues
+    - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/clojure.lang.security.use-of-md5.use-of-md5
     shortlink: https://sg.run/BgPx
     semgrep.dev:
       rule:
         rule_id: nJU1ep
-        version_id: QkTW0w9
-        url: https://semgrep.dev/playground/r/QkTW0w9/clojure.lang.security.use-of-md5.use-of-md5
+        version_id: 5PTdeYo
+        url: https://semgrep.dev/playground/r/5PTdeYo/clojure.lang.security.use-of-md5.use-of-md5
         origin: community
   pattern-either:
   - pattern: (MessageDigest/getInstance "MD5")
@@ -383,15 +383,15 @@ rules:
     impact: HIGH
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Insecure Hashing Algorithm
     - Cryptographic Issues
+    - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/clojure.lang.security.use-of-sha1.use-of-sha1
     shortlink: https://sg.run/dvwX
     semgrep.dev:
       rule:
         rule_id: NbUy12
-        version_id: 3ZTkQry
-        url: https://semgrep.dev/playground/r/3ZTkQry/clojure.lang.security.use-of-sha1.use-of-sha1
+        version_id: GxTv8Wq
+        url: https://semgrep.dev/playground/r/GxTv8Wq/clojure.lang.security.use-of-sha1.use-of-sha1
         origin: community
   patterns:
   - pattern-either:
@@ -602,6 +602,7 @@ rules:
     - 'CWE-862: Missing Authorization'
     cwe2021-top25: true
     cwe2022-top25: true
+    cwe2023-top25: true
     owasp:
     - A01:2021 - Broken Access Control
     references:
@@ -621,20 +622,24 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqU32Y
-        version_id: 0bTLlgl
-        url: https://semgrep.dev/playground/r/0bTLlgl/csharp.dotnet.security.audit.missing-or-broken-authorization.missing-or-broken-authorization
+        version_id: A8T9gKe
+        url: https://semgrep.dev/playground/r/A8T9gKe/csharp.dotnet.security.audit.missing-or-broken-authorization.missing-or-broken-authorization
         origin: community
   languages:
   - csharp
   patterns:
   - pattern: |
-      [AllowAnonymous]
       public class $CLASS : Controller {
         ...
       }
   - pattern-inside: |
       using Microsoft.AspNetCore.Mvc;
       ...
+  - pattern-not: |
+      [AllowAnonymous]
+      public class $CLASS : Controller {
+        ...
+      }
   - pattern-not: |
       [Authorize]
       public class $CLASS : Controller {
@@ -10090,8 +10095,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: AbUQLr
-        version_id: 2KTzrk0
-        url: https://semgrep.dev/playground/r/2KTzrk0/go.lang.security.injection.tainted-url-host.tainted-url-host
+        version_id: WrTWqDE
+        url: https://semgrep.dev/playground/r/WrTWqDE/go.lang.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sources:
@@ -21075,6 +21080,90 @@ rules:
     - pattern-either:
       - pattern-inside: new $SINK(...)
     - pattern: "$SINK"
+- id: php.lang.security.injection.tainted-session.tainted-session
+  severity: WARNING
+  message: Session key based on user input risks session poisoning. The user can determine
+    the key used for the session, and thus write any session variable. Session variables
+    are typically trusted to be set only by the application, and manipulating the
+    session can result in access control issues.
+  metadata:
+    technology:
+    - php
+    category: security
+    cwe:
+    - 'CWE-284: Improper Access Control'
+    owasp:
+    - A01:2021 - Broken Access Control
+    references:
+    - https://en.wikipedia.org/wiki/Session_poisoning
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/php.lang.security.injection.tainted-session.tainted-session
+    shortlink: https://sg.run/bxNp
+    semgrep.dev:
+      rule:
+        rule_id: 4bUdoP
+        version_id: 0bTLKDl
+        url: https://semgrep.dev/playground/r/0bTLKDl/php.lang.security.injection.tainted-session.tainted-session
+        origin: community
+  languages:
+  - php
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: "$_GET"
+      - pattern: "$_POST"
+      - pattern: "$_COOKIE"
+      - pattern: "$_REQUEST"
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: "$A . $B"
+      - pattern: bin2hex(...)
+      - pattern: crc32(...)
+      - pattern: crypt(...)
+      - pattern: filter_input(...)
+      - pattern: filter_var(...)
+      - pattern: hash(...)
+      - pattern: md5(...)
+      - pattern: preg_filter(...)
+      - pattern: preg_grep(...)
+      - pattern: preg_match_all(...)
+      - pattern: sha1(...)
+      - pattern: sprintf(...)
+      - pattern: str_contains(...)
+      - pattern: str_ends_with(...)
+      - pattern: str_starts_with(...)
+      - pattern: strcasecmp(...)
+      - pattern: strchr(...)
+      - pattern: stripos(...)
+      - pattern: stristr(...)
+      - pattern: strnatcasecmp(...)
+      - pattern: strnatcmp(...)
+      - pattern: strncmp(...)
+      - pattern: strpbrk(...)
+      - pattern: strpos(...)
+      - pattern: strripos(...)
+      - pattern: strrpos(...)
+      - pattern: strspn(...)
+      - pattern: strstr(...)
+      - pattern: strtok(...)
+      - pattern: substr_compare(...)
+      - pattern: substr_count(...)
+      - pattern: vsprintf(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-inside: "$_SESSION[$KEY] = $VAL;"
+    - pattern: "$KEY"
 - id: php.lang.security.injection.tainted-sql-string.tainted-sql-string
   languages:
   - php
@@ -21398,6 +21487,57 @@ rules:
   languages:
   - php
   severity: WARNING
+- id: php.lang.security.tainted-exec.tainted-exec
+  mode: taint
+  pattern-sources:
+  - pattern: "$_REQUEST"
+  - pattern: "$_GET"
+  - pattern: "$_POST"
+  - pattern: "$_COOKIE"
+  pattern-sinks:
+  - pattern: exec(...)
+  - pattern: system(...)
+  - pattern: popen(...)
+  - pattern: passthru(...)
+  - pattern: shell_exec(...)
+  - pattern: pcntl_exec(...)
+  - pattern: proc_open(...)
+  pattern-sanitizers:
+  - pattern: escapeshellarg(...)
+  message: Executing non-constant commands. This can lead to command injection. You
+    should use `escapeshellarg()` when using command.
+  metadata:
+    cwe:
+    - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    references:
+    - https://www.stackhawk.com/blog/php-command-injection/
+    - https://brightsec.com/blog/code-injection-php/
+    - https://www.acunetix.com/websitesecurity/php-security-2/
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2021 - Injection
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    likelihood: HIGH
+    impact: HIGH
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Code Injection
+    source: https://semgrep.dev/r/php.lang.security.tainted-exec.tainted-exec
+    shortlink: https://sg.run/JAkP
+    semgrep.dev:
+      rule:
+        rule_id: 9AUw06
+        version_id: NdT3djz
+        url: https://semgrep.dev/playground/r/NdT3djz/php.lang.security.tainted-exec.tainted-exec
+        origin: community
+  languages:
+  - php
+  severity: ERROR
 - id: php.laravel.security.laravel-api-route-sql-injection.laravel-api-route-sql-injection
   mode: taint
   pattern-sources:
@@ -38261,10 +38401,10 @@ rules:
     as ActiveRecord which will protect your queries.
   metadata:
     cwe:
-    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
+    - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command
+      (''SQL Injection'')'
     owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
+    - A01:2017 - Injection
     - A03:2021 - Injection
     category: security
     technology:
@@ -38280,14 +38420,14 @@ rules:
     impact: HIGH
     confidence: MEDIUM
     vulnerability_class:
-    - Cross-Site-Scripting (XSS)
+    - SQL Injection
     source: https://semgrep.dev/r/ruby.rails.security.injection.tainted-sql-string.tainted-sql-string
     shortlink: https://sg.run/Y85o
     semgrep.dev:
       rule:
         rule_id: bwU8gl
-        version_id: pZT1LGK
-        url: https://semgrep.dev/playground/r/pZT1LGK/ruby.rails.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: YDTpZBw
+        url: https://semgrep.dev/playground/r/YDTpZBw/ruby.rails.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sources:
@@ -44797,6 +44937,64 @@ rules:
   languages:
   - yaml
   severity: WARNING
+- id: yaml.kubernetes.security.legacy-api-clusterrole-excessive-permissions.legacy-api-clusterrole-excessive-permissions
+  patterns:
+  - pattern: '"*"
+
+      '
+  - pattern-inside: |
+      resources: $A
+      ...
+  - pattern-inside: |
+      verbs: $A
+      ...
+  - pattern-inside: |
+      - apiGroups: [""]
+        ...
+  - pattern-inside: |
+      apiVersion: rbac.authorization.k8s.io/v1
+      ...
+  - pattern-inside: |
+      kind: ClusterRole
+      ...
+  message: 'Semgrep detected a Kubernetes core API ClusterRole with excessive permissions.
+    Attaching excessive permissions to a ClusterRole associated with the core namespace
+    allows the V1 API to perform arbitrary actions on arbitrary resources attached
+    to the cluster. Prefer explicit allowlists of verbs/resources when configuring
+    the core API namespace. '
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    cwe:
+    - 'CWE-269: Improper Privilege Management'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A06:2017 - Security Misconfiguration
+    references:
+    - https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+    - https://kubernetes.io/docs/concepts/security/rbac-good-practices/#general-good-practice
+    - https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#api-groups
+    category: security
+    technology:
+    - kubernetes
+    cwe2021-top25: false
+    subcategory:
+    - vuln
+    likelihood: MEDIUM
+    impact: HIGH
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/yaml.kubernetes.security.legacy-api-clusterrole-excessive-permissions.legacy-api-clusterrole-excessive-permissions
+    shortlink: https://sg.run/x6Dz
+    semgrep.dev:
+      rule:
+        rule_id: GdUR2A
+        version_id: o5TgbOJ
+        url: https://semgrep.dev/playground/r/o5TgbOJ/yaml.kubernetes.security.legacy-api-clusterrole-excessive-permissions.legacy-api-clusterrole-excessive-permissions
+        origin: community
 - id: yaml.kubernetes.security.privileged-container.privileged-container
   pattern-either:
   - patterns:
