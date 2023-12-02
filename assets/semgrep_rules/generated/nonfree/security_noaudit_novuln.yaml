@@ -150,6 +150,80 @@ rules:
         version_id: l4T4vn1
         url: https://semgrep.dev/playground/r/l4T4vn1/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
         origin: community
+- id: python.django.security.django-no-csrf-token.django-no-csrf-token
+  patterns:
+  - pattern: "<form...>...</form>"
+  - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
+  message: Manually-created forms in django templates should specify a csrf_token
+    to prevent CSRF attacks
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
+    references:
+    - https://docs.djangoproject.com/en/4.2/howto/csrf/
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    subcategory:
+    - guardrail
+    technology:
+    - django
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cross-Site Request Forgery (CSRF)
+    source: https://semgrep.dev/r/python.django.security.django-no-csrf-token.django-no-csrf-token
+    shortlink: https://sg.run/N0Bp
+    semgrep.dev:
+      rule:
+        rule_id: PeUyYG
+        version_id: K3TvKZG
+        url: https://semgrep.dev/playground/r/K3TvKZG/python.django.security.django-no-csrf-token.django-no-csrf-token
+        origin: community
+  paths:
+    include:
+    - "*.html"
+- id: python.django.security.django-using-request-post-after-is-valid.django-using-request-post-after-is-valid
+  patterns:
+  - pattern-inside: |
+      def $FUNC(request, ...):
+        ...
+  - pattern-inside: |
+      if $FORM.is_valid():
+        ...
+  - pattern-either:
+    - pattern: request.POST[...]
+    - pattern: request.POST.get(...)
+  message: Use $FORM.cleaned_data[] instead of request.POST[] after form.is_valid()
+    has been executed to only access sanitized data
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-20: Improper Input Validation'
+    references:
+    - https://docs.djangoproject.com/en/4.2/ref/forms/api/#accessing-clean-data
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    subcategory:
+    - guardrail
+    technology:
+    - django
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Validation
+    source: https://semgrep.dev/r/python.django.security.django-using-request-post-after-is-valid.django-using-request-post-after-is-valid
+    shortlink: https://sg.run/kJn7
+    semgrep.dev:
+      rule:
+        rule_id: JDUjqx
+        version_id: qkT2RER
+        url: https://semgrep.dev/playground/r/qkT2RER/python.django.security.django-using-request-post-after-is-valid.django-using-request-post-after-is-valid
+        origin: community
 - patterns:
   - pattern-either:
     - pattern: |

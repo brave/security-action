@@ -366,6 +366,9 @@ rules:
   - pattern: memset($S, $C, 0);
   - pattern: memset($S, $C, '\0');
   - pattern: memset($S, sizeof(...), $N);
+  - pattern: memset_explicit($S, $C, 0);
+  - pattern: memset_explicit($S, $C, '\0');
+  - pattern: memset_explicit($S, sizeof(...), $N);
 - id: raptor-incorrect-use-of-sizeof
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -790,24 +793,27 @@ rules:
   - pattern: "(char $NARROW) = <... (long int $LARGE) ...>"
   - pattern: "(char $NARROW) = <... (unsigned long $LARGE) ...>"
   - pattern: "(char $NARROW) = <... (unsigned long int $LARGE) ...>"
-  - pattern: |
-      char $FUN(...)
-      {
-      ...
-      return (short $LARGE);
-      }
-  - pattern: |
-      char $FUN(...)
-      {
-      ...
-      return (int $LARGE);
-      }
-  - pattern: |
-      char $FUN(...)
-      {
-      ...
-      return (long $LARGE);
-      }
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          char $FUN(...)
+          {
+          ...
+          return (short $LARGE);
+          }
+      - pattern: |
+          char $FUN(...)
+          {
+          ...
+          return (int $LARGE);
+          }
+      - pattern: |
+          char $FUN(...)
+          {
+          ...
+          return (long $LARGE);
+          }
+    - focus-metavariable: "$FUN"
   - pattern: "(short $NARROW) = <... (unsigned short $LARGE) ...>"
   - pattern: "(short int $NARROW) = <... (unsigned short int $LARGE) ...>"
   - pattern: "(short $NARROW) = <... (int $LARGE) ...>"
@@ -824,30 +830,35 @@ rules:
   - pattern: "(unsigned short int $NARROW) = <... (long int $LARGE) ...>"
   - pattern: "(unsigned short $NARROW) = <... (unsigned long $LARGE) ...>"
   - pattern: "(unsigned short int $NARROW) = <... (unsigned long int $LARGE) ...>"
-  - pattern: |
-      short $FUN(...)
-      {
-      ...
-      return (int $LARGE);
-      }
-  - pattern: |
-      short $FUN(...)
-      {
-      ...
-      return (long $LARGE);
-      }
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          short $FUN(...)
+          {
+          ...
+          return (int $LARGE);
+          }
+      - pattern: |
+          short $FUN(...)
+          {
+          ...
+          return (long $LARGE);
+          }
+    - focus-metavariable: "$FUN"
   - pattern: "(int $NARROW) = <... (unsigned $LARGE) ...>"
   - pattern: "(int $NARROW) = <... (unsigned int $LARGE) ...>"
   - pattern: "(int $NARROW) = <... (long $LARGE) ...>"
   - pattern: "(int $NARROW) = <... (long int $LARGE) ...>"
   - pattern: "(int $NARROW) = <... (unsigned long $LARGE) ...>"
   - pattern: "(int $NARROW) = <... (unsigned long int $LARGE) ...>"
-  - pattern: |
-      int $FUN(...)
-      {
-      ...
-      return (long $LARGE);
-      }
+  - patterns:
+    - pattern: |
+        int $FUN(...)
+        {
+        ...
+        return (long $LARGE);
+        }
+    - focus-metavariable: "$FUN"
   - pattern: "(long $NARROW) = <... (unsigned long $LARGE) ...>"
   - pattern: "(long int $NARROW) = <... (unsigned long int $LARGE) ...>"
 - id: raptor-integer-wraparound
@@ -976,6 +987,7 @@ rules:
     - https://github.com/x509cert/banned/blob/master/banned.h
     - https://g.co/kgs/PCHQjJ
     - https://www.sei.cmu.edu/downloads/sei-cert-c-coding-standard-2016-v01.pdf
+    - https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/28719-banned-api-usage-use-updated-function-replacement
     confidence: MEDIUM
     license: MIT
     category: security
@@ -1034,7 +1046,7 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*memc?cpy\\s*$|^\\w*memmove\\s*$|^\\w*bcopy\\s*$"
+        regex: "^\\w*memc?cpy(_s)?\\s*$|^\\w*memmove(_s)?\\s*$|^\\w*bcopy\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -1070,6 +1082,11 @@ rules:
     - metavariable-regex:
         metavariable: "$FUN"
         regex: "^\\w*mkdir\\s*$|^\\w*creat\\s*$|^\\w*link(at)?\\s*$|^\\w*rename(at)?\\s*$|^\\w*access(at|_ok)?\\s*$|^\\w*stat(at)?\\s*$|^\\w*ch(own|mod)(at)?\\s*$|^\\w*realpath(at)?\\s*$|^\\w*readlink\\s*$"
+  - patterns:
+    - pattern: "$FUN(...)"
+    - metavariable-regex:
+        metavariable: "$FUN"
+        regex: "^\\w*locale\\s*$|^\\w*(make|split)path\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -1246,7 +1263,7 @@ rules:
     - https://g.co/kgs/PCHQjJ
     - https://github.com/struct/mms
     - https://github.com/returntocorp/semgrep/issues/4939
-    confidence: MEDIUM
+    confidence: LOW
     license: MIT
     category: security
     subcategory:
@@ -1287,6 +1304,13 @@ rules:
   - pattern-not: 'switch ($VAR) { case $VAL1: return $RET; case $VAL2: ... }
 
       '
+  - pattern-not: 'switch ($VAR) { case $VAL1: ... goto $LOC; case $VAL2: ... }
+
+      '
+  - pattern-not: 'switch ($VAR) { case $VAL1: goto $LOC; case $VAL2: ... }
+
+      '
+  - focus-metavariable: "$VAR"
 - id: raptor-missing-default-in-switch
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1295,7 +1319,7 @@ rules:
     - https://g.co/kgs/PCHQjJ
     - https://github.com/struct/mms
     - https://github.com/returntocorp/semgrep/issues/4939
-    confidence: MEDIUM
+    confidence: LOW
     license: MIT
     category: security
     subcategory:
@@ -1314,6 +1338,7 @@ rules:
   - pattern-not: 'switch ($VAR) { default: ... }
 
       '
+  - focus-metavariable: "$VAR"
 - id: raptor-missing-return
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1338,6 +1363,7 @@ rules:
   - pattern-not: "$TYPE $FUN(...) { ... return $RET; }"
   - pattern-not: int main(...) { ... }
   - pattern-not: void $FUN(...) { ... }
+  - focus-metavariable: "$FUN"
 - id: raptor-off-by-one
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1581,33 +1607,36 @@ rules:
   - cpp
   pattern-either:
   - pattern: "(unsigned int $UNSIGNED) = <... (int $SIGNED) ...>"
-  - pattern: |
-      unsigned int $FUN(...)
-      {
-      ...
-      return (int $SIGNED);
-      }
   - pattern: "(unsigned $UNSIGNED) = <... (int $SIGNED) ...>"
-  - pattern: |
-      unsigned $FUN(...)
-      {
-      ...
-      return (int $SIGNED);
-      }
   - pattern: "(size_t $UNSIGNED) = <... (int $SIGNED) ...>"
-  - pattern: |
-      size_t $FUN(...)
-      {
-      ...
-      return (int $SIGNED);
-      }
   - pattern: "(size_t $UNSIGNED) = <... (off_t $SIGNED) ...>"
-  - pattern: |
-      size_t $FUN(...)
-      {
-      ...
-      return (off_t $SIGNED);
-      }
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          unsigned int $FUN(...)
+          {
+          ...
+          return (int $SIGNED);
+          }
+      - pattern: |
+          unsigned $FUN(...)
+          {
+          ...
+          return (int $SIGNED);
+          }
+      - pattern: |
+          size_t $FUN(...)
+          {
+          ...
+          return (int $SIGNED);
+          }
+      - pattern: |
+          size_t $FUN(...)
+          {
+          ...
+          return (off_t $SIGNED);
+          }
+    - focus-metavariable: "$FUN"
   - pattern: strncpy($DST, $SRC, (int $LEN))
   - pattern: stpncpy($DST, $SRC, (int $LEN))
   - pattern: strncat($DST, $SRC, (int $LEN))
@@ -1631,33 +1660,36 @@ rules:
   - pattern: recvfrom($SD, $BUF, (int $LEN), $FL, ...)
   - pattern: fread($PTR, (int $LEN), $NITEMS, $FS)
   - pattern: "(int $SIGNED) = <... (unsigned int $UNSIGNED) ...>"
-  - pattern: |
-      int $FUN(...)
-      {
-      ...
-      return (unsigned int $UNSIGNED);
-      }
   - pattern: "(int $SIGNED) = <... (unsigned $UNSIGNED) ...>"
-  - pattern: |
-      int $FUN(...)
-      {
-      ...
-      return (unsigned $UNSIGNED);
-      }
   - pattern: "(int $SIGNED) = <... (size_t $UNSIGNED) ...>"
-  - pattern: |
-      int $FUN(...)
-      {
-      ...
-      return (size_t $UNSIGNED);
-      }
   - pattern: "(off_t $SIGNED) = <... (size_t $UNSIGNED) ...>"
-  - pattern: |
-      off_t $FUN(...)
-      {
-      ...
-      return (size_t $UNSIGNED);
-      }
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          int $FUN(...)
+          {
+          ...
+          return (unsigned int $UNSIGNED);
+          }
+      - pattern: |
+          int $FUN(...)
+          {
+          ...
+          return (unsigned $UNSIGNED);
+          }
+      - pattern: |
+          int $FUN(...)
+          {
+          ...
+          return (size_t $UNSIGNED);
+          }
+      - pattern: |
+          off_t $FUN(...)
+          {
+          ...
+          return (size_t $UNSIGNED);
+          }
+    - focus-metavariable: "$FUN"
 - id: raptor-suspicious-assert
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1703,7 +1735,7 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/typos.yaml
   message: The programmer accidentally uses the wrong operator, which changes the
-    application logic in security-relevant ways. This rule also covers  some other
+    application logic in security-relevant ways. This rule also covers some other
     common typo patterns.
   severity: INFO
   languages:
@@ -1761,7 +1793,7 @@ rules:
       - pattern: "$TYPE $ARR[$LEN] = $EXPR;"
     - metavariable-regex:
         metavariable: "$LEN"
-        regex: "^0.*"
+        regex: "^0[^xX].*"
 - id: raptor-unchecked-ret-malloc-calloc-realloc
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -2038,7 +2070,7 @@ rules:
     - audit
     source: https://github.com/0xdea/semgrep-rules/blob/main/c/unterminated-string-strncpy-stpncpy.yaml
   message: If there is no NUL character byte in the first n bytes of the source string,
-    strncpy() and stpncpy() do not null-terminate the destination buffer. If the program
+    strncpy() and stpncpy() do not NUL-terminate the destination buffer. If the program
     does not explicitly terminate the destination buffer, this will almost certainly
     result in information disclosure, and possibly a buffer overflow condition.
   severity: WARNING
@@ -2127,16 +2159,15 @@ rules:
   patterns:
   - pattern-either:
     - pattern: "$PTR->$MEM"
-    - pattern: "(*$PTR).$MEM"
     - pattern: "$PTR[$POS]"
+    - pattern: "(*$PTR)"
     - pattern: return $PTR;
-    - pattern: return *$PTR;
     - patterns:
       - pattern-either:
         - pattern: "$FUN(..., <... $PTR ...>, ...)"
         - pattern: "$FUN(..., <... $PTR->$MEM ...>, ...)"
-        - pattern: "$FUN(..., <... (*$PTR).$MEM ...>, ...)"
         - pattern: "$FUN(..., <... $PTR[$POS] ...>, ...)"
+        - pattern: "$FUN(..., <... (*$PTR) ...>, ...)"
         - pattern: "$PTR->$FUN(...)"
       - metavariable-pattern:
           metavariable: "$FUN"
@@ -2215,7 +2246,7 @@ rules:
     - pattern-inside: |
         $TYPE $BUF[$LEN];
         ...
-        $FUN($BUF, $LEN, $FMT, ...);
+        $FUN($BUF, $N, $FMT, ...);
     - metavariable-regex:
         metavariable: "$FMT"
         regex: (".*%l?s.*"|".*%S.*"|[a-zA-Z_][a-zA-Z0-9_]*)

@@ -1199,64 +1199,34 @@ rules:
           ... Regex.Match($X, $P, $O);
         }
 - id: csharp.lang.security.sqli.csharp-sqli.csharp-sqli
-  patterns:
-  - metavariable-regex:
-      metavariable: "$PATTERN"
-      regex: "^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$"
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          StringBuilder $SB = new StringBuilder(...);
-          ...
-          $S.$PATTERN = $SB.ToString();
-      - pattern: "$S.$PATTERN = $SB.ToString();"
-    - patterns:
-      - pattern-inside: |
-          StringBuilder $SB = new StringBuilder(...);
-          ...
-          $PATTERN $X = new $PATTERN($SB.ToString(),...);
-      - pattern: "$PATTERN $X = new $PATTERN($SB.ToString(),...);"
-    - pattern: "$S.$PATTERN = string.Format(...);\n"
-    - pattern: "$S.$PATTERN = string.Concat(...);\n"
-    - pattern: "$S.$PATTERN  = String.Format(...);\n"
-    - pattern: "$S.$PATTERN  = String.Concat(...);\n"
-    - pattern: |
-        $S = string.Concat(...);
-        ...
-        $PATTERN $SQL = new $PATTERN($S,...);
-    - pattern: |
-        $S = String.Format(...);
-        ...
-        $PATTERN $SQL = new $PATTERN($S,...);
-    - pattern: |
-        $S = String.Concat(...);
-        ...
-        $PATTERN $SQL = new $PATTERN($S,...);
-    - pattern: "$PATTERN $S = new $PATTERN(...);\n"
-    - patterns:
-      - pattern-inside: |
-          $T $X(...,$SQL,...)
-          {
-            ...
-            $S.$PATTERN = $SQL;
-            ...
-          }
-      - pattern: "$S.$PATTERN = $SQL;"
-    - patterns:
-      - pattern-inside: |
-          $T $X(...,$SQL,...)
-          {
-            ...
-            $PATTERN $S = new $PATTERN($SQL,...);
-            ...
-          }
-      - pattern: "$PATTERN $S = new $PATTERN($SQL,...);"
-  - pattern-not: '$S.$PATTERN = "..." + "...";
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern: "(string $X)\n"
+    - pattern-not: '"..."
 
-      '
-  - pattern-not-inside: |
-      ...
-      <... $S.Parameters ...>;
+        '
+  pattern-propagators:
+  - pattern: "(StringBuilder $B).$ANY(...,(string $X),...)"
+    from: "$X"
+    to: "$B"
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - patterns:
+        - pattern: 'new $PATTERN($CMD,...)
+
+            '
+        - focus-metavariable: "$CMD"
+      - pattern: "$CMD.$PATTERN = ...;\n"
+    - metavariable-regex:
+        metavariable: "$PATTERN"
+        regex: "^(SqlCommand|CommandText|OleDbCommand|OdbcCommand|OracleCommand)$"
+  pattern-sanitizers:
+  - pattern-either:
+    - pattern: "$CMD.Parameters.add(...)\n"
+    - pattern: "$CMD.Parameters[$IDX] = ...\n"
+    by-side-effect: true
   message: Detected a formatted string in a SQL statement. This could lead to SQL
     injection if variables in the SQL statement are not properly sanitized. Use a
     prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand'
@@ -1288,8 +1258,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UxeP
-        version_id: nWTxPkZ
-        url: https://semgrep.dev/playground/r/nWTxPkZ/csharp.lang.security.sqli.csharp-sqli.csharp-sqli
+        version_id: DkT6Rg2
+        url: https://semgrep.dev/playground/r/DkT6Rg2/csharp.lang.security.sqli.csharp-sqli.csharp-sqli
         origin: community
   languages:
   - csharp
@@ -16009,15 +15979,15 @@ rules:
       (''PHP Remote File Inclusion'')'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Path Traversal
     - Code Injection
+    - Path Traversal
     source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
     shortlink: https://sg.run/PGPW
     semgrep.dev:
       rule:
         rule_id: YGU8Yo
-        version_id: RGTDRwE
-        url: https://semgrep.dev/playground/r/RGTDRwE/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
+        version_id: BjTXrAP
+        url: https://semgrep.dev/playground/r/BjTXrAP/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
         origin: community
 - id: php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
   patterns:
@@ -16055,15 +16025,15 @@ rules:
       (''PHP Remote File Inclusion'')'
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Path Traversal
     - Code Injection
+    - Path Traversal
     source: https://semgrep.dev/r/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
     shortlink: https://sg.run/JpwW
     semgrep.dev:
       rule:
         rule_id: 6JU0yK
-        version_id: A8T9Xn0
-        url: https://semgrep.dev/playground/r/A8T9Xn0/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
+        version_id: DkT6njD
+        url: https://semgrep.dev/playground/r/DkT6njD/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
         origin: community
 - id: php.wordpress-plugins.security.audit.wp-open-redirect-audit.wp-open-redirect-audit
   pattern: wp_redirect(...)
