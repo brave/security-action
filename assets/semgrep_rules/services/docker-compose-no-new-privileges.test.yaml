@@ -1,0 +1,29 @@
+version: '3'
+name: mytest
+services:
+  # Ignore when extended (hopefully the base file is secure :/)
+  # ok: docker-compose-no-new-privileges
+  ser:
+    e: f
+    extends:
+      file: docker-compose-common.yml
+      service: lts
+    g: h
+    image: links
+    i: j
+
+  # ruleid: docker-compose-no-new-privileges
+  bad:
+    a: b
+    image: links
+    c: d
+
+  # Ignore when extended (hopefully the base file is secure :/)
+  # ok: docker-compose-no-new-privileges
+  vice:
+    x: y
+    extends:
+      file: ../../docker-compose.yml
+      service: vice
+    volumes:
+      - /x:/y
