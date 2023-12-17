@@ -1,0 +1,27 @@
+rules:
+  - id: activerecord-sanitize-sql-noop
+    patterns:
+      - pattern-either:
+        - pattern: ActiveRecord::Base.$FUNC($STR)
+        - pattern: $FUNC($STR)
+      - metavariable-regex:
+          metavariable: $STR
+          regex: "^[^[]"
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: "^sanitize_sql(_for_(order|conditions))?$"
+    message: |
+      When $FUNC is called with a string argument rather than an array/hash, it returns the string as-is without sanitization.
+      The method name is dangerously misleading.
+      The method's intended use is to safely insert variables into a string containing '?' or ':param', producing a valid SQL fragment for use where parameterized queries will not work.
+      This method will NOT sanitize just a SQL string.
+      User input here is likely a SQL injection vulnerability.
+    languages: 
+      - ruby
+    severity: INFO
+    metadata:
+      author: Ben Caller
+      references:
+        - https://api.rubyonrails.org/classes/ActiveRecord/Sanitization/ClassMethods.html
+      confidence: LOW
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/activerecord-sanitize-sql-noop.yaml
