@@ -1,0 +1,12 @@
+{
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/brave/security-action/issues",
+        "email": "security@brave.com"
+    },
+    "dependencies": {
+        "@octokit/core": "^5.0.2",
+        "@slack/web-api": "^6.11.0",
+        "@tryfabric/mack": "^1.2.1"
+    }
+}
