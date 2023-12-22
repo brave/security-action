@@ -33,7 +33,7 @@ export default async function getMaintainers({
 
     for (const repo of Object.keys(props).sort()) {
         if (props[repo].maintainers) {
-            maintainers += `- https://github/${org}/${repo} maintainers: ${props[repo].maintainers.split(',').join(', ')}\n`
+            maintainers += `- https://github.com/${org}/${repo} maintainers: ${props[repo].maintainers.split(',').join(', ')}\n`
         }
     }
 
