@@ -590,21 +590,21 @@ runs:
 # CodeQL Steps
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' && hashFiles(inputs.codeql_config) }}
       name: Initialize CodeQL
-      uses: github/codeql-action/init@b374143c1149a9115d881581d29b8390bbcbb59c # v3.22.11
+      uses: github/codeql-action/init@012739e5082ff0c22ca6d6ab32e07c36df03c4a4 # v3.22.12
       with:
         languages: ${{ matrix.language }}
         config-file: ${{ inputs.codeql_config }}
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' && !hashFiles(inputs.codeql_config)}}
       name: Initialize CodeQL (without config)
-      uses: github/codeql-action/init@b374143c1149a9115d881581d29b8390bbcbb59c # v3.22.11
+      uses: github/codeql-action/init@012739e5082ff0c22ca6d6ab32e07c36df03c4a4 # v3.22.12
       with:
         languages: ${{ matrix.language }}
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
       name: Autobuild
-      uses: github/codeql-action/autobuild@b374143c1149a9115d881581d29b8390bbcbb59c # v3.22.11
+      uses: github/codeql-action/autobuild@012739e5082ff0c22ca6d6ab32e07c36df03c4a4 # v3.22.12
     - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
       name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@b374143c1149a9115d881581d29b8390bbcbb59c # v3.22.11
+      uses: github/codeql-action/analyze@012739e5082ff0c22ca6d6ab32e07c36df03c4a4 # v3.22.12
 #    - run: echo ${{ inputs.in-name }}
 #      shell: bash
 #    - id: output-step-id
