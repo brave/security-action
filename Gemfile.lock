@@ -1,14 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    brakeman (6.1.0)
+    brakeman (6.1.1)
+      racc
+    racc (1.4.16)
 
 PLATFORMS
   arm64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
-  brakeman (= 6.1.0)
+  brakeman (= 6.1.1)
 
 BUNDLED WITH
    2.4.10
