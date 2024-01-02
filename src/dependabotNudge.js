@@ -12,7 +12,7 @@ export default async function dependabotNudge({
     debug = false,
     minlevel = Severity.high,
     skipRepositories = ['chromium'],
-    skipHotwords = ['dos', 'denial of service', 'redos', 'denial-of-service', 'memory explosion'],
+    skipHotwords = ['dos', 'denial of service', 'redos', 'denial-of-service', 'memory explosion', 'inefficient regular expression', 'regular expression complexity'],
     defaultContact = ['yan'],
     singleOutputMessage = false,
 }) {
@@ -103,7 +103,7 @@ export default async function dependabotNudge({
                     console.log(`alerts len: ${alerts.length}`);
 
                 let msg = `[${org}/${repo.name}](https://github.com/${org}/${repo.name}) has \`${alerts.length}\` open security issue(s) in depedencies`;
-                const critLen = alerts.filter(s => Severity[s.severity] >= Severity.critical).filter.length;
+                const critLen = alerts.filter(s => Severity[s.severity] >= Severity.critical).length;
                 if (critLen > 0) {
                     msg += `, **\`${critLen}\` of which are critical**`;
                 }
