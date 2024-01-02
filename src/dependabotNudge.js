@@ -110,10 +110,16 @@ export default async function dependabotNudge({
                 msg += `\n\n---\n\n`;
 
                 for (const alert of alerts) {
+                    let descFirstLine = alert.security_advisory.description.split("\n").map(d => `&gt; ${d}`)[0];
+
                     msg += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity *${alert.security_advisory.summary}*`;
                     msg += `\n\n`; 
-                    msg += alert.security_advisory.description.split("\n").map(d => `&gt; ${d}`).join("\n");
-                    msg += `\n\n`;
+
+                    if (descFirstLine && descFirstLine.length > 0) {
+                        msg += descFirstLine;
+                        msg += `...\n\n`;
+                    }
+
                     msg += `Handle this alert at ${alert.html_url}\n\n`
                     msg += "\n\n---\n\n"
                 }
