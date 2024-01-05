@@ -432,6 +432,8 @@ rules:
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
     references:
+    - https://cwe.mitre.org/data/definitions/787
+    - https://cwe.mitre.org/data/definitions/193
     - https://g.co/kgs/PCHQjJ
     confidence: HIGH
     license: MIT
@@ -490,6 +492,7 @@ rules:
         - pattern: strncpy
         - pattern: stpncpy
         - pattern: strlcpy
+        - pattern: strscpy
     - pattern-either:
       - pattern-inside: |
           $TYPE $SRC[$LEN];
@@ -505,6 +508,7 @@ rules:
         - pattern: strncpy
         - pattern: stpncpy
         - pattern: strlcpy
+        - pattern: strscpy
 - id: raptor-insecure-api-access-stat-lstat
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1641,6 +1645,7 @@ rules:
   - pattern: stpncpy($DST, $SRC, (int $LEN))
   - pattern: strncat($DST, $SRC, (int $LEN))
   - pattern: strlcpy($DST, $SRC, (int $LEN))
+  - pattern: strscpy($DST, $SRC, (int $LEN))
   - pattern: strlcat($DST, $SRC, (int $LEN))
   - pattern: snprintf($BUF, (int $LEN), ...)
   - pattern: vsnprintf($BUF, (int $LEN), ...)
@@ -1935,6 +1940,7 @@ rules:
     - https://cwe.mitre.org/data/definitions/252
     - https://lwn.net/Articles/451985/
     - https://www.usenix.org/legacy/events/sec02/full_papers/chen/chen.pdf
+    - https://www.openwall.com/lists/oss-security/2023/12/30/4
     confidence: MEDIUM
     license: MIT
     category: security
@@ -2209,6 +2215,7 @@ rules:
         - pattern: stpcpy
         - pattern: stpncpy
         - pattern: strlcpy
+        - pattern: strscpy
         - pattern: wcscpy
         - pattern: wcsncpy
         - pattern: wcpcpy
@@ -2294,8 +2301,8 @@ rules:
         - pattern: recv
         - pattern: recvfrom
 - id: trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
-  message: 'Variable `$X` is likely modified and later used on error. In some cases
-    this could result  in panics due to a nil dereference  '
+  message: Variable `$X` is likely modified and later used on error. In some cases
+    this could result  in panics due to a nil dereference
   languages:
   - go
   severity: WARNING
@@ -2320,8 +2327,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU6Xb
-        version_id: DkT6Gbr
-        url: https://semgrep.dev/playground/r/DkT6Gbr/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+        version_id: 7ZTDO6X
+        url: https://semgrep.dev/playground/r/7ZTDO6X/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
         origin: community
   patterns:
   - pattern: |
@@ -2578,8 +2585,8 @@ rules:
     - pattern: "{..., cors: $CORS_ORIGIN, ...}\n"
     - focus-metavariable: "$CORS_ORIGIN"
 - id: trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
-  message: 'If possible, it is better to rely on automatic pinning in PyTorch to avoid
-    undefined behavior and for efficiency '
+  message: If possible, it is better to rely on automatic pinning in PyTorch to avoid
+    undefined behavior and for efficiency
   languages:
   - python
   severity: WARNING
@@ -2604,8 +2611,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUN1Z
-        version_id: 2KTz44E
-        url: https://semgrep.dev/playground/r/2KTz44E/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
+        version_id: 8KT4boW
+        url: https://semgrep.dev/playground/r/8KT4boW/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
         origin: community
   pattern-either:
   - patterns:
@@ -2679,9 +2686,9 @@ rules:
   - pattern: numpy.f2py.compile(...)
   - pattern-not: numpy.f2py.compile("...", ...)
 - id: trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
-  message: 'Using the NumPy RNG inside of a PyTorch dataset can lead to a number of
+  message: Using the NumPy RNG inside of a PyTorch dataset can lead to a number of
     issues with loading data, including identical augmentations. Instead, use the
-    random number generators built into Python and PyTorch '
+    random number generators built into Python and PyTorch
   languages:
   - python
   severity: WARNING
@@ -2707,8 +2714,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxURLn
-        version_id: 9lTdOOL
-        url: https://semgrep.dev/playground/r/9lTdOOL/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+        version_id: gET6q8p
+        url: https://semgrep.dev/playground/r/gET6q8p/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
         origin: community
   patterns:
   - pattern: |
