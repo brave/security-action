@@ -1,40 +1,5 @@
 ---
 rules:
-- id: contrib.dlint.dlint-equivalent.insecure-xml-use
-  message: Insecure XML parsing functionality, prefer 'defusedxml'
-  languages:
-  - python
-  severity: WARNING
-  metadata:
-    source_rule_url: https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
-    category: security
-    technology:
-    - python
-    references:
-    - https://github.com/dlint-py/dlint/blob/master/docs/linters/DUO107.md
-    owasp:
-    - A09:2017 - Using Components with Known Vulnerabilities
-    - A06:2021 - Vulnerable and Outdated Components
-    cwe:
-    - 'CWE-611: Improper Restriction of XML External Entity Reference'
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - XML Injection
-    source: https://semgrep.dev/r/contrib.dlint.dlint-equivalent.insecure-xml-use
-    shortlink: https://sg.run/5QOW
-    semgrep.dev:
-      rule:
-        rule_id: zdUkvA
-        version_id: DkT6nYQ
-        url: https://semgrep.dev/playground/r/DkT6nYQ/contrib.dlint.dlint-equivalent.insecure-xml-use
-        origin: community
-  pattern-either:
-  - patterns:
-    - pattern: xml.$ANYTHING
-    - pattern-not: xml.sax.saxutils
-    - pattern-not: xml.etree.ElementTree.Element
-    - pattern-not: xml.etree.ElementTree.SubElement
-  - pattern: xmlrpclib.$ANYTHING
 - id: go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
   message: "`MinVersion` is missing from this TLS configuration.  By default, TLS
     1.2 is currently used as the minimum when acting as a client, and TLS 1.0 when
@@ -153,6 +118,15 @@ rules:
 - id: python.django.security.django-no-csrf-token.django-no-csrf-token
   patterns:
   - pattern: "<form...>...</form>"
+  - pattern-either:
+    - pattern: '<form ... method="$METHOD" ...>...</form>
+
+        '
+    - pattern: "<form ... method='$METHOD' ...>...</form>\n"
+    - pattern: "<form ... method=$METHOD ...>...</form>\n"
+  - metavariable-regex:
+      metavariable: "$METHOD"
+      regex: "(?i)(post|put|delete|patch)"
   - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
   message: Manually-created forms in django templates should specify a csrf_token
     to prevent CSRF attacks
@@ -179,8 +153,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUyYG
-        version_id: K3TvKZG
-        url: https://semgrep.dev/playground/r/K3TvKZG/python.django.security.django-no-csrf-token.django-no-csrf-token
+        version_id: 9lTez9q
+        url: https://semgrep.dev/playground/r/9lTez9q/python.django.security.django-no-csrf-token.django-no-csrf-token
         origin: community
   paths:
     include:

@@ -375,104 +375,6 @@ rules:
   languages:
   - c
   severity: WARNING
-- id: contrib.nodejsscan.crypto_node.node_md5
-  message: The MD5 hashing algorithm is considered to be weak. If this is used in
-    any sensitive operation such as password hashing, or is used to ensure data integrity
-    (collision sensitive) then you should use a stronger hashing algorithm. For passwords,
-    consider using `Argon2id`, `scrypt`, or `bcrypt`. For data integrity, consider
-    using `SHA-256`
-  severity: WARNING
-  metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    category: security
-    cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    references:
-    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
-    subcategory:
-    - audit
-    technology:
-    - node.js
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Cryptographic Issues
-    source: https://semgrep.dev/r/contrib.nodejsscan.crypto_node.node_md5
-    shortlink: https://sg.run/dKBX
-    semgrep.dev:
-      rule:
-        rule_id: GdU75E
-        version_id: 7ZTgoEl
-        url: https://semgrep.dev/playground/r/7ZTgoEl/contrib.nodejsscan.crypto_node.node_md5
-        origin: community
-  languages:
-  - javascript
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: '"md5"
-
-          '
-      - pattern: '"MD5"
-
-          '
-  pattern-sinks:
-  - patterns:
-    - pattern-inside: "$CRYPTO.createHash(...)\n"
-- id: contrib.nodejsscan.crypto_node.node_sha1
-  message: The SHA1 hashing algorithm is considered to be weak. If this is used in
-    any sensitive operation such as password hashing, or is used to ensure data integrity
-    (collision sensitive) then you should use a stronger hashing algorithm. For passwords,
-    consider using `Argon2id`, `scrypt`, or `bcrypt`. For data integrity, consider
-    using `SHA-256`
-  severity: WARNING
-  metadata:
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    category: security
-    cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    references:
-    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures
-    subcategory:
-    - audit
-    technology:
-    - node.js
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Cryptographic Issues
-    source: https://semgrep.dev/r/contrib.nodejsscan.crypto_node.node_sha1
-    shortlink: https://sg.run/ZvEx
-    semgrep.dev:
-      rule:
-        rule_id: ReUgYx
-        version_id: LjTqQkn
-        url: https://semgrep.dev/playground/r/LjTqQkn/contrib.nodejsscan.crypto_node.node_sha1
-        origin: community
-  languages:
-  - javascript
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-either:
-      - pattern: '"SHA1"
-
-          '
-      - pattern: '"sha1"
-
-          '
-  pattern-sinks:
-  - patterns:
-    - pattern-inside: "$CRYPTO.createHash(...)\n"
 - id: csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
   message: "$METHOD is a state-changing MVC method that does not validate the antiforgery
     token or do strict content-type checking. State-changing controller methods should
@@ -9905,17 +9807,17 @@ rules:
       - pattern-not: java.lang.Short
 - id: java.servlets.security.cookie-issecure-false.cookie-issecure-false
   patterns:
-  - pattern: "$COOKIE = new Cookie(...);\n"
+  - pattern: "$COOKIE = new Cookie($...ARGS);"
   - pattern-not-inside: |
       $COOKIE = new Cookie(...);
       ...
-      $COOKIE.setSecure(true);
+      $COOKIE.setSecure(...);
   message: 'Default session middleware settings: `setSecure` not set to true. This
     ensures that the cookie is sent only over HTTPS to prevent cross-site scripting
     attacks.'
-  fix-regex:
-    regex: setSecure\(false\)
-    replacement: setSecure(true)
+  fix: |
+    $COOKIE = new Cookie($...ARGS);
+    $COOKIE.setSecure(true);
   metadata:
     vulnerability: Insecure Transport
     owasp:
@@ -9924,11 +9826,12 @@ rules:
     cwe:
     - 'CWE-319: Cleartext Transmission of Sensitive Information'
     references:
-    - https://tomcat.apache.org/tomcat-5.5-doc/servletapi/
+    - https://docs.oracle.com/javaee/6/api/javax/servlet/http/Cookie.html#setSecure(boolean)
+    - https://owasp.org/www-community/controls/SecureCookieAttribute
     category: security
     technology:
-    - servlet
-    - tomcat
+    - java
+    - cookie
     subcategory:
     - audit
     likelihood: LOW
@@ -9942,8 +9845,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUkn9
-        version_id: gET3xdQ
-        url: https://semgrep.dev/playground/r/gET3xdQ/java.servlets.security.cookie-issecure-false.cookie-issecure-false
+        version_id: xyTvPr0
+        url: https://semgrep.dev/playground/r/xyTvPr0/java.servlets.security.cookie-issecure-false.cookie-issecure-false
         origin: community
   languages:
   - java
@@ -14837,6 +14740,101 @@ rules:
   - metavariable-comparison:
       metavariable: "$BITS"
       comparison: "$BITS < 2048"
+- id: ocaml.lang.security.hashtable-dos.ocamllint-hashtable-dos
+  patterns:
+  - pattern: Hashtbl.create $Y
+  - pattern-not: Hashtbl.create $Y ~random:true
+  message: Creating a Hashtbl without the optional random number parameter makes it
+    prone to DoS attacks when attackers are able to fill the table with malicious
+    content. Hashtbl.randomize or the R flag in the OCAMLRUNPARAM are other ways to
+    randomize it.
+  languages:
+  - ocaml
+  severity: WARNING
+  metadata:
+    category: security
+    references:
+    - https://v2.ocaml.org/api/Hashtbl.html
+    technology:
+    - ocaml
+    cwe: 'CWE-399: Resource Management Errors (4.12)'
+    confidence: LOW
+    likelihood: LOW
+    impact: LOW
+    subcategory:
+    - audit
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/ocaml.lang.security.hashtable-dos.ocamllint-hashtable-dos
+    shortlink: https://sg.run/OrPrk
+    semgrep.dev:
+      rule:
+        rule_id: qNU2j21
+        version_id: jQTlK0B
+        url: https://semgrep.dev/playground/r/jQTlK0B/ocaml.lang.security.hashtable-dos.ocamllint-hashtable-dos
+        origin: community
+- id: ocaml.lang.security.unsafe.ocamllint-unsafe
+  pattern-either:
+  - pattern: "$X.unsafe_get"
+  - pattern: "$X.unsafe_set"
+  - pattern: "$X.unsafe_to_string"
+  - pattern: "$X.unsafe_of_string"
+  - pattern: "$X.unsafe_blit"
+  - pattern: "$X.unsafe_blit_string"
+  - pattern: "$X.unsafe_fill"
+  - pattern: "$X.unsafe_to_string"
+  - pattern: "$X.unsafe_getenv"
+  - pattern: "$X.unsafe_environment"
+  - pattern: "$X.unsafe_chr"
+  - pattern: "$X.unsafe_of_int"
+  - pattern: "$X.unsafe_output"
+  - pattern: "$X.unsafe_output_string"
+  - pattern: "$X.unsafe_read"
+  - pattern: "$X.unsafe_recv"
+  - pattern: "$X.unsafe_recvfrom"
+  - pattern: "$X.unsafe_send"
+  - pattern: "$X.unsafe_sendto"
+  - pattern: "$X.unsafe_set"
+  - pattern: "$X.unsafe_set_int16"
+  - pattern: "$X.unsafe_set_int32"
+  - pattern: "$X.unsafe_set_int64"
+  - pattern: "$X.unsafe_set_int8"
+  - pattern: "$X.unsafe_set_uint16_ne"
+  - pattern: "$X.unsafe_set_uint8"
+  - pattern: "$X.unsafe_single_write"
+  - pattern: "$X.unsafe_string"
+  - pattern: "$X.unsafe_sub"
+  - pattern: "$X.unsafe_write"
+  message: Unsafe functions do not perform boundary checks or have other side effects,
+    use with care.
+  languages:
+  - ocaml
+  severity: WARNING
+  metadata:
+    category: security
+    references:
+    - https://v2.ocaml.org/api/Bigarray.Array1.html#VALunsafe_get
+    - https://v2.ocaml.org/api/Bytes.html#VALunsafe_to_string
+    technology:
+    - ocaml
+    cwe: 'CWE-242: Use of Inherently Dangerous Function (4.12)'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: MEDIUM
+    subcategory:
+    - audit
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/ocaml.lang.security.unsafe.ocamllint-unsafe
+    shortlink: https://sg.run/d8K80
+    semgrep.dev:
+      rule:
+        rule_id: 6JUvjv6
+        version_id: LjT7Zeo
+        url: https://semgrep.dev/playground/r/LjT7Zeo/ocaml.lang.security.unsafe.ocamllint-unsafe
+        origin: community
 - id: php.doctrine.security.audit.doctrine-dbal-dangerous-query.doctrine-dbal-dangerous-query
   languages:
   - php
@@ -16339,8 +16337,10 @@ rules:
       airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
 - id: python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
   pattern: cryptography.hazmat.primitives.ciphers.modes.ECB(...)
-  message: Detected ECB cipher mode which is considered insecure. The algorithm can
-    potentially leak information about the plaintext. Use CBC mode instead.
+  message: ECB (Electronic Code Book) is the simplest mode of operation for block
+    ciphers.  Each block of data is encrypted in the same way.  This means identical
+    plaintext blocks will always result in identical ciphertext blocks, which can
+    leave significant patterns in the output. Use a different, more secure mode instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L101
     cwe:
@@ -16350,6 +16350,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B305
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#insecure-modes
     - https://crypto.stackexchange.com/questions/20941/why-shouldnt-i-use-ecb-encryption
     category: security
     technology:
@@ -16359,6 +16360,8 @@ rules:
     likelihood: LOW
     impact: LOW
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::mode::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -16367,8 +16370,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUp5g
-        version_id: X0TQxbJ
-        url: https://semgrep.dev/playground/r/X0TQxbJ/python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
+        version_id: 0bTyOx2
+        url: https://semgrep.dev/playground/r/0bTyOx2/python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
         origin: community
   severity: WARNING
   languages:
@@ -16407,6 +16410,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::key-length::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -16415,8 +16420,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUjZ3
-        version_id: yeTR2Jb
-        url: https://semgrep.dev/playground/r/yeTR2Jb/python.cryptography.security.insufficient-ec-key-size.insufficient-ec-key-size
+        version_id: YDTNPqv
+        url: https://semgrep.dev/playground/r/YDTNPqv/python.cryptography.security.insufficient-ec-key-size.insufficient-ec-key-size
         origin: community
   languages:
   - python
@@ -16441,6 +16446,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/weak_cryptographic_key.py
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/asymmetric/rsa/
     - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
     category: security
     technology:
@@ -16450,6 +16456,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::key-length::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -16458,8 +16466,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU9jn
-        version_id: rxTyLZR
-        url: https://semgrep.dev/playground/r/rxTyLZR/python.cryptography.security.insufficient-rsa-key-size.insufficient-rsa-key-size
+        version_id: JdT5g1p
+        url: https://semgrep.dev/playground/r/JdT5g1p/python.cryptography.security.insufficient-rsa-key-size.insufficient-rsa-key-size
         origin: community
   languages:
   - python
@@ -30717,62 +30725,6 @@ rules:
         rule_id: eqUvZ9
         version_id: K3TvG8r
         url: https://semgrep.dev/playground/r/K3TvG8r/yaml.docker-compose.security.exposing-docker-socket-volume.exposing-docker-socket-volume
-        origin: community
-  languages:
-  - yaml
-  severity: WARNING
-- id: yaml.docker-compose.security.no-new-privileges.no-new-privileges
-  patterns:
-  - pattern-inside: |
-      version: ...
-      ...
-      services:
-        ...
-  - pattern: |
-      $SERVICE:
-        ...
-        image: ...
-  - pattern-not: |
-      $SERVICE:
-        ...
-        image: ...
-        ...
-        security_opt:
-          - ...
-          - no-new-privileges:true
-          - ...
-  - focus-metavariable: "$SERVICE"
-  message: Service '$SERVICE' allows for privilege escalation via setuid or setgid
-    binaries. Add 'no-new-privileges:true' in 'security_opt' to prevent this.
-  metadata:
-    cwe:
-    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
-    owasp:
-    - A05:2021 - Security Misconfiguration
-    - A06:2017 - Security Misconfiguration
-    references:
-    - https://raesene.github.io/blog/2019/06/01/docker-capabilities-and-no-new-privs/
-    - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
-    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
-    category: security
-    technology:
-    - docker-compose
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: HIGH
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Improper Authorization
-    source: https://semgrep.dev/r/yaml.docker-compose.security.no-new-privileges.no-new-privileges
-    shortlink: https://sg.run/0n8q
-    semgrep.dev:
-      rule:
-        rule_id: qNUoWr
-        version_id: qkT2BLp
-        url: https://semgrep.dev/playground/r/qkT2BLp/yaml.docker-compose.security.no-new-privileges.no-new-privileges
         origin: community
   languages:
   - yaml

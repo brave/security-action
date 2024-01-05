@@ -400,78 +400,6 @@ rules:
   - metavariable-regex:
       metavariable: "$ALGO"
       regex: (((org\.apache\.commons\.codec\.digest\.)?MessageDigestAlgorithms/)?"?(SHA-1|SHA1)"?)
-- id: contrib.owasp.java.xxe.documentbuilderfactory.owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
-  message: DocumentBuilderFactory being instantiated without calling the setFeature
-    functions that are generally used for disabling entity processing, which can allow
-    for XXE vulnerabilities
-  metadata:
-    cwe: 'CWE-611: Improper Restriction of XML External Entity Reference'
-    owasp: A04:2017 - XML External Entities (XXE)
-    source-rule-url: https://cheatsheetseries.owasp.org//cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
-    category: security
-    technology:
-    - java
-    - xml
-    cwe2022-top25: true
-    cwe2021-top25: true
-    references:
-    - https://www.programcreek.com/java-api-examples/?api=javax.xml.parsers.DocumentBuilderFactory
-    likelihood: LOW
-    impact: HIGH
-    subcategory:
-    - vuln
-    confidence: HIGH
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - XML Injection
-    source: https://semgrep.dev/r/contrib.owasp.java.xxe.documentbuilderfactory.owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
-    shortlink: https://sg.run/gLbR
-    semgrep.dev:
-      rule:
-        rule_id: 0oU5Dw
-        version_id: 3ZTkQWk
-        url: https://semgrep.dev/playground/r/3ZTkQWk/contrib.owasp.java.xxe.documentbuilderfactory.owasp.java.xxe.javax.xml.parsers.DocumentBuilderFactory
-        origin: community
-  severity: ERROR
-  patterns:
-  - pattern-either:
-    - patterns:
-      - pattern-inside: |
-          DocumentBuilderFactory $DBF =  ... ;
-          ...
-      - pattern-inside: |
-          DocumentBuilder $DB = $DBF.newDocumentBuilder();
-          ...
-      - pattern: "$DB.parse(...);\n"
-    - patterns:
-      - pattern-inside: |
-          (DocumentBuilder $DB) = (DocumentBuilderFactory $DBF).newDocumentBuilder();
-          ...
-      - pattern: "(DocumentBuilder $DB).parse(...);\n"
-    - pattern: DocumentBuilder $DB = DocumentBuilderFactory. ... .newInstance(). ...
-        .newDocumentBuilder();
-  - pattern-not:
-      patterns:
-      - pattern-inside: |
-          DocumentBuilderFactory $DBF =  ... ;
-          ...
-      - pattern-inside: |
-          $DBF. ... .setXIncludeAware(true);
-          ...
-      - pattern-inside: |
-          $DBF. ... .setNamespaceAware(true);
-          ...
-      - pattern-inside: |
-          $DBF. ... .setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-          ...
-      - pattern-inside: |
-          $DBF. ... .setFeature("http://xml.org/sax/features/external-general-entities", false);
-          ...
-      - pattern-inside: |
-          $DBF. ... .setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-          ...
-  languages:
-  - java
 - id: csharp.dotnet.security.audit.ldap-injection.ldap-injection
   message: LDAP queries are constructed dynamically on user-controlled input. This
     vulnerability in code could lead to an arbitrary LDAP query execution.
@@ -4394,6 +4322,47 @@ rules:
         origin: community
   patterns:
   - pattern-regex: "(?i)[a-z0-9]{14}\\.atlasv1\\.[a-z0-9\\-_=]{60,70}"
+- id: generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
+  message: A gitleaks hashicorp-tf-password was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
+    shortlink: https://sg.run/bw7lv
+    semgrep.dev:
+      rule:
+        rule_id: BYUXNWY
+        version_id: kbTgNPD
+        url: https://semgrep.dev/playground/r/kbTgNPD/generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:administrator_login_password|password)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}("[a-z0-9=_\-]{8,20}")(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.heroku-api-key.heroku-api-key
   message: A gitleaks heroku-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -19072,8 +19041,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUon7
-        version_id: K3TvjWe
-        url: https://semgrep.dev/playground/r/K3TvjWe/javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret
+        version_id: e1TgQKG
+        url: https://semgrep.dev/playground/r/e1TgQKG/javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret
         origin: community
   languages:
   - javascript
@@ -19082,24 +19051,16 @@ rules:
   mode: taint
   pattern-sources:
   - patterns:
+    - pattern: "$X = '...' \n"
+    - pattern: "$X = '$Y' \n"
+  - patterns:
     - pattern-either:
-      - patterns:
-        - pattern-inside: "$VALUE = '$Y' \n...\n"
-        - pattern: "$VALUE"
-      - patterns:
-        - pattern-either:
-          - pattern-inside: "$JWT.sign($VALUE, $Y,...)"
-          - pattern-inside: "$JWT.verify($VALUE, $Y,...)"
-        - focus-metavariable: "$Y"
-        - pattern: "'...'\n"
-      - patterns:
-        - pattern-inside: |
-            $SECRET = "$Y"
-            ...
-            class $FUNC {
-              ...
-            }
-        - pattern: "$SECRET"
+      - pattern-inside: '$JWT.sign($DATA,"...",...);
+
+          '
+      - pattern-inside: '$JWT.verify($DATA,"...",...);
+
+          '
   pattern-sinks:
   - patterns:
     - pattern-either:
@@ -20805,6 +20766,7 @@ rules:
   - pattern: "$_POST"
   pattern-sinks:
   - pattern: echo ...;
+  - pattern: print(...);
   pattern-sanitizers:
   - pattern: isset(...)
   - pattern: empty(...)
@@ -20841,8 +20803,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUyyg
-        version_id: 0bTLlzv
-        url: https://semgrep.dev/playground/r/0bTLlzv/php.lang.security.injection.echoed-request.echoed-request
+        version_id: 8KT4RlJ
+        url: https://semgrep.dev/playground/r/8KT4RlJ/php.lang.security.injection.echoed-request.echoed-request
         origin: community
 - id: php.lang.security.injection.tainted-filename.tainted-filename
   severity: WARNING
@@ -21201,8 +21163,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNUXdL
-        version_id: l4T4v0Q
-        url: https://semgrep.dev/playground/r/l4T4v0Q/php.lang.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: RGTevOe
+        url: https://semgrep.dev/playground/r/RGTevOe/php.lang.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   mode: taint
   pattern-sanitizers:
@@ -21227,20 +21189,19 @@ rules:
           metavariable: "$SQLSTR"
           regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*"
     - patterns:
-      - pattern: '"...{$EXPR}..."
-
-          '
-      - pattern-regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*\n"
-    - patterns:
       - pattern: '"...$EXPR..."
 
           '
-      - pattern-regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*\n"
+      - metavariable-regex:
+          metavariable: "$EXPR"
+          regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*"
     - patterns:
-      - pattern: '"...".$EXPR
+      - pattern: '"$SQLSTR".$EXPR
 
           '
-      - pattern-regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*\n"
+      - metavariable-regex:
+          metavariable: "$SQLSTR"
+          regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*"
 - id: php.lang.security.injection.tainted-url-host.tainted-url-host
   languages:
   - php
@@ -22501,8 +22462,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: j2Uv2K
-        version_id: qkT2xZx
-        url: https://semgrep.dev/playground/r/qkT2xZx/problem-based-packs.insecure-transport.java-stdlib.disallow-old-tls-versions1.disallow-old-tls-versions1
+        version_id: d6TqD0o
+        url: https://semgrep.dev/playground/r/d6TqD0o/problem-based-packs.insecure-transport.java-stdlib.disallow-old-tls-versions1.disallow-old-tls-versions1
         origin: community
   languages:
   - java
@@ -22524,6 +22485,14 @@ rules:
   - pattern-not: 'new SSLConnectionSocketFactory(..., new String[] {"TLSv1.2"}, ...);
 
       '
+  - pattern-not-inside: "(SSLConnectionSocketFactory $SF) = new SSLConnectionSocketFactory(...);
+      ... (TlsConfig $TLSCONFIG) = TlsConfig.custom(). ... .setSupportedProtocols(TLS.V_1_2).
+      ... .build(); ... HttpClientConnectionManager cm = $CM.create(). ... .setSSLSocketFactory($SF).
+      ... .setDefaultTlsConfig($TLSCONFIG). ... .build();\n"
+  - pattern-not-inside: "(SSLConnectionSocketFactory $SF) = new SSLConnectionSocketFactory(...);
+      ... (TlsConfig $TLSCONFIG) = TlsConfig.custom(). ... .setSupportedProtocols(TLS.V_1_3).
+      ... .build(); ... HttpClientConnectionManager cm = $CM.create(). ... .setSSLSocketFactory($SF).
+      ... .setDefaultTlsConfig($TLSCONFIG). ... .build();\n"
 - id: problem-based-packs.insecure-transport.java-stdlib.disallow-old-tls-versions2.disallow-old-tls-versions2
   message: Detects setting client protocols to insecure versions of TLS and SSL. These
     protocols are deprecated due to POODLE, man in the middle attacks, and other vulnerabilities.
@@ -24677,8 +24646,6 @@ rules:
     - https://cwe.mitre.org/data/definitions/327.html
     - https://cwe.mitre.org/data/definitions/310.html
     category: security
-    technology:
-    - python
     subcategory:
     - vuln
     likelihood: MEDIUM
@@ -24686,6 +24653,13 @@ rules:
     confidence: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     owasp: A6:2017 misconfiguration
+    functional-categories:
+    - crypto::search::key-length::pycrypto
+    - crypto::search::key-length::pycryptodome
+    technology:
+    - python
+    - pycrypto
+    - pycryptodome
     vulnerability_class:
     - Cryptographic Issues
     source: https://semgrep.dev/r/python.cryptography.security.empty-aes-key.empty-aes-key
@@ -24693,13 +24667,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrUADK
-        version_id: o5Tgl0L
-        url: https://semgrep.dev/playground/r/o5Tgl0L/python.cryptography.security.empty-aes-key.empty-aes-key
+        version_id: A8TkYjr
+        url: https://semgrep.dev/playground/r/A8TkYjr/python.cryptography.security.empty-aes-key.empty-aes-key
         origin: community
 - id: python.cryptography.security.insecure-cipher-algorithms-arc4.insecure-cipher-algorithm-arc4
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
-  message: Detected ARC4 cipher algorithm which is considered insecure. The algorithm
-    is considered weak and has been deprecated. Use AES instead.
+  message: ARC4 (Alleged RC4) is a stream cipher with serious weaknesses in its initial
+    stream output.  Its use is strongly discouraged. ARC4 does not use mode constructions.
+    Use a strong symmetric cipher such as EAS instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -24709,7 +24684,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B304
     references:
-    - https://tools.ietf.org/html/rfc5469
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#weak-ciphers
     category: security
     technology:
     - cryptography
@@ -24718,6 +24693,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -24726,16 +24703,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU8gK
-        version_id: zyTK8pN
-        url: https://semgrep.dev/playground/r/zyTK8pN/python.cryptography.security.insecure-cipher-algorithms-arc4.insecure-cipher-algorithm-arc4
+        version_id: BjTxYWN
+        url: https://semgrep.dev/playground/r/BjTxYWN/python.cryptography.security.insecure-cipher-algorithms-arc4.insecure-cipher-algorithm-arc4
         origin: community
   severity: WARNING
   languages:
   - python
 - id: python.cryptography.security.insecure-cipher-algorithms-blowfish.insecure-cipher-algorithm-blowfish
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
-  message: Detected Blowfish cipher algorithm which is considered insecure. The algorithm
-    is considered weak and has been deprecated. Use AES instead.
+  message: Blowfish is a block cipher developed by Bruce Schneier. It is known to
+    be susceptible to attacks when using weak keys.  The author has recommended that
+    users of Blowfish move to newer algorithms such as AES.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -24745,6 +24723,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B304
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#weak-ciphers
     - https://tools.ietf.org/html/rfc5469
     category: security
     technology:
@@ -24754,6 +24733,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -24762,16 +24743,19 @@ rules:
     semgrep.dev:
       rule:
         rule_id: qNULvO
-        version_id: pZT1yKA
-        url: https://semgrep.dev/playground/r/pZT1yKA/python.cryptography.security.insecure-cipher-algorithms-blowfish.insecure-cipher-algorithm-blowfish
+        version_id: DkTq8dW
+        url: https://semgrep.dev/playground/r/DkTq8dW/python.cryptography.security.insecure-cipher-algorithms-blowfish.insecure-cipher-algorithm-blowfish
         origin: community
   severity: WARNING
   languages:
   - python
 - id: python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-idea
   pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
-  message: Detected IDEA cipher algorithm which is considered insecure. The algorithm
-    is considered weak and has been deprecated. Use AES instead.
+  message: IDEA (International Data Encryption Algorithm) is a block cipher created
+    in 1991.  It is an optional component of the OpenPGP standard. This cipher is
+    susceptible to attacks when using weak keys.  It is recommended that you do not
+    use this cipher for new applications. Use a strong symmetric cipher such as EAS
+    instead.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
     cwe:
@@ -24782,6 +24766,7 @@ rules:
     bandit-code: B304
     references:
     - https://tools.ietf.org/html/rfc5469
+    - https://cryptography.io/en/latest/hazmat/primitives/symmetric-encryption/#cryptography.hazmat.primitives.ciphers.algorithms.IDEA
     category: security
     technology:
     - cryptography
@@ -24790,6 +24775,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -24798,8 +24785,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: BYUNPg
-        version_id: 2KTzrgw
-        url: https://semgrep.dev/playground/r/2KTzrgw/python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-idea
+        version_id: WrTOxzP
+        url: https://semgrep.dev/playground/r/WrTOxzP/python.cryptography.security.insecure-cipher-algorithms.insecure-cipher-algorithm-idea
         origin: community
   severity: WARNING
   languages:
@@ -24818,6 +24805,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B303
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/cryptographic-hashes/#md5
     - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
     - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
     - http://2012.sharcs.org/slides/stevens.pdf
@@ -24830,6 +24818,8 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -24838,8 +24828,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUopp
-        version_id: jQTgYbL
-        url: https://semgrep.dev/playground/r/jQTgYbL/python.cryptography.security.insecure-hash-algorithms-md5.insecure-hash-algorithm-md5
+        version_id: K3Tny25
+        url: https://semgrep.dev/playground/r/K3Tny25/python.cryptography.security.insecure-hash-algorithms-md5.insecure-hash-algorithm-md5
         origin: community
   severity: WARNING
   languages:
@@ -24868,6 +24858,7 @@ rules:
     - A02:2021 - Cryptographic Failures
     bandit-code: B303
     references:
+    - https://cryptography.io/en/latest/hazmat/primitives/cryptographic-hashes/#sha-1
     - https://www.schneier.com/blog/archives/2012/10/when_will_we_se.html
     - https://www.trendmicro.com/vinfo/us/security/news/vulnerabilities-and-exploits/sha-1-collision-signals-the-end-of-the-algorithm-s-viability
     - http://2012.sharcs.org/slides/stevens.pdf
@@ -24880,6 +24871,8 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::symmetric-algorithm::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -24888,8 +24881,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oU5dN
-        version_id: 1QTOY9n
-        url: https://semgrep.dev/playground/r/1QTOY9n/python.cryptography.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
+        version_id: qkT5qYQ
+        url: https://semgrep.dev/playground/r/qkT5qYQ/python.cryptography.security.insecure-hash-algorithms.insecure-hash-algorithm-sha1
         origin: community
   severity: WARNING
   languages:
@@ -24914,6 +24907,8 @@ rules:
     - A02:2021 - Cryptographic Failures
     source-rule-url: https://github.com/PyCQA/bandit/blob/b1411bfb43795d3ffd268bef17a839dee954c2b1/bandit/plugins/weak_cryptographic_key.py
     references:
+    - https://www.cosic.esat.kuleuven.be/ecrypt/ecrypt2/documents/D.SPA.20.pdf
+    - https://cryptography.io/en/latest/hazmat/primitives/asymmetric/dsa/
     - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57Pt3r1.pdf
     category: security
     technology:
@@ -24923,6 +24918,8 @@ rules:
     likelihood: MEDIUM
     impact: MEDIUM
     confidence: MEDIUM
+    functional-categories:
+    - crypto::search::key-length::cryptography
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cryptographic Issues
@@ -24931,8 +24928,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUb0x
-        version_id: 9lTdWg8
-        url: https://semgrep.dev/playground/r/9lTdWg8/python.cryptography.security.insufficient-dsa-key-size.insufficient-dsa-key-size
+        version_id: l4TlPQX
+        url: https://semgrep.dev/playground/r/l4TlPQX/python.cryptography.security.insufficient-dsa-key-size.insufficient-dsa-key-size
         origin: community
   languages:
   - python
@@ -30520,8 +30517,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: yyUn6Z
-        version_id: BjTXrEG
-        url: https://semgrep.dev/playground/r/BjTXrEG/python.django.security.passwords.use-none-for-password-default.use-none-for-password-default
+        version_id: yeT3XWe
+        url: https://semgrep.dev/playground/r/yeT3XWe/python.django.security.passwords.use-none-for-password-default.use-none-for-password-default
         origin: community
   languages:
   - python
@@ -30538,6 +30535,9 @@ rules:
         def $F(..., $VAR=$EMPTY, ...):
           ...
           $MODEL.set_password($VAR)
+  - metavariable-pattern:
+      metavariable: "$EMPTY"
+      pattern: '""'
   - focus-metavariable: "$EMPTY"
   fix: 'None
 

@@ -892,10 +892,10 @@ rules:
           ...
         }
 - id: trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
-  message: 'The Apollo GraphQL uses the ''schemaDirectives'' option. This works in
-    ApolloServer v2, but does nothing in version >=3. Depending on what the directives
-    are used for, this can expose authenticated endpoints, disable rate limiting,
-    and more. See the references on how to create custom directives in v3 and v4. '
+  message: The Apollo GraphQL uses the 'schemaDirectives' option. This works in ApolloServer
+    v2, but does nothing in version >=3. Depending on what the directives are used
+    for, this can expose authenticated endpoints, disable rate limiting, and more.
+    See the references on how to create custom directives in v3 and v4.
   languages:
   - js
   - ts
@@ -922,11 +922,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU1Oz
-        version_id: 0bTLEEw
-        url: https://semgrep.dev/playground/r/0bTLEEw/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+        version_id: LjT70dp
+        url: https://semgrep.dev/playground/r/LjT70dp/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
         origin: community
   pattern-either:
-  - pattern: 'new ApolloServer({..., schemaDirectives: ..., ...})'
+  - pattern: 'new ApolloServer({..., schemaDirectives: ..., ...})
+
+      '
 - id: trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
   languages:
   - js
@@ -1350,8 +1352,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBUWjy
-        version_id: NdT3AAp
-        url: https://semgrep.dev/playground/r/NdT3AAp/trailofbits.python.pickles-in-numpy.pickles-in-numpy
+        version_id: QkT8J3R
+        url: https://semgrep.dev/playground/r/QkT8J3R/trailofbits.python.pickles-in-numpy.pickles-in-numpy
         origin: community
   patterns:
   - pattern: numpy.load(..., allow_pickle=$VALUE, ...)
@@ -1367,7 +1369,9 @@ rules:
       - pattern-not: 'None
 
           '
-      - pattern-not: '""'
+      - pattern-not: '""
+
+          '
 - id: trailofbits.python.pickles-in-pandas.pickles-in-pandas
   message: Functions reliant on pickle can result in arbitrary code execution. Consider
     using fickling or switching to a safer serialization method
