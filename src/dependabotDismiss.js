@@ -70,5 +70,7 @@ export default async function dependabotDismiss({
 
     if (message.length > 0) {
         return watermark + message;
+    } else {
+        return '';
     }
 }
