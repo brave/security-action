@@ -28,7 +28,18 @@ jobs:
                   const debug = process.env.DEBUG === 'true';
                   const { default: sendSlackMessage } = await import('${{ github.workspace }}/src/sendSlackMessage.js');
                   const { default: dependabotNudge } = await import('${{ github.workspace }}/src/dependabotNudge.js');
-                  const messages = await dependabotNudge({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, minlevel: 'medium'});
+
+                  // set minlevel to 'medium' if it's the first Monday of the month, otherwise stick to high or critical issues
+                  let minlevel = 'medium';
+                  const today = new Date();
+                  const firstMonday = new Date(today.getFullYear(), today.getMonth(), 1 + (1 - today.getDay()) % 7);
+                  if (today.getMonth() !== firstMonday.getMonth() || today.getDate() !== firstMonday.getDate()) {
+                    if (debug)
+                      console.log('Not the first Monday of the month!');
+                    minlevel = 'high';
+                  }
+
+                  const messages = await dependabotNudge({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, minlevel: minlevel});
 
                   for (const message of messages) {
                     try {
