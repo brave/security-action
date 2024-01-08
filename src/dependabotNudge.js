@@ -5,6 +5,24 @@ const Severity = {
     critical: 3,
 }
 
+// original code at: https://stackoverflow.com/questions/44195322/a-plain-javascript-way-to-decode-html-entities-works-on-both-browsers-and-node
+function decodeEntities(encodedString) {
+    var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
+    var translate = {
+        "nbsp":" ",
+        "amp" : "&",
+        "quot": "\"",
+        "lt"  : "<",
+        "gt"  : ">"
+    };
+    return encodedString.replace(translate_re, function(match, entity) {
+        return translate[entity];
+    }).replace(/&#(\d+);/gi, function(match, numStr) {
+        var num = parseInt(numStr, 10);
+        return String.fromCharCode(num);
+    });
+}
+
 export default async function dependabotNudge({
     org,
     githubToken = null,
@@ -110,7 +128,13 @@ export default async function dependabotNudge({
                 msg += `\n\n---\n\n`;
 
                 for (const alert of alerts) {
-                    let descFirstLine = alert.security_advisory.description.split("\n").map(d => `&gt; ${d}`)[0];
+                    let descFirstLine = alert.security_advisory.description.
+                        split("\n").
+                        filter(d => d[0] !== '#').
+                        filter(d => d.trim().length > 0).
+                        splice(0, 1).
+                        map(d => `&gt; ${decodeEntities(d).substring(0, 40)}`).
+                        shift();
 
                     msg += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity *${alert.security_advisory.summary}*`;
                     msg += `\n\n`; 
