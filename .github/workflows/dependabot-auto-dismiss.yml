@@ -2,7 +2,7 @@ name: Weekly Dependabot Auto Dismiss
 
 on:
   schedule:
-    # Run at 9am UTC every Monday
+    # Run at 24:00 UTC every Monday
     - cron: "0 0 * * 1"
   workflow_dispatch:
 
@@ -28,7 +28,7 @@ jobs:
                   const debug = process.env.DEBUG === 'true';
                   const { default: sendSlackMessage } = await import('${{ github.workspace }}/src/sendSlackMessage.js');
                   const { default: dependabotDismiss } = await import('${{ github.workspace }}/src/dependabotDismiss.js');
-                  const message = await dependabotDismiss({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github});
+                  const message = await dependabotDismiss({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, dependabotDismissConfig: '${{ github.workspace }}/.github/dependabot-dismiss.txt'});
                   if (message.length > 0)
                     await sendSlackMessage({debug, username: 'dependabot-auto-dismiss', message: message, channel: process.env.SLACK_CHANNEL, token: process.env.SLACK_TOKEN});
 
