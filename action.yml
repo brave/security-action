@@ -52,6 +52,9 @@ inputs:
   pip_audit_pypi_insecure_hosts:
     description: Hosts for --trusted-host in pip-audit in case you have an untrusted private index, comma separated
     required: false
+  gh_to_slack_user_map:
+    description: JSON map of github usernames to slack usernames
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
@@ -567,8 +570,19 @@ runs:
       id: assignees-slack
       env:
         ASSIGNEES: ${{steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result)}}
-      run: echo "result=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')" >> $GITHUB_OUTPUT
-      shell: bash
+        GH_TO_SLACK_USER_MAP: ${{ inputs.gh_to_slack_user_map }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          let githubToSlack = {};
+          try {
+            githubToSlack = JSON.parse(process.env.GH_TO_SLACK_USER_MAP);
+          } catch (e) {
+            console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
+          }
+
+          const assignees = process.env.ASSIGNEES.split(/\s+/).map(e => e.trim()).filter(Boolean);
+          return assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ');
     - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
