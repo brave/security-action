@@ -582,7 +582,9 @@ runs:
           }
 
           const assignees = process.env.ASSIGNEES.split(/\s+/).map(e => e.trim()).filter(Boolean);
-          return assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ');
+          const slackAssignees = assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ');
+          core.setSecret(slackAssignees);
+          return slackAssignees;
     - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
