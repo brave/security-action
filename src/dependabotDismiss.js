@@ -11,13 +11,19 @@ export default async function dependabotDismiss({
     org,
     minlevel = Severity.low,
     debug = false,
-    hotwords = [' dos ', 'denial of service', 'redos', 'denial-of-service', 'memory explosion'],
+    hotwords = [' dos ',
+        'denial of service',
+        'redos',
+        'denial-of-service',
+        'memory explosion',
+        'inefficient regular expression',
+        'regular expression complexity'],
     githubToken = null,
     github = null,
     actor = 'security-action',
     dependabotDismissConfig = 'dependabot-dismiss.txt',
 }) {
-    let watermark = "The following alerts were dismissed because they contained hotwords:\n\n";
+    let watermark = "The following alerts were dismissed:\n\n";
     let message = '';
 
     let dependabotDismissIds = [];
