@@ -32,6 +32,7 @@ export default async function dependabotNudge({
     skipRepositories = ['chromium'],
     skipHotwords = ['dos', 'denial of service', 'redos', 'denial-of-service', 'memory explosion', 'inefficient regular expression', 'regular expression complexity'],
     defaultContact = ['yan'],
+    githubToSlack = {},
     singleOutputMessage = false,
 }) {
     if (!github && githubToken) {
@@ -114,7 +115,7 @@ export default async function dependabotNudge({
 
             // get property values for this repository
             const prop = props[repo.name] || {properties: {}};
-            const maintainers = (prop.maintainers || "").split(',').filter(Boolean).map(m => `@${m}`) || [];
+            const maintainers = (prop.maintainers || "").split(',').filter(Boolean).map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`) || [];
             
             if (alerts.length > 0) {
                 if (debug)

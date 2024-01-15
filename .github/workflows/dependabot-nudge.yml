@@ -21,6 +21,7 @@ jobs:
               env:
                 SLACK_TOKEN: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
                 SLACK_CHANNEL: '#secops-hotspots'
+                GH_TO_SLACK_USER_MAP: ${{ secrets.GH_TO_SLACK_USER_MAP }}
                 DEBUG: false
               with:
                 github-token: ${{ secrets.DEPENDABOT_NUDGE_GITHUB_TOKEN }}
@@ -28,6 +29,13 @@ jobs:
                   const debug = process.env.DEBUG === 'true';
                   const { default: sendSlackMessage } = await import('${{ github.workspace }}/src/sendSlackMessage.js');
                   const { default: dependabotNudge } = await import('${{ github.workspace }}/src/dependabotNudge.js');
+                  
+                  let githubToSlack = {};
+                  try {
+                    githubToSlack = JSON.parse(process.env.GH_TO_SLACK_USER_MAP);
+                  } catch (e) {
+                    if (debug) console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
+                  }
 
                   // set minlevel to 'medium' if it's the first Monday of the month, otherwise stick to high or critical issues
                   let minlevel = 'medium';
@@ -39,7 +47,7 @@ jobs:
                     minlevel = 'high';
                   }
 
-                  const messages = await dependabotNudge({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, minlevel: minlevel});
+                  const messages = await dependabotNudge({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, minlevel: minlevel, githubToSlack: githubToSlack});
 
                   for (const message of messages) {
                     try {
