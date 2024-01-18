@@ -107,16 +107,41 @@ runs:
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
-    - name: Store codeql enabled
-      if: ${{ inputs.enabled == 'true' && github.event.pull_request.draft == 'false' && github.actor != 'dependabot[bot]' && matrix.language && matrix.language != 'generic' }}
+    - name: Store if CodeQL should be enabled
       id: codeql-enabled
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        LANGUAGE: ${{ matrix.language }}
+        ENABLED: ${{ inputs.enabled }}
+      with:
+        script: |
+          const query = `
+            query($owner: String!, $name: String!) { 
+              repository(owner: $owner, name: $name) { 
+                isPrivate
+              }
+            }
+          `;
+          const variables = {
+            owner: context.repo.owner,
+            name: context.repo.repo,
+          };
+          const result = await github.graphql(query, variables);
+
+          const isPrivate = result.repository.isPrivate;
+          const isDraft = context.payload.pull_request?.draft;
+          const isDependabot = context.actor === 'dependabot[bot]';
+          const isNotGeneric = process.env.LANGUAGE !== "" && process.env.LANGUAGE !== 'generic';
+          const isEnabled = process.env.ENABLED === 'true';
+
+          return isEnabled && !isDraft && !isDependabot && isNotGeneric && !isPrivate;
+    - name: CodeQL Sanity Check
+      if: ${{ steps.codeql-enabled.outputs.result != 'true' && steps.codeql-enabled.outputs.result != 'false' }}
       shell: bash
       run: |
         set -x
-        # enable codeql only if it's a public repo
-        if curl --retry 5 -s -I ${{github.event.repository.url}} | head -n1 | grep 200 >/dev/null  ; then
-          echo "result=true" >> $GITHUB_OUTPUT
-        fi
+        echo "CodeQL enabled is not a boolean, aborting"
+        exit 1
 # REVIEWDOG Steps
 # REVIEWDOG Setup
     - name: Write changed files to file
