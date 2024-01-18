@@ -1,0 +1,22 @@
+name: CodeQL
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master, staging, development, devel, dev, prod]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main, master, staging, development, devel, dev]
+  merge_group:
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+jobs:
+  codeql:
+    name: codeql
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: brave/security-action/actions/codeql@main

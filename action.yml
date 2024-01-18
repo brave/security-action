@@ -36,9 +36,6 @@ inputs:
   debug:
     description: enables debug output for this action
     required: false
-  codeql_config:
-    description: CodeQL configuration config config
-    default: ./.github/codeql/codeql-config.yml
   enabled:
     type: boolean
     description: may disable the whole action, big red button for emergency cases
@@ -87,14 +84,14 @@ runs:
       with:
         separator: '\0'
     - name: Store reviewdog enabled for PR
-      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
       id: reviewdog-enabled-pr
       shell: bash
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
     - name: Store reviewdog enabled for full repo manual run
-      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') }}
       id: reviewdog-enabled-full
       shell: bash
       run: |
@@ -107,41 +104,6 @@ runs:
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
-    - name: Store if CodeQL should be enabled
-      id: codeql-enabled
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      env:
-        LANGUAGE: ${{ matrix.language }}
-        ENABLED: ${{ inputs.enabled }}
-      with:
-        script: |
-          const query = `
-            query($owner: String!, $name: String!) { 
-              repository(owner: $owner, name: $name) { 
-                isPrivate
-              }
-            }
-          `;
-          const variables = {
-            owner: context.repo.owner,
-            name: context.repo.repo,
-          };
-          const result = await github.graphql(query, variables);
-
-          const isPrivate = result.repository.isPrivate;
-          const isDraft = context.payload.pull_request?.draft;
-          const isDependabot = context.actor === 'dependabot[bot]';
-          const isNotGeneric = process.env.LANGUAGE !== "" && process.env.LANGUAGE !== 'generic';
-          const isEnabled = process.env.ENABLED === 'true';
-
-          return isEnabled && !isDraft && !isDependabot && isNotGeneric && !isPrivate;
-    - name: CodeQL Sanity Check
-      if: ${{ steps.codeql-enabled.outputs.result != 'true' && steps.codeql-enabled.outputs.result != 'false' }}
-      shell: bash
-      run: |
-        set -x
-        echo "CodeQL enabled is not a boolean, aborting"
-        exit 1
 # REVIEWDOG Steps
 # REVIEWDOG Setup
     - name: Write changed files to file
@@ -219,7 +181,7 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - id: unverified-commits
-      if: ${{ github.event_name == 'pull_request' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ github.event_name == 'pull_request' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
           script: |
@@ -628,27 +590,3 @@ runs:
         channel: secops-hotspots
         color: green
         verbose: true
-# CodeQL Steps
-    - if: ${{ steps.codeql-enabled.outputs.result == 'true' && hashFiles(inputs.codeql_config) }}
-      name: Initialize CodeQL
-      uses: github/codeql-action/init@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1
-      with:
-        languages: ${{ matrix.language }}
-        config-file: ${{ inputs.codeql_config }}
-    - if: ${{ steps.codeql-enabled.outputs.result == 'true' && !hashFiles(inputs.codeql_config)}}
-      name: Initialize CodeQL (without config)
-      uses: github/codeql-action/init@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1
-      with:
-        languages: ${{ matrix.language }}
-    - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
-      name: Autobuild
-      uses: github/codeql-action/autobuild@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1
-    - if: ${{ steps.codeql-enabled.outputs.result == 'true' }}
-      name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1
-#    - run: echo ${{ inputs.in-name }}
-#      shell: bash
-#    - id: output-step-id
-#      run: echo "output-name=antani" >> $GITHUB_OUTPUT
-#      shell bash
-
