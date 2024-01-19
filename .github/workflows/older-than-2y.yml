@@ -2,21 +2,21 @@ name: Older Than 2 Years Informer
 on:
   schedule:
     # Every month, first day of the month
-    - cron:  '0 0 1 * *'
+    - cron: "0 0 1 * *"
   workflow_dispatch:
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Older Than 2 Years Informer
-      id: older-than-2y
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
+      - name: Older Than 2 Years Informer
+        id: older-than-2y
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
           github-token: ${{ secrets.GH_PAT }}
           script: |
             const org = process.env.GITHUB_REPOSITORY_OWNER;
-            
+
             function formatInMessage(r) {
               var pushedAt = new Date(r.pushed_at);
               return `- ${r.private ? '😎 ' : ''} ${r.full_name} ${r.html_url}\t🌟 ${r.stargazers_count}🍴${r.forks} - Last pushed ${pushedAt.getFullYear()}/${pushedAt.getMonth()}/${pushedAt.getDay()+1}\n`
@@ -53,12 +53,12 @@ jobs:
             core.setSecret(message);
 
             return message;
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
-      if: ${{ fromJson(steps.older-than-2y.outputs.result) != '' }}
-      with:
-        slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
-        message: |
-          [older-than-2y] ${{ fromJson(steps.older-than-2y.outputs.result) }}
-        channel: secops-hotspots
-        color: blue
-        verbose: false
+      - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
+        if: ${{ fromJson(steps.older-than-2y.outputs.result) != '' }}
+        with:
+          slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
+          message: |
+            [older-than-2y] ${{ fromJson(steps.older-than-2y.outputs.result) }}
+          channel: secops-hotspots
+          color: blue
+          verbose: false
