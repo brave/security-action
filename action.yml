@@ -61,7 +61,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: ${{ github.action_path }}/actions/main
+    - uses: ${{ github.action_path }}/actions/reviewdog
       with:
         github_token: ${{ inputs.github_token }}
         slack_token: ${{ inputs.slack_token }}
