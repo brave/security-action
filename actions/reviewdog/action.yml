@@ -37,12 +37,11 @@ inputs:
     description: enables debug output for this action
     required: false
   enabled:
-    type: boolean
     description: may disable the whole action, big red button for emergency cases
-    default: true
+    default: "true"
   baseline_scan_only:
     description: compare changed files with the base ref, do not scan the entire repo with reviewdog
-    default: true
+    default: "true"
   pip_audit_pypi_index_url:
     description: Pypi index for pip-audit to use in case you have a private index
     required: false
@@ -180,77 +179,7 @@ runs:
             ).length;
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
-    - id: unverified-commits
-      if: ${{ github.event_name == 'pull_request' }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
-          script: |
-            const commits = await github.rest.pulls.listCommits({
-              pull_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
-            const previousCommentsQuery = `query ($owner: String!, $name: String!, $prnumber: Int!) {
-              repository(owner: $owner, name: $name) {
-                pullRequest(number: $prnumber) {
-                  comments(last: 50) {
-                    nodes {
-                      id
-                      author {
-                        login
-                      }
-                      body
-                    }
-                  }
-                }
-              }
-            }`;
-            const deleteMutation = `mutation($comment:ID!) {
-              deleteIssueComment(input: {id:$comment}) {
-                clientMutationId
-              }
-            }`;
-            const previousComments = await github.graphql(previousCommentsQuery, {
-              owner: context.repo.owner,
-              name: context.repo.repo,
-              prnumber: context.issue.number
-            });
-            const commentPrefix = "The following commits were not [verified](https://github.com/brave/handbook/blob/master/development/commit-and-tag-signing.md):\n";
-            const actionPreviousComments = previousComments.repository.pullRequest.comments.nodes.filter(
-              c => c.author.login === "github-actions" && c.body.startsWith(commentPrefix)
-            );
-            const unverifiedCommits = commits.data.filter(c => c.commit.verification.verified !== true);
-            if (unverifiedCommits.length) {
-              const commitList = unverifiedCommits.map(c => `${c.sha} (${c.commit.verification.reason})`).join("\n");
-              const body = commentPrefix + commitList;
-              var commentExists = false;
-              for (const comment of actionPreviousComments) {
-                if (comment.body == body) {
-                  console.log("Good comment found:", comment);
-                  commentExists = true;
-                } else {
-                  console.log("Deleting", comment);
-                  await github.graphql(deleteMutation, {comment: comment.id});
-                }
-              }
-              if (!commentExists) {
-                console.log("Creating new comment");
-                github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  body: body,
-                });
-                return "UNVERIFIED-CHANGED";  // A new comment was created
-              }
-              return "UNVERIFIED";
-            } else {
-              console.log("Commits verified");
-              for (const comment of actionPreviousComments) {
-                console.log("Deleting", comment);
-                await github.graphql(deleteMutation, {comment: comment.id});
-              }
-            }
+
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Cache pip cache
       id: cache-pip
@@ -522,11 +451,6 @@ runs:
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
-    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.3
-      if: ${{ steps.unverified-commits.outputs.result == '"UNVERIFIED-CHANGED"' }}
-      with:
-        github_token: ${{ inputs.github_token }}
-        labels: unverified-commits
     - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.3
       if: ${{ (steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true') }}
       with:
