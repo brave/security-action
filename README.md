@@ -20,11 +20,6 @@ jobs:
   security:
     name: security
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      # CodeQL analyzed languages
-      matrix:
-        language: [ 'generic', 'javascript', 'python', 'ruby' ]
     steps:
       - uses: actions/checkout@v3
         with:
