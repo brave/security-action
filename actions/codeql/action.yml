@@ -1,0 +1,99 @@
+name: "Security Action (CodeQL)"
+description: "CodeQL"
+inputs:
+  debug:
+    description: enables debug output for this action
+    required: false
+  codeql_enabled:
+    description: enables this action
+    required: false
+  codeql_config_file:
+    description: |
+      Path to the CodeQL config file
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@ae82ed4ae04587b665efad2f206578aa6f0e8539 # v42.0.0
+      with:
+        separator: '\0'
+        files: |
+          **/*.{cpp,c++,hpp,hh,h++,hxx,c,cc,h}
+          **/*.{sln,csproj,cs,cshtml,xaml}
+          **/*.go
+          **/*.java
+          **/*.kt
+          **/*.{js,jsx,mjs,es,es6,htm,html,xhtm,xhtml,vue,hbs,ejs,njk,json,yaml,yml,raml,xml}
+          **/*.py
+          **/*.{rb,erb,gemspec}
+          **/Gemfile
+          **/*.swift
+          **/*.{ts,tsx,mts,cts}
+    - name: Store configurations
+      id: cfg
+      env:
+        DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
+        FILES: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          var debug = process.env.DEBUG == 'true';
+          console.log(debug);
+          if (debug) {
+            console.log("Initializing CodeQL Action");
+          }
+
+          const { existsSync } = await import('fs');
+          const { default: getConfig } = await import('${{ github.action_path }}/../../src/getConfig.js');
+          const { default: getProperties } = await import('${{ github.action_path }}/../../src/getProperties.js');
+
+          const query = `
+            query($owner: String!, $name: String!) { 
+              repository(owner: $owner, name: $name) { 
+                isPrivate
+              }
+            }
+          `;
+          const variables = {
+            owner: context.repo.owner,
+            name: context.repo.repo,
+          };
+          const result = await github.graphql(query, variables);
+
+          const isPrivate = result.repository.isPrivate;
+          const isDraft = context.payload.pull_request?.draft;
+          const isBot = context.actor.endsWith('[bot]');
+          const isEmptyFiles = process.env.FILES.trim() === '';
+
+          const inputs = ${{ toJson(inputs) }};
+          // delete if empty string in inputs value
+          Object.keys(inputs).forEach(key => inputs[key] === '' && delete inputs[key]);
+
+          const config = await getConfig({owner: context.repo.owner, repo: context.repo.repo, path: '.github/codeql.json', debug, github});
+          const properties = await getProperties({owner: context.repo.owner, repo: context.repo.repo, debug, github});
+
+          const options = Object.assign({
+            codeql_enabled: (!isDraft && !isBot && !isPrivate && !isEmptyFiles).toString(),
+            codeql_config_file: existsSync('.github/codeql/codeql-config.yml') ?
+                                  '.github/codeql/codeql-config.yml' : 
+                                existsSync('${{ github.action_path }}/../../.github/codeql/codeql-config.yml') ?
+                                  '${{ github.action_path }}/../../.github/codeql/codeql-config.yml' :
+                                undefined,
+          }, config, properties, inputs);
+
+          if (debug) console.log(`options: ${JSON.stringify(options, null, 2)}`);
+
+          return options;
+    - if: ${{ fromJson(steps.cfg.outputs.result).codeql_enabled == 'true' }}
+      name: Initialize CodeQL
+      uses: github/codeql-action/init@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1
+      with:
+        config-file: ${{ steps.cfg.outputs.result.codeql_config_file }}
+    - if: ${{ fromJson(steps.cfg.outputs.result).codeql_enabled == 'true' }}
+      name: Autobuild
+      uses: github/codeql-action/autobuild@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1
+    - if: ${{ fromJson(steps.cfg.outputs.result).codeql_enabled == 'true' }}
+      name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@0b21cf2492b6b02c465a3e5d7c473717ad7721ba # v3.23.1

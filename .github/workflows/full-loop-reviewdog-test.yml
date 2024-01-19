@@ -1,4 +1,4 @@
-name: full-loop
+name: full-loop-reviewdog-test
 on:
   workflow_dispatch:
   push:
@@ -10,13 +10,13 @@ permissions:
   contents: read
 jobs:
   full-loop:
-    name: full-loop
+    name: full-loop-reviewdog-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           fetch-depth: 0
-      - uses: ./
+      - uses: ./actions/reviewdog
         name: Run action on full security-action repo
         id: action
         with:

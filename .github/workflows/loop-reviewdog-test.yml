@@ -1,4 +1,4 @@
-name: loop
+name: loop-reviewdog-test
 on:
   workflow_dispatch:
   push:
@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 jobs:
   loop:
-    name: loop
+    name: loop-reviewdog-test
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -26,7 +26,7 @@ jobs:
           pwd
           tree -a
         shell: bash
-      - uses: ./
+      - uses: ./actions/reviewdog
         with:
           debug: true
           github_token: ${{ secrets.GITHUB_TOKEN }}

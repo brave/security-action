@@ -1,0 +1,592 @@
+name: 'Security Action (main)'
+description: 'Collect and Generalize multiple CI Security checks'
+inputs:
+# in-name:
+#   description: yadda yadda
+#   required: true
+#   default: 0
+  github_token:
+    description: |
+      Secret token to push review comments, and
+      interact with the repository systematically
+    required: true
+  slack_token:
+    description: |
+      Secret token to forward findings to slack
+    required: false
+  assignees:
+    description: assign PR to the people linked
+    default: |
+      thypon
+      bcaller
+  hotwords:
+    description: body hotwords which should trigger the action
+    default: |
+      password
+      cryptography
+      login
+      policy
+      safebrowsing
+      safe browsing
+      csp
+      url parse
+      urlparse
+      :disableDigestUpdates
+      pinDigest
+  debug:
+    description: enables debug output for this action
+    required: false
+  enabled:
+    type: boolean
+    description: may disable the whole action, big red button for emergency cases
+    default: true
+  baseline_scan_only:
+    description: compare changed files with the base ref, do not scan the entire repo with reviewdog
+    default: true
+  pip_audit_pypi_index_url:
+    description: Pypi index for pip-audit to use in case you have a private index
+    required: false
+  pip_audit_pypi_insecure_hosts:
+    description: Hosts for --trusted-host in pip-audit in case you have an untrusted private index, comma separated
+    required: false
+  gh_to_slack_user_map:
+    description: JSON map of github usernames to slack usernames
+    required: false
+outputs:
+  reviewdog-findings:
+    description: number of reviewdog findings
+    value: ${{ steps.run-reviewdog-pr.outputs.findings }}${{ steps.run-reviewdog-full.outputs.findings }}
+  safesvg-count:
+    description: number of safesvg findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.safesvg_count }}${{ steps.run-reviewdog-full.outputs.safesvg_count }}
+  tfsec-count:
+    description: number of tfsec findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.tfsec_count }}${{ steps.run-reviewdog-full.outputs.tfsec_count }}
+  semgrep-count:
+    description: number of semgrep findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.semgrep_count }}${{ steps.run-reviewdog-full.outputs.semgrep_count }}
+  sveltegrep-count:
+    description: number of sveltegrep findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.sveltegrep_count }}${{ steps.run-reviewdog-full.outputs.sveltegrep_count }}
+  npm-audit-count:
+    description: number of npm-audit findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.npm_audit_count }}${{ steps.run-reviewdog-full.outputs.npm_audit_count }}
+  pip-audit-count:
+    description: number of pip-audit findings via reviewdog
+    value: ${{ steps.run-reviewdog-pr.outputs.pip_audit_count }}${{ steps.run-reviewdog-full.outputs.pip_audit_count }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Get changed files
+      if: ${{ inputs.enabled == 'true' && github.event_name == 'pull_request' }}
+      id: changed-files
+      uses: tj-actions/changed-files@ae82ed4ae04587b665efad2f206578aa6f0e8539 # v42.0.0
+      with:
+        separator: '\0'
+    - name: Store reviewdog enabled for PR
+      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
+      id: reviewdog-enabled-pr
+      shell: bash
+      run: |
+        set -x
+        echo "result=true" >> $GITHUB_OUTPUT
+    - name: Store reviewdog enabled for full repo manual run
+      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') }}
+      id: reviewdog-enabled-full
+      shell: bash
+      run: |
+        set -x
+        echo "result=true" >> $GITHUB_OUTPUT
+    - name: Store reviewdog enabled
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' || steps.reviewdog-enabled-full.outputs.result == 'true' }}
+      id: reviewdog-enabled
+      shell: bash
+      run: |
+        set -x
+        echo "result=true" >> $GITHUB_OUTPUT
+# REVIEWDOG Steps
+# REVIEWDOG Setup
+    - name: Write changed files to file
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      id: write-changed-files
+      shell: bash
+      run: |
+        set -e
+        printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/../../assets/all_changed_files.txt
+        printf '${{ steps.changed-files.outputs.any_changed }}'
+    - id: comments-before
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+          script: |
+            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+              repository(owner:$owner, name:$name) { 
+                pullRequest(number:$prnumber) {
+                  reviewThreads(last:100) {
+                    nodes {
+                      isOutdated
+                      comments(first:1) {
+                        totalCount
+                        nodes {
+                          id
+                          author {
+                            login
+                          }
+                          body
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            const threads = result.repository.pullRequest.reviewThreads;
+            const deletableComments = threads.nodes.filter(
+              reviewThread => (
+                reviewThread.isOutdated === true &&
+                reviewThread.comments.totalCount === 1 &&
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
+              )
+            ).map(
+              reviewThread => (
+                reviewThread.comments.nodes[0].id
+              )
+            );
+            console.log("Delete", deletableComments);
+            if (deletableComments) {
+              deleteMutation = `mutation($comment:ID!) {
+                deletePullRequestReviewComment(input: {id:$comment}) {
+                  clientMutationId
+                }
+              }`;
+              for (const commentId of deletableComments) {
+                console.log("Deleting %s", commentId);
+                await github.graphql(deleteMutation, {comment: commentId});
+              }
+            }
+            var commentsNumber = threads.nodes.filter(
+              reviewThread => (
+                !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
+              )
+            ).length;
+            console.log("Comments: %d", commentsNumber);
+            return commentsNumber;
+    - id: unverified-commits
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+          script: |
+            const commits = await github.rest.pulls.listCommits({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const previousCommentsQuery = `query ($owner: String!, $name: String!, $prnumber: Int!) {
+              repository(owner: $owner, name: $name) {
+                pullRequest(number: $prnumber) {
+                  comments(last: 50) {
+                    nodes {
+                      id
+                      author {
+                        login
+                      }
+                      body
+                    }
+                  }
+                }
+              }
+            }`;
+            const deleteMutation = `mutation($comment:ID!) {
+              deleteIssueComment(input: {id:$comment}) {
+                clientMutationId
+              }
+            }`;
+            const previousComments = await github.graphql(previousCommentsQuery, {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            });
+            const commentPrefix = "The following commits were not [verified](https://github.com/brave/handbook/blob/master/development/commit-and-tag-signing.md):\n";
+            const actionPreviousComments = previousComments.repository.pullRequest.comments.nodes.filter(
+              c => c.author.login === "github-actions" && c.body.startsWith(commentPrefix)
+            );
+            const unverifiedCommits = commits.data.filter(c => c.commit.verification.verified !== true);
+            if (unverifiedCommits.length) {
+              const commitList = unverifiedCommits.map(c => `${c.sha} (${c.commit.verification.reason})`).join("\n");
+              const body = commentPrefix + commitList;
+              var commentExists = false;
+              for (const comment of actionPreviousComments) {
+                if (comment.body == body) {
+                  console.log("Good comment found:", comment);
+                  commentExists = true;
+                } else {
+                  console.log("Deleting", comment);
+                  await github.graphql(deleteMutation, {comment: comment.id});
+                }
+              }
+              if (!commentExists) {
+                console.log("Creating new comment");
+                github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: body,
+                });
+                return "UNVERIFIED-CHANGED";  // A new comment was created
+              }
+              return "UNVERIFIED";
+            } else {
+              console.log("Commits verified");
+              for (const comment of actionPreviousComments) {
+                console.log("Deleting", comment);
+                await github.graphql(deleteMutation, {comment: comment.id});
+              }
+            }
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Cache pip cache
+      id: cache-pip
+      uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+      with:
+        path: ~/.cache/pip/
+        key: ${{ runner.os }}-pip
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      uses: reviewdog/action-setup@154bb4214db7d87bdb814a346ec67b3472fe1c5f # v1.1.0
+      with:
+        reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Setup Ruby
+      id: ruby
+      uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_GEMFILE: ${{ github.action_path }}/../../Gemfile
+      with:
+        ruby-version: '3.2'
+        bundler-cache: true
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Install semgrep & pip-audit
+      shell: bash
+      run: |
+        python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/../../requirements.txt
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Install xmllint for safesvg
+      uses: awalsh128/cache-apt-pkgs-action@44c33b32f808cdddd5ac0366d70595ed63661ed8 # v1.3.1
+      with:
+          packages: libxml2-utils
+          version: 1.0
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Install tfsec
+      uses: jaxxstorm/action-install-gh-release@c5ead9a448b4660cf1e7866ee22e4dc56538031a # v1.10.0
+      with: # Grab a specific tag with caching
+        repo: aquasecurity/tfsec
+        tag: v1.28.1
+        cache: enable
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && inputs.debug == 'true'}}
+      env:
+        ASSIGNEES: ${{inputs.assignees}}
+      run: ${{ github.action_path }}/../../assets/debug.sh
+      shell: bash
+
+# REVIEWDOG Run
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      name: Run reviewdog
+      id: run-reviewdog-pr
+      shell: bash
+      env:
+        ASSIGNEES: ${{inputs.assignees}}
+        REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
+        SEC_ACTION_DEBUG: ${{ inputs.debug }}
+        PYPI_INDEX_URL: ${{ inputs.pip_audit_pypi_index_url }}
+        PYPI_INSECURE_HOSTS: ${{ inputs.pip_audit_pypi_insecure_hosts }}
+      run: ${{ github.action_path }}/../../assets/reviewdog.sh
+    - if: ${{ steps.reviewdog-enabled-full.outputs.result == 'true' }}
+      name: Run reviewdog full
+      id: run-reviewdog-full
+      shell: bash
+      run: unset GITHUB_BASE_REF && ${{ github.action_path }}/../../assets/reviewdog.sh
+
+    - id: comments-after
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+          script: |
+            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+              repository(owner:$owner, name:$name) { 
+                pullRequest(number:$prnumber) {
+                  reviewThreads(last:100) {
+                    nodes {
+                      isOutdated
+                      comments(first:1) {
+                        totalCount
+                        nodes {
+                          author {
+                            login
+                          }
+                          body
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            const threads = result.repository.pullRequest.reviewThreads;
+            var commentsNumber = threads.nodes.filter(
+              reviewThread => (
+                !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
+              )
+            ).length;
+            console.log("Comments: %d", commentsNumber);
+            return commentsNumber;
+
+    - id: assignees-after
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        ASSIGNEES: ${{ inputs.assignees }}
+      with:
+          script: |
+            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+              repository(owner:$owner, name:$name) { 
+                pullRequest(number:$prnumber) {
+                  reviewThreads(last:100) {
+                    nodes {
+                      comments(first:1) {
+                        totalCount
+                        nodes {
+                          id
+                          author {
+                            login
+                          }
+                          body
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            const threads = result.repository.pullRequest.reviewThreads;
+            var assignees = [...new Set(threads.nodes.filter(
+              reviewThread => (
+                reviewThread.comments.nodes[0].author.login === "github-actions" &&
+                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
+              )
+            ).map(
+              e => e.comments.nodes[0].body
+                    .replace(/.*<br>Cc(.*)/, '$1')
+                    .replaceAll('@', '').trim().split(' ')
+            ).flat())]
+            
+            console.log("assignees: %o", assignees);
+            if (assignees.length > 0) {
+              return assignees.join('\n');
+            } else {
+              return process.env.ASSIGNEES.split(/\s+/).filter((str) => str !== '').join('\n');
+            }
+
+    - id: assignee-removed-label
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        ASSIGNEES: ${{ steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result) }}
+      with:
+        script: |
+            const { ASSIGNEES } = process.env;
+            console.log("assignees: %o", ASSIGNEES);
+            const assignees = ASSIGNEES.split(/\s+/).filter((str) => str !== '');
+            var query = `query ($owner: String!, $name: String!, $prnumber: Int!) {
+              repository(owner: $owner, name: $name) {
+                pullRequest(number: $prnumber) {
+                  timelineItems(last: 100, itemTypes: UNLABELED_EVENT) {
+                    nodes {
+                      ... on UnlabeledEvent {
+                        label {
+                          name
+                        }
+                        actor {
+                          login
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              owner: context.repo.owner,
+              name: context.repo.repo,
+              prnumber: context.issue.number
+            }
+            const result = await github.graphql(query, variables);
+            const timelineItems = result.repository.pullRequest.timelineItems;
+            console.log("timelineItems: %o", timelineItems);
+            var removedByAssigneeEvents = timelineItems.nodes.filter(
+              timelineItem => (
+                timelineItem.label.name === "needs-security-review" &&
+                assignees.some((a) => timelineItem.actor.login === a)
+              )
+            ).length;
+            console.log("RemovedByAssigneeEvents: %d", removedByAssigneeEvents);
+            return removedByAssigneeEvents > 0;
+
+    - id: description-contains-hotwords
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && github.actor != 'renovate[bot]' }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        HOTWORDS: ${{ inputs.hotwords }}
+      with:
+        script: |
+              const { HOTWORDS } = process.env;
+              const hotwords = HOTWORDS.split('\n').map(s => s.trim()).filter((s) => s !== '');
+
+              console.log("hotwords: %s", hotwords);
+
+              var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+                repository(owner:$owner, name:$name) { 
+                  pullRequest(number:$prnumber) {
+                    title
+                    body
+                  }
+                }
+              }`;
+              const variables = {
+                owner: context.repo.owner,
+                name: context.repo.repo,
+                prnumber: context.issue.number
+              };
+              const result = await github.graphql(query, variables);
+              const content = (result.repository.pullRequest.title + result.repository.pullRequest.body).toLowerCase();
+              console.log("Body: %s", content);
+
+              const ret = hotwords.some((word) => content.includes(word));
+              console.log("hotword hit: %s", ret);
+
+              if (ret) {
+                const m = `The security team is monitoring all repositories for certain keywords. This PR includes the word(s) "${hotwords.filter(word => content.includes(word)).join(', ')}" and so security team members have been added as reviewers to take a look.<br/>
+                  No need to request a full security review at this stage, the security team will take a look shortly and either clear the label or request more information/changes.<br/>
+                  Notifications have already been sent, but if this is blocking your merge feel free to reach out directly to the security team on Slack so that we can expedite this check.`
+
+                var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+                  repository(owner:$owner, name:$name) { 
+                    pullRequest(number:$prnumber) {
+                      comments(first: 100) {
+                        nodes {
+                          author { login }
+                          body
+                          bodyHTML
+                          bodyText
+                        }
+                      }
+                    }
+                  }
+                }`;
+                const messages = (await github.graphql(query, variables)).repository.pullRequest.comments.nodes.map(node => node.body);
+
+                if (!messages.includes(m))
+                  github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    body: m
+                  });
+              }
+                
+              return ret;
+
+    - id: should-trigger 
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && !(steps.assignee-removed-label.outputs.result  == 'true') && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result == 'true') }}
+      shell: bash
+      run: |
+        set -x
+        echo "result=true" >> $GITHUB_OUTPUT
+    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.3
+      if: ${{ steps.unverified-commits.outputs.result == '"UNVERIFIED-CHANGED"' }}
+      with:
+        github_token: ${{ inputs.github_token }}
+        labels: unverified-commits
+    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.3
+      if: ${{ (steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true') }}
+      with:
+        github_token: ${{ inputs.github_token }}
+        labels: needs-security-review
+    - uses: actions-ecosystem/action-add-assignees@a5b84af721c4a621eb9c7a4a95ec20a90d0b88e9 # v1.0.1
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
+      with:
+        github_token: ${{ inputs.github_token }}
+        assignees: ${{ fromJson(steps.assignees-after.outputs.result) }}
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && hashFiles('reviewdog.fail.log') }}
+      shell: bash
+      run: |
+        set +x
+        echo -e '\033[0;31mThis action encountered an error while reporting the following findings via the Github API:'
+        cat reviewdog.fail.log | sed 's/^/\x1B[0;34m/'
+        echo -e '\033[0;31mThe failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action \033[0m'
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && !inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+      shell: bash
+      run: exit 1
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+      id: reviewdog-fail-log-head
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          return '\n'+require('fs').readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      id: assignees-slack
+      env:
+        ASSIGNEES: ${{steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result)}}
+        GH_TO_SLACK_USER_MAP: ${{ inputs.gh_to_slack_user_map }}
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          let githubToSlack = {};
+          try {
+            githubToSlack = JSON.parse(process.env.GH_TO_SLACK_USER_MAP);
+          } catch (e) {
+            console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
+          }
+
+          const assignees = process.env.ASSIGNEES.split(/\s+/).map(e => e.trim()).filter(Boolean);
+          const slackAssignees = assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ');
+          core.setSecret(slackAssignees);
+          return slackAssignees;
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
+      with:
+        slack_token: ${{ inputs.slack_token }}
+        message: |
+          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees-slack.outputs.result}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
+        channel: secops-hotspots
+        color: red
+        verbose: true
+    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && steps.should-trigger.outputs.result == 'true' }}
+      with:
+        slack_token: ${{ inputs.slack_token }}
+        message: |
+          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees-slack.outputs.result}}
+        channel: secops-hotspots
+        color: green
+        verbose: true
