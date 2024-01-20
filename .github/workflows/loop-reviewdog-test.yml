@@ -1,4 +1,4 @@
-name: loop
+name: loop-reviewdog-test
 on:
   workflow_dispatch:
   push:
@@ -11,13 +11,8 @@ permissions:
   pull-requests: write
 jobs:
   loop:
-    name: loop
+    name: loop-reviewdog-test
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      # CodeQL analyzed languages
-      matrix:
-        language: [ 'generic', 'javascript', '' ]
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
@@ -26,7 +21,7 @@ jobs:
           pwd
           tree -a
         shell: bash
-      - uses: ./
+      - uses: ./actions/reviewdog
         with:
           debug: true
           github_token: ${{ secrets.GITHUB_TOKEN }}

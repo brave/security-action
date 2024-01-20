@@ -1,4 +1,4 @@
-name: security
+name: CodeQL
 on:
   workflow_dispatch:
   push:
@@ -9,18 +9,14 @@ on:
   merge_group:
 permissions:
   contents: read
-  issues: write
-  pull-requests: write
+  issues: read
+  pull-requests: read
 jobs:
-  security:
-    name: security
+  codeql:
+    name: codeql
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-        with:
-          fetch-depth: 0
-      - uses: brave/security-action@main
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
-          gh_to_slack_user_map: ${{ secrets.GH_TO_SLACK_USER_MAP }}
+      - uses: brave/security-action/actions/codeql@main
