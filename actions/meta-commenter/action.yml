@@ -1,0 +1,30 @@
+name: Security Action (meta-commenter)
+description: Add labels to pull requests based on existing labels.
+inputs:
+  github_token:
+    description: 'GitHub token'
+    required: true
+  input1:
+    description: |
+      First input
+    required: false
+  input2:
+    description: |
+      Second input
+    required: false
+  input3:
+    description: |
+      Third input
+    required: false
+  input4:
+    description: |
+      Fourth input
+    required: false
+  # add new input here if required
+  inputN:
+    description: |
+      Nth input
+    required: false
+runs:
+  steps: [] # TODO: add steps here
+  using: "composite"

@@ -1,0 +1,114 @@
+name: Security Action (meta-slack-notifier)
+description: Meta Action to Send Messages to Slack
+inputs:
+  slack_token:
+    description: |
+      Secret token to forward findings to slack
+    required: false
+  slack_channel:
+    description: |
+      Slack channel to send messages to
+    required: false
+  input1:
+    description: |
+      First input
+    required: false
+  input2:
+    description: |
+      Second input
+    required: false
+  input3:
+    description: |
+      Third input
+    required: false
+  input4:
+    description: |
+      Fourth input
+    required: false
+  # add new input here if required
+  inputN:
+    description: |
+      Nth input
+    required: false
+  slack_username:
+    description: |
+      Slack username to send messages as
+    required: false
+  slack_icon_emoji:
+    description: |
+      Slack emoji to use as icon
+    required: false
+  slack_icon_url:
+    description: |
+      Slack url to use as icon
+    required: false
+  slack_color:
+    description: |
+      Slack color to use for the message
+    required: false
+  slack_title:
+    description: |
+      Slack title to use for the message
+    required: false
+  slack_title_link:
+    description: |
+      Slack title link to use for the message
+    required: false
+  slack_footer:
+    description: |
+      Slack footer to use for the message
+    required: false
+  slack_footer_icon:
+    description: |
+      Slack footer icon to use for the message
+    required: false
+  slack_ts:
+    description: |
+      Slack timestamp to use for the message
+    required: false
+  slack_pretext:
+    description: |
+      Slack pretext to use for the message
+    required: false
+  slack_text:
+    description: |
+      Slack text to use for the message
+    required: false
+  slack_image_url:
+    description: |
+      Slack image url to use for the message
+    required: false
+  slack_thumb_url:
+    description: |
+      Slack thumbnail url to use for the message
+    required: false
+  slack_author_name:
+    description: |
+      Slack author name to use for the message
+    required: false
+  slack_author_link:
+    description: |
+      Slack author link to use for the message
+    required: false
+  slack_author_icon:
+    description: |
+      Slack author icon to use for the message
+    required: false
+  slack_fields:
+    description: |
+      Slack fields to use for the message
+    required: false
+  slack_actions:
+    description: |
+      Slack actions to use for the message
+    required: false
+  slack_markdown_in:
+    description: |
+      Slack markdown_in to use for the message
+    required: false
+  slack_blocks:
+    description: |
+      Slack blocks to use for the message
+runs:
+  steps: [] # TODO: add steps here
+  using: "composite"

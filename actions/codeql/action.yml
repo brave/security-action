@@ -11,6 +11,10 @@ inputs:
     description: |
       Path to the CodeQL config file
     required: false
+  codeql_allow_forks:
+    description: |
+      Allow forks to run this action
+    required: false
 runs:
   using: "composite"
   steps:
@@ -75,13 +79,15 @@ runs:
           const properties = await getProperties({owner: context.repo.owner, repo: context.repo.repo, debug, github});
 
           const options = Object.assign({
-            codeql_enabled: (!isDraft && !isBot && !isPrivate && !isEmptyFiles).toString(),
+            codeql_enabled: !isDraft && !isBot && !isPrivate && !isEmptyFiles,
             codeql_config_file: existsSync('.github/codeql/codeql-config.yml') ?
                                   '.github/codeql/codeql-config.yml' : 
                                 existsSync('${{ github.action_path }}/../../.github/codeql/codeql-config.yml') ?
                                   '${{ github.action_path }}/../../.github/codeql/codeql-config.yml' :
                                 undefined,
           }, config, properties, inputs);
+
+          options.codeql_enabled = (options.codeql_enabled && (options.codeql_allow_forks === 'true' || !context.payload.repository.fork)).toString();
 
           if (debug) console.log(`options: ${JSON.stringify(options, null, 2)}`);
 

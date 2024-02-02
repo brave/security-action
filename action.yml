@@ -1,4 +1,4 @@
-name: 'Security Action (legacy)'
+name: 'Security Action (compound)'
 description: 'Collect and Generalize multiple CI Security checks'
 inputs:
 # in-name:
@@ -61,21 +61,29 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: ${{ github.action_path }}/actions/reviewdog
+    - id: reviewdog
+      uses: ${{ github.action_path }}/actions/reviewdog
       with:
         github_token: ${{ inputs.github_token }}
         slack_token: ${{ inputs.slack_token }}
         assignees: ${{ inputs.assignees }}
-        hotwords: ${{ inputs.hotwords }}
         debug: ${{ inputs.debug }}
         enabled: ${{ inputs.enabled }}
         baseline_scan_only: ${{ inputs.baseline_scan_only }}
         pip_audit_pypi_index_url: ${{ inputs.pip_audit_pypi_index_url }}
         pip_audit_pypi_insecure_hosts: ${{ inputs.pip_audit_pypi_insecure_hosts }}
         gh_to_slack_user_map: ${{ inputs.gh_to_slack_user_map }}
-    - uses: ${{ github.action_path }}/actions/unverified-commits
+    - id: unverified-commits
+      uses: ${{ github.action_path }}/actions/unverified-commits
       with:
-        github_token: ${{ inputs.github_token }
+        enabled: ${{ inputs.enabled }}
+        github_token: ${{ inputs.github_token }}
+    - id: hotwords
+      uses: ${{ github.action_path }}/actions/hotwords
+      with:
+        enabled: ${{ inputs.enabled }}
+        hotwords: ${{ inputs.hotwords }}
+        debug: ${{ inputs.debug }}
     - uses: ${{ github.action_path }}/actions/codeql
       with:
         debug: ${{ inputs.debug }}
