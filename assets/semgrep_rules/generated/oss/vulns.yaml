@@ -1255,6 +1255,9 @@ rules:
     description: CSRF protection disabled
     references:
     - https://www.apollographql.com/docs/apollo-server/v3/security/cors/#preventing-cross-site-request-forgery-csrf
+    fix-regex:
+      regex: csrfPrevention:\s*false
+      replacement: 'csrfPrevention: true'
     license: AGPL-3.0 license
     vulnerability_class:
     - Cross-Site Request Forgery (CSRF)
@@ -1263,8 +1266,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UjQ3
-        version_id: pZT1GGe
-        url: https://semgrep.dev/playground/r/pZT1GGe/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+        version_id: 44T73jp
+        url: https://semgrep.dev/playground/r/44T73jp/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
         origin: community
   patterns:
   - pattern: 'new ApolloServer({..., csrfPrevention: false, ...})

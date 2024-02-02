@@ -659,8 +659,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 9AUOjg
-        version_id: X0TQxkK
-        url: https://semgrep.dev/playground/r/X0TQxkK/csharp.lang.security.injections.os-command.os-command-injection
+        version_id: 3ZTpYly
+        url: https://semgrep.dev/playground/r/3ZTpYly/csharp.lang.security.injections.os-command.os-command-injection
         origin: community
   message: The software constructs all or part of an OS command using externally-influenced
     input from an upstream component, but it does not neutralize or incorrectly neutralizes
@@ -712,6 +712,24 @@ rules:
 
           '
       - focus-metavariable: "$PSINFO"
+    - patterns:
+      - pattern-inside: |
+          Process $PROC = new Process()
+          {
+            StartInfo = new ProcessStartInfo()
+            {
+              ...
+            }
+          };
+          ...
+      - pattern-either:
+        - pattern-inside: |
+            FileName = $ARG;
+            ...
+        - pattern-inside: |
+            Arguments = $ARG;
+            ...
+      - pattern: "$PROC.Start();\n"
 - id: csharp.lang.security.insecure-deserialization.data-contract-resolver.data-contract-resolver
   severity: WARNING
   languages:
@@ -2476,9 +2494,10 @@ rules:
       regex: (AWS|aws|Aws)?_?(ACCOUNT|account|Account)_?(ID|id|Id)?("|')?
   languages:
   - generic
-  message: AWS Account ID detected. This is a sensitive credential and should not
-    be hardcoded here. Instead, read the value from an environment variable or keep
-    the value in a separate, private file.
+  message: AWS Account ID detected. While not considered sensitive information, it
+    is important to use them and share them carefully. For that reason it would be
+    preferrable avoiding to hardcoded it here. Instead, read the value from an environment
+    variable or keep the value in a separate, private file.
   severity: ERROR
   metadata:
     cwe:
@@ -2507,8 +2526,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: zdUkdd
-        version_id: gET3xGg
-        url: https://semgrep.dev/playground/r/gET3xGg/generic.secrets.security.detected-aws-account-id.detected-aws-account-id
+        version_id: pZTk9GY
+        url: https://semgrep.dev/playground/r/pZTk9GY/generic.secrets.security.detected-aws-account-id.detected-aws-account-id
         origin: community
 - id: generic.secrets.security.detected-aws-appsync-graphql-key.detected-aws-appsync-graphql-key
   pattern-regex: da2-[a-z0-9]{26}
@@ -14740,40 +14759,6 @@ rules:
   - metavariable-comparison:
       metavariable: "$BITS"
       comparison: "$BITS < 2048"
-- id: ocaml.lang.security.hashtable-dos.ocamllint-hashtable-dos
-  patterns:
-  - pattern: Hashtbl.create $Y
-  - pattern-not: Hashtbl.create $Y ~random:true
-  message: Creating a Hashtbl without the optional random number parameter makes it
-    prone to DoS attacks when attackers are able to fill the table with malicious
-    content. Hashtbl.randomize or the R flag in the OCAMLRUNPARAM are other ways to
-    randomize it.
-  languages:
-  - ocaml
-  severity: WARNING
-  metadata:
-    category: security
-    references:
-    - https://v2.ocaml.org/api/Hashtbl.html
-    technology:
-    - ocaml
-    cwe: 'CWE-399: Resource Management Errors (4.12)'
-    confidence: LOW
-    likelihood: LOW
-    impact: LOW
-    subcategory:
-    - audit
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/ocaml.lang.security.hashtable-dos.ocamllint-hashtable-dos
-    shortlink: https://sg.run/OrPrk
-    semgrep.dev:
-      rule:
-        rule_id: qNU2j21
-        version_id: jQTlK0B
-        url: https://semgrep.dev/playground/r/jQTlK0B/ocaml.lang.security.hashtable-dos.ocamllint-hashtable-dos
-        origin: community
 - id: ocaml.lang.security.unsafe.ocamllint-unsafe
   pattern-either:
   - pattern: "$X.unsafe_get"
@@ -15341,45 +15326,6 @@ rules:
   languages:
   - php
   severity: ERROR
-- id: php.lang.security.non-literal-header.non-literal-header
-  patterns:
-  - pattern: header(...)
-  - pattern-not: header("...",...)
-  message: 'Using user input when setting headers with `header()` is potentially dangerous.
-    This could allow an attacker to inject a new line and add a new header into the
-    response. This is called HTTP response splitting. To fix, do not allow whitespace
-    inside `header()`: ''[^\s]+''.'
-  metadata:
-    references:
-    - https://www.php.net/manual/en/function.header.php
-    - https://owasp.org/www-community/attacks/HTTP_Response_Splitting
-    category: security
-    technology:
-    - php
-    cwe:
-    - 'CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers (''HTTP
-      Request/Response Splitting'')'
-    owasp:
-    - A03:2021 - Injection
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Improper Validation
-    source: https://semgrep.dev/r/php.lang.security.non-literal-header.non-literal-header
-    shortlink: https://sg.run/9rL8
-    semgrep.dev:
-      rule:
-        rule_id: x8UxNQ
-        version_id: X0TQxqd
-        url: https://semgrep.dev/playground/r/X0TQxqd/php.lang.security.non-literal-header.non-literal-header
-        origin: community
-  languages:
-  - php
-  severity: WARNING
 - id: php.lang.security.php-permissive-cors.php-permissive-cors
   patterns:
   - pattern: header($VALUE,...)
@@ -16336,11 +16282,11 @@ rules:
       ...
       airflow.operators.bash_operator.BashOperator(..., bash_command=$CMD, ...)
 - id: python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
-  pattern: cryptography.hazmat.primitives.ciphers.modes.ECB(...)
   message: ECB (Electronic Code Book) is the simplest mode of operation for block
     ciphers.  Each block of data is encrypted in the same way.  This means identical
     plaintext blocks will always result in identical ciphertext blocks, which can
-    leave significant patterns in the output. Use a different, more secure mode instead.
+    leave significant patterns in the output. Use a different, cryptographically strong
+    mode instead, such as GCM.
   metadata:
     source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L101
     cwe:
@@ -16370,12 +16316,14 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbUp5g
-        version_id: 0bTyOx2
-        url: https://semgrep.dev/playground/r/0bTyOx2/python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
+        version_id: l4TlPgr
+        url: https://semgrep.dev/playground/r/l4TlPgr/python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
         origin: community
   severity: WARNING
   languages:
   - python
+  pattern: cryptography.hazmat.primitives.ciphers.modes.ECB($IV)
+  fix: cryptography.hazmat.primitives.ciphers.modes.GCM($IV)
 - id: python.cryptography.security.insufficient-ec-key-size.insufficient-ec-key-size
   patterns:
   - pattern-inside: cryptography.hazmat.primitives.asymmetric.ec.generate_private_key(...)
@@ -16436,6 +16384,10 @@ rules:
   - metavariable-comparison:
       metavariable: "$SIZE"
       comparison: "$SIZE < 2048"
+  - focus-metavariable: "$SIZE"
+  fix: '2048
+
+    '
   message: Detected an insufficient key size for RSA. NIST recommends a key size of
     2048 or higher.
   metadata:
@@ -16466,8 +16418,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU9jn
-        version_id: JdT5g1p
-        url: https://semgrep.dev/playground/r/JdT5g1p/python.cryptography.security.insufficient-rsa-key-size.insufficient-rsa-key-size
+        version_id: o5TkxOr
+        url: https://semgrep.dev/playground/r/o5TkxOr/python.cryptography.security.insufficient-rsa-key-size.insufficient-rsa-key-size
         origin: community
   languages:
   - python
@@ -17035,7 +16987,7 @@ rules:
   - pattern: "$MODEL.set_password($X)"
   fix: |
     if django.contrib.auth.password_validation.validate_password($X, user=$MODEL):
-            $MODEL.set_password($X)
+        $MODEL.set_password($X)
   message: The password on '$MODEL' is being set without validating the password.
     Call django.contrib.auth.password_validation.validate_password() with validation
     functions before setting the password. See https://docs.djangoproject.com/en/3.0/topics/auth/passwords/
@@ -17063,8 +17015,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1UywG
-        version_id: JdTNpJk
-        url: https://semgrep.dev/playground/r/JdTNpJk/python.django.security.audit.unvalidated-password.unvalidated-password
+        version_id: 44TAy70
+        url: https://semgrep.dev/playground/r/44TAy70/python.django.security.audit.unvalidated-password.unvalidated-password
         origin: community
   languages:
   - python
@@ -18623,32 +18575,35 @@ rules:
     - pattern-inside: |
         $RESP = flask.Response(...)
         ...
-  - pattern-not: "$RESPONSE.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)"
-  - pattern-not: "$RESPONSE.set_cookie(..., **$A)"
-  - pattern: "$RESPONSE.set_cookie(...)"
-  message: Found a Flask cookie without secure, httponly, or samesite correctly set.
-    Flask cookies should be handled securely by setting secure=True, httponly=True,
-    and samesite='Lax' in response.set_cookie(...). If these parameters are not properly
-    set, your cookies are not properly protected and are at risk of being stolen by
-    an attacker. Include the 'secure=True', 'httponly=True', samesite='Lax' arguments
-    or set these to be true in the Flask configuration.
+  - pattern-not: "$RESP.set_cookie(..., secure=$A, httponly=$B, samesite=$C, ...)"
+  - pattern-not: "$RESP.set_cookie(..., **$A)"
+  - pattern: "$RESP.set_cookie(...)"
+  message: Found a Flask cookie with insecurely configured properties.  By default
+    the secure, httponly and samesite ar configured insecurely. cookies should be
+    handled securely by setting `secure=True`, `httponly=True`, and `samesite='Lax'`
+    in response.set_cookie(...). If these parameters are not properly set, your cookies
+    are not properly protected and are at risk of being stolen by an attacker. Include
+    the `secure=True`, `httponly=True`, `samesite='Lax'` arguments or set these to
+    be true in the Flask configuration.
   metadata:
     cwe:
     - 'CWE-614: Sensitive Cookie in HTTPS Session Without ''Secure'' Attribute'
     owasp:
     - A05:2021 - Security Misconfiguration
     references:
-    - https://semgrep.dev/blog/2020/bento-check-keeping-cookies-safe-in-flask/
-    - https://bento.dev/checks/flask/secure-set-cookie/
-    - https://flask.palletsprojects.com/en/1.1.x/security/#set-cookie-options
+    - https://flask.palletsprojects.com/en/3.0.x/api/#flask.Response.set_cookie
+    - https://flask.palletsprojects.com/en/3.0.x/security/#set-cookie-options
     category: security
     technology:
+    - python
     - flask
     subcategory:
     - audit
     likelihood: LOW
     impact: LOW
     confidence: LOW
+    functional-categories:
+    - web::search::cookie-config::flask
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cookie Security
@@ -18657,21 +18612,23 @@ rules:
     semgrep.dev:
       rule:
         rule_id: GdU7GR
-        version_id: rxTyLx3
-        url: https://semgrep.dev/playground/r/rxTyLx3/python.flask.security.audit.secure-set-cookie.secure-set-cookie
+        version_id: 5PTk5OX
+        url: https://semgrep.dev/playground/r/5PTk5OX/python.flask.security.audit.secure-set-cookie.secure-set-cookie
         origin: community
   languages:
   - python
   severity: WARNING
 - id: python.flask.security.audit.wtf-csrf-disabled.flask-wtf-csrf-disabled
   message: Setting 'WTF_CSRF_ENABLED' to 'False' explicitly disables CSRF protection.
+  options:
+    symbolic_propagation: true
   metadata:
     cwe:
     - 'CWE-352: Cross-Site Request Forgery (CSRF)'
     owasp:
     - A01:2021 - Broken Access Control
     references:
-    - https://flask-wtf.readthedocs.io/en/stable/csrf.html
+    - https://flask-wtf.readthedocs.io/en/1.2.x/csrf/
     category: security
     technology:
     - flask
@@ -18682,6 +18639,9 @@ rules:
     likelihood: LOW
     impact: MEDIUM
     confidence: LOW
+    functional-categories:
+    - web::search::csrf-config::flask
+    - web::search::csrf-config::flask-wtf
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
     - Cross-Site Request Forgery (CSRF)
@@ -18690,13 +18650,55 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUgXz
-        version_id: bZTb1Gq
-        url: https://semgrep.dev/playground/r/bZTb1Gq/python.flask.security.audit.wtf-csrf-disabled.flask-wtf-csrf-disabled
+        version_id: A8TkY3P
+        url: https://semgrep.dev/playground/r/A8TkY3P/python.flask.security.audit.wtf-csrf-disabled.flask-wtf-csrf-disabled
         origin: community
   severity: WARNING
   languages:
   - python
-  pattern: "$APP.config['WTF_CSRF_ENABLED'] = False"
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern: $APP.config["WTF_CSRF_ENABLED"] = $FALSE
+        - pattern: "$APP.config.WTF_CSRF_ENABLED = $FALSE"
+        - patterns:
+          - pattern: |
+              $APP.config.$UPDATE(
+                ...,
+                WTF_CSRF_ENABLED = $FALSE,
+                ...
+              )
+          - pattern-not-inside: |
+              $APP.config.$UPDATE(
+                  ...,
+                  TESTING=True,
+                  ...
+              )
+          - pattern-not-inside: |
+              $APP.config.$UPDATE(
+                  ...,
+                  DEBUG=True,
+                  ...
+              )
+          - metavariable-regex:
+              metavariable: "$UPDATE"
+              regex: "^(update|from_mapping)$"
+        - pattern: |
+            $OBJ = $CLASS()
+            ...
+            $OBJ.WTF_CSRF_ENABLED = $FALSE
+            ...
+            $APP.config.from_object($OBJ, ...)
+        - pattern: |
+            WTF_CSRF_ENABLED = $FALSE
+            ...
+            $APP.config.from_object(__name__)
+      - metavariable-regex:
+          metavariable: "$FALSE"
+          regex: "^(False)$"
+      - focus-metavariable: "$FALSE"
+  fix: 'True'
 - id: python.flask.security.audit.xss.make-response-with-unknown-content.make-response-with-unknown-content
   patterns:
   - pattern: flask.make_response(...)
@@ -22513,9 +22515,36 @@ rules:
   - pattern: sh.$BIN($X.format(...))
   - pattern: sh.$BIN(f"...{...}...")
 - id: python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
-  patterns:
-  - pattern: sqlalchemy.text(...)
-  - pattern-not-inside: sqlalchemy.text("...")
+  mode: taint
+  pattern-sinks:
+  - pattern: 'sqlalchemy.text(...)
+
+      '
+  pattern-sources:
+  - patterns:
+    - pattern: "$X + $Y\n"
+    - metavariable-type:
+        metavariable: "$X"
+        type: string
+  - patterns:
+    - pattern: "$X + $Y\n"
+    - metavariable-type:
+        metavariable: "$Y"
+        type: string
+  - patterns:
+    - pattern: 'f"..."
+
+        '
+  - patterns:
+    - pattern: "$X.format(...)\n"
+    - metavariable-type:
+        metavariable: "$X"
+        type: string
+  - patterns:
+    - pattern: "$X % $Y\n"
+    - metavariable-type:
+        metavariable: "$X"
+        type: string
   message: sqlalchemy.text passes the constructed SQL statement to the database mostly
     unchanged. This means that the usual SQL injection protections are not applied
     and this function is vulnerable to SQL injection if user input can reach here.
@@ -22547,8 +22576,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: r6U2wE
-        version_id: RGTDRQR
-        url: https://semgrep.dev/playground/r/RGTDRQR/python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
+        version_id: 2KTGW4q
+        url: https://semgrep.dev/playground/r/2KTGW4q/python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
         origin: community
   languages:
   - python
