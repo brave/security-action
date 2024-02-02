@@ -1820,76 +1820,50 @@ rules:
   languages:
   - c
   - cpp
-  pattern-either:
-  - patterns:
-    - pattern-either:
-      - pattern: "$RET = malloc(...)"
-      - pattern: "$RET = ($CAST)malloc(...)"
-    - pattern-not-inside: |
-        malloc(...);
-        ...
-        if (<... $RET == NULL ...>) ...
-    - pattern-not-inside: |
-        malloc(...);
-        ...
-        if (<... $RET != NULL ...>) ...
-    - pattern-not-inside: |
-        malloc(...);
-        ...
-        if (<... !$RET ...>) ...
-    - pattern-not-inside: |
-        malloc(...);
-        ...
-        if (<... $RET ...>) ...
-    - pattern-not-inside: "<... $ALLOC == NULL ...>"
-    - pattern-not-inside: "<... $ALLOC != NULL ...>"
-    - pattern-not-inside: "<... !$ALLOC ...>"
-  - patterns:
-    - pattern-either:
-      - pattern: "$RET = calloc(...)"
-      - pattern: "$RET = ($CAST)calloc(...)"
-    - pattern-not-inside: |
-        calloc(...);
-        ...
-        if (<... $RET == NULL ...>) ...
-    - pattern-not-inside: |
-        calloc(...);
-        ...
-        if (<... $RET != NULL ...>) ...
-    - pattern-not-inside: |
-        calloc(...);
-        ...
-        if (<... !$RET ...>) ...
-    - pattern-not-inside: |
-        calloc(...);
-        ...
-        if (<... $RET ...>) ...
-    - pattern-not-inside: "<... $ALLOC == NULL ...>"
-    - pattern-not-inside: "<... $ALLOC != NULL ...>"
-    - pattern-not-inside: "<... !$ALLOC ...>"
-  - patterns:
-    - pattern-either:
-      - pattern: "$RET = realloc(...)"
-      - pattern: "$RET = ($CAST)realloc(...)"
-    - pattern-not-inside: |
-        realloc(...);
-        ...
-        if (<... $RET == NULL ...>) ...
-    - pattern-not-inside: |
-        realloc(...);
-        ...
-        if (<... $RET != NULL ...>) ...
-    - pattern-not-inside: |
-        realloc(...);
-        ...
-        if (<... !$RET ...>) ...
-    - pattern-not-inside: |
-        realloc(...);
-        ...
-        if (<... $RET ...>) ...
-    - pattern-not-inside: "<... $ALLOC == NULL ...>"
-    - pattern-not-inside: "<... $ALLOC != NULL ...>"
-    - pattern-not-inside: "<... !$ALLOC ...>"
+  patterns:
+  - pattern-either:
+    - pattern: "$RET = $FUN(...)"
+    - pattern: "$RET = ($CAST)$FUN(...)"
+  - metavariable-pattern:
+      metavariable: "$FUN"
+      pattern-either:
+      - pattern: malloc
+      - pattern: calloc
+      - pattern: realloc
+      - pattern: reallocf
+      - pattern: valloc
+      - pattern: aligned_alloc
+      - pattern: strdup
+      - pattern: strndup
+  - pattern-not-inside: |
+      $FUN(...);
+      ...
+      if (<... $RET == NULL ...>) ...
+  - pattern-not-inside: |
+      $FUN(...);
+      ...
+      if (<... NULL == $RET ...>) ...
+  - pattern-not-inside: |
+      $FUN(...);
+      ...
+      if (<... $RET != NULL ...>) ...
+  - pattern-not-inside: |
+      $FUN(...);
+      ...
+      if (<... NULL != $RET ...>) ...
+  - pattern-not-inside: |
+      $FUN(...);
+      ...
+      if (<... !$RET ...>) ...
+  - pattern-not-inside: |
+      $FUN(...);
+      ...
+      if (<... $RET ...>) ...
+  - pattern-not-inside: "<... $ALLOC == NULL ...>"
+  - pattern-not-inside: "<... NULL == $ALLOC ...>"
+  - pattern-not-inside: "<... $ALLOC != NULL ...>"
+  - pattern-not-inside: "<... NULL != $ALLOC ...>"
+  - pattern-not-inside: "<... !$ALLOC ...>"
 - id: raptor-unchecked-ret-scanf-etc
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -1927,11 +1901,17 @@ rules:
       - pattern: vswscanf
   - pattern-not-inside: "$RET = $FUN(...)"
   - pattern-not-inside: "<... $FUN(...) == $VAL ...>"
+  - pattern-not-inside: "<... $VAL == $FUN(...) ...>"
   - pattern-not-inside: "<... $FUN(...) != $VAL ...>"
+  - pattern-not-inside: "<... $VAL != $FUN(...) ...>"
   - pattern-not-inside: "<... $FUN(...) < $VAL ...>"
+  - pattern-not-inside: "<... $VAL > $FUN(...) ...>"
   - pattern-not-inside: "<... $FUN(...) <= $VAL ...>"
+  - pattern-not-inside: "<... $VAL >= $FUN(...) ...>"
   - pattern-not-inside: "<... $FUN(...) > $VAL ...>"
+  - pattern-not-inside: "<... $VAL < $FUN(...) ...>"
   - pattern-not-inside: "<... $FUN(...) >= $VAL ...>"
+  - pattern-not-inside: "<... $VAL <= $FUN(...) ...>"
   - pattern-not-inside: return $FUN(...);
 - id: raptor-unchecked-ret-setuid-seteuid
   metadata:
@@ -1956,23 +1936,22 @@ rules:
   languages:
   - c
   - cpp
-  pattern-either:
-  - patterns:
-    - pattern: setuid(...)
-    - pattern-not-inside: "$RET = setuid(...)"
-    - pattern-not-inside: "<... setuid(...) == $VAL ...>"
-    - pattern-not-inside: "<... setuid(...) != $VAL ...>"
-    - pattern-not-inside: "<... setuid(...) < $VAL ...>"
-    - pattern-not-inside: "<... !setuid(...) ...>"
-    - pattern-not-inside: return setuid(...);
-  - patterns:
-    - pattern: seteuid(...)
-    - pattern-not-inside: "$RET = seteuid(...)"
-    - pattern-not-inside: "<... seteuid(...) == $VAL ...>"
-    - pattern-not-inside: "<... seteuid(...) != $VAL ...>"
-    - pattern-not-inside: "<... seteuid(...) < $VAL ...>"
-    - pattern-not-inside: "<... !seteuid(...) ...>"
-    - pattern-not-inside: return seteuid(...);
+  patterns:
+  - pattern: "$FUN(...)"
+  - metavariable-pattern:
+      metavariable: "$FUN"
+      pattern-either:
+      - pattern: setuid
+      - pattern: seteuid
+  - pattern-not-inside: "$RET = $FUN(...)"
+  - pattern-not-inside: "<... $FUN(...) == $VAL ...>"
+  - pattern-not-inside: "<... $VAL == $FUN(...) ...>"
+  - pattern-not-inside: "<... $FUN(...) != $VAL ...>"
+  - pattern-not-inside: "<... $VAL != $FUN(...) ...>"
+  - pattern-not-inside: "<... $FUN(...) < $VAL ...>"
+  - pattern-not-inside: "<... $VAL > $FUN(...) ...>"
+  - pattern-not-inside: "<... !$FUN(...) ...>"
+  - pattern-not-inside: return $FUN(...);
 - id: raptor-unsafe-ret-snprintf-vsnprintf
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -2083,63 +2062,27 @@ rules:
   languages:
   - c
   - cpp
-  pattern-either:
-  - patterns:
-    - pattern: strncpy(...)
-    - pattern-not-inside: |
-        strncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = NULL;
-    - pattern-not-inside: |
-        strncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = '\0';
-    - pattern-not-inside: |
-        strncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = 0;
-  - patterns:
-    - pattern: stpncpy(...)
-    - pattern-not-inside: |
-        stpncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = NULL;
-    - pattern-not-inside: |
-        stpncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = '\0';
-    - pattern-not-inside: |
-        stpncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = 0;
-  - patterns:
-    - pattern: wcsncpy(...)
-    - pattern-not-inside: |
-        wcsncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = NULL;
-    - pattern-not-inside: |
-        wcsncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = '\0';
-    - pattern-not-inside: |
-        wcsncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = 0;
-  - patterns:
-    - pattern: wcpncpy(...)
-    - pattern-not-inside: |
-        wcpncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = NULL;
-    - pattern-not-inside: |
-        wcpncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = '\0';
-    - pattern-not-inside: |
-        wcpncpy($DST, $SRC, $N);
-        ...
-        $DST[$POS] = 0;
+  patterns:
+  - pattern: "$FUN(...)"
+  - metavariable-pattern:
+      metavariable: "$FUN"
+      pattern-either:
+      - pattern: strncpy
+      - pattern: stpncpy
+      - pattern: wcsncpy
+      - pattern: wcpncpy
+  - pattern-not-inside: |
+      $FUN($DST, $SRC, $N);
+      ...
+      $DST[$POS] = NULL;
+  - pattern-not-inside: |
+      $FUN($DST, $SRC, $N);
+      ...
+      $DST[$POS] = '\0';
+  - pattern-not-inside: |
+      $FUN($DST, $SRC, $N);
+      ...
+      $DST[$POS] = 0;
 - id: raptor-use-after-free
   metadata:
     author: Marco Ivaldi <raptor@0xdeadbeef.info>
@@ -2300,6 +2243,382 @@ rules:
         - pattern: pread
         - pattern: recv
         - pattern: recvfrom
+- id: trailofbits.generic.container-privileged.container-privileged
+  message: Found container command with extended privileges
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-250: Execution with Unnecessary Privileges'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://docs.docker.com/engine/reference/commandline/run/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/trailofbits.generic.container-privileged.container-privileged
+    shortlink: https://sg.run/qNLGR
+    semgrep.dev:
+      rule:
+        rule_id: ReUD0BO
+        version_id: vdT1k6d
+        url: https://semgrep.dev/playground/r/vdT1k6d/trailofbits.generic.container-privileged.container-privileged
+        origin: community
+  pattern-either:
+  - pattern: docker ... --privileged
+  - pattern: docker ... --cap-add=ALL
+  - pattern: docker ... --cap-add=SYS_ADMIN
+  - pattern: docker ... --cap-add=SYS_MODULE
+  - pattern: docker ... --net=host
+  - pattern: docker ... --userns=host
+  - pattern: docker ... --pid=host
+  - pattern: docker ... --ipc=host
+  - pattern: docker ... --security-opt seccomp=unconfined
+  - pattern: docker ... --security-opt apparmor=unconfined
+  - pattern: podman ... --privileged
+  - pattern: podman ... --cap-add=ALL
+  - pattern: podman ... --cap-add=SYS_ADMIN
+  - pattern: podman ... --cap-add=SYS_MODULE
+  - pattern: podman ... --net=host
+  - pattern: podman ... --userns=host
+  - pattern: podman ... --pid=host
+  - pattern: podman ... --ipc=host
+  - pattern: podman ... --security-opt seccomp=unconfined
+  - pattern: podman ... --security-opt apparmor=unconfined
+- id: trailofbits.generic.container-user-root.container-user-root
+  message: Found container command running as root
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-250: Execution with Unnecessary Privileges'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://docs.docker.com/engine/reference/commandline/run/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/trailofbits.generic.container-user-root.container-user-root
+    shortlink: https://sg.run/lBKyB
+    semgrep.dev:
+      rule:
+        rule_id: AbU9gy9
+        version_id: d6TqRxp
+        url: https://semgrep.dev/playground/r/d6TqRxp/trailofbits.generic.container-user-root.container-user-root
+        origin: community
+  pattern-either:
+  - pattern: docker ... -u root
+  - pattern: docker ... -u 0
+  - pattern: docker ... --user root
+  - pattern: docker ... --user 0
+  - pattern: podman ... -u root
+  - pattern: podman ... --u 0
+  - pattern: podman ... --user root
+  - pattern: podman ... --user 0
+- id: trailofbits.generic.curl-insecure.curl-insecure
+  message: Found `curl` command disabling SSL verification
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://curl.se/docs/manpage.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.curl-insecure.curl-insecure
+    shortlink: https://sg.run/YG37D
+    semgrep.dev:
+      rule:
+        rule_id: BYUXkQx
+        version_id: ZRT6EAy
+        url: https://semgrep.dev/playground/r/ZRT6EAy/trailofbits.generic.curl-insecure.curl-insecure
+        origin: community
+  pattern-either:
+  - pattern: 'curl ... -k '
+  - pattern: curl ... --insecure
+- id: trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
+  message: Found `curl` command with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://curl.se/docs/manpage.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
+    shortlink: https://sg.run/6JldW
+    semgrep.dev:
+      rule:
+        rule_id: DbU6R39
+        version_id: nWTOeLd
+        url: https://semgrep.dev/playground/r/nWTOeLd/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
+        origin: community
+  pattern-either:
+  - pattern: curl ... http://
+  - pattern: curl ... ftp://
+- id: trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
+  message: Found `gpg` command using insecure flags
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://www.gnupg.org/gph/de/manual/r1023.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
+    shortlink: https://sg.run/oqLJx
+    semgrep.dev:
+      rule:
+        rule_id: WAUWqko
+        version_id: ExTRkxb
+        url: https://semgrep.dev/playground/r/ExTRkxb/trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
+        origin: community
+  pattern-either:
+  - pattern: gpg ... --allow-non-selfsigned-uid
+  - pattern: gpg ... --allow-freeform-uid
+  - pattern: gpg ... --allow-old-cipher-algos
+  - pattern: gpg ... --allow-weak-digest-algos
+  - pattern: gpg ... --allow-weak-key-signatures
+  - pattern: gpg ... --ignore-time-conflict
+  - pattern: gpg ... --ignore-valid-from
+  - pattern: gpg ... --ignore-crc-error
+  - pattern: gpg ... --ignore-mdc-error
+  - pattern: gpg ... --skip-verify
+  - pattern: gpg ... --no-require-cross-certification
+- id: trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
+  message: Found `installer` command allowing untrusted installations
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-494: Download of Code Without Integrity Check'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://ss64.com/mac/installer.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
+    shortlink: https://sg.run/zdLlk
+    semgrep.dev:
+      rule:
+        rule_id: 0oULKQE
+        version_id: 7ZTD73J
+        url: https://semgrep.dev/playground/r/7ZTD73J/trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
+        origin: community
+  pattern: installer ... -allowUntrusted
+- id: trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
+  message: Found `openssl` command using insecure flags
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://www.openssl.org/docs/manmaster/man1/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
+    shortlink: https://sg.run/pKL5k
+    semgrep.dev:
+      rule:
+        rule_id: KxUvKPY
+        version_id: LjT7Ygd
+        url: https://semgrep.dev/playground/r/LjT7Ygd/trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
+        origin: community
+  pattern-either:
+  - pattern: 'openssl ... -pass pass:'
+  - pattern: 'openssl ... -passin pass:'
+  - pattern: 'openssl ... -passout pass:'
+  - pattern: 'openssl ... -nodes '
+  - pattern: 'openssl ... -noenc '
+  - pattern: 'openssl ... -sha1 '
+- id: trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
+  message: Found `ssh` command disabling host key checking
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://man7.org/linux/man-pages/man1/ssh.1.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
+    shortlink: https://sg.run/2ZWd8
+    semgrep.dev:
+      rule:
+        rule_id: qNU2R9X
+        version_id: 8KT42rO
+        url: https://semgrep.dev/playground/r/8KT42rO/trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
+        origin: community
+  pattern: ssh ... StrictHostKeyChecking=no
+- id: trailofbits.generic.tar-insecure-flags.tar-insecure-flags
+  message: Found `tar` command using insecure flags
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-73: External Control of File Name or Path'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://man7.org/linux/man-pages/man1/tar.1.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Path Traversal
+    source: https://semgrep.dev/r/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
+    shortlink: https://sg.run/X5RyN
+    semgrep.dev:
+      rule:
+        rule_id: lBU4JeW
+        version_id: gET647o
+        url: https://semgrep.dev/playground/r/gET647o/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
+        origin: community
+  pattern-either:
+  - pattern: 'tar ... -P '
+  - pattern: tar ... --absolute-paths
+  - pattern: tar ... --absolute-names
+  - pattern: 'tar ... --passphrase '
+- id: trailofbits.generic.wget-no-check-certificate.wget-no-check-certificate
+  message: Found `wget` command disabling SSL verification
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://linux.die.net/man/1/wget
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.wget-no-check-certificate.wget-no-check-certificate
+    shortlink: https://sg.run/j2WyD
+    semgrep.dev:
+      rule:
+        rule_id: PeUJREx
+        version_id: QkT8yqY
+        url: https://semgrep.dev/playground/r/QkT8yqY/trailofbits.generic.wget-no-check-certificate.wget-no-check-certificate
+        origin: community
+  pattern-either:
+  - pattern: wget ... --no-check-certificate
+  - pattern: wget ... --no-hsts
+- id: trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
+  message: Found `wget` command  with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - shell
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://linux.die.net/man/1/wget
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
+    shortlink: https://sg.run/10Ddk
+    semgrep.dev:
+      rule:
+        rule_id: JDUNz2o
+        version_id: 3ZTlJXZ
+        url: https://semgrep.dev/playground/r/3ZTlJXZ/trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
+        origin: community
+  pattern-either:
+  - pattern: wget ... http://
+  - pattern: wget ... ftp://
 - id: trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
   message: Variable `$X` is likely modified and later used on error. In some cases
     this could result  in panics due to a nil dereference
@@ -2584,6 +2903,38 @@ rules:
   - patterns:
     - pattern: "{..., cors: $CORS_ORIGIN, ...}\n"
     - focus-metavariable: "$CORS_ORIGIN"
+- id: trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-verification-disabled
+  message: Found MongoDB client with SSL hostname verification disabled
+  languages:
+  - java
+  - kotlin
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - java
+    - kotlin
+    - mongodb
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://www.mongodb.com/docs/drivers/java/sync/current/fundamentals/connection/tls/#disable-hostname-verification
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-verification-disabled
+    shortlink: https://sg.run/yyLqk
+    semgrep.dev:
+      rule:
+        rule_id: GdUvk46
+        version_id: JdT5gxX
+        url: https://semgrep.dev/playground/r/JdT5gxX/trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-verification-disabled
+        origin: community
+  pattern: "$SETTINGS.invalidHostNameAllowed(true)"
 - id: trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
   message: If possible, it is better to rely on automatic pinning in PyTorch to avoid
     undefined behavior and for efficiency
@@ -2952,3 +3303,798 @@ rules:
             fn $FUNC(...) -> $RETTYPE {
                 ...
             }
+- id: trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
+  message: Found apt key download with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - apt
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_key_module.html#parameter-url
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
+    shortlink: https://sg.run/r68RP
+    semgrep.dev:
+      rule:
+        rule_id: ReUD0BR
+        version_id: 5PTk51b
+        url: https://semgrep.dev/playground/r/5PTk51b/trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $APTKEY:
+        ...
+  - metavariable-pattern:
+      metavariable: "$APTKEY"
+      pattern-either:
+      - pattern: apt_key
+      - pattern: ansible.builtin.apt_key
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: url
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-validate-certs-disabled
+  message: Found apt key with SSL verification disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - apt
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_key_module.html#parameter-validate_certs
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-validate-certs-disabled
+    shortlink: https://sg.run/bwPnP
+    semgrep.dev:
+      rule:
+        rule_id: AbU9gyg
+        version_id: GxTjwed
+        url: https://semgrep.dev/playground/r/GxTjwed/trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-validate-certs-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $APTKEY:
+        ...
+        url: ...
+        ...
+  - metavariable-pattern:
+      metavariable: "$APTKEY"
+      pattern-either:
+      - pattern: apt_key
+      - pattern: ansible.builtin.apt_key
+  - pattern: "$KEY: $VALUE"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: validate_certs
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern-either:
+      - pattern: 'false'
+- id: trailofbits.yaml.ansible.apt-unencrypted-url.apt-unencrypted-url
+  message: Found apt deb with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - apt
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#parameter-deb
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.apt-unencrypted-url.apt-unencrypted-url
+    shortlink: https://sg.run/NbW3L
+    semgrep.dev:
+      rule:
+        rule_id: BYUXkQb
+        version_id: RGTevLG
+        url: https://semgrep.dev/playground/r/RGTevLG/trailofbits.yaml.ansible.apt-unencrypted-url.apt-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $APT:
+        ...
+  - metavariable-pattern:
+      metavariable: "$APT"
+      pattern-either:
+      - pattern: apt
+      - pattern: ansible.builtin.apt
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: deb
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
+  message: Found dnf download with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - dnf
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html#parameter-name
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf5_module.html#parameter-name
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
+    shortlink: https://sg.run/kx0y1
+    semgrep.dev:
+      rule:
+        rule_id: DbU6R3w
+        version_id: A8TkYdl
+        url: https://semgrep.dev/playground/r/A8TkYdl/trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $DNF:
+        ...
+  - metavariable-pattern:
+      metavariable: "$DNF"
+      pattern-either:
+      - pattern: dnf
+      - pattern: ansible.builtin.dnf
+      - pattern: dnf5
+      - pattern: ansible.builtin.dnf5
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: name
+      - pattern: pkg
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-certs-disabled
+  message: Found dnf with SSL verification disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - dnf
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html#parameter-validate_certs
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf5_module.html#parameter-validate_certs
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-certs-disabled
+    shortlink: https://sg.run/wdL06
+    semgrep.dev:
+      rule:
+        rule_id: WAUWqkG
+        version_id: BjTxYZZ
+        url: https://semgrep.dev/playground/r/BjTxYZZ/trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-certs-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $DNF:
+        ...
+  - metavariable-pattern:
+      metavariable: "$DNF"
+      pattern-either:
+      - pattern: dnf
+      - pattern: ansible.builtin.dnf
+      - pattern: dnf5
+      - pattern: ansible.builtin.dnf5
+  - pattern: "$KEY: $VALUE"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: validate_certs
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern-either:
+      - pattern: 'false'
+- id: trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-url
+  message: Found file download with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html#parameter-url
+    - https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_get_url_module.html#parameter-url
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-url
+    shortlink: https://sg.run/x8LKj
+    semgrep.dev:
+      rule:
+        rule_id: 0oULKQq
+        version_id: DkTq8bj
+        url: https://semgrep.dev/playground/r/DkTq8bj/trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $GETURL:
+        ...
+  - pattern-not-inside: |
+      $GETURL:
+        ...
+        checksum: ...
+        ...
+  - metavariable-pattern:
+      metavariable: "$GETURL"
+      pattern-either:
+      - pattern: get_url
+      - pattern: win_get_url
+      - pattern: ansible.builtin.get_url
+      - pattern: ansible.windows.win_get_url
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: url
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-validate-certs-disabled
+  message: Found file download with SSL verification disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html#parameter-validate_certs
+    - https://docs.ansible.com/ansible/latest/collections/ansible/windows/win_get_url_module.html#parameter-validate_certs
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-validate-certs-disabled
+    shortlink: https://sg.run/Or0N7
+    semgrep.dev:
+      rule:
+        rule_id: KxUvKPQ
+        version_id: WrTOxK1
+        url: https://semgrep.dev/playground/r/WrTOxK1/trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-validate-certs-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $GETURL:
+        ...
+        url: ...
+        ...
+  - pattern-not-inside: |
+      $GETURL:
+        ...
+        checksum: ...
+        ...
+  - metavariable-pattern:
+      metavariable: "$GETURL"
+      pattern-either:
+      - pattern: get_url
+      - pattern: win_get_url
+      - pattern: ansible.builtin.get_url
+      - pattern: ansible.windows.win_get_url
+  - pattern: "$KEY: $VALUE"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: validate_certs
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern-either:
+      - pattern: 'false'
+- id: trailofbits.yaml.ansible.rpm-key-unencrypted-url.rpm-key-unencrypted-url
+  message: Found RPM key download with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - rpm
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/rpm_key_module.html#parameter-key
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.rpm-key-unencrypted-url.rpm-key-unencrypted-url
+    shortlink: https://sg.run/eqGkR
+    semgrep.dev:
+      rule:
+        rule_id: qNU2R9K
+        version_id: 0bTyOzA
+        url: https://semgrep.dev/playground/r/0bTyOzA/trailofbits.yaml.ansible.rpm-key-unencrypted-url.rpm-key-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $RPMKEY:
+        ...
+  - metavariable-pattern:
+      metavariable: "$RPMKEY"
+      pattern-either:
+      - pattern: rpm_key
+      - pattern: ansible.builtin.rpm_key
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: key
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-validate-certs-disabled
+  message: Found RPM key with SSL verification disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - rpm
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/rpm_key_module.html#parameter-validate_certs
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-validate-certs-disabled
+    shortlink: https://sg.run/v8LWW
+    semgrep.dev:
+      rule:
+        rule_id: lBU4Jee
+        version_id: K3Tnykp
+        url: https://semgrep.dev/playground/r/K3Tnykp/trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-validate-certs-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $RPMKEY:
+        ...
+        key: ...
+        ...
+  - metavariable-pattern:
+      metavariable: "$RPMKEY"
+      pattern-either:
+      - pattern: rpm_key
+      - pattern: ansible.builtin.rpm_key
+  - pattern: "$KEY: $VALUE"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: validate_certs
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern-either:
+      - pattern: 'false'
+- id: trailofbits.yaml.ansible.unarchive-unencrypted-url.unarchive-unencrypted-url
+  message: Found unarchive download with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-src
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.unarchive-unencrypted-url.unarchive-unencrypted-url
+    shortlink: https://sg.run/d85yn
+    semgrep.dev:
+      rule:
+        rule_id: YGUpZzx
+        version_id: qkT5q7N
+        url: https://semgrep.dev/playground/r/qkT5q7N/trailofbits.yaml.ansible.unarchive-unencrypted-url.unarchive-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $UNARCHIVE:
+        ...
+  - metavariable-pattern:
+      metavariable: "$UNARCHIVE"
+      pattern-either:
+      - pattern: unarchive
+      - pattern: ansible.builtin.unarchive
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: src
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-validate-certs-disabled
+  message: Found unarchive download with SSL verification disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#parameter-validate_certs
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-validate-certs-disabled
+    shortlink: https://sg.run/ZqByA
+    semgrep.dev:
+      rule:
+        rule_id: 6JUv2A4
+        version_id: l4TlPRP
+        url: https://semgrep.dev/playground/r/l4TlPRP/trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-validate-certs-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $UNARCHIVE:
+        ...
+  - metavariable-pattern:
+      metavariable: "$UNARCHIVE"
+      pattern-either:
+      - pattern: unarchive
+      - pattern: ansible.builtin.unarchive
+  - pattern: "$KEY: $VALUE"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: validate_certs
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern-either:
+      - pattern: 'false'
+- id: trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validation-ignore
+  message: Found Windows Remote Management connection with certificate validation
+    disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/os_guide/windows_winrm.html#https-certificate-validation
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validation-ignore
+    shortlink: https://sg.run/nJlP1
+    semgrep.dev:
+      rule:
+        rule_id: oqUgbWQ
+        version_id: YDTNPeX
+        url: https://semgrep.dev/playground/r/YDTNPeX/trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validation-ignore
+        origin: community
+  pattern: 'ansible_winrm_server_cert_validation: ignore'
+- id: trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
+  message: Found yum download with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - yum
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html#parameter-name
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
+    shortlink: https://sg.run/Ew4NE
+    semgrep.dev:
+      rule:
+        rule_id: zdUKbXv
+        version_id: JdT5gj1
+        url: https://semgrep.dev/playground/r/JdT5gj1/trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $YUM:
+        ...
+  - metavariable-pattern:
+      metavariable: "$YUM"
+      pattern-either:
+      - pattern: yum
+      - pattern: ansible.builtin.yum
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: name
+      - pattern: pkg
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-certs-disabled
+  message: Found yum with SSL verification disabled
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - yum
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html#parameter-validate_certs
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-certs-disabled
+    shortlink: https://sg.run/7Kvdw
+    semgrep.dev:
+      rule:
+        rule_id: pKU10q4
+        version_id: 5PTk5zd
+        url: https://semgrep.dev/playground/r/5PTk5zd/trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-certs-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $YUM:
+        ...
+  - metavariable-pattern:
+      metavariable: "$YUM"
+      pattern-either:
+      - pattern: yum
+      - pattern: ansible.builtin.yum
+  - pattern: "$KEY: $VALUE"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: validate_certs
+  - metavariable-pattern:
+      metavariable: "$VALUE"
+      pattern-either:
+      - pattern: 'false'
+- id: trailofbits.yaml.ansible.zypper-repository-unencrypted-url.zypper-repository-unencrypted-url
+  message: Found Zypper repository with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - zypper
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/community/general/zypper_module.html#parameter-name
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.zypper-repository-unencrypted-url.zypper-repository-unencrypted-url
+    shortlink: https://sg.run/L1Bkn
+    semgrep.dev:
+      rule:
+        rule_id: 2ZUzvAk
+        version_id: GxTjwRj
+        url: https://semgrep.dev/playground/r/GxTjwRj/trailofbits.yaml.ansible.zypper-repository-unencrypted-url.zypper-repository-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $ZYPPER:
+        ...
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: repo
+  - metavariable-pattern:
+      metavariable: "$ZYPPER"
+      pattern-either:
+      - pattern: zypper_repository
+      - pattern: community.general.zypper_repository
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url
+  message: Found Zypper package with unencrypted URL (e.g. HTTP, FTP, etc.)
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    subcategory:
+    - audit
+    technology:
+    - ansible
+    - zypper
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    references:
+    - https://docs.ansible.com/ansible/latest/collections/community/general/zypper_module.html#parameter-name
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url
+    shortlink: https://sg.run/8GLdB
+    semgrep.dev:
+      rule:
+        rule_id: X5UQzo1
+        version_id: RGTevlQ
+        url: https://semgrep.dev/playground/r/RGTevlQ/trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url
+        origin: community
+  patterns:
+  - pattern-inside: |
+      $ZYPPER:
+        ...
+  - pattern: "$KEY: '$VALUE'"
+  - metavariable-pattern:
+      metavariable: "$KEY"
+      pattern-either:
+      - pattern: name
+      - pattern: pkg
+  - metavariable-pattern:
+      metavariable: "$ZYPPER"
+      pattern-either:
+      - pattern: zypper
+      - pattern: community.general.zypper
+  - metavariable-regex:
+      metavariable: "$VALUE"
+      regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
+  message: Service port is exposed on all interfaces
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-1327: Binding to an Unrestricted IP Address'
+    subcategory:
+    - audit
+    technology:
+    - docker
+    - compose
+    confidence: LOW
+    likelihood: LOW
+    impact: LOW
+    references:
+    - https://docs.docker.com/compose/compose-file/compose-file-v3/#ports
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
+    shortlink: https://sg.run/gxAyK
+    semgrep.dev:
+      rule:
+        rule_id: j2UgnLW
+        version_id: A8TkY2z
+        url: https://semgrep.dev/playground/r/A8TkY2z/trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
+        origin: community
+  patterns:
+  - pattern-inside: |
+      services:
+        ...
+  - pattern: |
+      ports:
+        - ...
+        - "$PORT"
+        - ...
+  - focus-metavariable: "$PORT"
+  - metavariable-regex:
+      metavariable: "$PORT"
+      regex: "^(?!127.\\d{1,3}.\\d{1,3}.\\d{1,3}:).+"

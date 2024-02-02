@@ -128,6 +128,7 @@ rules:
       metavariable: "$METHOD"
       regex: "(?i)(post|put|delete|patch)"
   - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
+  - pattern-not-inside: "<form...>...{{ $VAR.csrf_token }}...</form>"
   message: Manually-created forms in django templates should specify a csrf_token
     to prevent CSRF attacks
   languages:
@@ -153,8 +154,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUyYG
-        version_id: 9lTez9q
-        url: https://semgrep.dev/playground/r/9lTez9q/python.django.security.django-no-csrf-token.django-no-csrf-token
+        version_id: RGTevKN
+        url: https://semgrep.dev/playground/r/RGTevKN/python.django.security.django-no-csrf-token.django-no-csrf-token
         origin: community
   paths:
     include:

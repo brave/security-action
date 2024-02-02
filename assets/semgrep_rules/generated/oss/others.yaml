@@ -1833,6 +1833,40 @@ rules:
         version_id: QkT4Qb
         url: https://semgrep.dev/playground/r/QkT4Qb/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
         origin: community
+- id: trailofbits.jvm.gc-call.gc-call
+  message: |
+    Calling `gc` suggests to the JVM that the garbage collector should be
+    run, and memory should be reclaimed. This is only a suggestion, and there
+    is no guarantee that anything will happen. Relying on this behavior for
+    correctness or memory management is an anti-pattern.
+  languages:
+  - java
+  - kotlin
+  severity: WARNING
+  metadata:
+    category: best-practice
+    subcategory:
+    - audit
+    technology:
+    - java
+    - kotlin
+    confidence: HIGH
+    likelihood: HIGH
+    impact: LOW
+    references:
+    - https://stackoverflow.com/questions/2414105/why-is-it-bad-practice-to-call-system-gc
+    license: AGPL-3.0 license
+    source: https://semgrep.dev/r/trailofbits.jvm.gc-call.gc-call
+    shortlink: https://sg.run/9ApQ0
+    semgrep.dev:
+      rule:
+        rule_id: 5rUdoB9
+        version_id: PkTDL34
+        url: https://semgrep.dev/playground/r/PkTDL34/trailofbits.jvm.gc-call.gc-call
+        origin: community
+  pattern-either:
+  - pattern: System.gc()
+  - pattern: Runtime.getRuntime().gc()
 - id: trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
   message: Usage of NumPy library inside PyTorch `$MODULE` module was found. Avoid
     mixing these libraries for efficiency and proper ONNX loading
