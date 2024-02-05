@@ -111,7 +111,8 @@ export default async function dependabotNudge({
                 sort: 'updated',
                 state: 'open',
                 severity: Object.keys(Severity).filter(s => Severity[s] >= minlevel)
-            })).filter(a => !skipHotwords.some(h => a.security_advisory.summary.toLowerCase().includes(h)));
+            })).filter(a => !skipHotwords.some(h => a.security_advisory.summary.toLowerCase().includes(h))).
+                filter(a => a.security_vulnerability?.first_patched_version?.identifier);
 
             // get property values for this repository
             const prop = props[repo.name] || {properties: {}};
