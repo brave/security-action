@@ -25,3 +25,4 @@ https://semgrep.dev/r/typescript.react.security.audit.react-href-var.react-href-
 https://semgrep.dev/r/typescript.react.security.audit.react-missing-noreferrer.react-missing-noreferrer
 https://semgrep.dev/r/yaml.docker-compose.security.no-new-privileges.no-new-privileges
 https://semgrep.dev/r/yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+https://semgrep.dev/r/trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
