@@ -131,7 +131,7 @@ char *escape_string(char *string)
 		switch (*cp) {
 		case '\\':
 			if (escape) {
-                 		*dest++ = '\';
+                 		*dest++ = '\\';
                  		escape = 0;
              		} else
                  		escape = 1;
