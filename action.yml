@@ -17,7 +17,7 @@ inputs:
   assignees:
     description: assign PR to the people linked
     default: |
-      thypon
+      diracdeltas
       bcaller
   hotwords:
     description: body hotwords which should trigger the action
