@@ -1,0 +1,26 @@
+rules:
+  - id: http-parse-multipart-dos
+    metadata:
+      author: Ben Caller
+      confidence: LOW
+      references:
+        - https://pkg.go.dev/net/http#Request.ParseMultipartForm
+        - https://pkg.go.dev/net/http#MaxBytesReader
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/http-parse-multipart-dos.yaml
+      assignees: |
+        bcaller
+        thypon
+    severity: INFO
+    languages:
+      - go
+    patterns:
+      - pattern: $R.ParseMultipartForm($MAXSIZE)
+      - pattern-not-inside: |
+          $R.Body = http.MaxBytesReader($W, <...$R.Body...>, $LIMIT)
+          ...
+    fix: $R.Body = http.MaxBytesReader($W, $R.Body, $MAXSIZE)
+    message: |
+        ParseMultipartForm is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body.
+        The specified limit of $MAXSIZE is the maximum amount stored in memory.
+        The remainder is still parsed and stored on disk in temporary files.
+        Wrapping $R.Body with http.MaxBytesReader prevents this wasting of server resources.
