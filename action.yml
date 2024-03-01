@@ -606,16 +606,32 @@ runs:
             console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
           }
 
-          const assignees = process.env.ASSIGNEES.split(/\s+/).map(e => e.trim()).filter(Boolean);
+          const assignees = process.env.ASSIGNEES.toLowerCase().split(/\s+/).map(e => e.trim()).filter(Boolean);
           const slackAssignees = assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ');
           core.setSecret(slackAssignees);
           return slackAssignees;
+    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
+      id: actor-slack
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        ACTOR: ${{ github.actor }}
+      with:
+        script: |
+          let actor = process.env.ACTOR.toLowerCase();
+          let githubToSlack = {};
+          try {
+            githubToSlack = JSON.parse(process.env.GH_TO_SLACK_USER_MAP);
+          } catch (e) {
+            console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
+          }
+
+          return githubToSlack[actor] ? githubToSlack[actor] : `@${actor}`;
     - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} action failed, plz take a look. /cc ${{steps.assignees-slack.outputs.result}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
+          [semgrep] @${{ fromJson(steps.actor-slack.outputs.result) }} action failed, plz take a look. /cc ${{fromJson(steps.assignees-slack.outputs.result)}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
         channel: secops-hotspots
         color: red
         verbose: true
@@ -624,7 +640,7 @@ runs:
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ github.actor }} pushed commits. /cc ${{steps.assignees-slack.outputs.result}}
+          [semgrep] @${{ fromJson(steps.actor-slack.outputs.result) }} pushed commits. /cc ${{fromJson(steps.assignees-slack.outputs.result)}}
         channel: secops-hotspots
         color: green
         verbose: true
