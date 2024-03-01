@@ -640,7 +640,7 @@ runs:
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ fromJson(steps.actor-slack.outputs.result) }} pushed commits. /cc ${{fromJson(steps.assignees-slack.outputs.result)}}
+          [semgrep] ${{ fromJson(steps.actor-slack.outputs.result) }} pushed commits. /cc ${{fromJson(steps.assignees-slack.outputs.result)}}
         channel: secops-hotspots
         color: green
         verbose: true
