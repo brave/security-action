@@ -116,7 +116,7 @@ export default async function dependabotNudge({
 
             // get property values for this repository
             const prop = props[repo.name] || {properties: {}};
-            const maintainers = (prop.maintainers || "").split(',').filter(Boolean).map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`) || [];
+            const maintainers = (prop.maintainers || "").toLowerCase().split(',').filter(Boolean).map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`) || [];
             
             if (alerts.length > 0) {
                 if (debug)
