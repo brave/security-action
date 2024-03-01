@@ -3,7 +3,7 @@
 name: Add Maintainer as Custom Property to Repositories
 on:
     schedule:
-        - cron: '0 0 1 * *'
+        - cron: '0 0 27 * *'
     workflow_dispatch:
 
 jobs:
