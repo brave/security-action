@@ -615,6 +615,7 @@ runs:
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       env:
         ACTOR: ${{ github.actor }}
+        GH_TO_SLACK_USER_MAP: ${{ inputs.gh_to_slack_user_map }}
       with:
         script: |
           let actor = process.env.ACTOR.toLowerCase();
@@ -631,7 +632,7 @@ runs:
       with:
         slack_token: ${{ inputs.slack_token }}
         message: |
-          [semgrep] @${{ fromJson(steps.actor-slack.outputs.result) }} action failed, plz take a look. /cc ${{fromJson(steps.assignees-slack.outputs.result)}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
+          [semgrep] ${{ fromJson(steps.actor-slack.outputs.result) }} action failed, plz take a look. /cc ${{fromJson(steps.assignees-slack.outputs.result)}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
         channel: secops-hotspots
         color: red
         verbose: true
