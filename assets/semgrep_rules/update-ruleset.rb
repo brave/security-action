@@ -8,6 +8,8 @@ require 'pp'
 SEMGREP_VERSION = `semgrep --version`.strip
 RULESETS = [
 	'r/c.lang.security.insecure-use-memset.insecure-use-memset',
+	'r/c.lang.security.info-leak-on-non-formatted-string.info-leak-on-non-formated-string',
+	'r/c.lang.security.function-use-after-free.function-use-after-free',
 
 	'p/default',
 	'p/xss',
@@ -55,7 +57,7 @@ RULESETS = [
 	'p/wordpress',
 	'p/react-best-practices',
 	'p/trailofbits',
-    'p/rust',
+	'p/rust',
 	'p/c',
 	'p/swift',
 ]

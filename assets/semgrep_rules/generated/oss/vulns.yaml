@@ -328,8 +328,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUzNK
-        version_id: 3ZTkBPJ
-        url: https://semgrep.dev/playground/r/3ZTkBPJ/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+        version_id: BjTDX4z
+        url: https://semgrep.dev/playground/r/BjTDX4z/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
         origin: community
   patterns:
   - pattern-either:
@@ -345,6 +345,12 @@ rules:
       defer $T.RUnlock()
       ...
   - pattern-not-inside: "$FOO(..., ..., func(...) { \n    ... \n})\n"
+  - pattern-not-inside: |
+      return func(...) {
+          ...
+          $T.RUnlock()
+          ...
+      }
 - id: trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
   message: Missing mutex unlock before returning from a function.  This could result
     in panics resulting from double lock operations
@@ -373,8 +379,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1U5Gz
-        version_id: 44TRzkv
-        url: https://semgrep.dev/playground/r/44TRzkv/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+        version_id: DkT96BG
+        url: https://semgrep.dev/playground/r/DkT96BG/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
         origin: community
   patterns:
   - pattern-either:
@@ -390,6 +396,12 @@ rules:
       defer $T.Unlock()
       ...
   - pattern-not-inside: "$FOO(..., ..., func(...) { \n    ... \n})\n"
+  - pattern-not-inside: |
+      return func(...) {
+          ...
+          $T.Unlock()
+          ...
+      }
 - id: trailofbits.go.nil-check-after-call.nil-check-after-call
   message: Potential `$FOO` nil dereference when `$BAR` is called
   languages:
