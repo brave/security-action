@@ -92,7 +92,7 @@ rules:
     category: security
     technology:
     - c
-    confidence: MEDIUM
+    confidence: LOW
     owasp:
     - A09:2021 - Security Logging and Monitoring Failures
     subcategory:
@@ -107,8 +107,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUOlg
-        version_id: xyTKZpQ
-        url: https://semgrep.dev/playground/r/xyTKZpQ/c.lang.security.info-leak-on-non-formatted-string.info-leak-on-non-formated-string
+        version_id: ExTpjpr
+        url: https://semgrep.dev/playground/r/ExTpjpr/c.lang.security.info-leak-on-non-formatted-string.info-leak-on-non-formated-string
         origin: community
   languages:
   - c
@@ -2716,7 +2716,9 @@ rules:
         url: https://semgrep.dev/playground/r/JdTNpAp/generic.secrets.security.detected-codeclimate.detected-codeclimate
         origin: community
 - id: generic.secrets.security.detected-etc-shadow.detected-etc-shadow
-  pattern-regex: root:[x!*]*:[0-9]*:[0-9]*
+  patterns:
+  - pattern-regex: "^(\\s*)(?P<ROOT>root:[x!*]*:[0-9]*:[0-9]*)"
+  - focus-metavariable: "$ROOT"
   languages:
   - regex
   message: linux shadow file detected
@@ -2746,8 +2748,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUP6p
-        version_id: 5PTdA0e
-        url: https://semgrep.dev/playground/r/5PTdA0e/generic.secrets.security.detected-etc-shadow.detected-etc-shadow
+        version_id: PkTWJ2o
+        url: https://semgrep.dev/playground/r/PkTWJ2o/generic.secrets.security.detected-etc-shadow.detected-etc-shadow
         origin: community
 - id: generic.secrets.security.detected-facebook-access-token.detected-facebook-access-token
   pattern-either:
@@ -4404,16 +4406,20 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 5rUOWQ
-        version_id: l4T4vA3
-        url: https://semgrep.dev/playground/r/l4T4vA3/go.jwt-go.security.jwt-none-alg.jwt-go-none-algorithm
+        version_id: 0bT59Rk
+        url: https://semgrep.dev/playground/r/0bT59Rk/go.jwt-go.security.jwt-none-alg.jwt-go-none-algorithm
         origin: community
   languages:
   - go
   severity: ERROR
   patterns:
-  - pattern-inside: |
-      import "github.com/dgrijalva/jwt-go"
-      ...
+  - pattern-either:
+    - pattern-inside: |
+        import "github.com/golang-jwt/jwt"
+        ...
+    - pattern-inside: |
+        import "github.com/dgrijalva/jwt-go"
+        ...
   - pattern-either:
     - pattern: 'jwt.SigningMethodNone
 
@@ -4939,8 +4945,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ZqU5bD
-        version_id: kbTdxBw
-        url: https://semgrep.dev/playground/r/kbTdxBw/go.lang.security.audit.database.string-formatted-query.string-formatted-query
+        version_id: JdT3NAn
+        url: https://semgrep.dev/playground/r/JdT3NAn/go.lang.security.audit.database.string-formatted-query.string-formatted-query
         origin: community
   patterns:
   - metavariable-regex:
@@ -4970,120 +4976,57 @@ rules:
     - pattern: $OBJ.Query(fmt.$P("...", ...))
     - pattern: $OBJ.QueryContext($CTX, fmt.$P("...", ...))
     - pattern: $OBJ.QueryRow(fmt.$P("...", ...))
-    - pattern: $OBJ.QueryRow($CTX, fmt.$P("...", ...))
+    - pattern: $OBJ.QueryRow($CTX, fmt.$U("...", ...))
     - pattern: $OBJ.QueryRowContext($CTX, fmt.$P("...", ...))
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.Exec($QUERY, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.Query($QUERY, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.ExecContext($CTX, $QUERY, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryContext($CTX, $QUERY, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryRow($QUERY)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryRow($CTX, $QUERY)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $QUERY = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryRowContext($CTX, $QUERY, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.Exec($OTHER, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.Query($OTHER, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.ExecContext($CTX, $OTHER, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryContext($CTX, $OTHER, ...)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryRow($OTHER)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryRow($CTX, $OTHER)
-    - pattern: |
-        $QUERY = "..."
-        ...
-        $OTHER = $FXN(..., $QUERY, ...)
-        ...
-        $OBJ.QueryRowContext($CTX, $OTHER, ...)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.Exec($QUERY, ...)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.Query($QUERY, ...)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.ExecContext($CTX, $QUERY, ...)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.QueryContext($CTX, $QUERY, ...)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.QueryRow($QUERY)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.QueryRow($CTX, $QUERY)
-    - pattern: |
-        $QUERY = $X + ...
-        ...
-        $OBJ.QueryRowContext($CTX, $QUERY, ...)
+    - patterns:
+      - pattern-either:
+        - pattern: $QUERY = fmt.Fprintf($F, "$SQLSTR", ...)
+        - pattern: $QUERY = fmt.Sprintf("$SQLSTR", ...)
+        - pattern: $QUERY = fmt.Printf("$SQLSTR", ...)
+        - pattern: "$QUERY = $X + ..."
+      - pattern-either:
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.Query($QUERY, ...)
+                ...
+            }
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.ExecContext($CTX, $QUERY, ...)
+                ...
+            }
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.Exec($QUERY, ...)
+                ...
+            }
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.QueryRow($CTX, $QUERY)
+                ...
+            }
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.QueryRow($QUERY)
+                ...
+            }
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.QueryContext($CTX, $QUERY)
+                ...
+            }
+        - pattern-inside: |
+            func $FUNC(...) {
+                ...
+                $OBJ.QueryRowContext($CTX, $QUERY, ...)
+                ...
+            }
 - id: go.lang.security.audit.net.bind_all.avoid-bind-to-all-interfaces
   message: Detected a network listener listening on 0.0.0.0 or an empty string. This
     could unexpectedly expose the server publicly as it binds to all available interfaces.
@@ -6026,10 +5969,8 @@ rules:
   - pattern: ioutil.WriteFile("=~//tmp/.*$/", ...)
   - pattern: os.Create("=~//tmp/.*$/", ...)
 - id: go.lang.security.decompression_bomb.potential-dos-via-decompression-bomb
-  message: Detected a possible denial-of-service via a zip bomb attack. By limiting
-    the max bytes read, you can mitigate this attack. `io.CopyN()` can specify a size.
-    Refer to https://bomb.codes/ to learn more about this attack and other ways to
-    mitigate it.
+  message: 'Detected a possible denial-of-service via a zip bomb attack. By limiting
+    the max bytes read, you can mitigate this attack. `io.CopyN()` can specify a size. '
   severity: WARNING
   languages:
   - go
@@ -6076,7 +6017,6 @@ rules:
     - 'CWE-400: Uncontrolled Resource Consumption'
     source-rule-url: https://github.com/securego/gosec
     references:
-    - https://bomb.codes/
     - https://golang.org/pkg/io/#CopyN
     - https://github.com/securego/gosec/blob/master/rules/decompression-bomb.go
     category: security
@@ -6096,8 +6036,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: oqUeqn
-        version_id: 6xTvJlY
-        url: https://semgrep.dev/playground/r/6xTvJlY/go.lang.security.decompression_bomb.potential-dos-via-decompression-bomb
+        version_id: JdT3NG6
+        url: https://semgrep.dev/playground/r/JdT3NG6/go.lang.security.decompression_bomb.potential-dos-via-decompression-bomb
         origin: community
 - id: go.lang.security.zip.path-traversal-inside-zip-extraction
   message: File traversal when extracting zip archive
@@ -6832,8 +6772,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1Uyvp
-        version_id: GxTv63G
-        url: https://semgrep.dev/playground/r/GxTv63G/java.lang.security.audit.cookie-missing-secure-flag.cookie-missing-secure-flag
+        version_id: qkTbbZp
+        url: https://semgrep.dev/playground/r/qkTbbZp/java.lang.security.audit.cookie-missing-secure-flag.cookie-missing-secure-flag
         origin: community
   message: A cookie was detected without setting the 'secure' flag. The 'secure' flag
     for cookies prevents the client from transmitting the cookie over insecure channels
@@ -12224,89 +12164,6 @@ rules:
       $OTHERFUNC(..., <... $UNK ...>, ...);
   - pattern: $OTHERFUNC(..., <... "=~/.*<script.*/" ...>, ...)
   - pattern: "$UNK"
-- id: javascript.lang.security.audit.vm-injection.vm-runincontext-context-injection
-  message: Make sure that unverified user data can not reach vm.runInContext.
-  severity: WARNING
-  languages:
-  - javascript
-  - typescript
-  metadata:
-    owasp:
-    - A03:2021 - Injection
-    cwe:
-    - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
-    category: security
-    technology:
-    - javascript
-    references:
-    - https://nodejs.org/dist/latest-v16.x/docs/api/vm.html
-    cwe2022-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Code Injection
-    source: https://semgrep.dev/r/javascript.lang.security.audit.vm-injection.vm-runincontext-context-injection
-    shortlink: https://sg.run/9oey
-    semgrep.dev:
-      rule:
-        rule_id: eqU8KW
-        version_id: GxTv6Eg
-        url: https://semgrep.dev/playground/r/GxTv6Eg/javascript.lang.security.audit.vm-injection.vm-runincontext-context-injection
-        origin: community
-  mode: taint
-  pattern-sources:
-  - patterns:
-    - pattern-inside: function ... (..., $ARG,...) {...}
-    - focus-metavariable: "$ARG"
-  pattern-sinks:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          $VM = require('vm')
-          ...
-      - pattern-inside: |
-          import * as $VM from 'vm'
-          ...
-      - pattern-inside: |
-          import $VM from 'vm'
-          ...
-    - pattern-either:
-      - pattern: "$VM.runInContext($CODE,$INPUT,...)"
-      - pattern: "$VM.runInContext($INPUT,...)"
-      - pattern: "$VM.runInNewContext($CODE,$INPUT,...)"
-      - pattern: "$VM.runInNewContext($INPUT,...)"
-      - pattern: "$VM.runInThisContext($INPUT,...)"
-      - pattern: "$VM.compileFunction($INPUT,...)"
-      - pattern: "$VM.compileFunction($CODE,$PARAMS,{parsingContext: $INPUT},...)\n"
-      - pattern: |
-          $OPTS = {parsingContext: $INPUT};
-          ...
-          $VM.compileFunction($CODE,$PARAMS,$OPTS,...)
-      - pattern: new $VM.Script($INPUT,...)
-      - pattern: new $VM.SourceTextModule($INPUT,...)
-    - focus-metavariable: "$INPUT"
-  - patterns:
-    - pattern-either:
-      - pattern: vm.runInContext($CODE,$INPUT,...)
-      - pattern: vm.runInContext($INPUT,...)
-      - pattern: vm.runInNewContext($CODE,$INPUT,...)
-      - pattern: vm.runInNewContext($INPUT,...)
-      - pattern: vm.runInThisContext($INPUT,...)
-      - pattern: vm.compileFunction($INPUT,...)
-      - pattern: 'vm.compileFunction($CODE,$PARAMS,{parsingContext: $INPUT},...)
-
-          '
-      - pattern: |
-          $OPTS = {parsingContext: $INPUT};
-          ...
-          vm.compileFunction($CODE,$PARAMS,$OPTS,...)
-      - pattern: new vm.Script($INPUT,...)
-      - pattern: new vm.SourceTextModule($INPUT,...)
-    - focus-metavariable: "$INPUT"
 - id: javascript.lang.security.detect-buffer-noassert.detect-buffer-noassert
   message: Detected usage of noassert in Buffer API, which allows the offset the be
     beyond the end of the buffer. This could result in writing or reading beyond the
@@ -14993,6 +14850,67 @@ rules:
   languages:
   - php
   severity: ERROR
+- id: php.lang.security.base-convert-loses-precision.base-convert-loses-precision
+  message: The function base_convert uses 64-bit numbers internally, and does not
+    correctly convert large numbers. It is not suitable for random tokens such as
+    those used for session tokens or CSRF tokens.
+  metadata:
+    references:
+    - https://www.php.net/base_convert
+    - https://www.sjoerdlangkemper.nl/2017/03/15/dont-use-base-convert-on-random-tokens/
+    category: security
+    technology:
+    - php
+    cwe:
+    - 'CWE-190: Integer Overflow or Wraparound'
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    confidence: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/php.lang.security.base-convert-loses-precision.base-convert-loses-precision
+    shortlink: https://sg.run/kxpGo
+    semgrep.dev:
+      rule:
+        rule_id: 7KUgBAk
+        version_id: 1QTKbNw
+        url: https://semgrep.dev/playground/r/1QTKbNw/php.lang.security.base-convert-loses-precision.base-convert-loses-precision
+        origin: community
+  languages:
+  - php
+  severity: WARNING
+  mode: taint
+  pattern-sources:
+  - pattern: hash(...)
+  - pattern: hash_hmac(...)
+  - pattern: sha1(...)
+  - pattern: md5(...)
+  - patterns:
+    - pattern: random_bytes($N)
+    - metavariable-comparison:
+        metavariable: "$N"
+        comparison: "$N > 7"
+  - patterns:
+    - pattern: openssl_random_pseudo_bytes($N)
+    - metavariable-comparison:
+        metavariable: "$N"
+        comparison: "$N > 7"
+  - patterns:
+    - pattern: "$OBJ->get_random_bytes($N)"
+    - metavariable-comparison:
+        metavariable: "$N"
+        comparison: "$N > 7"
+  pattern-sinks:
+  - pattern: base_convert(...)
+  pattern-sanitizers:
+  - patterns:
+    - pattern: substr(..., $LENGTH)
+    - metavariable-comparison:
+        metavariable: "$LENGTH"
+        comparison: "$LENGTH <= 7"
 - id: php.lang.security.eval-use.eval-use
   patterns:
   - pattern: eval(...);
@@ -28346,6 +28264,20 @@ rules:
             })
             ...
           }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
+                ...
+              ]
+              ...
+            })
+            ...
+          }
       - pattern: 'Action = $ACTION
 
           '
@@ -28369,6 +28301,16 @@ rules:
           data aws_iam_policy_document "..." {
             ...
             statement {
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -28532,8 +28474,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxUwK2
-        version_id: YDTpnEX
-        url: https://semgrep.dev/playground/r/YDTpnEX/terraform.lang.security.iam.no-iam-creds-exposure.no-iam-creds-exposure
+        version_id: qkTjezP
+        url: https://semgrep.dev/playground/r/qkTjezP/terraform.lang.security.iam.no-iam-creds-exposure.no-iam-creds-exposure
         origin: community
   languages:
   - hcl
@@ -28550,6 +28492,20 @@ rules:
               Statement = [
                 ...,
                 {... Resource = "*" ...},
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
                 ...
               ]
               ...
@@ -28581,6 +28537,16 @@ rules:
             statement {
               ...
               resources = ["*"]
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -28648,8 +28614,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: wdUj1k
-        version_id: 6xTvQRb
-        url: https://semgrep.dev/playground/r/6xTvQRb/terraform.lang.security.iam.no-iam-data-exfiltration.no-iam-data-exfiltration
+        version_id: l4T92wK
+        url: https://semgrep.dev/playground/r/l4T92wK/terraform.lang.security.iam.no-iam-data-exfiltration.no-iam-data-exfiltration
         origin: community
   languages:
   - hcl
@@ -28664,6 +28630,20 @@ rules:
             policy = jsonencode({
               ...
               Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
                 ...
               ]
               ...
@@ -28691,6 +28671,16 @@ rules:
           data aws_iam_policy_document "..." {
             ...
             statement {
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -28763,8 +28753,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: x8UxLq
-        version_id: o5Tg9Lg
-        url: https://semgrep.dev/playground/r/o5Tg9Lg/terraform.lang.security.iam.no-iam-priv-esc-funcs.no-iam-priv-esc-funcs
+        version_id: YDTROjB
+        url: https://semgrep.dev/playground/r/YDTROjB/terraform.lang.security.iam.no-iam-priv-esc-funcs.no-iam-priv-esc-funcs
         origin: community
   languages:
   - hcl
@@ -28781,6 +28771,20 @@ rules:
               Statement = [
                 ...,
                 {... Resource = $RESOURCE ...},
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
                 ...
               ]
               ...
@@ -28812,6 +28816,16 @@ rules:
             statement {
               ...
               resources = $RESOURCE
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -28867,8 +28881,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: OrU6jO
-        version_id: zyTKDBj
-        url: https://semgrep.dev/playground/r/zyTKDBj/terraform.lang.security.iam.no-iam-priv-esc-other-users.no-iam-priv-esc-other-users
+        version_id: JdTyeAb
+        url: https://semgrep.dev/playground/r/JdTyeAb/terraform.lang.security.iam.no-iam-priv-esc-other-users.no-iam-priv-esc-other-users
         origin: community
   languages:
   - hcl
@@ -28883,6 +28897,20 @@ rules:
             policy = jsonencode({
               ...
               Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
                 ...
               ]
               ...
@@ -28912,6 +28940,16 @@ rules:
           data aws_iam_policy_document "..." {
             ...
             statement {
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -29005,8 +29043,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: eqUzR3
-        version_id: pZT1L26
-        url: https://semgrep.dev/playground/r/pZT1L26/terraform.lang.security.iam.no-iam-priv-esc-roles.no-iam-priv-esc-roles
+        version_id: 5PTO30W
+        url: https://semgrep.dev/playground/r/5PTO30W/terraform.lang.security.iam.no-iam-priv-esc-roles.no-iam-priv-esc-roles
         origin: community
   languages:
   - hcl
@@ -29021,6 +29059,20 @@ rules:
             policy = jsonencode({
               ...
               Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
                 ...
               ]
               ...
@@ -29050,6 +29102,16 @@ rules:
           data aws_iam_policy_document "..." {
             ...
             statement {
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -30140,8 +30202,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: v8U9r0
-        version_id: 2KTz3Rb
-        url: https://semgrep.dev/playground/r/2KTz3Rb/terraform.lang.security.iam.no-iam-resource-exposure.no-iam-resource-exposure
+        version_id: GxT7J51
+        url: https://semgrep.dev/playground/r/GxT7J51/terraform.lang.security.iam.no-iam-resource-exposure.no-iam-resource-exposure
         origin: community
   languages:
   - hcl
@@ -30156,6 +30218,20 @@ rules:
             policy = jsonencode({
               ...
               Statement = [
+                ...
+              ]
+              ...
+            })
+            ...
+          }
+      - pattern-not-inside: |
+          resource $TYPE "..." {
+            ...
+            policy = jsonencode({
+              ...
+              Statement = [
+                ...,
+                {... Effect = "Deny" ...},
                 ...
               ]
               ...
@@ -30185,6 +30261,16 @@ rules:
           data aws_iam_policy_document "..." {
             ...
             statement {
+              ...
+            }
+            ...
+          }
+      - pattern-not-inside: |
+          data aws_iam_policy_document "..." {
+            ...
+            statement {
+              ...
+              effect = "Deny"
               ...
             }
             ...
@@ -30221,8 +30307,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: d8Uew3
-        version_id: X0TQ2YZ
-        url: https://semgrep.dev/playground/r/X0TQ2YZ/terraform.lang.security.iam.no-iam-star-actions.no-iam-star-actions
+        version_id: RGTgrYj
+        url: https://semgrep.dev/playground/r/RGTgrYj/terraform.lang.security.iam.no-iam-star-actions.no-iam-star-actions
         origin: community
   languages:
   - hcl

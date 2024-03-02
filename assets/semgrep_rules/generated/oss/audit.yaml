@@ -1070,7 +1070,7 @@ rules:
     - pattern: "$FUN(...)"
     - metavariable-regex:
         metavariable: "$FUN"
-        regex: "^\\w*fork\\s*$|^\\w*clone\\s*$"
+        regex: "^\\w*fork\\s*$"
   - patterns:
     - pattern: "$FUN(...)"
     - metavariable-regex:
@@ -2549,9 +2549,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: lBU4JeW
-        version_id: gET647o
-        url: https://semgrep.dev/playground/r/gET647o/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
+        version_id: 6xT5vWg
+        url: https://semgrep.dev/playground/r/6xT5vWg/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
         origin: community
+  options:
+    generic_ellipsis_max_span: 0
   pattern-either:
   - pattern: 'tar ... -P '
   - pattern: tar ... --absolute-paths
@@ -2646,8 +2648,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: kxU6Xb
-        version_id: 7ZTDO6X
-        url: https://semgrep.dev/playground/r/7ZTDO6X/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+        version_id: A8Tr9vQ
+        url: https://semgrep.dev/playground/r/A8Tr9vQ/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
         origin: community
   patterns:
   - pattern: |
@@ -2671,6 +2673,24 @@ rules:
         $X = ...
         ...
         <... $X.$Y ...>
+      }
+  - pattern-not: |
+      ..., $X, ..., $ERR = ...
+      if $ERR != nil {
+        ...
+        if $X != nil {
+          <... $X.$Y ...>
+        }
+        ...
+      }
+  - pattern-not: |
+      ..., $X, ..., $ERR := ...
+      if $ERR != nil {
+        ...
+        if  $X != nil && <... $X.$Y ...> {
+          ...
+        }
+        ...
       }
 - id: trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
   message: Iteration over a possibly empty map `$C`. This is likely a bug or redundant
@@ -4056,45 +4076,3 @@ rules:
   - metavariable-regex:
       metavariable: "$VALUE"
       regex: "(?i)^(http|ftp)://.*"
-- id: trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
-  message: Service port is exposed on all interfaces
-  languages:
-  - yaml
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-1327: Binding to an Unrestricted IP Address'
-    subcategory:
-    - audit
-    technology:
-    - docker
-    - compose
-    confidence: LOW
-    likelihood: LOW
-    impact: LOW
-    references:
-    - https://docs.docker.com/compose/compose-file/compose-file-v3/#ports
-    license: AGPL-3.0 license
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
-    shortlink: https://sg.run/gxAyK
-    semgrep.dev:
-      rule:
-        rule_id: j2UgnLW
-        version_id: A8TkY2z
-        url: https://semgrep.dev/playground/r/A8TkY2z/trailofbits.yaml.docker-compose.port-all-interfaces.port-all-interfaces
-        origin: community
-  patterns:
-  - pattern-inside: |
-      services:
-        ...
-  - pattern: |
-      ports:
-        - ...
-        - "$PORT"
-        - ...
-  - focus-metavariable: "$PORT"
-  - metavariable-regex:
-      metavariable: "$PORT"
-      regex: "^(?!127.\\d{1,3}.\\d{1,3}.\\d{1,3}:).+"

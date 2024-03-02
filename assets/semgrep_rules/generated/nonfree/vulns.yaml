@@ -78,7 +78,7 @@ rules:
     category: security
     technology:
     - c
-    confidence: MEDIUM
+    confidence: LOW
     subcategory:
     - vuln
     likelihood: LOW
@@ -91,8 +91,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDUyw8
-        version_id: kbTdxL3
-        url: https://semgrep.dev/playground/r/kbTdxL3/c.lang.security.double-free.double-free
+        version_id: ZRT7Q7O
+        url: https://semgrep.dev/playground/r/ZRT7Q7O/c.lang.security.double-free.double-free
         origin: community
   languages:
   - c
@@ -121,7 +121,7 @@ rules:
     category: security
     technology:
     - c
-    confidence: MEDIUM
+    confidence: LOW
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
@@ -136,8 +136,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAU9Dz
-        version_id: w8T9nD5
-        url: https://semgrep.dev/playground/r/w8T9nD5/c.lang.security.function-use-after-free.function-use-after-free
+        version_id: nWT8x8G
+        url: https://semgrep.dev/playground/r/nWT8x8G/c.lang.security.function-use-after-free.function-use-after-free
         origin: community
   languages:
   - c
@@ -155,7 +155,7 @@ rules:
     category: security
     technology:
     - c
-    confidence: MEDIUM
+    confidence: LOW
     subcategory:
     - vuln
     likelihood: MEDIUM
@@ -168,8 +168,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUgWx
-        version_id: vdTYN8J
-        url: https://semgrep.dev/playground/r/vdTYN8J/c.lang.security.insecure-use-printf-fn.insecure-use-printf-fn
+        version_id: 7ZT1g1b
+        url: https://semgrep.dev/playground/r/7ZT1g1b/c.lang.security.insecure-use-printf-fn.insecure-use-printf-fn
         origin: community
   languages:
   - c
@@ -214,7 +214,7 @@ rules:
     category: security
     technology:
     - c
-    confidence: MEDIUM
+    confidence: LOW
     cwe2022-top25: true
     cwe2021-top25: true
     subcategory:
@@ -229,8 +229,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUb9l
-        version_id: LjTqQAn
-        url: https://semgrep.dev/playground/r/LjTqQAn/c.lang.security.use-after-free.use-after-free
+        version_id: LjT2q2X
+        url: https://semgrep.dev/playground/r/LjT2q2X/c.lang.security.use-after-free.use-after-free
         origin: community
   languages:
   - c
@@ -327,7 +327,6 @@ rules:
     - A03:2017 - Sensitive Data Exposure
     - A02:2021 - Cryptographic Failures
     cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
     - 'CWE-328: Use of Weak Hash'
     author: Gabriel Marquet <gab.marquet@gmail.com>
     category: security
@@ -338,15 +337,14 @@ rules:
     impact: HIGH
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Cryptographic Issues
     - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/clojure.lang.security.use-of-md5.use-of-md5
     shortlink: https://sg.run/BgPx
     semgrep.dev:
       rule:
         rule_id: nJU1ep
-        version_id: 5PTdeYo
-        url: https://semgrep.dev/playground/r/5PTdeYo/clojure.lang.security.use-of-md5.use-of-md5
+        version_id: 2KTQz3r
+        url: https://semgrep.dev/playground/r/2KTQz3r/clojure.lang.security.use-of-md5.use-of-md5
         origin: community
   pattern-either:
   - pattern: (MessageDigest/getInstance "MD5")
@@ -7517,11 +7515,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxUAY4
-        version_id: pZT1yg8
-        url: https://semgrep.dev/playground/r/pZT1yg8/generic.secrets.gitleaks.stripe-access-token.stripe-access-token
+        version_id: jQT6gyn
+        url: https://semgrep.dev/playground/r/jQT6gyn/generic.secrets.gitleaks.stripe-access-token.stripe-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)\b((sk|pk)_(test|live)_[0-9a-z]{10,32})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)\b((sk)_(test|live)_[0-9a-z]{10,32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.sumologic-access-id.sumologic-access-id
   message: A gitleaks sumologic-access-id was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -9028,7 +9026,7 @@ rules:
     - A03:2017 - Sensitive Data Exposure
     - A02:2021 - Cryptographic Failures
     cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    - 'CWE-328: Use of Weak Hash'
     source-rule-url: https://github.com/securego/gosec#available-rules
     category: security
     technology:
@@ -9042,14 +9040,14 @@ rules:
     impact: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Cryptographic Issues
+    - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-md5
     shortlink: https://sg.run/2xB5
     semgrep.dev:
       rule:
         rule_id: x8Un6q
-        version_id: 2KTzro0
-        url: https://semgrep.dev/playground/r/2KTzro0/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-md5
+        version_id: 1QTbO72
+        url: https://semgrep.dev/playground/r/1QTbO72/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-md5
         origin: community
   patterns:
   - pattern-inside: |
@@ -9113,7 +9111,7 @@ rules:
     - A03:2017 - Sensitive Data Exposure
     - A02:2021 - Cryptographic Failures
     cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    - 'CWE-328: Use of Weak Hash'
     source-rule-url: https://github.com/securego/gosec#available-rules
     category: security
     technology:
@@ -9127,14 +9125,14 @@ rules:
     confidence: MEDIUM
     license: Commons Clause License Condition v1.0[LGPL-2.1-only]
     vulnerability_class:
-    - Cryptographic Issues
+    - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-sha1
     shortlink: https://sg.run/XBYA
     semgrep.dev:
       rule:
         rule_id: OrU31O
-        version_id: X0TQx0B
-        url: https://semgrep.dev/playground/r/X0TQx0B/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-sha1
+        version_id: 9lTod53
+        url: https://semgrep.dev/playground/r/9lTod53/go.lang.security.audit.crypto.use_of_weak_crypto.use-of-sha1
         origin: community
   patterns:
   - pattern-inside: |
@@ -20522,7 +20520,7 @@ rules:
     - A03:2017 - Sensitive Data Exposure
     - A02:2021 - Cryptographic Failures
     cwe:
-    - 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+    - 'CWE-328: Use of Weak Hash'
     source-rule-url: https://find-sec-bugs.github.io/bugs.htm#WEAK_MESSAGE_DIGEST_MD5
     category: security
     technology:
@@ -20536,14 +20534,14 @@ rules:
     impact: MEDIUM
     confidence: MEDIUM
     vulnerability_class:
-    - Cryptographic Issues
+    - Insecure Hashing Algorithm
     source: https://semgrep.dev/r/kotlin.lang.security.use-of-md5.use-of-md5
     shortlink: https://sg.run/4eQx
     semgrep.dev:
       rule:
         rule_id: qNUXPj
-        version_id: l4T4vRQ
-        url: https://semgrep.dev/playground/r/l4T4vRQ/kotlin.lang.security.use-of-md5.use-of-md5
+        version_id: yeTBRZG
+        url: https://semgrep.dev/playground/r/yeTBRZG/kotlin.lang.security.use-of-md5.use-of-md5
         origin: community
   pattern-either:
   - pattern: '$VAR = $MD.getInstance("MD5")
