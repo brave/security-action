@@ -26,6 +26,11 @@ inputs:
       cryptography
       login
       policy
+      auth
+      authentication
+      secure
+      security
+      insecure
       safebrowsing
       safe browsing
       csp
