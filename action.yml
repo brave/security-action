@@ -29,7 +29,6 @@ inputs:
       auth
       authentication
       secure
-      security
       insecure
       safebrowsing
       safe browsing
