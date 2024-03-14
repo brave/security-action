@@ -26,7 +26,6 @@ inputs:
       cryptography
       login
       policy
-      auth
       authentication
       secure
       insecure
