@@ -1,5 +1,5 @@
-element [^:]+: validity error : ID [^ ]+ already defined
-element [^:]+: validity error : No declaration for attribute data-[^ ]+ of element [^:]+
+element *: validity error : ID * already defined
+element *: validity error : No declaration for attribute data-* of element *
 element style: validity error : Element style does not carry attribute type
-element svg: validity error : Value for attribute version of svg must be [^ ]+
-third_party\/rust\/[^.]+\.svg
+element svg: validity error : Value for attribute version of svg must be *
+third_party/rust/**/*.svg
