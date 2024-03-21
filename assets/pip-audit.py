@@ -1,5 +1,5 @@
-import json
 import subprocess
+import tomllib
 
 from collections.abc import Iterator
 from os import environ, path
@@ -26,7 +26,10 @@ def main():
         files = all_changed_files.read()
         changed_lock_files = [
             f for f in files.split("\x00")
-            if path.basename(f).startswith("requirements") and path.basename(f).endswith(".txt")
+            if (
+                (path.basename(f).startswith("requirements") and path.basename(f).endswith(".txt")) or
+                (path.basename(f) == "pyproject.toml")
+            )
         ]
 
     index_url = environ.get("PYPI_INDEX_URL") or None
@@ -77,6 +80,13 @@ def install_commands(lock_path: str) -> Iterator[tuple[list[str], int]]:
     else:
         diff_lines = set(lock_file_lines)  # full scan on all lines
 
+    if lock_path.endswith("pyproject.toml"):
+        yield from install_commands_for_pyproject_toml(lock_file_lines, diff_lines)
+    else:
+        yield from install_commands_for_requirements_txt(lock_file_lines, diff_lines)
+
+
+def install_commands_for_requirements_txt(lock_file_lines: list[str], diff_lines: list[str]) -> Iterator[tuple[list[str], int]]:
     zero_indexed_lineno = 0
     while zero_indexed_lineno < len(lock_file_lines):
         line = lock_file_lines[zero_indexed_lineno]
@@ -88,6 +98,39 @@ def install_commands(lock_path: str) -> Iterator[tuple[list[str], int]]:
             install_cmd = [line.strip().split(" ", 1)[0]]
             yield (install_cmd, zero_indexed_lineno + 1)
         zero_indexed_lineno += 1
+
+
+def install_commands_for_pyproject_toml(lock_file_lines: list[str], diff_lines: list[str]) -> Iterator[tuple[list[str], int]]:
+    KEYS_TO_WATCH = [
+        # In future may want build or dev dependencies
+        ('project', 'dependencies')
+    ]
+
+    # Read toml data properly
+    toml_data = tomllib.loads("\n".join(lock_file_lines))
+    declared_dependencies = {
+        dependency
+        for l in (
+            toml_data.get(section, {}).get(key, []) for section, key in KEYS_TO_WATCH
+        ) for dependency in l
+    }
+    if not declared_dependencies:
+        return
+
+    zero_indexed_lineno = 0
+    while zero_indexed_lineno < len(lock_file_lines):
+        line = lock_file_lines[zero_indexed_lineno]
+        if line and line in diff_lines and not line.startswith(("#")):
+            seen_dependencies = set()
+            for dependency in declared_dependencies:
+                # This is lazy but complexity should only be an issue in gigantic files
+                if dependency in line:
+                    seen_dependencies.add(dependency)
+                    install_cmd = [dependency]
+                    yield (install_cmd, zero_indexed_lineno + 1)
+            declared_dependencies.difference_update(seen_dependencies)
+        zero_indexed_lineno += 1
+
 
 if __name__ == "__main__":
     main()
