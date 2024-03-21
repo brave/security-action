@@ -8,7 +8,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "fastapi==0.104.1", "pydantic==1.10.13",
+    "fastapi==0.109.1", "pydantic==1.10.13",
     "shortuuid==1.0.11",
     "Jinja2>=3.1.2", "transformers==4.36.2"
 ]
