@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-DEFAULT_MATCHER_FILENAME = ".github/security-action-blocklist.txt"
-
 class Matcher
   def initialize(*blocklist_files)
     @blocklist = []
@@ -33,14 +31,14 @@ class Matcher
 end
 
 options = {
-  matcher: Matcher.new(DEFAULT_MATCHER_FILENAME)
+  matcher: Matcher.new()
 }
 OptionParser.new do |opts|
   opts.banner = "Usage: reviewdog-adapter.rb [options]"
 
   opts.on("--svgo", "Add SVGO String") do |v|
     options[:svgo] = true
-    options[:matcher] = Matcher.new(DEFAULT_MATCHER_FILENAME, "#{ENV["SCRIPTPATH"]}/dtd/blocklist.txt")
+    options[:matcher] = Matcher.new("#{ENV["SCRIPTPATH"]}/dtd/blocklist.txt")
   end
 
   opts.on("--assignees", "Add Assignees String") do |v|
@@ -49,12 +47,12 @@ OptionParser.new do |opts|
 
   opts.on("--sveltegrep", "Remove Extracted Script Extension, and use semgrep blocklist") do |v|
     options[:sveltegrep] = true
-    options[:matcher] = Matcher.new(DEFAULT_MATCHER_FILENAME, "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt")
+    options[:matcher] = Matcher.new("#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt")
   end
 
   opts.on("--semgrep", "Use semgrep blocklist") do |v|
     options[:semgrep] = true
-    options[:matcher] = Matcher.new(DEFAULT_MATCHER_FILENAME, "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt")
+    options[:matcher] = Matcher.new("#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt")
   end
 end.parse!
 
