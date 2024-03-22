@@ -1,0 +1,23 @@
+rules:
+  - id: brave-execute-script-ios
+    metadata:
+      author: Artem Chaikin
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-execute-script-ios.yaml
+      assignees: stoletheminerals
+    message: |
+      $FUNC usages should be vet by the security-team.
+
+      References:
+      - https://github.com/brave/brave-browser/wiki/Security-reviews (point 13)
+    severity: INFO
+    languages:
+      - swift
+    patterns:
+      - pattern-either:
+          - pattern: $OBJ.$FUNC(...)
+          - pattern: $FUNC(...)
+      - metavariable-regex:
+          metavariable: $FUNC
+          regex: ^(WKUserScript|evaluateSafeJavaScriptThrowing|evaluateSafeJavaScript|evaluateJavaScript)$
