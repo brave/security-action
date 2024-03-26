@@ -27,6 +27,10 @@ inputs:
       login
       policy
       authentication
+      authorization
+      authn
+      authz
+      oauth
       secure
       insecure
       safebrowsing
