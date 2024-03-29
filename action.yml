@@ -91,14 +91,14 @@ runs:
       with:
         separator: '\0'
     - name: Store reviewdog enabled for PR
-      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
       id: reviewdog-enabled-pr
       shell: bash
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
     - name: Store reviewdog enabled for full repo manual run
-      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') }}
       id: reviewdog-enabled-full
       shell: bash
       run: |
@@ -188,7 +188,7 @@ runs:
             console.log("Comments: %d", commentsNumber);
             return commentsNumber;
     - id: unverified-commits
-      if: ${{ github.event_name == 'pull_request' && (!matrix.language || matrix.language == 'generic') }}
+      if: ${{ github.event_name == 'pull_request' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
           script: |
