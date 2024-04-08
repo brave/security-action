@@ -1890,11 +1890,13 @@ rules:
     semgrep.dev:
       rule:
         rule_id: KxU507
-        version_id: yeTRvvY
-        url: https://semgrep.dev/playground/r/yeTRvvY/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
+        version_id: pZTz48j
+        url: https://semgrep.dev/playground/r/pZTz48j/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
         origin: community
   patterns:
-  - pattern: "$RESULT = numpy.$FUNCTION(...)"
+  - pattern-either:
+    - pattern: numpy.$FN(...)
+    - pattern: numpy. ... .$FN(...)
   - pattern-inside: |
       class $MODULE(torch.nn.Module):
           ...

@@ -72,122 +72,6 @@ rules:
     - pattern: org.apache.commons.lang.StringEscapeUtils.escapeHtml(...)
     - pattern: org.springframework.web.util.HtmlUtils.htmlEscape(...)
     - pattern: org.owasp.esapi.ESAPI.encoder().encodeForHTML(...)
-- id: trailofbits.go.anonymous-race-condition.anonymous-race-condition
-  message: Possible race condition due to memory aliasing of variable `$X`
-  languages:
-  - go
-  severity: ERROR
-  metadata:
-    category: security
-    cwe: 'CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization
-      (''Race Condition'')'
-    subcategory:
-    - vuln
-    confidence: MEDIUM
-    likelihood: HIGH
-    impact: MEDIUM
-    technology:
-    - "--no-technology--"
-    description: Race conditions within anonymous goroutines
-    references:
-    - https://github.com/golang/go/wiki/CommonMistakes#using-goroutines-on-loop-iterator-variables
-    license: AGPL-3.0 license
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/trailofbits.go.anonymous-race-condition.anonymous-race-condition
-    shortlink: https://sg.run/BL22
-    semgrep.dev:
-      rule:
-        rule_id: nJUr88
-        version_id: LjTq4yK
-        url: https://semgrep.dev/playground/r/LjTq4yK/trailofbits.go.anonymous-race-condition.anonymous-race-condition
-        origin: community
-  patterns:
-  - pattern-either:
-    - pattern: |
-        for $Y, $X := range ... {
-          ...
-          go func(...){
-            ...
-            $FOO(..., $X, ...)
-            ...
-          }(...)
-          ...
-        }
-    - pattern: |
-        for $Y, $X := range ... {
-          ...
-          go func(...){
-            ...
-            $FOO(..., $Y, ...)
-            ...
-          }(...)
-          ...
-        }
-    - pattern: |
-        for $Y, $X := range ... {
-          ...
-          go func(...){
-            ...
-            $X(...)
-            ...
-          }(...)
-          ...
-        }
-    - pattern: |
-        for $X:=...;$Y;$Z {
-          ...
-          go func(...) {
-            ...
-            $FOO(..., $X,...)
-            ...
-          }(...)
-          ...
-        }
-    - pattern: |
-        for $Y, $X := range ... {
-          ...
-          go func(...){
-            ...
-            $X. ... .$M(...)
-            ...
-          }(...)
-          ...
-        }
-  - pattern-not: |
-      for ..., $X := range ... {
-        ...
-        ..., $X := ..., $X
-        ...
-        go func(...){
-          ...
-          $FOO(..., $X, ...)
-          ...
-        }(...)
-        ...
-      }
-  - pattern-not: |
-      for ..., $X := range ... {
-          ...
-          $X, ... := $X, ...
-          ...
-          go func(...){
-            ...
-            $FOO(..., $X, ...)
-            ...
-          }(...)
-          ...
-      }
-  - pattern-not: |
-      for $Y, $X := range ... {
-        ...
-        $Y, $X := $Y, $X
-        ...
-        go func(...){
-          ...
-        }(...)
-        ...
-      }
 - id: trailofbits.go.hanging-goroutine.hanging-goroutine
   message: Potential goroutine leak due to unbuffered channel send inside loop or
     unbuffered channel receive in select block
@@ -302,7 +186,8 @@ rules:
       $CHANNEL := make(..., $T)
       ...
 - id: trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
-  message: Missing `RUnlock` on an `RWMutex` lock before returning from a function
+  message: Missing `RUnlock` on an `RWMutex` (`$T` variable) lock before returning
+    from a function
   languages:
   - go
   severity: ERROR
@@ -328,13 +213,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 8GUzNK
-        version_id: BjTDX4z
-        url: https://semgrep.dev/playground/r/BjTDX4z/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+        version_id: YDTAKBW
+        url: https://semgrep.dev/playground/r/YDTAKBW/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
         origin: community
   patterns:
   - pattern-either:
     - pattern: panic(...)
     - pattern: return ...
+  - metavariable-pattern:
+      metavariable: "$T"
+      patterns:
+      - pattern: "($T : sync.RWMutex)\n"
   - pattern-inside: |
       $T.RLock()
       ...
@@ -344,6 +233,13 @@ rules:
   - pattern-not-inside: |
       defer $T.RUnlock()
       ...
+  - pattern-not-inside: |
+      defer func(...) {
+        ...
+        $T.RUnlock()
+        ...
+      }(...)
+      ...
   - pattern-not-inside: "$FOO(..., ..., func(...) { \n    ... \n})\n"
   - pattern-not-inside: |
       return func(...) {
@@ -352,8 +248,8 @@ rules:
           ...
       }
 - id: trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
-  message: Missing mutex unlock before returning from a function.  This could result
-    in panics resulting from double lock operations
+  message: Missing mutex unlock (`$T` variable) before returning from a function.  This
+    could result in panics resulting from double lock operations
   languages:
   - go
   severity: ERROR
@@ -379,13 +275,17 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1U5Gz
-        version_id: DkT96BG
-        url: https://semgrep.dev/playground/r/DkT96BG/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+        version_id: 6xTEwrB
+        url: https://semgrep.dev/playground/r/6xTEwrB/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
         origin: community
   patterns:
   - pattern-either:
     - pattern: panic(...)
     - pattern: return ...
+  - metavariable-pattern:
+      metavariable: "$T"
+      patterns:
+      - pattern: "($T : sync.Mutex)\n"
   - pattern-inside: |
       $T.Lock()
       ...
@@ -394,6 +294,13 @@ rules:
       ...
   - pattern-not-inside: |
       defer $T.Unlock()
+      ...
+  - pattern-not-inside: |
+      defer func(...) {
+        ...
+        $T.Unlock()
+        ...
+      }(...)
       ...
   - pattern-not-inside: "$FOO(..., ..., func(...) { \n    ... \n})\n"
   - pattern-not-inside: |
@@ -1312,8 +1219,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: 0oUrdJ
-        version_id: X0TQZZl
-        url: https://semgrep.dev/playground/r/X0TQZZl/trailofbits.python.lxml-in-pandas.lxml-in-pandas
+        version_id: o5T2pO6
+        url: https://semgrep.dev/playground/r/o5T2pO6/trailofbits.python.lxml-in-pandas.lxml-in-pandas
         origin: community
   pattern-either:
   - patterns:
@@ -1339,6 +1246,149 @@ rules:
         - pattern: 'pandas.read_html(**$KWARGS)
 
             '
+- id: trailofbits.python.msgpack-numpy.msgpack-numpy
+  message: Found usage of msgpack-numpy unpacking, which relies on pickle to deserialize
+    numpy arrays containing objects. Functions reliant on pickle can result in arbitrary
+    code execution.  Consider switching to a safer serialization method.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - numpy
+    description: Potential arbitrary code execution from functions reliant on pickling
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.msgpack-numpy.msgpack-numpy
+    shortlink: https://sg.run/r6pr1
+    semgrep.dev:
+      rule:
+        rule_id: GdUvWBy
+        version_id: zyTn0O7
+        url: https://semgrep.dev/playground/r/zyTn0O7/trailofbits.python.msgpack-numpy.msgpack-numpy
+        origin: community
+  pattern-either:
+  - patterns:
+    - pattern: msgpack.$FN(...)
+    - metavariable-regex:
+        metavariable: "$FN"
+        regex: "(loads?|dumps?|packb?|unpackb?)"
+    - pattern-inside: |
+        msgpack_numpy.patch()
+        ...
+  - patterns:
+    - pattern: msgpack.$FN(..., object_hook=msgpack_numpy.decode, ...)
+    - metavariable-regex:
+        metavariable: "$FN"
+        regex: unpackb?
+  - patterns:
+    - pattern: msgpack.$FN(..., default=msgpack_numpy.encode, ...)
+    - metavariable-regex:
+        metavariable: "$FN"
+        regex: packb?
+- id: trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-deprecation
+  message: The usage of pickle and hdf5 formats for model files are deprecated in
+    Keras. The keras.models.load_model function is deprecated as well. Keras is now
+    embedded in Tensorflow 2 under tensorflow.keras.
+  languages:
+  - python
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - keras
+    description: Potential arbitrary code execution from Keras' load_model function
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-deprecation
+    shortlink: https://sg.run/NbJRG
+    semgrep.dev:
+      rule:
+        rule_id: AbU9npB
+        version_id: X0Tg01y
+        url: https://semgrep.dev/playground/r/X0Tg01y/trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-deprecation
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: keras.models.load_model(...)
+    - pattern: tensorflow.keras.models.load_model(...)
+    - pattern: keras.saving.load_model(...)
+    - pattern: tensorflow.keras.saving.load_model(...)
+  - pattern-not:
+      patterns:
+      - pattern-either:
+        - pattern: keras.models.load_model($FILE)
+        - pattern: tensorflow.keras.models.load_model($FILE)
+        - pattern: keras.saving.load_model($FILE)
+        - pattern: tensorflow.keras.saving.load_model($FILE)
+      - metavariable-regex:
+          metavariable: "$FILE"
+          regex: ".*\\.keras"
+- id: trailofbits.python.pickles-in-keras.pickles-in-keras
+  message: |-
+    Keras' load_model function may result in arbitrary code execution: - It can load vulnerable pickled models - It can load an hdf5 model that contains a lambda layer with arbitrary code
+      that will be executed every time the model is used (loading, training, eval)
+    Note: Keras loading with the built-in file format should be safe as long as checks are not disabled.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - keras
+    description: Potential arbitrary code execution from Keras' load_model function
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-keras.pickles-in-keras
+    shortlink: https://sg.run/kxK8o
+    semgrep.dev:
+      rule:
+        rule_id: BYUXGv6
+        version_id: jQTQ082
+        url: https://semgrep.dev/playground/r/jQTQ082/trailofbits.python.pickles-in-keras.pickles-in-keras
+        origin: community
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern: keras.models.load_model(...)
+      - pattern-not: keras.models.load_model("...", ...)
+    - patterns:
+      - pattern: tensorflow.keras.models.load_model(...)
+      - pattern-not: tensorflow.keras.models.load_model("...", ...)
+    - patterns:
+      - pattern: keras.saving.load_model(...)
+      - pattern-not: keras.saving.load_model("...", ...)
+    - patterns:
+      - pattern: tensorflow.keras.saving.load_model(...)
+      - pattern-not: tensorflow.keras.saving.load_model("...", ...)
 - id: trailofbits.python.pickles-in-numpy.pickles-in-numpy
   message: Functions reliant on pickle can result in arbitrary code execution.  Consider
     using fickling or switching to a safer serialization method
@@ -1495,8 +1545,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: JDU6WD
-        version_id: xyTKWWO
-        url: https://semgrep.dev/playground/r/xyTKWWO/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
+        version_id: 1QT5wrl
+        url: https://semgrep.dev/playground/r/1QT5wrl/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
         origin: community
   patterns:
   - pattern-either:
@@ -1505,7 +1555,45 @@ rules:
   - pattern-not: torch.load("...")
   - pattern-not: torch.save(..., "...")
   - pattern-not: torch.save($M.state_dict(), ...)
-  - pattern-not-inside: "$M.load_state_dict(torch.load(...))"
+  - pattern-not-inside: "$M.load_state_dict(...)"
+  - pattern-not:
+      patterns:
+      - pattern: torch.save($STATE_DICT, ...)
+      - pattern-inside: |
+          $STATE_DICT = $M.state_dict()
+          ...
+- id: trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
+  message: Tensorflow's low-level load function may result in arbitrary code execution.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - vuln
+    confidence: MEDIUM
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - keras
+    description: Potential arbitrary code execution from tensorflow's load function
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
+    shortlink: https://sg.run/wd5jn
+    semgrep.dev:
+      rule:
+        rule_id: DbU6e7r
+        version_id: 9lTZ9vg
+        url: https://semgrep.dev/playground/r/9lTZ9vg/trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
+        origin: community
+  patterns:
+  - pattern: tensorflow.saved_model.load(...)
+  - pattern-not: tensorflow.saved_model.load("...", ...)
 - id: trailofbits.python.scikit-joblib-load.scikit-joblib-load
   message: Scikit `joblib` uses pickle under the hood. Functions reliant on pickle
     can result in arbitrary code execution. Consider using `skops` instead.

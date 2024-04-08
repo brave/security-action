@@ -2244,7 +2244,7 @@ rules:
         - pattern: recv
         - pattern: recvfrom
 - id: trailofbits.generic.container-privileged.container-privileged
-  message: Found container command with extended privileges
+  message: Found container command (docker, podman) with extended privileges
   languages:
   - generic
   severity: WARNING
@@ -2268,8 +2268,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReUD0BO
-        version_id: vdT1k6d
-        url: https://semgrep.dev/playground/r/vdT1k6d/trailofbits.generic.container-privileged.container-privileged
+        version_id: WrTNkvB
+        url: https://semgrep.dev/playground/r/WrTNkvB/trailofbits.generic.container-privileged.container-privileged
         origin: community
   pattern-either:
   - pattern: docker ... --privileged
@@ -2385,12 +2385,15 @@ rules:
     semgrep.dev:
       rule:
         rule_id: DbU6R39
-        version_id: nWTOeLd
-        url: https://semgrep.dev/playground/r/nWTOeLd/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
+        version_id: 0bTrQAn
+        url: https://semgrep.dev/playground/r/0bTrQAn/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
         origin: community
-  pattern-either:
-  - pattern: curl ... http://
-  - pattern: curl ... ftp://
+  patterns:
+  - pattern-either:
+    - pattern: curl ... http://
+    - pattern: curl ... ftp://
+  - pattern-not-inside: curl ... http://127.0.0.1
+  - pattern-not-inside: curl ... http://localhost
 - id: trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
   message: Found `gpg` command using insecure flags
   languages:
@@ -3163,6 +3166,63 @@ rules:
       ...
   - pattern: "$SESSION.register_custom_ops_library(...)"
   - pattern-not: $SESSION.register_custom_ops_library("...")
+- id: trailofbits.python.pandas-eval.pandas-eval
+  message: Pandas eval() and query() may be dangerous if used to evaluate dynamic
+    content. If this content can be input from outside the program, this may be a
+    code injection vulnerability. Ensure evaluated content is not definable by external
+    sources.
+  languages:
+  - python
+  severity: ERROR
+  metadata:
+    category: security
+    cwe: 'CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code
+      (''Eval Injection'')'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    technology:
+    - pandas
+    description: Potential arbitrary code execution from `pandas` functions that evaluate
+      user-provided expressions
+    references:
+    - https://blog.trailofbits.com/2021/03/15/never-a-dill-moment-exploiting-machine-learning-pickle-files/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Code Injection
+    source: https://semgrep.dev/r/trailofbits.python.pandas-eval.pandas-eval
+    shortlink: https://sg.run/bwJed
+    semgrep.dev:
+      rule:
+        rule_id: ReUDw9J
+        version_id: 2KTLoZO
+        url: https://semgrep.dev/playground/r/2KTLoZO/trailofbits.python.pandas-eval.pandas-eval
+        origin: community
+  patterns:
+  - pattern-inside: |
+      import pandas
+      ...
+  - pattern-either:
+    - patterns:
+      - pattern: pandas.DataFrame.$FN(...)
+      - pattern-not: pandas.DataFrame.$FN("...", ...)
+      - pattern-not: pandas.DataFrame.$FN(f"", ...)
+    - patterns:
+      - pattern: pandas.$FN(...)
+      - pattern-not: pandas.$FN("...", ...)
+      - pattern-not: pandas.$FN(f"", ...)
+    - patterns:
+      - pattern-inside: |
+          $DF = pandas.DataFrame(...)
+          ...
+      - pattern: "$DF.$FN(...)"
+      - pattern-not: $DF.$FN("...", ...)
+      - pattern-not: $DF.$FN(f"", ...)
+  - metavariable-regex:
+      metavariable: "$FN"
+      regex: "(eval|query)"
 - id: trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
   message: Loading custom operator libraries can result in arbitrary code execution
   languages:
