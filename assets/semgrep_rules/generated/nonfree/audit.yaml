@@ -1558,22 +1558,17 @@ rules:
   severity: ERROR
 - id: dockerfile.security.last-user-is-root.last-user-is-root
   patterns:
-  - pattern-inside: |
-      USER $F
-      ...
-      USER $X
-  - pattern-not-inside: |
-      ...
-      USER $X
-      ...
-      USER $F
-  - focus-metavariable: "$X"
-  - metavariable-regex:
-      metavariable: "$X"
-      regex: "^(root)$"
-  - metavariable-regex:
-      metavariable: "$F"
-      regex: "(.*(?!root))"
+  - pattern: USER root
+  - pattern-not-inside:
+      patterns:
+      - pattern: |
+          USER root
+          ...
+          USER $X
+      - metavariable-pattern:
+          metavariable: "$X"
+          patterns:
+          - pattern-not: root
   message: The last user in the container is 'root'. This is a security hazard because
     if an attacker gains control of the container they will have root access. Switch
     back to another user after running commands as 'root'.
@@ -1604,8 +1599,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: ReU2n5
-        version_id: e1T01GL
-        url: https://semgrep.dev/playground/r/e1T01GL/dockerfile.security.last-user-is-root.last-user-is-root
+        version_id: kbTw78l
+        url: https://semgrep.dev/playground/r/kbTw78l/dockerfile.security.last-user-is-root.last-user-is-root
         origin: community
 - id: dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
   patterns:
@@ -1774,46 +1769,6 @@ rules:
   - pattern: 'sh -i ...<...> /dev/tcp/.../... ...<&... 1>&... 2>&
 
       '
-- id: generic.dockerfile.security.last-user-is-root.last-user-is-root
-  patterns:
-  - pattern: USER root
-  - pattern-not-inside: |
-      USER root
-      ...
-      USER $ANYTHING
-  message: The last user in the container is 'root'. This is a security hazard because
-    if an attacker gains control of the container they will have root access. Switch
-    back to another user after running commands as 'root'.
-  severity: ERROR
-  languages:
-  - dockerfile
-  metadata:
-    cwe:
-    - 'CWE-269: Improper Privilege Management'
-    source-rule-url: https://github.com/hadolint/hadolint/wiki/DL3002
-    references:
-    - https://github.com/hadolint/hadolint/wiki/DL3002
-    category: security
-    technology:
-    - dockerfile
-    confidence: MEDIUM
-    owasp:
-    - A04:2021 - Insecure Design
-    subcategory:
-    - audit
-    likelihood: MEDIUM
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Improper Authorization
-    source: https://semgrep.dev/r/generic.dockerfile.security.last-user-is-root.last-user-is-root
-    shortlink: https://sg.run/N461
-    semgrep.dev:
-      rule:
-        rule_id: L1UyO5
-        version_id: qkT2xK0
-        url: https://semgrep.dev/playground/r/qkT2xK0/generic.dockerfile.security.last-user-is-root.last-user-is-root
-        origin: community
 - id: generic.nginx.security.alias-path-traversal.alias-path-traversal
   patterns:
   - pattern: |
@@ -3818,7 +3773,7 @@ rules:
         url: https://semgrep.dev/playground/r/d6TrA5w/generic.secrets.security.detected-square-oauth-secret.detected-square-oauth-secret
         origin: community
 - id: generic.secrets.security.detected-ssh-password.detected-ssh-password
-  pattern-regex: sshpass -p.*['|\\\"]
+  pattern-regex: sshpass -p\s*['|\\\"][^%]
   languages:
   - regex
   message: SSH Password detected
@@ -3850,8 +3805,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: PeUZ4d
-        version_id: ZRTQNvQ
-        url: https://semgrep.dev/playground/r/ZRTQNvQ/generic.secrets.security.detected-ssh-password.detected-ssh-password
+        version_id: 3ZT6geb
+        url: https://semgrep.dev/playground/r/3ZT6geb/generic.secrets.security.detected-ssh-password.detected-ssh-password
         origin: community
 - id: generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key
   pattern-regex: sk_live_[0-9a-zA-Z]{24}
@@ -6772,8 +6727,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: L1Uyvp
-        version_id: qkTbbZp
-        url: https://semgrep.dev/playground/r/qkTbbZp/java.lang.security.audit.cookie-missing-secure-flag.cookie-missing-secure-flag
+        version_id: GxTv63G
+        url: https://semgrep.dev/playground/r/GxTv63G/java.lang.security.audit.cookie-missing-secure-flag.cookie-missing-secure-flag
         origin: community
   message: A cookie was detected without setting the 'secure' flag. The 'secure' flag
     for cookies prevents the client from transmitting the cookie over insecure channels
@@ -22728,8 +22683,8 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUZz5
-        version_id: zyTKDAv
-        url: https://semgrep.dev/playground/r/zyTKDAv/ruby.jwt.security.jwt-hardcode.ruby-jwt-hardcoded-secret
+        version_id: ExTq53v
+        url: https://semgrep.dev/playground/r/ExTq53v/ruby.jwt.security.jwt-hardcode.ruby-jwt-hardcoded-secret
         origin: community
   patterns:
   - pattern-inside: |
@@ -22756,6 +22711,12 @@ rules:
         $SECRET = "..."
         ...
         JWT.decode($PAYLOAD,$SECRET,...)
+  - pattern-not: 'JWT.encode($PAYLOAD, nil, ... , jwks: ..., ...)
+
+      '
+  - pattern-not: 'JWT.decode($PAYLOAD, nil, ..., jwks: ..., ...)
+
+      '
   languages:
   - ruby
   severity: ERROR

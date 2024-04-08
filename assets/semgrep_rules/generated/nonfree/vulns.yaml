@@ -3254,6 +3254,129 @@ rules:
         origin: community
   patterns:
   - pattern-regex: (?i)(?:etsy)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9]{24})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.facebook-access-token.facebook-access-token
+  message: A gitleaks facebook-access-token was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.facebook-access-token.facebook-access-token
+    shortlink: https://sg.run/Ab0Pg
+    semgrep.dev:
+      rule:
+        rule_id: 4bUR8vw
+        version_id: e1TrP21
+        url: https://semgrep.dev/playground/r/e1TrP21/generic.secrets.gitleaks.facebook-access-token.facebook-access-token
+        origin: community
+  patterns:
+  - pattern-regex: (?i)\b(\d{15,16}\|[0-9a-z\-_]{27})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.facebook-page-access-token.facebook-page-access-token
+  message: A gitleaks facebook-page-access-token was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.facebook-page-access-token.facebook-page-access-token
+    shortlink: https://sg.run/BYK5b
+    semgrep.dev:
+      rule:
+        rule_id: PeUJbAl
+        version_id: vdT4bA8
+        url: https://semgrep.dev/playground/r/vdT4bA8/generic.secrets.gitleaks.facebook-page-access-token.facebook-page-access-token
+        origin: community
+  patterns:
+  - pattern-regex: (?i)\b(EAA[MC][a-z0-9]{20,})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.facebook-secret.facebook-secret
+  message: A gitleaks facebook-secret was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.facebook-secret.facebook-secret
+    shortlink: https://sg.run/DblB2
+    semgrep.dev:
+      rule:
+        rule_id: JDUNK7E
+        version_id: d6T4N5y
+        url: https://semgrep.dev/playground/r/d6T4N5y/generic.secrets.gitleaks.facebook-secret.facebook-secret
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:facebook)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.facebook.facebook
   message: A gitleaks facebook was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -5216,11 +5339,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUeZl
-        version_id: 2KTzrnR
-        url: https://semgrep.dev/playground/r/2KTzrnR/generic.secrets.gitleaks.mailchimp-api-key.mailchimp-api-key
+        version_id: ZRTGRv2
+        url: https://semgrep.dev/playground/r/ZRTGRv2/generic.secrets.gitleaks.mailchimp-api-key.mailchimp-api-key
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:mailchimp)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32}-us20)(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?:MailchimpSDK.initialize|mailchimp)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-f0-9]{32}-us\d\d)(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.mailgun-private-api-token.mailgun-private-api-token
   message: A gitleaks mailgun-private-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -7433,11 +7556,11 @@ rules:
     semgrep.dev:
       rule:
         rule_id: WAUePl
-        version_id: o5TglQp
-        url: https://semgrep.dev/playground/r/o5TglQp/generic.secrets.gitleaks.square-access-token.square-access-token
+        version_id: nWTGD1Q
+        url: https://semgrep.dev/playground/r/nWTGD1Q/generic.secrets.gitleaks.square-access-token.square-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)\b(sq0atp-[0-9A-Za-z\-_]{22})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)\b((EAAA|sq0atp-)[0-9A-Za-z\-_]{22,60})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.squarespace-access-token.squarespace-access-token
   message: A gitleaks squarespace-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -19193,6 +19316,64 @@ rules:
       $JWT = require("jsonwebtoken");
       ...
   - pattern: "$JWT.verify($P, $X, {algorithms:[...,'none',...]},...)"
+- id: javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify
+  message: Detected the decoding of a JWT token without a verify step. JWT tokens
+    must be verified before use, otherwise the token's integrity is unknown. This
+    means a malicious actor could forge a JWT token with any claims. Set 'verify'
+    to `true` before using the token.
+  severity: ERROR
+  metadata:
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    - A07:2021 - Identification and Authentication Failures
+    cwe:
+    - 'CWE-287: Improper Authentication'
+    - 'CWE-345: Insufficient Verification of Data Authenticity'
+    - 'CWE-347: Improper Verification of Cryptographic Signature'
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - jwt-simple
+    - jwt
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    references:
+    - https://www.npmjs.com/package/jwt-simple
+    - https://cwe.mitre.org/data/definitions/287
+    - https://cwe.mitre.org/data/definitions/345
+    - https://cwe.mitre.org/data/definitions/347
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    - Improper Authentication
+    source: https://semgrep.dev/r/javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify
+    shortlink: https://sg.run/zdjod
+    semgrep.dev:
+      rule:
+        rule_id: r6UyNLy
+        version_id: 44TgJGG
+        url: https://semgrep.dev/playground/r/44TgJGG/javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify
+        origin: community
+  languages:
+  - javascript
+  - typescript
+  patterns:
+  - pattern-inside: |
+      $JWT = require('jwt-simple');
+      ...
+  - pattern: "$JWT.decode($TOKEN, $SECRET, $NOVERIFY, ...)"
+  - metavariable-pattern:
+      metavariable: "$NOVERIFY"
+      patterns:
+      - pattern-either:
+        - pattern: 'true
+
+            '
+        - pattern: '"..."
+
+            '
 - id: javascript.lang.security.audit.code-string-concat.code-string-concat
   message: Found data from an Express or Next web request flowing to `eval`. If this
     data is user-controllable this can lead to execution of arbitrary system commands
