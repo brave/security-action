@@ -5,8 +5,8 @@ SCRIPT=$(readlink -f $0)
 export SCRIPTPATH=`dirname $SCRIPT`
 
 ARGS=""
-if find -name '*.tfvars' 2> /dev/null; then
-    for TFVARS in $(find -name '*.tfvars'); do
+if ls *.tfvars 2> /dev/null; then
+    for TFVARS in *.tfvars; do
         ARGS+="--tfvars-file $TFVARS "
     done
 fi
