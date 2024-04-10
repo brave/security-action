@@ -64,7 +64,7 @@ runner:
       (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep '\.tf$' | xargs -r -d '\n' dirname | sort -u \
       | xargs -r -d '\n' $SCRIPTPATH/tfsec.sh \
       | jq -r '.diagnostics[] | "\(.severity[0:1]):\(.location.path):\(.location.range.start.line) \(.message  | sub("\n";"<br/>";"g"))<br><br>source: \(.code.url)<br><br>"' \
-      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.tfsec.stderr.log
+      | $SCRIPTPATH/cleaner.rb) 2> /dev/null # TODO: reviewdog.tfsec.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   brakeman:
@@ -97,6 +97,6 @@ runner:
     cmd: |
       set -e
       (python3 $SCRIPTPATH/pip-audit.py \
-      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.pip-audit.stderr.log 
+      | $SCRIPTPATH/cleaner.rb) 2> /dev/null # reviewdog.pip-audit.stderr.log 
     errorformat:
       - "%t:%f:%l %m"
