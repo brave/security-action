@@ -289,10 +289,7 @@ runs:
         python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/requirements.txt
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install xmllint for safesvg
-      uses: awalsh128/cache-apt-pkgs-action@44c33b32f808cdddd5ac0366d70595ed63661ed8 # v1.3.1
-      with:
-          packages: libxml2-utils
-          version: 1.0
+      run: sudo apt-get install -y libxml2-utils
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install tfsec
       uses: jaxxstorm/action-install-gh-release@71d17cb091aa850acb2a1a4cf87258d183eb941b # v1.11.0
