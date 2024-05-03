@@ -1,0 +1,9 @@
+rules:
+  - id: internal-digest-call
+    pattern-regex: _INTERNAL_DIGEST_NEVER_CALL_DIRECTLY
+    message: Internal Digest Direct Call, never call this directly
+    languages:
+      - python
+    severity: WARNING
+    metadata:
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/internal-digest-call.yaml
