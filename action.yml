@@ -128,11 +128,11 @@ runs:
         script: |
           const actionPath = '${{ github.action_path }}'
 
-          const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
-          const cleanupComments = require(`${actionPath}/src/cleanupComments.js`)
+          const {default: commentsNumber} = await import(`${actionPath}/src/commentsNumber.js`)
+          const {default: cleanupComments} = await import(`${actionPath}/src/cleanupComments.js`)
 
-          const number = commentsNumber({context, github})
-          cleanupComments({context, github})
+          const number = await commentsNumber({context, github})
+          await cleanupComments({context, github})
           return number
     - id: unverified-commits
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
@@ -141,9 +141,9 @@ runs:
         script: |
           const actionPath = '${{ github.action_path }}'
 
-          const unverifiedCommits = require(`${actionPath}/src/unverifiedCommits.js`)
+          const {default: unverifiedCommits} = await import(`${actionPath}/src/unverifiedCommits.js`)
 
-          return unverifiedCommits({context, github})
+          return await unverifiedCommits({context, github})
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
@@ -212,8 +212,8 @@ runs:
       with:
         script: |
           const actionPath = '${{ github.action_path }}'
-          const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
-          return commentsNumber({context, github})
+          const {default: commentsNumber} = await import(`${actionPath}/src/commentsNumber.js`)
+          return await commentsNumber({context, github})
     - id: assignees-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -222,8 +222,8 @@ runs:
       with:
         script: |
           const actionPath = '${{ github.action_path }}'
-          const assigneesAfter = require(`${actionPath}/src/assigneesAfter.js`)
-          return assigneesAfter({context, github})
+          const {default: assigneesAfter} = await import(`${actionPath}/src/assigneesAfter.js`)
+          return await assigneesAfter({context, github})
     - id: assignee-removed-label
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -232,8 +232,8 @@ runs:
       with:
         script: |
           const actionPath = '${{ github.action_path }}'
-          const assigneeRemoved = require(`${actionPath}/src/assigneeRemoved.js`)
-          return assigneeRemoved({context, github})
+          const {default: assigneeRemoved} = await import(`${actionPath}/src/assigneeRemoved.js`)
+          return await assigneeRemoved({context, github})
     - id: description-contains-hotwords
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && github.actor != 'renovate[bot]' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -242,8 +242,8 @@ runs:
       with:
         script: |
           const actionPath = '${{ github.action_path }}'
-          const hotwords = require(`${actionPath}/src/hotwords.js`)
-          return hotwords({context, github})
+          const {default: hotwords} = await import(`${actionPath}/src/hotwords.js`)
+          return await hotwords({context, github})
     - id: should-trigger
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && !(steps.assignee-removed-label.outputs.result  == 'true') && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result == 'true') }}
       shell: bash
