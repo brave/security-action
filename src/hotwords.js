@@ -8,7 +8,7 @@ export default async function hotwords ({
 
   console.log('hotwords: %s', hotwords)
 
-  var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+  const pullRequestQuery = `query($owner:String!, $name:String!, $prnumber:Int!) { 
       repository(owner:$owner, name:$name) { 
         pullRequest(number:$prnumber) {
           title
@@ -21,7 +21,7 @@ export default async function hotwords ({
     name: context.repo.repo,
     prnumber: context.issue.number
   }
-  const result = await github.graphql(query, variables)
+  const result = await github.graphql(pullRequestQuery, variables)
   const content = (result.repository.pullRequest.title + result.repository.pullRequest.body).toLowerCase()
   console.log('Body: %s', content)
 
@@ -33,7 +33,7 @@ export default async function hotwords ({
         No need to request a full security review at this stage, the security team will take a look shortly and either clear the label or request more information/changes.<br/>
         Notifications have already been sent, but if this is blocking your merge feel free to reach out directly to the security team on Slack so that we can expedite this check.`
 
-    var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
+    const pullRequestCommentsQuery = `query($owner:String!, $name:String!, $prnumber:Int!) { 
         repository(owner:$owner, name:$name) { 
           pullRequest(number:$prnumber) {
             comments(first: 100) {
@@ -47,7 +47,7 @@ export default async function hotwords ({
           }
         }
       }`
-    const messages = (await github.graphql(query, variables)).repository.pullRequest.comments.nodes.map(node => node.body)
+    const messages = (await github.graphql(pullRequestCommentsQuery, variables)).repository.pullRequest.comments.nodes.map(node => node.body)
 
     if (!messages.includes(m)) {
       github.rest.issues.createComment({
