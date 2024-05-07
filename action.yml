@@ -1,10 +1,10 @@
 name: 'Security Action'
 description: 'Collect and Generalize multiple CI Security checks'
 inputs:
-# in-name:
-#   description: yadda yadda
-#   required: true
-#   default: 0
+  # in-name:
+  #   description: yadda yadda
+  #   required: true
+  #   default: 0
   github_token:
     description: |
       Secret token to push review comments, and
@@ -111,8 +111,8 @@ runs:
       run: |
         set -x
         echo "result=true" >> $GITHUB_OUTPUT
-# REVIEWDOG Steps
-# REVIEWDOG Setup
+      # REVIEWDOG Steps
+      # REVIEWDOG Setup
     - name: Write changed files to file
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       id: write-changed-files
@@ -125,25 +125,25 @@ runs:
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
-          script: |
-            const actionPath = '${{ github.action_path }}'
-            
-            const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
-            const cleanupComments = require(`${actionPath}/src/cleanupComments.js`)
+        script: |
+          const actionPath = '${{ github.action_path }}'
 
-            const number = commentsNumber({context, github})
-            cleanupComments({context, github})
-            return number
+          const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
+          const cleanupComments = require(`${actionPath}/src/cleanupComments.js`)
+
+          const number = commentsNumber({context, github})
+          cleanupComments({context, github})
+          return number
     - id: unverified-commits
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
-          script: |
-            const actionPath = '${{ github.action_path }}'
-            
-            const unverifiedCommits = require(`${actionPath}/src/unverifiedCommits.js`)
+        script: |
+          const actionPath = '${{ github.action_path }}'
 
-            return unverifiedCommits({context, github})
+          const unverifiedCommits = require(`${actionPath}/src/unverifiedCommits.js`)
+
+          return unverifiedCommits({context, github})
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
@@ -189,8 +189,7 @@ runs:
         ASSIGNEES: ${{inputs.assignees}}
       run: ${{ github.action_path }}/assets/debug.sh
       shell: bash
-
-# REVIEWDOG Run
+      # REVIEWDOG Run
     - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       name: Run reviewdog
       id: run-reviewdog-pr
@@ -207,26 +206,24 @@ runs:
       id: run-reviewdog-full
       shell: bash
       run: unset GITHUB_BASE_REF && ${{ github.action_path }}/assets/reviewdog.sh
-
     - id: comments-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
-          script: |
-            const actionPath = '${{ github.action_path }}'
-            const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
-            return commentsNumber({context, github})
+        script: |
+          const actionPath = '${{ github.action_path }}'
+          const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
+          return commentsNumber({context, github})
     - id: assignees-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       env:
         ASSIGNEES: ${{ inputs.assignees }}
       with:
-          script: |
-            const actionPath = '${{ github.action_path }}'
-            const assigneesAfter = require(`${actionPath}/src/assigneesAfter.js`)
-            return assigneesAfter({context, github})
-
+        script: |
+          const actionPath = '${{ github.action_path }}'
+          const assigneesAfter = require(`${actionPath}/src/assigneesAfter.js`)
+          return assigneesAfter({context, github})
     - id: assignee-removed-label
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -237,7 +234,6 @@ runs:
           const actionPath = '${{ github.action_path }}'
           const assigneeRemoved = require(`${actionPath}/src/assigneeRemoved.js`)
           return assigneeRemoved({context, github})
-
     - id: description-contains-hotwords
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && github.actor != 'renovate[bot]' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -248,8 +244,7 @@ runs:
           const actionPath = '${{ github.action_path }}'
           const hotwords = require(`${actionPath}/src/hotwords.js`)
           return hotwords({context, github})
-
-    - id: should-trigger 
+    - id: should-trigger
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && !(steps.assignee-removed-label.outputs.result  == 'true') && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result == 'true') }}
       shell: bash
       run: |
@@ -345,4 +340,3 @@ runs:
 #    - id: output-step-id
 #      run: echo "output-name=antani" >> $GITHUB_OUTPUT
 #      shell bash
-

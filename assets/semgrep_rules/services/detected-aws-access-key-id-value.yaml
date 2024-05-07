@@ -5,9 +5,7 @@ rules:
       - pattern-not-regex: (?i)example|sample|test|fake
     languages:
       - regex
-    message: AWS Access Key ID Value detected. This is a sensitive credential and
-      should not be hardcoded here. Instead, read this value from an environment
-      variable or keep it in a separate, private file.
+    message: AWS Access Key ID Value detected. This is a sensitive credential and should not be hardcoded here. Instead, read this value from an environment variable or keep it in a separate, private file.
     severity: ERROR
     metadata:
       cwe:

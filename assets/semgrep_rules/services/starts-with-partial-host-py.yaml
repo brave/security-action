@@ -14,7 +14,7 @@ rules:
           metavariable: $URL
           regex: (?i).*ur[li].*
     message: |
-        Add a forward-slash at the end to prevent matching `$PREFIX.e.vil` or `$PREFIX@e.vil`.
-        Even better, properly parse the URL and match a list of origins/hosts.
+      Add a forward-slash at the end to prevent matching `$PREFIX.e.vil` or `$PREFIX@e.vil`.
+      Even better, properly parse the URL and match a list of origins/hosts.
     languages: [python]
     severity: WARNING

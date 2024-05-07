@@ -12,10 +12,7 @@ rules:
       # static_cast/reinterpret_cast are not covered.
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/interesting-api-calls.yaml
     message: >-
-      Locate all calls to interesting and potentially insecure API
-      functions (candidate points). The auditor can backtrace from these
-      candidate points to find pathways allowing access from untrusted
-      input.
+      Locate all calls to interesting and potentially insecure API functions (candidate points). The auditor can backtrace from these candidate points to find pathways allowing access from untrusted input.
     severity: INFO
     languages:
       - c

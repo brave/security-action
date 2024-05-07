@@ -17,10 +17,7 @@ rules:
       # NOTE: common issues with comments are not covered.
       # NOTE: constructs such as assert(var == val) lead to false positives.
     message: >-
-      The programmer accidentally uses the wrong operator, which changes
-      the application logic in security-relevant ways.
-      These types of errors are generally the result of a typo.
-      This rule also covers some other common typo patterns. (see $EXPR1)
+      The programmer accidentally uses the wrong operator, which changes the application logic in security-relevant ways. These types of errors are generally the result of a typo. This rule also covers some other common typo patterns. (see $EXPR1)
     severity: WARNING
     languages:
       - c
@@ -32,15 +29,15 @@ rules:
       # - pattern: $EXPR1 == $EXPR2;
       # = instead of == in comparison
       - patterns:
-        - pattern: if (<... $EXPR1 = $EXPR2 ...>) ...
-        - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) == $EXPR ...>) ...
-        - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) != $EXPR ...>) ...
-        - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) < $EXPR ...>) ...
-        - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) <= $EXPR ...>) ...
-        - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) > $EXPR ...>) ...
-        - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) >= $EXPR ...>) ...
-        - pattern-not-regex: "if\\s*\\(\\s*[_a-zA-Z][_a-zA-Z0-9:<>]{0,40}\\**\\s+\\**[_a-zA-Z][_a-zA-Z0-9]{0,30}\\s*"
-        - pattern-not-regex: "if\\s*\\(\\s*[_a-zA-Z][_a-zA-Z0-9*:]{0,40}<[_a-zA-Z][_a-zA-Z0-9:]{0,30}>\\s*"
+          - pattern: if (<... $EXPR1 = $EXPR2 ...>) ...
+          - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) == $EXPR ...>) ...
+          - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) != $EXPR ...>) ...
+          - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) < $EXPR ...>) ...
+          - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) <= $EXPR ...>) ...
+          - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) > $EXPR ...>) ...
+          - pattern-not-inside: if (<... ($EXPR1 = $EXPR2) >= $EXPR ...>) ...
+          - pattern-not-regex: "if\\s*\\(\\s*[_a-zA-Z][_a-zA-Z0-9:<>]{0,40}\\**\\s+\\**[_a-zA-Z][_a-zA-Z0-9]{0,30}\\s*"
+          - pattern-not-regex: "if\\s*\\(\\s*[_a-zA-Z][_a-zA-Z0-9*:]{0,40}<[_a-zA-Z][_a-zA-Z0-9:]{0,30}>\\s*"
       # REMOVED: False Positive on Chrome, & instead of && in comparison
       # - patterns:
       #  - pattern: if (<... $EXPR1 & $EXPR2 ...>) ...
@@ -67,11 +64,10 @@ rules:
       - pattern: for ($EXPR1; $EXPR2; $EXPR3);
       # accidental octal conversion
       - patterns:
-        - pattern-either:
-          - pattern: $TYPE $ARR[$SIZE];
-          - pattern: $TYPE $ARR[$SIZE] = $EXPR;
-        - metavariable-regex:
-            metavariable: $SIZE
-            regex: '^0.*'
-      # missing {} in if() statement (too many false positives)
-        # - pattern: if ($COND) $BODY;
+          - pattern-either:
+              - pattern: $TYPE $ARR[$SIZE];
+              - pattern: $TYPE $ARR[$SIZE] = $EXPR;
+          - metavariable-regex:
+              metavariable: $SIZE
+              regex: '^0.*'
+              # - pattern: if ($COND) $BODY;

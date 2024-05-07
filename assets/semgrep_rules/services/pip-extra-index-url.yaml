@@ -8,9 +8,7 @@ rules:
       confidence: LOW
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/pip-extra-index-url.yaml
     message: >-
-      Use --index-url instead of --extra-index-url to avoid dependency confusion.
-      When using --extra-index-url, pip looks on pypi.org as well as the private index.
-      It may install a malicious package from pypi.org with the same name as your private package instead of the package in your private index.
+      Use --index-url instead of --extra-index-url to avoid dependency confusion. When using --extra-index-url, pip looks on pypi.org as well as the private index. It may install a malicious package from pypi.org with the same name as your private package instead of the package in your private index.
     severity: INFO
     languages:
       - generic
