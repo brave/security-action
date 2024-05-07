@@ -134,78 +134,16 @@ runs:
             const number = commentsNumber({context, github})
             cleanupComments({context, github})
             return number
-
     - id: unverified-commits
-      if: ${{ github.event_name == 'pull_request' }}
+      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
           script: |
-            const commits = await github.rest.pulls.listCommits({
-              pull_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
-            const previousCommentsQuery = `query ($owner: String!, $name: String!, $prnumber: Int!) {
-              repository(owner: $owner, name: $name) {
-                pullRequest(number: $prnumber) {
-                  comments(last: 50) {
-                    nodes {
-                      id
-                      author {
-                        login
-                      }
-                      body
-                    }
-                  }
-                }
-              }
-            }`;
-            const deleteMutation = `mutation($comment:ID!) {
-              deleteIssueComment(input: {id:$comment}) {
-                clientMutationId
-              }
-            }`;
-            const previousComments = await github.graphql(previousCommentsQuery, {
-              owner: context.repo.owner,
-              name: context.repo.repo,
-              prnumber: context.issue.number
-            });
-            const commentPrefix = "The following commits were not [verified](https://github.com/brave/handbook/blob/master/development/commit-and-tag-signing.md):\n";
-            const actionPreviousComments = previousComments.repository.pullRequest.comments.nodes.filter(
-              c => c.author.login === "github-actions" && c.body.startsWith(commentPrefix)
-            );
-            const unverifiedCommits = commits.data.filter(c => c.commit.verification.verified !== true);
-            if (unverifiedCommits.length) {
-              const commitList = unverifiedCommits.map(c => `${c.sha} (${c.commit.verification.reason})`).join("\n");
-              const body = commentPrefix + commitList;
-              var commentExists = false;
-              for (const comment of actionPreviousComments) {
-                if (comment.body == body) {
-                  console.log("Good comment found:", comment);
-                  commentExists = true;
-                } else {
-                  console.log("Deleting", comment);
-                  await github.graphql(deleteMutation, {comment: comment.id});
-                }
-              }
-              if (!commentExists) {
-                console.log("Creating new comment");
-                github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  body: body,
-                });
-                return "UNVERIFIED-CHANGED";  // A new comment was created
-              }
-              return "UNVERIFIED";
-            } else {
-              console.log("Commits verified");
-              for (const comment of actionPreviousComments) {
-                console.log("Deleting", comment);
-                await github.graphql(deleteMutation, {comment: comment.id});
-              }
-            }
+            const actionPath = '${{ github.action_path }}'
+            
+            const unverifiedCommits = require(`${actionPath}/src/unverifiedCommits.js`)
+
+            return unverifiedCommits({context, github})
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
