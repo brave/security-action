@@ -126,67 +126,15 @@ runs:
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
           script: |
-            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
-              repository(owner:$owner, name:$name) { 
-                pullRequest(number:$prnumber) {
-                  reviewThreads(last:100) {
-                    nodes {
-                      isOutdated
-                      comments(first:1) {
-                        totalCount
-                        nodes {
-                          id
-                          author {
-                            login
-                          }
-                          body
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }`;
-            const variables = {
-              owner: context.repo.owner,
-              name: context.repo.repo,
-              prnumber: context.issue.number
-            }
-            const result = await github.graphql(query, variables);
-            const threads = result.repository.pullRequest.reviewThreads;
-            const deletableComments = threads.nodes.filter(
-              reviewThread => (
-                reviewThread.isOutdated === true &&
-                reviewThread.comments.totalCount === 1 &&
-                reviewThread.comments.nodes[0].author.login === "github-actions" &&
-                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
-              )
-            ).map(
-              reviewThread => (
-                reviewThread.comments.nodes[0].id
-              )
-            );
-            console.log("Delete", deletableComments);
-            if (deletableComments) {
-              deleteMutation = `mutation($comment:ID!) {
-                deletePullRequestReviewComment(input: {id:$comment}) {
-                  clientMutationId
-                }
-              }`;
-              for (const commentId of deletableComments) {
-                console.log("Deleting %s", commentId);
-                await github.graphql(deleteMutation, {comment: commentId});
-              }
-            }
-            var commentsNumber = threads.nodes.filter(
-              reviewThread => (
-                !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
-                reviewThread.comments.nodes[0].author.login === "github-actions" &&
-                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
-              )
-            ).length;
-            console.log("Comments: %d", commentsNumber);
-            return commentsNumber;
+            const actionPath = '${{ github.action_path }}'
+            
+            const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
+            const cleanupComments = require(`${actionPath}/src/cleanupComments.js`)
+
+            const number = commentsNumber({context, github})
+            cleanupComments({context, github})
+            return number
+
     - id: unverified-commits
       if: ${{ github.event_name == 'pull_request' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -327,43 +275,9 @@ runs:
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
           script: |
-            var query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
-              repository(owner:$owner, name:$name) { 
-                pullRequest(number:$prnumber) {
-                  reviewThreads(last:100) {
-                    nodes {
-                      isOutdated
-                      comments(first:1) {
-                        totalCount
-                        nodes {
-                          author {
-                            login
-                          }
-                          body
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }`;
-            const variables = {
-              owner: context.repo.owner,
-              name: context.repo.repo,
-              prnumber: context.issue.number
-            }
-            const result = await github.graphql(query, variables);
-            const threads = result.repository.pullRequest.reviewThreads;
-            var commentsNumber = threads.nodes.filter(
-              reviewThread => (
-                !(reviewThread.isOutdated === true && reviewThread.comments.totalCount === 1) &&
-                reviewThread.comments.nodes[0].author.login === "github-actions" &&
-                reviewThread.comments.nodes[0].body.includes("<br>Cc ")
-              )
-            ).length;
-            console.log("Comments: %d", commentsNumber);
-            return commentsNumber;
-
+            const actionPath = '${{ github.action_path }}'
+            const commentsNumber = require(`${actionPath}/src/commentsNumber.js`)
+            return commentsNumber({context, github})
     - id: assignees-after
       if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
