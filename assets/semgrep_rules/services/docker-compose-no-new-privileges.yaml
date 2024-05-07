@@ -1,56 +1,55 @@
 rules:
-- id: docker-compose-no-new-privileges
-  patterns:
-  - pattern-inside: |
-      version: ...
-      ...
-      services:
-        ...
-  - pattern: |
-      $SERVICE:
-        ...
-        image: ...
-  - pattern-not: |
-      $SERVICE:
-        ...
-        image: ...
-        ...
-        security_opt:
-          - ...
-          - no-new-privileges=true
-          - ...
-  - pattern-not: |
-      $SERVICE:
-        ...
-        extends: ...
-  - focus-metavariable: "$SERVICE"
-  message: Service '$SERVICE' allows for privilege escalation via setuid or setgid
-    binaries. Add 'no-new-privileges=true' in 'security_opt' to prevent this.
-  metadata:
-    cwe:
-    - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
-    owasp:
-    - A05:2021 - Security Misconfiguration
-    - A06:2017 - Security Misconfiguration
-    references:
-    - https://docs.docker.com/engine/reference/run/#security-configuration
-    - https://raesene.github.io/blog/2019/06/01/docker-capabilities-and-no-new-privs/
-    - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
-    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
-    category: security
-    technology:
-    - docker-compose
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: HIGH
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Improper Authorization
-    source-rule-url: https://semgrep.dev/r/yaml.docker-compose.security.no-new-privileges.no-new-privileges
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/docker-compose-no-new-privileges.yaml
-  languages:
-  - yaml
-  severity: WARNING
+  - id: docker-compose-no-new-privileges
+    patterns:
+      - pattern-inside: |
+          version: ...
+          ...
+          services:
+            ...
+      - pattern: |
+          $SERVICE:
+            ...
+            image: ...
+      - pattern-not: |
+          $SERVICE:
+            ...
+            image: ...
+            ...
+            security_opt:
+              - ...
+              - no-new-privileges=true
+              - ...
+      - pattern-not: |
+          $SERVICE:
+            ...
+            extends: ...
+      - focus-metavariable: "$SERVICE"
+    message: Service '$SERVICE' allows for privilege escalation via setuid or setgid binaries. Add 'no-new-privileges=true' in 'security_opt' to prevent this.
+    metadata:
+      cwe:
+        - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
+      owasp:
+        - A05:2021 - Security Misconfiguration
+        - A06:2017 - Security Misconfiguration
+      references:
+        - https://docs.docker.com/engine/reference/run/#security-configuration
+        - https://raesene.github.io/blog/2019/06/01/docker-capabilities-and-no-new-privs/
+        - https://www.kernel.org/doc/Documentation/prctl/no_new_privs.txt
+        - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html#rule-4-add-no-new-privileges-flag
+      category: security
+      technology:
+        - docker-compose
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: HIGH
+      confidence: LOW
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+      vulnerability_class:
+        - Improper Authorization
+      source-rule-url: https://semgrep.dev/r/yaml.docker-compose.security.no-new-privileges.no-new-privileges
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/docker-compose-no-new-privileges.yaml
+    languages:
+      - yaml
+    severity: WARNING

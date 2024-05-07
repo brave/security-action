@@ -8,17 +8,16 @@ rules:
         fmarier
     pattern-either:
       - patterns:
-        - pattern: $TYPE $VAR = ...;
-        - metavariable-regex:
-            metavariable: $VAR
-            regex: origin
-        - metavariable-regex:
-            metavariable: $TYPE
-            regex: ^(G|K)URL$
+          - pattern: $TYPE $VAR = ...;
+          - metavariable-regex:
+              metavariable: $VAR
+              regex: origin
+          - metavariable-regex:
+              metavariable: $TYPE
+              regex: ^(G|K)URL$
       - pattern: ((GURL)$VAR).DeprecatedGetOriginAsURL();
       - pattern: SecurityOrigin::Create((KURL $VAR));
       - pattern: SecurityOrigin::Create((GURL $VAR));
-
     message: |
       Use origin (rather than URL) for security decisions.
 

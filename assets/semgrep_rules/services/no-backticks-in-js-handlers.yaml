@@ -5,9 +5,9 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/no-backticks-in-js-handlers.yaml
     patterns:
       - pattern-either:
-        - pattern-inside: $HANDLER="..."
-        - pattern-inside: $HANDLER='...'
-        - pattern-inside: $HANDLER=...
+          - pattern-inside: $HANDLER="..."
+          - pattern-inside: $HANDLER='...'
+          - pattern-inside: $HANDLER=...
       - pattern-regex: '`{{[^}]+}}`'
       - metavariable-regex:
           metavariable: $HANDLER

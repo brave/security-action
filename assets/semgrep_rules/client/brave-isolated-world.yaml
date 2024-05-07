@@ -19,7 +19,7 @@ rules:
         - "*.cc"
         - "*.h"
         - "*.hh"
-        - "*.hcc" 
+        - "*.hcc"
     pattern-either:
       - pattern-regex: ISOLATED_WORLD_ID_CONTENT_END
       - pattern-regex: ISOLATED_WORLD_ID_BRAVE_INTERNAL

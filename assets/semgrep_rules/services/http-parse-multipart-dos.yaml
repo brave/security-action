@@ -19,8 +19,8 @@ rules:
           $R.Body = http.MaxBytesReader($W, <...$R.Body...>, $LIMIT)
           ...
     fix: $R.Body = http.MaxBytesReader($W, $R.Body, $MAXSIZE)
-    message: |
-        ParseMultipartForm is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body.
-        The specified limit of $MAXSIZE is the maximum amount stored in memory.
-        The remainder is still parsed and stored on disk in temporary files.
-        Wrapping $R.Body with http.MaxBytesReader prevents this wasting of server resources.
+    message: |-
+      ParseMultipartForm is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body.
+      The specified limit of $MAXSIZE is the maximum amount stored in memory.
+      The remainder is still parsed and stored on disk in temporary files.
+      Wrapping $R.Body with http.MaxBytesReader prevents this wasting of server resources.

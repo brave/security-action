@@ -1,40 +1,40 @@
 rules:
-- id: go-insecure-templates
-  patterns:
-  - pattern-inside: |
-      import "html/template"
-      ...
-  - pattern-either:
-    - pattern: var $VAR template.HTML = $EXP
-    - pattern: var $VAR template.CSS = $EXP
-    - pattern: var $VAR template.HTMLAttr = $EXP
-    - pattern: var $VAR template.JS = $EXP
-    - pattern: var $VAR template.JSStr = $EXP
-    - pattern: var $VAR template.Srcset = $EXP
-  message: >-
-    usage of insecure template types. They are documented as a security risk. See https://golang.org/pkg/html/template/#HTML.
-  severity: WARNING
-  metadata:
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/insecure-types.yaml
-    original_source: https://github.com/returntocorp/semgrep-rules/blob/5b098c252feec688d243cef046d07597a546c25b/go/template/security/insecure-types.yaml
-    cwe:
-    - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
-    references:
-    - https://golang.org/pkg/html/template/#HTML
-    - https://twitter.com/empijei/status/1275177219011350528
-    category: security
-    technology:
-    - template
-    confidence: LOW
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-  languages:
-  - go
+  - id: go-insecure-templates
+    patterns:
+      - pattern-inside: |
+          import "html/template"
+          ...
+      - pattern-either:
+          - pattern: var $VAR template.HTML = $EXP
+          - pattern: var $VAR template.CSS = $EXP
+          - pattern: var $VAR template.HTMLAttr = $EXP
+          - pattern: var $VAR template.JS = $EXP
+          - pattern: var $VAR template.JSStr = $EXP
+          - pattern: var $VAR template.Srcset = $EXP
+    message: >-
+      usage of insecure template types. They are documented as a security risk. See https://golang.org/pkg/html/template/#HTML.
+    severity: WARNING
+    metadata:
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/insecure-types.yaml
+      original_source: https://github.com/returntocorp/semgrep-rules/blob/5b098c252feec688d243cef046d07597a546c25b/go/template/security/insecure-types.yaml
+      cwe:
+        - "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      references:
+        - https://golang.org/pkg/html/template/#HTML
+        - https://twitter.com/empijei/status/1275177219011350528
+      category: security
+      technology:
+        - template
+      confidence: LOW
+      owasp:
+        - A07:2017 - Cross-Site Scripting (XSS)
+        - A03:2021 - Injection
+      cwe2022-top25: true
+      cwe2021-top25: true
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: MEDIUM
+      license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    languages:
+      - go

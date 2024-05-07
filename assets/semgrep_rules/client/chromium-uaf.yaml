@@ -1,50 +1,49 @@
 rules:
-- id: chromium-unretained-uaf
-  patterns:
-    - pattern: base::Unretained(...)
-    - pattern-not-inside: web_ui()->RegisterMessageCallback(...)
-    - pattern-not-inside: pref_change_registrar_.Add(...)
-    - pattern-not-inside: receiver_.set_disconnect_handler(...)
-    - pattern-not-inside: receiver_.set_disconnect_with_reason_handler(...)
-    - pattern-not-inside: remote_.set_disconnect_handler(...)
-    - pattern-not-inside: remote_.set_disconnect_with_reason_handler(...)
-    - pattern-not-inside: timer_.Start(...)
+  - id: chromium-unretained-uaf
+    patterns:
+      - pattern: base::Unretained(...)
+      - pattern-not-inside: web_ui()->RegisterMessageCallback(...)
+      - pattern-not-inside: pref_change_registrar_.Add(...)
+      - pattern-not-inside: receiver_.set_disconnect_handler(...)
+      - pattern-not-inside: receiver_.set_disconnect_with_reason_handler(...)
+      - pattern-not-inside: remote_.set_disconnect_handler(...)
+      - pattern-not-inside: remote_.set_disconnect_with_reason_handler(...)
+      - pattern-not-inside: timer_.Start(...)
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-uaf.yaml
+      assignees: |
+        thypon
+        goodov
+        iefremov
+    message: |
+      base::Unretained is most of the time unrequited, and a weak reference is better suited for secure coding.
+      Consider swapping Unretained for a weak reference.
+      base::Unretained usage may be acceptable when a callback owner is guaranteed
+      to be destroyed with the object base::Unretained is pointing to, for example:
 
-  metadata:
-    author: Andrea Brancaleoni <abc@pompel.me>
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-uaf.yaml
-    assignees: |
-      thypon
-      goodov
-      iefremov
-  message: |
-    base::Unretained is most of the time unrequited, and a weak reference is better suited for secure coding.
-    Consider swapping Unretained for a weak reference.
-    base::Unretained usage may be acceptable when a callback owner is guaranteed
-    to be destroyed with the object base::Unretained is pointing to, for example:
-    
-    - PrefChangeRegistrar
-    - base::*Timer
-    - mojo::Receiver
-    - any other class member destroyed when the class is deallocated
-  languages: [cpp, c]
-  severity: WARNING
-- id: chromium-bind-uaf
-  metadata:
-    author: Andrea Brancaleoni <abc@pompel.me>
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-uaf.yaml
-    assignees: |
-      thypon
-      goodov
-      iefremov
-  patterns:
-    - patterns:
-      - pattern-either:
-        - pattern: base::BindOnce($FIRST_ARG, $...REST_ARGS)
-        - pattern: base::BindRepeating($FIRST_ARG, $...REST_ARGS)
-      - metavariable-comparison:
-          comparison: not re.match("::", str($FIRST_ARG)) and re.match("this", str($...REST_ARGS))
-  message: |
-    BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle.<br/>Verify the occurrences manually.
-  languages: [cpp, c]
-  severity: WARNING
+      - PrefChangeRegistrar
+      - base::*Timer
+      - mojo::Receiver
+      - any other class member destroyed when the class is deallocated
+    languages: [cpp, c]
+    severity: WARNING
+  - id: chromium-bind-uaf
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-uaf.yaml
+      assignees: |
+        thypon
+        goodov
+        iefremov
+    patterns:
+      - patterns:
+          - pattern-either:
+              - pattern: base::BindOnce($FIRST_ARG, $...REST_ARGS)
+              - pattern: base::BindRepeating($FIRST_ARG, $...REST_ARGS)
+          - metavariable-comparison:
+              comparison: not re.match("::", str($FIRST_ARG)) and re.match("this", str($...REST_ARGS))
+    message: |
+      BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle.<br/>Verify the occurrences manually.
+    languages: [cpp, c]
+    severity: WARNING

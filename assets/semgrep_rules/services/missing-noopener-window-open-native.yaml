@@ -1,4 +1,4 @@
-rules: 
+rules:
   - id: missing-noopener-window-open-native
     message: window.open should enforce `noopener` to avoid tab-nabbing vulnerabilities.
     metadata:
@@ -29,18 +29,18 @@ rules:
     patterns:
       - pattern-either:
           - patterns:
-            - pattern-either:
-              - pattern: window.open($...URL)
-              - pattern: document.open($...URL)
-              - pattern: open($...URL)
-            - metavariable-comparison:
-                metavariable: $...URL
-                comparison: not re.match('.*(chrome|brave)(-untrusted)?://.*', str($...URL)) and re.match('^([^,]*|[^,]*,[^,]*)$', str($...URL))
+              - pattern-either:
+                  - pattern: window.open($...URL)
+                  - pattern: document.open($...URL)
+                  - pattern: open($...URL)
+              - metavariable-comparison:
+                  metavariable: $...URL
+                  comparison: not re.match('.*(chrome|brave)(-untrusted)?://.*', str($...URL)) and re.match('^([^,]*|[^,]*,[^,]*)$', str($...URL))
           - patterns:
-            - pattern-either:
-                - pattern: window.open($URL, $TARGET, $FEATURES, ...)
-                - pattern: document.open($URL, $TARGET, $FEATURES, ...)
-                - pattern: open($URL, $TARGET, $FEATURES, ...)
-            - metavariable-comparison:
-                metavariable: $...FEATURES
-                comparison: not re.match(".*no(opener|referrer).*", str($FEATURES))
+              - pattern-either:
+                  - pattern: window.open($URL, $TARGET, $FEATURES, ...)
+                  - pattern: document.open($URL, $TARGET, $FEATURES, ...)
+                  - pattern: open($URL, $TARGET, $FEATURES, ...)
+              - metavariable-comparison:
+                  metavariable: $...FEATURES
+                  comparison: not re.match(".*no(opener|referrer).*", str($FEATURES))

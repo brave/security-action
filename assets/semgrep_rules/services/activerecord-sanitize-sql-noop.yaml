@@ -2,8 +2,8 @@ rules:
   - id: activerecord-sanitize-sql-noop
     patterns:
       - pattern-either:
-        - pattern: ActiveRecord::Base.$FUNC($STR)
-        - pattern: $FUNC($STR)
+          - pattern: ActiveRecord::Base.$FUNC($STR)
+          - pattern: $FUNC($STR)
       - metavariable-regex:
           metavariable: $STR
           regex: "^[^[]"
@@ -16,7 +16,7 @@ rules:
       The method's intended use is to safely insert variables into a string containing '?' or ':param', producing a valid SQL fragment for use where parameterized queries will not work.
       This method will NOT sanitize just a SQL string.
       User input here is likely a SQL injection vulnerability.
-    languages: 
+    languages:
       - ruby
     severity: INFO
     metadata:

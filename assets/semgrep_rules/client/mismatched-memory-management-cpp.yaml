@@ -14,83 +14,66 @@ rules:
       # mmap()/munmap() are not covered.
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/mismatched-memory-management-cpp.yaml
     message: >-
-      The software attempts to return a memory resource to the system, but
-      it calls a release function that is not compatible with the function
-      that was originally used to allocate that resource.
-      When the memory management functions are mismatched, the consequences
-      may be as severe as code execution, memory corruption, or program
-      crash. Consequences and ease of exploit will vary depending on the
-      implementation of the routines and the object being managed.
-      Due to inherent limitations of Semgrep, this rule might generate many
-      false positives and should therefore be customized for your codebase.
+      The software attempts to return a memory resource to the system, but it calls a release function that is not compatible with the function that was originally used to allocate that resource. When the memory management functions are mismatched, the consequences may be as severe as code execution, memory corruption, or program crash. Consequences and ease of exploit will vary depending on the implementation of the routines and the object being managed. Due to inherent limitations of Semgrep, this rule might generate many false positives and should therefore be customized for your codebase.
     severity: INFO
     languages:
       - cpp
     pattern-either:
       # free
       - patterns:
-        - pattern: free($PTR);
-        - pattern-not-inside: |
-            $PTR = malloc(...);
-            ...
-            free($PTR);
-        - pattern-not-inside: |
-            $PTR = ($CAST)malloc(...);
-            ...
-            free($PTR);
-        - pattern-not-inside: |
-            $PTR = calloc(...);
-            ...
-            free($PTR);
-        - pattern-not-inside: |
-            $PTR = ($CAST)calloc(...);
-            ...
-            free($PTR);
-        - pattern-not-inside: |
-            $PTR = realloc(...);
-            ...
-            free($PTR);
-        - pattern-not-inside: |
-            $PTR = ($CAST)realloc(...);
-            ...
-            free($PTR); 
-        - pattern-not-inside: |
-            $PTR = strdup(...);
-            ...
-            free($PTR); 
-        - pattern-not-inside: |
-            $PTR = strndup(...);
-            ...
-            free($PTR); 
+          - pattern: free($PTR);
+          - pattern-not-inside: |
+              $PTR = malloc(...);
+              ...
+              free($PTR);
+          - pattern-not-inside: |
+              $PTR = ($CAST)malloc(...);
+              ...
+              free($PTR);
+          - pattern-not-inside: |
+              $PTR = calloc(...);
+              ...
+              free($PTR);
+          - pattern-not-inside: |
+              $PTR = ($CAST)calloc(...);
+              ...
+              free($PTR);
+          - pattern-not-inside: |
+              $PTR = realloc(...);
+              ...
+              free($PTR);
+          - pattern-not-inside: "$PTR = ($CAST)realloc(...);\n...\nfree($PTR); \n"
+          - pattern-not-inside: "$PTR = strdup(...);\n...\nfree($PTR); \n"
+          - pattern-not-inside: "$PTR = strndup(...);\n...\nfree($PTR); \n"
       # delete[]
       - patterns:
-        - pattern: delete[]($PTR);
-        - pattern-not-inside: |
-            $PTR = new $OBJ[$SIZE];
-            ...
-            delete[]($PTR);
-        - pattern-not: delete[](this);
-        - metavariable-regex:
-            metavariable: $PTR
-            regex: .
+          - pattern: delete[]($PTR);
+          - pattern-not-inside: |
+              $PTR = new $OBJ[$SIZE];
+              ...
+              delete[]($PTR);
+          - pattern-not: delete[](this);
+          - metavariable-regex:
+              metavariable: $PTR
+              regex: .
       # delete
       - patterns:
-        - pattern: delete($PTR);
-        - pattern-not-inside: |
-            $PTR = new $OBJ;
-            ...
-            delete($PTR);
-        - pattern-not: delete(this);
-        - metavariable-regex:
-            metavariable: $PTR
-            regex: .
+          - pattern: delete($PTR);
+          - pattern-not-inside: |
+              $PTR = new $OBJ;
+              ...
+              delete($PTR);
+          - pattern-not: delete(this);
+          - metavariable-regex:
+              metavariable: $PTR
+              regex: .
       - patterns:
-        - pattern: delete($PTR);
-        - pattern-inside: |
-            $PTR = new $OBJ[$SIZE];
-            ...
-            delete($PTR);
-        - pattern-not: delete(this);
-        - metavariable-regex:
-            metavariable: $PTR
-            regex: .
+          - pattern: delete($PTR);
+          - pattern-inside: |
+              $PTR = new $OBJ[$SIZE];
+              ...
+              delete($PTR);
+          - pattern-not: delete(this);
+          - metavariable-regex:
+              metavariable: $PTR
+              regex: .

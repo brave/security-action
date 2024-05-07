@@ -2,16 +2,16 @@ rules:
   - id: android-resolve-intent
     patterns:
       - pattern-either:
-          - pattern: ....resolveService(...,...)
-          - pattern: ....resolveContentProvider(...,...)
-          - pattern: ....resolveActivity(...,...)
-          - pattern: ....resolveActivity(...)
-          - pattern: ....resolveActivityInfo(...,...)
-          - pattern: ....queryBroadcastReceivers(...,...)
-          - pattern: ....queryIntentActivities(...,...)
-          - pattern: ....queryIntentActivityOptions(...,...,...,...)
-          - pattern: ....queryIntentServices(...,...)
-          - pattern: ....queryIntentContentProviders(...,...)
+          - pattern: '....resolveService(...,...)'
+          - pattern: '....resolveContentProvider(...,...)'
+          - pattern: '....resolveActivity(...,...)'
+          - pattern: '....resolveActivity(...)'
+          - pattern: '....resolveActivityInfo(...,...)'
+          - pattern: '....queryBroadcastReceivers(...,...)'
+          - pattern: '....queryIntentActivities(...,...)'
+          - pattern: '....queryIntentActivityOptions(...,...,...,...)'
+          - pattern: '....queryIntentServices(...,...)'
+          - pattern: '....queryIntentContentProviders(...,...)'
     metadata:
       author: Artem Chaikin
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/android-resolve-intent.yaml

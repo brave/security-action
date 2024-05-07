@@ -11,13 +11,11 @@ services:
     g: h
     image: links
     i: j
-
   # ruleid: docker-compose-no-new-privileges
   bad:
     a: b
     image: links
     c: d
-
   # Ignore when extended (hopefully the base file is secure :/)
   # ok: docker-compose-no-new-privileges
   vice:

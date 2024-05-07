@@ -13,10 +13,7 @@ rules:
       # NOTE: we should also check for default blocks that miss the
       # break/return/exit or equivalent statement/function call.
     message: >-
-      The software omits a break statement within a switch or similar
-      construct, causing code associated with multiple conditions to
-      execute. This can cause problems when the programmer only intended to
-      execute code associated with one condition.
+      The software omits a break statement within a switch or similar construct, causing code associated with multiple conditions to execute. This can cause problems when the programmer only intended to execute code associated with one condition.
     severity: INFO
     languages:
       - c

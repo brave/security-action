@@ -69,19 +69,7 @@ runner:
       - "%t:%f:%l %m"
   brakeman:
     name: brakeman
-    cmd: |
-      set -e
-      (if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\.rb$'; then
-        bundle exec brakeman --quiet \
-          --no-exit-on-warn \
-          --no-exit-on-error \
-          --skip-files vendor/ \
-          --skip-libs \
-          --force \
-          --format json \
-        | jq -r '.warnings[] | "\(.confidence[0:1]):\(.file):\(.line) \(.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.link)"' \
-        | $SCRIPTPATH/cleaner.rb
-      fi) 2> reviewdog.brakeman.stderr.log 
+    cmd: "set -e\n(if xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt | grep -q '\\.rb$'; then\n  bundle exec brakeman --quiet \\\n    --no-exit-on-warn \\\n    --no-exit-on-error \\\n    --skip-files vendor/ \\\n    --skip-libs \\\n    --force \\\n    --format json \\\n  | jq -r '.warnings[] | \"\\(.confidence[0:1]):\\(.file):\\(.line) \\(.message | sub(\"\\n\";\"<br/>\";\"g\"))<br><br>Source: \\(.link)\"' \\\n  | $SCRIPTPATH/cleaner.rb\nfi) 2> reviewdog.brakeman.stderr.log \n"
     errorformat:
       - "%t:%f:%l %m"
   npm-audit:
@@ -94,9 +82,6 @@ runner:
       - "%t:%f:%l %m"
   pip-audit:
     name: pip-audit
-    cmd: |
-      set -e
-      (python3 $SCRIPTPATH/pip-audit.py \
-      | $SCRIPTPATH/cleaner.rb) 2> /dev/null # reviewdog.pip-audit.stderr.log 
+    cmd: "set -e\n(python3 $SCRIPTPATH/pip-audit.py \\\n| $SCRIPTPATH/cleaner.rb) 2> /dev/null # reviewdog.pip-audit.stderr.log \n"
     errorformat:
       - "%t:%f:%l %m"

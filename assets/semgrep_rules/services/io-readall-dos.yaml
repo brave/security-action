@@ -19,6 +19,6 @@ rules:
           $R.Body = http.MaxBytesReader($W, <...$R.Body...>, $LIMIT)
           ...
     fix: io.ReadAll(http.MaxBytesReader(w, $R.Body, MAX_REQUEST_SIZE))
-    message: |
-        io.ReadAll is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body.
-        Wrapping $R.Body with http.MaxBytesReader (or io.LimitReader) prevents this wasting of server resources.
+    message: |-
+      io.ReadAll is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body.
+      Wrapping $R.Body with http.MaxBytesReader (or io.LimitReader) prevents this wasting of server resources.

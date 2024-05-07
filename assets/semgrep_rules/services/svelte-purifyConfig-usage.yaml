@@ -9,8 +9,7 @@ rules:
       confidence: LOW
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/svelte-purifyConfig-usages.yaml
     message: >-
-      The code contains new security hotspots (`purifyConfig`) which should be checked manually
-      by a security team member!
+      The code contains new security hotspots (`purifyConfig`) which should be checked manually by a security team member!
     severity: INFO
     languages:
       - generic
