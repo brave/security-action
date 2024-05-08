@@ -1,11 +1,11 @@
 export default async function assigneeRemoved ({
   context,
   github,
-  githubToken
+  githubToken,
+  assignees
 }) {
-  const { ASSIGNEES } = process.env
-  console.log('assignees: %o', ASSIGNEES)
-  const assignees = ASSIGNEES.split(/\s+/).filter((str) => str !== '')
+  console.log('assignees: %o', assignees)
+  const assigneesOutput = assignees.split(/\s+/).filter((str) => str !== '')
   const query = `query ($owner: String!, $name: String!, $prnumber: Int!) {
       repository(owner: $owner, name: $name) {
         pullRequest(number: $prnumber) {
@@ -35,7 +35,7 @@ export default async function assigneeRemoved ({
   const removedByAssigneeEvents = timelineItems.nodes.filter(
     timelineItem => (
       timelineItem.label.name === 'needs-security-review' &&
-        assignees.some((a) => timelineItem.actor.login === a)
+      assigneesOutput.some((a) => timelineItem.actor.login === a)
     )
   ).length
   console.log('RemovedByAssigneeEvents: %d', removedByAssigneeEvents)
