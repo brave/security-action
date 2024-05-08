@@ -5,7 +5,9 @@ rules:
       references:
         - https://github.com/brave/brave-browser/wiki/Security-reviews
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-execute-script-ios.yaml
-      assignees: stoletheminerals
+      assignees: |
+        stoletheminerals
+        bridiver
     message: |
       $FUNC usages should be vet by the security-team.
 
