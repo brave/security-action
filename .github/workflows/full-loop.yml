@@ -25,6 +25,7 @@ jobs:
           baseline_scan_only: false
           gh_to_slack_user_map: ${{ secrets.GH_TO_SLACK_USER_MAP }}
       - run: |
+          set -e
           echo ${{ steps.action.outputs.reviewdog-findings }}
           if ((${{ steps.action.outputs.reviewdog-findings }} < 106)); then
             echo "Too few reviewdog findings"

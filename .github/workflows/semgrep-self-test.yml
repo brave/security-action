@@ -19,7 +19,7 @@ jobs:
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
       - run: |
-          semgrep --test --disable-version-check --strict --metrics=off
+          cd assets/semgrep_rules/; semgrep --test --disable-version-check --strict --metrics=off
         shell: bash
       - run: |
           JSON=$(semgrep \

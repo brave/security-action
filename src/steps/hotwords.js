@@ -1,10 +1,10 @@
 export default async function hotwords ({
   github,
   githubToken,
-  context
+  context,
+  hotwords
 }) {
-  const { HOTWORDS } = process.env
-  const hotwords = HOTWORDS.split('\n').map(s => s.trim()).filter((s) => s !== '')
+  hotwords = hotwords.split('\n').map(s => s.trim()).filter((s) => s !== '')
 
   console.log('hotwords: %s', hotwords)
 

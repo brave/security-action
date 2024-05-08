@@ -62,88 +62,39 @@ inputs:
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
-    value: ${{ steps.run-reviewdog-pr.outputs.findings }}${{ steps.run-reviewdog-full.outputs.findings }}
+    value: ${{ steps.script.outputs.findings }}
   safesvg-count:
     description: number of safesvg findings via reviewdog
-    value: ${{ steps.run-reviewdog-pr.outputs.safesvg_count }}${{ steps.run-reviewdog-full.outputs.safesvg_count }}
+    value: ${{ steps.script.outputs.safesvg_count }}
   tfsec-count:
     description: number of tfsec findings via reviewdog
-    value: ${{ steps.run-reviewdog-pr.outputs.tfsec_count }}${{ steps.run-reviewdog-full.outputs.tfsec_count }}
+    value: ${{ steps.script.outputs.tfsec_count }}
   semgrep-count:
     description: number of semgrep findings via reviewdog
-    value: ${{ steps.run-reviewdog-pr.outputs.semgrep_count }}${{ steps.run-reviewdog-full.outputs.semgrep_count }}
+    value: ${{ steps.script.outputs.semgrep_count }}
   sveltegrep-count:
     description: number of sveltegrep findings via reviewdog
-    value: ${{ steps.run-reviewdog-pr.outputs.sveltegrep_count }}${{ steps.run-reviewdog-full.outputs.sveltegrep_count }}
+    value: ${{ steps.script.outputs.sveltegrep_count }}
   npm-audit-count:
     description: number of npm-audit findings via reviewdog
-    value: ${{ steps.run-reviewdog-pr.outputs.npm_audit_count }}${{ steps.run-reviewdog-full.outputs.npm_audit_count }}
+    value: ${{ steps.script.outputs.npm_audit_count }}
   pip-audit-count:
     description: number of pip-audit findings via reviewdog
-    value: ${{ steps.run-reviewdog-pr.outputs.pip_audit_count }}${{ steps.run-reviewdog-full.outputs.pip_audit_count }}
+    value: ${{ steps.script.outputs.pip_audit_count }}
 runs:
   using: 'composite'
   steps:
-    - name: Get changed files
-      if: ${{ inputs.enabled == 'true' && github.event_name == 'pull_request' }}
-      id: changed-files
-      uses: tj-actions/changed-files@0874344d6ebbaa00a27da73276ae7162fadcaf69 # v44.3.0
-      with:
-        separator: '\0'
-    - name: Store reviewdog enabled for PR
-      if: ${{ inputs.enabled == 'true' && inputs.baseline_scan_only != 'false' && steps.changed-files.outputs.all_changed_files != '' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]' }}
-      id: reviewdog-enabled-pr
-      shell: bash
-      run: |
-        set -x
-        echo "result=true" >> $GITHUB_OUTPUT
-    - name: Store reviewdog enabled for full repo manual run
-      if: ${{ inputs.enabled == 'true' && !(steps.reviewdog-enabled-pr.outputs.result == 'true') && (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') }}
-      id: reviewdog-enabled-full
-      shell: bash
-      run: |
-        set -x
-        echo "result=true" >> $GITHUB_OUTPUT
     - name: Store reviewdog enabled
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' || steps.reviewdog-enabled-full.outputs.result == 'true' }}
+      # inputs.enabled == 'true' && (
+      #   (inputs.baseline_scan_only != 'false' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]') # reviewdog-enabled-pr
+      #   || 
+      #   (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') # reviewdog-enabled-full
+      # )
+      if: ${{ inputs.enabled == 'true' && ( (inputs.baseline_scan_only != 'false' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]') || (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') )}}
       id: reviewdog-enabled
-      shell: bash
-      run: |
-        set -x
-        echo "result=true" >> $GITHUB_OUTPUT
-      # REVIEWDOG Steps
-      # REVIEWDOG Setup
-    - name: Write changed files to file
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      id: write-changed-files
-      shell: bash
-      run: |
-        set -e
-        printf -- '${{ steps.changed-files.outputs.all_changed_files }}' >> ${{ github.action_path }}/assets/all_changed_files.txt
-        printf '${{ steps.changed-files.outputs.any_changed }}'
-    - id: comments-before
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       with:
-        script: |
-          const actionPath = '${{ github.action_path }}'
-
-          const {default: commentsNumber} = await import(`${actionPath}/src/commentsNumber.js`)
-          const {default: cleanupComments} = await import(`${actionPath}/src/cleanupComments.js`)
-
-          const number = await commentsNumber({context, github})
-          await cleanupComments({context, github})
-          return number
-    - id: unverified-commits
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
-        script: |
-          const actionPath = '${{ github.action_path }}'
-
-          const {default: unverifiedCommits} = await import(`${actionPath}/src/unverifiedCommits.js`)
-
-          return await unverifiedCommits({context, github})
+        script: return true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
@@ -169,14 +120,9 @@ runs:
         ruby-version: '3.2'
         bundler-cache: true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      name: Install semgrep & pip-audit
+      id: npm
+      run: cd ${{ github.action_path }}; npm ci
       shell: bash
-      run: |
-        python3 -m pip install --disable-pip-version-check -r ${{ github.action_path }}/requirements.txt
-    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      name: Install xmllint for safesvg
-      shell: bash
-      run: sudo apt-get install -y libxml2-utils
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install tfsec
       uses: jaxxstorm/action-install-gh-release@71d17cb091aa850acb2a1a4cf87258d183eb941b # v1.11.0
@@ -184,159 +130,13 @@ runs:
         repo: aquasecurity/tfsec
         tag: v1.28.1
         cache: enable
-    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && inputs.debug == 'true'}}
-      env:
-        ASSIGNEES: ${{inputs.assignees}}
-      run: ${{ github.action_path }}/assets/debug.sh
-      shell: bash
-      # REVIEWDOG Run
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      name: Run reviewdog
-      id: run-reviewdog-pr
-      shell: bash
-      env:
-        ASSIGNEES: ${{inputs.assignees}}
-        REVIEWDOG_GITHUB_API_TOKEN: ${{ inputs.github_token }}
-        SEC_ACTION_DEBUG: ${{ inputs.debug }}
-        PYPI_INDEX_URL: ${{ inputs.pip_audit_pypi_index_url }}
-        PYPI_INSECURE_HOSTS: ${{ inputs.pip_audit_pypi_insecure_hosts }}
-      run: ${{ github.action_path }}/assets/reviewdog.sh
-    - if: ${{ steps.reviewdog-enabled-full.outputs.result == 'true' }}
-      name: Run reviewdog full
-      id: run-reviewdog-full
-      shell: bash
-      run: unset GITHUB_BASE_REF && ${{ github.action_path }}/assets/reviewdog.sh
-    - id: comments-after
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      id: script
       with:
-        script: |
+        script: |-
           const actionPath = '${{ github.action_path }}'
-          const {default: commentsNumber} = await import(`${actionPath}/src/commentsNumber.js`)
-          return await commentsNumber({context, github})
-    - id: assignees-after
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      env:
-        ASSIGNEES: ${{ inputs.assignees }}
-      with:
-        script: |
-          const actionPath = '${{ github.action_path }}'
-          const {default: assigneesAfter} = await import(`${actionPath}/src/assigneesAfter.js`)
-          return await assigneesAfter({context, github})
-    - id: assignee-removed-label
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      env:
-        ASSIGNEES: ${{ steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result) }}
-      with:
-        script: |
-          const actionPath = '${{ github.action_path }}'
-          const {default: assigneeRemoved} = await import(`${actionPath}/src/assigneeRemoved.js`)
-          return await assigneeRemoved({context, github})
-    - id: description-contains-hotwords
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && github.actor != 'renovate[bot]' }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      env:
-        HOTWORDS: ${{ inputs.hotwords }}
-      with:
-        script: |
-          const actionPath = '${{ github.action_path }}'
-          const {default: hotwords} = await import(`${actionPath}/src/hotwords.js`)
-          return await hotwords({context, github})
-    - id: should-trigger
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && !(steps.assignee-removed-label.outputs.result  == 'true') && ( (steps.comments-before.outputs.result != steps.comments-after.outputs.result) || steps.description-contains-hotwords.outputs.result == 'true') }}
-      shell: bash
-      run: |
-        set -x
-        echo "result=true" >> $GITHUB_OUTPUT
-    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.3
-      if: ${{ steps.unverified-commits.outputs.result == '"UNVERIFIED-CHANGED"' }}
-      with:
-        github_token: ${{ inputs.github_token }}
-        labels: unverified-commits
-    - uses: actions-ecosystem/action-add-labels@18f1af5e3544586314bbe15c0273249c770b2daf # v1.1.3
-      if: ${{ (steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true') }}
-      with:
-        github_token: ${{ inputs.github_token }}
-        labels: needs-security-review
-    - uses: actions-ecosystem/action-add-assignees@a5b84af721c4a621eb9c7a4a95ec20a90d0b88e9 # v1.0.1
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && steps.should-trigger.outputs.result == 'true' }}
-      with:
-        github_token: ${{ inputs.github_token }}
-        assignees: ${{ fromJson(steps.assignees-after.outputs.result) }}
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && hashFiles('reviewdog.fail.log') }}
-      shell: bash
-      run: |
-        set +x
-        echo -e '\033[0;31mThis action encountered an error while reporting the following findings via the Github API:'
-        cat reviewdog.fail.log | sed 's/^/\x1B[0;34m/'
-        echo -e '\033[0;31mThe failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action \033[0m'
-    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && !inputs.slack_token && hashFiles('reviewdog.fail.log') }}
-      shell: bash
-      run: exit 1
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
-      id: reviewdog-fail-log-head
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
-        script: |
-          return '\n'+require('fs').readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      id: assignees-slack
-      env:
-        ASSIGNEES: ${{steps.assignees-after.outputs.result && fromJson(steps.assignees-after.outputs.result)}}
-        GH_TO_SLACK_USER_MAP: ${{ inputs.gh_to_slack_user_map }}
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      with:
-        script: |
-          let githubToSlack = {};
-          try {
-            githubToSlack = JSON.parse(process.env.GH_TO_SLACK_USER_MAP);
-          } catch (e) {
-            console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
-          }
+          const inputs = ${{ toJson(inputs) }}
 
-          const assignees = process.env.ASSIGNEES.toLowerCase().split(/\s+/).map(e => e.trim()).filter(Boolean);
-          const slackAssignees = assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ');
-          core.setSecret(slackAssignees);
-          return slackAssignees;
-    - if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' }}
-      id: actor-slack
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      env:
-        ACTOR: ${{ github.actor }}
-        GH_TO_SLACK_USER_MAP: ${{ inputs.gh_to_slack_user_map }}
-      with:
-        script: |
-          let actor = process.env.ACTOR.toLowerCase();
-          let githubToSlack = {};
-          try {
-            githubToSlack = JSON.parse(process.env.GH_TO_SLACK_USER_MAP);
-          } catch (e) {
-            console.log('GH_TO_SLACK_USER_MAP is not valid JSON');
-          }
-
-          return githubToSlack[actor] ? githubToSlack[actor] : `@${actor}`;
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && hashFiles('reviewdog.fail.log') }}
-      with:
-        slack_token: ${{ inputs.slack_token }}
-        message: |
-          [semgrep] ${{ fromJson(steps.actor-slack.outputs.result) }} action failed, plz take a look. /cc ${{fromJson(steps.assignees-slack.outputs.result)}} ${{ fromJson(steps.reviewdog-fail-log-head.outputs.result) }}
-        channel: secops-hotspots
-        color: red
-        verbose: true
-    - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
-      if: ${{ steps.reviewdog-enabled-pr.outputs.result == 'true' && inputs.slack_token && steps.should-trigger.outputs.result == 'true' }}
-      with:
-        slack_token: ${{ inputs.slack_token }}
-        message: |
-          [semgrep] ${{ fromJson(steps.actor-slack.outputs.result) }} pushed commits. /cc ${{fromJson(steps.assignees-slack.outputs.result)}}
-        channel: secops-hotspots
-        color: green
-        verbose: true
-#    - run: echo ${{ inputs.in-name }}
-#      shell: bash
-#    - id: output-step-id
-#      run: echo "output-name=antani" >> $GITHUB_OUTPUT
-#      shell bash
+          const script = require(`${actionPath}/action.cjs`)
+          await script({github, context, inputs, actionPath, core})

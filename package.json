@@ -11,7 +11,8 @@
     "dependencies": {
         "@octokit/core": "^5.0.2",
         "@slack/web-api": "^7.0.0",
-        "@tryfabric/mack": "^1.2.1"
+        "@tryfabric/mack": "^1.2.1",
+        "markdown-to-txt": "^2.0.1"
     },
     "devDependencies": {
         "standard": "17.1.0"

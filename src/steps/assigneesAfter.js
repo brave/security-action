@@ -1,6 +1,7 @@
 export default async function assigneesAfter ({
   github,
-  context
+  context,
+  assignees
 }) {
   const query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
               repository(owner:$owner, name:$name) { 
@@ -29,7 +30,7 @@ export default async function assigneesAfter ({
   }
   const result = await github.graphql(query, variables)
   const threads = result.repository.pullRequest.reviewThreads
-  const assignees = [...new Set(threads.nodes.filter(
+  const outputAssignees = [...new Set(threads.nodes.filter(
     reviewThread => (
       reviewThread.comments.nodes[0].author.login === 'github-actions' &&
                 reviewThread.comments.nodes[0].body.includes('<br>Cc ')
@@ -40,10 +41,10 @@ export default async function assigneesAfter ({
       .replaceAll('@', '').trim().split(' ')
   ).flat())]
 
-  console.log('assignees: %o', assignees)
-  if (assignees.length > 0) {
-    return assignees.join('\n')
+  console.log('assignees: %o', outputAssignees)
+  if (outputAssignees.length > 0) {
+    return outputAssignees.join('\n')
   } else {
-    return process.env.ASSIGNEES.split(/\s+/).filter((str) => str !== '').join('\n')
+    return assignees.split(/\s+/).filter((str) => str !== '').join('\n')
   }
 }
