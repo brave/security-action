@@ -40,6 +40,10 @@ inputs:
       urlparse
       :disableDigestUpdates
       pinDigest
+      NonCommercial
+      NoDerivs
+      BY-NC
+      BY-ND
   debug:
     description: enables debug output for this action
     required: false
