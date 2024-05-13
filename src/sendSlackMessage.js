@@ -26,9 +26,20 @@ export default async function sendSlackMessage ({
   const { markdownToBlocks } = await import('@tryfabric/mack')
 
   const web = new WebClient(token)
-  const blocks = await markdownToBlocks(message)
+  let blocks = await markdownToBlocks(message)
 
   if (debug) { console.log(blocks) }
+
+  if (blocks.length > 50) {
+    blocks = blocks.slice(0, 49)
+    blocks.push({
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: '...and more'
+      }
+    })
+  }
 
   const result = await web.chat.postMessage({
     username,
