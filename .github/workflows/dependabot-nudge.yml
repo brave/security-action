@@ -44,7 +44,12 @@ jobs:
               minlevel = 'high';
             }
 
-            const messages = await dependabotNudge({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, minlevel: minlevel, githubToSlack: githubToSlack});
+            let messages = await dependabotNudge({debug, org: process.env.GITHUB_REPOSITORY_OWNER, github: github, minlevel: minlevel, githubToSlack: githubToSlack});
+
+            if (messages.length > 50) {
+              messages = messages.slice(0, 49);
+              messages.push('... and more!');
+            }
 
             for (const message of messages) {
               try {
