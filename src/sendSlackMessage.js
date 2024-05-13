@@ -32,6 +32,7 @@ export default async function sendSlackMessage ({
 
   const result = await web.chat.postMessage({
     username,
+    text: `${username} alert`,
     channel,
     blocks
   })
