@@ -1,5 +1,12 @@
 rules:
   - id: license-nonfree
+    metadata:
+      author: Francois Marier <francois@fmarier.org>
+      confidence: LOW
+      assignees: |
+        fmarier
+        thypon
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/licensing.yaml
     message: "Non-free license detected"
     severity: ERROR
     languages:
