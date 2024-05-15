@@ -1,0 +1,9 @@
+rules:
+  - id: license-nonfree
+    message: "Non-free license detected"
+    severity: ERROR
+    languages:
+      - regex
+    patterns:
+      # ruleid: license-nonfree
+      - pattern-regex: (NonCommercial|NoDerivs|BY-NC|BY-ND)
