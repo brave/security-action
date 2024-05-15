@@ -1,0 +1,4 @@
+// ruleid: license-nonfree
+This logo is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license.
+
+See LICENSE.txt for more details.
