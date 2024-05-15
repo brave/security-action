@@ -1,9 +1,10 @@
 rules:
   - id: license-nonfree
     metadata:
-      author: Francois Marier <francois@fmarier.org>
+      author: Francois Marier <francois@brave.com>
       confidence: LOW
       assignees: |
+        diracdeltas
         fmarier
         thypon
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/licensing.yaml
