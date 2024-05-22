@@ -1,0 +1,31 @@
+rules:
+  - id: privacy
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      confidence: LOW
+      assignees: |
+        bridiver
+        arthuredelstein
+        ShivanKaul
+        thypon
+    message: "Privacy claim found"
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.html"
+        - "*.md"
+        - "*.grd"
+        - "*.grdp"
+    severity: WARNING
+    pattern-either:
+      - pattern: "completely private"
+      - pattern: "anonymous"
+      - pattern: "anonymized"
+      - pattern: "military grade"
+      - pattern: "military-grade"
+      - pattern: "totally secure"
+      - pattern: "unbreakable encryption"
+      - pattern: "unhackable"
+      - pattern: "hackerproof"
+      - pattern: "hacker-proof"
