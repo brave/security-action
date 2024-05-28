@@ -157,7 +157,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
 
     const { default: sendSlackMessage } = await import(`${actionPath}/src/sendSlackMessage.js`)
 
-    const message = `Repository: ${process.env.GITHUB_REPOSITORY}\npull-request: ${context.payload.pull_request.html_url}`
+    const message = `Repository: [${process.env.GITHUB_REPOSITORY}](https://github.com/${process.env.GITHUB_REPOSITORY})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}`
 
     let githubToSlack = {}
     try {
@@ -192,10 +192,11 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
         // send error slack message, if there is any error
         await sendSlackMessage({
           token: inputs.slack_token,
-          text: `[security-action] ${actor} action failed, plz take a look. /cc ${slackAssignees} ${reviewdogFailLogHead}`,
+          text: `[error] ${actor} action failed, plz take a look. /cc ${slackAssignees} ${reviewdogFailLogHead}`,
           message,
           channel: '#secops-hotspots',
-          color: 'red'
+          color: 'red',
+          username: 'security-action'
         })
         debug('Sent error slack message')
       } else {
@@ -209,10 +210,11 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
       // Send slack message, if there are any findings
       await sendSlackMessage({
         token: inputs.slack_token,
-        text: `[semgrep] ${actor} pushed commits. /cc ${slackAssignees}`,
+        text: `[security-action] ${actor} pushed commits. /cc ${slackAssignees}`,
         message,
         channel: '#secops-hotspots',
-        color: 'green'
+        color: 'green',
+        username: 'security-action'
       })
       debug('Comments after:', commentsAfter)
     }
