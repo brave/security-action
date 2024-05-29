@@ -44,12 +44,11 @@ inputs:
     description: enables debug output for this action
     required: false
   enabled:
-    type: boolean
     description: may disable the whole action, big red button for emergency cases
-    default: true
+    required: false
   baseline_scan_only:
     description: compare changed files with the base ref, do not scan the entire repo with reviewdog
-    default: true
+    required: false
   pip_audit_pypi_index_url:
     description: Pypi index for pip-audit to use in case you have a private index
     required: false
