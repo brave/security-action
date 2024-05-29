@@ -28,17 +28,33 @@ function runCommand () {
   })
 }
 
-module.exports = async ({ github, context, inputs, actionPath, core, debug }) => {
-  const debugLog = debug ? console.log : () => {}
+module.exports = async ({ github, context, inputs, actionPath, core, debug = false }) => {
+  const { default: getConfig } = await import(`${actionPath}/src/getConfig.js`)
+  const { default: getProperties } = await import(`${actionPath}/src/getProperties.js`)
 
-  if (inputs.enabled !== 'true') { return }
+  const config = await getConfig({ owner: context.repo.owner, repo: context.repo.repo, path: '.github/security-action.json', debug, github })
+  const properties = await getProperties({ owner: context.repo.owner, repo: context.repo.repo, debug, github, prefix: 'security_action_' })
+
+  const options = Object.assign({
+    enabled: 'true',
+    baseline_scan_only: 'true'
+  }, config, properties, inputs)
+
+  options.enabled = options.enabled === 'true'
+  options.baseline_scan_only = options.baseline_scan_only === 'true'
+  options.debug = options.debug ? (options.debug === 'true') : debug
+
+  const debugLog = options.debug ? console.log : () => {}
+
+  if (!options.enabled) { return }
+
   debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
-  const reviewdogEnabledPr = inputs.baseline_scan_only !== 'false' && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.payload.pull_request.draft === false && context.actor !== 'dependabot[bot]'
-  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${inputs.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}, context.payload.pull_request.draft: ${context.payload.pull_request?.draft}`)
+  const reviewdogEnabledPr = options.baseline_scan_only !== 'false' && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.payload.pull_request.draft === false && context.actor !== 'dependabot[bot]'
+  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}, context.payload.pull_request.draft: ${context.payload.pull_request?.draft}`)
   // reviewdog-enabled-full steps
-  const reviewdogEnabledFull = !reviewdogEnabledPr && (inputs.baseline_scan_only === 'false' || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
-  debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${inputs.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
+  const reviewdogEnabledFull = !reviewdogEnabledPr && (options.baseline_scan_only === 'false' || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
+  debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
   // reviewdog-enabled steps
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
   debugLog('Security Action enabled for reviewdog')
@@ -51,10 +67,10 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
   debugLog('Installed xmllint')
 
   // debug step
-  if (inputs.debug === 'true') {
+  if (options.debug) {
     const env = {
       ...process.env,
-      ASSIGNEES: inputs.assignees
+      ASSIGNEES: options.assignees
     }
     await runCommand(`${actionPath}/assets/debug.sh`, { env })
     debugLog('Debug step completed')
@@ -104,11 +120,11 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
     // run-reviewdog-pr step
     const env = {
       ...process.env,
-      ASSIGNEES: inputs.assignees,
-      REVIEWDOG_GITHUB_API_TOKEN: inputs.github_token,
-      SEC_ACTION_DEBUG: inputs.debug,
-      PYPI_INDEX_URL: inputs.pip_audit_pypi_index_url,
-      PYPI_INSECURE_HOSTS: inputs.pip_audit_pypi_insecure_hosts
+      ASSIGNEES: options.assignees,
+      REVIEWDOG_GITHUB_API_TOKEN: options.github_token,
+      SEC_ACTION_DEBUG: options.debug,
+      PYPI_INDEX_URL: options.pip_audit_pypi_index_url,
+      PYPI_INSECURE_HOSTS: options.pip_audit_pypi_insecure_hosts
     }
     await runCommand(`${actionPath}/assets/reviewdog.sh`, { env })
     debugLog('Reviewdog PR step completed')
@@ -119,7 +135,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
 
     // assignees-after step
     const { default: assigneesAfter } = await import(`${actionPath}/src/steps/assigneesAfter.js`)
-    const assigneesAfterVal = await assigneesAfter({ context, github, assignees: inputs.assignees })
+    const assigneesAfterVal = await assigneesAfter({ context, github, assignees: options.assignees })
     debugLog('Assignees after:', assigneesAfterVal)
 
     // assignee-removed-label step
@@ -129,7 +145,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
 
     // add description-contains-hotwords step
     const { default: hotwords } = await import(`${actionPath}/src/steps/hotwords.js`)
-    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]') ? await hotwords({ context, github, hotwords: inputs.hotwords }) : false
+    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]') ? await hotwords({ context, github, hotwords: options.hotwords }) : false
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
@@ -161,7 +177,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
 
     let githubToSlack = {}
     try {
-      githubToSlack = JSON.parse(inputs.gh_to_slack_user_map)
+      githubToSlack = JSON.parse(options.gh_to_slack_user_map)
     } catch (e) {
       console.log('GH_TO_SLACK_USER_MAP is not valid JSON')
     }
@@ -184,14 +200,14 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
       console.log(`${CONSOLE_RED}The failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action ${RESET_CONSOLE_COLOR}`)
       debugLog('Error log printed to console')
 
-      if (inputs.slack_token) {
+      if (options.slack_token) {
         // reviewdog-fail-log-head step
         const reviewdogFailLogHead = '\n' + fs.readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
         debugLog('Reviewdog fail log head:', reviewdogFailLogHead)
 
         // send error slack message, if there is any error
         await sendSlackMessage({
-          token: inputs.slack_token,
+          token: options.slack_token,
           text: `[error] ${actor} action failed, plz take a look. /cc ${slackAssignees} ${reviewdogFailLogHead}`,
           message,
           channel: '#secops-hotspots',
@@ -206,10 +222,10 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug }) =>
       }
     }
 
-    if (inputs.slack_token && shouldTrigger) {
+    if (options.slack_token && shouldTrigger) {
       // Send slack message, if there are any findings
       await sendSlackMessage({
-        token: inputs.slack_token,
+        token: options.slack_token,
         text: `[security-action] ${actor} pushed commits. /cc ${slackAssignees}`,
         message,
         channel: '#secops-hotspots',
