@@ -28,27 +28,27 @@ function runCommand () {
   })
 }
 
-module.exports = async ({ github, context, inputs, actionPath, core }) => {
-  const debug = inputs.debug === 'true' ? console.log : () => {}
+module.exports = async ({ github, context, inputs, actionPath, core, debug }) => {
+  const debugLog = debug ? console.log : () => {}
 
   if (inputs.enabled !== 'true') { return }
-  debug('Security Action enabled')
+  debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
   const reviewdogEnabledPr = inputs.baseline_scan_only !== 'false' && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.payload.pull_request.draft === false && context.actor !== 'dependabot[bot]'
-  debug(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${inputs.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}, context.payload.pull_request.draft: ${context.payload.pull_request?.draft}`)
+  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${inputs.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}, context.payload.pull_request.draft: ${context.payload.pull_request?.draft}`)
   // reviewdog-enabled-full steps
   const reviewdogEnabledFull = !reviewdogEnabledPr && (inputs.baseline_scan_only === 'false' || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
-  debug(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${inputs.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
+  debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${inputs.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
   // reviewdog-enabled steps
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
-  debug('Security Action enabled for reviewdog')
+  debugLog('Security Action enabled for reviewdog')
 
   // Install semgrep & pip-audit
   await runCommand(`pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`, { shell: true })
-  debug('Installed semgrep & pip-audit')
+  debugLog('Installed semgrep & pip-audit')
   // Install xmllint for safesvg
   await runCommand('sudo apt-get install -y libxml2-utils', { shell: true })
-  debug('Installed xmllint')
+  debugLog('Installed xmllint')
 
   // debug step
   if (inputs.debug === 'true') {
@@ -57,7 +57,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
       ASSIGNEES: inputs.assignees
     }
     await runCommand(`${actionPath}/assets/debug.sh`, { env })
-    debug('Debug step completed')
+    debugLog('Debug step completed')
   }
 
   // run-reviewdog-full step
@@ -65,23 +65,23 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
     const env = { ...process.env }
     delete env.GITHUB_BASE_REF
     await runCommand(`${actionPath}/assets/reviewdog.sh`, { env })
-    debug('Reviewdog full step completed')
+    debugLog('Reviewdog full step completed')
   }
 
   if (reviewdogEnabledPr) {
     // changed-files steps
     const { default: pullRequestChangedFiles } = await import(`${actionPath}/src/pullRequestChangedFiles.js`)
     const changedFiles = await pullRequestChangedFiles({ github, owner: context.repo.owner, name: context.repo.repo, prnumber: context.payload.pull_request.number })
-    debug('Changed files:', changedFiles)
+    debugLog('Changed files:', changedFiles)
 
     // Write changed files to file
     fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
-    debug('Wrote changed files to file')
+    debugLog('Wrote changed files to file')
 
     // comments-before steps
     const { default: commentsNumber } = await import(`${actionPath}/src/steps/commentsNumber.js`)
     const { default: cleanupComments } = await import(`${actionPath}/src/steps/cleanupComments.js`)
-    debug('Comments before:', await commentsNumber({ context, github }))
+    debugLog('Comments before:', await commentsNumber({ context, github }))
 
     const commentsBefore = await commentsNumber({ context, github })
     await cleanupComments({ context, github })
@@ -98,7 +98,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
         issue_number: context.issue.number,
         labels: ['unverified-commits']
       })
-      debug('Added unverified-commits label')
+      debugLog('Added unverified-commits label')
     }
 
     // run-reviewdog-pr step
@@ -111,30 +111,30 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
       PYPI_INSECURE_HOSTS: inputs.pip_audit_pypi_insecure_hosts
     }
     await runCommand(`${actionPath}/assets/reviewdog.sh`, { env })
-    debug('Reviewdog PR step completed')
+    debugLog('Reviewdog PR step completed')
 
     // comments-after step
     const commentsAfter = await commentsNumber({ context, github })
-    debug('Comments after:', commentsAfter)
+    debugLog('Comments after:', commentsAfter)
 
     // assignees-after step
     const { default: assigneesAfter } = await import(`${actionPath}/src/steps/assigneesAfter.js`)
     const assigneesAfterVal = await assigneesAfter({ context, github, assignees: inputs.assignees })
-    debug('Assignees after:', assigneesAfterVal)
+    debugLog('Assignees after:', assigneesAfterVal)
 
     // assignee-removed-label step
     const { default: assigneeRemoved } = await import(`${actionPath}/src/steps/assigneeRemoved.js`)
     const assigneeRemovedLabel = await assigneeRemoved({ context, github, assignees: assigneesAfterVal })
-    debug('Assignee removed:', assigneeRemovedLabel)
+    debugLog('Assignee removed:', assigneeRemovedLabel)
 
     // add description-contains-hotwords step
     const { default: hotwords } = await import(`${actionPath}/src/steps/hotwords.js`)
     const descriptionContainsHotwords = (context.actor !== 'renovate[bot]') ? await hotwords({ context, github, hotwords: inputs.hotwords }) : false
-    debug('Description contains hotwords:', descriptionContainsHotwords)
+    debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
     const shouldTrigger = reviewdogEnabledPr && !assigneeRemovedLabel && ((commentsBefore !== commentsAfter) || descriptionContainsHotwords)
-    debug('Should trigger:', shouldTrigger)
+    debugLog('Should trigger:', shouldTrigger)
 
     if (shouldTrigger) {
       // add label step
@@ -144,7 +144,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
         issue_number: context.issue.number,
         labels: ['needs-security-review']
       })
-      debug('Added needs-security-review label')
+      debugLog('Added needs-security-review label')
       // add assignees step
       await github.rest.issues.addAssignees({
         owner: context.repo.owner,
@@ -152,7 +152,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
         issue_number: context.issue.number,
         assignees: assigneesAfterVal.split(/\s+/).filter((str) => str !== '')
       })
-      debug('Added assignees')
+      debugLog('Added assignees')
     }
 
     const { default: sendSlackMessage } = await import(`${actionPath}/src/sendSlackMessage.js`)
@@ -170,7 +170,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
     const assignees = assigneesAfterVal.toLowerCase().split(/\s+/).map(e => e.trim()).filter(Boolean)
     const slackAssignees = assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ')
     core.setSecret(slackAssignees)
-    debug('Slack assignees:', slackAssignees)
+    debugLog('Slack assignees:', slackAssignees)
 
     // actor-slack step
     const actor = githubToSlack[context.actor] ? githubToSlack[context.actor] : `@${context.actor}`
@@ -182,12 +182,12 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
       console.log(`${CONSOLE_RED}This action encountered an error while reporting the following findings via the Github API:`)
       console.log(log)
       console.log(`${CONSOLE_RED}The failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action ${RESET_CONSOLE_COLOR}`)
-      debug('Error log printed to console')
+      debugLog('Error log printed to console')
 
       if (inputs.slack_token) {
         // reviewdog-fail-log-head step
         const reviewdogFailLogHead = '\n' + fs.readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
-        debug('Reviewdog fail log head:', reviewdogFailLogHead)
+        debugLog('Reviewdog fail log head:', reviewdogFailLogHead)
 
         // send error slack message, if there is any error
         await sendSlackMessage({
@@ -198,10 +198,10 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
           color: 'red',
           username: 'security-action'
         })
-        debug('Sent error slack message')
+        debugLog('Sent error slack message')
       } else {
         // throw error if no slack token is provided, and there is an error log
-        debug('Error was thrown and Slack token is missing, exiting eagerly!')
+        debugLog('Error was thrown and Slack token is missing, exiting eagerly!')
         throw new Error('Error was thrown and Slack token is missing, exiting eagerly!')
       }
     }
@@ -216,7 +216,7 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
         color: 'green',
         username: 'security-action'
       })
-      debug('Comments after:', commentsAfter)
+      debugLog('Comments after:', commentsAfter)
     }
   }
 }

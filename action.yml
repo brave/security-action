@@ -133,10 +133,13 @@ runs:
     - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       id: script
+      env:
+        DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
       with:
         script: |-
           const actionPath = '${{ github.action_path }}'
           const inputs = ${{ toJson(inputs) }}
 
           const script = require(`${actionPath}/action.cjs`)
-          await script({github, context, inputs, actionPath, core})
+          await script({github, context, inputs, actionPath, core,
+            debug: process.env.DEBUG === 'true'})
