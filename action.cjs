@@ -32,6 +32,9 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   const { default: getConfig } = await import(`${actionPath}/src/getConfig.js`)
   const { default: getProperties } = await import(`${actionPath}/src/getProperties.js`)
 
+  // delete if empty string in inputs value
+  Object.keys(inputs).forEach(key => inputs[key] === '' && delete inputs[key])
+
   const config = await getConfig({ owner: context.repo.owner, repo: context.repo.repo, path: '.github/security-action.json', debug, github })
   const properties = await getProperties({ owner: context.repo.owner, repo: context.repo.repo, debug, github, prefix: 'security_action_' })
 
