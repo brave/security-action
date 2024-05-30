@@ -55,10 +55,10 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
-  const reviewdogEnabledPr = options.baseline_scan_only !== 'false' && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.payload.pull_request.draft === false && context.actor !== 'dependabot[bot]'
+  const reviewdogEnabledPr = options.baseline_scan_only && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.payload.pull_request.draft === false && context.actor !== 'dependabot[bot]'
   debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}, context.payload.pull_request.draft: ${context.payload.pull_request?.draft}`)
   // reviewdog-enabled-full steps
-  const reviewdogEnabledFull = !reviewdogEnabledPr && (options.baseline_scan_only === 'false' || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
+  const reviewdogEnabledFull = !reviewdogEnabledPr && (!options.baseline_scan_only || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
   debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
   // reviewdog-enabled steps
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
