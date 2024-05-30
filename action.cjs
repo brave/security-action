@@ -46,6 +46,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   const debugLog = options.debug ? console.log : () => {}
 
+  debugLog('Options: ', options)
+
   if (!options.enabled) { return }
 
   debugLog('Security Action enabled')
