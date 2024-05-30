@@ -26,32 +26,31 @@ jobs:
           gh_to_slack_user_map: ${{ secrets.GH_TO_SLACK_USER_MAP }}
       - run: |
           set -e
-          echo ${{ steps.action.outputs.reviewdog-findings }}
-          if ((${{ steps.action.outputs.reviewdog-findings }} < 106)); then
+          if ((${{ fromJson(steps.action.outputs.reviewdog-findings) }} < 106)); then
             echo "Too few reviewdog findings"
             exit 1
           fi
-          if ((${{ steps.action.outputs.safesvg-count }} < 2)); then
+          if ((${{ fromJson(steps.action.outputs.safesvg-count) }} < 2)); then
             echo "Too few safesvg findings"
             exit 1
           fi
-          if ((${{ steps.action.outputs.tfsec-count }} < 4)); then
+          if ((${{ fromJson(steps.action.outputs.tfsec-count) }} < 4)); then
             echo "Too few tfsec findings"
             exit 1
           fi
-          if ((${{ steps.action.outputs.semgrep-count }} < 97)); then
+          if ((${{ fromJson(steps.action.outputs.semgrep-count) }} < 97)); then
             echo "Too few semgrep findings"
             exit 1
           fi
-          if ((${{ steps.action.outputs.sveltegrep-count }} < 3)); then
+          if ((${{ fromJson(steps.action.outputs.sveltegrep-count) }} < 3)); then
             echo "Too few sveltegrep findings"
             exit 1
           fi
-          if ((${{ steps.action.outputs.npm-audit-count }} < 3)); then
+          if ((${{ fromJson(steps.action.outputs.npm-audit-count) }} < 3)); then
             echo "Too few npm-audit findings"
             exit 1
           fi
-          if ((${{ steps.action.outputs.pip-audit-count }} < 2)); then
+          if ((${{ fromJson(steps.action.outputs.pip-audit-count) }} < 2)); then
             echo "Too few pip-audit findings"
             exit 1
           fi
