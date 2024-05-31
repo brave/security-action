@@ -16,30 +16,13 @@ inputs:
     required: false
   assignees:
     description: assign PR to the people linked
-    default: |
-      thypon
-      bcaller
+    required: false
   hotwords:
     description: body hotwords which should trigger the action
-    default: |
-      password
-      cryptography
-      login
-      policy
-      authentication
-      authorization
-      authn
-      authz
-      oauth
-      secure
-      insecure
-      safebrowsing
-      safe browsing
-      csp
-      url parse
-      urlparse
-      :disableDigestUpdates
-      pinDigest
+    required: false
+  hotwords_enabled:
+    description: control if the hotwords should trigger the action
+    required: false
   debug:
     description: enables debug output for this action
     required: false
