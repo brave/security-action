@@ -5,6 +5,27 @@ const CONSOLE_BLUE = '\x1B[0;34m'
 const CONSOLE_RED = '\x1b[0;31m'
 const RESET_CONSOLE_COLOR = '\x1b[0m'
 
+const ASSIGNEES = `thypon
+bcaller`
+const HOTWORDS = `password
+cryptography
+login
+policy
+authentication
+authorization
+authn
+authz
+oauth
+secure
+insecure
+safebrowsing
+safe browsing
+csp
+url parse
+urlparse
+:disableDigestUpdates
+pinDigest`
+
 function runCommand () {
   const args = Array.prototype.slice.call(arguments)
   return new Promise((resolve, reject) => {
@@ -40,10 +61,14 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   const options = Object.assign({
     enabled: 'true',
-    baseline_scan_only: 'true'
+    baseline_scan_only: 'true',
+    assignees: ASSIGNEES,
+    hotwords: HOTWORDS,
+    hotwords_enabled: 'true'
   }, config, properties, inputs)
 
   options.enabled = options.enabled === 'true'
+  options.hotwords_enabled = options.hotwords_enabled === 'true'
   options.baseline_scan_only = options.baseline_scan_only === 'true'
   options.debug = options.debug ? (options.debug === 'true') : debug
 
@@ -150,7 +175,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
     // add description-contains-hotwords step
     const { default: hotwords } = await import(`${actionPath}/src/steps/hotwords.js`)
-    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]') ? await hotwords({ context, github, hotwords: options.hotwords }) : false
+    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]' && options.hotwords_enabled) ? await hotwords({ context, github, hotwords: options.hotwords }) : false
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
