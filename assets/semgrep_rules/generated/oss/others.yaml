@@ -13,6 +13,8 @@ rules:
     shortlink: https://sg.run/O81B
     semgrep.dev:
       rule:
+        r_id: 11875
+        rv_id: 13242
         rule_id: 6JU6qd
         version_id: l4TzRP
         url: https://semgrep.dev/playground/r/l4TzRP/gitlab.bandit.B108-1
@@ -42,6 +44,8 @@ rules:
     shortlink: https://sg.run/nq5r
     semgrep.dev:
       rule:
+        r_id: 11536
+        rv_id: 73118
         rule_id: 9AUOKZ
         version_id: WrTw4p
         url: https://semgrep.dev/playground/r/WrTw4p/gitlab.bandit.B303-3
@@ -71,6 +75,8 @@ rules:
     shortlink: https://sg.run/E5GB
     semgrep.dev:
       rule:
+        r_id: 11537
+        rv_id: 73119
         rule_id: yyUvLN
         version_id: 0bTXP3
         url: https://semgrep.dev/playground/r/0bTXP3/gitlab.bandit.B303-4
@@ -101,6 +107,8 @@ rules:
     shortlink: https://sg.run/70eQ
     semgrep.dev:
       rule:
+        r_id: 11538
+        rv_id: 73120
         rule_id: r6UkYj
         version_id: K3TXWk
         url: https://semgrep.dev/playground/r/K3TXWk/gitlab.bandit.B303-5
@@ -131,6 +139,8 @@ rules:
     shortlink: https://sg.run/L0KY
     semgrep.dev:
       rule:
+        r_id: 11539
+        rv_id: 73121
         rule_id: bwUOkX
         version_id: qkTy8y
         url: https://semgrep.dev/playground/r/qkTy8y/gitlab.bandit.B303-6
@@ -156,6 +166,8 @@ rules:
     shortlink: https://sg.run/58xj
     semgrep.dev:
       rule:
+        r_id: 11547
+        rv_id: 13275
         rule_id: d8UzRp
         version_id: JdTQjX
         url: https://semgrep.dev/playground/r/JdTQjX/gitlab.bandit.B308.B703
@@ -195,6 +207,8 @@ rules:
     shortlink: https://sg.run/DJ5G
     semgrep.dev:
       rule:
+        r_id: 11552
+        rv_id: 13281
         rule_id: L1U4Yd
         version_id: DkTKjj
         url: https://semgrep.dev/playground/r/DkTKjj/gitlab.bandit.B313.B314.B315.B316.B318.B319.B320.B405.B406.B407.B408.B409.B410
@@ -230,6 +244,8 @@ rules:
     shortlink: https://sg.run/plRe
     semgrep.dev:
       rule:
+        r_id: 11562
+        rv_id: 13295
         rule_id: ReUPvG
         version_id: 1QTeld
         url: https://semgrep.dev/playground/r/1QTeld/gitlab.bandit.B502.B503
@@ -272,6 +288,8 @@ rules:
     shortlink: https://sg.run/8nbQ
     semgrep.dev:
       rule:
+        r_id: 11584
+        rv_id: 56280
         rule_id: NbUAnd
         version_id: rxTqor
         url: https://semgrep.dev/playground/r/rxTqor/gitlab.eslint.detect-object-injection
@@ -306,6 +324,8 @@ rules:
     shortlink: https://sg.run/YeEe
     semgrep.dev:
       rule:
+        r_id: 43714
+        rv_id: 78318
         rule_id: L1UJDJ
         version_id: PkTpOL
         url: https://semgrep.dev/playground/r/PkTpOL/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
@@ -365,6 +385,8 @@ rules:
     shortlink: https://sg.run/6pQo
     semgrep.dev:
       rule:
+        r_id: 43715
+        rv_id: 78319
         rule_id: 8GU0OP
         version_id: JdTJe7
         url: https://semgrep.dev/playground/r/JdTJe7/mobsf.mobsfscan.android.logging.android_logging
@@ -399,6 +421,8 @@ rules:
     shortlink: https://sg.run/p02g
     semgrep.dev:
       rule:
+        r_id: 43718
+        rv_id: 89493
         rule_id: 3qUgDz
         version_id: WrTWOdb
         url: https://semgrep.dev/playground/r/WrTWOdb/mobsf.mobsfscan.android.secrets.hardcoded_api_key
@@ -433,6 +457,8 @@ rules:
     shortlink: https://sg.run/oWp9
     semgrep.dev:
       rule:
+        r_id: 43716
+        rv_id: 89491
         rule_id: gxUpG8
         version_id: BjTXxew
         url: https://semgrep.dev/playground/r/BjTXxew/mobsf.mobsfscan.android.secrets.hardcoded_password
@@ -467,6 +493,8 @@ rules:
     shortlink: https://sg.run/23O0
     semgrep.dev:
       rule:
+        r_id: 43719
+        rv_id: 89494
         rule_id: 4bUJWL
         version_id: 0bTLywO
         url: https://semgrep.dev/playground/r/0bTLywO/mobsf.mobsfscan.android.secrets.hardcoded_secret
@@ -501,6 +529,8 @@ rules:
     shortlink: https://sg.run/zXGG
     semgrep.dev:
       rule:
+        r_id: 43717
+        rv_id: 89492
         rule_id: QrULll
         version_id: DkT6qGO
         url: https://semgrep.dev/playground/r/DkT6qGO/mobsf.mobsfscan.android.secrets.hardcoded_username
@@ -527,6 +557,8 @@ rules:
     shortlink: https://sg.run/XxEK
     semgrep.dev:
       rule:
+        r_id: 43720
+        rv_id: 78324
         rule_id: PeUKq9
         version_id: BjT9GN
         url: https://semgrep.dev/playground/r/BjT9GN/mobsf.mobsfscan.android.word_readable_writable.world_readable
@@ -554,6 +586,8 @@ rules:
     shortlink: https://sg.run/jGlY
     semgrep.dev:
       rule:
+        r_id: 43721
+        rv_id: 78325
         rule_id: JDU4Ab
         version_id: DkTOeW
         url: https://semgrep.dev/playground/r/DkTOeW/mobsf.mobsfscan.android.word_readable_writable.world_writeable
@@ -590,6 +624,8 @@ rules:
     shortlink: https://sg.run/1lOw
     semgrep.dev:
       rule:
+        r_id: 43722
+        rv_id: 78326
         rule_id: 5rUx0W
         version_id: WrTR6P
         url: https://semgrep.dev/playground/r/WrTR6P/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
@@ -638,6 +674,8 @@ rules:
     shortlink: https://sg.run/9jOY
     semgrep.dev:
       rule:
+        r_id: 43723
+        rv_id: 78327
         rule_id: GdUg51
         version_id: 0bT462
         url: https://semgrep.dev/playground/r/0bT462/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
@@ -672,6 +710,8 @@ rules:
     shortlink: https://sg.run/y25x
     semgrep.dev:
       rule:
+        r_id: 43724
+        rv_id: 78328
         rule_id: ReUdYj
         version_id: K3TpO5
         url: https://semgrep.dev/playground/r/K3TpO5/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
@@ -698,6 +738,8 @@ rules:
     shortlink: https://sg.run/rqjn
     semgrep.dev:
       rule:
+        r_id: 43725
+        rv_id: 78329
         rule_id: AbUx1o
         version_id: qkT0KQ
         url: https://semgrep.dev/playground/r/qkT0KQ/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
@@ -732,6 +774,8 @@ rules:
     shortlink: https://sg.run/bERp
     semgrep.dev:
       rule:
+        r_id: 43726
+        rv_id: 78330
         rule_id: BYUoO0
         version_id: l4TLNX
         url: https://semgrep.dev/playground/r/l4TLNX/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
@@ -802,6 +846,8 @@ rules:
     shortlink: https://sg.run/NXEp
     semgrep.dev:
       rule:
+        r_id: 43727
+        rv_id: 78331
         rule_id: DbUL4y
         version_id: YDT38v
         url: https://semgrep.dev/playground/r/YDT38v/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
@@ -830,6 +876,8 @@ rules:
     shortlink: https://sg.run/kRY7
     semgrep.dev:
       rule:
+        r_id: 43728
+        rv_id: 78332
         rule_id: WAUg2K
         version_id: 6xTL0J
         url: https://semgrep.dev/playground/r/6xTL0J/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
@@ -858,6 +906,8 @@ rules:
     shortlink: https://sg.run/wzPY
     semgrep.dev:
       rule:
+        r_id: 43729
+        rv_id: 78333
         rule_id: 0oUZRX
         version_id: o5T759
         url: https://semgrep.dev/playground/r/o5T759/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
@@ -890,6 +940,8 @@ rules:
     shortlink: https://sg.run/xpJz
     semgrep.dev:
       rule:
+        r_id: 43730
+        rv_id: 78334
         rule_id: KxURB0
         version_id: zyTxeb
         url: https://semgrep.dev/playground/r/zyTxeb/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
@@ -932,6 +984,8 @@ rules:
     shortlink: https://sg.run/OjEB
     semgrep.dev:
       rule:
+        r_id: 43731
+        rv_id: 78335
         rule_id: qNUrzk
         version_id: pZTBQn
         url: https://semgrep.dev/playground/r/pZTBQn/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
@@ -968,6 +1022,8 @@ rules:
     shortlink: https://sg.run/egDb
     semgrep.dev:
       rule:
+        r_id: 43732
+        rv_id: 78336
         rule_id: lBUYwL
         version_id: 2KTD6R
         url: https://semgrep.dev/playground/r/2KTD6R/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
@@ -997,6 +1053,8 @@ rules:
     shortlink: https://sg.run/vo4A
     semgrep.dev:
       rule:
+        r_id: 43733
+        rv_id: 78337
         rule_id: PeUKqY
         version_id: X0TvJk
         url: https://semgrep.dev/playground/r/X0TvJk/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
@@ -1023,6 +1081,8 @@ rules:
     shortlink: https://sg.run/dnBZ
     semgrep.dev:
       rule:
+        r_id: 43734
+        rv_id: 78338
         rule_id: JDU4Ag
         version_id: jQTE9J
         url: https://semgrep.dev/playground/r/jQTE9J/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
@@ -1057,6 +1117,8 @@ rules:
     shortlink: https://sg.run/ZZED
     semgrep.dev:
       rule:
+        r_id: 43735
+        rv_id: 89495
         rule_id: 5rUx0n
         version_id: K3TvnrN
         url: https://semgrep.dev/playground/r/K3TvnrN/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
@@ -1092,6 +1154,8 @@ rules:
     shortlink: https://sg.run/nDyX
     semgrep.dev:
       rule:
+        r_id: 43736
+        rv_id: 78340
         rule_id: GdUgKL
         version_id: 9lTjnn
         url: https://semgrep.dev/playground/r/9lTjnn/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
@@ -1120,6 +1184,8 @@ rules:
     shortlink: https://sg.run/EKZw
     semgrep.dev:
       rule:
+        r_id: 43737
+        rv_id: 78341
         rule_id: ReUdZD
         version_id: yeT6dQ
         url: https://semgrep.dev/playground/r/yeT6dQ/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
@@ -1156,6 +1222,8 @@ rules:
     shortlink: https://sg.run/72wZ
     semgrep.dev:
       rule:
+        r_id: 43738
+        rv_id: 78342
         rule_id: AbUxZk
         version_id: rxT58X
         url: https://semgrep.dev/playground/r/rxT58X/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
@@ -1193,6 +1261,8 @@ rules:
     shortlink: https://sg.run/LpZr
     semgrep.dev:
       rule:
+        r_id: 43739
+        rv_id: 78343
         rule_id: BYUonD
         version_id: bZTY4P
         url: https://semgrep.dev/playground/r/bZTY4P/mobsf.mobsfscan.crypto.weak_iv.weak_iv
@@ -1253,6 +1323,8 @@ rules:
     shortlink: https://sg.run/8Xey
     semgrep.dev:
       rule:
+        r_id: 43740
+        rv_id: 78344
         rule_id: DbULZp
         version_id: NdTxQW
         url: https://semgrep.dev/playground/r/NdTxQW/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
@@ -1283,6 +1355,8 @@ rules:
     shortlink: https://sg.run/gPzJ
     semgrep.dev:
       rule:
+        r_id: 43741
+        rv_id: 78345
         rule_id: WAUgAZ
         version_id: kbToZ0
         url: https://semgrep.dev/playground/r/kbToZ0/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
@@ -1313,6 +1387,8 @@ rules:
     shortlink: https://sg.run/QxZ4
     semgrep.dev:
       rule:
+        r_id: 43742
+        rv_id: 78346
         rule_id: 0oUZYJ
         version_id: w8Te0B
         url: https://semgrep.dev/playground/r/w8Te0B/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
@@ -1341,6 +1417,8 @@ rules:
     shortlink: https://sg.run/36wr
     semgrep.dev:
       rule:
+        r_id: 43743
+        rv_id: 78347
         rule_id: KxUR67
         version_id: xyTY3g
         url: https://semgrep.dev/playground/r/xyTY3g/mobsf.mobsfscan.injection.command_injection.command_injection
@@ -1413,6 +1491,8 @@ rules:
     shortlink: https://sg.run/4oQl
     semgrep.dev:
       rule:
+        r_id: 43744
+        rv_id: 78348
         rule_id: qNUrPW
         version_id: O9TPZ9
         url: https://semgrep.dev/playground/r/O9TPZ9/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
@@ -1464,6 +1544,8 @@ rules:
     shortlink: https://sg.run/PxZY
     semgrep.dev:
       rule:
+        r_id: 43745
+        rv_id: 78349
         rule_id: lBUYAy
         version_id: e1T6A5
         url: https://semgrep.dev/playground/r/e1T6A5/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
@@ -1540,6 +1622,8 @@ rules:
     shortlink: https://sg.run/JoZw
     semgrep.dev:
       rule:
+        r_id: 43746
+        rv_id: 78350
         rule_id: YGUxKY
         version_id: vdTZ3e
         url: https://semgrep.dev/playground/r/vdTZ3e/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
@@ -1567,9 +1651,53 @@ rules:
     shortlink: https://sg.run/5zwA
     semgrep.dev:
       rule:
+        r_id: 43747
+        rv_id: 78351
         rule_id: 6JUkwx
         version_id: d6TBbY
         url: https://semgrep.dev/playground/r/d6TBbY/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
+        origin: community
+- id: mobsf.mobsfscan.webview.webview_allow_file_from_url.webview_allow_file_from_url
+  patterns:
+  - pattern-either:
+    - pattern: 'setAllowFileAccessFromFileURLs(true)
+
+        '
+    - pattern: "$W.setAllowFileAccessFromFileURLs(true)\n"
+    - pattern: |
+        $X = true;
+        ...
+        $W.setAllowFileAccessFromFileURLs($X);
+    - pattern: 'setAllowUniversalAccessFromFileURLs(true)
+
+        '
+    - pattern: "$W.setAllowUniversalAccessFromFileURLs(true)\n"
+    - pattern: |
+        $X = true;
+        ...
+        $W.setAllowUniversalAccessFromFileURLs($X);
+  message: Ensure that user controlled URLs never reaches the Webview. Enabling file
+    access from URLs in WebView can leak sensitive information from the file system.
+  languages:
+  - java
+  severity: WARNING
+  metadata:
+    cwe: cwe-200
+    owasp-mobile: m1
+    masvs: platform-7
+    reference: https://github.com/MobSF/owasp-mstg/blob/master/Document/0x05h-Testing-Platform-Interaction.md#static-analysis-6
+    license: LGPL-3.0-or-later
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/mobsf.mobsfscan.webview.webview_allow_file_from_url.webview_allow_file_from_url
+    shortlink: https://sg.run/wdPz0
+    semgrep.dev:
+      rule:
+        r_id: 134573
+        rv_id: 756521
+        rule_id: QrUWlLB
+        version_id: vdT4P7g
+        url: https://semgrep.dev/playground/r/vdT4P7g/mobsf.mobsfscan.webview.webview_allow_file_from_url.webview_allow_file_from_url
         origin: community
 - id: mobsf.mobsfscan.webview.webview_debugging.webview_debugging
   patterns:
@@ -1596,6 +1724,8 @@ rules:
     shortlink: https://sg.run/G3Zp
     semgrep.dev:
       rule:
+        r_id: 43748
+        rv_id: 78352
         rule_id: oqUPpl
         version_id: ZRTLyo
         url: https://semgrep.dev/playground/r/ZRTLyo/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
@@ -1633,6 +1763,8 @@ rules:
     shortlink: https://sg.run/Rx3O
     semgrep.dev:
       rule:
+        r_id: 43749
+        rv_id: 78353
         rule_id: zdU90D
         version_id: nWT6wg
         url: https://semgrep.dev/playground/r/nWT6wg/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
@@ -1658,6 +1790,8 @@ rules:
     shortlink: https://sg.run/ABgp
     semgrep.dev:
       rule:
+        r_id: 43750
+        rv_id: 78354
         rule_id: pKUJ40
         version_id: ExT9YD
         url: https://semgrep.dev/playground/r/ExT9YD/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
@@ -1687,6 +1821,8 @@ rules:
     shortlink: https://sg.run/BDgW
     semgrep.dev:
       rule:
+        r_id: 43751
+        rv_id: 78355
         rule_id: 2ZUXop
         version_id: 7ZTLYR
         url: https://semgrep.dev/playground/r/7ZTLYR/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
@@ -1715,6 +1851,8 @@ rules:
     shortlink: https://sg.run/D0LY
     semgrep.dev:
       rule:
+        r_id: 43752
+        rv_id: 78356
         rule_id: X5Up0Y
         version_id: LjT1pg
         url: https://semgrep.dev/playground/r/LjT1pg/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
@@ -1760,6 +1898,8 @@ rules:
     shortlink: https://sg.run/WxP4
     semgrep.dev:
       rule:
+        r_id: 43753
+        rv_id: 78357
         rule_id: j2Up0D
         version_id: 8KTdLZ
         url: https://semgrep.dev/playground/r/8KTdLZ/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
@@ -1787,6 +1927,8 @@ rules:
     shortlink: https://sg.run/0qwv
     semgrep.dev:
       rule:
+        r_id: 43754
+        rv_id: 78358
         rule_id: 10UnwQ
         version_id: gETb5l
         url: https://semgrep.dev/playground/r/gETb5l/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
@@ -1829,6 +1971,8 @@ rules:
     shortlink: https://sg.run/KzZ7
     semgrep.dev:
       rule:
+        r_id: 43755
+        rv_id: 78359
         rule_id: 9AUL9X
         version_id: QkT4Qb
         url: https://semgrep.dev/playground/r/QkT4Qb/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
@@ -1860,6 +2004,8 @@ rules:
     shortlink: https://sg.run/9ApQ0
     semgrep.dev:
       rule:
+        r_id: 113223
+        rv_id: 253294
         rule_id: 5rUdoB9
         version_id: PkTDL34
         url: https://semgrep.dev/playground/r/PkTDL34/trailofbits.jvm.gc-call.gc-call
@@ -1889,6 +2035,8 @@ rules:
     shortlink: https://sg.run/9vxr
     semgrep.dev:
       rule:
+        r_id: 17167
+        rv_id: 733074
         rule_id: KxU507
         version_id: pZTz48j
         url: https://semgrep.dev/playground/r/pZTz48j/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
@@ -1921,6 +2069,8 @@ rules:
     shortlink: https://sg.run/72xG
     semgrep.dev:
       rule:
+        r_id: 44138
+        rv_id: 95116
         rule_id: JDU4RQ
         version_id: vdTY55y
         url: https://semgrep.dev/playground/r/vdTY55y/trailofbits.python.pytorch-tensor.pytorch-tensor

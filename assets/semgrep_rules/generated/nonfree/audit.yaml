@@ -33,6 +33,8 @@ rules:
     shortlink: https://sg.run/KXz6
     semgrep.dev:
       rule:
+        r_id: 14555
+        rv_id: 108995
         rule_id: qNUXrw
         version_id: pZT1yLp
         url: https://semgrep.dev/playground/r/pZT1yLp/bash.curl.security.curl-pipe-bash.curl-pipe-bash
@@ -78,6 +80,8 @@ rules:
     shortlink: https://sg.run/Q9pq
     semgrep.dev:
       rule:
+        r_id: 14842
+        rv_id: 109000
         rule_id: WAUy9q
         version_id: 9lTdW5W
         url: https://semgrep.dev/playground/r/9lTdW5W/bash.lang.security.ifs-tampering.ifs-tampering
@@ -106,6 +110,8 @@ rules:
     shortlink: https://sg.run/vzwn
     semgrep.dev:
       rule:
+        r_id: 8833
+        rv_id: 257629
         rule_id: 5rUOlg
         version_id: ExTpjpr
         url: https://semgrep.dev/playground/r/ExTpjpr/c.lang.security.info-leak-on-non-formatted-string.info-leak-on-non-formated-string
@@ -138,6 +144,8 @@ rules:
     shortlink: https://sg.run/dKqX
     semgrep.dev:
       rule:
+        r_id: 8834
+        rv_id: 109008
         rule_id: GdU7OE
         version_id: O9TNOdZ
         url: https://semgrep.dev/playground/r/O9TNOdZ/c.lang.security.insecure-use-gets-fn.insecure-use-gets-fn
@@ -184,6 +192,8 @@ rules:
     shortlink: https://sg.run/l9GE
     semgrep.dev:
       rule:
+        r_id: 18213
+        rv_id: 109009
         rule_id: d8UK7D
         version_id: e1T013E
         url: https://semgrep.dev/playground/r/e1T013E/c.lang.security.insecure-use-memset.insecure-use-memset
@@ -213,6 +223,8 @@ rules:
     shortlink: https://sg.run/nd1g
     semgrep.dev:
       rule:
+        r_id: 8836
+        rv_id: 109011
         rule_id: AbUzPd
         version_id: d6TrAvO
         url: https://semgrep.dev/playground/r/d6TrAvO/c.lang.security.insecure-use-scanf-fn.insecure-use-scanf-fn
@@ -248,6 +260,8 @@ rules:
     shortlink: https://sg.run/EkRP
     semgrep.dev:
       rule:
+        r_id: 8837
+        rv_id: 109012
         rule_id: BYUNjA
         version_id: ZRTQNpR
         url: https://semgrep.dev/playground/r/ZRTQNpR/c.lang.security.insecure-use-strcat-fn.insecure-use-strcat-fn
@@ -286,6 +300,8 @@ rules:
     shortlink: https://sg.run/7oNk
     semgrep.dev:
       rule:
+        r_id: 8838
+        rv_id: 109013
         rule_id: DbUpo5
         version_id: nWTxPoA
         url: https://semgrep.dev/playground/r/nWTxPoA/c.lang.security.insecure-use-string-copy-fn.insecure-use-string-copy-fn
@@ -319,6 +335,8 @@ rules:
     shortlink: https://sg.run/LwqG
     semgrep.dev:
       rule:
+        r_id: 8839
+        rv_id: 109014
         rule_id: WAUo5v
         version_id: ExTjNA3
         url: https://semgrep.dev/playground/r/ExTjNA3/c.lang.security.insecure-use-strtok-fn.insecure-use-strtok-fn
@@ -368,6 +386,8 @@ rules:
     shortlink: https://sg.run/8yNj
     semgrep.dev:
       rule:
+        r_id: 8840
+        rv_id: 109015
         rule_id: 0oU5k4
         version_id: 7ZTgonl
         url: https://semgrep.dev/playground/r/7ZTgonl/c.lang.security.random-fd-exhaustion.random-fd-exhaustion
@@ -407,6 +427,8 @@ rules:
     shortlink: https://sg.run/Y0Jy
     semgrep.dev:
       rule:
+        r_id: 18214
+        rv_id: 109180
         rule_id: ZqUlxE
         version_id: YDTp2kw
         url: https://semgrep.dev/playground/r/YDTp2kw/csharp.dotnet.security.mvc-missing-antiforgery.mvc-missing-antiforgery
@@ -463,6 +485,8 @@ rules:
     shortlink: https://sg.run/yPWx
     semgrep.dev:
       rule:
+        r_id: 17324
+        rv_id: 109181
         rule_id: 0oUrvj
         version_id: JdTNpGG
         url: https://semgrep.dev/playground/r/JdTNpGG/csharp.dotnet.security.net-webconfig-debug.net-webconfig-debug
@@ -506,6 +530,8 @@ rules:
     shortlink: https://sg.run/6bP1
     semgrep.dev:
       rule:
+        r_id: 18215
+        rv_id: 109182
         rule_id: nJUyJq
         version_id: 5PTdArE
         url: https://semgrep.dev/playground/r/5PTdArE/csharp.dotnet.security.net-webconfig-trace-enabled.net-webconfig-trace-enabled
@@ -553,6 +579,8 @@ rules:
     shortlink: https://sg.run/z1jd
     semgrep.dev:
       rule:
+        r_id: 18217
+        rv_id: 109188
         rule_id: 7KUxPg
         version_id: WrTWQG5
         url: https://semgrep.dev/playground/r/WrTWQG5/csharp.dotnet.security.web-config-insecure-cookie-settings.web-config-insecure-cookie-settings
@@ -621,6 +649,8 @@ rules:
     shortlink: https://sg.run/KA0d
     semgrep.dev:
       rule:
+        r_id: 28955
+        rv_id: 109193
         rule_id: bwU5kK
         version_id: YDTp2k5
         url: https://semgrep.dev/playground/r/YDTp2k5/csharp.lang.security.ad.jwt-tokenvalidationparameters-no-expiry-validation.jwt-tokenvalidationparameters-no-expiry-validation
@@ -658,6 +688,8 @@ rules:
     shortlink: https://sg.run/Ze6p
     semgrep.dev:
       rule:
+        r_id: 11479
+        rv_id: 255672
         rule_id: 9AUOjg
         version_id: 3ZTpYly
         url: https://semgrep.dev/playground/r/3ZTpYly/csharp.lang.security.injections.os-command.os-command-injection
@@ -759,6 +791,8 @@ rules:
     shortlink: https://sg.run/yXjP
     semgrep.dev:
       rule:
+        r_id: 18224
+        rv_id: 109201
         rule_id: PeUxb0
         version_id: 1QTOY3v
         url: https://semgrep.dev/playground/r/1QTOY3v/csharp.lang.security.insecure-deserialization.data-contract-resolver.data-contract-resolver
@@ -798,6 +832,8 @@ rules:
     shortlink: https://sg.run/nqnd
     semgrep.dev:
       rule:
+        r_id: 11136
+        rv_id: 109202
         rule_id: NbUAwk
         version_id: 9lTdWqB
         url: https://semgrep.dev/playground/r/9lTdWqB/csharp.lang.security.insecure-deserialization.fast-json.insecure-fastjson-deserialization
@@ -843,6 +879,8 @@ rules:
     shortlink: https://sg.run/rere
     semgrep.dev:
       rule:
+        r_id: 18225
+        rv_id: 109204
         rule_id: JDUlKl
         version_id: rxTyLl5
         url: https://semgrep.dev/playground/r/rxTyLl5/csharp.lang.security.insecure-deserialization.insecure-typefilterlevel-full.insecure-typefilterlevel-full
@@ -899,6 +937,8 @@ rules:
     shortlink: https://sg.run/0nJq
     semgrep.dev:
       rule:
+        r_id: 11198
+        rv_id: 109205
         rule_id: PeUkrK
         version_id: bZTb1QG
         url: https://semgrep.dev/playground/r/bZTb1QG/csharp.lang.security.insecure-deserialization.javascript-serializer.insecure-javascriptserializer-deserialization
@@ -964,6 +1004,8 @@ rules:
     shortlink: https://sg.run/8n2g
     semgrep.dev:
       rule:
+        r_id: 11140
+        rv_id: 109208
         rule_id: OrUGgl
         version_id: w8T9n51
         url: https://semgrep.dev/playground/r/w8T9n51/csharp.lang.security.insecure-deserialization.newtonsoft.insecure-newtonsoft-deserialization
@@ -997,6 +1039,8 @@ rules:
     shortlink: https://sg.run/b4eW
     semgrep.dev:
       rule:
+        r_id: 18226
+        rv_id: 109210
         rule_id: 5rUyEN
         version_id: O9TNOBk
         url: https://semgrep.dev/playground/r/O9TNOBk/csharp.lang.security.memory.memory-marshal-create-span.memory-marshal-create-span
@@ -1033,6 +1077,8 @@ rules:
     shortlink: https://sg.run/NgRy
     semgrep.dev:
       rule:
+        r_id: 18227
+        rv_id: 109213
         rule_id: GdUDBP
         version_id: d6TrALz
         url: https://semgrep.dev/playground/r/d6TrALz/csharp.lang.security.regular-expression-dos.regular-expression-dos-infinite-timeout.regular-expression-dos-infinite-timeout
@@ -1081,6 +1127,8 @@ rules:
     shortlink: https://sg.run/RPyY
     semgrep.dev:
       rule:
+        r_id: 12005
+        rv_id: 109214
         rule_id: 4bU2gd
         version_id: ZRTQNWg
         url: https://semgrep.dev/playground/r/ZRTQNWg/csharp.lang.security.regular-expression-dos.regular-expression-dos.regular-expression-dos
@@ -1177,6 +1225,8 @@ rules:
     shortlink: https://sg.run/d2Xd
     semgrep.dev:
       rule:
+        r_id: 15078
+        rv_id: 113530
         rule_id: x8UxeP
         version_id: DkT6Rg2
         url: https://semgrep.dev/playground/r/DkT6Rg2/csharp.lang.security.sqli.csharp-sqli.csharp-sqli
@@ -1212,6 +1262,8 @@ rules:
     shortlink: https://sg.run/4eB9
     semgrep.dev:
       rule:
+        r_id: 13700
+        rv_id: 109216
         rule_id: 10UdbE
         version_id: ExTjN6q
         url: https://semgrep.dev/playground/r/ExTjN6q/csharp.lang.security.ssrf.http-client.ssrf
@@ -1287,6 +1339,8 @@ rules:
     shortlink: https://sg.run/Pb9v
     semgrep.dev:
       rule:
+        r_id: 13701
+        rv_id: 109217
         rule_id: 9AURoq
         version_id: 7ZTgoPx
         url: https://semgrep.dev/playground/r/7ZTgoPx/csharp.lang.security.ssrf.rest-client.ssrf
@@ -1340,6 +1394,8 @@ rules:
     shortlink: https://sg.run/JxqP
     semgrep.dev:
       rule:
+        r_id: 13702
+        rv_id: 109218
         rule_id: yyUPBe
         version_id: LjTqQBz
         url: https://semgrep.dev/playground/r/LjTqQBz/csharp.lang.security.ssrf.web-client.ssrf
@@ -1434,6 +1490,8 @@ rules:
     shortlink: https://sg.run/5DWj
     semgrep.dev:
       rule:
+        r_id: 13703
+        rv_id: 109219
         rule_id: r6UwoG
         version_id: 8KTQ9nK
         url: https://semgrep.dev/playground/r/8KTQ9nK/csharp.lang.security.ssrf.web-request.ssrf
@@ -1505,6 +1563,8 @@ rules:
     shortlink: https://sg.run/XvkA
     semgrep.dev:
       rule:
+        r_id: 26720
+        rv_id: 109220
         rule_id: lBU6Dv
         version_id: gET3x0x
         url: https://semgrep.dev/playground/r/gET3x0x/csharp.lang.security.stacktrace-disclosure.stacktrace-disclosure
@@ -1548,6 +1608,8 @@ rules:
     shortlink: https://sg.run/P86E
     semgrep.dev:
       rule:
+        r_id: 13489
+        rv_id: 109224
         rule_id: lBUzPw
         version_id: PkTJ1be
         url: https://semgrep.dev/playground/r/PkTJ1be/csharp.razor.security.html-raw-json.html-raw-json
@@ -1598,6 +1660,8 @@ rules:
     shortlink: https://sg.run/5Z43
     semgrep.dev:
       rule:
+        r_id: 20147
+        rv_id: 675962
         rule_id: ReU2n5
         version_id: kbTw78l
         url: https://semgrep.dev/playground/r/kbTw78l/dockerfile.security.last-user-is-root.last-user-is-root
@@ -1642,6 +1706,8 @@ rules:
     shortlink: https://sg.run/k281
     semgrep.dev:
       rule:
+        r_id: 47272
+        rv_id: 109256
         rule_id: ReUW9E
         version_id: vdTYNBn
         url: https://semgrep.dev/playground/r/vdTYNBn/dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
@@ -1686,6 +1752,8 @@ rules:
     shortlink: https://sg.run/Gbvn
     semgrep.dev:
       rule:
+        r_id: 20148
+        rv_id: 109257
         rule_id: AbUN06
         version_id: d6TrApz
         url: https://semgrep.dev/playground/r/d6TrApz/dockerfile.security.missing-user.missing-user
@@ -1720,6 +1788,8 @@ rules:
     shortlink: https://sg.run/80Q7
     semgrep.dev:
       rule:
+        r_id: 66384
+        rv_id: 109258
         rule_id: kxUlx1
         version_id: ZRTQNXg
         url: https://semgrep.dev/playground/r/ZRTQNXg/dockerfile.security.no-sudo-in-dockerfile.no-sudo-in-dockerfile
@@ -1751,6 +1821,8 @@ rules:
     shortlink: https://sg.run/4l9l
     semgrep.dev:
       rule:
+        r_id: 16200
+        rv_id: 109325
         rule_id: gxUJrJ
         version_id: PkTJ1nv
         url: https://semgrep.dev/playground/r/PkTJ1nv/generic.ci.security.bash-reverse-shell.bash_reverse_shell
@@ -1825,6 +1897,8 @@ rules:
     shortlink: https://sg.run/ZvNL
     semgrep.dev:
       rule:
+        r_id: 9035
+        rv_id: 109343
         rule_id: 5rUOjq
         version_id: 2KTzrAQ
         url: https://semgrep.dev/playground/r/2KTzrAQ/generic.nginx.security.alias-path-traversal.alias-path-traversal
@@ -1866,6 +1940,8 @@ rules:
     shortlink: https://sg.run/ndpb
     semgrep.dev:
       rule:
+        r_id: 9036
+        rv_id: 109344
         rule_id: GdU7yl
         version_id: X0TQxo8
         url: https://semgrep.dev/playground/r/X0TQxo8/generic.nginx.security.dynamic-proxy-host.dynamic-proxy-host
@@ -1909,6 +1985,8 @@ rules:
     shortlink: https://sg.run/EkAo
     semgrep.dev:
       rule:
+        r_id: 9037
+        rv_id: 109345
         rule_id: ReUg7n
         version_id: jQTgYLq
         url: https://semgrep.dev/playground/r/jQTgYLq/generic.nginx.security.dynamic-proxy-scheme.dynamic-proxy-scheme
@@ -1958,6 +2036,8 @@ rules:
     shortlink: https://sg.run/7oj4
     semgrep.dev:
       rule:
+        r_id: 9038
+        rv_id: 109346
         rule_id: AbUz8p
         version_id: 1QTOY0e
         url: https://semgrep.dev/playground/r/1QTOY0e/generic.nginx.security.header-injection.header-injection
@@ -2014,6 +2094,8 @@ rules:
     shortlink: https://sg.run/Lwl7
     semgrep.dev:
       rule:
+        r_id: 9039
+        rv_id: 109347
         rule_id: BYUN58
         version_id: 9lTdWER
         url: https://semgrep.dev/playground/r/9lTdWER/generic.nginx.security.header-redefinition.header-redefinition
@@ -2061,6 +2143,8 @@ rules:
     shortlink: https://sg.run/8y14
     semgrep.dev:
       rule:
+        r_id: 9040
+        rv_id: 109348
         rule_id: DbUpJe
         version_id: yeTR2QA
         url: https://semgrep.dev/playground/r/yeTR2QA/generic.nginx.security.insecure-redirect.insecure-redirect
@@ -2108,6 +2192,8 @@ rules:
     shortlink: https://sg.run/gLKy
     semgrep.dev:
       rule:
+        r_id: 9041
+        rv_id: 109349
         rule_id: WAUo9k
         version_id: rxTyLbD
         url: https://semgrep.dev/playground/r/rxTyLbD/generic.nginx.security.insecure-ssl-version.insecure-ssl-version
@@ -2153,6 +2239,8 @@ rules:
     shortlink: https://sg.run/3xzl
     semgrep.dev:
       rule:
+        r_id: 9043
+        rv_id: 109351
         rule_id: KxUbeA
         version_id: NdT3d5q
         url: https://semgrep.dev/playground/r/NdT3d5q/generic.nginx.security.missing-ssl-version.missing-ssl-version
@@ -2220,6 +2308,8 @@ rules:
     shortlink: https://sg.run/ploZ
     semgrep.dev:
       rule:
+        r_id: 10562
+        rv_id: 109352
         rule_id: 6JUq0Z
         version_id: kbTdxrx
         url: https://semgrep.dev/playground/r/kbTdxrx/generic.nginx.security.possible-h2c-smuggling.possible-nginx-h2c-smuggling
@@ -2264,6 +2354,8 @@ rules:
     shortlink: https://sg.run/4x3Z
     semgrep.dev:
       rule:
+        r_id: 9044
+        rv_id: 109353
         rule_id: qNUjGg
         version_id: w8T9n4D
         url: https://semgrep.dev/playground/r/w8T9n4D/generic.nginx.security.request-host-used.request-host-used
@@ -2300,6 +2392,8 @@ rules:
     shortlink: https://sg.run/PJzE
     semgrep.dev:
       rule:
+        r_id: 9045
+        rv_id: 109519
         rule_id: lBU9bw
         version_id: ExTjNPp
         url: https://semgrep.dev/playground/r/ExTjNPp/generic.secrets.security.detected-amazon-mws-auth-token.detected-amazon-mws-auth-token
@@ -2357,6 +2451,8 @@ rules:
     shortlink: https://sg.run/J9KZ
     semgrep.dev:
       rule:
+        r_id: 9046
+        rv_id: 109520
         rule_id: YGUR5K
         version_id: 7ZTgoqQ
         url: https://semgrep.dev/playground/r/7ZTgoqQ/generic.secrets.security.detected-artifactory-password.detected-artifactory-password
@@ -2410,6 +2506,8 @@ rules:
     shortlink: https://sg.run/5Q2l
     semgrep.dev:
       rule:
+        r_id: 9047
+        rv_id: 109521
         rule_id: 6JUj3l
         version_id: LjTqQD4
         url: https://semgrep.dev/playground/r/LjTqQD4/generic.secrets.security.detected-artifactory-token.detected-artifactory-token
@@ -2480,6 +2578,8 @@ rules:
     shortlink: https://sg.run/Ro22
     semgrep.dev:
       rule:
+        r_id: 9049
+        rv_id: 253873
         rule_id: zdUkdd
         version_id: pZTk9GY
         url: https://semgrep.dev/playground/r/pZTk9GY/generic.secrets.security.detected-aws-account-id.detected-aws-account-id
@@ -2516,6 +2616,8 @@ rules:
     shortlink: https://sg.run/AvJ6
     semgrep.dev:
       rule:
+        r_id: 9050
+        rv_id: 109524
         rule_id: pKUOoZ
         version_id: QkTW0ln
         url: https://semgrep.dev/playground/r/QkTW0ln/generic.secrets.security.detected-aws-appsync-graphql-key.detected-aws-appsync-graphql-key
@@ -2554,6 +2656,8 @@ rules:
     shortlink: https://sg.run/Bk39
     semgrep.dev:
       rule:
+        r_id: 9051
+        rv_id: 109525
         rule_id: 2ZUbe8
         version_id: 3ZTkQD3
         url: https://semgrep.dev/playground/r/3ZTkQD3/generic.secrets.security.detected-aws-secret-access-key.detected-aws-secret-access-key
@@ -2595,6 +2699,8 @@ rules:
     shortlink: https://sg.run/DoRW
     semgrep.dev:
       rule:
+        r_id: 9052
+        rv_id: 109526
         rule_id: X5U8Er
         version_id: 44TRlWe
         url: https://semgrep.dev/playground/r/44TRlWe/generic.secrets.security.detected-aws-session-token.detected-aws-session-token
@@ -2630,6 +2736,8 @@ rules:
     shortlink: https://sg.run/3A8G
     semgrep.dev:
       rule:
+        r_id: 10043
+        rv_id: 109527
         rule_id: PeUk0Q
         version_id: PkTJ1qQ
         url: https://semgrep.dev/playground/r/PkTJ1qQ/generic.secrets.security.detected-bcrypt-hash.detected-bcrypt-hash
@@ -2666,6 +2774,8 @@ rules:
     shortlink: https://sg.run/W8yz
     semgrep.dev:
       rule:
+        r_id: 9053
+        rv_id: 109528
         rule_id: j2UvW7
         version_id: JdTNpAp
         url: https://semgrep.dev/playground/r/JdTNpAp/generic.secrets.security.detected-codeclimate.detected-codeclimate
@@ -2702,6 +2812,8 @@ rules:
     shortlink: https://sg.run/4ylL
     semgrep.dev:
       rule:
+        r_id: 10044
+        rv_id: 258243
         rule_id: JDUP6p
         version_id: PkTWJ2o
         url: https://semgrep.dev/playground/r/PkTWJ2o/generic.secrets.security.detected-etc-shadow.detected-etc-shadow
@@ -2741,6 +2853,8 @@ rules:
     shortlink: https://sg.run/0QYJ
     semgrep.dev:
       rule:
+        r_id: 9054
+        rv_id: 109530
         rule_id: 10UKBL
         version_id: GxTv65k
         url: https://semgrep.dev/playground/r/GxTv65k/generic.secrets.security.detected-facebook-access-token.detected-facebook-access-token
@@ -2777,6 +2891,8 @@ rules:
     shortlink: https://sg.run/Klq6
     semgrep.dev:
       rule:
+        r_id: 9055
+        rv_id: 109531
         rule_id: 9AU127
         version_id: RGTDkYp
         url: https://semgrep.dev/playground/r/RGTDkYp/generic.secrets.security.detected-facebook-oauth.detected-facebook-oauth
@@ -2816,6 +2932,8 @@ rules:
     shortlink: https://sg.run/qxj8
     semgrep.dev:
       rule:
+        r_id: 9056
+        rv_id: 109532
         rule_id: yyUn8p
         version_id: A8T951E
         url: https://semgrep.dev/playground/r/A8T951E/generic.secrets.security.detected-generic-api-key.detected-generic-api-key
@@ -2855,499 +2973,11 @@ rules:
     shortlink: https://sg.run/l2o5
     semgrep.dev:
       rule:
+        r_id: 9057
+        rv_id: 109533
         rule_id: r6Urqe
         version_id: BjTXrOJ
         url: https://semgrep.dev/playground/r/BjTXrOJ/generic.secrets.security.detected-generic-secret.detected-generic-secret
-        origin: community
-- id: generic.secrets.security.detected-github-token.detected-github-token
-  patterns:
-  - pattern-either:
-    - pattern: "$VAR = $SECRET\n"
-    - pattern: "$VAR: $SECRET\n"
-    - pattern: "$VAR = '$SECRET'\n"
-    - pattern: "$VAR: '$SECRET'\n"
-    - pattern: "'$VAR' = '$SECRET'\n"
-    - pattern: "'$VAR': '$SECRET'\n"
-    - pattern: '"[hH][tT][tT][pP][sS]?://.*$SECRET.*"
-
-        '
-  - metavariable-regex:
-      metavariable: "$SECRET"
-      regex: gh[pousr]_[A-Za-z0-9_]{36,251}
-  - metavariable-analysis:
-      analyzer: entropy
-      metavariable: "$SECRET"
-  languages:
-  - generic
-  message: GitHub Token detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.blog/changelog/2021-03-04-authentication-token-format-updates/
-    category: security
-    technology:
-    - secrets
-    - github
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-github-token.detected-github-token
-    shortlink: https://sg.run/PpOv
-    semgrep.dev:
-      rule:
-        rule_id: eqUv7b
-        version_id: DkT6n47
-        url: https://semgrep.dev/playground/r/DkT6n47/generic.secrets.security.detected-github-token.detected-github-token
-        origin: community
-- id: generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account
-  pattern-regex: (("|'|`)?type("|'|`)?\s{0,50}(:|=>|=)\s{0,50}("|'|`)?service_account("|'|`)?,?)
-  languages:
-  - regex
-  message: Google (GCM) Service account detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
-    category: security
-    technology:
-    - secrets
-    - google-cloud
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account
-    shortlink: https://sg.run/6nXj
-    semgrep.dev:
-      rule:
-        rule_id: NbUkL8
-        version_id: K3TvjBP
-        url: https://semgrep.dev/playground/r/K3TvjBP/generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account
-        origin: community
-- id: generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token
-  pattern-regex: ya29\.[0-9A-Za-z\-_]+
-  languages:
-  - regex
-  message: Google OAuth Access Token detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
-    category: security
-    technology:
-    - secrets
-    - google
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token
-    shortlink: https://sg.run/ox2n
-    semgrep.dev:
-      rule:
-        rule_id: kxUkpo
-        version_id: qkT2xzr
-        url: https://semgrep.dev/playground/r/qkT2xzr/generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token
-        origin: community
-- id: generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key
-  pattern-regex: "[hH][eE][rR][oO][kK][uU].*[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}"
-  languages:
-  - regex
-  message: Heroku API Key detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
-    category: security
-    technology:
-    - secrets
-    - heroku
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key
-    shortlink: https://sg.run/pxXR
-    semgrep.dev:
-      rule:
-        rule_id: x8UnOB
-        version_id: YDTp2jG
-        url: https://semgrep.dev/playground/r/YDTp2jG/generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key
-        origin: community
-- id: generic.secrets.security.detected-hockeyapp.detected-hockeyapp
-  pattern-regex: (?i)hockey.{0,50}(\\\"|'|`)?[0-9a-f]{32}(\\\"|'|`)?
-  languages:
-  - regex
-  message: HockeyApp detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
-    category: security
-    technology:
-    - secrets
-    - hockeyapp
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-hockeyapp.detected-hockeyapp
-    shortlink: https://sg.run/2xoY
-    semgrep.dev:
-      rule:
-        rule_id: OrU3zo
-        version_id: 6xTvJOO
-        url: https://semgrep.dev/playground/r/6xTvJOO/generic.secrets.security.detected-hockeyapp.detected-hockeyapp
-        origin: community
-- id: generic.secrets.security.detected-jwt-token.detected-jwt-token
-  pattern-regex: eyJ[A-Za-z0-9-_=]{14,}\.[A-Za-z0-9-_=]{13,}\.?[A-Za-z0-9-_.+/=]*?
-  languages:
-  - regex
-  message: JWT token detected
-  severity: ERROR
-  metadata:
-    source-rule-url: https://github.com/Yelp/detect-secrets/blob/master/detect_secrets/plugins/jwt.py
-    category: security
-    technology:
-    - secrets
-    - jwt
-    confidence: LOW
-    references:
-    - https://semgrep.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
-    cwe:
-    - 'CWE-321: Use of Hard-coded Cryptographic Key'
-    owasp:
-    - A02:2021 - Cryptographic Failures
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Cryptographic Issues
-    source: https://semgrep.dev/r/generic.secrets.security.detected-jwt-token.detected-jwt-token
-    shortlink: https://sg.run/05N5
-    semgrep.dev:
-      rule:
-        rule_id: kxU8E8
-        version_id: o5Tgljp
-        url: https://semgrep.dev/playground/r/o5Tgljp/generic.secrets.security.detected-jwt-token.detected-jwt-token
-        origin: community
-- id: generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key
-  pattern-regex: k2sk_v[0-9]_[0-9a-zA-Z]{24}
-  languages:
-  - regex
-  message: Kolide API Key detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    category: security
-    technology:
-    - secrets
-    - kolide
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key
-    shortlink: https://sg.run/d2YQ
-    semgrep.dev:
-      rule:
-        rule_id: JDULYW
-        version_id: zyTK8vw
-        url: https://semgrep.dev/playground/r/zyTK8vw/generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key
-        origin: community
-- id: generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key
-  pattern-regex: "[0-9a-f]{32}-us[0-9]{1,2}"
-  languages:
-  - regex
-  message: MailChimp API Key detected
-  severity: ERROR
-  metadata:
-    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
-    category: security
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    technology:
-    - secrets
-    - mailchimp
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key
-    shortlink: https://sg.run/XBde
-    semgrep.dev:
-      rule:
-        rule_id: eqU8QR
-        version_id: pZT1yv8
-        url: https://semgrep.dev/playground/r/pZT1yv8/generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key
-        origin: community
-- id: generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key
-  pattern-regex: key-[0-9a-zA-Z]{32}
-  languages:
-  - regex
-  message: Mailgun API Key detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
-    category: security
-    technology:
-    - secrets
-    - mailgun
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key
-    shortlink: https://sg.run/jRL2
-    semgrep.dev:
-      rule:
-        rule_id: v8UneY
-        version_id: 2KTzrBe
-        url: https://semgrep.dev/playground/r/2KTzrBe/generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key
-        origin: community
-- id: generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
-  patterns:
-  - pattern: "$AUTHTOKEN = $VALUE"
-  - metavariable-regex:
-      metavariable: "$AUTHTOKEN"
-      regex: _(authToken|auth|password)
-  - pattern-not: "$AUTHTOKEN = ${...}"
-  languages:
-  - generic
-  message: NPM registry authentication token detected
-  paths:
-    include:
-    - "*npmrc*"
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    category: security
-    technology:
-    - secrets
-    - npm
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
-    shortlink: https://sg.run/Ppg3
-    semgrep.dev:
-      rule:
-        rule_id: 5rU4pe
-        version_id: X0TQxXD
-        url: https://semgrep.dev/playground/r/X0TQxXD/generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
-        origin: community
-- id: generic.secrets.security.detected-outlook-team.detected-outlook-team
-  pattern-regex: https://outlook\.office\.com/webhook/[0-9a-f-]{36}
-  languages:
-  - regex
-  message: Outlook Team detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
-    category: security
-    technology:
-    - secrets
-    - outlook
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-outlook-team.detected-outlook-team
-    shortlink: https://sg.run/1ZwQ
-    semgrep.dev:
-      rule:
-        rule_id: d8UjXq
-        version_id: jQTgYAP
-        url: https://semgrep.dev/playground/r/jQTgYAP/generic.secrets.security.detected-outlook-team.detected-outlook-team
-        origin: community
-- id: generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token
-  pattern-regex: access_token\$production\$[0-9a-z]{16}\$[0-9a-z]{32}
-  languages:
-  - regex
-  message: PayPal Braintree Access Token detected
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
-    category: security
-    technology:
-    - secrets
-    - paypal
-    - braintree
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token
-    shortlink: https://sg.run/9oBR
-    semgrep.dev:
-      rule:
-        rule_id: ZqU507
-        version_id: 1QTOYA1
-        url: https://semgrep.dev/playground/r/1QTOYA1/generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token
-        origin: community
-- id: generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block
-  pattern-regex: "-----BEGIN PGP PRIVATE KEY BLOCK-----"
-  languages:
-  - regex
-  message: Something that looks like a PGP private key block is detected. This is
-    a potential hardcoded secret that could be leaked if this code is committed. Instead,
-    remove this code block from the commit.
-  severity: ERROR
-  metadata:
-    cwe:
-    - 'CWE-798: Use of Hard-coded Credentials'
-    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
-    category: security
-    technology:
-    - secrets
-    confidence: LOW
-    owasp:
-    - A07:2021 - Identification and Authentication Failures
-    references:
-    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Hard-coded Secrets
-    source: https://semgrep.dev/r/generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block
-    shortlink: https://sg.run/ydKd
-    semgrep.dev:
-      rule:
-        rule_id: nJUzXz
-        version_id: 9lTdWYP
-        url: https://semgrep.dev/playground/r/9lTdWYP/generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block
         origin: community
 - id: generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key
   pattern-regex: sk_live_[0-9a-z]{32}
@@ -3381,6 +3011,8 @@ rules:
     shortlink: https://sg.run/rdGA
     semgrep.dev:
       rule:
+        r_id: 9069
+        rv_id: 109550
         rule_id: EwU274
         version_id: yeTR291
         url: https://semgrep.dev/playground/r/yeTR291/generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key
@@ -3430,6 +3062,8 @@ rules:
     shortlink: https://sg.run/b7dr
     semgrep.dev:
       rule:
+        r_id: 9070
+        rv_id: 109551
         rule_id: 7KUQ0p
         version_id: rxTyLRv
         url: https://semgrep.dev/playground/r/rxTyLRv/generic.secrets.security.detected-private-key.detected-private-key
@@ -3466,6 +3100,8 @@ rules:
     shortlink: https://sg.run/N4k1
     semgrep.dev:
       rule:
+        r_id: 9071
+        rv_id: 109552
         rule_id: L1UyZ5
         version_id: bZTb1D3
         url: https://semgrep.dev/playground/r/bZTb1D3/generic.secrets.security.detected-sauce-token.detected-sauce-token
@@ -3502,6 +3138,8 @@ rules:
     shortlink: https://sg.run/qqOy
     semgrep.dev:
       rule:
+        r_id: 12856
+        rv_id: 109553
         rule_id: x8U2EG
         version_id: NdT3d0j
         url: https://semgrep.dev/playground/r/NdT3d0j/generic.secrets.security.detected-sendgrid-api-key.detected-sendgrid-api-key
@@ -3540,6 +3178,8 @@ rules:
     shortlink: https://sg.run/kXdz
     semgrep.dev:
       rule:
+        r_id: 9072
+        rv_id: 109554
         rule_id: 8GUjRA
         version_id: kbTdx0X
         url: https://semgrep.dev/playground/r/kbTdx0X/generic.secrets.security.detected-slack-token.detected-slack-token
@@ -3576,6 +3216,8 @@ rules:
     shortlink: https://sg.run/weWX
     semgrep.dev:
       rule:
+        r_id: 9073
+        rv_id: 109555
         rule_id: gxU1dy
         version_id: w8T9ndZ
         url: https://semgrep.dev/playground/r/w8T9ndZ/generic.secrets.security.detected-slack-webhook.detected-slack-webhook
@@ -3611,6 +3253,8 @@ rules:
     shortlink: https://sg.run/lxO9
     semgrep.dev:
       rule:
+        r_id: 12857
+        rv_id: 109556
         rule_id: OrUD9J
         version_id: xyTKZyY
         url: https://semgrep.dev/playground/r/xyTKZyY/generic.secrets.security.detected-snyk-api-key.detected-snyk-api-key
@@ -3647,6 +3291,8 @@ rules:
     shortlink: https://sg.run/YXq4
     semgrep.dev:
       rule:
+        r_id: 12858
+        rv_id: 109557
         rule_id: eqUplZ
         version_id: O9TNOKy
         url: https://semgrep.dev/playground/r/O9TNOKy/generic.secrets.security.detected-softlayer-api-key.detected-softlayer-api-key
@@ -3696,6 +3342,8 @@ rules:
     shortlink: https://sg.run/x10P
     semgrep.dev:
       rule:
+        r_id: 9074
+        rv_id: 109558
         rule_id: QrUzP1
         version_id: e1T01Xd
         url: https://semgrep.dev/playground/r/e1T01Xd/generic.secrets.security.detected-sonarqube-docs-api-key.detected-sonarqube-docs-api-key
@@ -3732,6 +3380,8 @@ rules:
     shortlink: https://sg.run/OP3b
     semgrep.dev:
       rule:
+        r_id: 9075
+        rv_id: 109559
         rule_id: 3qUPqO
         version_id: vdTYNxW
         url: https://semgrep.dev/playground/r/vdTYNxW/generic.secrets.security.detected-square-access-token.detected-square-access-token
@@ -3768,6 +3418,8 @@ rules:
     shortlink: https://sg.run/eL7E
     semgrep.dev:
       rule:
+        r_id: 9076
+        rv_id: 109560
         rule_id: 4bUk4l
         version_id: d6TrA5w
         url: https://semgrep.dev/playground/r/d6TrA5w/generic.secrets.security.detected-square-oauth-secret.detected-square-oauth-secret
@@ -3804,6 +3456,8 @@ rules:
     shortlink: https://sg.run/vzDR
     semgrep.dev:
       rule:
+        r_id: 9077
+        rv_id: 724918
         rule_id: PeUZ4d
         version_id: 3ZT6geb
         url: https://semgrep.dev/playground/r/3ZT6geb/generic.secrets.security.detected-ssh-password.detected-ssh-password
@@ -3840,6 +3494,8 @@ rules:
     shortlink: https://sg.run/dKd5
     semgrep.dev:
       rule:
+        r_id: 9078
+        rv_id: 109562
         rule_id: JDUy0z
         version_id: nWTxP1O
         url: https://semgrep.dev/playground/r/nWTxP1O/generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key
@@ -3876,6 +3532,8 @@ rules:
     shortlink: https://sg.run/ZvdL
     semgrep.dev:
       rule:
+        r_id: 9079
+        rv_id: 109563
         rule_id: 5rUOWq
         version_id: ExTjN3p
         url: https://semgrep.dev/playground/r/ExTjN3p/generic.secrets.security.detected-stripe-restricted-api-key.detected-stripe-restricted-api-key
@@ -3915,6 +3573,8 @@ rules:
     shortlink: https://sg.run/nd4b
     semgrep.dev:
       rule:
+        r_id: 9080
+        rv_id: 109564
         rule_id: GdU7Nl
         version_id: 7ZTgojQ
         url: https://semgrep.dev/playground/r/7ZTgojQ/generic.secrets.security.detected-telegram-bot-api-key.detected-telegram-bot-api-key
@@ -3951,6 +3611,8 @@ rules:
     shortlink: https://sg.run/Ek2o
     semgrep.dev:
       rule:
+        r_id: 9081
+        rv_id: 109565
         rule_id: ReUgJn
         version_id: LjTqQo4
         url: https://semgrep.dev/playground/r/LjTqQo4/generic.secrets.security.detected-twilio-api-key.detected-twilio-api-key
@@ -3987,6 +3649,8 @@ rules:
     shortlink: https://sg.run/DL5d
     semgrep.dev:
       rule:
+        r_id: 52196
+        rv_id: 109567
         rule_id: EwU3kN
         version_id: gET3xog
         url: https://semgrep.dev/playground/r/gET3xog/generic.secrets.security.google-maps-apikeyleak.google-maps-apikeyleak
@@ -4032,6 +3696,8 @@ rules:
     shortlink: https://sg.run/nK4r
     semgrep.dev:
       rule:
+        r_id: 14880
+        rv_id: 109568
         rule_id: d8UeX4
         version_id: QkTW0jn
         url: https://semgrep.dev/playground/r/QkTW0jn/generic.unicode.security.bidi.contains-bidirectional-characters
@@ -4094,6 +3760,8 @@ rules:
     shortlink: https://sg.run/4xJZ
     semgrep.dev:
       rule:
+        r_id: 9088
+        rv_id: 109576
         rule_id: qNUj6g
         version_id: A8T95ZE
         url: https://semgrep.dev/playground/r/A8T95ZE/go.gorilla.security.audit.session-cookie-missing-httponly.session-cookie-missing-httponly
@@ -4142,6 +3810,8 @@ rules:
     shortlink: https://sg.run/PJdE
     semgrep.dev:
       rule:
+        r_id: 9089
+        rv_id: 109577
         rule_id: lBU9kw
         version_id: BjTXrnJ
         url: https://semgrep.dev/playground/r/BjTXrnJ/go.gorilla.security.audit.session-cookie-missing-secure.session-cookie-missing-secure
@@ -4149,6 +3819,54 @@ rules:
   fix-regex:
     regex: "(Secure\\s*:\\s+)false"
     replacement: "\\1true"
+  severity: WARNING
+  languages:
+  - go
+- id: go.gorilla.security.audit.session-cookie-samesitenone.session-cookie-samesitenone
+  patterns:
+  - pattern-inside: |
+      &sessions.Options{
+        ...,
+        SameSite: http.SameSiteNoneMode,
+        ...,
+      }
+  - pattern: |
+      &sessions.Options{
+        ...,
+      }
+  message: Found SameSiteNoneMode setting in Gorilla session options. Consider setting
+    SameSite to Lax, Strict or Default for enhanced security.
+  metadata:
+    cwe:
+    - 'CWE-1275: Sensitive Cookie with Improper SameSite Attribute'
+    owasp:
+    - A05:2021 - Security Misconfiguration
+    references:
+    - https://pkg.go.dev/github.com/gorilla/sessions#Options
+    category: security
+    technology:
+    - gorilla
+    confidence: MEDIUM
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: LOW
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cookie Security
+    source: https://semgrep.dev/r/go.gorilla.security.audit.session-cookie-samesitenone.session-cookie-samesitenone
+    shortlink: https://sg.run/x8Nwj
+    semgrep.dev:
+      rule:
+        r_id: 133074
+        rv_id: 751089
+        rule_id: YGUpGd4
+        version_id: K3T5Lyr
+        url: https://semgrep.dev/playground/r/K3T5Lyr/go.gorilla.security.audit.session-cookie-samesitenone.session-cookie-samesitenone
+        origin: community
+  fix-regex:
+    regex: "(SameSite\\s*:\\s+)http.SameSiteNoneMode"
+    replacement: "\\1http.SameSiteDefaultMode"
   severity: WARNING
   languages:
   - go
@@ -4197,6 +3915,8 @@ rules:
     shortlink: https://sg.run/xXpz
     semgrep.dev:
       rule:
+        r_id: 18430
+        rv_id: 109578
         rule_id: ReUKdz
         version_id: DkT6nZ7
         url: https://semgrep.dev/playground/r/DkT6nZ7/go.gorilla.security.audit.websocket-missing-origin-check.websocket-missing-origin-check
@@ -4224,6 +3944,8 @@ rules:
     shortlink: https://sg.run/J9yZ
     semgrep.dev:
       rule:
+        r_id: 9090
+        rv_id: 109580
         rule_id: PeUZ4X
         version_id: 0bTLlY6
         url: https://semgrep.dev/playground/r/0bTLlY6/go.grpc.security.grpc-client-insecure-connection.grpc-client-insecure-connection
@@ -4264,6 +3986,8 @@ rules:
     shortlink: https://sg.run/5Q5l
     semgrep.dev:
       rule:
+        r_id: 9091
+        rv_id: 109581
         rule_id: JDUy0B
         version_id: K3Tvj6P
         url: https://semgrep.dev/playground/r/K3Tvj6P/go.grpc.security.grpc-server-insecure-connection.grpc-server-insecure-connection
@@ -4319,6 +4043,8 @@ rules:
     shortlink: https://sg.run/Av66
     semgrep.dev:
       rule:
+        r_id: 9094
+        rv_id: 109582
         rule_id: ReUgJJ
         version_id: qkT2xPr
         url: https://semgrep.dev/playground/r/qkT2xPr/go.jwt-go.security.audit.jwt-parse-unverified.jwt-go-parse-unverified
@@ -4360,6 +4086,8 @@ rules:
     shortlink: https://sg.run/Gej1
     semgrep.dev:
       rule:
+        r_id: 9092
+        rv_id: 378644
         rule_id: 5rUOWQ
         version_id: 0bT59Rk
         url: https://semgrep.dev/playground/r/0bT59Rk/go.jwt-go.security.jwt-none-alg.jwt-go-none-algorithm
@@ -4408,6 +4136,8 @@ rules:
     shortlink: https://sg.run/l2gj
     semgrep.dev:
       rule:
+        r_id: 9113
+        rv_id: 109596
         rule_id: yyUnov
         version_id: l4T4vAR
         url: https://semgrep.dev/playground/r/l4T4vAR/go.lang.security.audit.crypto.bad_imports.insecure-module-used
@@ -4452,6 +4182,8 @@ rules:
     shortlink: https://sg.run/Yv6X
     semgrep.dev:
       rule:
+        r_id: 9114
+        rv_id: 109597
         rule_id: r6UrW9
         version_id: YDTp2K7
         url: https://semgrep.dev/playground/r/YDTp2K7/go.lang.security.audit.crypto.insecure_ssh.avoid-ssh-insecure-ignore-host-key
@@ -4489,6 +4221,8 @@ rules:
     shortlink: https://sg.run/9oY4
     semgrep.dev:
       rule:
+        r_id: 9123
+        rv_id: 109606
         rule_id: d8UjY3
         version_id: 9lTdWGe
         url: https://semgrep.dev/playground/r/9lTdWGe/go.lang.security.audit.crypto.use_of_weak_rsa_key.use-of-weak-rsa-key
@@ -4565,6 +4299,8 @@ rules:
     shortlink: https://sg.run/Bko5
     semgrep.dev:
       rule:
+        r_id: 9107
+        rv_id: 109607
         rule_id: pKUOZ9
         version_id: yeTR24B
         url: https://semgrep.dev/playground/r/yeTR24B/go.lang.security.audit.dangerous-command-write.dangerous-command-write
@@ -4665,6 +4401,8 @@ rules:
     shortlink: https://sg.run/Dorj
     semgrep.dev:
       rule:
+        r_id: 9108
+        rv_id: 109608
         rule_id: 2ZUb8l
         version_id: rxTyLpr
         url: https://semgrep.dev/playground/r/rxTyLpr/go.lang.security.audit.dangerous-exec-cmd.dangerous-exec-cmd
@@ -4745,6 +4483,8 @@ rules:
     shortlink: https://sg.run/W8lA
     semgrep.dev:
       rule:
+        r_id: 9109
+        rv_id: 109609
         rule_id: X5U8RQ
         version_id: bZTb17O
         url: https://semgrep.dev/playground/r/bZTb17O/go.lang.security.audit.dangerous-exec-command.dangerous-exec-command
@@ -4858,6 +4598,8 @@ rules:
     shortlink: https://sg.run/0QRb
     semgrep.dev:
       rule:
+        r_id: 9110
+        rv_id: 109610
         rule_id: j2UvPl
         version_id: NdT3dKY
         url: https://semgrep.dev/playground/r/NdT3dKY/go.lang.security.audit.dangerous-syscall-exec.dangerous-syscall-exec
@@ -4899,6 +4641,8 @@ rules:
     shortlink: https://sg.run/ydEr
     semgrep.dev:
       rule:
+        r_id: 9124
+        rv_id: 258604
         rule_id: ZqU5bD
         version_id: JdT3NAn
         url: https://semgrep.dev/playground/r/JdT3NAn/go.lang.security.audit.database.string-formatted-query.string-formatted-query
@@ -5013,6 +4757,8 @@ rules:
     shortlink: https://sg.run/rdE0
     semgrep.dev:
       rule:
+        r_id: 9125
+        rv_id: 109613
         rule_id: nJUz3J
         version_id: xyTKZgN
         url: https://semgrep.dev/playground/r/xyTKZgN/go.lang.security.audit.net.bind_all.avoid-bind-to-all-interfaces
@@ -5052,6 +4798,8 @@ rules:
     shortlink: https://sg.run/weE0
     semgrep.dev:
       rule:
+        r_id: 9129
+        rv_id: 109617
         rule_id: 8GUjDW
         version_id: d6TrA0v
         url: https://semgrep.dev/playground/r/d6TrA0v/go.lang.security.audit.net.formatted-template-string.formatted-template-string
@@ -5111,6 +4859,8 @@ rules:
     shortlink: https://sg.run/x1Ep
     semgrep.dev:
       rule:
+        r_id: 9130
+        rv_id: 109619
         rule_id: gxU1Kp
         version_id: nWTxPb9
         url: https://semgrep.dev/playground/r/nWTxPb9/go.lang.security.audit.net.pprof.pprof-debug-exposure
@@ -5168,6 +4918,8 @@ rules:
     shortlink: https://sg.run/OPRp
     semgrep.dev:
       rule:
+        r_id: 9131
+        rv_id: 109620
         rule_id: QrUz9R
         version_id: ExTjNLe
         url: https://semgrep.dev/playground/r/ExTjNLe/go.lang.security.audit.net.unescaped-data-in-htmlattr.unescaped-data-in-htmlattr
@@ -5232,6 +4984,8 @@ rules:
     shortlink: https://sg.run/eLNl
     semgrep.dev:
       rule:
+        r_id: 9132
+        rv_id: 109621
         rule_id: 3qUP8K
         version_id: 7ZTgolZ
         url: https://semgrep.dev/playground/r/7ZTgolZ/go.lang.security.audit.net.unescaped-data-in-js.unescaped-data-in-js
@@ -5297,6 +5051,8 @@ rules:
     shortlink: https://sg.run/vzE4
     semgrep.dev:
       rule:
+        r_id: 9133
+        rv_id: 109622
         rule_id: 4bUkDW
         version_id: LjTqQWB
         url: https://semgrep.dev/playground/r/LjTqQWB/go.lang.security.audit.net.unescaped-data-in-url.unescaped-data-in-url
@@ -5331,41 +5087,6 @@ rules:
       $OTHER, $ERR = fmt.$P(..., $T, ...)
       ...
       template.URL($OTHER, ...)
-- id: go.lang.security.audit.net.use-tls.use-tls
-  pattern: http.ListenAndServe($ADDR, $HANDLER)
-  fix: http.ListenAndServeTLS($ADDR, certFile, keyFile, $HANDLER)
-  metadata:
-    cwe:
-    - 'CWE-319: Cleartext Transmission of Sensitive Information'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    references:
-    - https://golang.org/pkg/net/http/#ListenAndServeTLS
-    category: security
-    technology:
-    - go
-    confidence: MEDIUM
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Mishandled Sensitive Information
-    source: https://semgrep.dev/r/go.lang.security.audit.net.use-tls.use-tls
-    shortlink: https://sg.run/dKbY
-    semgrep.dev:
-      rule:
-        rule_id: PeUZ8X
-        version_id: 8KTQ9JB
-        url: https://semgrep.dev/playground/r/8KTQ9JB/go.lang.security.audit.net.use-tls.use-tls
-        origin: community
-  message: Found an HTTP server without TLS. Use 'http.ListenAndServeTLS' instead.
-    See https://golang.org/pkg/net/http/#ListenAndServeTLS for more information.
-  languages:
-  - go
-  severity: WARNING
 - id: go.lang.security.audit.reflect-makefunc.reflect-makefunc
   message: "'reflect.MakeFunc' detected. This will sidestep protections that are normally
     afforded by Go's type system. Audit this call and be sure that user input cannot
@@ -5393,6 +5114,8 @@ rules:
     shortlink: https://sg.run/KlPd
     semgrep.dev:
       rule:
+        r_id: 9111
+        rv_id: 109625
         rule_id: 10UKGb
         version_id: QkTW0YB
         url: https://semgrep.dev/playground/r/QkTW0YB/go.lang.security.audit.reflect-makefunc.reflect-makefunc
@@ -5444,6 +5167,8 @@ rules:
     shortlink: https://sg.run/R8Xv
     semgrep.dev:
       rule:
+        r_id: 10005
+        rv_id: 109630
         rule_id: BYUBdJ
         version_id: 5PTdAR2
         url: https://semgrep.dev/playground/r/5PTdAR2/go.lang.security.audit.unsafe-reflect-by-name.unsafe-reflect-by-name
@@ -5480,6 +5205,8 @@ rules:
     shortlink: https://sg.run/qxEx
     semgrep.dev:
       rule:
+        r_id: 9112
+        rv_id: 109631
         rule_id: 9AU1p1
         version_id: GxTv6nn
         url: https://semgrep.dev/playground/r/GxTv6nn/go.lang.security.audit.unsafe.use-of-unsafe-block
@@ -5520,6 +5247,8 @@ rules:
     shortlink: https://sg.run/ndEO
     semgrep.dev:
       rule:
+        r_id: 9136
+        rv_id: 109632
         rule_id: 5rUOZQ
         version_id: RGTDk68
         url: https://semgrep.dev/playground/r/RGTDk68/go.lang.security.audit.xss.import-text-template.import-text-template
@@ -5570,6 +5299,8 @@ rules:
     shortlink: https://sg.run/EkbA
     semgrep.dev:
       rule:
+        r_id: 9137
+        rv_id: 109633
         rule_id: GdU71y
         version_id: A8T95O8
         url: https://semgrep.dev/playground/r/A8T95O8/go.lang.security.audit.xss.no-direct-write-to-responsewriter.no-direct-write-to-responsewriter
@@ -5623,6 +5354,8 @@ rules:
     shortlink: https://sg.run/7oqR
     semgrep.dev:
       rule:
+        r_id: 9138
+        rv_id: 109634
         rule_id: ReUgyJ
         version_id: BjTXrgq
         url: https://semgrep.dev/playground/r/BjTXrgq/go.lang.security.audit.xss.no-fprintf-to-responsewriter.no-fprintf-to-responsewriter
@@ -5674,6 +5407,8 @@ rules:
     shortlink: https://sg.run/LwJJ
     semgrep.dev:
       rule:
+        r_id: 9139
+        rv_id: 109635
         rule_id: AbUzBB
         version_id: DkT6nPE
         url: https://semgrep.dev/playground/r/DkT6nPE/go.lang.security.audit.xss.no-interpolation-in-tag.no-interpolation-in-tag
@@ -5722,6 +5457,8 @@ rules:
     shortlink: https://sg.run/8yl7
     semgrep.dev:
       rule:
+        r_id: 9140
+        rv_id: 109636
         rule_id: BYUNR6
         version_id: WrTWQX0
         url: https://semgrep.dev/playground/r/WrTWQX0/go.lang.security.audit.xss.no-interpolation-js-template-string.no-interpolation-js-template-string
@@ -5770,6 +5507,8 @@ rules:
     shortlink: https://sg.run/gLwn
     semgrep.dev:
       rule:
+        r_id: 9141
+        rv_id: 109637
         rule_id: DbUpEr
         version_id: 0bTLl8P
         url: https://semgrep.dev/playground/r/0bTLl8P/go.lang.security.audit.xss.no-io-writestring-to-responsewriter.no-io-writestring-to-responsewriter
@@ -5819,6 +5558,8 @@ rules:
     shortlink: https://sg.run/Q5BP
     semgrep.dev:
       rule:
+        r_id: 9142
+        rv_id: 109638
         rule_id: WAUoLp
         version_id: K3TvjDq
         url: https://semgrep.dev/playground/r/K3TvjDq/go.lang.security.audit.xss.no-printf-in-responsewriter.no-printf-in-responsewriter
@@ -5870,6 +5611,8 @@ rules:
     shortlink: https://sg.run/3xDb
     semgrep.dev:
       rule:
+        r_id: 9143
+        rv_id: 109639
         rule_id: 0oU5n3
         version_id: qkT2xdw
         url: https://semgrep.dev/playground/r/qkT2xdw/go.lang.security.audit.xss.template-html-does-not-escape.unsafe-template-type
@@ -5916,6 +5659,8 @@ rules:
     shortlink: https://sg.run/Gejn
     semgrep.dev:
       rule:
+        r_id: 9104
+        rv_id: 109641
         rule_id: 6JUjnL
         version_id: YDTp217
         url: https://semgrep.dev/playground/r/YDTp217/go.lang.security.bad_tmp.bad-tmp-file-creation
@@ -5990,6 +5735,8 @@ rules:
     shortlink: https://sg.run/RodK
     semgrep.dev:
       rule:
+        r_id: 9105
+        rv_id: 258244
         rule_id: oqUeqn
         version_id: JdT3NG6
         url: https://semgrep.dev/playground/r/JdT3NG6/go.lang.security.decompression_bomb.potential-dos-via-decompression-bomb
@@ -6023,6 +5770,8 @@ rules:
     shortlink: https://sg.run/Av64
     semgrep.dev:
       rule:
+        r_id: 9106
+        rv_id: 109647
         rule_id: zdUkoR
         version_id: X0TQxjB
         url: https://semgrep.dev/playground/r/X0TQxjB/go.lang.security.zip.path-traversal-inside-zip-extraction
@@ -6066,6 +5815,8 @@ rules:
     shortlink: https://sg.run/4xWE
     semgrep.dev:
       rule:
+        r_id: 9144
+        rv_id: 109648
         rule_id: KxUbxk
         version_id: jQTgY8k
         url: https://semgrep.dev/playground/r/jQTgY8k/go.otto.security.audit.dangerous-execution.dangerous-execution
@@ -6123,6 +5874,8 @@ rules:
     shortlink: https://sg.run/3A4o
     semgrep.dev:
       rule:
+        r_id: 9987
+        rv_id: 109673
         rule_id: JDUPQ7
         version_id: JdTNpEA
         url: https://semgrep.dev/playground/r/JdTNpEA/java.jboss.security.seam-log-injection.seam-log-injection
@@ -6162,6 +5915,8 @@ rules:
     shortlink: https://sg.run/0Q7b
     semgrep.dev:
       rule:
+        r_id: 9154
+        rv_id: 109675
         rule_id: j2Uvol
         version_id: GxTv63n
         url: https://semgrep.dev/playground/r/GxTv63n/java.jjwt.security.jwt-none-alg.jjwt-none-alg
@@ -6206,6 +5961,8 @@ rules:
     shortlink: https://sg.run/jR6A
     semgrep.dev:
       rule:
+        r_id: 9165
+        rv_id: 109680
         rule_id: eqU8J3
         version_id: WrTWQD0
         url: https://semgrep.dev/playground/r/WrTWQD0/java.lang.security.audit.anonymous-ldap-bind.anonymous-ldap-bind
@@ -6243,6 +6000,8 @@ rules:
     shortlink: https://sg.run/1Z7D
     semgrep.dev:
       rule:
+        r_id: 9166
+        rv_id: 109681
         rule_id: v8Uny0
         version_id: 0bTLlDP
         url: https://semgrep.dev/playground/r/0bTLlDP/java.lang.security.audit.bad-hexa-conversion.bad-hexa-conversion
@@ -6292,6 +6051,8 @@ rules:
     shortlink: https://sg.run/9o74
     semgrep.dev:
       rule:
+        r_id: 9167
+        rv_id: 109682
         rule_id: d8UjJ3
         version_id: K3TvjZq
         url: https://semgrep.dev/playground/r/K3TvjZq/java.lang.security.audit.blowfish-insufficient-key-size.blowfish-insufficient-key-size
@@ -6340,6 +6101,8 @@ rules:
     shortlink: https://sg.run/ydxr
     semgrep.dev:
       rule:
+        r_id: 9168
+        rv_id: 109683
         rule_id: ZqU5oD
         version_id: qkT2xEw
         url: https://semgrep.dev/playground/r/qkT2xEw/java.lang.security.audit.cbc-padding-oracle.cbc-padding-oracle
@@ -6456,6 +6219,8 @@ rules:
     shortlink: https://sg.run/rd90
     semgrep.dev:
       rule:
+        r_id: 9169
+        rv_id: 109684
         rule_id: nJUzvJ
         version_id: l4T4vgR
         url: https://semgrep.dev/playground/r/l4T4vgR/java.lang.security.audit.command-injection-formatted-runtime-call.command-injection-formatted-runtime-call
@@ -6643,6 +6408,8 @@ rules:
     shortlink: https://sg.run/gJJe
     semgrep.dev:
       rule:
+        r_id: 9941
+        rv_id: 109685
         rule_id: 4bUzzo
         version_id: YDTp2B7
         url: https://semgrep.dev/playground/r/YDTp2B7/java.lang.security.audit.command-injection-process-builder.command-injection-process-builder
@@ -6679,6 +6446,8 @@ rules:
     shortlink: https://sg.run/b7Be
     semgrep.dev:
       rule:
+        r_id: 9170
+        rv_id: 109686
         rule_id: EwU2z6
         version_id: JdTNpEW
         url: https://semgrep.dev/playground/r/JdTNpEW/java.lang.security.audit.cookie-missing-httponly.cookie-missing-httponly
@@ -6726,6 +6495,8 @@ rules:
     shortlink: https://sg.run/kXoK
     semgrep.dev:
       rule:
+        r_id: 9172
+        rv_id: 109688
         rule_id: L1Uyvp
         version_id: GxTv63G
         url: https://semgrep.dev/playground/r/GxTv63G/java.lang.security.audit.cookie-missing-secure-flag.cookie-missing-secure-flag
@@ -6774,6 +6545,8 @@ rules:
     shortlink: https://sg.run/PJ0p
     semgrep.dev:
       rule:
+        r_id: 9201
+        rv_id: 109698
         rule_id: KxUbW4
         version_id: YDTp25Q
         url: https://semgrep.dev/playground/r/YDTp25Q/java.lang.security.audit.crypto.ssl.avoid-implementing-custom-digests.avoid-implementing-custom-digests
@@ -6819,6 +6592,8 @@ rules:
     shortlink: https://sg.run/J9Gj
     semgrep.dev:
       rule:
+        r_id: 9202
+        rv_id: 109699
         rule_id: qNUj8b
         version_id: 6xTvJ31
         url: https://semgrep.dev/playground/r/6xTvJ31/java.lang.security.audit.crypto.ssl.defaulthttpclient-is-deprecated.defaulthttpclient-is-deprecated
@@ -6866,6 +6641,8 @@ rules:
     shortlink: https://sg.run/5QoD
     semgrep.dev:
       rule:
+        r_id: 9203
+        rv_id: 109700
         rule_id: lBU9n8
         version_id: o5Tglv2
         url: https://semgrep.dev/playground/r/o5Tglv2/java.lang.security.audit.crypto.ssl.insecure-hostname-verifier.insecure-hostname-verifier
@@ -6916,6 +6693,8 @@ rules:
     shortlink: https://sg.run/GePy
     semgrep.dev:
       rule:
+        r_id: 9204
+        rv_id: 109701
         rule_id: YGUR9A
         version_id: zyTK8dW
         url: https://semgrep.dev/playground/r/zyTK8dW/java.lang.security.audit.crypto.ssl.insecure-trust-manager.insecure-trust-manager
@@ -6983,6 +6762,8 @@ rules:
     shortlink: https://sg.run/NwBp
     semgrep.dev:
       rule:
+        r_id: 17327
+        rv_id: 109711
         rule_id: lBUW5D
         version_id: NdT3dLr
         url: https://semgrep.dev/playground/r/NdT3dLr/java.lang.security.audit.crypto.weak-random.weak-random
@@ -7042,6 +6823,8 @@ rules:
     shortlink: https://sg.run/58LK
     semgrep.dev:
       rule:
+        r_id: 10091
+        rv_id: 109713
         rule_id: ReUPKp
         version_id: w8T9nr4
         url: https://semgrep.dev/playground/r/w8T9nr4/java.lang.security.audit.dangerous-groovy-shell.dangerous-groovy-shell
@@ -7074,6 +6857,8 @@ rules:
     shortlink: https://sg.run/x1wp
     semgrep.dev:
       rule:
+        r_id: 9174
+        rv_id: 109714
         rule_id: gxU1Np
         version_id: xyTKZO1
         url: https://semgrep.dev/playground/r/xyTKZO1/java.lang.security.audit.el-injection.el-injection
@@ -7243,6 +7028,8 @@ rules:
     shortlink: https://sg.run/kkrX
     semgrep.dev:
       rule:
+        r_id: 11928
+        rv_id: 109718
         rule_id: KxUY7b
         version_id: d6TrA15
         url: https://semgrep.dev/playground/r/d6TrA15/java.lang.security.audit.java-reverse-shell.java-reverse-shell
@@ -7282,6 +7069,8 @@ rules:
     shortlink: https://sg.run/dKWY
     semgrep.dev:
       rule:
+        r_id: 9178
+        rv_id: 109719
         rule_id: PeUZNX
         version_id: ZRTQNn9
         url: https://semgrep.dev/playground/r/ZRTQNn9/java.lang.security.audit.jdbc-sql-formatted-string.jdbc-sql-formatted-string
@@ -7409,6 +7198,8 @@ rules:
     shortlink: https://sg.run/ZvOn
     semgrep.dev:
       rule:
+        r_id: 9179
+        rv_id: 109720
         rule_id: JDUy8B
         version_id: nWTxPjE
         url: https://semgrep.dev/playground/r/nWTxPjE/java.lang.security.audit.ldap-entry-poisoning.ldap-entry-poisoning
@@ -7460,6 +7251,8 @@ rules:
     shortlink: https://sg.run/nd2O
     semgrep.dev:
       rule:
+        r_id: 9180
+        rv_id: 109721
         rule_id: 5rUObQ
         version_id: ExTjNOO
         url: https://semgrep.dev/playground/r/ExTjNOO/java.lang.security.audit.ldap-injection.ldap-injection
@@ -7545,6 +7338,8 @@ rules:
     shortlink: https://sg.run/Ek0A
     semgrep.dev:
       rule:
+        r_id: 9181
+        rv_id: 109723
         rule_id: GdU7py
         version_id: LjTqQOj
         url: https://semgrep.dev/playground/r/LjTqQOj/java.lang.security.audit.object-deserialization.object-deserialization
@@ -7586,6 +7381,8 @@ rules:
     shortlink: https://sg.run/7o7R
     semgrep.dev:
       rule:
+        r_id: 9182
+        rv_id: 109724
         rule_id: ReUgjJ
         version_id: 8KTQ9Xw
         url: https://semgrep.dev/playground/r/8KTQ9Xw/java.lang.security.audit.ognl-injection.ognl-injection
@@ -8442,6 +8239,8 @@ rules:
     shortlink: https://sg.run/LwzJ
     semgrep.dev:
       rule:
+        r_id: 9183
+        rv_id: 109725
         rule_id: AbUzwB
         version_id: gET3xjQ
         url: https://semgrep.dev/playground/r/gET3xjQ/java.lang.security.audit.overly-permissive-file-permission.overly-permissive-file-permission
@@ -8495,6 +8294,8 @@ rules:
     shortlink: https://sg.run/8y77
     semgrep.dev:
       rule:
+        r_id: 9184
+        rv_id: 109726
         rule_id: BYUN66
         version_id: QkTW0Dr
         url: https://semgrep.dev/playground/r/QkTW0Dr/java.lang.security.audit.permissive-cors.permissive-cors
@@ -8576,6 +8377,8 @@ rules:
     shortlink: https://sg.run/gLqn
     semgrep.dev:
       rule:
+        r_id: 9185
+        rv_id: 109727
         rule_id: DbUpAr
         version_id: 3ZTkQnw
         url: https://semgrep.dev/playground/r/3ZTkQnw/java.lang.security.audit.script-engine-injection.script-engine-injection
@@ -8715,6 +8518,8 @@ rules:
     shortlink: https://sg.run/Roqg
     semgrep.dev:
       rule:
+        r_id: 9205
+        rv_id: 109728
         rule_id: 6JUjPD
         version_id: 44TRlpj
         url: https://semgrep.dev/playground/r/44TRlpj/java.lang.security.audit.sqli.hibernate-sqli.hibernate-sqli
@@ -8790,6 +8595,8 @@ rules:
     shortlink: https://sg.run/AvkL
     semgrep.dev:
       rule:
+        r_id: 9206
+        rv_id: 109729
         rule_id: oqUe8K
         version_id: PkTJ1vy
         url: https://semgrep.dev/playground/r/PkTJ1vy/java.lang.security.audit.sqli.jdbc-sqli.jdbc-sqli
@@ -8894,6 +8701,8 @@ rules:
     shortlink: https://sg.run/Bkwx
     semgrep.dev:
       rule:
+        r_id: 9207
+        rv_id: 109730
         rule_id: zdUk7l
         version_id: JdTNpbW
         url: https://semgrep.dev/playground/r/JdTNpbW/java.lang.security.audit.sqli.jdo-sqli.jdo-sqli
@@ -8966,6 +8775,8 @@ rules:
     shortlink: https://sg.run/DoOd
     semgrep.dev:
       rule:
+        r_id: 9208
+        rv_id: 109731
         rule_id: pKUO7y
         version_id: 5PTdAjX
         url: https://semgrep.dev/playground/r/5PTdAjX/java.lang.security.audit.sqli.jpa-sqli.jpa-sqli
@@ -9069,6 +8880,8 @@ rules:
     shortlink: https://sg.run/W8zL
     semgrep.dev:
       rule:
+        r_id: 9209
+        rv_id: 109733
         rule_id: 2ZUbJ3
         version_id: RGTDk7b
         url: https://semgrep.dev/playground/r/RGTDk7b/java.lang.security.audit.sqli.turbine-sqli.turbine-sqli
@@ -9148,6 +8961,8 @@ rules:
     shortlink: https://sg.run/0QKB
     semgrep.dev:
       rule:
+        r_id: 9210
+        rv_id: 109734
         rule_id: X5U86z
         version_id: A8T958Y
         url: https://semgrep.dev/playground/r/A8T958Y/java.lang.security.audit.sqli.vertx-sqli.vertx-sqli
@@ -9193,6 +9008,8 @@ rules:
     shortlink: https://sg.run/R8X8
     semgrep.dev:
       rule:
+        r_id: 9993
+        rv_id: 109740
         rule_id: DbUW1W
         version_id: qkT2x6j
         url: https://semgrep.dev/playground/r/qkT2x6j/java.lang.security.audit.unsafe-reflection.unsafe-reflection
@@ -9226,6 +9043,8 @@ rules:
     shortlink: https://sg.run/4x7E
     semgrep.dev:
       rule:
+        r_id: 9188
+        rv_id: 109743
         rule_id: KxUb1k
         version_id: 6xTvJn1
         url: https://semgrep.dev/playground/r/6xTvJn1/java.lang.security.audit.weak-ssl-context.weak-ssl-context
@@ -9276,6 +9095,8 @@ rules:
     shortlink: https://sg.run/PJjq
     semgrep.dev:
       rule:
+        r_id: 9189
+        rv_id: 109744
         rule_id: qNUj3y
         version_id: o5Tglq2
         url: https://semgrep.dev/playground/r/o5Tglq2/java.lang.security.audit.xml-decoder.xml-decoder
@@ -9329,6 +9150,8 @@ rules:
     shortlink: https://sg.run/qxne
     semgrep.dev:
       rule:
+        r_id: 9212
+        rv_id: 109745
         rule_id: 10UKqE
         version_id: zyTK8oW
         url: https://semgrep.dev/playground/r/zyTK8oW/java.lang.security.audit.xss.jsf.autoescape-disabled.autoescape-disabled
@@ -9369,6 +9192,8 @@ rules:
     shortlink: https://sg.run/J96Q
     semgrep.dev:
       rule:
+        r_id: 9190
+        rv_id: 109750
         rule_id: lBU9Gj
         version_id: 1QTOY6y
         url: https://semgrep.dev/playground/r/1QTOY6y/java.lang.security.audit.xssrequestwrapper-is-insecure.xssrequestwrapper-is-insecure
@@ -9417,6 +9242,8 @@ rules:
     shortlink: https://sg.run/6n76
     semgrep.dev:
       rule:
+        r_id: 9159
+        rv_id: 109757
         rule_id: bwUw28
         version_id: w8T9nX4
         url: https://semgrep.dev/playground/r/w8T9nX4/java.lang.security.do-privileged-use.do-privileged-use
@@ -9507,6 +9334,8 @@ rules:
     shortlink: https://sg.run/GDop
     semgrep.dev:
       rule:
+        r_id: 56948
+        rv_id: 109760
         rule_id: QrUD20
         version_id: e1T01QP
         url: https://semgrep.dev/playground/r/e1T01QP/java.lang.security.jackson-unsafe-deserialization.jackson-unsafe-deserialization
@@ -9539,6 +9368,8 @@ rules:
     shortlink: https://sg.run/L8qY
     semgrep.dev:
       rule:
+        r_id: 12683
+        rv_id: 109762
         rule_id: 6JU67x
         version_id: d6TrAX5
         url: https://semgrep.dev/playground/r/d6TrAX5/java.lang.security.use-snakeyaml-constructor.use-snakeyaml-constructor
@@ -9586,15 +9417,25 @@ rules:
     shortlink: https://sg.run/2x75
     semgrep.dev:
       rule:
+        r_id: 9163
+        rv_id: 745879
         rule_id: x8Unkq
-        version_id: ZRTQN09
-        url: https://semgrep.dev/playground/r/ZRTQN09/java.lang.security.xmlinputfactory-external-entities-enabled.xmlinputfactory-external-entities-enabled
+        version_id: WrTN4En
+        url: https://semgrep.dev/playground/r/WrTN4En/java.lang.security.xmlinputfactory-external-entities-enabled.xmlinputfactory-external-entities-enabled
         origin: community
   message: XML external entities are enabled for this XMLInputFactory. This is vulnerable
     to XML external entity attacks. Disable external entities by setting "javax.xml.stream.isSupportingExternalEntities"
     to false.
-  pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities",
-    true);
+  patterns:
+  - pattern-either:
+    - pattern: (javax.xml.stream.XMLInputFactory $XMLFACTORY).setProperty("javax.xml.stream.isSupportingExternalEntities",
+        true);
+    - pattern: "(javax.xml.stream.XMLInputFactory $XMLFACTORY).setProperty(javax.xml.stream.XMLInputFactory.SUPPORT_DTD,
+        true);"
+    - pattern: (javax.xml.stream.XMLInputFactory $XMLFACTORY).setProperty("javax.xml.stream.isSupportingExternalEntities",
+        Boolean.TRUE);
+    - pattern: "(javax.xml.stream.XMLInputFactory $XMLFACTORY).setProperty(javax.xml.stream.XMLInputFactory.SUPPORT_DTD,
+        Boolean.TRUE);"
   languages:
   - java
 - id: java.rmi.security.server-dangerous-class-deserialization.server-dangerous-class-deserialization
@@ -9626,6 +9467,8 @@ rules:
     shortlink: https://sg.run/oxg6
     semgrep.dev:
       rule:
+        r_id: 9216
+        rv_id: 109767
         rule_id: bwUwj4
         version_id: LjTqQZj
         url: https://semgrep.dev/playground/r/LjTqQZj/java.rmi.security.server-dangerous-class-deserialization.server-dangerous-class-deserialization
@@ -9674,6 +9517,8 @@ rules:
     shortlink: https://sg.run/zvnl
     semgrep.dev:
       rule:
+        r_id: 9217
+        rv_id: 109768
         rule_id: NbUkw5
         version_id: 8KTQ9Rw
         url: https://semgrep.dev/playground/r/8KTQ9Rw/java.rmi.security.server-dangerous-object-deserialization.server-dangerous-object-deserialization
@@ -9758,6 +9603,8 @@ rules:
     shortlink: https://sg.run/pxn0
     semgrep.dev:
       rule:
+        r_id: 9218
+        rv_id: 230005
         rule_id: kxUkn9
         version_id: xyTvPr0
         url: https://semgrep.dev/playground/r/xyTvPr0/java.servlets.security.cookie-issecure-false.cookie-issecure-false
@@ -9792,6 +9639,8 @@ rules:
     shortlink: https://sg.run/XBp4
     semgrep.dev:
       rule:
+        r_id: 9220
+        rv_id: 109770
         rule_id: x8Un7b
         version_id: QkTW0Pr
         url: https://semgrep.dev/playground/r/QkTW0Pr/java.spring.security.audit.spel-injection.spel-injection
@@ -9908,6 +9757,8 @@ rules:
     shortlink: https://sg.run/jRnl
     semgrep.dev:
       rule:
+        r_id: 9221
+        rv_id: 109775
         rule_id: OrU3gK
         version_id: 5PTdAWX
         url: https://semgrep.dev/playground/r/5PTdAWX/java.spring.security.audit.spring-csrf-disabled.spring-csrf-disabled
@@ -9947,6 +9798,8 @@ rules:
     shortlink: https://sg.run/Q88o
     semgrep.dev:
       rule:
+        r_id: 9942
+        rv_id: 109776
         rule_id: PeUkkL
         version_id: GxTv6NG
         url: https://semgrep.dev/playground/r/GxTv6NG/java.spring.security.audit.spring-jsp-eval.spring-jsp-eval
@@ -9997,6 +9850,8 @@ rules:
     shortlink: https://sg.run/2xlq
     semgrep.dev:
       rule:
+        r_id: 9219
+        rv_id: 109785
         rule_id: wdUJ7q
         version_id: l4T4vEd
         url: https://semgrep.dev/playground/r/l4T4vEd/java.spring.security.unrestricted-request-mapping.unrestricted-request-mapping
@@ -10029,6 +9884,8 @@ rules:
     shortlink: https://sg.run/d2jY
     semgrep.dev:
       rule:
+        r_id: 13578
+        rv_id: 109786
         rule_id: PeUo5X
         version_id: YDTp2LQ
         url: https://semgrep.dev/playground/r/YDTp2LQ/javascript.ajv.security.audit.ajv-allerrors-true.ajv-allerrors-true
@@ -10083,6 +9940,8 @@ rules:
     shortlink: https://sg.run/rdn1
     semgrep.dev:
       rule:
+        r_id: 9225
+        rv_id: 109789
         rule_id: ZqU5Yn
         version_id: GxTv61D
         url: https://semgrep.dev/playground/r/GxTv61D/javascript.angular.security.detect-angular-open-redirect.detect-angular-open-redirect
@@ -10126,6 +9985,8 @@ rules:
     shortlink: https://sg.run/b7kd
     semgrep.dev:
       rule:
+        r_id: 9226
+        rv_id: 109790
         rule_id: nJUzgX
         version_id: RGTDky2
         url: https://semgrep.dev/playground/r/RGTDky2/javascript.angular.security.detect-angular-resource-loading.detect-angular-resource-loading
@@ -10171,6 +10032,8 @@ rules:
     shortlink: https://sg.run/kXgo
     semgrep.dev:
       rule:
+        r_id: 9228
+        rv_id: 109792
         rule_id: 7KUQ4k
         version_id: BjTXrRr
         url: https://semgrep.dev/playground/r/BjTXrRr/javascript.angular.security.detect-angular-trust-as-css.detect-angular-trust-as-css-method
@@ -10219,6 +10082,8 @@ rules:
     shortlink: https://sg.run/wenn
     semgrep.dev:
       rule:
+        r_id: 9229
+        rv_id: 109793
         rule_id: L1Uy88
         version_id: DkT6nEY
         url: https://semgrep.dev/playground/r/DkT6nEY/javascript.angular.security.detect-angular-trust-as-html-method.detect-angular-trust-as-html-method
@@ -10267,6 +10132,8 @@ rules:
     shortlink: https://sg.run/x1nA
     semgrep.dev:
       rule:
+        r_id: 9230
+        rv_id: 109794
         rule_id: 8GUj8k
         version_id: WrTWQLq
         url: https://semgrep.dev/playground/r/WrTWQLq/javascript.angular.security.detect-angular-trust-as-js-method.detect-angular-trust-as-js-method
@@ -10315,6 +10182,8 @@ rules:
     shortlink: https://sg.run/eLOd
     semgrep.dev:
       rule:
+        r_id: 9232
+        rv_id: 109796
         rule_id: QrUzeq
         version_id: K3Tvjxg
         url: https://semgrep.dev/playground/r/K3Tvjxg/javascript.angular.security.detect-angular-trust-as-resourceurl-method.detect-angular-trust-as-resourceurl-method
@@ -10363,6 +10232,8 @@ rules:
     shortlink: https://sg.run/vznl
     semgrep.dev:
       rule:
+        r_id: 9233
+        rv_id: 109797
         rule_id: 3qUP01
         version_id: qkT2xDL
         url: https://semgrep.dev/playground/r/qkT2xDL/javascript.angular.security.detect-angular-trust-as-url-method.detect-angular-trust-as-url-method
@@ -10412,6 +10283,8 @@ rules:
     shortlink: https://sg.run/ZvXp
     semgrep.dev:
       rule:
+        r_id: 9235
+        rv_id: 109798
         rule_id: PeUZPg
         version_id: l4T4vE1
         url: https://semgrep.dev/playground/r/l4T4vE1/javascript.angular.security.detect-third-party-angular-translate.detect-angular-translateprovider-translations-method
@@ -10457,6 +10330,8 @@ rules:
     shortlink: https://sg.run/jkEZ
     semgrep.dev:
       rule:
+        r_id: 13021
+        rv_id: 109799
         rule_id: AbUGBR
         version_id: YDTp2LO
         url: https://semgrep.dev/playground/r/YDTp2LO/javascript.apollo.security.apollo-axios-ssrf.apollo-axios-ssrf
@@ -10512,6 +10387,8 @@ rules:
     shortlink: https://sg.run/AzoB
     semgrep.dev:
       rule:
+        r_id: 22550
+        rv_id: 109801
         rule_id: kxUYE9
         version_id: o5TglAW
         url: https://semgrep.dev/playground/r/o5TglAW/javascript.audit.detect-replaceall-sanitization.detect-replaceall-sanitization
@@ -10562,6 +10439,8 @@ rules:
     shortlink: https://sg.run/EkeL
     semgrep.dev:
       rule:
+        r_id: 9237
+        rv_id: 109814
         rule_id: 5rUOg6
         version_id: w8T9nYx
         url: https://semgrep.dev/playground/r/w8T9nYx/javascript.browser.security.dom-based-xss.dom-based-xss
@@ -10606,6 +10485,8 @@ rules:
     shortlink: https://sg.run/7ope
     semgrep.dev:
       rule:
+        r_id: 9238
+        rv_id: 109815
         rule_id: GdU7dw
         version_id: xyTKZ6r
         url: https://semgrep.dev/playground/r/xyTKZ6r/javascript.browser.security.eval-detected.eval-detected
@@ -10646,6 +10527,8 @@ rules:
     shortlink: https://sg.run/LwA9
     semgrep.dev:
       rule:
+        r_id: 9239
+        rv_id: 109816
         rule_id: ReUg41
         version_id: O9TNO1x
         url: https://semgrep.dev/playground/r/O9TNO1x/javascript.browser.security.insecure-document-method.insecure-document-method
@@ -10692,6 +10575,8 @@ rules:
     shortlink: https://sg.run/gL9x
     semgrep.dev:
       rule:
+        r_id: 9241
+        rv_id: 109818
         rule_id: BYUN0X
         version_id: vdTYNlP
         url: https://semgrep.dev/playground/r/vdTYNlP/javascript.browser.security.insufficient-postmessage-origin-validation.insufficient-postmessage-origin-validation
@@ -10756,6 +10641,8 @@ rules:
     shortlink: https://sg.run/PJ4p
     semgrep.dev:
       rule:
+        r_id: 9245
+        rv_id: 109824
         rule_id: KxUbq4
         version_id: LjTqQvN
         url: https://semgrep.dev/playground/r/LjTqQvN/javascript.browser.security.wildcard-postmessage-configuration.wildcard-postmessage-configuration
@@ -10797,6 +10684,8 @@ rules:
     shortlink: https://sg.run/BxzR
     semgrep.dev:
       rule:
+        r_id: 22551
+        rv_id: 109832
         rule_id: wdUKEq
         version_id: 5PTdAbp
         url: https://semgrep.dev/playground/r/5PTdAbp/javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage
@@ -10850,6 +10739,8 @@ rules:
     shortlink: https://sg.run/W70E
     semgrep.dev:
       rule:
+        r_id: 22553
+        rv_id: 109840
         rule_id: OrUX9K
         version_id: K3Tvj1g
         url: https://semgrep.dev/playground/r/K3Tvj1g/javascript.express.security.audit.express-detect-notevil-usage.express-detect-notevil-usage
@@ -10914,6 +10805,8 @@ rules:
     shortlink: https://sg.run/n8Ag
     semgrep.dev:
       rule:
+        r_id: 22080
+        rv_id: 109843
         rule_id: 2ZUY52
         version_id: YDTp2dO
         url: https://semgrep.dev/playground/r/YDTp2dO/javascript.express.security.audit.express-libxml-vm-noent.express-libxml-vm-noent
@@ -10976,6 +10869,8 @@ rules:
     shortlink: https://sg.run/OPv2
     semgrep.dev:
       rule:
+        r_id: 9275
+        rv_id: 109851
         rule_id: gxU12X
         version_id: 1QTOY1R
         url: https://semgrep.dev/playground/r/1QTOY1R/javascript.express.security.audit.possible-user-input-redirect.unknown-value-in-redirect
@@ -11027,6 +10922,8 @@ rules:
     shortlink: https://sg.run/dKXQ
     semgrep.dev:
       rule:
+        r_id: 9278
+        rv_id: 109855
         rule_id: 4bUkPO
         version_id: bZTb12y
         url: https://semgrep.dev/playground/r/bZTb12y/javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape
@@ -11075,6 +10972,8 @@ rules:
     shortlink: https://sg.run/Zv0p
     semgrep.dev:
       rule:
+        r_id: 9279
+        rv_id: 109856
         rule_id: PeUZrg
         version_id: NdT3d77
         url: https://semgrep.dev/playground/r/NdT3d77/javascript.express.security.audit.xss.ejs.var-in-href.var-in-href
@@ -11121,6 +11020,8 @@ rules:
     shortlink: https://sg.run/ndxZ
     semgrep.dev:
       rule:
+        r_id: 9280
+        rv_id: 109857
         rule_id: JDUyrJ
         version_id: kbTdx1n
         url: https://semgrep.dev/playground/r/kbTdx1n/javascript.express.security.audit.xss.ejs.var-in-script-src.var-in-script-src
@@ -11171,6 +11072,8 @@ rules:
     shortlink: https://sg.run/Ek9L
     semgrep.dev:
       rule:
+        r_id: 9281
+        rv_id: 109858
         rule_id: 5rUOD6
         version_id: w8T9nOx
         url: https://semgrep.dev/playground/r/w8T9nOx/javascript.express.security.audit.xss.ejs.var-in-script-tag.var-in-script-tag
@@ -11218,6 +11121,8 @@ rules:
     shortlink: https://sg.run/7oWe
     semgrep.dev:
       rule:
+        r_id: 9282
+        rv_id: 109859
         rule_id: GdU7Ew
         version_id: xyTKZkr
         url: https://semgrep.dev/playground/r/xyTKZkr/javascript.express.security.audit.xss.mustache.escape-function-overwrite.escape-function-overwrite
@@ -11265,6 +11170,8 @@ rules:
     shortlink: https://sg.run/Lwx9
     semgrep.dev:
       rule:
+        r_id: 9283
+        rv_id: 109860
         rule_id: ReUgG1
         version_id: O9TNO5x
         url: https://semgrep.dev/playground/r/O9TNO5x/javascript.express.security.audit.xss.mustache.explicit-unescape.template-explicit-unescape
@@ -11310,6 +11217,8 @@ rules:
     shortlink: https://sg.run/Q5jk
     semgrep.dev:
       rule:
+        r_id: 9286
+        rv_id: 109863
         rule_id: DbUpyq
         version_id: d6TrAJk
         url: https://semgrep.dev/playground/r/d6TrAJk/javascript.express.security.audit.xss.pug.and-attributes.template-and-attributes
@@ -11353,6 +11262,8 @@ rules:
     shortlink: https://sg.run/3xbe
     semgrep.dev:
       rule:
+        r_id: 9287
+        rv_id: 109864
         rule_id: WAUonl
         version_id: ZRTQNoL
         url: https://semgrep.dev/playground/r/ZRTQNoL/javascript.express.security.audit.xss.pug.explicit-unescape.template-explicit-unescape
@@ -11399,6 +11310,8 @@ rules:
     shortlink: https://sg.run/4xNx
     semgrep.dev:
       rule:
+        r_id: 9288
+        rv_id: 109865
         rule_id: 0oU535
         version_id: nWTxPv7
         url: https://semgrep.dev/playground/r/nWTxPv7/javascript.express.security.audit.xss.pug.var-in-href.var-in-href
@@ -11443,6 +11356,8 @@ rules:
     shortlink: https://sg.run/PJXp
     semgrep.dev:
       rule:
+        r_id: 9289
+        rv_id: 109866
         rule_id: KxUbL4
         version_id: ExTjNzk
         url: https://semgrep.dev/playground/r/ExTjNzk/javascript.express.security.audit.xss.pug.var-in-script-tag.var-in-script-tag
@@ -11488,6 +11403,8 @@ rules:
     shortlink: https://sg.run/pkpL
     semgrep.dev:
       rule:
+        r_id: 12818
+        rv_id: 109868
         rule_id: ReUo60
         version_id: LjTqQ8N
         url: https://semgrep.dev/playground/r/LjTqQ8N/javascript.express.security.express-data-exfiltration.express-data-exfiltration
@@ -11564,6 +11481,8 @@ rules:
     shortlink: https://sg.run/Do1d
     semgrep.dev:
       rule:
+        r_id: 9252
+        rv_id: 109871
         rule_id: pKUOjy
         version_id: QkTW0e7
         url: https://semgrep.dev/playground/r/QkTW0e7/javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret
@@ -11624,6 +11543,8 @@ rules:
     shortlink: https://sg.run/J9Yj
     semgrep.dev:
       rule:
+        r_id: 9290
+        rv_id: 109884
         rule_id: qNUjwb
         version_id: K3TvjWg
         url: https://semgrep.dev/playground/r/K3TvjWg/javascript.fbjs.security.audit.insecure-createnodesfrommarkup.insecure-createnodesfrommarkup
@@ -11667,6 +11588,8 @@ rules:
     shortlink: https://sg.run/5QkD
     semgrep.dev:
       rule:
+        r_id: 9291
+        rv_id: 109885
         rule_id: lBU9D8
         version_id: qkT2x8L
         url: https://semgrep.dev/playground/r/qkT2x8L/javascript.grpc.security.grpc-nodejs-insecure-connection.grpc-nodejs-insecure-connection
@@ -11730,6 +11653,8 @@ rules:
     shortlink: https://sg.run/BkAx
     semgrep.dev:
       rule:
+        r_id: 9295
+        rv_id: 109887
         rule_id: GdU7XP
         version_id: YDTp29O
         url: https://semgrep.dev/playground/r/YDTp29O/javascript.jose.security.audit.jose-exposed-data.jose-exposed-data
@@ -11786,6 +11711,8 @@ rules:
     shortlink: https://sg.run/J9YP
     semgrep.dev:
       rule:
+        r_id: 9302
+        rv_id: 109894
         rule_id: KxUbL3
         version_id: DkT6nrZ
         url: https://semgrep.dev/playground/r/DkT6nrZ/javascript.jsonwebtoken.security.audit.jwt-decode-without-verify.jwt-decode-without-verify
@@ -11840,6 +11767,8 @@ rules:
     shortlink: https://sg.run/5Qkj
     semgrep.dev:
       rule:
+        r_id: 9303
+        rv_id: 109895
         rule_id: qNUjwe
         version_id: WrTWQ4X
         url: https://semgrep.dev/playground/r/WrTWQ4X/javascript.jsonwebtoken.security.audit.jwt-exposed-data.jwt-exposed-data
@@ -11889,6 +11818,8 @@ rules:
     shortlink: https://sg.run/K9bn
     semgrep.dev:
       rule:
+        r_id: 22555
+        rv_id: 109918
         rule_id: v8UGEw
         version_id: e1T01kp
         url: https://semgrep.dev/playground/r/e1T01kp/javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key
@@ -11931,6 +11862,8 @@ rules:
     shortlink: https://sg.run/1GbQ
     semgrep.dev:
       rule:
+        r_id: 13466
+        rv_id: 109919
         rule_id: d8UlRq
         version_id: vdTYNz9
         url: https://semgrep.dev/playground/r/vdTYNz9/javascript.lang.security.audit.incomplete-sanitization.incomplete-sanitization
@@ -11976,6 +11909,8 @@ rules:
     shortlink: https://sg.run/w1DB
     semgrep.dev:
       rule:
+        r_id: 13373
+        rv_id: 109925
         rule_id: QrUpbJ
         version_id: LjTqQbA
         url: https://semgrep.dev/playground/r/LjTqQbA/javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop
@@ -12047,6 +11982,8 @@ rules:
     shortlink: https://sg.run/Wgeo
     semgrep.dev:
       rule:
+        r_id: 9853
+        rv_id: 109926
         rule_id: lBUdr5
         version_id: 8KTQ9k5
         url: https://semgrep.dev/playground/r/8KTQ9k5/javascript.lang.security.audit.spawn-shell-true.spawn-shell-true
@@ -12104,6 +12041,8 @@ rules:
     shortlink: https://sg.run/1Zy1
     semgrep.dev:
       rule:
+        r_id: 9322
+        rv_id: 109931
         rule_id: OrU37Y
         version_id: PkTJ1rO
         url: https://semgrep.dev/playground/r/PkTJ1rO/javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag
@@ -12146,6 +12085,8 @@ rules:
     shortlink: https://sg.run/qxpO
     semgrep.dev:
       rule:
+        r_id: 9312
+        rv_id: 109943
         rule_id: j2Uvj8
         version_id: l4T4vOE
         url: https://semgrep.dev/playground/r/l4T4vOE/javascript.lang.security.detect-buffer-noassert.detect-buffer-noassert
@@ -12191,6 +12132,8 @@ rules:
     shortlink: https://sg.run/l2lo
     semgrep.dev:
       rule:
+        r_id: 9313
+        rv_id: 109944
         rule_id: 10UKNB
         version_id: YDTp20d
         url: https://semgrep.dev/playground/r/YDTp20d/javascript.lang.security.detect-child-process.detect-child-process
@@ -12274,6 +12217,8 @@ rules:
     shortlink: https://sg.run/Yvwd
     semgrep.dev:
       rule:
+        r_id: 9314
+        rv_id: 109945
         rule_id: 9AU17r
         version_id: 6xTvJgP
         url: https://semgrep.dev/playground/r/6xTvJgP/javascript.lang.security.detect-disable-mustache-escape.detect-disable-mustache-escape
@@ -12314,6 +12259,8 @@ rules:
     shortlink: https://sg.run/GWyz
     semgrep.dev:
       rule:
+        r_id: 10048
+        rv_id: 109947
         rule_id: AbUWeE
         version_id: zyTK8J3
         url: https://semgrep.dev/playground/r/zyTK8J3/javascript.lang.security.detect-insecure-websocket.detect-insecure-websocket
@@ -12355,6 +12302,8 @@ rules:
     shortlink: https://sg.run/oxoX
     semgrep.dev:
       rule:
+        r_id: 9316
+        rv_id: 109948
         rule_id: r6UrvQ
         version_id: pZT1yj3
         url: https://semgrep.dev/playground/r/pZT1yj3/javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override
@@ -12398,6 +12347,8 @@ rules:
     shortlink: https://sg.run/pxze
     semgrep.dev:
       rule:
+        r_id: 9318
+        rv_id: 109950
         rule_id: NbUkR2
         version_id: X0TQxN9
         url: https://semgrep.dev/playground/r/X0TQxN9/javascript.lang.security.detect-pseudorandombytes.detect-pseudoRandomBytes
@@ -12438,6 +12389,8 @@ rules:
     shortlink: https://sg.run/2xrr
     semgrep.dev:
       rule:
+        r_id: 9319
+        rv_id: 109953
         rule_id: kxUkPP
         version_id: 9lTdW0z
         url: https://semgrep.dev/playground/r/9lTdW0z/javascript.lang.security.spawn-git-clone.spawn-git-clone
@@ -12487,6 +12440,8 @@ rules:
     shortlink: https://sg.run/Jx7R
     semgrep.dev:
       rule:
+        r_id: 14402
+        rv_id: 109954
         rule_id: zdUYQb
         version_id: yeTR21L
         url: https://semgrep.dev/playground/r/yeTR21L/javascript.monaco-editor.security.audit.monaco-hover-htmlsupport.monaco-hover-htmlsupport
@@ -12538,6 +12493,8 @@ rules:
     shortlink: https://sg.run/eLdL
     semgrep.dev:
       rule:
+        r_id: 9332
+        rv_id: 109955
         rule_id: gxU171
         version_id: rxTyLzP
         url: https://semgrep.dev/playground/r/rxTyLzP/javascript.node-expat.security.audit.expat-xxe.expat-xxe
@@ -12631,6 +12588,8 @@ rules:
     shortlink: https://sg.run/dKv0
     semgrep.dev:
       rule:
+        r_id: 9334
+        rv_id: 109957
         rule_id: 3qUPXE
         version_id: NdT3dR3
         url: https://semgrep.dev/playground/r/NdT3dR3/javascript.phantom.security.audit.phantom-injection.phantom-injection
@@ -12681,6 +12640,8 @@ rules:
     shortlink: https://sg.run/Zv94
     semgrep.dev:
       rule:
+        r_id: 9335
+        rv_id: 109958
         rule_id: 4bUkj1
         version_id: kbTdxPg
         url: https://semgrep.dev/playground/r/kbTdxPg/javascript.playwright.security.audit.playwright-addinitscript-code-injection.playwright-addinitscript-code-injection
@@ -12726,6 +12687,8 @@ rules:
     shortlink: https://sg.run/ndgr
     semgrep.dev:
       rule:
+        r_id: 9336
+        rv_id: 109959
         rule_id: PeUZ30
         version_id: w8T9nbz
         url: https://semgrep.dev/playground/r/w8T9nbz/javascript.playwright.security.audit.playwright-evaluate-arg-injection.playwright-evaluate-arg-injection
@@ -12771,6 +12734,8 @@ rules:
     shortlink: https://sg.run/EkJB
     semgrep.dev:
       rule:
+        r_id: 9337
+        rv_id: 109960
         rule_id: JDUyxl
         version_id: xyTKZrn
         url: https://semgrep.dev/playground/r/xyTKZrn/javascript.playwright.security.audit.playwright-evaluate-code-injection.playwright-evaluate-code-injection
@@ -12822,6 +12787,8 @@ rules:
     shortlink: https://sg.run/7oEQ
     semgrep.dev:
       rule:
+        r_id: 9338
+        rv_id: 109961
         rule_id: 5rUO1N
         version_id: O9TNO7G
         url: https://semgrep.dev/playground/r/O9TNO7G/javascript.playwright.security.audit.playwright-exposed-chrome-devtools.playwright-exposed-chrome-devtools
@@ -12866,6 +12833,8 @@ rules:
     shortlink: https://sg.run/LwWY
     semgrep.dev:
       rule:
+        r_id: 9339
+        rv_id: 109962
         rule_id: GdU7eP
         version_id: e1T01Kp
         url: https://semgrep.dev/playground/r/e1T01Kp/javascript.playwright.security.audit.playwright-goto-injection.playwright-goto-injection
@@ -12913,6 +12882,8 @@ rules:
     shortlink: https://sg.run/8yEQ
     semgrep.dev:
       rule:
+        r_id: 9340
+        rv_id: 109963
         rule_id: ReUgLk
         version_id: vdTYNQ9
         url: https://semgrep.dev/playground/r/vdTYNQ9/javascript.playwright.security.audit.playwright-setcontent-injection.playwright-setcontent-injection
@@ -12960,6 +12931,8 @@ rules:
     shortlink: https://sg.run/gLQ5
     semgrep.dev:
       rule:
+        r_id: 9341
+        rv_id: 109964
         rule_id: AbUzdX
         version_id: d6TrAg4
         url: https://semgrep.dev/playground/r/d6TrAg4/javascript.puppeteer.security.audit.puppeteer-evaluate-arg-injection.puppeteer-evaluate-arg-injection
@@ -13006,6 +12979,8 @@ rules:
     shortlink: https://sg.run/Q5Yq
     semgrep.dev:
       rule:
+        r_id: 9342
+        rv_id: 109965
         rule_id: BYUNZk
         version_id: ZRTQNdl
         url: https://semgrep.dev/playground/r/ZRTQNdl/javascript.puppeteer.security.audit.puppeteer-evaluate-code-injection.puppeteer-evaluate-code-injection
@@ -13057,6 +13032,8 @@ rules:
     shortlink: https://sg.run/3xEW
     semgrep.dev:
       rule:
+        r_id: 9343
+        rv_id: 109966
         rule_id: DbUpbk
         version_id: nWTxPNn
         url: https://semgrep.dev/playground/r/nWTxPNn/javascript.puppeteer.security.audit.puppeteer-exposed-chrome-devtools.puppeteer-exposed-chrome-devtools
@@ -13101,6 +13078,8 @@ rules:
     shortlink: https://sg.run/4xE9
     semgrep.dev:
       rule:
+        r_id: 9344
+        rv_id: 109967
         rule_id: WAUoK7
         version_id: ExTjNWg
         url: https://semgrep.dev/playground/r/ExTjNWg/javascript.puppeteer.security.audit.puppeteer-goto-injection.puppeteer-goto-injection
@@ -13148,6 +13127,8 @@ rules:
     shortlink: https://sg.run/PJlv
     semgrep.dev:
       rule:
+        r_id: 9345
+        rv_id: 109968
         rule_id: 0oU5zg
         version_id: 7ZTgoRo
         url: https://semgrep.dev/playground/r/7ZTgoRo/javascript.puppeteer.security.audit.puppeteer-setcontent-injection.puppeteer-setcontent-injection
@@ -13192,6 +13173,8 @@ rules:
     shortlink: https://sg.run/J9BP
     semgrep.dev:
       rule:
+        r_id: 9346
+        rv_id: 109970
         rule_id: KxUbk3
         version_id: 8KTQ9l5
         url: https://semgrep.dev/playground/r/8KTQ9l5/javascript.sandbox.security.audit.sandbox-code-injection.sandbox-code-injection
@@ -13253,6 +13236,8 @@ rules:
     shortlink: https://sg.run/5QEj
     semgrep.dev:
       rule:
+        r_id: 9347
+        rv_id: 109971
         rule_id: qNUj7e
         version_id: gET3xXP
         url: https://semgrep.dev/playground/r/gET3xXP/javascript.sax.security.audit.sax-xxe.sax-xxe
@@ -13301,6 +13286,8 @@ rules:
     shortlink: https://sg.run/yz6Z
     semgrep.dev:
       rule:
+        r_id: 9968
+        rv_id: 109972
         rule_id: NbUAYW
         version_id: QkTW0NE
         url: https://semgrep.dev/playground/r/QkTW0NE/javascript.sequelize.security.audit.sequelize-enforce-tls.sequelize-enforce-tls
@@ -13371,6 +13358,8 @@ rules:
     shortlink: https://sg.run/rAkj
     semgrep.dev:
       rule:
+        r_id: 9969
+        rv_id: 109975
         rule_id: kxUR80
         version_id: PkTJ1GO
         url: https://semgrep.dev/playground/r/PkTJ1GO/javascript.sequelize.security.audit.sequelize-tls-disabled-cert-validation.sequelize-tls-disabled-cert-validation
@@ -13427,6 +13416,8 @@ rules:
     shortlink: https://sg.run/bDrq
     semgrep.dev:
       rule:
+        r_id: 9970
+        rv_id: 109976
         rule_id: wdU8GB
         version_id: JdTNpRZ
         url: https://semgrep.dev/playground/r/JdTNpRZ/javascript.sequelize.security.audit.sequelize-weak-tls-version.sequelize-weak-tls-version
@@ -13482,6 +13473,8 @@ rules:
     shortlink: https://sg.run/Ro6N
     semgrep.dev:
       rule:
+        r_id: 9349
+        rv_id: 109977
         rule_id: YGURez
         version_id: 5PTdAGB
         url: https://semgrep.dev/playground/r/5PTdAGB/javascript.serialize-javascript.security.audit.unsafe-serialize-javascript.unsafe-serialize-javascript
@@ -13526,6 +13519,8 @@ rules:
     shortlink: https://sg.run/AvEB
     semgrep.dev:
       rule:
+        r_id: 9350
+        rv_id: 109978
         rule_id: 6JUj9k
         version_id: GxTv6Xg
         url: https://semgrep.dev/playground/r/GxTv6Xg/javascript.shelljs.security.shelljs-exec-injection.shelljs-exec-injection
@@ -13570,6 +13565,8 @@ rules:
     shortlink: https://sg.run/BkER
     semgrep.dev:
       rule:
+        r_id: 9351
+        rv_id: 109979
         rule_id: oqUeDG
         version_id: RGTDkxN
         url: https://semgrep.dev/playground/r/RGTDkxN/javascript.thenify.security.audit.multiargs-code-execution.multiargs-code-execution
@@ -13622,6 +13619,8 @@ rules:
     shortlink: https://sg.run/DoPG
     semgrep.dev:
       rule:
+        r_id: 9352
+        rv_id: 109980
         rule_id: zdUk2g
         version_id: A8T95lP
         url: https://semgrep.dev/playground/r/A8T95lP/javascript.vm2.security.audit.vm2-code-injection.vm2-code-injection
@@ -13700,6 +13699,8 @@ rules:
     shortlink: https://sg.run/W8XE
     semgrep.dev:
       rule:
+        r_id: 9353
+        rv_id: 109981
         rule_id: pKUO3v
         version_id: BjTXrLO
         url: https://semgrep.dev/playground/r/BjTXrLO/javascript.vm2.security.audit.vm2-context-injection.vm2-context-injection
@@ -14063,6 +14064,8 @@ rules:
     shortlink: https://sg.run/0QEw
     semgrep.dev:
       rule:
+        r_id: 9354
+        rv_id: 109982
         rule_id: 2ZUb2o
         version_id: DkT6nyZ
         url: https://semgrep.dev/playground/r/DkT6nyZ/javascript.vue.security.audit.xss.templates.avoid-v-html.avoid-v-html
@@ -14101,6 +14104,8 @@ rules:
     shortlink: https://sg.run/KlDn
     semgrep.dev:
       rule:
+        r_id: 9355
+        rv_id: 109983
         rule_id: X5U8yj
         version_id: WrTWQnX
         url: https://semgrep.dev/playground/r/WrTWQnX/javascript.wkhtmltoimage.security.audit.wkhtmltoimage-injection.wkhtmltoimage-injection
@@ -14145,6 +14150,8 @@ rules:
     shortlink: https://sg.run/qx8O
     semgrep.dev:
       rule:
+        r_id: 9356
+        rv_id: 109984
         rule_id: j2Uv58
         version_id: 0bTLl3D
         url: https://semgrep.dev/playground/r/0bTLl3D/javascript.wkhtmltopdf.security.audit.wkhtmltopdf-injection.wkhtmltopdf-injection
@@ -14195,6 +14202,8 @@ rules:
     shortlink: https://sg.run/l27o
     semgrep.dev:
       rule:
+        r_id: 9357
+        rv_id: 109985
         rule_id: 10UKpB
         version_id: K3TvjLe
         url: https://semgrep.dev/playground/r/K3TvjLe/javascript.xml2json.security.audit.xml2json-xxe.xml2json-xxe
@@ -14241,6 +14250,8 @@ rules:
     shortlink: https://sg.run/b25p
     semgrep.dev:
       rule:
+        r_id: 15126
+        rv_id: 109991
         rule_id: d8UegG
         version_id: GxTv6XX
         url: https://semgrep.dev/playground/r/GxTv6XX/kotlin.lang.security.bad-hexa-conversion.bad-hexa-conversion
@@ -14292,6 +14303,8 @@ rules:
     shortlink: https://sg.run/6nEK
     semgrep.dev:
       rule:
+        r_id: 9359
+        rv_id: 109992
         rule_id: yyUnpo
         version_id: RGTDkxL
         url: https://semgrep.dev/playground/r/RGTDkxL/kotlin.lang.security.command-injection-formatted-runtime-call.command-injection-formatted-runtime-call
@@ -14328,6 +14341,8 @@ rules:
     shortlink: https://sg.run/ox7X
     semgrep.dev:
       rule:
+        r_id: 9360
+        rv_id: 109993
         rule_id: r6UrKQ
         version_id: A8T95l2
         url: https://semgrep.dev/playground/r/A8T95l2/kotlin.lang.security.cookie-missing-httponly.cookie-missing-httponly
@@ -14373,6 +14388,8 @@ rules:
     shortlink: https://sg.run/zv7n
     semgrep.dev:
       rule:
+        r_id: 9361
+        rv_id: 109994
         rule_id: bwUw3j
         version_id: BjTXrLP
         url: https://semgrep.dev/playground/r/BjTXrLP/kotlin.lang.security.cookie-missing-secure-flag.cookie-missing-secure-flag
@@ -14424,6 +14441,8 @@ rules:
     shortlink: https://sg.run/RXEK
     semgrep.dev:
       rule:
+        r_id: 14693
+        rv_id: 109995
         rule_id: ReU3Yb
         version_id: DkT6nyD
         url: https://semgrep.dev/playground/r/DkT6nyD/kotlin.lang.security.defaulthttpclient-is-deprecated.defaulthttpclient-is-deprecated
@@ -14461,6 +14480,8 @@ rules:
     shortlink: https://sg.run/WpPA
     semgrep.dev:
       rule:
+        r_id: 14697
+        rv_id: 109997
         rule_id: WAUyAW
         version_id: 0bTLl3v
         url: https://semgrep.dev/playground/r/0bTLl3v/kotlin.lang.security.gcm-detection.gcm-detection
@@ -14511,6 +14532,8 @@ rules:
     shortlink: https://sg.run/KXZd
     semgrep.dev:
       rule:
+        r_id: 14699
+        rv_id: 109999
         rule_id: KxU76z
         version_id: qkT2xwl
         url: https://semgrep.dev/playground/r/qkT2xwl/kotlin.lang.security.unencrypted-socket.unencrypted-socket
@@ -14558,6 +14581,8 @@ rules:
     shortlink: https://sg.run/krq7
     semgrep.dev:
       rule:
+        r_id: 15128
+        rv_id: 110002
         rule_id: nJUZNL
         version_id: 6xTvJ9Z
         url: https://semgrep.dev/playground/r/6xTvJ9Z/kotlin.lang.security.weak-rsa.use-of-weak-rsa-key
@@ -14628,6 +14653,8 @@ rules:
     shortlink: https://sg.run/d8K80
     semgrep.dev:
       rule:
+        r_id: 92978
+        rv_id: 230014
         rule_id: 6JUvjv6
         version_id: LjT7Zeo
         url: https://semgrep.dev/playground/r/LjT7Zeo/ocaml.lang.security.unsafe.ocamllint-unsafe
@@ -14666,6 +14693,8 @@ rules:
     shortlink: https://sg.run/KXWn
     semgrep.dev:
       rule:
+        r_id: 13799
+        rv_id: 110029
         rule_id: X5UdZj
         version_id: QkTW0qD
         url: https://semgrep.dev/playground/r/QkTW0qD/php.doctrine.security.audit.doctrine-dbal-dangerous-query.doctrine-dbal-dangerous-query
@@ -14767,6 +14796,8 @@ rules:
     shortlink: https://sg.run/kzn7
     semgrep.dev:
       rule:
+        r_id: 17328
+        rv_id: 110033
         rule_id: YGUAoe
         version_id: JdTNpx9
         url: https://semgrep.dev/playground/r/JdTNpx9/php.lang.security.audit.openssl-decrypt-validate.openssl-decrypt-validate
@@ -14798,6 +14829,8 @@ rules:
     shortlink: https://sg.run/4xj9
     semgrep.dev:
       rule:
+        r_id: 9388
+        rv_id: 110034
         rule_id: WAUow7
         version_id: 5PTdA1D
         url: https://semgrep.dev/playground/r/5PTdA1D/php.lang.security.backticks-use.backticks-use
@@ -14830,6 +14863,8 @@ rules:
     shortlink: https://sg.run/kxpGo
     semgrep.dev:
       rule:
+        r_id: 115928
+        rv_id: 348110
         rule_id: 7KUgBAk
         version_id: 1QTKbNw
         url: https://semgrep.dev/playground/r/1QTKbNw/php.lang.security.base-convert-loses-precision.base-convert-loses-precision
@@ -14898,6 +14933,8 @@ rules:
     shortlink: https://sg.run/J9AP
     semgrep.dev:
       rule:
+        r_id: 9390
+        rv_id: 110037
         rule_id: KxUbX3
         version_id: A8T95d2
         url: https://semgrep.dev/playground/r/A8T95d2/php.lang.security.eval-use.eval-use
@@ -14936,6 +14973,8 @@ rules:
     shortlink: https://sg.run/5Q1j
     semgrep.dev:
       rule:
+        r_id: 9391
+        rv_id: 110038
         rule_id: qNUjye
         version_id: BjTXrZP
         url: https://semgrep.dev/playground/r/BjTXrZP/php.lang.security.exec-use.exec-use
@@ -14974,6 +15013,8 @@ rules:
     shortlink: https://sg.run/Ge56
     semgrep.dev:
       rule:
+        r_id: 9392
+        rv_id: 110039
         rule_id: lBU90N
         version_id: DkT6nbD
         url: https://semgrep.dev/playground/r/DkT6nbD/php.lang.security.file-inclusion.file-inclusion
@@ -15037,6 +15078,8 @@ rules:
     shortlink: https://sg.run/RoYN
     semgrep.dev:
       rule:
+        r_id: 9393
+        rv_id: 110040
         rule_id: PeUZyE
         version_id: WrTWQKR
         url: https://semgrep.dev/playground/r/WrTWQKR/php.lang.security.ftp-use.ftp-use
@@ -15079,6 +15122,8 @@ rules:
     shortlink: https://sg.run/18Rv
     semgrep.dev:
       rule:
+        r_id: 13966
+        rv_id: 110046
         rule_id: wdUjA5
         version_id: 6xTvJoZ
         url: https://semgrep.dev/playground/r/6xTvJoZ/php.lang.security.ldap-bind-without-password.ldap-bind-without-password
@@ -15117,6 +15162,8 @@ rules:
     shortlink: https://sg.run/AvdB
     semgrep.dev:
       rule:
+        r_id: 9394
+        rv_id: 110047
         rule_id: JDUyj4
         version_id: o5Tglwy
         url: https://semgrep.dev/playground/r/o5Tglwy/php.lang.security.mb-ereg-replace-eval.mb-ereg-replace-eval
@@ -15153,6 +15200,8 @@ rules:
     shortlink: https://sg.run/BkZR
     semgrep.dev:
       rule:
+        r_id: 9395
+        rv_id: 110048
         rule_id: 5rUOzK
         version_id: zyTK8Zk
         url: https://semgrep.dev/playground/r/zyTK8Zk/php.lang.security.mcrypt-use.mcrypt-use
@@ -15192,6 +15241,8 @@ rules:
     shortlink: https://sg.run/Do4G
     semgrep.dev:
       rule:
+        r_id: 9396
+        rv_id: 110049
         rule_id: GdU7RO
         version_id: pZT1yYG
         url: https://semgrep.dev/playground/r/pZT1yYG/php.lang.security.md5-loose-equality.md5-loose-equality
@@ -15234,6 +15285,8 @@ rules:
     shortlink: https://sg.run/y1XR
     semgrep.dev:
       rule:
+        r_id: 13968
+        rv_id: 110053
         rule_id: OrU6JZ
         version_id: 1QTOYvP
         url: https://semgrep.dev/playground/r/1QTOYvP/php.lang.security.php-permissive-cors.php-permissive-cors
@@ -15275,6 +15328,8 @@ rules:
     shortlink: https://sg.run/rYeR
     semgrep.dev:
       rule:
+        r_id: 13969
+        rv_id: 110059
         rule_id: eqUzDE
         version_id: kbTdxbD
         url: https://semgrep.dev/playground/r/kbTdxbD/php.lang.security.unlink-use.unlink-use
@@ -15315,6 +15370,8 @@ rules:
     shortlink: https://sg.run/b24E
     semgrep.dev:
       rule:
+        r_id: 13970
+        rv_id: 110060
         rule_id: v8U9OJ
         version_id: w8T9nLW
         url: https://semgrep.dev/playground/r/w8T9nLW/php.lang.security.unserialize-use.unserialize-use
@@ -15353,6 +15410,8 @@ rules:
     shortlink: https://sg.run/KlBn
     semgrep.dev:
       rule:
+        r_id: 9399
+        rv_id: 110061
         rule_id: BYUNAg
         version_id: xyTKZ50
         url: https://semgrep.dev/playground/r/xyTKZ50/php.lang.security.weak-crypto.weak-crypto
@@ -15409,6 +15468,8 @@ rules:
     shortlink: https://sg.run/N1gz
     semgrep.dev:
       rule:
+        r_id: 13971
+        rv_id: 110073
         rule_id: d8UeKO
         version_id: QkTW0OD
         url: https://semgrep.dev/playground/r/QkTW0OD/php.symfony.security.audit.symfony-csrf-protection-disabled.symfony-csrf-protection-disabled
@@ -15450,6 +15511,8 @@ rules:
     shortlink: https://sg.run/4ey5
     semgrep.dev:
       rule:
+        r_id: 13800
+        rv_id: 110074
         rule_id: j2U3q8
         version_id: 3ZTkQ1q
         url: https://semgrep.dev/playground/r/3ZTkQ1q/php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
@@ -15505,6 +15568,8 @@ rules:
     shortlink: https://sg.run/kr92
     semgrep.dev:
       rule:
+        r_id: 13972
+        rv_id: 110075
         rule_id: ZqUOlR
         version_id: 44TRldD
         url: https://semgrep.dev/playground/r/44TRldD/php.symfony.security.audit.symfony-permissive-cors.symfony-permissive-cors
@@ -15550,6 +15615,8 @@ rules:
     shortlink: https://sg.run/B0eA
     semgrep.dev:
       rule:
+        r_id: 39195
+        rv_id: 110076
         rule_id: DbUe2y
         version_id: PkTJ1yN
         url: https://semgrep.dev/playground/r/PkTJ1yN/php.wordpress-plugins.security.audit.wp-ajax-no-auth-and-auth-hooks-audit.wp-ajax-no-auth-and-auth-hooks-audit
@@ -15590,6 +15657,8 @@ rules:
     shortlink: https://sg.run/DqeP
     semgrep.dev:
       rule:
+        r_id: 39196
+        rv_id: 110077
         rule_id: WAU6YK
         version_id: JdTNpj9
         url: https://semgrep.dev/playground/r/JdTNpj9/php.wordpress-plugins.security.audit.wp-authorisation-checks-audit.wp-authorisation-checks-audit
@@ -15631,6 +15700,8 @@ rules:
     shortlink: https://sg.run/WKD2
     semgrep.dev:
       rule:
+        r_id: 39197
+        rv_id: 110078
         rule_id: 0oU6pX
         version_id: 5PTdAzD
         url: https://semgrep.dev/playground/r/5PTdAzD/php.wordpress-plugins.security.audit.wp-code-execution-audit.wp-code-execution-audit
@@ -15674,6 +15745,8 @@ rules:
     shortlink: https://sg.run/01Wj
     semgrep.dev:
       rule:
+        r_id: 39198
+        rv_id: 110079
         rule_id: KxUOw0
         version_id: GxTv6RX
         url: https://semgrep.dev/playground/r/GxTv6RX/php.wordpress-plugins.security.audit.wp-command-execution-audit.wp-command-execution-audit
@@ -15711,6 +15784,8 @@ rules:
     shortlink: https://sg.run/K2y5
     semgrep.dev:
       rule:
+        r_id: 39199
+        rv_id: 110080
         rule_id: qNUKpk
         version_id: RGTDklL
         url: https://semgrep.dev/playground/r/RGTDklL/php.wordpress-plugins.security.audit.wp-csrf-audit.wp-csrf-audit
@@ -15752,6 +15827,8 @@ rules:
     shortlink: https://sg.run/4gkz
     semgrep.dev:
       rule:
+        r_id: 39200
+        rv_id: 110081
         rule_id: lBUNXL
         version_id: A8T9522
         url: https://semgrep.dev/playground/r/A8T9522/php.wordpress-plugins.security.audit.wp-file-download-audit.wp-file-download-audit
@@ -15802,6 +15879,8 @@ rules:
     shortlink: https://sg.run/PGPW
     semgrep.dev:
       rule:
+        r_id: 39201
+        rv_id: 110082
         rule_id: YGU8Yo
         version_id: BjTXrAP
         url: https://semgrep.dev/playground/r/BjTXrAP/php.wordpress-plugins.security.audit.wp-file-inclusion-audit.wp-file-inclusion-audit
@@ -15848,6 +15927,8 @@ rules:
     shortlink: https://sg.run/JpwW
     semgrep.dev:
       rule:
+        r_id: 39202
+        rv_id: 110083
         rule_id: 6JU0yK
         version_id: DkT6njD
         url: https://semgrep.dev/playground/r/DkT6njD/php.wordpress-plugins.security.audit.wp-file-manipulation-audit.wp-file-manipulation-audit
@@ -15886,6 +15967,8 @@ rules:
     shortlink: https://sg.run/5nZX
     semgrep.dev:
       rule:
+        r_id: 39203
+        rv_id: 110084
         rule_id: oqU5KY
         version_id: WrTWQwR
         url: https://semgrep.dev/playground/r/WrTWQwR/php.wordpress-plugins.security.audit.wp-open-redirect-audit.wp-open-redirect-audit
@@ -15927,6 +16010,8 @@ rules:
     shortlink: https://sg.run/G6X2
     semgrep.dev:
       rule:
+        r_id: 39204
+        rv_id: 110085
         rule_id: zdUelq
         version_id: 0bTLlXv
         url: https://semgrep.dev/playground/r/0bTLlXv/php.wordpress-plugins.security.audit.wp-php-object-injection-audit.wp-php-object-injection-audit
@@ -15978,6 +16063,8 @@ rules:
     shortlink: https://sg.run/RAbe
     semgrep.dev:
       rule:
+        r_id: 39205
+        rv_id: 110086
         rule_id: pKUQN1
         version_id: K3TvjXy
         url: https://semgrep.dev/playground/r/K3TvjXy/php.wordpress-plugins.security.audit.wp-sql-injection-audit.wp-sql-injection-audit
@@ -16008,6 +16095,8 @@ rules:
     shortlink: https://sg.run/2x9L
     semgrep.dev:
       rule:
+        r_id: 9419
+        rv_id: 110107
         rule_id: NbUkl9
         version_id: 2KTzrqw
         url: https://semgrep.dev/playground/r/2KTzrqw/problem-based-packs.insecure-transport.java-stdlib.socket-request.socket-request
@@ -16063,6 +16152,8 @@ rules:
     shortlink: https://sg.run/x1zL
     semgrep.dev:
       rule:
+        r_id: 9430
+        rv_id: 110118
         rule_id: 7KUQAE
         version_id: xyTKZoP
         url: https://semgrep.dev/playground/r/xyTKZoP/problem-based-packs.insecure-transport.js-node.using-http-server.using-http-server
@@ -16108,6 +16199,8 @@ rules:
     shortlink: https://sg.run/ndBY
     semgrep.dev:
       rule:
+        r_id: 9436
+        rv_id: 110124
         rule_id: 4bUkOY
         version_id: nWTxPKL
         url: https://semgrep.dev/playground/r/nWTxPKL/python.airflow.security.audit.formatted-string-bashoperator.formatted-string-bashoperator
@@ -16188,6 +16281,8 @@ rules:
     shortlink: https://sg.run/4xr5
     semgrep.dev:
       rule:
+        r_id: 9444
+        rv_id: 252915
         rule_id: DbUp5g
         version_id: l4TlPgr
         url: https://semgrep.dev/playground/r/l4TlPgr/python.cryptography.security.insecure-cipher-mode-ecb.insecure-cipher-mode-ecb
@@ -16240,6 +16335,8 @@ rules:
     shortlink: https://sg.run/GeQq
     semgrep.dev:
       rule:
+        r_id: 9448
+        rv_id: 251691
         rule_id: qNUjZ3
         version_id: YDTNPqv
         url: https://semgrep.dev/playground/r/YDTNPqv/python.cryptography.security.insufficient-ec-key-size.insufficient-ec-key-size
@@ -16290,6 +16387,8 @@ rules:
     shortlink: https://sg.run/RoQq
     semgrep.dev:
       rule:
+        r_id: 9449
+        rv_id: 252918
         rule_id: lBU9jn
         version_id: o5TkxOr
         url: https://semgrep.dev/playground/r/o5TkxOr/python.cryptography.security.insufficient-rsa-key-size.insufficient-rsa-key-size
@@ -16327,6 +16426,8 @@ rules:
     shortlink: https://sg.run/N9JL
     semgrep.dev:
       rule:
+        r_id: 31871
+        rv_id: 110158
         rule_id: lBUpNZ
         version_id: bZTb1qg
         url: https://semgrep.dev/playground/r/bZTb1qg/python.cryptography.security.mode-without-authentication.crypto-mode-without-authentication
@@ -16389,6 +16490,8 @@ rules:
     shortlink: https://sg.run/yd0P
     semgrep.dev:
       rule:
+        r_id: 9468
+        rv_id: 110181
         rule_id: eqU8Wr
         version_id: RGTDkXP
         url: https://semgrep.dev/playground/r/RGTDkXP/python.django.security.audit.avoid-mark-safe.avoid-mark-safe
@@ -16430,6 +16533,8 @@ rules:
     shortlink: https://sg.run/b7bW
     semgrep.dev:
       rule:
+        r_id: 9470
+        rv_id: 110183
         rule_id: d8Ujk6
         version_id: BjTXr9d
         url: https://semgrep.dev/playground/r/BjTXr9d/python.django.security.audit.custom-expression-as-sql.custom-expression-as-sql
@@ -16475,6 +16580,8 @@ rules:
     shortlink: https://sg.run/vzBY
     semgrep.dev:
       rule:
+        r_id: 9477
+        rv_id: 110185
         rule_id: gxU1wE
         version_id: WrTWQRd
         url: https://semgrep.dev/playground/r/WrTWQRd/python.django.security.audit.django-rest-framework.missing-throttle-config.missing-throttle-config
@@ -16516,6 +16623,8 @@ rules:
     shortlink: https://sg.run/N4Ay
     semgrep.dev:
       rule:
+        r_id: 9471
+        rv_id: 110186
         rule_id: ZqU5z3
         version_id: 0bTLl4p
         url: https://semgrep.dev/playground/r/0bTLl4p/python.django.security.audit.extends-custom-expression.extends-custom-expression
@@ -16669,6 +16778,8 @@ rules:
     shortlink: https://sg.run/kXZP
     semgrep.dev:
       rule:
+        r_id: 9472
+        rv_id: 110187
         rule_id: nJUzBP
         version_id: K3TvjpJ
         url: https://semgrep.dev/playground/r/K3TvjpJ/python.django.security.audit.query-set-extra.avoid-query-set-extra
@@ -16712,6 +16823,8 @@ rules:
     shortlink: https://sg.run/weDA
     semgrep.dev:
       rule:
+        r_id: 9473
+        rv_id: 110188
         rule_id: EwU2JA
         version_id: qkT2x0x
         url: https://semgrep.dev/playground/r/qkT2x0x/python.django.security.audit.raw-query.avoid-raw-sql
@@ -16787,6 +16900,8 @@ rules:
     shortlink: https://sg.run/x1WL
     semgrep.dev:
       rule:
+        r_id: 9474
+        rv_id: 110189
         rule_id: 7KUQ2E
         version_id: l4T4vL6
         url: https://semgrep.dev/playground/r/l4T4vL6/python.django.security.audit.secure-cookies.django-secure-set-cookie
@@ -16828,6 +16943,8 @@ rules:
     shortlink: https://sg.run/dK3E
     semgrep.dev:
       rule:
+        r_id: 9478
+        rv_id: 110190
         rule_id: QrUzb2
         version_id: YDTp23Z
         url: https://semgrep.dev/playground/r/YDTp23Z/python.django.security.audit.templates.debug-template-tag.debug-template-tag
@@ -16887,6 +17004,8 @@ rules:
     shortlink: https://sg.run/OPBL
     semgrep.dev:
       rule:
+        r_id: 9475
+        rv_id: 255673
         rule_id: L1UywG
         version_id: 44TAy70
         url: https://semgrep.dev/playground/r/44TAy70/python.django.security.audit.unvalidated-password.unvalidated-password
@@ -16927,6 +17046,8 @@ rules:
     shortlink: https://sg.run/Zvpw
     semgrep.dev:
       rule:
+        r_id: 9479
+        rv_id: 110192
         rule_id: 3qUPve
         version_id: 5PTdAv7
         url: https://semgrep.dev/playground/r/5PTdAv7/python.django.security.audit.xss.class-extends-safestring.class-extends-safestring
@@ -16975,6 +17096,8 @@ rules:
     shortlink: https://sg.run/nd7Y
     semgrep.dev:
       rule:
+        r_id: 9480
+        rv_id: 110193
         rule_id: 4bUknY
         version_id: GxTv6GY
         url: https://semgrep.dev/playground/r/GxTv6GY/python.django.security.audit.xss.context-autoescape-off.context-autoescape-off
@@ -17031,6 +17154,8 @@ rules:
     shortlink: https://sg.run/EknN
     semgrep.dev:
       rule:
+        r_id: 9481
+        rv_id: 110194
         rule_id: PeUZgE
         version_id: RGTDkX9
         url: https://semgrep.dev/playground/r/RGTDkX9/python.django.security.audit.xss.direct-use-of-httpresponse.direct-use-of-httpresponse
@@ -17102,6 +17227,8 @@ rules:
     shortlink: https://sg.run/7o12
     semgrep.dev:
       rule:
+        r_id: 9482
+        rv_id: 110195
         rule_id: JDUyd4
         version_id: A8T956L
         url: https://semgrep.dev/playground/r/A8T956L/python.django.security.audit.xss.filter-with-is-safe.filter-with-is-safe
@@ -17145,6 +17272,8 @@ rules:
     shortlink: https://sg.run/lxQo
     semgrep.dev:
       rule:
+        r_id: 12657
+        rv_id: 110196
         rule_id: v8UjKg
         version_id: BjTXr9G
         url: https://semgrep.dev/playground/r/BjTXr9G/python.django.security.audit.xss.formathtml-fstring-parameter.formathtml-fstring-parameter
@@ -17187,6 +17316,8 @@ rules:
     shortlink: https://sg.run/LwG6
     semgrep.dev:
       rule:
+        r_id: 9483
+        rv_id: 110197
         rule_id: 5rUOXK
         version_id: DkT6nO3
         url: https://semgrep.dev/playground/r/DkT6nO3/python.django.security.audit.xss.global-autoescape-off.global-autoescape-off
@@ -17239,6 +17370,8 @@ rules:
     shortlink: https://sg.run/8y9N
     semgrep.dev:
       rule:
+        r_id: 9484
+        rv_id: 110198
         rule_id: GdU7QO
         version_id: WrTWQRg
         url: https://semgrep.dev/playground/r/WrTWQRg/python.django.security.audit.xss.html-magic-method.html-magic-method
@@ -17287,6 +17420,8 @@ rules:
     shortlink: https://sg.run/gLO0
     semgrep.dev:
       rule:
+        r_id: 9485
+        rv_id: 110199
         rule_id: ReUg5Y
         version_id: 0bTLl40
         url: https://semgrep.dev/playground/r/0bTLl40/python.django.security.audit.xss.html-safe.html-safe
@@ -17331,6 +17466,8 @@ rules:
     shortlink: https://sg.run/Q5WZ
     semgrep.dev:
       rule:
+        r_id: 9486
+        rv_id: 110200
         rule_id: AbUzAZ
         version_id: K3Tvjp9
         url: https://semgrep.dev/playground/r/K3Tvjp9/python.django.security.audit.xss.template-autoescape-off.template-autoescape-off
@@ -17394,6 +17531,8 @@ rules:
     shortlink: https://sg.run/3xpK
     semgrep.dev:
       rule:
+        r_id: 9487
+        rv_id: 110201
         rule_id: BYUNwg
         version_id: qkT2x0z
         url: https://semgrep.dev/playground/r/qkT2x0z/python.django.security.audit.xss.template-blocktranslate-no-escape.template-blocktranslate-no-escape
@@ -17535,6 +17674,8 @@ rules:
     shortlink: https://sg.run/PJDz
     semgrep.dev:
       rule:
+        r_id: 9489
+        rv_id: 110203
         rule_id: WAUov9
         version_id: YDTp231
         url: https://semgrep.dev/playground/r/YDTp231/python.django.security.audit.xss.template-translate-as-no-escape.template-translate-as-no-escape
@@ -17570,6 +17711,8 @@ rules:
     shortlink: https://sg.run/5Q30
     semgrep.dev:
       rule:
+        r_id: 9491
+        rv_id: 110205
         rule_id: KxUbdx
         version_id: o5Tgl7v
         url: https://semgrep.dev/playground/r/o5Tgl7v/python.django.security.audit.xss.template-var-unescaped-with-safeseq.template-var-unescaped-with-safeseq
@@ -17616,6 +17759,8 @@ rules:
     shortlink: https://sg.run/7GYv
     semgrep.dev:
       rule:
+        r_id: 11938
+        rv_id: 110207
         rule_id: j2UR3n
         version_id: pZT1yBE
         url: https://semgrep.dev/playground/r/pZT1yBE/python.django.security.globals-as-template-context.globals-as-template-context
@@ -17658,6 +17803,8 @@ rules:
     shortlink: https://sg.run/Kl55
     semgrep.dev:
       rule:
+        r_id: 9499
+        rv_id: 110209
         rule_id: AbUzAA
         version_id: X0TQxv6
         url: https://semgrep.dev/playground/r/X0TQxv6/python.django.security.injection.code.globals-misuse-code-execution.globals-misuse-code-execution
@@ -17894,6 +18041,8 @@ rules:
     shortlink: https://sg.run/Ro0q
     semgrep.dev:
       rule:
+        r_id: 9493
+        rv_id: 110219
         rule_id: lBU97n
         version_id: xyTKZYJ
         url: https://semgrep.dev/playground/r/xyTKZYJ/python.django.security.injection.mass-assignment.mass-assignment
@@ -17934,6 +18083,8 @@ rules:
     shortlink: https://sg.run/Dovo
     semgrep.dev:
       rule:
+        r_id: 9508
+        rv_id: 110222
         rule_id: 6JUjLj
         version_id: vdTYN21
         url: https://semgrep.dev/playground/r/vdTYN21/python.django.security.injection.path-traversal.path-traversal-join.path-traversal-join
@@ -18046,6 +18197,8 @@ rules:
     shortlink: https://sg.run/PbZp
     semgrep.dev:
       rule:
+        r_id: 14701
+        rv_id: 110235
         rule_id: lBU8Ad
         version_id: JdTNpqk
         url: https://semgrep.dev/playground/r/JdTNpqk/python.django.security.injection.tainted-sql-string.tainted-sql-string
@@ -18110,6 +18263,8 @@ rules:
     shortlink: https://sg.run/oYz6
     semgrep.dev:
       rule:
+        r_id: 14760
+        rv_id: 110236
         rule_id: 6JU1l0
         version_id: 5PTdA67
         url: https://semgrep.dev/playground/r/5PTdA67/python.django.security.injection.tainted-url-host.tainted-url-host
@@ -18191,6 +18346,8 @@ rules:
     shortlink: https://sg.run/L8XL
     semgrep.dev:
       rule:
+        r_id: 11939
+        rv_id: 110237
         rule_id: 10Ued2
         version_id: GxTv62Y
         url: https://semgrep.dev/playground/r/GxTv62Y/python.django.security.locals-as-template-context.locals-as-template-context
@@ -18249,6 +18406,8 @@ rules:
     shortlink: https://sg.run/pxEL
     semgrep.dev:
       rule:
+        r_id: 9518
+        rv_id: 110241
         rule_id: r6Ur5A
         version_id: DkT6nQ3
         url: https://semgrep.dev/playground/r/DkT6nQ3/python.docker.security.audit.docker-arbitrary-container-run.docker-arbitrary-container-run
@@ -18281,6 +18440,8 @@ rules:
     shortlink: https://sg.run/LwPo
     semgrep.dev:
       rule:
+        r_id: 9539
+        rv_id: 110255
         rule_id: JDUyJR
         version_id: 1QTOYjN
         url: https://semgrep.dev/playground/r/1QTOYjN/python.flask.security.audit.hardcoded-config.avoid_hardcoded_config_DEBUG
@@ -18320,6 +18481,8 @@ rules:
     shortlink: https://sg.run/7oXW
     semgrep.dev:
       rule:
+        r_id: 9538
+        rv_id: 110254
         rule_id: PeUZpr
         version_id: jQTgYKX
         url: https://semgrep.dev/playground/r/jQTgYKX/python.flask.security.audit.hardcoded-config.avoid_hardcoded_config_ENV
@@ -18357,6 +18520,8 @@ rules:
     shortlink: https://sg.run/Ekde
     semgrep.dev:
       rule:
+        r_id: 9537
+        rv_id: 110253
         rule_id: 4bUkX0
         version_id: X0TQxP6
         url: https://semgrep.dev/playground/r/X0TQxP6/python.flask.security.audit.hardcoded-config.avoid_hardcoded_config_SECRET_KEY
@@ -18394,6 +18559,8 @@ rules:
     shortlink: https://sg.run/ndZ2
     semgrep.dev:
       rule:
+        r_id: 9536
+        rv_id: 110252
         rule_id: 3qUPoy
         version_id: 2KTzr19
         url: https://semgrep.dev/playground/r/2KTzr19/python.flask.security.audit.hardcoded-config.avoid_hardcoded_config_TESTING
@@ -18430,6 +18597,8 @@ rules:
     shortlink: https://sg.run/8yjE
     semgrep.dev:
       rule:
+        r_id: 9540
+        rv_id: 110257
         rule_id: 5rUOv1
         version_id: yeTR2Xr
         url: https://semgrep.dev/playground/r/yeTR2Xr/python.flask.security.audit.render-template-string.render-template-string
@@ -18484,6 +18653,8 @@ rules:
     shortlink: https://sg.run/gLkZ
     semgrep.dev:
       rule:
+        r_id: 9541
+        rv_id: 251895
         rule_id: GdU7GR
         version_id: 5PTk5OX
         url: https://semgrep.dev/playground/r/5PTk5OX/python.flask.security.audit.secure-set-cookie.secure-set-cookie
@@ -18522,6 +18693,8 @@ rules:
     shortlink: https://sg.run/Q5AQ
     semgrep.dev:
       rule:
+        r_id: 9542
+        rv_id: 252100
         rule_id: ReUgXz
         version_id: A8TkY3P
         url: https://semgrep.dev/playground/r/A8TkY3P/python.flask.security.audit.wtf-csrf-disabled.flask-wtf-csrf-disabled
@@ -18628,6 +18801,8 @@ rules:
     shortlink: https://sg.run/3x3p
     semgrep.dev:
       rule:
+        r_id: 9543
+        rv_id: 110260
         rule_id: AbUz6A
         version_id: NdT3d1x
         url: https://semgrep.dev/playground/r/NdT3d1x/python.flask.security.audit.xss.make-response-with-unknown-content.make-response-with-unknown-content
@@ -18661,6 +18836,8 @@ rules:
     shortlink: https://sg.run/b79E
     semgrep.dev:
       rule:
+        r_id: 9526
+        rv_id: 110261
         rule_id: v8UnZJ
         version_id: kbTdx77
         url: https://semgrep.dev/playground/r/kbTdx77/python.flask.security.dangerous-template-string.dangerous-template-string
@@ -18747,6 +18924,8 @@ rules:
     shortlink: https://sg.run/bDWr
     semgrep.dev:
       rule:
+        r_id: 10126
+        rv_id: 110262
         rule_id: NbUAeY
         version_id: w8T9n32
         url: https://semgrep.dev/playground/r/w8T9n32/python.flask.security.flask-api-method-string-format.flask-api-method-string-format
@@ -18784,6 +18963,8 @@ rules:
     shortlink: https://sg.run/4xzz
     semgrep.dev:
       rule:
+        r_id: 9544
+        rv_id: 110266
         rule_id: BYUN99
         version_id: vdTYNk1
         url: https://semgrep.dev/playground/r/vdTYNk1/python.flask.security.injection.os-system-injection.os-system-injection
@@ -18864,6 +19045,8 @@ rules:
     shortlink: https://sg.run/PJRW
     semgrep.dev:
       rule:
+        r_id: 9545
+        rv_id: 110267
         rule_id: DbUpOQ
         version_id: d6TrARQ
         url: https://semgrep.dev/playground/r/d6TrARQ/python.flask.security.injection.path-traversal-open.path-traversal-open
@@ -18972,6 +19155,8 @@ rules:
     shortlink: https://sg.run/N45z
     semgrep.dev:
       rule:
+        r_id: 9527
+        rv_id: 110275
         rule_id: d8UjBO
         version_id: QkTW0yZ
         url: https://semgrep.dev/playground/r/QkTW0yZ/python.flask.security.insecure-deserialization.insecure-deserialization
@@ -19062,6 +19247,8 @@ rules:
     shortlink: https://sg.run/kXe2
     semgrep.dev:
       rule:
+        r_id: 9528
+        rv_id: 110276
         rule_id: ZqU5LR
         version_id: 3ZTkQJQ
         url: https://semgrep.dev/playground/r/3ZTkQJQ/python.flask.security.open-redirect.open-redirect
@@ -19101,6 +19288,8 @@ rules:
     shortlink: https://sg.run/weGP
     semgrep.dev:
       rule:
+        r_id: 9529
+        rv_id: 110277
         rule_id: nJUz6A
         version_id: 44TRl36
         url: https://semgrep.dev/playground/r/44TRl36/python.flask.security.secure-static-file-serve.avoid_send_file_without_path_sanitization
@@ -19142,6 +19331,8 @@ rules:
     shortlink: https://sg.run/x1Rg
     semgrep.dev:
       rule:
+        r_id: 9530
+        rv_id: 110278
         rule_id: EwU293
         version_id: PkTJ1LR
         url: https://semgrep.dev/playground/r/PkTJ1LR/python.flask.security.unescaped-template-extension.unescaped-template-extension
@@ -19205,6 +19396,8 @@ rules:
     shortlink: https://sg.run/OPGn
     semgrep.dev:
       rule:
+        r_id: 9531
+        rv_id: 110279
         rule_id: 7KUQLl
         version_id: JdTNpgk
         url: https://semgrep.dev/playground/r/JdTNpgk/python.flask.security.unsanitized-input.response-contains-unsanitized-input
@@ -19260,6 +19453,8 @@ rules:
     shortlink: https://sg.run/RoKe
     semgrep.dev:
       rule:
+        r_id: 9549
+        rv_id: 110280
         rule_id: qNUjN2
         version_id: 5PTdA57
         url: https://semgrep.dev/playground/r/5PTdA57/python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
@@ -19311,6 +19506,8 @@ rules:
     shortlink: https://sg.run/AvZ8
     semgrep.dev:
       rule:
+        r_id: 9550
+        rv_id: 110281
         rule_id: lBU95l
         version_id: GxTv6wY
         url: https://semgrep.dev/playground/r/GxTv6wY/python.flask.security.xss.audit.explicit-unescape-with-markup.explicit-unescape-with-markup
@@ -19355,6 +19552,8 @@ rules:
     shortlink: https://sg.run/Bkn2
     semgrep.dev:
       rule:
+        r_id: 9551
+        rv_id: 110282
         rule_id: YGURo6
         version_id: RGTDkv9
         url: https://semgrep.dev/playground/r/RGTDkv9/python.flask.security.xss.audit.template-autoescape-off.template-autoescape-off
@@ -19395,6 +19594,8 @@ rules:
     shortlink: https://sg.run/ox8R
     semgrep.dev:
       rule:
+        r_id: 9560
+        rv_id: 110288
         rule_id: 9AU1zW
         version_id: K3Tvjy9
         url: https://semgrep.dev/playground/r/K3Tvjy9/python.jwt.security.audit.jwt-exposed-data.jwt-python-exposed-data
@@ -19434,6 +19635,8 @@ rules:
     shortlink: https://sg.run/qxPy
     semgrep.dev:
       rule:
+        r_id: 9556
+        rv_id: 110289
         rule_id: 2ZUb1L
         version_id: qkT2xqz
         url: https://semgrep.dev/playground/r/qkT2xqz/python.jwt.security.jwt-exposed-credentials.jwt-python-exposed-credentials
@@ -19501,6 +19704,8 @@ rules:
     shortlink: https://sg.run/6nyB
     semgrep.dev:
       rule:
+        r_id: 9559
+        rv_id: 110292
         rule_id: 10UKjo
         version_id: JdTNpgE
         url: https://semgrep.dev/playground/r/JdTNpgE/python.jwt.security.unverified-jwt-decode.unverified-jwt-decode
@@ -19544,6 +19749,8 @@ rules:
     shortlink: https://sg.run/x1lz
     semgrep.dev:
       rule:
+        r_id: 9630
+        rv_id: 110362
         rule_id: nJUzeK
         version_id: kbTdLKO
         url: https://semgrep.dev/playground/r/kbTdLKO/python.lang.security.audit.conn_recv.multiprocessing-recv
@@ -19593,6 +19800,8 @@ rules:
     shortlink: https://sg.run/8R6J
     semgrep.dev:
       rule:
+        r_id: 11940
+        rv_id: 110363
         rule_id: 9AUkR3
         version_id: w8T9D1K
         url: https://semgrep.dev/playground/r/w8T9D1K/python.lang.security.audit.dangerous-annotations-usage.dangerous-annotations-usage
@@ -19658,6 +19867,8 @@ rules:
     shortlink: https://sg.run/dKZZ
     semgrep.dev:
       rule:
+        r_id: 9634
+        rv_id: 110385
         rule_id: 8GUj22
         version_id: BjTXpW3
         url: https://semgrep.dev/playground/r/BjTXpW3/python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
@@ -19703,6 +19914,8 @@ rules:
     shortlink: https://sg.run/ZvrD
     semgrep.dev:
       rule:
+        r_id: 9635
+        rv_id: 110386
         rule_id: gxU149
         version_id: DkT6Yd0
         url: https://semgrep.dev/playground/r/DkT6Yd0/python.lang.security.audit.eval-detected.eval-detected
@@ -19747,6 +19960,8 @@ rules:
     shortlink: https://sg.run/ndRX
     semgrep.dev:
       rule:
+        r_id: 9636
+        rv_id: 110387
         rule_id: QrUzKv
         version_id: WrTW3zn
         url: https://semgrep.dev/playground/r/WrTW3zn/python.lang.security.audit.exec-detected.exec-detected
@@ -19782,6 +19997,8 @@ rules:
     shortlink: https://sg.run/EkWw
     semgrep.dev:
       rule:
+        r_id: 9637
+        rv_id: 110388
         rule_id: 3qUP9k
         version_id: 0bTLexz
         url: https://semgrep.dev/playground/r/0bTLexz/python.lang.security.audit.formatted-sql-query.formatted-sql-query
@@ -19834,6 +20051,8 @@ rules:
     shortlink: https://sg.run/7oyZ
     semgrep.dev:
       rule:
+        r_id: 9638
+        rv_id: 110389
         rule_id: 4bUkv7
         version_id: K3TvG2X
         url: https://semgrep.dev/playground/r/K3TvG2X/python.lang.security.audit.ftplib.ftplib
@@ -19878,6 +20097,8 @@ rules:
     shortlink: https://sg.run/Lw9r
     semgrep.dev:
       rule:
+        r_id: 9639
+        rv_id: 110390
         rule_id: PeUZAW
         version_id: qkT2BYZ
         url: https://semgrep.dev/playground/r/qkT2BYZ/python.lang.security.audit.hardcoded-password-default-argument.hardcoded-password-default-argument
@@ -19911,6 +20132,8 @@ rules:
     shortlink: https://sg.run/8yby
     semgrep.dev:
       rule:
+        r_id: 9640
+        rv_id: 110391
         rule_id: JDUy7y
         version_id: l4T46Q7
         url: https://semgrep.dev/playground/r/l4T46Q7/python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
@@ -19952,6 +20175,8 @@ rules:
     shortlink: https://sg.run/AvPp
     semgrep.dev:
       rule:
+        r_id: 9650
+        rv_id: 110393
         rule_id: qNUjlR
         version_id: JdTNv1q
         url: https://semgrep.dev/playground/r/JdTNv1q/python.lang.security.audit.insecure-transport.ftplib.use-ftp-tls.use-ftp-tls
@@ -20018,6 +20243,8 @@ rules:
     shortlink: https://sg.run/Bk5W
     semgrep.dev:
       rule:
+        r_id: 9651
+        rv_id: 110394
         rule_id: lBU9BZ
         version_id: 5PTdeJ5
         url: https://semgrep.dev/playground/r/5PTdeJ5/python.lang.security.audit.insecure-transport.requests.request-session-http-in-with-context.request-session-http-in-with-context
@@ -20084,6 +20311,8 @@ rules:
     shortlink: https://sg.run/DoBY
     semgrep.dev:
       rule:
+        r_id: 9652
+        rv_id: 110395
         rule_id: YGURXw
         version_id: GxTv8L9
         url: https://semgrep.dev/playground/r/GxTv8L9/python.lang.security.audit.insecure-transport.requests.request-session-with-http.request-session-with-http
@@ -20124,6 +20353,8 @@ rules:
     shortlink: https://sg.run/W8J4
     semgrep.dev:
       rule:
+        r_id: 9653
+        rv_id: 110396
         rule_id: 6JUjpG
         version_id: RGTDRDO
         url: https://semgrep.dev/playground/r/RGTDRDO/python.lang.security.audit.insecure-transport.requests.request-with-http.request-with-http
@@ -20187,6 +20418,8 @@ rules:
     shortlink: https://sg.run/0Q0v
     semgrep.dev:
       rule:
+        r_id: 9654
+        rv_id: 110397
         rule_id: oqUeYJ
         version_id: A8T9X99
         url: https://semgrep.dev/playground/r/A8T9X99/python.lang.security.audit.insecure-transport.ssl.no-set-ciphers.no-set-ciphers
@@ -20222,6 +20455,8 @@ rules:
     shortlink: https://sg.run/Klj7
     semgrep.dev:
       rule:
+        r_id: 9655
+        rv_id: 110398
         rule_id: zdUkPQ
         version_id: BjTXpXx
         url: https://semgrep.dev/playground/r/BjTXpXx/python.lang.security.audit.insecure-transport.urllib.insecure-openerdirector-open-ftp.insecure-openerdirector-open-ftp
@@ -20285,6 +20520,8 @@ rules:
     shortlink: https://sg.run/qxKz
     semgrep.dev:
       rule:
+        r_id: 9656
+        rv_id: 110399
         rule_id: pKUO9Q
         version_id: DkT6Y69
         url: https://semgrep.dev/playground/r/DkT6Y69/python.lang.security.audit.insecure-transport.urllib.insecure-openerdirector-open.insecure-openerdirector-open
@@ -20355,6 +20592,8 @@ rules:
     shortlink: https://sg.run/l2Py
     semgrep.dev:
       rule:
+        r_id: 9657
+        rv_id: 110400
         rule_id: 2ZUbWA
         version_id: WrTW3Wo
         url: https://semgrep.dev/playground/r/WrTW3Wo/python.lang.security.audit.insecure-transport.urllib.insecure-request-object-ftp.insecure-request-object-ftp
@@ -20398,6 +20637,8 @@ rules:
     shortlink: https://sg.run/YvAe
     semgrep.dev:
       rule:
+        r_id: 9658
+        rv_id: 110401
         rule_id: X5U8Bp
         version_id: 0bTLeLE
         url: https://semgrep.dev/playground/r/0bTLeLE/python.lang.security.audit.insecure-transport.urllib.insecure-request-object.insecure-request-object
@@ -20446,6 +20687,8 @@ rules:
     shortlink: https://sg.run/6n1o
     semgrep.dev:
       rule:
+        r_id: 9659
+        rv_id: 110402
         rule_id: j2UvOG
         version_id: K3TvGvY
         url: https://semgrep.dev/playground/r/K3TvGvY/python.lang.security.audit.insecure-transport.urllib.insecure-urlopen-ftp.insecure-urlopen-ftp
@@ -20489,6 +20732,8 @@ rules:
     shortlink: https://sg.run/oxB9
     semgrep.dev:
       rule:
+        r_id: 9660
+        rv_id: 110403
         rule_id: 10UKgW
         version_id: qkT2B2X
         url: https://semgrep.dev/playground/r/qkT2B2X/python.lang.security.audit.insecure-transport.urllib.insecure-urlopen.insecure-urlopen
@@ -20536,6 +20781,8 @@ rules:
     shortlink: https://sg.run/zvwG
     semgrep.dev:
       rule:
+        r_id: 9661
+        rv_id: 110404
         rule_id: 9AU1DY
         version_id: l4T464W
         url: https://semgrep.dev/playground/r/l4T464W/python.lang.security.audit.insecure-transport.urllib.insecure-urlopener-open-ftp.insecure-urlopener-open-ftp
@@ -20599,6 +20846,8 @@ rules:
     shortlink: https://sg.run/pxWg
     semgrep.dev:
       rule:
+        r_id: 9662
+        rv_id: 110405
         rule_id: yyUnwW
         version_id: YDTpnpl
         url: https://semgrep.dev/playground/r/YDTpnpl/python.lang.security.audit.insecure-transport.urllib.insecure-urlopener-open.insecure-urlopener-open
@@ -20667,6 +20916,8 @@ rules:
     shortlink: https://sg.run/2xY0
     semgrep.dev:
       rule:
+        r_id: 9663
+        rv_id: 110406
         rule_id: r6UrPp
         version_id: 6xTvQvy
         url: https://semgrep.dev/playground/r/6xTvQvy/python.lang.security.audit.insecure-transport.urllib.insecure-urlopener-retrieve-ftp.insecure-urlopener-retrieve-ftp
@@ -20730,6 +20981,8 @@ rules:
     shortlink: https://sg.run/XBGK
     semgrep.dev:
       rule:
+        r_id: 9664
+        rv_id: 110407
         rule_id: bwUw0n
         version_id: o5Tg9gZ
         url: https://semgrep.dev/playground/r/o5Tg9gZ/python.lang.security.audit.insecure-transport.urllib.insecure-urlopener-retrieve.insecure-urlopener-retrieve
@@ -20798,6 +21051,8 @@ rules:
     shortlink: https://sg.run/jR8Y
     semgrep.dev:
       rule:
+        r_id: 9665
+        rv_id: 110408
         rule_id: NbUknL
         version_id: zyTKDK8
         url: https://semgrep.dev/playground/r/zyTKDK8/python.lang.security.audit.insecure-transport.urllib.insecure-urlretrieve-ftp.insecure-urlretrieve-ftp
@@ -20841,6 +21096,8 @@ rules:
     shortlink: https://sg.run/1Zqw
     semgrep.dev:
       rule:
+        r_id: 9666
+        rv_id: 110409
         rule_id: kxUk4N
         version_id: pZT1L1L
         url: https://semgrep.dev/playground/r/pZT1L1L/python.lang.security.audit.insecure-transport.urllib.insecure-urlretrieve.insecure-urlretrieve
@@ -20893,6 +21150,8 @@ rules:
     shortlink: https://sg.run/9okY
     semgrep.dev:
       rule:
+        r_id: 9667
+        rv_id: 110410
         rule_id: wdUJQY
         version_id: 2KTz3zv
         url: https://semgrep.dev/playground/r/2KTz3zv/python.lang.security.audit.logging.listeneval.listen-eval
@@ -20933,6 +21192,8 @@ rules:
     shortlink: https://sg.run/Q5v4
     semgrep.dev:
       rule:
+        r_id: 9642
+        rv_id: 110412
         rule_id: GdU79Z
         version_id: jQTgyg1
         url: https://semgrep.dev/playground/r/jQTgyg1/python.lang.security.audit.mako-templates-detected.mako-templates-detected
@@ -20971,6 +21232,8 @@ rules:
     shortlink: https://sg.run/3xor
     semgrep.dev:
       rule:
+        r_id: 9643
+        rv_id: 110413
         rule_id: ReUg13
         version_id: 1QTO7O3
         url: https://semgrep.dev/playground/r/1QTO7O3/python.lang.security.audit.marshal.marshal-usage
@@ -21007,6 +21270,8 @@ rules:
     shortlink: https://sg.run/N4Np
     semgrep.dev:
       rule:
+        r_id: 9671
+        rv_id: 110417
         rule_id: v8UnWQ
         version_id: bZTb9bx
         url: https://semgrep.dev/playground/r/bZTb9bx/python.lang.security.audit.network.http-not-https-connection.http-not-https-connection
@@ -21050,6 +21315,8 @@ rules:
     shortlink: https://sg.run/y6Jk
     semgrep.dev:
       rule:
+        r_id: 12068
+        rv_id: 110418
         rule_id: AbUGN5
         version_id: NdT3o3E
         url: https://semgrep.dev/playground/r/NdT3o3E/python.lang.security.audit.non-literal-import.non-literal-import
@@ -21092,6 +21359,8 @@ rules:
     shortlink: https://sg.run/4xpl
     semgrep.dev:
       rule:
+        r_id: 9644
+        rv_id: 110420
         rule_id: AbUzbe
         version_id: w8T9D9g
         url: https://semgrep.dev/playground/r/w8T9D9g/python.lang.security.audit.paramiko-implicit-trust-host-key.paramiko-implicit-trust-host-key
@@ -21136,6 +21405,8 @@ rules:
     shortlink: https://sg.run/kXQ7
     semgrep.dev:
       rule:
+        r_id: 9672
+        rv_id: 110419
         rule_id: d8Uj9x
         version_id: kbTdLdQ
         url: https://semgrep.dev/playground/r/kbTdLdQ/python.lang.security.audit.paramiko.paramiko-exec-command.paramiko-exec-command
@@ -21179,6 +21450,8 @@ rules:
     shortlink: https://sg.run/gYZJ
     semgrep.dev:
       rule:
+        r_id: 15185
+        rv_id: 110421
         rule_id: nJUZRY
         version_id: xyTKpKy
         url: https://semgrep.dev/playground/r/xyTKpKy/python.lang.security.audit.python-reverse-shell.python-reverse-shell
@@ -21220,6 +21493,8 @@ rules:
     shortlink: https://sg.run/WgGL
     semgrep.dev:
       rule:
+        r_id: 10309
+        rv_id: 110423
         rule_id: DbUWRY
         version_id: e1T030o
         url: https://semgrep.dev/playground/r/e1T030o/python.lang.security.audit.sqli.aiopg-sqli.aiopg-sqli
@@ -21334,6 +21609,8 @@ rules:
     shortlink: https://sg.run/0nBB
     semgrep.dev:
       rule:
+        r_id: 10310
+        rv_id: 110424
         rule_id: WAUZqq
         version_id: vdTY8YE
         url: https://semgrep.dev/playground/r/vdTY8YE/python.lang.security.audit.sqli.asyncpg-sqli.asyncpg-sqli
@@ -21436,6 +21713,8 @@ rules:
     shortlink: https://sg.run/KWAL
     semgrep.dev:
       rule:
+        r_id: 10311
+        rv_id: 110425
         rule_id: 0oUEKo
         version_id: d6Trvr1
         url: https://semgrep.dev/playground/r/d6Trvr1/python.lang.security.audit.sqli.pg8000-sqli.pg8000-sqli
@@ -21533,6 +21812,8 @@ rules:
     shortlink: https://sg.run/qrLe
     semgrep.dev:
       rule:
+        r_id: 10312
+        rv_id: 110426
         rule_id: KxU4Kg
         version_id: ZRTQpQ0
         url: https://semgrep.dev/playground/r/ZRTQpQ0/python.lang.security.audit.sqli.psycopg-sqli.psycopg-sqli
@@ -21628,6 +21909,8 @@ rules:
     shortlink: https://sg.run/5QXA
     semgrep.dev:
       rule:
+        r_id: 9647
+        rv_id: 110429
         rule_id: WAUorE
         version_id: 7ZTgng4
         url: https://semgrep.dev/playground/r/7ZTgng4/python.lang.security.audit.system-wildcard-detected.system-wildcard-detected
@@ -21663,6 +21946,8 @@ rules:
     shortlink: https://sg.run/Gelp
     semgrep.dev:
       rule:
+        r_id: 9648
+        rv_id: 110430
         rule_id: 0oU5Wl
         version_id: LjTqAqb
         url: https://semgrep.dev/playground/r/LjTqAqb/python.lang.security.audit.telnetlib.telnetlib
@@ -21705,6 +21990,8 @@ rules:
     shortlink: https://sg.run/RoZO
     semgrep.dev:
       rule:
+        r_id: 9649
+        rv_id: 110431
         rule_id: KxUbNG
         version_id: 8KTQyQl
         url: https://semgrep.dev/playground/r/8KTQyQl/python.lang.security.audit.weak-ssl-version.weak-ssl-version
@@ -21779,6 +22066,8 @@ rules:
     shortlink: https://sg.run/jNzn
     semgrep.dev:
       rule:
+        r_id: 10065
+        rv_id: 110433
         rule_id: 9AUOZP
         version_id: QkTWwWO
         url: https://semgrep.dev/playground/r/QkTWwWO/python.lang.security.dangerous-globals-use.dangerous-globals-use
@@ -21820,6 +22109,8 @@ rules:
     shortlink: https://sg.run/rkNP
     semgrep.dev:
       rule:
+        r_id: 12069
+        rv_id: 110440
         rule_id: BYU7Kp
         version_id: RGTDReO
         url: https://semgrep.dev/playground/r/RGTDReO/python.lang.security.deserialization.avoid-jsonpickle.avoid-jsonpickle
@@ -21857,6 +22148,8 @@ rules:
     shortlink: https://sg.run/we9Y
     semgrep.dev:
       rule:
+        r_id: 9673
+        rv_id: 110441
         rule_id: ZqU5jZ
         version_id: A8T9Xk9
         url: https://semgrep.dev/playground/r/A8T9Xk9/python.lang.security.deserialization.avoid-pyyaml-load.avoid-pyyaml-load
@@ -21915,6 +22208,8 @@ rules:
     shortlink: https://sg.run/x1rz
     semgrep.dev:
       rule:
+        r_id: 9674
+        rv_id: 110442
         rule_id: nJUzqK
         version_id: BjTXpxx
         url: https://semgrep.dev/playground/r/BjTXpxx/python.lang.security.deserialization.avoid-unsafe-ruamel.avoid-unsafe-ruamel
@@ -21954,6 +22249,8 @@ rules:
     shortlink: https://sg.run/eLxb
     semgrep.dev:
       rule:
+        r_id: 9676
+        rv_id: 110444
         rule_id: 7KUQNL
         version_id: WrTW3Oo
         url: https://semgrep.dev/playground/r/WrTW3Oo/python.lang.security.deserialization.pickle.avoid-cPickle
@@ -21994,6 +22291,8 @@ rules:
     shortlink: https://sg.run/vzjA
     semgrep.dev:
       rule:
+        r_id: 9677
+        rv_id: 110445
         rule_id: L1Uy60
         version_id: 0bTLeyE
         url: https://semgrep.dev/playground/r/0bTLeyE/python.lang.security.deserialization.pickle.avoid-dill
@@ -22034,6 +22333,8 @@ rules:
     shortlink: https://sg.run/OPwB
     semgrep.dev:
       rule:
+        r_id: 9675
+        rv_id: 110443
         rule_id: EwU2BJ
         version_id: DkT6Yq9
         url: https://semgrep.dev/playground/r/DkT6Yq9/python.lang.security.deserialization.pickle.avoid-pickle
@@ -22077,6 +22378,8 @@ rules:
     shortlink: https://sg.run/dKkZ
     semgrep.dev:
       rule:
+        r_id: 9678
+        rv_id: 110446
         rule_id: 8GUje2
         version_id: K3TvGnY
         url: https://semgrep.dev/playground/r/K3TvGnY/python.lang.security.deserialization.pickle.avoid-shelve
@@ -22124,6 +22427,8 @@ rules:
     shortlink: https://sg.run/rdBn
     semgrep.dev:
       rule:
+        r_id: 9625
+        rv_id: 110449
         rule_id: OrU30g
         version_id: YDTpnNl
         url: https://semgrep.dev/playground/r/YDTpnNl/python.lang.security.insecure-hash-function.insecure-hash-function
@@ -22168,6 +22473,8 @@ rules:
     shortlink: https://sg.run/N4lp
     semgrep.dev:
       rule:
+        r_id: 9627
+        rv_id: 110451
         rule_id: v8UnkQ
         version_id: o5Tg9kZ
         url: https://semgrep.dev/playground/r/o5Tg9kZ/python.lang.security.unverified-ssl-context.unverified-ssl-context
@@ -22203,6 +22510,8 @@ rules:
     shortlink: https://sg.run/kX47
     semgrep.dev:
       rule:
+        r_id: 9628
+        rv_id: 110453
         rule_id: d8UjRx
         version_id: pZT1LkL
         url: https://semgrep.dev/playground/r/pZT1LkL/python.lang.security.use-defused-xml.use-defused-xml
@@ -22248,6 +22557,8 @@ rules:
     shortlink: https://sg.run/weqY
     semgrep.dev:
       rule:
+        r_id: 9629
+        rv_id: 110454
         rule_id: ZqU5EZ
         version_id: 2KTz3Gv
         url: https://semgrep.dev/playground/r/2KTz3Gv/python.lang.security.use-defused-xmlrpc.use-defused-xmlrpc
@@ -22281,6 +22592,8 @@ rules:
     shortlink: https://sg.run/AlYp
     semgrep.dev:
       rule:
+        r_id: 9694
+        rv_id: 110490
         rule_id: qNUoYR
         version_id: K3TvGzY
         url: https://semgrep.dev/playground/r/K3TvGzY/python.requests.security.disabled-cert-validation.disabled-cert-validation
@@ -22333,6 +22646,8 @@ rules:
     shortlink: https://sg.run/B4NW
     semgrep.dev:
       rule:
+        r_id: 9695
+        rv_id: 110491
         rule_id: lBUdQZ
         version_id: qkT2B1X
         url: https://semgrep.dev/playground/r/qkT2B1X/python.requests.security.no-auth-over-http.no-auth-over-http
@@ -22379,6 +22694,8 @@ rules:
     shortlink: https://sg.run/Wg34
     semgrep.dev:
       rule:
+        r_id: 9697
+        rv_id: 110492
         rule_id: JDUP1G
         version_id: l4T46rW
         url: https://semgrep.dev/playground/r/l4T46rW/python.sh.security.string-concat.string-concat
@@ -22448,6 +22765,8 @@ rules:
     shortlink: https://sg.run/yP1O
     semgrep.dev:
       rule:
+        r_id: 15824
+        rv_id: 253874
         rule_id: r6U2wE
         version_id: 2KTGW4q
         url: https://semgrep.dev/playground/r/2KTGW4q/python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text
@@ -22490,6 +22809,8 @@ rules:
     shortlink: https://sg.run/2b1L
     semgrep.dev:
       rule:
+        r_id: 10563
+        rv_id: 110498
         rule_id: oqUz5y
         version_id: A8T9Xrg
         url: https://semgrep.dev/playground/r/A8T9Xrg/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query
@@ -22551,6 +22872,8 @@ rules:
     shortlink: https://sg.run/AlYg
     semgrep.dev:
       rule:
+        r_id: 9706
+        rv_id: 110506
         rule_id: KxU426
         version_id: YDTpn6x
         url: https://semgrep.dev/playground/r/YDTpn6x/ruby.jwt.security.audit.jwt-decode-without-verify.ruby-jwt-decode-without-verify
@@ -22592,6 +22915,8 @@ rules:
     shortlink: https://sg.run/B4Nb
     semgrep.dev:
       rule:
+        r_id: 9707
+        rv_id: 110507
         rule_id: qNUoYd
         version_id: 6xTvQ54
         url: https://semgrep.dev/playground/r/6xTvQ54/ruby.jwt.security.audit.jwt-exposed-data.ruby-jwt-exposed-data
@@ -22637,6 +22962,8 @@ rules:
     shortlink: https://sg.run/58Y6
     semgrep.dev:
       rule:
+        r_id: 9703
+        rv_id: 110508
         rule_id: DbUWdB
         version_id: o5Tg9yQ
         url: https://semgrep.dev/playground/r/o5Tg9yQ/ruby.jwt.security.jwt-exposed-credentials.ruby-jwt-exposed-credentials
@@ -22682,6 +23009,8 @@ rules:
     shortlink: https://sg.run/GW2B
     semgrep.dev:
       rule:
+        r_id: 9704
+        rv_id: 729097
         rule_id: WAUZz5
         version_id: ExTq53v
         url: https://semgrep.dev/playground/r/ExTq53v/ruby.jwt.security.jwt-hardcode.ruby-jwt-hardcoded-secret
@@ -22749,6 +23078,8 @@ rules:
     shortlink: https://sg.run/R8kE
     semgrep.dev:
       rule:
+        r_id: 9705
+        rv_id: 110510
         rule_id: 0oUExR
         version_id: pZT1L64
         url: https://semgrep.dev/playground/r/pZT1L64/ruby.jwt.security.jwt-none-alg.ruby-jwt-none-alg
@@ -22791,6 +23122,8 @@ rules:
     shortlink: https://sg.run/Wg3y
     semgrep.dev:
       rule:
+        r_id: 9709
+        rv_id: 110514
         rule_id: YGUrq5
         version_id: 1QTO7b6
         url: https://semgrep.dev/playground/r/1QTO7b6/ruby.lang.security.cookie-serialization.cookie-serialization
@@ -22837,6 +23170,8 @@ rules:
     shortlink: https://sg.run/0nLk
     semgrep.dev:
       rule:
+        r_id: 9710
+        rv_id: 110515
         rule_id: 6JUqbn
         version_id: 9lTd5op
         url: https://semgrep.dev/playground/r/9lTd5op/ruby.lang.security.create-with.create-with
@@ -22881,6 +23216,8 @@ rules:
     shortlink: https://sg.run/Al8Q
     semgrep.dev:
       rule:
+        r_id: 9806
+        rv_id: 110517
         rule_id: 0oUEyd
         version_id: rxTy4o7
         url: https://semgrep.dev/playground/r/rxTy4o7/ruby.lang.security.dangerous-open.dangerous-open
@@ -22925,6 +23262,8 @@ rules:
     shortlink: https://sg.run/B4jv
     semgrep.dev:
       rule:
+        r_id: 9807
+        rv_id: 110518
         rule_id: KxU4nd
         version_id: bZTb9Ke
         url: https://semgrep.dev/playground/r/bZTb9Ke/ruby.lang.security.dangerous-open3-pipeline.dangerous-open3-pipeline
@@ -22967,6 +23306,8 @@ rules:
     shortlink: https://sg.run/NrxL
     semgrep.dev:
       rule:
+        r_id: 9827
+        rv_id: 110519
         rule_id: OrUGn8
         version_id: NdT3o9R
         url: https://semgrep.dev/playground/r/NdT3o9R/ruby.lang.security.dangerous-subshell.dangerous-subshell
@@ -23003,6 +23344,8 @@ rules:
     shortlink: https://sg.run/DJkv
     semgrep.dev:
       rule:
+        r_id: 9808
+        rv_id: 110520
         rule_id: qNUo50
         version_id: kbTdLjG
         url: https://semgrep.dev/playground/r/kbTdLjG/ruby.lang.security.dangerous-syscall.dangerous-syscall
@@ -23041,6 +23384,8 @@ rules:
     shortlink: https://sg.run/qrR1
     semgrep.dev:
       rule:
+        r_id: 9712
+        rv_id: 110522
         rule_id: zdUyqE
         version_id: xyTKpAo
         url: https://semgrep.dev/playground/r/xyTKpAo/ruby.lang.security.file-disclosure.file-disclosure
@@ -23086,6 +23431,8 @@ rules:
     shortlink: https://sg.run/ljNL
     semgrep.dev:
       rule:
+        r_id: 9713
+        rv_id: 110523
         rule_id: pKUGP7
         version_id: O9TNdne
         url: https://semgrep.dev/playground/r/O9TNdne/ruby.lang.security.filter-skipping.filter-skipping
@@ -23131,6 +23478,8 @@ rules:
     shortlink: https://sg.run/6r0w
     semgrep.dev:
       rule:
+        r_id: 9715
+        rv_id: 110525
         rule_id: X5UZWK
         version_id: vdTY8p2
         url: https://semgrep.dev/playground/r/vdTY8p2/ruby.lang.security.hardcoded-http-auth-in-controller.hardcoded-http-auth-in-controller
@@ -23174,6 +23523,8 @@ rules:
     shortlink: https://sg.run/plr3
     semgrep.dev:
       rule:
+        r_id: 9718
+        rv_id: 110530
         rule_id: 9AUOQB
         version_id: 7ZTgnQD
         url: https://semgrep.dev/playground/r/7ZTgnQD/ruby.lang.security.json-entity-escape.json-entity-escape
@@ -23211,6 +23562,8 @@ rules:
     shortlink: https://sg.run/2byz
     semgrep.dev:
       rule:
+        r_id: 9719
+        rv_id: 110531
         rule_id: yyUvkJ
         version_id: LjTqAy2
         url: https://semgrep.dev/playground/r/LjTqAy2/ruby.lang.security.mass-assignment-protection-disabled.mass-assignment-protection-disabled
@@ -23263,6 +23616,8 @@ rules:
     shortlink: https://sg.run/XLel
     semgrep.dev:
       rule:
+        r_id: 9720
+        rv_id: 110533
         rule_id: r6UkO5
         version_id: gET3O1W
         url: https://semgrep.dev/playground/r/gET3O1W/ruby.lang.security.missing-csrf-protection.missing-csrf-protection
@@ -23298,6 +23653,8 @@ rules:
     shortlink: https://sg.run/jNrZ
     semgrep.dev:
       rule:
+        r_id: 9721
+        rv_id: 110534
         rule_id: bwUOAG
         version_id: QkTWwzp
         url: https://semgrep.dev/playground/r/QkTWwzp/ruby.lang.security.model-attr-accessible.model-attr-accessible
@@ -23373,6 +23730,8 @@ rules:
     shortlink: https://sg.run/1nrb
     semgrep.dev:
       rule:
+        r_id: 9722
+        rv_id: 110535
         rule_id: NbUADO
         version_id: 3ZTkrPj
         url: https://semgrep.dev/playground/r/3ZTkrPj/ruby.lang.security.model-attributes-attr-accessible.model-attributes-attr-accessible
@@ -23409,6 +23768,8 @@ rules:
     shortlink: https://sg.run/Nrbx
     semgrep.dev:
       rule:
+        r_id: 9727
+        rv_id: 110540
         rule_id: eqUv0L
         version_id: GxTv876
         url: https://semgrep.dev/playground/r/GxTv876/ruby.lang.security.no-send.bad-send
@@ -23471,6 +23832,8 @@ rules:
     shortlink: https://sg.run/xY8e
     semgrep.dev:
       rule:
+        r_id: 9730
+        rv_id: 110543
         rule_id: ZqUqQg
         version_id: BjTXpNb
         url: https://semgrep.dev/playground/r/BjTXpNb/ruby.lang.security.unprotected-mass-assign.mass-assignment-vuln
@@ -23503,6 +23866,8 @@ rules:
     shortlink: https://sg.run/Je0d
     semgrep.dev:
       rule:
+        r_id: 16546
+        rv_id: 110554
         rule_id: 8GUAo4
         version_id: pZT1LO4
         url: https://semgrep.dev/playground/r/pZT1LO4/ruby.rails.security.audit.detailed-exceptions.detailed-exceptions
@@ -23566,6 +23931,8 @@ rules:
     shortlink: https://sg.run/PgwY
     semgrep.dev:
       rule:
+        r_id: 16201
+        rv_id: 110568
         rule_id: QrUnEk
         version_id: e1T0386
         url: https://semgrep.dev/playground/r/e1T0386/ruby.rails.security.audit.rails-skip-forgery-protection.rails-skip-forgery-protection
@@ -23599,6 +23966,8 @@ rules:
     shortlink: https://sg.run/dg8P
     semgrep.dev:
       rule:
+        r_id: 9734
+        rv_id: 110570
         rule_id: L1U4qz
         version_id: d6TrvjR
         url: https://semgrep.dev/playground/r/d6TrvjR/ruby.rails.security.audit.xss.avoid-content-tag.avoid-content-tag
@@ -23637,6 +24006,8 @@ rules:
     shortlink: https://sg.run/Pbrq
     semgrep.dev:
       rule:
+        r_id: 13589
+        rv_id: 110571
         rule_id: qNUXYy
         version_id: ZRTQp5j
         url: https://semgrep.dev/playground/r/ZRTQp5j/ruby.rails.security.audit.xss.avoid-default-routes.avoid-default-routes
@@ -23684,6 +24055,8 @@ rules:
     shortlink: https://sg.run/Zeq7
     semgrep.dev:
       rule:
+        r_id: 9735
+        rv_id: 110572
         rule_id: 8GUEQK
         version_id: nWTxoYW
         url: https://semgrep.dev/playground/r/nWTxoYW/ruby.rails.security.audit.xss.avoid-html-safe.avoid-html-safe
@@ -23726,6 +24099,8 @@ rules:
     shortlink: https://sg.run/nqJG
     semgrep.dev:
       rule:
+        r_id: 9736
+        rv_id: 110574
         rule_id: gxUW3x
         version_id: 7ZTgneD
         url: https://semgrep.dev/playground/r/7ZTgneD/ruby.rails.security.audit.xss.avoid-raw.avoid-raw
@@ -23766,6 +24141,8 @@ rules:
     shortlink: https://sg.run/E5w8
     semgrep.dev:
       rule:
+        r_id: 9737
+        rv_id: 110577
         rule_id: QrU6Ww
         version_id: gET3OWW
         url: https://semgrep.dev/playground/r/gET3OWW/ruby.rails.security.audit.xss.avoid-render-inline.avoid-render-inline
@@ -23806,6 +24183,8 @@ rules:
     shortlink: https://sg.run/70Kv
     semgrep.dev:
       rule:
+        r_id: 9738
+        rv_id: 110578
         rule_id: 3qUBk4
         version_id: QkTWw6p
         url: https://semgrep.dev/playground/r/QkTWw6p/ruby.rails.security.audit.xss.avoid-render-text.avoid-render-text
@@ -23848,6 +24227,8 @@ rules:
     shortlink: https://sg.run/L01L
     semgrep.dev:
       rule:
+        r_id: 9739
+        rv_id: 110579
         rule_id: 4bUzR9
         version_id: 3ZTkrBj
         url: https://semgrep.dev/playground/r/3ZTkrBj/ruby.rails.security.audit.xss.manual-template-creation.manual-template-creation
@@ -23893,6 +24274,8 @@ rules:
     shortlink: https://sg.run/8nGJ
     semgrep.dev:
       rule:
+        r_id: 9740
+        rv_id: 110580
         rule_id: PeUkJe
         version_id: 44TR6zg
         url: https://semgrep.dev/playground/r/44TR6zg/ruby.rails.security.audit.xss.templates.alias-for-html-safe.alias-for-html-safe
@@ -23939,6 +24322,8 @@ rules:
     shortlink: https://sg.run/gJxo
     semgrep.dev:
       rule:
+        r_id: 9741
+        rv_id: 110581
         rule_id: JDUPNG
         version_id: PkTJdkx
         url: https://semgrep.dev/playground/r/PkTJdkx/ruby.rails.security.audit.xss.templates.avoid-content-tag.avoid-content-tag
@@ -23985,6 +24370,8 @@ rules:
     shortlink: https://sg.run/Q8rD
     semgrep.dev:
       rule:
+        r_id: 9742
+        rv_id: 110582
         rule_id: 5rU4dE
         version_id: JdTNvPo
         url: https://semgrep.dev/playground/r/JdTNvPo/ruby.rails.security.audit.xss.templates.avoid-html-safe.avoid-html-safe
@@ -24031,6 +24418,8 @@ rules:
     shortlink: https://sg.run/3Aqg
     semgrep.dev:
       rule:
+        r_id: 9743
+        rv_id: 110583
         rule_id: GdU0vJ
         version_id: 5PTde49
         url: https://semgrep.dev/playground/r/5PTde49/ruby.rails.security.audit.xss.templates.avoid-raw.avoid-raw
@@ -24075,6 +24464,8 @@ rules:
     shortlink: https://sg.run/PpeN
     semgrep.dev:
       rule:
+        r_id: 9745
+        rv_id: 110585
         rule_id: AbUW9y
         version_id: RGTDRPR
         url: https://semgrep.dev/playground/r/RGTDRPR/ruby.rails.security.audit.xss.templates.unquoted-attribute.unquoted-attribute
@@ -24128,6 +24519,8 @@ rules:
     shortlink: https://sg.run/J3Do
     semgrep.dev:
       rule:
+        r_id: 9746
+        rv_id: 110586
         rule_id: BYUBXo
         version_id: A8T9XWg
         url: https://semgrep.dev/playground/r/A8T9XWg/ruby.rails.security.audit.xss.templates.var-in-href.var-in-href
@@ -24176,6 +24569,8 @@ rules:
     shortlink: https://sg.run/58r6
     semgrep.dev:
       rule:
+        r_id: 9747
+        rv_id: 110587
         rule_id: DbUW6B
         version_id: BjTXpBb
         url: https://semgrep.dev/playground/r/BjTXpBb/ruby.rails.security.audit.xss.templates.var-in-script-tag.var-in-script-tag
@@ -24236,6 +24631,8 @@ rules:
     shortlink: https://sg.run/WDYA
     semgrep.dev:
       rule:
+        r_id: 20153
+        rv_id: 110591
         rule_id: KxUw3v
         version_id: K3TvG4Q
         url: https://semgrep.dev/playground/r/K3TvG4Q/ruby.rails.security.brakeman.check-cookie-store-session-security-attributes.check-cookie-store-session-security-attributes
@@ -24276,6 +24673,8 @@ rules:
     shortlink: https://sg.run/4k0Z
     semgrep.dev:
       rule:
+        r_id: 20044
+        rv_id: 110594
         rule_id: 5rUNql
         version_id: YDTpnrx
         url: https://semgrep.dev/playground/r/YDTpnrx/ruby.rails.security.brakeman.check-permit-attributes-high.check-permit-attributes-high
@@ -24316,6 +24715,8 @@ rules:
     shortlink: https://sg.run/PPLE
     semgrep.dev:
       rule:
+        r_id: 20045
+        rv_id: 110595
         rule_id: GdUoq5
         version_id: JdTNvPO
         url: https://semgrep.dev/playground/r/JdTNvPO/ruby.rails.security.brakeman.check-permit-attributes-medium.check-permit-attributes-medium
@@ -24369,6 +24770,8 @@ rules:
     shortlink: https://sg.run/0Wvb
     semgrep.dev:
       rule:
+        r_id: 20154
+        rv_id: 110596
         rule_id: qNUpJ5
         version_id: 5PTde4l
         url: https://semgrep.dev/playground/r/5PTde4l/ruby.rails.security.brakeman.check-rails-secret-yaml.check-rails-secret-yaml
@@ -24397,6 +24800,8 @@ rules:
     shortlink: https://sg.run/G6k6
     semgrep.dev:
       rule:
+        r_id: 40104
+        rv_id: 110613
         rule_id: DbUeEe
         version_id: X0TQ2ZP
         url: https://semgrep.dev/playground/r/X0TQ2ZP/rust.lang.security.args-os.args-os
@@ -24428,6 +24833,8 @@ rules:
     shortlink: https://sg.run/RADN
     semgrep.dev:
       rule:
+        r_id: 40105
+        rv_id: 110614
         rule_id: WAU6Lk
         version_id: jQTgyqZ
         url: https://semgrep.dev/playground/r/jQTgyqZ/rust.lang.security.args.args
@@ -24459,6 +24866,8 @@ rules:
     shortlink: https://sg.run/AW1B
     semgrep.dev:
       rule:
+        r_id: 40106
+        rv_id: 110615
         rule_id: 0oU6nZ
         version_id: 1QTO7Zg
         url: https://semgrep.dev/playground/r/1QTO7Zg/rust.lang.security.current-exe.current-exe
@@ -24495,6 +24904,8 @@ rules:
     shortlink: https://sg.run/B09R
     semgrep.dev:
       rule:
+        r_id: 40107
+        rv_id: 110616
         rule_id: KxUOxA
         version_id: 9lTd5kQ
         url: https://semgrep.dev/playground/r/9lTd5kQ/rust.lang.security.insecure-hashes.insecure-hashes
@@ -24551,6 +24962,8 @@ rules:
     shortlink: https://sg.run/WKlE
     semgrep.dev:
       rule:
+        r_id: 40109
+        rv_id: 110618
         rule_id: lBUNEw
         version_id: rxTy490
         url: https://semgrep.dev/playground/r/rxTy490/rust.lang.security.reqwest-set-sensitive.reqwest-set-sensitive
@@ -24584,6 +24997,8 @@ rules:
     shortlink: https://sg.run/qzEO
     semgrep.dev:
       rule:
+        r_id: 40112
+        rv_id: 110621
         rule_id: oqU5AO
         version_id: kbTdL8R
         url: https://semgrep.dev/playground/r/kbTdL8R/rust.lang.security.temp-dir.temp-dir
@@ -24612,6 +25027,8 @@ rules:
     shortlink: https://sg.run/lqgo
     semgrep.dev:
       rule:
+        r_id: 40113
+        rv_id: 110622
         rule_id: zdUezd
         version_id: w8T9DGG
         url: https://semgrep.dev/playground/r/w8T9DGG/rust.lang.security.unsafe-usage.unsafe-usage
@@ -24666,6 +25083,8 @@ rules:
     shortlink: https://sg.run/79b2
     semgrep.dev:
       rule:
+        r_id: 18282
+        rv_id: 110625
         rule_id: JDUle4
         version_id: e1T03pD
         url: https://semgrep.dev/playground/r/e1T03pD/scala.lang.security.audit.dangerous-seq-run.dangerous-seq-run
@@ -24720,6 +25139,8 @@ rules:
     shortlink: https://sg.run/Lg76
     semgrep.dev:
       rule:
+        r_id: 18283
+        rv_id: 110626
         rule_id: 5rUy3K
         version_id: vdTY8jv
         url: https://semgrep.dev/playground/r/vdTY8jv/scala.lang.security.audit.dangerous-shell-run.dangerous-shell-run
@@ -24770,6 +25191,8 @@ rules:
     shortlink: https://sg.run/gR6J
     semgrep.dev:
       rule:
+        r_id: 18485
+        rv_id: 110627
         rule_id: 5rUyl4
         version_id: d6TrvlP
         url: https://semgrep.dev/playground/r/d6TrvlP/scala.lang.security.audit.dispatch-ssrf.dispatch-ssrf
@@ -24803,6 +25226,8 @@ rules:
     shortlink: https://sg.run/JxAw
     semgrep.dev:
       rule:
+        r_id: 15190
+        rv_id: 110629
         rule_id: gxUgDk
         version_id: nWTxoro
         url: https://semgrep.dev/playground/r/nWTxoro/scala.lang.security.audit.insecure-random.insecure-random
@@ -24865,6 +25290,8 @@ rules:
     shortlink: https://sg.run/Qbz4
     semgrep.dev:
       rule:
+        r_id: 18486
+        rv_id: 110630
         rule_id: GdUDOZ
         version_id: ExTjAQE
         url: https://semgrep.dev/playground/r/ExTjAQE/scala.lang.security.audit.io-source-ssrf.io-source-ssrf
@@ -24901,6 +25328,8 @@ rules:
     shortlink: https://sg.run/5D1A
     semgrep.dev:
       rule:
+        r_id: 15191
+        rv_id: 110631
         rule_id: QrUdOZ
         version_id: 7ZTgnpB
         url: https://semgrep.dev/playground/r/7ZTgnpB/scala.lang.security.audit.path-traversal-fromfile.path-traversal-fromfile
@@ -24965,6 +25394,8 @@ rules:
     shortlink: https://sg.run/GO5p
     semgrep.dev:
       rule:
+        r_id: 15192
+        rv_id: 110632
         rule_id: 3qUj1Q
         version_id: LjTqArR
         url: https://semgrep.dev/playground/r/LjTqArR/scala.lang.security.audit.rsa-padding-set.rsa-padding-set
@@ -25057,6 +25488,8 @@ rules:
     shortlink: https://sg.run/QbYP
     semgrep.dev:
       rule:
+        r_id: 19042
+        rv_id: 110633
         rule_id: KxUrkq
         version_id: 8KTQyxg
         url: https://semgrep.dev/playground/r/8KTQyxg/scala.lang.security.audit.sax-dtd-enabled.sax-dtd-enabled
@@ -25126,6 +25559,8 @@ rules:
     shortlink: https://sg.run/wZBY
     semgrep.dev:
       rule:
+        r_id: 17329
+        rv_id: 110634
         rule_id: 6JUEeo
         version_id: gET3OY0
         url: https://semgrep.dev/playground/r/gET3OY0/scala.lang.security.audit.scala-dangerous-process-run.scala-dangerous-process-run
@@ -25166,6 +25601,8 @@ rules:
     shortlink: https://sg.run/QbGd
     semgrep.dev:
       rule:
+        r_id: 18686
+        rv_id: 110635
         rule_id: JDUlE0
         version_id: QkTWwpg
         url: https://semgrep.dev/playground/r/QkTWwpg/scala.lang.security.audit.scalac-debug.scalac-debug
@@ -25216,6 +25653,8 @@ rules:
     shortlink: https://sg.run/OgjB
     semgrep.dev:
       rule:
+        r_id: 18431
+        rv_id: 110636
         rule_id: AbU3xA
         version_id: 3ZTkrEx
         url: https://semgrep.dev/playground/r/3ZTkrEx/scala.lang.security.audit.scalaj-http-ssrf.scalaj-http-ssrf
@@ -25266,6 +25705,8 @@ rules:
     shortlink: https://sg.run/3BEb
     semgrep.dev:
       rule:
+        r_id: 19043
+        rv_id: 110639
         rule_id: qNUQ7w
         version_id: JdTNvQO
         url: https://semgrep.dev/playground/r/JdTNvQO/scala.lang.security.audit.xmlinputfactory-dtd-enabled.xmlinputfactory-dtd-enabled
@@ -25297,8 +25738,9 @@ rules:
   message: A parameter being passed directly into `WSClient` most likely lead to SSRF.
     This could allow an attacker to send data to their own server, potentially exposing
     sensitive data sent with this request. They could also probe internal servers
-    or other resources that the server runnig this code can access. Do not allow arbitrary
-    hosts. Instead, create an allowlist for approved hosts hardcode the correct host.
+    or other resources that the server running this code can access. Do not allow
+    arbitrary hosts. Instead, create an allowlist for approved hosts hardcode the
+    correct host.
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -25325,9 +25767,11 @@ rules:
     shortlink: https://sg.run/reRR
     semgrep.dev:
       rule:
+        r_id: 18369
+        rv_id: 751092
         rule_id: PeUxEE
-        version_id: WrTW3PB
-        url: https://semgrep.dev/playground/r/WrTW3PB/scala.play.security.webservice-ssrf.webservice-ssrf
+        version_id: YDTAbP2
+        url: https://semgrep.dev/playground/r/YDTAbP2/scala.play.security.webservice-ssrf.webservice-ssrf
         origin: community
   languages:
   - scala
@@ -25364,6 +25808,8 @@ rules:
     shortlink: https://sg.run/Z40o
     semgrep.dev:
       rule:
+        r_id: 15079
+        rv_id: 110647
         rule_id: OrU6W1
         version_id: 0bTLeJn
         url: https://semgrep.dev/playground/r/0bTLeJn/scala.scala-jwt.security.jwt-hardcode.scala-jwt-hardcoded-secret
@@ -25467,6 +25913,8 @@ rules:
     shortlink: https://sg.run/PYe0
     semgrep.dev:
       rule:
+        r_id: 17501
+        rv_id: 110648
         rule_id: wdUA97
         version_id: K3TvGY1
         url: https://semgrep.dev/playground/r/K3TvGY1/scala.slick.security.scala-slick-overridesql-literal.scala-slick-overrideSql-literal
@@ -25512,6 +25960,8 @@ rules:
     shortlink: https://sg.run/JgDk
     semgrep.dev:
       rule:
+        r_id: 17502
+        rv_id: 110649
         rule_id: x8UNKe
         version_id: qkT2Bb8
         url: https://semgrep.dev/playground/r/qkT2Bb8/scala.slick.security.scala-slick-sql-non-literal.scala-slick-sql-non-literal
@@ -25537,6 +25987,8 @@ rules:
     shortlink: https://sg.run/6DyK
     semgrep.dev:
       rule:
+        r_id: 67659
+        rv_id: 110687
         rule_id: 5rUD6Z
         version_id: A8T9XQO
         url: https://semgrep.dev/playground/r/A8T9XQO/solidity.security.no-bidi-characters.no-bidi-characters
@@ -25584,6 +26036,8 @@ rules:
     shortlink: https://sg.run/YWLd
     semgrep.dev:
       rule:
+        r_id: 66514
+        rv_id: 110702
         rule_id: lBUOZk
         version_id: DkT6Y18
         url: https://semgrep.dev/playground/r/DkT6Y18/swift.webview.webview-js-window.swift-webview-config-allows-js-open-windows
@@ -25679,6 +26133,8 @@ rules:
     shortlink: https://sg.run/gX7J
     semgrep.dev:
       rule:
+        r_id: 17341
+        rv_id: 110726
         rule_id: NbUXOA
         version_id: e1T03rw
         url: https://semgrep.dev/playground/r/e1T03rw/terraform.aws.security.aws-athena-workgroup-unencrypted.aws-athena-workgroup-unencrypted
@@ -25721,6 +26177,8 @@ rules:
     shortlink: https://sg.run/18yw
     semgrep.dev:
       rule:
+        r_id: 15122
+        rv_id: 110727
         rule_id: x8UxrP
         version_id: vdTY84K
         url: https://semgrep.dev/playground/r/vdTY84K/terraform.aws.security.aws-backup-vault-unencrypted.aws-backup-vault-unencrypted
@@ -25762,6 +26220,8 @@ rules:
     shortlink: https://sg.run/38kr
     semgrep.dev:
       rule:
+        r_id: 17343
+        rv_id: 110729
         rule_id: wdUl2j
         version_id: ZRTQpG1
         url: https://semgrep.dev/playground/r/ZRTQpG1/terraform.aws.security.aws-cloudtrail-encrypted-with-cmk.aws-cloudtrail-encrypted-with-cmk
@@ -25812,6 +26272,8 @@ rules:
     shortlink: https://sg.run/Pg6Y
     semgrep.dev:
       rule:
+        r_id: 17345
+        rv_id: 110731
         rule_id: OrUl0J
         version_id: ExTjAqL
         url: https://semgrep.dev/playground/r/ExTjAqL/terraform.aws.security.aws-cloudwatch-log-group-unencrypted.aws-cloudwatch-log-group-unencrypted
@@ -25874,6 +26336,8 @@ rules:
     shortlink: https://sg.run/JeWw
     semgrep.dev:
       rule:
+        r_id: 17346
+        rv_id: 110733
         rule_id: eqUrdZ
         version_id: LjTqAPO
         url: https://semgrep.dev/playground/r/LjTqAPO/terraform.aws.security.aws-codebuild-project-artifacts-unencrypted.aws-codebuild-project-artifacts-unencrypted
@@ -25929,6 +26393,8 @@ rules:
     shortlink: https://sg.run/O6A7
     semgrep.dev:
       rule:
+        r_id: 47275
+        rv_id: 110735
         rule_id: DbUo7v
         version_id: gET3OJK
         url: https://semgrep.dev/playground/r/gET3OJK/terraform.aws.security.aws-config-aggregator-not-all-regions.aws-config-aggregator-not-all-regions
@@ -25970,6 +26436,8 @@ rules:
     shortlink: https://sg.run/RyzO
     semgrep.dev:
       rule:
+        r_id: 17349
+        rv_id: 110737
         rule_id: ZqUGEp
         version_id: 3ZTkr60
         url: https://semgrep.dev/playground/r/3ZTkr60/terraform.aws.security.aws-docdb-encrypted-with-cmk.aws-docdb-encrypted-with-cmk
@@ -26019,6 +26487,8 @@ rules:
     shortlink: https://sg.run/xJYP
     semgrep.dev:
       rule:
+        r_id: 48630
+        rv_id: 110738
         rule_id: AbU1WN
         version_id: 44TR6gP
         url: https://semgrep.dev/playground/r/44TR6gP/terraform.aws.security.aws-documentdb-auditing-disabled.aws-documentdb-auditing-disabled
@@ -26063,6 +26533,8 @@ rules:
     shortlink: https://sg.run/WW14
     semgrep.dev:
       rule:
+        r_id: 17353
+        rv_id: 110744
         rule_id: L1UPY9
         version_id: A8T9Xe6
         url: https://semgrep.dev/playground/r/A8T9Xe6/terraform.aws.security.aws-ebs-volume-encrypted-with-cmk.aws-ebs-volume-encrypted-with-cmk
@@ -26114,6 +26586,8 @@ rules:
     shortlink: https://sg.run/6ZbY
     semgrep.dev:
       rule:
+        r_id: 50759
+        rv_id: 110745
         rule_id: YGUKl1
         version_id: BjTXpzE
         url: https://semgrep.dev/playground/r/BjTXpzE/terraform.aws.security.aws-ebs-volume-unencrypted.aws-ebs-volume-unencrypted
@@ -26175,6 +26649,8 @@ rules:
     shortlink: https://sg.run/pg9J
     semgrep.dev:
       rule:
+        r_id: 50762
+        rv_id: 110749
         rule_id: zdU0Wo
         version_id: K3TvGrv
         url: https://semgrep.dev/playground/r/K3TvGrv/terraform.aws.security.aws-ec2-launch-template-metadata-service-v1-enabled.aws-ec2-launch-template-metadata-service-v1-enabled
@@ -26222,6 +26698,8 @@ rules:
     shortlink: https://sg.run/ZEeL
     semgrep.dev:
       rule:
+        r_id: 48635
+        rv_id: 110753
         rule_id: KxUB4o
         version_id: 6xTvQDq
         url: https://semgrep.dev/playground/r/6xTvQDq/terraform.aws.security.aws-ecr-mutable-image-tags.aws-ecr-mutable-image-tags
@@ -26266,6 +26744,8 @@ rules:
     shortlink: https://sg.run/Kk07
     semgrep.dev:
       rule:
+        r_id: 17355
+        rv_id: 110755
         rule_id: gxUJ4n
         version_id: zyTKDWY
         url: https://semgrep.dev/playground/r/zyTKDWY/terraform.aws.security.aws-efs-filesystem-encrypted-with-cmk.aws-efs-filesystem-encrypted-with-cmk
@@ -26312,6 +26792,8 @@ rules:
     shortlink: https://sg.run/6gOo
     semgrep.dev:
       rule:
+        r_id: 17359
+        rv_id: 110760
         rule_id: PeU0L7
         version_id: 1QTO7PY
         url: https://semgrep.dev/playground/r/1QTO7PY/terraform.aws.security.aws-emr-encrypted-with-cmk.aws-emr-encrypted-with-cmk
@@ -26358,6 +26840,8 @@ rules:
     shortlink: https://sg.run/oNG9
     semgrep.dev:
       rule:
+        r_id: 17360
+        rv_id: 110761
         rule_id: JDU6gw
         version_id: 9lTd5J5
         url: https://semgrep.dev/playground/r/9lTd5J5/terraform.aws.security.aws-fsx-lustre-files-ystem.aws-fsx-lustre-filesystem-encrypted-with-cmk
@@ -26403,6 +26887,8 @@ rules:
     shortlink: https://sg.run/zJ6G
     semgrep.dev:
       rule:
+        r_id: 17361
+        rv_id: 110762
         rule_id: 5rUp50
         version_id: yeTRZNx
         url: https://semgrep.dev/playground/r/yeTRZNx/terraform.aws.security.aws-fsx-lustre-filesystem-encrypted-with-cmk.aws-fsx-lustre-filesystem-encrypted-with-cmk
@@ -26447,6 +26933,8 @@ rules:
     shortlink: https://sg.run/pyRg
     semgrep.dev:
       rule:
+        r_id: 17362
+        rv_id: 110763
         rule_id: GdUzwK
         version_id: rxTy4D1
         url: https://semgrep.dev/playground/r/rxTy4D1/terraform.aws.security.aws-fsx-ontapfs-encrypted-with-cmk.aws-fsx-ontapfs-encrypted-with-cmk
@@ -26491,6 +26979,8 @@ rules:
     shortlink: https://sg.run/2pN0
     semgrep.dev:
       rule:
+        r_id: 17363
+        rv_id: 110764
         rule_id: ReUqv6
         version_id: bZTb9BE
         url: https://semgrep.dev/playground/r/bZTb9BE/terraform.aws.security.aws-fsx-windows-encrypted-with-cmk.aws-fsx-windows-encrypted-with-cmk
@@ -26535,6 +27025,8 @@ rules:
     shortlink: https://sg.run/9vdY
     semgrep.dev:
       rule:
+        r_id: 17367
+        rv_id: 110768
         rule_id: WAUNxL
         version_id: xyTKpN3
         url: https://semgrep.dev/playground/r/xyTKpN3/terraform.aws.security.aws-imagebuilder-component-encrypted-with-cmk.aws-imagebuilder-component-encrypted-with-cmk
@@ -26579,6 +27071,8 @@ rules:
     shortlink: https://sg.run/ryBn
     semgrep.dev:
       rule:
+        r_id: 17369
+        rv_id: 110771
         rule_id: KxU5yW
         version_id: vdTY8OK
         url: https://semgrep.dev/playground/r/vdTY8OK/terraform.aws.security.aws-kinesis-stream-encrypted-with-cmk.aws-kinesis-stream-encrypted-with-cmk
@@ -26631,6 +27125,8 @@ rules:
     shortlink: https://sg.run/KZ0L
     semgrep.dev:
       rule:
+        r_id: 52199
+        rv_id: 110772
         rule_id: 8GU72N
         version_id: d6TrvKN
         url: https://semgrep.dev/playground/r/d6TrvKN/terraform.aws.security.aws-kinesis-stream-unencrypted.aws-kinesis-stream-unencrypted
@@ -26672,6 +27168,8 @@ rules:
     shortlink: https://sg.run/bXvp
     semgrep.dev:
       rule:
+        r_id: 17370
+        rv_id: 110773
         rule_id: qNUWqn
         version_id: ZRTQpl1
         url: https://semgrep.dev/playground/r/ZRTQpl1/terraform.aws.security.aws-kinesis-video-stream-encrypted-with-cmk.aws-kinesis-video-stream-encrypted-with-cmk
@@ -26738,6 +27236,8 @@ rules:
     shortlink: https://sg.run/x4lz
     semgrep.dev:
       rule:
+        r_id: 17374
+        rv_id: 110777
         rule_id: 5rUp5w
         version_id: LjTqAEO
         url: https://semgrep.dev/playground/r/LjTqAEO/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
@@ -26790,6 +27290,8 @@ rules:
     shortlink: https://sg.run/wO2Y
     semgrep.dev:
       rule:
+        r_id: 54773
+        rv_id: 110779
         rule_id: eqUl1O
         version_id: gET3OyK
         url: https://semgrep.dev/playground/r/gET3OyK/terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
@@ -26832,6 +27334,8 @@ rules:
     shortlink: https://sg.run/eXnb
     semgrep.dev:
       rule:
+        r_id: 17376
+        rv_id: 110786
         rule_id: ReUqvX
         version_id: GxTv8DA
         url: https://semgrep.dev/playground/r/GxTv8DA/terraform.aws.security.aws-redshift-cluster-encrypted-with-cmk.aws-redshift-cluster-encrypted-with-cmk
@@ -26876,6 +27380,8 @@ rules:
     shortlink: https://sg.run/veKA
     semgrep.dev:
       rule:
+        r_id: 17377
+        rv_id: 110787
         rule_id: AbUeYR
         version_id: RGTDRK5
         url: https://semgrep.dev/playground/r/RGTDRK5/terraform.aws.security.aws-s3-bucket-object-encrypted-with-cmk.aws-s3-bucket-object-encrypted-with-cmk
@@ -26920,6 +27426,8 @@ rules:
     shortlink: https://sg.run/d1ZZ
     semgrep.dev:
       rule:
+        r_id: 17378
+        rv_id: 110788
         rule_id: BYUzYY
         version_id: A8T9X36
         url: https://semgrep.dev/playground/r/A8T9X36/terraform.aws.security.aws-s3-object-copy-encrypted-with-cmk.aws-s3-object-copy-encrypted-with-cmk
@@ -26964,6 +27472,8 @@ rules:
     shortlink: https://sg.run/ZjrD
     semgrep.dev:
       rule:
+        r_id: 17379
+        rv_id: 110789
         rule_id: DbUx8z
         version_id: BjTXpeE
         url: https://semgrep.dev/playground/r/BjTXpeE/terraform.aws.security.aws-sagemaker-domain-encrypted-with-cmk.aws-sagemaker-domain-encrypted-with-cmk
@@ -27015,6 +27525,8 @@ rules:
     shortlink: https://sg.run/nrRX
     semgrep.dev:
       rule:
+        r_id: 17380
+        rv_id: 110790
         rule_id: WAUNrz
         version_id: DkT6YG8
         url: https://semgrep.dev/playground/r/DkT6YG8/terraform.aws.security.aws-secretsmanager-secret-unencrypted.aws-secretsmanager-secret-unencrypted
@@ -27069,6 +27581,8 @@ rules:
     shortlink: https://sg.run/EyWw
     semgrep.dev:
       rule:
+        r_id: 17381
+        rv_id: 110795
         rule_id: 0oUrWL
         version_id: l4T46Xr
         url: https://semgrep.dev/playground/r/l4T46Xr/terraform.aws.security.aws-ssm-document-logging-issues.aws-ssm-document-logging-issues
@@ -27124,6 +27638,8 @@ rules:
     shortlink: https://sg.run/XJZw
     semgrep.dev:
       rule:
+        r_id: 50764
+        rv_id: 110796
         rule_id: 2ZUo79
         version_id: YDTpnYR
         url: https://semgrep.dev/playground/r/YDTpnYR/terraform.aws.security.aws-subnet-has-public-ip-address.aws-subnet-has-public-ip-address
@@ -27165,6 +27681,8 @@ rules:
     shortlink: https://sg.run/7nyZ
     semgrep.dev:
       rule:
+        r_id: 17382
+        rv_id: 110797
         rule_id: KxU5Nn
         version_id: JdTNvoP
         url: https://semgrep.dev/playground/r/JdTNvoP/terraform.aws.security.aws-timestream-database-encrypted-with-cmk.aws-timestream-database-encrypted-with-cmk
@@ -27210,6 +27728,8 @@ rules:
     shortlink: https://sg.run/L39r
     semgrep.dev:
       rule:
+        r_id: 17383
+        rv_id: 110798
         rule_id: qNUWl1
         version_id: 5PTdeN8
         url: https://semgrep.dev/playground/r/5PTdeN8/terraform.aws.security.aws-transfer-server-is-public.aws-transfer-server-is-public
@@ -27259,6 +27779,8 @@ rules:
     shortlink: https://sg.run/8gby
     semgrep.dev:
       rule:
+        r_id: 17384
+        rv_id: 110799
         rule_id: lBUWB9
         version_id: GxTv8or
         url: https://semgrep.dev/playground/r/GxTv8or/terraform.aws.security.aws-workspaces-root-volume-unencrypted.aws-workspaces-root-volume-unencrypted
@@ -27304,6 +27826,8 @@ rules:
     shortlink: https://sg.run/gXdJ
     semgrep.dev:
       rule:
+        r_id: 17385
+        rv_id: 110800
         rule_id: YGUAXr
         version_id: RGTDR2q
         url: https://semgrep.dev/playground/r/RGTDR2q/terraform.aws.security.aws-workspaces-user-volume-unencrypted.aws-workspaces-user-volume-unencrypted
@@ -27348,6 +27872,8 @@ rules:
     shortlink: https://sg.run/kzro
     semgrep.dev:
       rule:
+        r_id: 15828
+        rv_id: 110802
         rule_id: wdUljO
         version_id: BjTXpKK
         url: https://semgrep.dev/playground/r/BjTXpKK/terraform.aws.security.missing-athena-workgroup-encryption.missing-athena-workgroup-encryption
@@ -27378,6 +27904,8 @@ rules:
     shortlink: https://sg.run/LWlY
     semgrep.dev:
       rule:
+        r_id: 70983
+        rv_id: 110803
         rule_id: 7KU3dr
         version_id: DkT6Y2N
         url: https://semgrep.dev/playground/r/DkT6Y2N/terraform.aws.security.unrestricted-github-oidc-policy.unrestricted-github-oidc-policy
@@ -27468,6 +27996,8 @@ rules:
     shortlink: https://sg.run/PbXY
     semgrep.dev:
       rule:
+        r_id: 15101
+        rv_id: 110864
         rule_id: WAUynd
         version_id: rxTy46E
         url: https://semgrep.dev/playground/r/rxTy46E/terraform.azure.security.appservice.appservice-account-identity-registered.appservice-account-identity-registered
@@ -27514,6 +28044,8 @@ rules:
     shortlink: https://sg.run/rDwn
     semgrep.dev:
       rule:
+        r_id: 23969
+        rv_id: 110879
         rule_id: v8UNL7
         version_id: 8KTQyKe
         url: https://semgrep.dev/playground/r/8KTQyKe/terraform.azure.security.appservice.azure-appservice-min-tls-version.azure-appservice-min-tls-version
@@ -27578,6 +28110,8 @@ rules:
     shortlink: https://sg.run/B6AW
     semgrep.dev:
       rule:
+        r_id: 15107
+        rv_id: 110926
         rule_id: 6JU1X8
         version_id: xyTKppv
         url: https://semgrep.dev/playground/r/xyTKppv/terraform.azure.security.functionapp.functionapp-authentication-enabled.functionapp-authentication-enabled
@@ -27639,6 +28173,8 @@ rules:
     shortlink: https://sg.run/DzDY
     semgrep.dev:
       rule:
+        r_id: 15108
+        rv_id: 110927
         rule_id: oqU41L
         version_id: O9TNddn
         url: https://semgrep.dev/playground/r/O9TNddn/terraform.azure.security.functionapp.functionapp-enable-http2.functionapp-enable-http2
@@ -27702,6 +28238,8 @@ rules:
     shortlink: https://sg.run/nKgX
     semgrep.dev:
       rule:
+        r_id: 15136
+        rv_id: 110932
         rule_id: 4bU1jy
         version_id: nWTxooG
         url: https://semgrep.dev/playground/r/nWTxooG/terraform.azure.security.keyvault.keyvault-specify-network-acl.keyvault-specify-network-acl
@@ -27774,6 +28312,8 @@ rules:
     shortlink: https://sg.run/WpX4
     semgrep.dev:
       rule:
+        r_id: 15153
+        rv_id: 110933
         rule_id: GdUreY
         version_id: ExTjAAr
         url: https://semgrep.dev/playground/r/ExTjAAr/terraform.azure.security.storage.storage-allow-microsoft-service-bypass.storage-allow-microsoft-service-bypass
@@ -27823,6 +28363,8 @@ rules:
     shortlink: https://sg.run/WpN4
     semgrep.dev:
       rule:
+        r_id: 15109
+        rv_id: 110934
         rule_id: zdUY3N
         version_id: 7ZTgnnb
         url: https://semgrep.dev/playground/r/7ZTgnnb/terraform.azure.security.storage.storage-default-action-deny.storage-default-action-deny
@@ -27886,6 +28428,8 @@ rules:
     shortlink: https://sg.run/0yEv
     semgrep.dev:
       rule:
+        r_id: 15154
+        rv_id: 110936
         rule_id: ReU3L9
         version_id: 8KTQyy9
         url: https://semgrep.dev/playground/r/8KTQyy9/terraform.azure.security.storage.storage-queue-services-logging.storage-queue-services-logging
@@ -27937,6 +28481,8 @@ rules:
     shortlink: https://sg.run/R8eE
     semgrep.dev:
       rule:
+        r_id: 9749
+        rv_id: 111050
         rule_id: 0oUELR
         version_id: WrTW381
         url: https://semgrep.dev/playground/r/WrTW381/terraform.lang.security.ecr-image-scan-on-push.ecr-image-scan-on-push
@@ -27993,6 +28539,8 @@ rules:
     shortlink: https://sg.run/wZ3n
     semgrep.dev:
       rule:
+        r_id: 15829
+        rv_id: 111051
         rule_id: x8UGx7
         version_id: 0bTLeoA
         url: https://semgrep.dev/playground/r/0bTLeoA/terraform.lang.security.eks-insufficient-control-plane-logging.eks-insufficient-control-plane-logging
@@ -28044,6 +28592,8 @@ rules:
     shortlink: https://sg.run/Albg
     semgrep.dev:
       rule:
+        r_id: 9750
+        rv_id: 111052
         rule_id: KxU4v6
         version_id: K3TvGop
         url: https://semgrep.dev/playground/r/K3TvGop/terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
@@ -28094,6 +28644,8 @@ rules:
     shortlink: https://sg.run/B4Yb
     semgrep.dev:
       rule:
+        r_id: 9751
+        rv_id: 111053
         rule_id: qNUo2d
         version_id: qkT2BON
         url: https://semgrep.dev/playground/r/qkT2BON/terraform.lang.security.elastic-search-encryption-at-rest.elastic-search-encryption-at-rest
@@ -28202,6 +28754,8 @@ rules:
     shortlink: https://sg.run/oY0N
     semgrep.dev:
       rule:
+        r_id: 13560
+        rv_id: 111054
         rule_id: NbUNDX
         version_id: l4T46ZP
         url: https://semgrep.dev/playground/r/l4T46ZP/terraform.lang.security.iam.no-iam-admin-privileges.no-iam-admin-privileges
@@ -28434,6 +28988,8 @@ rules:
     shortlink: https://sg.run/zxY1
     semgrep.dev:
       rule:
+        r_id: 13561
+        rv_id: 378646
         rule_id: kxUwK2
         version_id: qkTjezP
         url: https://semgrep.dev/playground/r/qkTjezP/terraform.lang.security.iam.no-iam-creds-exposure.no-iam-creds-exposure
@@ -28574,6 +29130,8 @@ rules:
     shortlink: https://sg.run/pYrN
     semgrep.dev:
       rule:
+        r_id: 13562
+        rv_id: 378647
         rule_id: wdUj1k
         version_id: l4T92wK
         url: https://semgrep.dev/playground/r/l4T92wK/terraform.lang.security.iam.no-iam-data-exfiltration.no-iam-data-exfiltration
@@ -28713,6 +29271,8 @@ rules:
     shortlink: https://sg.run/28y5
     semgrep.dev:
       rule:
+        r_id: 13563
+        rv_id: 378648
         rule_id: x8UxLq
         version_id: YDTROjB
         url: https://semgrep.dev/playground/r/YDTROjB/terraform.lang.security.iam.no-iam-priv-esc-funcs.no-iam-priv-esc-funcs
@@ -28841,6 +29401,8 @@ rules:
     shortlink: https://sg.run/XOeA
     semgrep.dev:
       rule:
+        r_id: 13564
+        rv_id: 378649
         rule_id: OrU6jO
         version_id: JdTyeAb
         url: https://semgrep.dev/playground/r/JdTyeAb/terraform.lang.security.iam.no-iam-priv-esc-other-users.no-iam-priv-esc-other-users
@@ -29003,6 +29565,8 @@ rules:
     shortlink: https://sg.run/jwrA
     semgrep.dev:
       rule:
+        r_id: 13565
+        rv_id: 378650
         rule_id: eqUzR3
         version_id: 5PTO30W
         url: https://semgrep.dev/playground/r/5PTO30W/terraform.lang.security.iam.no-iam-priv-esc-roles.no-iam-priv-esc-roles
@@ -30162,6 +30726,8 @@ rules:
     shortlink: https://sg.run/18rD
     semgrep.dev:
       rule:
+        r_id: 13566
+        rv_id: 378651
         rule_id: v8U9r0
         version_id: GxT7J51
         url: https://semgrep.dev/playground/r/GxT7J51/terraform.lang.security.iam.no-iam-resource-exposure.no-iam-resource-exposure
@@ -30267,6 +30833,8 @@ rules:
     shortlink: https://sg.run/9rZ4
     semgrep.dev:
       rule:
+        r_id: 13567
+        rv_id: 378652
         rule_id: d8Uew3
         version_id: RGTgrYj
         url: https://semgrep.dev/playground/r/RGTgrYj/terraform.lang.security.iam.no-iam-star-actions.no-iam-star-actions
@@ -30310,6 +30878,8 @@ rules:
     shortlink: https://sg.run/Oye2
     semgrep.dev:
       rule:
+        r_id: 15831
+        rv_id: 111063
         rule_id: eqUrzK
         version_id: 1QTO7Ed
         url: https://semgrep.dev/playground/r/1QTO7Ed/terraform.lang.security.rds-public-access.rds-public-access
@@ -30345,6 +30915,8 @@ rules:
     shortlink: https://sg.run/DJb2
     semgrep.dev:
       rule:
+        r_id: 9752
+        rv_id: 111064
         rule_id: lBUd4g
         version_id: 9lTd53Z
         url: https://semgrep.dev/playground/r/9lTd53Z/terraform.lang.security.s3-cors-all-origins.all-origins-allowed
@@ -30389,6 +30961,8 @@ rules:
     shortlink: https://sg.run/WgAy
     semgrep.dev:
       rule:
+        r_id: 9753
+        rv_id: 111065
         rule_id: YGUrp5
         version_id: yeTRZqN
         url: https://semgrep.dev/playground/r/yeTRZqN/terraform.lang.security.s3-public-read-bucket.s3-public-read-bucket
@@ -30417,6 +30991,8 @@ rules:
     shortlink: https://sg.run/w13x
     semgrep.dev:
       rule:
+        r_id: 11929
+        rv_id: 111076
         rule_id: qNUbXo
         version_id: ZRTQpDy
         url: https://semgrep.dev/playground/r/ZRTQpDy/typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard
@@ -30465,6 +31041,8 @@ rules:
     shortlink: https://sg.run/ljBL
     semgrep.dev:
       rule:
+        r_id: 9757
+        rv_id: 111077
         rule_id: pKUG17
         version_id: nWTxoQd
         url: https://semgrep.dev/playground/r/nWTxoQd/typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any
@@ -30517,6 +31095,8 @@ rules:
     shortlink: https://sg.run/YgGW
     semgrep.dev:
       rule:
+        r_id: 9758
+        rv_id: 111078
         rule_id: 2ZU4zx
         version_id: ExTjAeb
         url: https://semgrep.dev/playground/r/ExTjAeb/typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled
@@ -30557,6 +31137,8 @@ rules:
     shortlink: https://sg.run/6rJw
     semgrep.dev:
       rule:
+        r_id: 9759
+        rv_id: 111079
         rule_id: X5UZQK
         version_id: 7ZTgnKJ
         url: https://semgrep.dev/playground/r/7ZTgnKJ/typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect
@@ -30602,6 +31184,8 @@ rules:
     shortlink: https://sg.run/wx8x
     semgrep.dev:
       rule:
+        r_id: 9773
+        rv_id: 111095
         rule_id: d8Uzqz
         version_id: 0bTLeGA
         url: https://semgrep.dev/playground/r/0bTLeGA/typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property
@@ -30643,6 +31227,8 @@ rules:
     shortlink: https://sg.run/xYye
     semgrep.dev:
       rule:
+        r_id: 9774
+        rv_id: 111096
         rule_id: ZqUq6g
         version_id: K3TvGgp
         url: https://semgrep.dev/playground/r/K3TvGgp/typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage
@@ -30694,6 +31280,8 @@ rules:
     shortlink: https://sg.run/9qAk
     semgrep.dev:
       rule:
+        r_id: 9767
+        rv_id: 111107
         rule_id: kxURd4
         version_id: WrTW3Gy
         url: https://semgrep.dev/playground/r/WrTW3Gy/typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html
@@ -30798,6 +31386,8 @@ rules:
     shortlink: https://sg.run/O14b
     semgrep.dev:
       rule:
+        r_id: 10131
+        rv_id: 111109
         rule_id: eqUvZ9
         version_id: K3TvG8r
         url: https://semgrep.dev/playground/r/K3TvG8r/yaml.docker-compose.security.exposing-docker-socket-volume.exposing-docker-socket-volume
@@ -30845,6 +31435,8 @@ rules:
     shortlink: https://sg.run/KWkY
     semgrep.dev:
       rule:
+        r_id: 10055
+        rv_id: 111112
         rule_id: lBUdW3
         version_id: YDTpnk2
         url: https://semgrep.dev/playground/r/YDTpnk2/yaml.docker-compose.security.seccomp-confinement-disabled.seccomp-confinement-disabled
@@ -30893,6 +31485,8 @@ rules:
     shortlink: https://sg.run/qryb
     semgrep.dev:
       rule:
+        r_id: 10056
+        rv_id: 111113
         rule_id: YGUrAG
         version_id: 6xTvQGQ
         url: https://semgrep.dev/playground/r/6xTvQGQ/yaml.docker-compose.security.selinux-separation-disabled.selinux-separation-disabled
@@ -30949,6 +31543,8 @@ rules:
     shortlink: https://sg.run/e4JE
     semgrep.dev:
       rule:
+        r_id: 10132
+        rv_id: 111114
         rule_id: v8U5vN
         version_id: o5Tg9ob
         url: https://semgrep.dev/playground/r/o5Tg9ob/yaml.docker-compose.security.writable-filesystem-service.writable-filesystem-service
@@ -30992,6 +31588,8 @@ rules:
     shortlink: https://sg.run/9r7r
     semgrep.dev:
       rule:
+        r_id: 14967
+        rv_id: 111116
         rule_id: X5Udrd
         version_id: pZT1Le2
         url: https://semgrep.dev/playground/r/pZT1Le2/yaml.github-actions.security.curl-eval.curl-eval
@@ -31049,6 +31647,8 @@ rules:
     shortlink: https://sg.run/jkdn
     semgrep.dev:
       rule:
+        r_id: 13365
+        rv_id: 111118
         rule_id: d8Ulkd
         version_id: X0TQ2kn
         url: https://semgrep.dev/playground/r/X0TQ2kn/yaml.github-actions.security.pull-request-target-code-checkout.pull-request-target-code-checkout
@@ -31118,6 +31718,8 @@ rules:
     shortlink: https://sg.run/y6x8
     semgrep.dev:
       rule:
+        r_id: 13024
+        rv_id: 111128
         rule_id: WAUP0z
         version_id: xyTKp0E
         url: https://semgrep.dev/playground/r/xyTKp0E/yaml.kubernetes.security.env.flask-debugging-enabled.flask-debugging-enabled
@@ -31163,6 +31765,8 @@ rules:
     shortlink: https://sg.run/nqGO
     semgrep.dev:
       rule:
+        r_id: 10236
+        rv_id: 111130
         rule_id: nJUYPE
         version_id: e1T03bQ
         url: https://semgrep.dev/playground/r/e1T03bQ/yaml.kubernetes.security.hostipc-pod.hostipc-pod
@@ -31202,6 +31806,8 @@ rules:
     shortlink: https://sg.run/E51A
     semgrep.dev:
       rule:
+        r_id: 10237
+        rv_id: 111131
         rule_id: EwU4NO
         version_id: vdTY8ol
         url: https://semgrep.dev/playground/r/vdTY8ol/yaml.kubernetes.security.hostnetwork-pod.hostnetwork-pod
@@ -31242,6 +31848,8 @@ rules:
     shortlink: https://sg.run/708R
     semgrep.dev:
       rule:
+        r_id: 10238
+        rv_id: 111132
         rule_id: 7KUeo0
         version_id: d6Trv7J
         url: https://semgrep.dev/playground/r/d6Trv7J/yaml.kubernetes.security.hostpid-pod.hostpid-pod
@@ -31312,6 +31920,8 @@ rules:
     shortlink: https://sg.run/D9No
     semgrep.dev:
       rule:
+        r_id: 26096
+        rv_id: 111137
         rule_id: L1UAxy
         version_id: LjTqA93
         url: https://semgrep.dev/playground/r/LjTqA93/yaml.kubernetes.security.run-as-non-root-unsafe-value.run-as-non-root-unsafe-value
@@ -31392,6 +32002,8 @@ rules:
     shortlink: https://sg.run/dgP5
     semgrep.dev:
       rule:
+        r_id: 10134
+        rv_id: 111138
         rule_id: ZqUqeK
         version_id: 8KTQyg1
         url: https://semgrep.dev/playground/r/8KTQyg1/yaml.kubernetes.security.run-as-non-root.run-as-non-root
@@ -31449,6 +32061,8 @@ rules:
     shortlink: https://sg.run/ZePL
     semgrep.dev:
       rule:
+        r_id: 10135
+        rv_id: 111143
         rule_id: nJUYn9
         version_id: PkTJd2A
         url: https://semgrep.dev/playground/r/PkTJd2A/yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container

@@ -35,6 +35,8 @@ rules:
     shortlink: https://sg.run/oxEN
     semgrep.dev:
       rule:
+        r_id: 9116
+        rv_id: 109599
         rule_id: NbUk4X
         version_id: o5Tglp0
         url: https://semgrep.dev/playground/r/o5Tglp0/go.lang.security.audit.crypto.missing-ssl-minversion.missing-ssl-minversion
@@ -111,6 +113,8 @@ rules:
     shortlink: https://sg.run/Eb5w
     semgrep.dev:
       rule:
+        r_id: 60237
+        rv_id: 109886
         rule_id: QrU96W
         version_id: l4T4vn1
         url: https://semgrep.dev/playground/r/l4T4vn1/javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash
@@ -153,6 +157,8 @@ rules:
     shortlink: https://sg.run/N0Bp
     semgrep.dev:
       rule:
+        r_id: 73471
+        rv_id: 252099
         rule_id: PeUyYG
         version_id: RGTevKN
         url: https://semgrep.dev/playground/r/RGTevKN/python.django.security.django-no-csrf-token.django-no-csrf-token
@@ -195,6 +201,8 @@ rules:
     shortlink: https://sg.run/kJn7
     semgrep.dev:
       rule:
+        r_id: 73472
+        rv_id: 113534
         rule_id: JDUjqx
         version_id: qkT2RER
         url: https://semgrep.dev/playground/r/qkT2RER/python.django.security.django-using-request-post-after-is-valid.django-using-request-post-after-is-valid
@@ -247,6 +255,8 @@ rules:
     shortlink: https://sg.run/7EjQ
     semgrep.dev:
       rule:
+        r_id: 70982
+        rv_id: 110784
         rule_id: EwUxO1
         version_id: JdTNvlx
         url: https://semgrep.dev/playground/r/JdTNvlx/terraform.aws.security.aws-provisioner-exec.aws-provisioner-exec

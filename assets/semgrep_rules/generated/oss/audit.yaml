@@ -2267,6 +2267,8 @@ rules:
     shortlink: https://sg.run/qNLGR
     semgrep.dev:
       rule:
+        r_id: 113212
+        rv_id: 723874
         rule_id: ReUD0BO
         version_id: WrTNkvB
         url: https://semgrep.dev/playground/r/WrTNkvB/trailofbits.generic.container-privileged.container-privileged
@@ -2316,6 +2318,8 @@ rules:
     shortlink: https://sg.run/lBKyB
     semgrep.dev:
       rule:
+        r_id: 113213
+        rv_id: 253283
         rule_id: AbU9gy9
         version_id: d6TqRxp
         url: https://semgrep.dev/playground/r/d6TqRxp/trailofbits.generic.container-user-root.container-user-root
@@ -2353,6 +2357,8 @@ rules:
     shortlink: https://sg.run/YG37D
     semgrep.dev:
       rule:
+        r_id: 113214
+        rv_id: 253284
         rule_id: BYUXkQx
         version_id: ZRT6EAy
         url: https://semgrep.dev/playground/r/ZRT6EAy/trailofbits.generic.curl-insecure.curl-insecure
@@ -2384,6 +2390,8 @@ rules:
     shortlink: https://sg.run/6JldW
     semgrep.dev:
       rule:
+        r_id: 113215
+        rv_id: 723875
         rule_id: DbU6R39
         version_id: 0bTrQAn
         url: https://semgrep.dev/playground/r/0bTrQAn/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
@@ -2418,6 +2426,8 @@ rules:
     shortlink: https://sg.run/oqLJx
     semgrep.dev:
       rule:
+        r_id: 113216
+        rv_id: 253286
         rule_id: WAUWqko
         version_id: ExTRkxb
         url: https://semgrep.dev/playground/r/ExTRkxb/trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
@@ -2458,6 +2468,8 @@ rules:
     shortlink: https://sg.run/zdLlk
     semgrep.dev:
       rule:
+        r_id: 113217
+        rv_id: 253287
         rule_id: 0oULKQE
         version_id: 7ZTD73J
         url: https://semgrep.dev/playground/r/7ZTD73J/trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
@@ -2487,6 +2499,8 @@ rules:
     shortlink: https://sg.run/pKL5k
     semgrep.dev:
       rule:
+        r_id: 113218
+        rv_id: 253288
         rule_id: KxUvKPY
         version_id: LjT7Ygd
         url: https://semgrep.dev/playground/r/LjT7Ygd/trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
@@ -2522,6 +2536,8 @@ rules:
     shortlink: https://sg.run/2ZWd8
     semgrep.dev:
       rule:
+        r_id: 113219
+        rv_id: 253289
         rule_id: qNU2R9X
         version_id: 8KT42rO
         url: https://semgrep.dev/playground/r/8KT42rO/trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
@@ -2551,6 +2567,8 @@ rules:
     shortlink: https://sg.run/X5RyN
     semgrep.dev:
       rule:
+        r_id: 113220
+        rv_id: 258314
         rule_id: lBU4JeW
         version_id: 6xT5vWg
         url: https://semgrep.dev/playground/r/6xT5vWg/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
@@ -2586,6 +2604,8 @@ rules:
     shortlink: https://sg.run/j2WyD
     semgrep.dev:
       rule:
+        r_id: 113221
+        rv_id: 253291
         rule_id: PeUJREx
         version_id: QkT8yqY
         url: https://semgrep.dev/playground/r/QkT8yqY/trailofbits.generic.wget-no-check-certificate.wget-no-check-certificate
@@ -2617,6 +2637,8 @@ rules:
     shortlink: https://sg.run/10Ddk
     semgrep.dev:
       rule:
+        r_id: 113222
+        rv_id: 253292
         rule_id: JDUNz2o
         version_id: 3ZTlJXZ
         url: https://semgrep.dev/playground/r/3ZTlJXZ/trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
@@ -2650,6 +2672,8 @@ rules:
     shortlink: https://sg.run/WWQ2
     semgrep.dev:
       rule:
+        r_id: 17197
+        rv_id: 258507
         rule_id: kxU6Xb
         version_id: A8Tr9vQ
         url: https://semgrep.dev/playground/r/A8Tr9vQ/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
@@ -2721,6 +2745,8 @@ rules:
     shortlink: https://sg.run/08jj
     semgrep.dev:
       rule:
+        r_id: 17198
+        rv_id: 95081
         rule_id: wdUlww
         version_id: QkTW6zJ
         url: https://semgrep.dev/playground/r/QkTW6zJ/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
@@ -2779,6 +2805,8 @@ rules:
     shortlink: https://sg.run/65WB
     semgrep.dev:
       rule:
+        r_id: 11759
+        rv_id: 95088
         rule_id: 4bU2AZ
         version_id: RGTDPPg
         url: https://semgrep.dev/playground/r/RGTDPPg/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
@@ -2906,6 +2934,8 @@ rules:
     shortlink: https://sg.run/ORxR
     semgrep.dev:
       rule:
+        r_id: 60575
+        rv_id: 95095
         rule_id: v8UlNl
         version_id: qkT2oo4
         url: https://semgrep.dev/playground/r/qkT2oo4/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
@@ -2953,6 +2983,8 @@ rules:
     shortlink: https://sg.run/yyLqk
     semgrep.dev:
       rule:
+        r_id: 113224
+        rv_id: 253295
         rule_id: GdUvk46
         version_id: JdT5gxX
         url: https://semgrep.dev/playground/r/JdT5gxX/trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-verification-disabled
@@ -2984,6 +3016,8 @@ rules:
     shortlink: https://sg.run/jz5N
     semgrep.dev:
       rule:
+        r_id: 17165
+        rv_id: 250821
         rule_id: WAUN1Z
         version_id: 8KT4boW
         url: https://semgrep.dev/playground/r/8KT4boW/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
@@ -3018,6 +3052,8 @@ rules:
     shortlink: https://sg.run/rqGP
     semgrep.dev:
       rule:
+        r_id: 43925
+        rv_id: 95104
         rule_id: GdUgN8
         version_id: jQTgqq9
         url: https://semgrep.dev/playground/r/jQTgqq9/trailofbits.python.numpy-distutils.numpy-distutils
@@ -3052,6 +3088,8 @@ rules:
     shortlink: https://sg.run/bEdP
     semgrep.dev:
       rule:
+        r_id: 43926
+        rv_id: 95105
         rule_id: ReUdJ0
         version_id: 1QTOZZ0
         url: https://semgrep.dev/playground/r/1QTOZZ0/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
@@ -3087,6 +3125,8 @@ rules:
     shortlink: https://sg.run/dnR6
     semgrep.dev:
       rule:
+        r_id: 44134
+        rv_id: 250822
         rule_id: KxURLn
         version_id: gET6q8p
         url: https://semgrep.dev/playground/r/gET6q8p/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
@@ -3124,6 +3164,8 @@ rules:
     shortlink: https://sg.run/NXkL
     semgrep.dev:
       rule:
+        r_id: 43927
+        rv_id: 95108
         rule_id: AbUxDq
         version_id: rxTykkg
         url: https://semgrep.dev/playground/r/rxTykkg/trailofbits.python.numpy-load-library.numpy-load-library
@@ -3156,6 +3198,8 @@ rules:
     shortlink: https://sg.run/kRd1
     semgrep.dev:
       rule:
+        r_id: 43928
+        rv_id: 95109
         rule_id: BYUoqy
         version_id: bZTbOOD
         url: https://semgrep.dev/playground/r/bZTbOOD/trailofbits.python.onnx-session-options.onnx-session-options
@@ -3196,6 +3240,8 @@ rules:
     shortlink: https://sg.run/bwJed
     semgrep.dev:
       rule:
+        r_id: 124726
+        rv_id: 733075
         rule_id: ReUDw9J
         version_id: 2KTLoZO
         url: https://semgrep.dev/playground/r/2KTLoZO/trailofbits.python.pandas-eval.pandas-eval
@@ -3248,6 +3294,8 @@ rules:
     shortlink: https://sg.run/nD6d
     semgrep.dev:
       rule:
+        r_id: 44136
+        rv_id: 95114
         rule_id: lBUYD9
         version_id: O9TNGGw
         url: https://semgrep.dev/playground/r/O9TNGGw/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
@@ -3282,6 +3330,8 @@ rules:
     shortlink: https://sg.run/EK35
     semgrep.dev:
       rule:
+        r_id: 44137
+        rv_id: 95115
         rule_id: PeUKGk
         version_id: e1T0vvB
         url: https://semgrep.dev/playground/r/e1T0vvB/trailofbits.python.pytorch-package.pytorch-package
@@ -3313,6 +3363,8 @@ rules:
     shortlink: https://sg.run/xp0j
     semgrep.dev:
       rule:
+        r_id: 43930
+        rv_id: 95119
         rule_id: WAUgBJ
         version_id: nWTxYYN
         url: https://semgrep.dev/playground/r/nWTxYYN/trailofbits.python.tensorflow-load-library.tensorflow-load-library
@@ -3348,6 +3400,8 @@ rules:
     shortlink: https://sg.run/WpeL
     semgrep.dev:
       rule:
+        r_id: 13697
+        rv_id: 95121
         rule_id: 2ZUPQ3
         version_id: 7ZTgeey
         url: https://semgrep.dev/playground/r/7ZTgeey/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
@@ -3408,6 +3462,8 @@ rules:
     shortlink: https://sg.run/r68RP
     semgrep.dev:
       rule:
+        r_id: 113225
+        rv_id: 253296
         rule_id: ReUD0BR
         version_id: 5PTk51b
         url: https://semgrep.dev/playground/r/5PTk51b/trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
@@ -3454,6 +3510,8 @@ rules:
     shortlink: https://sg.run/bwPnP
     semgrep.dev:
       rule:
+        r_id: 113226
+        rv_id: 253297
         rule_id: AbU9gyg
         version_id: GxTjwed
         url: https://semgrep.dev/playground/r/GxTjwed/trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-validate-certs-disabled
@@ -3503,6 +3561,8 @@ rules:
     shortlink: https://sg.run/NbW3L
     semgrep.dev:
       rule:
+        r_id: 113227
+        rv_id: 253298
         rule_id: BYUXkQb
         version_id: RGTevLG
         url: https://semgrep.dev/playground/r/RGTevLG/trailofbits.yaml.ansible.apt-unencrypted-url.apt-unencrypted-url
@@ -3550,6 +3610,8 @@ rules:
     shortlink: https://sg.run/kx0y1
     semgrep.dev:
       rule:
+        r_id: 113228
+        rv_id: 253299
         rule_id: DbU6R3w
         version_id: A8TkYdl
         url: https://semgrep.dev/playground/r/A8TkYdl/trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
@@ -3600,6 +3662,8 @@ rules:
     shortlink: https://sg.run/wdL06
     semgrep.dev:
       rule:
+        r_id: 113229
+        rv_id: 253300
         rule_id: WAUWqkG
         version_id: BjTxYZZ
         url: https://semgrep.dev/playground/r/BjTxYZZ/trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-certs-disabled
@@ -3649,6 +3713,8 @@ rules:
     shortlink: https://sg.run/x8LKj
     semgrep.dev:
       rule:
+        r_id: 113230
+        rv_id: 253301
         rule_id: 0oULKQq
         version_id: DkTq8bj
         url: https://semgrep.dev/playground/r/DkTq8bj/trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-url
@@ -3702,6 +3768,8 @@ rules:
     shortlink: https://sg.run/Or0N7
     semgrep.dev:
       rule:
+        r_id: 113231
+        rv_id: 253302
         rule_id: KxUvKPQ
         version_id: WrTOxK1
         url: https://semgrep.dev/playground/r/WrTOxK1/trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-validate-certs-disabled
@@ -3758,6 +3826,8 @@ rules:
     shortlink: https://sg.run/eqGkR
     semgrep.dev:
       rule:
+        r_id: 113232
+        rv_id: 253303
         rule_id: qNU2R9K
         version_id: 0bTyOzA
         url: https://semgrep.dev/playground/r/0bTyOzA/trailofbits.yaml.ansible.rpm-key-unencrypted-url.rpm-key-unencrypted-url
@@ -3804,6 +3874,8 @@ rules:
     shortlink: https://sg.run/v8LWW
     semgrep.dev:
       rule:
+        r_id: 113233
+        rv_id: 253304
         rule_id: lBU4Jee
         version_id: K3Tnykp
         url: https://semgrep.dev/playground/r/K3Tnykp/trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-validate-certs-disabled
@@ -3852,6 +3924,8 @@ rules:
     shortlink: https://sg.run/d85yn
     semgrep.dev:
       rule:
+        r_id: 113234
+        rv_id: 253305
         rule_id: YGUpZzx
         version_id: qkT5q7N
         url: https://semgrep.dev/playground/r/qkT5q7N/trailofbits.yaml.ansible.unarchive-unencrypted-url.unarchive-unencrypted-url
@@ -3897,6 +3971,8 @@ rules:
     shortlink: https://sg.run/ZqByA
     semgrep.dev:
       rule:
+        r_id: 113235
+        rv_id: 253306
         rule_id: 6JUv2A4
         version_id: l4TlPRP
         url: https://semgrep.dev/playground/r/l4TlPRP/trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-validate-certs-disabled
@@ -3944,6 +4020,8 @@ rules:
     shortlink: https://sg.run/nJlP1
     semgrep.dev:
       rule:
+        r_id: 113236
+        rv_id: 253307
         rule_id: oqUgbWQ
         version_id: YDTNPeX
         url: https://semgrep.dev/playground/r/YDTNPeX/trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validation-ignore
@@ -3974,6 +4052,8 @@ rules:
     shortlink: https://sg.run/Ew4NE
     semgrep.dev:
       rule:
+        r_id: 113237
+        rv_id: 253308
         rule_id: zdUKbXv
         version_id: JdT5gj1
         url: https://semgrep.dev/playground/r/JdT5gj1/trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
@@ -4021,6 +4101,8 @@ rules:
     shortlink: https://sg.run/7Kvdw
     semgrep.dev:
       rule:
+        r_id: 113238
+        rv_id: 253309
         rule_id: pKU10q4
         version_id: 5PTk5zd
         url: https://semgrep.dev/playground/r/5PTk5zd/trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-certs-disabled
@@ -4068,6 +4150,8 @@ rules:
     shortlink: https://sg.run/L1Bkn
     semgrep.dev:
       rule:
+        r_id: 113239
+        rv_id: 253310
         rule_id: 2ZUzvAk
         version_id: GxTjwRj
         url: https://semgrep.dev/playground/r/GxTjwRj/trailofbits.yaml.ansible.zypper-repository-unencrypted-url.zypper-repository-unencrypted-url
@@ -4114,6 +4198,8 @@ rules:
     shortlink: https://sg.run/8GLdB
     semgrep.dev:
       rule:
+        r_id: 113240
+        rv_id: 253311
         rule_id: X5UQzo1
         version_id: RGTevlQ
         url: https://semgrep.dev/playground/r/RGTevlQ/trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url

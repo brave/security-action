@@ -37,6 +37,8 @@ rules:
     shortlink: https://sg.run/KlRL
     semgrep.dev:
       rule:
+        r_id: 9211
+        rv_id: 109749
         rule_id: j2Uv7B
         version_id: jQTgYdy
         url: https://semgrep.dev/playground/r/jQTgYdy/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
@@ -98,6 +100,8 @@ rules:
     shortlink: https://sg.run/Dw8o
     semgrep.dev:
       rule:
+        r_id: 11752
+        rv_id: 95079
         rule_id: EwUQp2
         version_id: 8KTQEjp
         url: https://semgrep.dev/playground/r/8KTQEjp/trailofbits.go.hanging-goroutine.hanging-goroutine
@@ -212,6 +216,8 @@ rules:
     shortlink: https://sg.run/9r40
     semgrep.dev:
       rule:
+        r_id: 14223
+        rv_id: 733070
         rule_id: 8GUzNK
         version_id: YDTAKBW
         url: https://semgrep.dev/playground/r/YDTAKBW/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
@@ -274,6 +280,8 @@ rules:
     shortlink: https://sg.run/18Bk
     semgrep.dev:
       rule:
+        r_id: 14222
+        rv_id: 733071
         rule_id: L1U5Gz
         version_id: 6xTEwrB
         url: https://semgrep.dev/playground/r/6xTEwrB/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
@@ -334,6 +342,8 @@ rules:
     shortlink: https://sg.run/05g5
     semgrep.dev:
       rule:
+        r_id: 11754
+        rv_id: 95084
         rule_id: L1Ur2r
         version_id: PkTJkk5
         url: https://semgrep.dev/playground/r/PkTJkk5/trailofbits.go.nil-check-after-call.nil-check-after-call
@@ -422,6 +432,8 @@ rules:
     shortlink: https://sg.run/jkNY
     semgrep.dev:
       rule:
+        r_id: 11865
+        rv_id: 104226
         rule_id: ReUoP7
         version_id: WrTWdKp
         url: https://semgrep.dev/playground/r/WrTWdKp/trailofbits.go.racy-append-to-slice.racy-append-to-slice
@@ -488,6 +500,8 @@ rules:
     shortlink: https://sg.run/1Gnw
     semgrep.dev:
       rule:
+        r_id: 11866
+        rv_id: 104227
         rule_id: AbUGWD
         version_id: 0bTLwz3
         url: https://semgrep.dev/playground/r/0bTLwz3/trailofbits.go.racy-write-to-map.racy-write-to-map
@@ -542,6 +556,8 @@ rules:
     shortlink: https://sg.run/lx09
     semgrep.dev:
       rule:
+        r_id: 11757
+        rv_id: 95087
         rule_id: QrUp7k
         version_id: GxTv00x
         url: https://semgrep.dev/playground/r/GxTv00x/trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
@@ -589,6 +605,8 @@ rules:
     shortlink: https://sg.run/owlR
     semgrep.dev:
       rule:
+        r_id: 11760
+        rv_id: 95089
         rule_id: PeUBW1
         version_id: A8T9WWW
         url: https://semgrep.dev/playground/r/A8T9WWW/trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
@@ -637,6 +655,8 @@ rules:
     shortlink: https://sg.run/poE3
     semgrep.dev:
       rule:
+        r_id: 40518
+        rv_id: 95090
         rule_id: pKUQBW
         version_id: BjTXBB7
         url: https://semgrep.dev/playground/r/BjTXBB7/trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
@@ -691,6 +711,8 @@ rules:
     shortlink: https://sg.run/z98W
     semgrep.dev:
       rule:
+        r_id: 11761
+        rv_id: 95091
         rule_id: JDUQ3v
         version_id: DkT6WW1
         url: https://semgrep.dev/playground/r/DkT6WW1/trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-called-inside-goroutine
@@ -748,6 +770,8 @@ rules:
     shortlink: https://sg.run/pkGL
     semgrep.dev:
       rule:
+        r_id: 11762
+        rv_id: 95092
         rule_id: 5rU8Po
         version_id: WrTWZZN
         url: https://semgrep.dev/playground/r/WrTWZZN/trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
@@ -840,6 +864,8 @@ rules:
     shortlink: https://sg.run/wE2N
     semgrep.dev:
       rule:
+        r_id: 60573
+        rv_id: 250820
         rule_id: OrU1Oz
         version_id: LjT70dp
         url: https://semgrep.dev/playground/r/LjT70dp/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
@@ -878,6 +904,8 @@ rules:
     shortlink: https://sg.run/xE20
     semgrep.dev:
       rule:
+        r_id: 60574
+        rv_id: 95094
         rule_id: eqUB1Q
         version_id: K3Tv44w
         url: https://semgrep.dev/playground/r/K3Tv44w/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
@@ -913,6 +941,8 @@ rules:
     shortlink: https://sg.run/vE1n
     semgrep.dev:
       rule:
+        r_id: 60577
+        rv_id: 95097
         rule_id: ZqUbNY
         version_id: YDTprrn
         url: https://semgrep.dev/playground/r/YDTprrn/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
@@ -983,6 +1013,8 @@ rules:
     shortlink: https://sg.run/eNE0
     semgrep.dev:
       rule:
+        r_id: 60576
+        rv_id: 95096
         rule_id: d8UYAJ
         version_id: l4T4ddv
         url: https://semgrep.dev/playground/r/l4T4ddv/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
@@ -1028,6 +1060,8 @@ rules:
     shortlink: https://sg.run/Zo3x
     semgrep.dev:
       rule:
+        r_id: 60579
+        rv_id: 95099
         rule_id: EwUZNW
         version_id: o5Tgzzd
         url: https://semgrep.dev/playground/r/o5Tgzzd/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
@@ -1095,6 +1129,8 @@ rules:
     shortlink: https://sg.run/dbNX
     semgrep.dev:
       rule:
+        r_id: 60578
+        rv_id: 95098
         rule_id: nJU3P4
         version_id: 6xTvqq2
         url: https://semgrep.dev/playground/r/6xTvqq2/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
@@ -1143,6 +1179,8 @@ rules:
     shortlink: https://sg.run/nEGg
     semgrep.dev:
       rule:
+        r_id: 60580
+        rv_id: 95100
         rule_id: 7KU8o3
         version_id: zyTKyyB
         url: https://semgrep.dev/playground/r/zyTKyyB/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
@@ -1184,6 +1222,8 @@ rules:
     shortlink: https://sg.run/Eb1P
     semgrep.dev:
       rule:
+        r_id: 60581
+        rv_id: 253293
         rule_id: L1UjQ3
         version_id: 44T73jp
         url: https://semgrep.dev/playground/r/44T73jp/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
@@ -1218,6 +1258,8 @@ rules:
     shortlink: https://sg.run/1z1G
     semgrep.dev:
       rule:
+        r_id: 17166
+        rv_id: 733072
         rule_id: 0oUrdJ
         version_id: o5T2pO6
         url: https://semgrep.dev/playground/r/o5T2pO6/trailofbits.python.lxml-in-pandas.lxml-in-pandas
@@ -1273,6 +1315,8 @@ rules:
     shortlink: https://sg.run/r6pr1
     semgrep.dev:
       rule:
+        r_id: 124725
+        rv_id: 733073
         rule_id: GdUvWBy
         version_id: zyTn0O7
         url: https://semgrep.dev/playground/r/zyTn0O7/trailofbits.python.msgpack-numpy.msgpack-numpy
@@ -1323,6 +1367,8 @@ rules:
     shortlink: https://sg.run/NbJRG
     semgrep.dev:
       rule:
+        r_id: 124727
+        rv_id: 733076
         rule_id: AbU9npB
         version_id: X0Tg01y
         url: https://semgrep.dev/playground/r/X0Tg01y/trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-deprecation
@@ -1371,6 +1417,8 @@ rules:
     shortlink: https://sg.run/kxK8o
     semgrep.dev:
       rule:
+        r_id: 124728
+        rv_id: 733077
         rule_id: BYUXGv6
         version_id: jQTQ082
         url: https://semgrep.dev/playground/r/jQTQ082/trailofbits.python.pickles-in-keras.pickles-in-keras
@@ -1416,6 +1464,8 @@ rules:
     shortlink: https://sg.run/ryKe
     semgrep.dev:
       rule:
+        r_id: 17169
+        rv_id: 250823
         rule_id: lBUWjy
         version_id: QkT8J3R
         url: https://semgrep.dev/playground/r/QkT8J3R/trailofbits.python.pickles-in-numpy.pickles-in-numpy
@@ -1464,6 +1514,8 @@ rules:
     shortlink: https://sg.run/bXQW
     semgrep.dev:
       rule:
+        r_id: 17170
+        rv_id: 95111
         rule_id: PeU06j
         version_id: kbTdRRB
         url: https://semgrep.dev/playground/r/kbTdRRB/trailofbits.python.pickles-in-pandas.pickles-in-pandas
@@ -1506,6 +1558,8 @@ rules:
     shortlink: https://sg.run/ZZxW
     semgrep.dev:
       rule:
+        r_id: 44135
+        rv_id: 95112
         rule_id: qNUrw1
         version_id: w8T988E
         url: https://semgrep.dev/playground/r/w8T988E/trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-distributed
@@ -1544,6 +1598,8 @@ rules:
     shortlink: https://sg.run/NwQy
     semgrep.dev:
       rule:
+        r_id: 17171
+        rv_id: 733078
         rule_id: JDU6WD
         version_id: 1QT5wrl
         url: https://semgrep.dev/playground/r/1QT5wrl/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
@@ -1587,6 +1643,8 @@ rules:
     shortlink: https://sg.run/wd5jn
     semgrep.dev:
       rule:
+        r_id: 124729
+        rv_id: 733079
         rule_id: DbU6e7r
         version_id: 9lTZ9vg
         url: https://semgrep.dev/playground/r/9lTZ9vg/trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
@@ -1621,6 +1679,8 @@ rules:
     shortlink: https://sg.run/wzW6
     semgrep.dev:
       rule:
+        r_id: 43929
+        rv_id: 95117
         rule_id: DbULlX
         version_id: d6Trzzd
         url: https://semgrep.dev/playground/r/d6Trzzd/trailofbits.python.scikit-joblib-load.scikit-joblib-load
@@ -1655,6 +1715,8 @@ rules:
     shortlink: https://sg.run/2RLD
     semgrep.dev:
       rule:
+        r_id: 11763
+        rv_id: 95118
         rule_id: GdUZxq
         version_id: ZRTQqqP
         url: https://semgrep.dev/playground/r/ZRTQqqP/trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-traversal
@@ -1708,6 +1770,8 @@ rules:
     shortlink: https://sg.run/LpoX
     semgrep.dev:
       rule:
+        r_id: 44139
+        rv_id: 95120
         rule_id: 5rUxGL
         version_id: ExTj44x
         url: https://semgrep.dev/playground/r/ExTj44x/trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytorch-distributed
