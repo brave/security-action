@@ -56,6 +56,8 @@ rules:
     shortlink: https://sg.run/Y4yX
     semgrep.dev:
       rule:
+        r_id: 21214
+        rv_id: 26889
         rule_id: ReU2vo
         version_id: rxT4Zk
         url: https://semgrep.dev/playground/r/rxT4Zk/gitlab.find_sec_bugs.HARD_CODE_KEY-1
@@ -88,6 +90,8 @@ rules:
     shortlink: https://sg.run/obGN
     semgrep.dev:
       rule:
+        r_id: 21216
+        rv_id: 26891
         rule_id: BYUKYz
         version_id: NdTo8N
         url: https://semgrep.dev/playground/r/NdTo8N/gitlab.find_sec_bugs.HARD_CODE_KEY-2
@@ -115,6 +119,8 @@ rules:
     shortlink: https://sg.run/z561
     semgrep.dev:
       rule:
+        r_id: 21217
+        rv_id: 26892
         rule_id: DbU28G
         version_id: kbTLq6
         url: https://semgrep.dev/playground/r/kbTLq6/gitlab.find_sec_bugs.HARD_CODE_KEY-3
@@ -156,6 +162,8 @@ rules:
     shortlink: https://sg.run/6kO6
     semgrep.dev:
       rule:
+        r_id: 21215
+        rv_id: 26890
         rule_id: AbUNYQ
         version_id: bZT9qN
         url: https://semgrep.dev/playground/r/bZT9qN/gitlab.find_sec_bugs.HARD_CODE_KEY-4
@@ -401,6 +409,8 @@ rules:
     shortlink: https://sg.run/WD1A
     semgrep.dev:
       rule:
+        r_id: 21209
+        rv_id: 57077
         rule_id: lBUXP4
         version_id: YDT5zl
         url: https://semgrep.dev/playground/r/YDT5zl/gitlab.find_sec_bugs.SQL_INJECTION_SPRING_JDBC-1.SQL_INJECTION_JPA-1.SQL_INJECTION_JDO-1.SQL_INJECTION_JDBC-1.SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE-1
