@@ -80,8 +80,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
-  const reviewdogEnabledPr = options.baseline_scan_only && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.payload.pull_request.draft === false && context.actor !== 'dependabot[bot]'
-  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}, context.payload.pull_request.draft: ${context.payload.pull_request?.draft}`)
+  const reviewdogEnabledPr = options.baseline_scan_only && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.actor !== 'dependabot[bot]'
+  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}`)
   // reviewdog-enabled-full steps
   const reviewdogEnabledFull = !reviewdogEnabledPr && (!options.baseline_scan_only || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
   debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
@@ -179,7 +179,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
-    const shouldTrigger = reviewdogEnabledPr && !assigneeRemovedLabel && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
+    const shouldTrigger = reviewdogEnabledPr && context.payload.pull_request.draft === false && !assigneeRemovedLabel && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
     debugLog('Should trigger:', shouldTrigger)
 
     if (shouldTrigger) {
