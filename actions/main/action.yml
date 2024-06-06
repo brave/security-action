@@ -122,6 +122,6 @@ runs:
           const actionPath = '${{ github.action_path }}/../../'
           const inputs = ${{ toJson(inputs) }}
 
-          const script = require(`${actionPath}/action.cjs`)
+          const script = require('${{ github.action_path }}/action.cjs')
           await script({github, context, inputs, actionPath, core,
             debug: process.env.DEBUG === 'true'})
