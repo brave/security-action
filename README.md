@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: brave/security-action@main
+      - uses: brave/security-action/actions/main@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }} # optional
