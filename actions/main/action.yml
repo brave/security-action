@@ -1,0 +1,127 @@
+name: 'Security Action'
+description: 'Collect and Generalize multiple CI Security checks'
+inputs:
+  # in-name:
+  #   description: yadda yadda
+  #   required: true
+  #   default: 0
+  github_token:
+    description: |
+      Secret token to push review comments, and
+      interact with the repository systematically
+    required: true
+  slack_token:
+    description: |
+      Secret token to forward findings to slack
+    required: false
+  assignees:
+    description: assign PR to the people linked
+    required: false
+  hotwords:
+    description: body hotwords which should trigger the action
+    required: false
+  hotwords_enabled:
+    description: control if the hotwords should trigger the action
+    required: false
+  debug:
+    description: enables debug output for this action
+    required: false
+  enabled:
+    description: may disable the whole action, big red button for emergency cases
+    required: false
+  baseline_scan_only:
+    description: compare changed files with the base ref, do not scan the entire repo with reviewdog
+    required: false
+  pip_audit_pypi_index_url:
+    description: Pypi index for pip-audit to use in case you have a private index
+    required: false
+  pip_audit_pypi_insecure_hosts:
+    description: Hosts for --trusted-host in pip-audit in case you have an untrusted private index, comma separated
+    required: false
+  gh_to_slack_user_map:
+    description: JSON map of github usernames to slack usernames
+    required: false
+outputs:
+  reviewdog-findings:
+    description: number of reviewdog findings
+    value: ${{ steps.script.outputs.findings }}
+  safesvg-count:
+    description: number of safesvg findings via reviewdog
+    value: ${{ steps.script.outputs.safesvg_count }}
+  tfsec-count:
+    description: number of tfsec findings via reviewdog
+    value: ${{ steps.script.outputs.tfsec_count }}
+  semgrep-count:
+    description: number of semgrep findings via reviewdog
+    value: ${{ steps.script.outputs.semgrep_count }}
+  sveltegrep-count:
+    description: number of sveltegrep findings via reviewdog
+    value: ${{ steps.script.outputs.sveltegrep_count }}
+  npm-audit-count:
+    description: number of npm-audit findings via reviewdog
+    value: ${{ steps.script.outputs.npm_audit_count }}
+  pip-audit-count:
+    description: number of pip-audit findings via reviewdog
+    value: ${{ steps.script.outputs.pip_audit_count }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Store reviewdog enabled
+      # inputs.enabled != 'false' && (
+      #   (inputs.baseline_scan_only != 'false' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]') # reviewdog-enabled-pr
+      #   || 
+      #   (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') # reviewdog-enabled-full
+      # )
+      if: ${{ inputs.enabled != 'false' && ( (inputs.baseline_scan_only != 'false' && github.event_name == 'pull_request' && github.event.pull_request.draft == false && github.actor != 'dependabot[bot]') || (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') )}}
+      id: reviewdog-enabled
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: return true
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
+      with:
+        python-version: '3.12'
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Cache pip cache
+      id: cache-pip
+      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+      with:
+        path: ~/.cache/pip/
+        key: ${{ runner.os }}-pip
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
+      with:
+        reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Setup Ruby
+      id: ruby
+      uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_GEMFILE: ${{ github.action_path }}/../../Gemfile
+      with:
+        ruby-version: '3.2'
+        bundler-cache: true
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      id: npm
+      run: cd ${{ github.action_path }}/../..; npm ci
+      shell: bash
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Install tfsec
+      uses: jaxxstorm/action-install-gh-release@71d17cb091aa850acb2a1a4cf87258d183eb941b # v1.11.0
+      with: # Grab a specific tag with caching
+        repo: aquasecurity/tfsec
+        tag: v1.28.1
+        cache: enable
+    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      id: script
+      env:
+        DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
+      with:
+        script: |-
+          const actionPath = '${{ github.action_path }}/../../'
+          const inputs = ${{ toJson(inputs) }}
+
+          const script = require(`${actionPath}/action.cjs`)
+          await script({github, context, inputs, actionPath, core,
+            debug: process.env.DEBUG === 'true'})
