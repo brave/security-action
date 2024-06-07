@@ -8,54 +8,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check New Repos
-        id: check-new-repos
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      - name: check new repos
+        uses: brave/security-action/actions/check-new-repos@main
         with:
-          github-token: ${{ secrets.GH_PAT }}
-          script: |
-            var query = `query ($owner: String!) {
-              repositoryOwner(login: $owner) {
-                repositories(last: 100) {
-                  totalCount
-                  nodes {
-                    name
-                    createdAt
-                  }
-                }
-              }
-            }`;
-            const variables = {
-              owner: context.repo.owner
-            }
-            const result = await github.graphql(query, variables);
-            const totalCount = result.repositoryOwner.repositories.totalCount;
-
-            // DEBUG: console.log("totalCount: %s", totalCount);
-            const repositories = result.repositoryOwner.repositories;
-            const yesterday = ((d) => d.setDate(d.getDate() - 1))(new Date());
-            var newerThanADay = repositories.nodes.filter(
-              repo => new Date(repo.createdAt) > yesterday
-            );
-            // DEBUG: console.log("NewerThanADay: %o", newerThanADay);
-            var message = "";
-            if (newerThanADay.length > 0) {
-              message += `${newerThanADay.length} new repos in ${variables.owner}:\n\n`;
-              for (let i = 0; i < newerThanADay.length; i++) {
-                message += `- ${newerThanADay[i].name}\n`;
-              }
-              message += `\nTotal repositories in ${variables.owner}: ${totalCount}`;
-
-              core.setSecret(message);
-            }
-
-            return message;
-      - uses: actions-ecosystem/action-slack-notifier@fc778468d09c43a6f4d1b8cccaca59766656996a # v1.1.0
-        if: ${{ fromJson(steps.check-new-repos.outputs.result) != '' }}
-        with:
+          github_token: ${{ secrets.GH_PAT }}
           slack_token: ${{ secrets.HOTSPOTS_SLACK_TOKEN }}
-          message: |
-            [check-new-repos] ${{ fromJson(steps.check-new-repos.outputs.result) }}
-          channel: secops-hotspots
-          color: yellow
-          verbose: false
+          debug: false
