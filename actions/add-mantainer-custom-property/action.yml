@@ -1,0 +1,40 @@
+# action that add maintainer as a custom property
+# to all repositories in this organization
+name: add-maintainer-custom-property
+description: Add Maintainer as Custom Property to Repositories
+inputs:
+  github_token:
+    description: 'GitHub Token'
+    required: true
+  slack_token:
+    description: 'Slack Token'
+    required: true
+  ignore_maintainers:
+    description: 'Comma separated list of maintainers to ignore'
+    default: brave-builds,brave-browser-releases,brave-support-admin
+  debug:
+    description: 'Debug mode'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      with:
+        node-version: '20.x'
+    - id: npm
+      run: cd ${{ github.action_path }}/../..; npm ci
+      shell: bash
+    - name: run
+      id: run
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
+      with:
+        github-token: ${{ inputs.github_token }}
+        script: |
+          const actionPath = '${{ github.action_path }}/../../'
+          const inputs = ${{ toJson(inputs) }}
+
+          const script = require('${{ github.action_path }}/action.cjs')
+          await script({github, context, inputs, actionPath, core,
+            debug: process.env.DEBUG === 'true'})
