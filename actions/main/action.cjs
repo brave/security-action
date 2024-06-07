@@ -80,11 +80,11 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
-  const reviewdogEnabledPr = options.baseline_scan_only && process.env.GITHUB_EVENT_NAME === 'pull_request' && context.actor !== 'dependabot[bot]'
-  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}, context.actor: ${context.actor}`)
+  const reviewdogEnabledPr = options.baseline_scan_only && context.eventName === 'pull_request' && context.actor !== 'dependabot[bot]'
+  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}, context.actor: ${context.actor}`)
   // reviewdog-enabled-full steps
-  const reviewdogEnabledFull = !reviewdogEnabledPr && (!options.baseline_scan_only || process.env.GITHUB_EVENT_NAME === 'workflow_dispatch')
-  debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${process.env.GITHUB_EVENT_NAME}`)
+  const reviewdogEnabledFull = !reviewdogEnabledPr && (!options.baseline_scan_only || context.eventName === 'workflow_dispatch')
+  debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}`)
   // reviewdog-enabled steps
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
   debugLog('Security Action enabled for reviewdog')
@@ -203,7 +203,9 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
     const { default: sendSlackMessage } = await import(`${actionPath}/src/sendSlackMessage.js`)
 
-    const message = `Repository: [${process.env.GITHUB_REPOSITORY}](https://github.com/${process.env.GITHUB_REPOSITORY})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}`
+    const repoName = `${context.repo.owner}/${context.repo.repo}`
+
+    const message = `Repository: [${repoName}](https://github.com/${repoName})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}`
 
     let githubToSlack = {}
     try {
