@@ -1,0 +1,33 @@
+rules:
+  - id: unsafe-js-in-cpp-strings
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      confidence: LOW
+      assignees: |
+        diracdeltas
+        thypon
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/unsafejs-in-cpp.yaml
+    message: Unsafe JS in CPP strings
+    languages:
+      - c
+      - cpp
+    paths:
+      include:
+        - "*.cpp"
+        - "*.cc"
+        - "*.c"
+        - "*.h"
+        - "*.hpp"
+        - "*.hh"
+      exclude:
+        - test/
+        - "*.test.cc"
+        - "*browsertest*.cc"
+        - third_party/rust/*
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern-regex: innerHTML
+          - pattern-regex: document\.write
+      - pattern-inside: |
+          "..."
