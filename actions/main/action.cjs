@@ -151,6 +151,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     const env = {
       ...process.env,
       ASSIGNEES: options.assignees,
+      REMOTE_RUNTIME: options.runtime,
       REVIEWDOG_GITHUB_API_TOKEN: options.github_token,
       SEC_ACTION_DEBUG: options.debug,
       PYPI_INDEX_URL: options.pip_audit_pypi_index_url,

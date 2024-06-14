@@ -2,9 +2,17 @@
 require 'optparse'
 
 class Matcher
-  def initialize(*blocklist_files)
+  def initialize()
+    @files = []
     @blocklist = []
-    blocklist_files.each do |blf|
+  end
+
+  def push(blocklist)
+    @blocklist.push blocklist
+  end
+
+  def init()
+    @files.each do |blf|
       next unless File.exist?(blf)
 
       blocklist = File.read(blf).split("\n").map(&:strip).reject(&:empty?)
@@ -38,7 +46,7 @@ OptionParser.new do |opts|
 
   opts.on("--svgo", "Add SVGO String") do |v|
     options[:svgo] = true
-    options[:matcher] = Matcher.new("#{ENV["SCRIPTPATH"]}/dtd/blocklist.txt")
+    options[:matcher].push "#{ENV["SCRIPTPATH"]}/dtd/blocklist.txt"
   end
 
   opts.on("--assignees", "Add Assignees String") do |v|
@@ -47,14 +55,20 @@ OptionParser.new do |opts|
 
   opts.on("--sveltegrep", "Remove Extracted Script Extension, and use semgrep blocklist") do |v|
     options[:sveltegrep] = true
-    options[:matcher] = Matcher.new("#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt")
+    options[:matcher].push "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt"
   end
 
   opts.on("--semgrep", "Use semgrep blocklist") do |v|
     options[:semgrep] = true
-    options[:matcher] = Matcher.new("#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt")
+    options[:matcher].push "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt"
   end
 end.parse!
+
+if ENV['REMOTE_RUNTIME']
+  options[:matcher].push "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist-#{ENV['REMOTE_RUNTIME']}.txt"
+end
+
+options[:matcher].init()
 
 STDIN.each_line(chomp: true).sort.uniq.to_a.each do |l|
   l.gsub!(/#{ENV['PWD']}/, '')
