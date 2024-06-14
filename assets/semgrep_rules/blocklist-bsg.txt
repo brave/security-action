@@ -1,0 +1,3 @@
+https://semgrep.dev/r/yaml.kubernetes.security.run-as-non-root.run-as-non-root
+https://semgrep.dev/r/yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container
+https://semgrep.dev/r/yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext
