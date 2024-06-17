@@ -136,7 +136,10 @@ export default async function dependabotNudge ({
             .map(d => `&gt; ${decodeEntities(d).substring(0, 40)}`)
             .shift()
 
+          const devAppend = alert.dependency.scope === 'development' ? ' (dev)' : ''
+
           msg += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity *${alert.security_advisory.summary}*`
+          msg += devAppend
           msg += '\n\n'
 
           if (descFirstLine && descFirstLine.length > 0) {
