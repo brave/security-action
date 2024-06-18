@@ -259,7 +259,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       // Send slack message, if there are any findings
       await sendSlackMessage({
         token: options.slack_token,
-        text: `[security-action] ${actor} pushed commits. /cc ${slackAssignees}`,
+        text: `${actor} pushed commits. /cc ${slackAssignees}`,
         message,
         channel: '#secops-hotspots',
         color: 'green',
