@@ -39,7 +39,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   if (message.trim().length > 0) {
     await sendSlackMessage({
       token: inputs.slack_token,
-      message: `[check-new-repos] ${message}`,
+      message,
       channel: '#secops-hotspots',
       color: 'yellow',
       username: 'check-new-repos'

@@ -38,5 +38,5 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   core.setSecret(message)
 
-  if (message.length > 0) { await sendSlackMessage({ debug, username: 'older-than-2y', message: `[older-than-2y] ${message}`, color: 'blue', channel: '#security-hotspots', token: inputs.slack_token }) }
+  if (message.length > 0) { await sendSlackMessage({ debug, username: 'older-than-2y', message, color: 'blue', channel: '#security-hotspots', token: inputs.slack_token }) }
 }
