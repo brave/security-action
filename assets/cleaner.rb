@@ -8,7 +8,7 @@ class Matcher
   end
 
   def push(blocklist)
-    @blocklist.push blocklist
+    @files.push blocklist
   end
 
   def init()
