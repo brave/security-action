@@ -9,7 +9,7 @@ rules:
         - https://github.com/struct/mms
         - https://github.com/returntocorp/semgrep/issues/4939
       confidence: MEDIUM
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/missing-break-in-switch.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-missing-break-in-switch.yaml
       # NOTE: we should also check for default blocks that miss the
       # break/return/exit or equivalent statement/function call.
     message: >-
@@ -50,5 +50,10 @@ rules:
           switch ($VAR) { case $VAL1: NOTREACHED_NORETURN(); case $VAL2: ... }
       - pattern-not: |
           switch ($VAR) { case $VAL1: ... NOTREACHED_NORETURN(); case $VAL2: ... }
+      # NOTREACHED_IN_MIGRATION
+      - pattern-not: |
+          switch ($VAR) { case $VAL1: NOTREACHED_IN_MIGRATION(); case $VAL2: ... }
+      - pattern-not: |
+          switch ($VAR) { case $VAL1: ... NOTREACHED_IN_MIGRATION(); case $VAL2: ... }
       # [[fallthrough]];
       - pattern-not-regex: '\[\[fallthrough\]\];'
