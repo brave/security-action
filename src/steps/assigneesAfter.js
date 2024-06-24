@@ -1,8 +1,26 @@
 export default async function assigneesAfter ({
   github,
+  githubToken,
   context,
+  owner,
+  repo,
+  number,
   assignees
 }) {
+  if (!github && githubToken) {
+    const { Octokit } = await import('octokit')
+
+    github = new Octokit({ auth: githubToken })
+  }
+
+  if (!github) {
+    throw new Error('github or githubToken is required')
+  }
+
+  if (typeof number === 'string') {
+    number = parseInt(number, 10)
+  }
+
   const query = `query($owner:String!, $name:String!, $prnumber:Int!) { 
               repository(owner:$owner, name:$name) { 
                 pullRequest(number:$prnumber) {
@@ -24,9 +42,9 @@ export default async function assigneesAfter ({
               }
             }`
   const variables = {
-    owner: context.repo.owner,
-    name: context.repo.repo,
-    prnumber: context.issue.number
+    owner: owner || context.repo.owner,
+    name: repo || context.repo.repo,
+    prnumber: number || context.issue.number
   }
   const result = await github.graphql(query, variables)
   const threads = result.repository.pullRequest.reviewThreads
@@ -37,6 +55,7 @@ export default async function assigneesAfter ({
     )
   ).map(
     e => e.comments.nodes[0].body
+      .replace(/\n<!--(.*) -->\n/, '')
       .replace(/.*<br>Cc(.*)/, '$1')
       .replaceAll('@', '').trim().split(' ')
   ).flat())]
