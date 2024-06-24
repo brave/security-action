@@ -91,7 +91,7 @@ runs:
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
       with:
-        reviewdog_version: v0.18.0 # Optional. [latest,nightly,v.X.Y.Z]
+        reviewdog_version: v0.18.1 # Optional. [latest,nightly,v.X.Y.Z]
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Setup Ruby
       id: ruby
