@@ -21,8 +21,6 @@ rules:
     severity: WARNING
     pattern-either:
       - pattern: "completely private"
-      - pattern: "anonymous"
-      - pattern: "anonymized"
       - pattern: "military grade"
       - pattern: "military-grade"
       - pattern: "totally secure"
