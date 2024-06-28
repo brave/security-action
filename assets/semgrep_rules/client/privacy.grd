@@ -623,10 +623,6 @@ Or change later at <ph name="SETTINGS_EXTENIONS_LINK">$2<ex>brave://settings/ext
           Dismiss Brave search conversion, press Enter to remove this suggestion
         </message>
         <!-- web Discovery InfoBar -->
-        <message name="IDS_WEB_DISCOVERY_INFOBAR_MESSAGE" desc="The text for web discovery infobar message">
-          // ruleid: privacy
-          Help improve <ph name="SEARCH_NAME">$1<ex>Brave Search</ex></ph> by sending anonymous usage data.  <ph name="MORE_INFO">$2<ex>More info</ex></ph>
-        </message>
         <message name="IDS_WEB_DISCOVERY_INFOBAR_MESSAGE_BRAVE_SEARCH" desc="The text for brave search part in message">
           Brave Search
         </message>
@@ -699,10 +695,6 @@ Or change later at <ph name="SETTINGS_EXTENIONS_LINK">$2<ex>brave://settings/ext
       <!-- Brave Search -->
       <message name="IDS_SETTINGS_WEB_DISCOVERY_LABEL" desc="Description that shows settings for toggle Web Discovery">
         Web Discovery Project
-      </message>
-      <message name="IDS_SETTINGS_WEB_DISCOVERY_SUBLABEL" desc="Description that shows under main toggle setting for Web Discovery">
-        // ruleid: privacy
-        Contribute some anonymous search &amp; browsing data to refine Brave Search.
       </message>
 
       <!-- Brave Tooltips -->
