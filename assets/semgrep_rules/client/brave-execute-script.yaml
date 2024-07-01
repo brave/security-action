@@ -22,4 +22,4 @@ rules:
       - pattern: $OBJ.$FUNC(...)
       - metavariable-regex:
           metavariable: $FUNC
-          regex: ^(.*ExecuteScript.*|ExecuteMethodAndReturnValue|CallFunctionEvenIfScriptDisabled)$
+          regex: ^(.*ExecuteScript.*|ExecuteMethodAndReturnValue|CallFunctionEvenIfScriptDisabled|ExecuteJavaScript)$
