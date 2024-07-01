@@ -4,3 +4,4 @@ element style: validity error : Element style does not carry attribute type
 element svg: validity error : Value for attribute version of svg must be *
 third_party/rust/**/*.svg
 element *: validity error : No declaration for attribute gid of element *
+element *: validity error : No declaration for attribute cache-id of element *
