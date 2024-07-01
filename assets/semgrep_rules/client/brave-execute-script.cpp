@@ -5,4 +5,6 @@ int main() {
       blink::WebScriptSource(
           blink::WebString::FromUTF16(foobar)),
       blink::BackForwardCacheAware::kAllow);
+  // ruleid: brave-execute-script
+  web_contents()->GetPrimaryMainFrame()->ExecuteJavaScript(k_script, base::NullCallback());
 }
