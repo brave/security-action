@@ -222,7 +222,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Slack assignees:', slackAssignees)
 
     // actor-slack step
-    const actor = githubToSlack[context.actor] ? githubToSlack[context.actor] : `@${context.actor}`
+    const lowerActor = context.actor.toLowerCase()
+    const actor = githubToSlack[lowerActor] ? githubToSlack[lowerActor] : `@${context.actor}`
     core.setSecret(actor)
 
     if (fs.existsSync('reviewdog.fail.log')) {
