@@ -3563,13 +3563,13 @@ rules:
     semgrep.dev:
       rule:
         r_id: 121950
-        rv_id: 729092
+        rv_id: 760658
         rule_id: 4bUR8vw
-        version_id: e1TrP21
-        url: https://semgrep.dev/playground/r/e1TrP21/generic.secrets.gitleaks.facebook-access-token.facebook-access-token
+        version_id: w8TleZX
+        url: https://semgrep.dev/playground/r/w8TleZX/generic.secrets.gitleaks.facebook-access-token.facebook-access-token
         origin: community
   patterns:
-  - pattern-regex: (?i)\b(\d{15,16}\|[0-9a-z\-_]{27})(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)\b(\d{15,16}(\||%)[0-9a-z\-_]{27,40})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.facebook-page-access-token.facebook-page-access-token
   message: A gitleaks facebook-page-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -4731,6 +4731,49 @@ rules:
         origin: community
   patterns:
   - pattern-regex: (?i)\b(glsa_[A-Za-z0-9]{32}_[A-Fa-f0-9]{8})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.harness-api-key.harness-api-key
+  message: A gitleaks harness-api-key was detected which attempts to identify hard-coded
+    credentials. It is not recommended to store credentials in source-code, as this
+    risks secrets being leaked and used by either an internal or external malicious
+    adversary. It is recommended to use environment variables to securely provide
+    credentials or retrieve credentials from a secure vault or HSM (Hardware Security
+    Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.harness-api-key.harness-api-key
+    shortlink: https://sg.run/gxzkJ
+    semgrep.dev:
+      rule:
+        r_id: 137285
+        rv_id: 762643
+        rule_id: NbU3pxA
+        version_id: BjTzE9L
+        url: https://semgrep.dev/playground/r/BjTzE9L/generic.secrets.gitleaks.harness-api-key.harness-api-key
+        origin: community
+  patterns:
+  - pattern-regex: "((?:pat|sat)\\.[a-zA-Z0-9]{22}\\.[a-zA-Z0-9]{24}\\.[a-zA-Z0-9]{20})"
 - id: generic.secrets.gitleaks.hashicorp-tf-api-token.hashicorp-tf-api-token
   message: A gitleaks hashicorp-tf-api-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -5075,6 +5118,49 @@ rules:
         origin: community
   patterns:
   - pattern-regex: (?i)(?:intercom)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}([a-z0-9=_\-]{60})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.intra42-client-secret.intra42-client-secret
+  message: A gitleaks intra42-client-secret was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.intra42-client-secret.intra42-client-secret
+    shortlink: https://sg.run/QrZNo
+    semgrep.dev:
+      rule:
+        r_id: 136486
+        rv_id: 760659
+        rule_id: nJUx1de
+        version_id: xyTGYX6
+        url: https://semgrep.dev/playground/r/xyTGYX6/generic.secrets.gitleaks.intra42-client-secret.intra42-client-secret
+        origin: community
+  patterns:
+  - pattern-regex: (?i)\b(s-s4t2(?:ud|af)-[abcdef0123456789]{64})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.jfrog-api-key.jfrog-api-key
   message: A gitleaks jfrog-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
@@ -6149,6 +6235,49 @@ rules:
         origin: community
   patterns:
   - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(NRJS-[a-f0-9]{19})(?:['|\"|\n|\r|\s|\x60|;]|$)
+- id: generic.secrets.gitleaks.new-relic-insert-key.new-relic-insert-key
+  message: A gitleaks new-relic-insert-key was detected which attempts to identify
+    hard-coded credentials. It is not recommended to store credentials in source-code,
+    as this risks secrets being leaked and used by either an internal or external
+    malicious adversary. It is recommended to use environment variables to securely
+    provide credentials or retrieve credentials from a secure vault or HSM (Hardware
+    Security Module).
+  languages:
+  - regex
+  severity: INFO
+  metadata:
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: LOW
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+    source-rule-url: https://github.com/zricethezav/gitleaks/tree/master/cmd/generate/config/rules
+    subcategory:
+    - vuln
+    technology:
+    - gitleaks
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.gitleaks.new-relic-insert-key.new-relic-insert-key
+    shortlink: https://sg.run/3qwdo
+    semgrep.dev:
+      rule:
+        r_id: 136487
+        rv_id: 760660
+        rule_id: EwUj3dB
+        version_id: O9TlPe5
+        url: https://semgrep.dev/playground/r/O9TlPe5/generic.secrets.gitleaks.new-relic-insert-key.new-relic-insert-key
+        origin: community
+  patterns:
+  - pattern-regex: (?i)(?:new-relic|newrelic|new_relic)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}(NRII-[a-z0-9-]{32})(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.new-relic-user-api-id.new-relic-user-api-id
   message: A gitleaks new-relic-user-api-id was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -8252,13 +8381,13 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44800
-        rv_id: 109503
+        rv_id: 762644
         rule_id: YGUgQA
-        version_id: jQTgYeP
-        url: https://semgrep.dev/playground/r/jQTgYeP/generic.secrets.gitleaks.telegram-bot-api-token.telegram-bot-api-token
+        version_id: DkTxQOb
+        url: https://semgrep.dev/playground/r/DkTxQOb/generic.secrets.gitleaks.telegram-bot-api-token.telegram-bot-api-token
         origin: community
   patterns:
-  - pattern-regex: "(?i)(?:^|[^0-9])([0-9]{5,16}:A[a-zA-Z0-9_\\-]{34})(?:$|[^a-zA-Z0-9_\\-])"
+  - pattern-regex: (?i:(?:telegr)(?:[0-9a-z\(-_\t .\\]{0,40})(?:[\s|']|[\s|"]){0,3})(?:=|\|\|:|<=|=>|:|\?=|\()(?:'|\"|\s|=|\x60){0,5}([0-9]{5,16}:A[a-z0-9_\-]{34})(?:['|\"|\n|\r|\s|\x60|;|\\]|$)
 - id: generic.secrets.gitleaks.travisci-access-token.travisci-access-token
   message: A gitleaks travisci-access-token was detected which attempts to identify
     hard-coded credentials. It is not recommended to store credentials in source-code,
@@ -9471,10 +9600,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9115
-        rv_id: 109598
+        rv_id: 762645
         rule_id: bwUwy8
-        version_id: 6xTvJwY
-        url: https://semgrep.dev/playground/r/6xTvJwY/go.lang.security.audit.crypto.math_random.math-random-used
+        version_id: WrTNbRw
+        url: https://semgrep.dev/playground/r/WrTNbRw/go.lang.security.audit.crypto.math_random.math-random-used
         origin: community
   message: Do not use `math/rand`. Use `crypto/rand` instead.
   languages:
@@ -9490,7 +9619,7 @@ rules:
         '
   - metavariable-regex:
       metavariable: "$MATH"
-      regex: "^(math/rand)$"
+      regex: "^(math/rand(\\/v[0-9]+)*)$"
   - pattern-either:
     - pattern-inside: |
         ...
@@ -14961,9 +15090,9 @@ rules:
   message: User data flows into the host portion of this manually-constructed URL.
     This could allow an attacker to send data to their own server, potentially exposing
     sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig
+    They could also probe internal servers or other resources that the server running
     this code can access. (This is called server-side request forgery, or SSRF.) Do
-    not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
+    not allow arbitrary hosts. Instead, create an allowlist for approved hosts, hardcode
     the correct host, or ensure that the user data can only affect the path or parameters.
   options:
     interfile: true
@@ -14994,10 +15123,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 22077
-        rv_id: 109784
+        rv_id: 762646
         rule_id: oqUZo8
-        version_id: qkT2xDj
-        url: https://semgrep.dev/playground/r/qkT2xDj/java.spring.security.injection.tainted-url-host.tainted-url-host
+        version_id: 0bTrv4d
+        url: https://semgrep.dev/playground/r/0bTrv4d/java.spring.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sources:
@@ -19665,10 +19794,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14715
-        rv_id: 751091
+        rv_id: 763098
         rule_id: NbUNpr
-        version_id: l4TWDPx
-        url: https://semgrep.dev/playground/r/l4TWDPx/javascript.express.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: PkT0LoB
+        url: https://semgrep.dev/playground/r/PkT0LoB/javascript.express.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   languages:
   - javascript
@@ -19711,7 +19840,7 @@ rules:
           - pattern: "`$SQLSTR${$EXPR}...`\n"
         - metavariable-regex:
             metavariable: "$SQLSTR"
-            regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*"
+            regex: ".*\\b(?i)(select|delete|insert|create|update\\s+.+\\sset|alter|drop)\\b.*"
     - focus-metavariable: "$EXPR"
 - id: javascript.express.security.require-request.require-request
   message: If an attacker controls the x in require(x) then they can cause code to
@@ -21415,6 +21544,65 @@ rules:
   languages:
   - json
   severity: ERROR
+- id: kotlin.gradle.security.build-gradle-password-hardcoded.build-gradle-password-hardcoded
+  message: A secret is hard-coded in the application. Secrets stored in source code,
+    such as credentials, identifiers, and other types of sensitive data, can be leaked
+    and used by internal or external malicious actors. It is recommended to rotate
+    the secret and retrieve them from a secure secret vault or Hardware Security Module
+    (HSM), alternatively environment variables can be used if allowed by your company
+    policy.
+  severity: WARNING
+  metadata:
+    likelihood: LOW
+    impact: HIGH
+    confidence: MEDIUM
+    category: security
+    subcategory:
+    - vuln
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    cwe2020-top25: true
+    cwe2021-top25: true
+    cwe2022-top25: true
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    technology:
+    - secrets
+    vulnerability_class:
+    - Hard-coded Secrets
+    source_rule_url: https://semgrep.dev/playground/r/d8Ur5BA/achufistov6_personal_org.build-gradle-password-hardcoded
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    source: https://semgrep.dev/r/kotlin.gradle.security.build-gradle-password-hardcoded.build-gradle-password-hardcoded
+    shortlink: https://sg.run/qN29x
+    semgrep.dev:
+      rule:
+        r_id: 137856
+        rv_id: 764626
+        rule_id: ReUD6Kg
+        version_id: YDTAPoy
+        url: https://semgrep.dev/playground/r/YDTAPoy/kotlin.gradle.security.build-gradle-password-hardcoded.build-gradle-password-hardcoded
+        origin: community
+  languages:
+  - kotlin
+  options:
+    symbolic_propagation: true
+  patterns:
+  - pattern-either:
+    - pattern: "$PASS = env[...] ?: $VALUE"
+  - metavariable-regex:
+      metavariable: "$PASS"
+      regex: "(password|pass|passwd|loginPassword)"
+  - metavariable-pattern:
+      language: generic
+      metavariable: "$VALUE"
+      patterns:
+      - pattern-either:
+        - pattern-regex: "^[A-Za-z0-9/+=]+$"
+  paths:
+    include:
+    - "*build.gradle.kts"
 - id: kotlin.lang.security.anonymous-ldap-bind.anonymous-ldap-bind
   metadata:
     cwe:
@@ -22427,10 +22615,10 @@ rules:
   message: User data flows into the host portion of this manually-constructed URL.
     This could allow an attacker to send data to their own server, potentially exposing
     sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig
+    They could also probe internal servers or other resources that the server running
     this code can access. (This is called server-side request forgery, or SSRF.) Do
-    not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
-    the correct host.
+    not allow arbitrary hosts. Instead, create an allowlist for approved hosts, or
+    hardcode the correct host.
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -22456,10 +22644,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14758
-        rv_id: 110045
+        rv_id: 762647
         rule_id: lBU8K1
-        version_id: YDTp27p
-        url: https://semgrep.dev/playground/r/YDTp27p/php.lang.security.injection.tainted-url-host.tainted-url-host
+        version_id: K3T5lpd
+        url: https://semgrep.dev/playground/r/K3T5lpd/php.lang.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sources:
@@ -32469,16 +32657,20 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14389
-        rv_id: 110268
+        rv_id: 789459
         rule_id: GdUrJv
-        version_id: ZRTQNE5
-        url: https://semgrep.dev/playground/r/ZRTQNE5/python.flask.security.injection.raw-html-concat.raw-html-format
+        version_id: PkTxQrQ
+        url: https://semgrep.dev/playground/r/PkTxQrQ/python.flask.security.injection.raw-html-concat.raw-html-format
         origin: community
   mode: taint
   pattern-sanitizers:
   - pattern: jinja2.escape(...)
   - pattern: flask.escape(...)
-  - pattern: flask.render_template("~=/.*\.html", ...)
+  - patterns:
+    - pattern: flask.render_template($TPL, ...)
+    - metavariable-regex:
+        metavariable: "$TPL"
+        regex: ".*\\.html"
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -32771,10 +32963,10 @@ rules:
   message: User data flows into the host portion of this manually-constructed URL.
     This could allow an attacker to send data to their own server, potentially exposing
     sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig
+    They could also probe internal servers or other resources that the server running
     this code can access. (This is called server-side request forgery, or SSRF.) Do
-    not allow arbitrary hosts. Instead, create an allowlist for approved hosts hardcode
-    the correct host.
+    not allow arbitrary hosts. Instead, create an allowlist for approved hosts, or
+    hardcode the correct host.
   metadata:
     cwe:
     - 'CWE-918: Server-Side Request Forgery (SSRF)'
@@ -32800,10 +32992,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14649
-        rv_id: 110272
+        rv_id: 762649
         rule_id: ReU3Wb
-        version_id: LjTqQYP
-        url: https://semgrep.dev/playground/r/LjTqQYP/python.flask.security.injection.tainted-url-host.tainted-url-host
+        version_id: l4TW5L5
+        url: https://semgrep.dev/playground/r/l4TW5L5/python.flask.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sinks:
@@ -39111,6 +39303,9 @@ rules:
     - pattern: 'skip_before_filter ..., :except => $ARGS
 
         '
+    - pattern: 'skip_before_action ..., :except => $ARGS
+
+        '
   message: 'Disabled-by-default Rails controller checks make it much easier to introduce
     access control mistakes. Prefer an allowlist approach with `:only => [...]` rather
     than `except: => [...]`'
@@ -39143,10 +39338,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 20531
-        rv_id: 110590
+        rv_id: 760823
         rule_id: wdUkBP
-        version_id: 0bTLeEq
-        url: https://semgrep.dev/playground/r/0bTLeEq/ruby.rails.security.brakeman.check-before-filter.check-before-filter
+        version_id: RGTqX1r
+        url: https://semgrep.dev/playground/r/RGTqX1r/ruby.rails.security.brakeman.check-before-filter.check-before-filter
         origin: community
 - id: ruby.rails.security.brakeman.check-dynamic-render-local-file-include.check-dynamic-render-local-file-include
   mode: search
@@ -40279,7 +40474,7 @@ rules:
   message: User data flows into the host portion of this manually-constructed URL.
     This could allow an attacker to send data to their own server, potentially exposing
     sensitive data such as cookies or authorization information sent with this request.
-    They could also probe internal servers or other resources that the server runnig
+    They could also probe internal servers or other resources that the server running
     this code can access. (This is called server-side request forgery, or SSRF.) Do
     not allow arbitrary hosts. Use the `ssrf_filter` gem and guard the url construction
     with `SsrfFilter(...)`, or create an allowlist for approved hosts.
@@ -40311,10 +40506,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14705
-        rv_id: 110612
+        rv_id: 762650
         rule_id: zdUY0W
-        version_id: 2KTz34D
-        url: https://semgrep.dev/playground/r/2KTz34D/ruby.rails.security.injection.tainted-url-host.tainted-url-host
+        version_id: YDTAo3P
+        url: https://semgrep.dev/playground/r/YDTAo3P/ruby.rails.security.injection.tainted-url-host.tainted-url-host
         origin: community
   mode: taint
   pattern-sanitizers:

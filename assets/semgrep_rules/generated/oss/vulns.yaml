@@ -101,10 +101,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11752
-        rv_id: 95079
+        rv_id: 759637
         rule_id: EwUQp2
-        version_id: 8KTQEjp
-        url: https://semgrep.dev/playground/r/8KTQEjp/trailofbits.go.hanging-goroutine.hanging-goroutine
+        version_id: pZTzB2q
+        url: https://semgrep.dev/playground/r/pZTzB2q/trailofbits.go.hanging-goroutine.hanging-goroutine
         origin: community
   patterns:
   - pattern-either:
@@ -119,18 +119,6 @@ rules:
         }
         ...
         $Y = <- $CHANNEL
-        ...
-    - pattern: |
-        for ... {
-          ...
-          go func(...) {
-            ...
-            $CHANNEL <- $VAL
-            ...
-          }(...)
-        }
-        ...
-        $Y := <- $CHANNEL
         ...
     - pattern: |
         for ... {
@@ -162,33 +150,19 @@ rules:
     - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
         {\ncase ...\ncase $Y = <- $CHANNEL: \n...\n}\n"
     - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
-        {\ncase ...\ncase $Y := <- $CHANNEL: \n...\n}\n"
-    - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
         {\ncase ...\ncase <- $CHANNEL: \n...\n}\n"
     - pattern: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
         {\ncase ...\ncase $Y <- $CHANNEL: \n...\n}\n"
-  - pattern-not: |
-      for ... {
-        ...
-        go func(...) {
-          ...
-          $CHANNEL <- $VAL
-          ...
-        }(...)
-      }
-      ...
-      $Y = <- $CHANNEL
-      ...
   - pattern-inside: |
       $CHANNEL := make(...)
       ...
-  - pattern-not-inside: "...\nselect {\ncase ...\ncase ...: \n  ...\n  ... =<- $CHANNEL\n
-      \ ...\n}\n"
-  - pattern-not-inside: "...\nselect {\ncase ...\ncase ...: \n  ...\n  <-$CHANNEL\n
-      \ ...\n}\n"
   - pattern-not-inside: |
       $CHANNEL := make(..., $T)
       ...
+  - pattern-not: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
+      {\ncase ...\ncase ...: \n  ...\n  ... = <- $CHANNEL\n  ...\n}\n"
+  - pattern-not: "go func(...){\n  ...\n  $CHANNEL <- $X\n  ...\n}(...)\n...\nselect
+      {\ncase ...\ncase ...: \n  ...\n  <-$CHANNEL\n  ...\n}\n"
 - id: trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
   message: Missing `RUnlock` on an `RWMutex` (`$T` variable) lock before returning
     from a function
