@@ -1,0 +1,5 @@
+source_set("busted_includes") {
+    # This target's includes are messed up, exclude it from checking.
+    # ruleid: brave.gni_includes
+    check_includes = false 
+}
