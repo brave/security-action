@@ -308,7 +308,9 @@ rules:
         ...
         $X.setVisibility($V);
   message: Hidden elements in view can be used to hide data from user. But this data
-    can be leaked.
+    can be leaked. If the view contains sensitive data, it might still be accessible
+    through memory inspection. A good practice is to clear sensitive data before hiding
+    it.
   languages:
   - java
   severity: ERROR
@@ -325,10 +327,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43714
-        rv_id: 78318
+        rv_id: 764604
         rule_id: L1UJDJ
-        version_id: PkTpOL
-        url: https://semgrep.dev/playground/r/PkTpOL/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
+        version_id: nWTGe7Q
+        url: https://semgrep.dev/playground/r/nWTGe7Q/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
         origin: community
 - id: mobsf.mobsfscan.android.logging.android_logging
   patterns:
