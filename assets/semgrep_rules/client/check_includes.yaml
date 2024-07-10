@@ -1,0 +1,21 @@
+rules:
+  - id: brave.gni_includes
+    languages:
+      - generic
+    severity: ERROR
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/check_includes.yaml
+      assignees: |
+        bridiver
+        thypon
+    paths:
+      include:
+        - "*.gn"
+        - "*.gni"
+    message: >
+      `check_includes = false` should not be used since it disables gn
+      dependency checking.
+
+      `check_includes` behaviour should not be explicitly changed.
+    pattern: check_includes
