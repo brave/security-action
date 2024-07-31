@@ -1,0 +1,13 @@
+rules:
+  - id: find-links-without-no-index
+    author: Artem Chaikin
+    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/find-links-without-no-index.yaml
+    references:
+        - https://portswigger.net/daily-swig/dependency-confusion-attack-mounted-via-pypi-repo-exposes-flawed-package-installer-behavior
+        - https://www.bleepingcomputer.com/news/security/pytorch-discloses-malicious-dependency-chain-compromise-over-holidays/
+    confidence: LOW
+    pattern-regex: '^(?!.*--no-index).*--find-links.*$'
+    message: "When --find-links is used without --no-index, pip may try to install the package from PyPI. Add --no-index to avoid dependency confusion."
+    severity: INFO
+    languages:
+      - generic
