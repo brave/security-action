@@ -6,7 +6,7 @@ rules:
         - https://portswigger.net/daily-swig/dependency-confusion-attack-mounted-via-pypi-repo-exposes-flawed-package-installer-behavior
         - https://www.bleepingcomputer.com/news/security/pytorch-discloses-malicious-dependency-chain-compromise-over-holidays/
     confidence: LOW
-    pattern-regex: '^(?!.*--no-index).*--find-links.*$'
+    pattern-regex: '^(?!.*--no-index).*--find-links'
     message: "When --find-links is used without --no-index, pip may try to install the package from PyPI. Add --no-index to avoid dependency confusion."
     severity: INFO
     languages:
