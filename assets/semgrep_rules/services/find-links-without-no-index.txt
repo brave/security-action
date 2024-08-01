@@ -10,3 +10,7 @@ sphinx-reredirects==0.1.2
 --find-links https://mlc.ai/wheels
 mlc-ai-nightly
 --find-links --no-index https://mlc.ai/wheels
+--no-index --find-links https://mlc.ai/wheels
+// ruleid: find-links-without-no-index
+pip install --quiet --pre -U -f https://mlc.ai/wheels mlc-ai-nightly
+pip install --quiet --pre -U -f --no-index https://mlc.ai/wheels mlc-ai-nightly
