@@ -254,6 +254,12 @@ RULESETS.each do |ruleset|
 		next if rule['patterns'] && rule['patterns'][0]['pattern'] == 'a()' && rule['patterns'][1]['pattern'] == 'b()'
 		next if rule['patterns'] && rule['patterns'][0]['pattern'] == 'a' && rule['patterns'][1]['pattern'] == 'b'
 
+		# Fix improper metadata
+		if rule['id'] == 'python.lang.security.audit.subprocess-shell-true.subprocess-shell-true'
+			rule['metadata']['category'] = 'security'
+			rule['metadata']['subcategory'] = ['audit']
+		end
+
 		categoriser << rule
 	end
 end

@@ -2268,10 +2268,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113212
-        rv_id: 723874
+        rv_id: 833251
         rule_id: ReUD0BO
-        version_id: WrTNkvB
-        url: https://semgrep.dev/playground/r/WrTNkvB/trailofbits.generic.container-privileged.container-privileged
+        version_id: 5PTyDrK
+        url: https://semgrep.dev/playground/r/5PTyDrK/trailofbits.generic.container-privileged.container-privileged
         origin: community
   pattern-either:
   - pattern: docker ... --privileged
@@ -2319,10 +2319,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113213
-        rv_id: 253283
+        rv_id: 833252
         rule_id: AbU9gy9
-        version_id: d6TqRxp
-        url: https://semgrep.dev/playground/r/d6TqRxp/trailofbits.generic.container-user-root.container-user-root
+        version_id: GxTDEYO
+        url: https://semgrep.dev/playground/r/GxTDEYO/trailofbits.generic.container-user-root.container-user-root
         origin: community
   pattern-either:
   - pattern: docker ... -u root
@@ -2358,10 +2358,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113214
-        rv_id: 253284
+        rv_id: 833253
         rule_id: BYUXkQx
-        version_id: ZRT6EAy
-        url: https://semgrep.dev/playground/r/ZRT6EAy/trailofbits.generic.curl-insecure.curl-insecure
+        version_id: RGTKGnY
+        url: https://semgrep.dev/playground/r/RGTKGnY/trailofbits.generic.curl-insecure.curl-insecure
         origin: community
   pattern-either:
   - pattern: 'curl ... -k '
@@ -2391,10 +2391,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113215
-        rv_id: 723875
+        rv_id: 833254
         rule_id: DbU6R39
-        version_id: 0bTrQAn
-        url: https://semgrep.dev/playground/r/0bTrQAn/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
+        version_id: A8T370Z
+        url: https://semgrep.dev/playground/r/A8T370Z/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
         origin: community
   patterns:
   - pattern-either:
@@ -2427,10 +2427,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113216
-        rv_id: 253286
+        rv_id: 833255
         rule_id: WAUWqko
-        version_id: ExTRkxb
-        url: https://semgrep.dev/playground/r/ExTRkxb/trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
+        version_id: BjTe0Jg
+        url: https://semgrep.dev/playground/r/BjTe0Jg/trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
         origin: community
   pattern-either:
   - pattern: gpg ... --allow-non-selfsigned-uid
@@ -2469,10 +2469,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113217
-        rv_id: 253287
+        rv_id: 833256
         rule_id: 0oULKQE
-        version_id: 7ZTD73J
-        url: https://semgrep.dev/playground/r/7ZTD73J/trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
+        version_id: DkTG0Xg
+        url: https://semgrep.dev/playground/r/DkTG0Xg/trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
         origin: community
   pattern: installer ... -allowUntrusted
 - id: trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
@@ -2500,10 +2500,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113218
-        rv_id: 253288
+        rv_id: 833257
         rule_id: KxUvKPY
-        version_id: LjT7Ygd
-        url: https://semgrep.dev/playground/r/LjT7Ygd/trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
+        version_id: WrTdpG9
+        url: https://semgrep.dev/playground/r/WrTdpG9/trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
         origin: community
   pattern-either:
   - pattern: 'openssl ... -pass pass:'
@@ -2537,10 +2537,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113219
-        rv_id: 253289
+        rv_id: 833258
         rule_id: qNU2R9X
-        version_id: 8KT42rO
-        url: https://semgrep.dev/playground/r/8KT42rO/trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
+        version_id: 0bTwbgN
+        url: https://semgrep.dev/playground/r/0bTwbgN/trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
         origin: community
   pattern: ssh ... StrictHostKeyChecking=no
 - id: trailofbits.generic.tar-insecure-flags.tar-insecure-flags
@@ -2568,10 +2568,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113220
-        rv_id: 258314
+        rv_id: 833259
         rule_id: lBU4JeW
-        version_id: 6xT5vWg
-        url: https://semgrep.dev/playground/r/6xT5vWg/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
+        version_id: K3Trq8x
+        url: https://semgrep.dev/playground/r/K3Trq8x/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
         origin: community
   options:
     generic_ellipsis_max_span: 0
@@ -2605,10 +2605,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113221
-        rv_id: 253291
+        rv_id: 833260
         rule_id: PeUJREx
-        version_id: QkT8yqY
-        url: https://semgrep.dev/playground/r/QkT8yqY/trailofbits.generic.wget-no-check-certificate.wget-no-check-certificate
+        version_id: qkTQnL3
+        url: https://semgrep.dev/playground/r/qkTQnL3/trailofbits.generic.wget-no-check-certificate.wget-no-check-certificate
         origin: community
   pattern-either:
   - pattern: wget ... --no-check-certificate
@@ -2638,10 +2638,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113222
-        rv_id: 253292
+        rv_id: 833261
         rule_id: JDUNz2o
-        version_id: 3ZTlJXZ
-        url: https://semgrep.dev/playground/r/3ZTlJXZ/trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
+        version_id: l4TyOon
+        url: https://semgrep.dev/playground/r/l4TyOon/trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
         origin: community
   pattern-either:
   - pattern: wget ... http://
@@ -2681,10 +2681,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 137469
-        rv_id: 763094
+        rv_id: 833262
         rule_id: WAUWXz3
-        version_id: gETJ4g6
-        url: https://semgrep.dev/playground/r/gETJ4g6/trailofbits.go.eth-rpc-tracetransaction.eth-rpc-tracetransaction
+        version_id: YDTl0k0
+        url: https://semgrep.dev/playground/r/YDTl0k0/trailofbits.go.eth-rpc-tracetransaction.eth-rpc-tracetransaction
         origin: community
   pattern-either:
   - pattern: "$RECEIVER.TraceTransaction($CTX, $FILTER, $TRACECONF)"
@@ -2738,10 +2738,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 137470
-        rv_id: 763095
+        rv_id: 833263
         rule_id: 0oUL8xK
-        version_id: QkTnyd7
-        url: https://semgrep.dev/playground/r/QkTnyd7/trailofbits.go.eth-txreceipt-status.eth-txreceipt-status
+        version_id: 6xTDgGX
+        url: https://semgrep.dev/playground/r/6xTDgGX/trailofbits.go.eth-txreceipt-status.eth-txreceipt-status
         origin: community
   patterns:
   - pattern-inside: |
@@ -2775,10 +2775,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17197
-        rv_id: 258507
+        rv_id: 833265
         rule_id: kxU6Xb
-        version_id: A8Tr9vQ
-        url: https://semgrep.dev/playground/r/A8Tr9vQ/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
+        version_id: zyTWJNZ
+        url: https://semgrep.dev/playground/r/zyTWJNZ/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-modified-variable
         origin: community
   patterns:
   - pattern: |
@@ -2848,10 +2848,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17198
-        rv_id: 759634
+        rv_id: 833266
         rule_id: wdUlww
-        version_id: 6xTELRW
-        url: https://semgrep.dev/playground/r/6xTELRW/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
+        version_id: pZTXjeW
+        url: https://semgrep.dev/playground/r/pZTXjeW/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
         origin: community
   patterns:
   - pattern: |
@@ -2908,10 +2908,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11759
-        rv_id: 95088
+        rv_id: 833273
         rule_id: 4bU2AZ
-        version_id: RGTDPPg
-        url: https://semgrep.dev/playground/r/RGTDPPg/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
+        version_id: rxTDzNy
+        url: https://semgrep.dev/playground/r/rxTDzNy/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-cast
         origin: community
   pattern-either:
   - patterns:
@@ -3037,10 +3037,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60575
-        rv_id: 95095
+        rv_id: 833280
         rule_id: v8UlNl
-        version_id: qkT2oo4
-        url: https://semgrep.dev/playground/r/qkT2oo4/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
+        version_id: e1TDkqr
+        url: https://semgrep.dev/playground/r/e1TDkqr/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
         origin: community
   mode: taint
   pattern-sources:
@@ -3086,10 +3086,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113224
-        rv_id: 253295
+        rv_id: 833288
         rule_id: GdUvk46
-        version_id: JdT5gxX
-        url: https://semgrep.dev/playground/r/JdT5gxX/trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-verification-disabled
+        version_id: 8KTGkn3
+        url: https://semgrep.dev/playground/r/8KTGkn3/trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-verification-disabled
         origin: community
   pattern: "$SETTINGS.invalidHostNameAllowed(true)"
 - id: trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
@@ -3119,10 +3119,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17165
-        rv_id: 250821
+        rv_id: 833289
         rule_id: WAUN1Z
-        version_id: 8KT4boW
-        url: https://semgrep.dev/playground/r/8KT4boW/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
+        version_id: gETy20E
+        url: https://semgrep.dev/playground/r/gETy20E/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
         origin: community
   pattern-either:
   - patterns:
@@ -3155,10 +3155,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43925
-        rv_id: 95104
+        rv_id: 833292
         rule_id: GdUgN8
-        version_id: jQTgqq9
-        url: https://semgrep.dev/playground/r/jQTgqq9/trailofbits.python.numpy-distutils.numpy-distutils
+        version_id: 44TQP8Y
+        url: https://semgrep.dev/playground/r/44TQP8Y/trailofbits.python.numpy-distutils.numpy-distutils
         origin: community
   patterns:
   - pattern: 'import numpy.distutils
@@ -3191,10 +3191,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43926
-        rv_id: 95105
+        rv_id: 833293
         rule_id: ReUdJ0
-        version_id: 1QTOZZ0
-        url: https://semgrep.dev/playground/r/1QTOZZ0/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
+        version_id: PkTxrbE
+        url: https://semgrep.dev/playground/r/PkTxrbE/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
         origin: community
   patterns:
   - pattern: numpy.f2py.compile(...)
@@ -3228,10 +3228,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44134
-        rv_id: 250822
+        rv_id: 833294
         rule_id: KxURLn
-        version_id: gET6q8p
-        url: https://semgrep.dev/playground/r/gET6q8p/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
+        version_id: JdTlrK4
+        url: https://semgrep.dev/playground/r/JdTlrK4/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
         origin: community
   patterns:
   - pattern: |
@@ -3267,10 +3267,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43927
-        rv_id: 95108
+        rv_id: 833296
         rule_id: AbUxDq
-        version_id: rxTykkg
-        url: https://semgrep.dev/playground/r/rxTykkg/trailofbits.python.numpy-load-library.numpy-load-library
+        version_id: GxTDEBO
+        url: https://semgrep.dev/playground/r/GxTDEBO/trailofbits.python.numpy-load-library.numpy-load-library
         origin: community
   patterns:
   - pattern: numpy.ctypeslib.load_library(...)
@@ -3301,10 +3301,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43928
-        rv_id: 95109
+        rv_id: 833297
         rule_id: BYUoqy
-        version_id: bZTbOOD
-        url: https://semgrep.dev/playground/r/bZTbOOD/trailofbits.python.onnx-session-options.onnx-session-options
+        version_id: RGTKG9Y
+        url: https://semgrep.dev/playground/r/RGTKG9Y/trailofbits.python.onnx-session-options.onnx-session-options
         origin: community
   patterns:
   - pattern-inside: |
@@ -3343,10 +3343,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 124726
-        rv_id: 733075
+        rv_id: 833298
         rule_id: ReUDw9J
-        version_id: 2KTLoZO
-        url: https://semgrep.dev/playground/r/2KTLoZO/trailofbits.python.pandas-eval.pandas-eval
+        version_id: A8T37pZ
+        url: https://semgrep.dev/playground/r/A8T37pZ/trailofbits.python.pandas-eval.pandas-eval
         origin: community
   patterns:
   - pattern-inside: |
@@ -3397,10 +3397,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44136
-        rv_id: 95114
+        rv_id: 833306
         rule_id: lBUYD9
-        version_id: O9TNGGw
-        url: https://semgrep.dev/playground/r/O9TNGGw/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
+        version_id: YDTl040
+        url: https://semgrep.dev/playground/r/YDTl040/trailofbits.python.pytorch-classes-load-library.pytorch-classes-load-library
         origin: community
   patterns:
   - pattern: torch.classes.load_library(...)
@@ -3433,10 +3433,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44137
-        rv_id: 95115
+        rv_id: 833307
         rule_id: PeUKGk
-        version_id: e1T0vvB
-        url: https://semgrep.dev/playground/r/e1T0vvB/trailofbits.python.pytorch-package.pytorch-package
+        version_id: 6xTDgWX
+        url: https://semgrep.dev/playground/r/6xTDgWX/trailofbits.python.pytorch-package.pytorch-package
         origin: community
   pattern: import torch.package
 - id: trailofbits.python.tensorflow-load-library.tensorflow-load-library
@@ -3466,10 +3466,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43930
-        rv_id: 95119
+        rv_id: 833311
         rule_id: WAUgBJ
-        version_id: nWTxYYN
-        url: https://semgrep.dev/playground/r/nWTxYYN/trailofbits.python.tensorflow-load-library.tensorflow-load-library
+        version_id: 2KT7xEg
+        url: https://semgrep.dev/playground/r/2KT7xEg/trailofbits.python.tensorflow-load-library.tensorflow-load-library
         origin: community
   patterns:
   - pattern-either:
@@ -3503,10 +3503,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 13697
-        rv_id: 95121
+        rv_id: 833313
         rule_id: 2ZUPQ3
-        version_id: 7ZTgeey
-        url: https://semgrep.dev/playground/r/7ZTgeey/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
+        version_id: jQTrXJK
+        url: https://semgrep.dev/playground/r/jQTrXJK/trailofbits.rs.panic-in-function-returning-result.panic-in-function-returning-result
         origin: community
   patterns:
   - pattern-either:
@@ -3565,10 +3565,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113225
-        rv_id: 253296
+        rv_id: 833314
         rule_id: ReUD0BR
-        version_id: 5PTk51b
-        url: https://semgrep.dev/playground/r/5PTk51b/trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
+        version_id: 1QTPLQx
+        url: https://semgrep.dev/playground/r/1QTPLQx/trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -3613,10 +3613,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113226
-        rv_id: 253297
+        rv_id: 833315
         rule_id: AbU9gyg
-        version_id: GxTjwed
-        url: https://semgrep.dev/playground/r/GxTjwed/trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-validate-certs-disabled
+        version_id: 9lTJ06D
+        url: https://semgrep.dev/playground/r/9lTJ06D/trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-validate-certs-disabled
         origin: community
   patterns:
   - pattern-inside: |
@@ -3664,10 +3664,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113227
-        rv_id: 253298
+        rv_id: 833316
         rule_id: BYUXkQb
-        version_id: RGTevLG
-        url: https://semgrep.dev/playground/r/RGTevLG/trailofbits.yaml.ansible.apt-unencrypted-url.apt-unencrypted-url
+        version_id: yeTN15k
+        url: https://semgrep.dev/playground/r/yeTN15k/trailofbits.yaml.ansible.apt-unencrypted-url.apt-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -3713,10 +3713,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113228
-        rv_id: 253299
+        rv_id: 833317
         rule_id: DbU6R3w
-        version_id: A8TkYdl
-        url: https://semgrep.dev/playground/r/A8TkYdl/trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
+        version_id: rxTDzGy
+        url: https://semgrep.dev/playground/r/rxTDzGy/trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -3765,10 +3765,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113229
-        rv_id: 253300
+        rv_id: 833318
         rule_id: WAUWqkG
-        version_id: BjTxYZZ
-        url: https://semgrep.dev/playground/r/BjTxYZZ/trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-certs-disabled
+        version_id: bZTBe6R
+        url: https://semgrep.dev/playground/r/bZTBe6R/trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-certs-disabled
         origin: community
   patterns:
   - pattern-inside: |
@@ -3816,10 +3816,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113230
-        rv_id: 253301
+        rv_id: 833319
         rule_id: 0oULKQq
-        version_id: DkTq8bj
-        url: https://semgrep.dev/playground/r/DkTq8bj/trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-url
+        version_id: NdTB2r9
+        url: https://semgrep.dev/playground/r/NdTB2r9/trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -3871,10 +3871,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113231
-        rv_id: 253302
+        rv_id: 833320
         rule_id: KxUvKPQ
-        version_id: WrTOxK1
-        url: https://semgrep.dev/playground/r/WrTOxK1/trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-validate-certs-disabled
+        version_id: kbT2lek
+        url: https://semgrep.dev/playground/r/kbT2lek/trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-validate-certs-disabled
         origin: community
   patterns:
   - pattern-inside: |
@@ -3929,10 +3929,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113232
-        rv_id: 253303
+        rv_id: 833321
         rule_id: qNU2R9K
-        version_id: 0bTyOzA
-        url: https://semgrep.dev/playground/r/0bTyOzA/trailofbits.yaml.ansible.rpm-key-unencrypted-url.rpm-key-unencrypted-url
+        version_id: w8TAxy8
+        url: https://semgrep.dev/playground/r/w8TAxy8/trailofbits.yaml.ansible.rpm-key-unencrypted-url.rpm-key-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -3977,10 +3977,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113233
-        rv_id: 253304
+        rv_id: 833322
         rule_id: lBU4Jee
-        version_id: K3Tnykp
-        url: https://semgrep.dev/playground/r/K3Tnykp/trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-validate-certs-disabled
+        version_id: xyTNeQ2
+        url: https://semgrep.dev/playground/r/xyTNeQ2/trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-validate-certs-disabled
         origin: community
   patterns:
   - pattern-inside: |
@@ -4027,10 +4027,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113234
-        rv_id: 253305
+        rv_id: 833323
         rule_id: YGUpZzx
-        version_id: qkT5q7N
-        url: https://semgrep.dev/playground/r/qkT5q7N/trailofbits.yaml.ansible.unarchive-unencrypted-url.unarchive-unencrypted-url
+        version_id: O9TJWR6
+        url: https://semgrep.dev/playground/r/O9TJWR6/trailofbits.yaml.ansible.unarchive-unencrypted-url.unarchive-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -4074,10 +4074,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113235
-        rv_id: 253306
+        rv_id: 833324
         rule_id: 6JUv2A4
-        version_id: l4TlPRP
-        url: https://semgrep.dev/playground/r/l4TlPRP/trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-validate-certs-disabled
+        version_id: e1TDkGr
+        url: https://semgrep.dev/playground/r/e1TDkGr/trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-validate-certs-disabled
         origin: community
   patterns:
   - pattern-inside: |
@@ -4123,10 +4123,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113236
-        rv_id: 253307
+        rv_id: 833325
         rule_id: oqUgbWQ
-        version_id: YDTNPeX
-        url: https://semgrep.dev/playground/r/YDTNPeX/trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validation-ignore
+        version_id: vdTOzBO
+        url: https://semgrep.dev/playground/r/vdTOzBO/trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validation-ignore
         origin: community
   pattern: 'ansible_winrm_server_cert_validation: ignore'
 - id: trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
@@ -4155,10 +4155,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113237
-        rv_id: 253308
+        rv_id: 833326
         rule_id: zdUKbXv
-        version_id: JdT5gj1
-        url: https://semgrep.dev/playground/r/JdT5gj1/trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
+        version_id: d6TKGp6
+        url: https://semgrep.dev/playground/r/d6TKGp6/trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -4204,10 +4204,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113238
-        rv_id: 253309
+        rv_id: 833327
         rule_id: pKU10q4
-        version_id: 5PTk5zd
-        url: https://semgrep.dev/playground/r/5PTk5zd/trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-certs-disabled
+        version_id: ZRTlPX3
+        url: https://semgrep.dev/playground/r/ZRTlPX3/trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-certs-disabled
         origin: community
   patterns:
   - pattern-inside: |
@@ -4253,10 +4253,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113239
-        rv_id: 253310
+        rv_id: 833328
         rule_id: 2ZUzvAk
-        version_id: GxTjwRj
-        url: https://semgrep.dev/playground/r/GxTjwRj/trailofbits.yaml.ansible.zypper-repository-unencrypted-url.zypper-repository-unencrypted-url
+        version_id: nWTy40P
+        url: https://semgrep.dev/playground/r/nWTy40P/trailofbits.yaml.ansible.zypper-repository-unencrypted-url.zypper-repository-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
@@ -4301,10 +4301,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113240
-        rv_id: 253311
+        rv_id: 833329
         rule_id: X5UQzo1
-        version_id: RGTevlQ
-        url: https://semgrep.dev/playground/r/RGTevlQ/trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url
+        version_id: ExTrDXA
+        url: https://semgrep.dev/playground/r/ExTrDXA/trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url
         origin: community
   patterns:
   - pattern-inside: |
