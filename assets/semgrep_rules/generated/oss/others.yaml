@@ -327,10 +327,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43714
-        rv_id: 764604
+        rv_id: 833208
         rule_id: L1UJDJ
-        version_id: nWTGe7Q
-        url: https://semgrep.dev/playground/r/nWTGe7Q/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
+        version_id: zyTWJBg
+        url: https://semgrep.dev/playground/r/zyTWJBg/mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
         origin: community
 - id: mobsf.mobsfscan.android.logging.android_logging
   patterns:
@@ -388,10 +388,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43715
-        rv_id: 78319
+        rv_id: 833209
         rule_id: 8GU0OP
-        version_id: JdTJe7
-        url: https://semgrep.dev/playground/r/JdTJe7/mobsf.mobsfscan.android.logging.android_logging
+        version_id: pZTXj2v
+        url: https://semgrep.dev/playground/r/pZTXj2v/mobsf.mobsfscan.android.logging.android_logging
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_api_key
   patterns:
@@ -424,10 +424,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43718
-        rv_id: 89493
+        rv_id: 833212
         rule_id: 3qUgDz
-        version_id: WrTWOdb
-        url: https://semgrep.dev/playground/r/WrTWOdb/mobsf.mobsfscan.android.secrets.hardcoded_api_key
+        version_id: jQTrX18
+        url: https://semgrep.dev/playground/r/jQTrX18/mobsf.mobsfscan.android.secrets.hardcoded_api_key
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_password
   patterns:
@@ -460,10 +460,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43716
-        rv_id: 89491
+        rv_id: 833210
         rule_id: gxUpG8
-        version_id: BjTXxew
-        url: https://semgrep.dev/playground/r/BjTXxew/mobsf.mobsfscan.android.secrets.hardcoded_password
+        version_id: 2KT7xRo
+        url: https://semgrep.dev/playground/r/2KT7xRo/mobsf.mobsfscan.android.secrets.hardcoded_password
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_secret
   patterns:
@@ -496,10 +496,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43719
-        rv_id: 89494
+        rv_id: 833213
         rule_id: 4bUJWL
-        version_id: 0bTLywO
-        url: https://semgrep.dev/playground/r/0bTLywO/mobsf.mobsfscan.android.secrets.hardcoded_secret
+        version_id: 1QTPLEB
+        url: https://semgrep.dev/playground/r/1QTPLEB/mobsf.mobsfscan.android.secrets.hardcoded_secret
         origin: community
 - id: mobsf.mobsfscan.android.secrets.hardcoded_username
   patterns:
@@ -532,10 +532,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43717
-        rv_id: 89492
+        rv_id: 833211
         rule_id: QrULll
-        version_id: DkT6qGO
-        url: https://semgrep.dev/playground/r/DkT6qGO/mobsf.mobsfscan.android.secrets.hardcoded_username
+        version_id: X0T5NYj
+        url: https://semgrep.dev/playground/r/X0T5NYj/mobsf.mobsfscan.android.secrets.hardcoded_username
         origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_readable
   patterns:
@@ -560,10 +560,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43720
-        rv_id: 78324
+        rv_id: 833214
         rule_id: PeUKq9
-        version_id: BjT9GN
-        url: https://semgrep.dev/playground/r/BjT9GN/mobsf.mobsfscan.android.word_readable_writable.world_readable
+        version_id: 9lTJ03r
+        url: https://semgrep.dev/playground/r/9lTJ03r/mobsf.mobsfscan.android.word_readable_writable.world_readable
         origin: community
 - id: mobsf.mobsfscan.android.word_readable_writable.world_writeable
   patterns:
@@ -589,10 +589,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43721
-        rv_id: 78325
+        rv_id: 833215
         rule_id: JDU4Ab
-        version_id: DkTOeW
-        url: https://semgrep.dev/playground/r/DkTOeW/mobsf.mobsfscan.android.word_readable_writable.world_writeable
+        version_id: yeTN1qo
+        url: https://semgrep.dev/playground/r/yeTN1qo/mobsf.mobsfscan.android.word_readable_writable.world_writeable
         origin: community
 - id: mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
   patterns:
@@ -627,10 +627,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43722
-        rv_id: 78326
+        rv_id: 833216
         rule_id: 5rUx0W
-        version_id: WrTR6P
-        url: https://semgrep.dev/playground/r/WrTR6P/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
+        version_id: rxTDznQ
+        url: https://semgrep.dev/playground/r/rxTDznQ/mobsf.mobsfscan.best_practices.android_safetynetapi.android_safetynet_api
         origin: community
 - id: mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
   patterns:
@@ -677,10 +677,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43723
-        rv_id: 78327
+        rv_id: 833217
         rule_id: GdUg51
-        version_id: 0bT462
-        url: https://semgrep.dev/playground/r/0bT462/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
+        version_id: bZTBeEj
+        url: https://semgrep.dev/playground/r/bZTBeEj/mobsf.mobsfscan.best_practices.flag_secure.android_prevent_screenshot
         origin: community
 - id: mobsf.mobsfscan.best_practices.root_detection.android_root_detection
   patterns:
@@ -713,10 +713,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43724
-        rv_id: 78328
+        rv_id: 833218
         rule_id: ReUdYj
-        version_id: K3TpO5
-        url: https://semgrep.dev/playground/r/K3TpO5/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
+        version_id: NdTB262
+        url: https://semgrep.dev/playground/r/NdTB262/mobsf.mobsfscan.best_practices.root_detection.android_root_detection
         origin: community
 - id: mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
   patterns:
@@ -741,10 +741,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43725
-        rv_id: 78329
+        rv_id: 833219
         rule_id: AbUx1o
-        version_id: qkT0KQ
-        url: https://semgrep.dev/playground/r/qkT0KQ/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
+        version_id: kbT2lWP
+        url: https://semgrep.dev/playground/r/kbT2lWP/mobsf.mobsfscan.best_practices.tapjacking.android_detect_tapjacking
         origin: community
 - id: mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
   patterns:
@@ -777,10 +777,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43726
-        rv_id: 78330
+        rv_id: 833220
         rule_id: BYUoO0
-        version_id: l4TLNX
-        url: https://semgrep.dev/playground/r/l4TLNX/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
+        version_id: w8TAxWo
+        url: https://semgrep.dev/playground/r/w8TAxWo/mobsf.mobsfscan.best_practices.tls_certificate_transparency.android_certificate_transparency
         origin: community
 - id: mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
   patterns:
@@ -849,10 +849,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43727
-        rv_id: 78331
+        rv_id: 833221
         rule_id: DbUL4y
-        version_id: YDT38v
-        url: https://semgrep.dev/playground/r/YDT38v/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
+        version_id: xyTNeR5
+        url: https://semgrep.dev/playground/r/xyTNeR5/mobsf.mobsfscan.best_practices.tls_pinning.android_certificate_pinning
         origin: community
 - id: mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
   patterns:
@@ -879,10 +879,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43728
-        rv_id: 78332
+        rv_id: 833222
         rule_id: WAUg2K
-        version_id: 6xTL0J
-        url: https://semgrep.dev/playground/r/6xTL0J/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
+        version_id: O9TJWQY
+        url: https://semgrep.dev/playground/r/O9TJWQY/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode
         origin: community
 - id: mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
   patterns:
@@ -909,10 +909,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43729
-        rv_id: 78333
+        rv_id: 833223
         rule_id: 0oUZRX
-        version_id: o5T759
-        url: https://semgrep.dev/playground/r/o5T759/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
+        version_id: e1TDk4W
+        url: https://semgrep.dev/playground/r/e1TDk4W/mobsf.mobsfscan.crypto.aes_ecb.aes_ecb_mode_default
         origin: community
 - id: mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
   patterns:
@@ -943,10 +943,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43730
-        rv_id: 78334
+        rv_id: 833224
         rule_id: KxURB0
-        version_id: zyTxeb
-        url: https://semgrep.dev/playground/r/zyTxeb/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
+        version_id: vdTOzLZ
+        url: https://semgrep.dev/playground/r/vdTOzLZ/mobsf.mobsfscan.crypto.aes_encryption_keys.aes_hardcoded_key
         origin: community
 - id: mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
   patterns:
@@ -987,10 +987,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43731
-        rv_id: 78335
+        rv_id: 833225
         rule_id: qNUrzk
-        version_id: pZTBQn
-        url: https://semgrep.dev/playground/r/pZTBQn/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
+        version_id: d6TKG8D
+        url: https://semgrep.dev/playground/r/d6TKG8D/mobsf.mobsfscan.crypto.cbc_padding_oracle.cbc_padding_oracle
         origin: community
 - id: mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
   patterns:
@@ -1025,10 +1025,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43732
-        rv_id: 78336
+        rv_id: 833226
         rule_id: lBUYwL
-        version_id: 2KTD6R
-        url: https://semgrep.dev/playground/r/2KTD6R/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
+        version_id: ZRTlPDE
+        url: https://semgrep.dev/playground/r/ZRTlPDE/mobsf.mobsfscan.crypto.cbc_static_iv.cbc_static_iv
         origin: community
 - id: mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
   patterns:
@@ -1056,10 +1056,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43733
-        rv_id: 78337
+        rv_id: 833227
         rule_id: PeUKqY
-        version_id: X0TvJk
-        url: https://semgrep.dev/playground/r/X0TvJk/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
+        version_id: nWTy4Qq
+        url: https://semgrep.dev/playground/r/nWTy4Qq/mobsf.mobsfscan.crypto.insecure_random.java_insecure_random
         origin: community
 - id: mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
   patterns:
@@ -1084,10 +1084,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43734
-        rv_id: 78338
+        rv_id: 833228
         rule_id: JDU4Ag
-        version_id: jQTE9J
-        url: https://semgrep.dev/playground/r/jQTE9J/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
+        version_id: ExTrDv8
+        url: https://semgrep.dev/playground/r/ExTrDv8/mobsf.mobsfscan.crypto.insecure_ssl_v3.insecure_sslv3
         origin: community
 - id: mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
   patterns:
@@ -1120,10 +1120,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43735
-        rv_id: 89495
+        rv_id: 833229
         rule_id: 5rUx0n
-        version_id: K3TvnrN
-        url: https://semgrep.dev/playground/r/K3TvnrN/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
+        version_id: 7ZTx9Zg
+        url: https://semgrep.dev/playground/r/7ZTx9Zg/mobsf.mobsfscan.crypto.rsa_no_oeap.rsa_no_oeap
         origin: community
 - id: mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
   patterns:
@@ -1157,10 +1157,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43736
-        rv_id: 78340
+        rv_id: 833230
         rule_id: GdUgKL
-        version_id: 9lTjnn
-        url: https://semgrep.dev/playground/r/9lTjnn/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
+        version_id: LjTEb97
+        url: https://semgrep.dev/playground/r/LjTEb97/mobsf.mobsfscan.crypto.sha1_hash.sha1_hash
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
   patterns:
@@ -1187,10 +1187,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43737
-        rv_id: 78341
+        rv_id: 833231
         rule_id: ReUdZD
-        version_id: yeT6dQ
-        url: https://semgrep.dev/playground/r/yeT6dQ/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
+        version_id: 8KTGkgq
+        url: https://semgrep.dev/playground/r/8KTGkgq/mobsf.mobsfscan.crypto.weak_ciphers.weak_cipher
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_hashes.weak_hash
   patterns:
@@ -1225,10 +1225,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43738
-        rv_id: 78342
+        rv_id: 833232
         rule_id: AbUxZk
-        version_id: rxT58X
-        url: https://semgrep.dev/playground/r/rxT58X/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
+        version_id: gETy2E1
+        url: https://semgrep.dev/playground/r/gETy2E1/mobsf.mobsfscan.crypto.weak_hashes.weak_hash
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_iv.weak_iv
   patterns:
@@ -1264,10 +1264,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43739
-        rv_id: 78343
+        rv_id: 833233
         rule_id: BYUonD
-        version_id: bZTY4P
-        url: https://semgrep.dev/playground/r/bZTY4P/mobsf.mobsfscan.crypto.weak_iv.weak_iv
+        version_id: QkTkrA6
+        url: https://semgrep.dev/playground/r/QkTkrA6/mobsf.mobsfscan.crypto.weak_iv.weak_iv
         origin: community
 - id: mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
   patterns:
@@ -1326,10 +1326,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43740
-        rv_id: 78344
+        rv_id: 833234
         rule_id: DbULZp
-        version_id: NdTxQW
-        url: https://semgrep.dev/playground/r/NdTxQW/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
+        version_id: 3ZT3AWE
+        url: https://semgrep.dev/playground/r/3ZT3AWE/mobsf.mobsfscan.crypto.weak_key_size.weak_key_size
         origin: community
 - id: mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
   patterns:
@@ -1358,10 +1358,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43741
-        rv_id: 78345
+        rv_id: 833235
         rule_id: WAUgAZ
-        version_id: kbToZ0
-        url: https://semgrep.dev/playground/r/kbToZ0/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
+        version_id: 44TQP51
+        url: https://semgrep.dev/playground/r/44TQP51/mobsf.mobsfscan.deserialization.jackson_deserialization.jackson_deserialization
         origin: community
 - id: mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
   patterns:
@@ -1390,10 +1390,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43742
-        rv_id: 78346
+        rv_id: 833236
         rule_id: 0oUZYJ
-        version_id: w8Te0B
-        url: https://semgrep.dev/playground/r/w8Te0B/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
+        version_id: PkTxr20
+        url: https://semgrep.dev/playground/r/PkTxr20/mobsf.mobsfscan.deserialization.object_deserialization.object_deserialization
         origin: community
 - id: mobsf.mobsfscan.injection.command_injection.command_injection
   patterns:
@@ -1420,10 +1420,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43743
-        rv_id: 78347
+        rv_id: 833237
         rule_id: KxUR67
-        version_id: xyTY3g
-        url: https://semgrep.dev/playground/r/xyTY3g/mobsf.mobsfscan.injection.command_injection.command_injection
+        version_id: JdTlrGl
+        url: https://semgrep.dev/playground/r/JdTlrGl/mobsf.mobsfscan.injection.command_injection.command_injection
         origin: community
 - id: mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
   patterns:
@@ -1494,10 +1494,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43744
-        rv_id: 78348
+        rv_id: 833238
         rule_id: qNUrPW
-        version_id: O9TPZ9
-        url: https://semgrep.dev/playground/r/O9TPZ9/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
+        version_id: 5PTyDrN
+        url: https://semgrep.dev/playground/r/5PTyDrN/mobsf.mobsfscan.injection.command_injection_formated.command_injection_warning
         origin: community
 - id: mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
   patterns:
@@ -1547,10 +1547,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43745
-        rv_id: 78349
+        rv_id: 833239
         rule_id: lBUYAy
-        version_id: e1T6A5
-        url: https://semgrep.dev/playground/r/e1T6A5/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
+        version_id: GxTDEYP
+        url: https://semgrep.dev/playground/r/GxTDEYP/mobsf.mobsfscan.injection.sqlite_injection.sqlite_injection
         origin: community
 - id: mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
   patterns:
@@ -1625,10 +1625,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43746
-        rv_id: 78350
+        rv_id: 833240
         rule_id: YGUxKY
-        version_id: vdTZ3e
-        url: https://semgrep.dev/playground/r/vdTZ3e/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
+        version_id: RGTKGnk
+        url: https://semgrep.dev/playground/r/RGTKGnk/mobsf.mobsfscan.network.accept_self_signed.accept_self_signed_certificate
         origin: community
 - id: mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
   patterns:
@@ -1654,10 +1654,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43747
-        rv_id: 78351
+        rv_id: 833241
         rule_id: 6JUkwx
-        version_id: d6TBbY
-        url: https://semgrep.dev/playground/r/d6TBbY/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
+        version_id: A8T370X
+        url: https://semgrep.dev/playground/r/A8T370X/mobsf.mobsfscan.network.default_http_client_tls.default_http_client_tls
         origin: community
 - id: mobsf.mobsfscan.webview.webview_allow_file_from_url.webview_allow_file_from_url
   patterns:
@@ -1696,10 +1696,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 134573
-        rv_id: 756521
+        rv_id: 833242
         rule_id: QrUWlLB
-        version_id: vdT4P7g
-        url: https://semgrep.dev/playground/r/vdT4P7g/mobsf.mobsfscan.webview.webview_allow_file_from_url.webview_allow_file_from_url
+        version_id: BjTe0Jk
+        url: https://semgrep.dev/playground/r/BjTe0Jk/mobsf.mobsfscan.webview.webview_allow_file_from_url.webview_allow_file_from_url
         origin: community
 - id: mobsf.mobsfscan.webview.webview_debugging.webview_debugging
   patterns:
@@ -1727,10 +1727,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43748
-        rv_id: 78352
+        rv_id: 833243
         rule_id: oqUPpl
-        version_id: ZRTLyo
-        url: https://semgrep.dev/playground/r/ZRTLyo/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
+        version_id: DkTG0Xk
+        url: https://semgrep.dev/playground/r/DkTG0Xk/mobsf.mobsfscan.webview.webview_debugging.webview_debugging
         origin: community
 - id: mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
   patterns:
@@ -1766,10 +1766,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43749
-        rv_id: 78353
+        rv_id: 833244
         rule_id: zdU90D
-        version_id: nWT6wg
-        url: https://semgrep.dev/playground/r/nWT6wg/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
+        version_id: WrTdpG7
+        url: https://semgrep.dev/playground/r/WrTdpG7/mobsf.mobsfscan.webview.webview_external_storage.webview_external_storage
         origin: community
 - id: mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
   patterns:
@@ -1793,10 +1793,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43750
-        rv_id: 78354
+        rv_id: 833245
         rule_id: pKUJ40
-        version_id: ExT9YD
-        url: https://semgrep.dev/playground/r/ExT9YD/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
+        version_id: 0bTwbgg
+        url: https://semgrep.dev/playground/r/0bTwbgg/mobsf.mobsfscan.webview.webview_file_access.webview_set_allow_file_access
         origin: community
 - id: mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
   patterns:
@@ -1824,10 +1824,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43751
-        rv_id: 78355
+        rv_id: 833246
         rule_id: 2ZUXop
-        version_id: 7ZTLYR
-        url: https://semgrep.dev/playground/r/7ZTLYR/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
+        version_id: K3Trq83
+        url: https://semgrep.dev/playground/r/K3Trq83/mobsf.mobsfscan.webview.webview_ignore_ssl_errors.ignore_ssl_certificate_errors
         origin: community
 - id: mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
   patterns:
@@ -1854,10 +1854,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43752
-        rv_id: 78356
+        rv_id: 833247
         rule_id: X5Up0Y
-        version_id: LjT1pg
-        url: https://semgrep.dev/playground/r/LjT1pg/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
+        version_id: qkTQnLe
+        url: https://semgrep.dev/playground/r/qkTQnLe/mobsf.mobsfscan.webview.webview_javascript_interface.webview_javascript_interface
         origin: community
 - id: mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
   patterns:
@@ -1901,10 +1901,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43753
-        rv_id: 78357
+        rv_id: 833248
         rule_id: j2Up0D
-        version_id: 8KTdLZ
-        url: https://semgrep.dev/playground/r/8KTdLZ/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
+        version_id: l4TyOoN
+        url: https://semgrep.dev/playground/r/l4TyOoN/mobsf.mobsfscan.xxe.xmldecoder_xxe.xml_decoder_xxe
         origin: community
 - id: mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
   pattern: $XMLFACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities",
@@ -1930,10 +1930,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43754
-        rv_id: 78358
+        rv_id: 833249
         rule_id: 10UnwQ
-        version_id: gETb5l
-        url: https://semgrep.dev/playground/r/gETb5l/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
+        version_id: YDTl0kz
+        url: https://semgrep.dev/playground/r/YDTl0kz/mobsf.mobsfscan.xxe.xmlfactory_external_entities_enabled.xmlinputfactory_xxe_enabled
         origin: community
 - id: mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
   patterns:
@@ -1974,10 +1974,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43755
-        rv_id: 78359
+        rv_id: 833250
         rule_id: 9AUL9X
-        version_id: QkT4Qb
-        url: https://semgrep.dev/playground/r/QkT4Qb/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
+        version_id: JdTlrG4
+        url: https://semgrep.dev/playground/r/JdTlrG4/mobsf.mobsfscan.xxe.xmlfactory_xxe.xmlinputfactory_xxe
         origin: community
 - id: trailofbits.jvm.gc-call.gc-call
   message: |
@@ -2007,10 +2007,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113223
-        rv_id: 253294
+        rv_id: 833287
         rule_id: 5rUdoB9
-        version_id: PkTDL34
-        url: https://semgrep.dev/playground/r/PkTDL34/trailofbits.jvm.gc-call.gc-call
+        version_id: LjTEbBG
+        url: https://semgrep.dev/playground/r/LjTEbBG/trailofbits.jvm.gc-call.gc-call
         origin: community
   pattern-either:
   - pattern: System.gc()
@@ -2038,10 +2038,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17167
-        rv_id: 733074
+        rv_id: 833295
         rule_id: KxU507
-        version_id: pZTz48j
-        url: https://semgrep.dev/playground/r/pZTz48j/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
+        version_id: 5PTyDEK
+        url: https://semgrep.dev/playground/r/5PTyDEK/trailofbits.python.numpy-in-pytorch-modules.numpy-in-pytorch-modules
         origin: community
   patterns:
   - pattern-either:
@@ -2072,9 +2072,9 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44138
-        rv_id: 95116
+        rv_id: 833308
         rule_id: JDU4RQ
-        version_id: vdTY55y
-        url: https://semgrep.dev/playground/r/vdTY55y/trailofbits.python.pytorch-tensor.pytorch-tensor
+        version_id: o5TBEJD
+        url: https://semgrep.dev/playground/r/o5TBEJD/trailofbits.python.pytorch-tensor.pytorch-tensor
         origin: community
   pattern: torch.Tensor(...)

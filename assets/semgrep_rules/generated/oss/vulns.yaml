@@ -38,10 +38,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9211
-        rv_id: 109749
+        rv_id: 833983
         rule_id: j2Uv7B
-        version_id: jQTgYdy
-        url: https://semgrep.dev/playground/r/jQTgYdy/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
+        version_id: kbT2llw
+        url: https://semgrep.dev/playground/r/kbT2llw/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
         origin: community
   languages:
   - java
@@ -101,10 +101,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11752
-        rv_id: 759637
+        rv_id: 833264
         rule_id: EwUQp2
-        version_id: pZTzB2q
-        url: https://semgrep.dev/playground/r/pZTzB2q/trailofbits.go.hanging-goroutine.hanging-goroutine
+        version_id: o5TBEoD
+        url: https://semgrep.dev/playground/r/o5TBEoD/trailofbits.go.hanging-goroutine.hanging-goroutine
         origin: community
   patterns:
   - pattern-either:
@@ -191,10 +191,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14223
-        rv_id: 733070
+        rv_id: 833267
         rule_id: 8GUzNK
-        version_id: YDTAKBW
-        url: https://semgrep.dev/playground/r/YDTAKBW/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+        version_id: 2KT7x5g
+        url: https://semgrep.dev/playground/r/2KT7x5g/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
         origin: community
   patterns:
   - pattern-either:
@@ -255,10 +255,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14222
-        rv_id: 733071
+        rv_id: 833268
         rule_id: L1U5Gz
-        version_id: 6xTEwrB
-        url: https://semgrep.dev/playground/r/6xTEwrB/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+        version_id: X0T5Nkv
+        url: https://semgrep.dev/playground/r/X0T5Nkv/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
         origin: community
   patterns:
   - pattern-either:
@@ -317,10 +317,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11754
-        rv_id: 95084
+        rv_id: 833269
         rule_id: L1Ur2r
-        version_id: PkTJkk5
-        url: https://semgrep.dev/playground/r/PkTJkk5/trailofbits.go.nil-check-after-call.nil-check-after-call
+        version_id: jQTrXDK
+        url: https://semgrep.dev/playground/r/jQTrXDK/trailofbits.go.nil-check-after-call.nil-check-after-call
         origin: community
   patterns:
   - pattern-either:
@@ -407,10 +407,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11865
-        rv_id: 104226
+        rv_id: 833270
         rule_id: ReUoP7
-        version_id: WrTWdKp
-        url: https://semgrep.dev/playground/r/WrTWdKp/trailofbits.go.racy-append-to-slice.racy-append-to-slice
+        version_id: 1QTPL3x
+        url: https://semgrep.dev/playground/r/1QTPL3x/trailofbits.go.racy-append-to-slice.racy-append-to-slice
         origin: community
   patterns:
   - pattern: "$SLICE = append($SLICE, $ITEM)\n"
@@ -475,10 +475,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11866
-        rv_id: 104227
+        rv_id: 833271
         rule_id: AbUGWD
-        version_id: 0bTLwz3
-        url: https://semgrep.dev/playground/r/0bTLwz3/trailofbits.go.racy-write-to-map.racy-write-to-map
+        version_id: 9lTJ0qD
+        url: https://semgrep.dev/playground/r/9lTJ0qD/trailofbits.go.racy-write-to-map.racy-write-to-map
         origin: community
   patterns:
   - pattern: "$MAP[$KEY] = $VALUE\n"
@@ -531,10 +531,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11757
-        rv_id: 95087
+        rv_id: 833272
         rule_id: QrUp7k
-        version_id: GxTv00x
-        url: https://semgrep.dev/playground/r/GxTv00x/trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
+        version_id: yeTN1ek
+        url: https://semgrep.dev/playground/r/yeTN1ek/trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-readrequestbody-unhandled-nil
         origin: community
   patterns:
   - pattern: |
@@ -580,10 +580,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11760
-        rv_id: 95089
+        rv_id: 833274
         rule_id: PeUBW1
-        version_id: A8T9WWW
-        url: https://semgrep.dev/playground/r/A8T9WWW/trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
+        version_id: bZTBelR
+        url: https://semgrep.dev/playground/r/bZTBelR/trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
         origin: community
   patterns:
   - pattern-either:
@@ -630,10 +630,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 40518
-        rv_id: 95090
+        rv_id: 833275
         rule_id: pKUQBW
-        version_id: BjTXBB7
-        url: https://semgrep.dev/playground/r/BjTXBB7/trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
+        version_id: NdTB2J9
+        url: https://semgrep.dev/playground/r/NdTB2J9/trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
         origin: community
   patterns:
   - pattern-either:
@@ -686,10 +686,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11761
-        rv_id: 95091
+        rv_id: 833276
         rule_id: JDUQ3v
-        version_id: DkT6WW1
-        url: https://semgrep.dev/playground/r/DkT6WW1/trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-called-inside-goroutine
+        version_id: kbT2l5k
+        url: https://semgrep.dev/playground/r/kbT2l5k/trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-called-inside-goroutine
         origin: community
   patterns:
   - pattern-either:
@@ -745,10 +745,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11762
-        rv_id: 95092
+        rv_id: 833277
         rule_id: 5rU8Po
-        version_id: WrTWZZN
-        url: https://semgrep.dev/playground/r/WrTWZZN/trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
+        version_id: w8TAx58
+        url: https://semgrep.dev/playground/r/w8TAx58/trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
         origin: community
   patterns:
   - pattern-either:
@@ -839,10 +839,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60573
-        rv_id: 250820
+        rv_id: 833278
         rule_id: OrU1Oz
-        version_id: LjT70dp
-        url: https://semgrep.dev/playground/r/LjT70dp/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
+        version_id: xyTNew2
+        url: https://semgrep.dev/playground/r/xyTNew2/trailofbits.javascript.apollo-graphql.schema-directives.schema-directives
         origin: community
   pattern-either:
   - pattern: 'new ApolloServer({..., schemaDirectives: ..., ...})
@@ -879,10 +879,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60574
-        rv_id: 95094
+        rv_id: 833279
         rule_id: eqUB1Q
-        version_id: K3Tv44w
-        url: https://semgrep.dev/playground/r/K3Tv44w/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
+        version_id: O9TJWB6
+        url: https://semgrep.dev/playground/r/O9TJWB6/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-graphql-upload
         origin: community
   patterns:
   - pattern: app.use(graphqlUploadExpress());
@@ -916,10 +916,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60577
-        rv_id: 95097
+        rv_id: 833282
         rule_id: ZqUbNY
-        version_id: YDTprrn
-        url: https://semgrep.dev/playground/r/YDTprrn/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
+        version_id: d6TKGL6
+        url: https://semgrep.dev/playground/r/d6TKGL6/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-bad-cors
         origin: community
   mode: taint
   pattern-sources:
@@ -988,10 +988,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60576
-        rv_id: 95096
+        rv_id: 833281
         rule_id: d8UYAJ
-        version_id: l4T4ddv
-        url: https://semgrep.dev/playground/r/l4T4ddv/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
+        version_id: vdTOzdO
+        url: https://semgrep.dev/playground/r/vdTOzdO/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-cors
         origin: community
   patterns:
   - pattern-either:
@@ -1035,10 +1035,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60579
-        rv_id: 95099
+        rv_id: 833284
         rule_id: EwUZNW
-        version_id: o5Tgzzd
-        url: https://semgrep.dev/playground/r/o5Tgzzd/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
+        version_id: nWTy4kP
+        url: https://semgrep.dev/playground/r/nWTy4kP/trailofbits.javascript.apollo-graphql.v3-cors.v3-bad-cors
         origin: community
   mode: taint
   pattern-sources:
@@ -1104,10 +1104,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60578
-        rv_id: 95098
+        rv_id: 833283
         rule_id: nJU3P4
-        version_id: 6xTvqq2
-        url: https://semgrep.dev/playground/r/6xTvqq2/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
+        version_id: ZRTlPW3
+        url: https://semgrep.dev/playground/r/ZRTlPW3/trailofbits.javascript.apollo-graphql.v3-cors.v3-no-cors
         origin: community
   patterns:
   - pattern-either:
@@ -1154,10 +1154,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60580
-        rv_id: 95100
+        rv_id: 833285
         rule_id: 7KU8o3
-        version_id: zyTKyyB
-        url: https://semgrep.dev/playground/r/zyTKyyB/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
+        version_id: ExTrD6A
+        url: https://semgrep.dev/playground/r/ExTrD6A/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-prevention
         origin: community
   patterns:
   - pattern: new ApolloServer({...})
@@ -1197,10 +1197,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 60581
-        rv_id: 253293
+        rv_id: 833286
         rule_id: L1UjQ3
-        version_id: 44T73jp
-        url: https://semgrep.dev/playground/r/44T73jp/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
+        version_id: 7ZTx9PE
+        url: https://semgrep.dev/playground/r/7ZTx9PE/trailofbits.javascript.apollo-graphql.v4-csrf-prevention.v4-csrf-prevention
         origin: community
   patterns:
   - pattern: 'new ApolloServer({..., csrfPrevention: false, ...})
@@ -1233,10 +1233,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17166
-        rv_id: 733072
+        rv_id: 833290
         rule_id: 0oUrdJ
-        version_id: o5T2pO6
-        url: https://semgrep.dev/playground/r/o5T2pO6/trailofbits.python.lxml-in-pandas.lxml-in-pandas
+        version_id: QkTkr22
+        url: https://semgrep.dev/playground/r/QkTkr22/trailofbits.python.lxml-in-pandas.lxml-in-pandas
         origin: community
   pattern-either:
   - patterns:
@@ -1290,10 +1290,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 124725
-        rv_id: 733073
+        rv_id: 833291
         rule_id: GdUvWBy
-        version_id: zyTn0O7
-        url: https://semgrep.dev/playground/r/zyTn0O7/trailofbits.python.msgpack-numpy.msgpack-numpy
+        version_id: 3ZT3Abe
+        url: https://semgrep.dev/playground/r/3ZT3Abe/trailofbits.python.msgpack-numpy.msgpack-numpy
         origin: community
   pattern-either:
   - patterns:
@@ -1342,10 +1342,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 124727
-        rv_id: 733076
+        rv_id: 833299
         rule_id: AbU9npB
-        version_id: X0Tg01y
-        url: https://semgrep.dev/playground/r/X0Tg01y/trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-deprecation
+        version_id: BjTe0vg
+        url: https://semgrep.dev/playground/r/BjTe0vg/trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-deprecation
         origin: community
   patterns:
   - pattern-either:
@@ -1392,10 +1392,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 124728
-        rv_id: 733077
+        rv_id: 833300
         rule_id: BYUXGv6
-        version_id: jQTQ082
-        url: https://semgrep.dev/playground/r/jQTQ082/trailofbits.python.pickles-in-keras.pickles-in-keras
+        version_id: DkTG07g
+        url: https://semgrep.dev/playground/r/DkTG07g/trailofbits.python.pickles-in-keras.pickles-in-keras
         origin: community
   patterns:
   - pattern-either:
@@ -1439,10 +1439,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17169
-        rv_id: 250823
+        rv_id: 833301
         rule_id: lBUWjy
-        version_id: QkT8J3R
-        url: https://semgrep.dev/playground/r/QkT8J3R/trailofbits.python.pickles-in-numpy.pickles-in-numpy
+        version_id: WrTdpJ9
+        url: https://semgrep.dev/playground/r/WrTdpJ9/trailofbits.python.pickles-in-numpy.pickles-in-numpy
         origin: community
   patterns:
   - pattern: numpy.load(..., allow_pickle=$VALUE, ...)
@@ -1489,10 +1489,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17170
-        rv_id: 95111
+        rv_id: 833302
         rule_id: PeU06j
-        version_id: kbTdRRB
-        url: https://semgrep.dev/playground/r/kbTdRRB/trailofbits.python.pickles-in-pandas.pickles-in-pandas
+        version_id: 0bTwbqN
+        url: https://semgrep.dev/playground/r/0bTwbqN/trailofbits.python.pickles-in-pandas.pickles-in-pandas
         origin: community
   patterns:
   - pattern-either:
@@ -1533,10 +1533,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44135
-        rv_id: 95112
+        rv_id: 833303
         rule_id: qNUrw1
-        version_id: w8T988E
-        url: https://semgrep.dev/playground/r/w8T988E/trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-distributed
+        version_id: K3Trq3x
+        url: https://semgrep.dev/playground/r/K3Trq3x/trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-distributed
         origin: community
   patterns:
   - pattern-either:
@@ -1573,10 +1573,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 17171
-        rv_id: 733078
+        rv_id: 833304
         rule_id: JDU6WD
-        version_id: 1QT5wrl
-        url: https://semgrep.dev/playground/r/1QT5wrl/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
+        version_id: qkTQnJ3
+        url: https://semgrep.dev/playground/r/qkTQnJ3/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
         origin: community
   patterns:
   - pattern-either:
@@ -1618,10 +1618,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 124729
-        rv_id: 733079
+        rv_id: 833305
         rule_id: DbU6e7r
-        version_id: 9lTZ9vg
-        url: https://semgrep.dev/playground/r/9lTZ9vg/trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
+        version_id: l4TyO1n
+        url: https://semgrep.dev/playground/r/l4TyO1n/trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
         origin: community
   patterns:
   - pattern: tensorflow.saved_model.load(...)
@@ -1654,10 +1654,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 43929
-        rv_id: 95117
+        rv_id: 833309
         rule_id: DbULlX
-        version_id: d6Trzzd
-        url: https://semgrep.dev/playground/r/d6Trzzd/trailofbits.python.scikit-joblib-load.scikit-joblib-load
+        version_id: zyTWJrZ
+        url: https://semgrep.dev/playground/r/zyTWJrZ/trailofbits.python.scikit-joblib-load.scikit-joblib-load
         origin: community
   patterns:
   - pattern: joblib.load(...)
@@ -1690,10 +1690,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 11763
-        rv_id: 95118
+        rv_id: 833310
         rule_id: GdUZxq
-        version_id: ZRTQqqP
-        url: https://semgrep.dev/playground/r/ZRTQqqP/trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-traversal
+        version_id: pZTXjAW
+        url: https://semgrep.dev/playground/r/pZTXjAW/trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-traversal
         origin: community
   patterns:
   - pattern-either:
@@ -1745,10 +1745,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 44139
-        rv_id: 95120
+        rv_id: 833312
         rule_id: 5rUxGL
-        version_id: ExTj44x
-        url: https://semgrep.dev/playground/r/ExTj44x/trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytorch-distributed
+        version_id: X0T5Nnv
+        url: https://semgrep.dev/playground/r/X0T5Nnv/trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytorch-distributed
         origin: community
   patterns:
   - pattern-either:
