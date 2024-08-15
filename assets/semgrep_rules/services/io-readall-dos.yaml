@@ -8,7 +8,6 @@ rules:
         - https://pkg.go.dev/net/http#MaxBytesReader
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/io-readall-dos.yaml
       assignees: |
-        bcaller
         thypon
     severity: INFO
     languages:
