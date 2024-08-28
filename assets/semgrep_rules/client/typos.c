@@ -87,8 +87,8 @@ int bad4(char *src, int len)
 {
 	char dst[256];
 
-	// REMOVED, false positive on Chromium: raptor-typos
-	if (len > 0 && len <= sizeof(dst)); ti
+	// ruleid: raptor-typos
+	if (len > 0 && len <= sizeof(dst));
 		memcpy(dst, src, len);
 }
 
