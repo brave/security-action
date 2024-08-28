@@ -27,3 +27,4 @@ https://semgrep.dev/r/typescript.react.security.audit.react-missing-noreferrer.r
 https://semgrep.dev/r/yaml.docker-compose.security.no-new-privileges.no-new-privileges
 https://semgrep.dev/r/yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
 https://semgrep.dev/r/go.lang.security.audit.net.use-tls.use-tls
+https://semgrep.dev/r/terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
