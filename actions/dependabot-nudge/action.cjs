@@ -17,7 +17,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     minlevel = 'high'
   }
 
-  const messages = await dependabotNudge({ debug, org: context.repo.owner, github, minlevel, githubToSlack })
+  const messages = await dependabotNudge({ debug, org: context.repo.owner, github, minlevel, githubToSlack, actionPath })
 
   for (const message of messages) {
     try {
