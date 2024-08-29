@@ -33,8 +33,12 @@ export default async function dependabotNudge ({
   skipHotwords = ['dos', 'denial of service', 'redos', 'denial-of-service', 'memory explosion', 'inefficient regular expression', 'regular expression complexity'],
   defaultContact = ['yan'],
   githubToSlack = {},
-  singleOutputMessage = false
+  singleOutputMessage = false,
+  actionPath
 }) {
+  const { default: getConfig } = await import(`${actionPath}/src/getConfig.js`)
+  const { default: getProperties } = await import(`${actionPath}/src/getProperties.js`)
+
   if (!github && githubToken) {
     const { Octokit } = await import('octokit')
 
@@ -76,25 +80,25 @@ export default async function dependabotNudge ({
     type: 'all'
   })).filter(r => r.archived === false).filter(r => r.disabled === false)
 
-  const properties = await github.paginate('GET /orgs/{org}/properties/values', {
-    org,
-    headers: {
-      'X-GitHub-Api-Version': '2022-11-28'
-    }
-  })
-
-  // hash out of properties array
-  const props = {}
-  for (const prop of properties) {
-    props[prop.repository_name] = prop.properties.reduce((obj, item) => {
-      obj[item.property_name] = item.value
-      return obj
-    }, {})
-  }
-
   // get dependabot alerts for each repository
   for (const repo of repos) {
     if (debug) { console.log(`scanning repo ${repo.name} in org ${org}`) }
+
+    const config = await getConfig({ owner: org, repo: repo.name, path: '.github/security-action.json', debug, github })
+    const props = await getProperties({ owner: org, repo: repo.name, debug, github, prefix: 'security_action_' })
+
+    const options = Object.assign({
+      elected_maintainers: ''
+    }, config, props)
+
+    // elected maintainer is a string of comma separated github usernames map.
+    // E.g "original_maintainer_1:elected_maintaner_1,original_maintainer_2:elected_maintaner_2"
+    // split it and convert to object
+    options.elected_maintainers = options.elected_maintainers.split(/\s*,\s*/).reduce((obj, item) => {
+      const [original, elected] = item.split(/\s*:\s*/)
+      obj[original] = elected
+      return obj
+    }, {})
 
     if (skipRepositories.includes(repo.name)) {
       continue
@@ -114,8 +118,12 @@ export default async function dependabotNudge ({
         .filter(a => a.security_vulnerability?.first_patched_version?.identifier)
 
       // get property values for this repository
-      const prop = props[repo.name] || { properties: {} }
-      const maintainers = (prop.maintainers || '').toLowerCase().split(',').filter(Boolean).map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`) || []
+      let maintainers = (props.maintainers || '').toLowerCase().split(',').filter(Boolean)
+        .map(m => options.elected_maintainers[m] || m)
+        .map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`) || []
+
+      // remove duplicates
+      maintainers = Array.from(new Set(maintainers))
 
       if (alerts.length > 0) {
         if (debug) { console.log(`alerts len: ${alerts.length}`) }
