@@ -38,10 +38,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9211
-        rv_id: 833983
+        rv_id: 904971
         rule_id: j2Uv7B
-        version_id: kbT2llw
-        url: https://semgrep.dev/playground/r/kbT2llw/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
+        version_id: l4TXK23
+        url: https://semgrep.dev/playground/r/l4TXK23/java.lang.security.audit.xss.no-direct-response-writer.no-direct-response-writer
         origin: community
   languages:
   - java
