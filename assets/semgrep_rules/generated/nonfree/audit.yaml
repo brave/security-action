@@ -2981,6 +2981,39 @@ rules:
         version_id: 6xTDg3J
         url: https://semgrep.dev/playground/r/6xTDg3J/generic.secrets.security.detected-generic-secret.detected-generic-secret
         origin: community
+- id: generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token
+  pattern-regex: "(?:api_live(?:_[a-zA-Z]{2})?\\.[a-zA-Z0-9-_]{11}\\.[-_a-zA-Z0-9]{32})"
+  languages:
+  - regex
+  message: Onfido live API Token detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    category: security
+    technology:
+    - secrets
+    - onfido
+    confidence: HIGH
+    references:
+    - https://documentation.onfido.com/api/latest/#api-tokens
+    subcategory:
+    - audit
+    likelihood: HIGH
+    impact: HIGH
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token
+    shortlink: https://sg.run/lBoKD
+    semgrep.dev:
+      rule:
+        r_id: 141957
+        rv_id: 906492
+        rule_id: WAUW9q3
+        version_id: 2KTdZdb
+        url: https://semgrep.dev/playground/r/2KTdZdb/generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token
+        origin: community
 - id: generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key
   pattern-regex: sk_live_[0-9a-z]{32}
   languages:
@@ -18407,10 +18440,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14701
-        rv_id: 834457
+        rv_id: 906695
         rule_id: lBU8Ad
-        version_id: 0bTw3xv
-        url: https://semgrep.dev/playground/r/0bTw3xv/python.django.security.injection.tainted-sql-string.tainted-sql-string
+        version_id: X0TA1zR
+        url: https://semgrep.dev/playground/r/X0TA1zR/python.django.security.injection.tainted-sql-string.tainted-sql-string
         origin: community
   severity: ERROR
   languages:
@@ -20361,7 +20394,9 @@ rules:
   - pattern: http.client.HTTPSConnection(...)
   - pattern: six.moves.http_client.HTTPSConnection(...)
 - id: python.lang.security.audit.insecure-transport.ftplib.use-ftp-tls.use-ftp-tls
-  pattern: ftplib.FTP(...)
+  patterns:
+  - pattern: ftplib.FTP(...)
+  - pattern-not: ftplib.FTP_TLS(...)
   fix-regex:
     regex: FTP(.*)\)
     replacement: FTP_TLS\1, context=ssl.create_default_context())
@@ -20391,10 +20426,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9650
-        rv_id: 834615
+        rv_id: 904326
         rule_id: qNUjlR
-        version_id: 0bTw350
-        url: https://semgrep.dev/playground/r/0bTw350/python.lang.security.audit.insecure-transport.ftplib.use-ftp-tls.use-ftp-tls
+        version_id: O9Tvq3Y
+        url: https://semgrep.dev/playground/r/O9Tvq3Y/python.lang.security.audit.insecure-transport.ftplib.use-ftp-tls.use-ftp-tls
         origin: community
   severity: WARNING
   languages:
@@ -23077,10 +23112,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 10563
-        rv_id: 834719
+        rv_id: 904977
         rule_id: oqUz5y
-        version_id: l4TyDz7
-        url: https://semgrep.dev/playground/r/l4TyDz7/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query
+        version_id: 2KTdkwe
+        url: https://semgrep.dev/playground/r/2KTdkwe/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query
         origin: community
   severity: ERROR
   languages:
@@ -27511,60 +27546,6 @@ rules:
         rule_id: 5rUp5w
         version_id: l4TyDvO
         url: https://semgrep.dev/playground/r/l4TyDvO/terraform.aws.security.aws-lambda-environment-unencrypted.aws-lambda-environment-unencrypted
-        origin: community
-- id: terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
-  patterns:
-  - pattern: |
-      resource "aws_lambda_function" $ANYTHING {
-        ...
-      }
-  - pattern-not: |
-      resource "aws_lambda_function" $ANYTHING {
-        ...
-        tracing_config {
-          ...
-          mode = "Active"
-          ...
-        }
-        ...
-      }
-  message: The AWS Lambda function does not have active X-Ray tracing enabled. X-Ray
-    tracing enables end-to-end debugging and analysis of all function activity. This
-    makes it easier to trace the flow of logs and identify bottlenecks, slow downs
-    and timeouts.
-  languages:
-  - hcl
-  severity: INFO
-  metadata:
-    category: security
-    technology:
-    - aws
-    - terraform
-    owasp:
-    - A09:2021 Security Logging and Monitoring Failures
-    cwe:
-    - 'CWE-778: Insufficient Logging'
-    references:
-    - https://cwe.mitre.org/data/definitions/778.html
-    - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#mode
-    - https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: LOW
-    confidence: MEDIUM
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Insufficient Logging
-    source: https://semgrep.dev/r/terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
-    shortlink: https://sg.run/wO2Y
-    semgrep.dev:
-      rule:
-        r_id: 54773
-        rv_id: 834980
-        rule_id: eqUl1O
-        version_id: 6xTDXJ9
-        url: https://semgrep.dev/playground/r/6xTDXJ9/terraform.aws.security.aws-lambda-x-ray-tracing-not-active.aws-lambda-x-ray-tracing-not-active
         origin: community
 - patterns:
   - pattern-either:
