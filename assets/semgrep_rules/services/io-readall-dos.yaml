@@ -9,6 +9,7 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/io-readall-dos.yaml
       assignees: |
         thypon
+        kdenhartog
     severity: INFO
     languages:
       - go
