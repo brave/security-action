@@ -16,4 +16,4 @@ rules:
       - pattern: reinterpret_cast<$T>($ARG)
       - metavariable-regex:
           metavariable: $T
-          regex: ^(.*int.*|.*double.*|.*float.*|.*char.*)$ # this probably needs to be tweaked
+          regex: ^(.*int.*|.*double.*|.*float.*|.*char.*|.*size_t.*)$ # this probably needs to be tweaked
