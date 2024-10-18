@@ -1,0 +1,19 @@
+rules:
+  - id: reinterpret_cast
+    metadata:
+      author: Artem Chaikin
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/unsafe_buffers.md#Avoid-reinterpret_cast
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/reinterpret_casts.yaml
+      assignees: |
+        stoletheminerals
+        thypon
+        cdesouza-chromium
+    languages: [cpp]
+    message: "Using `reinterpret_cast` against some data types may lead to undefined bheaviour. In general, when needing to do these conversions, check how Chromium upstream does them. Most of the times a reinterpret_cast is wrong and there's no guarantee the compiler will generate the code that you thought it would."
+    severity: WARNING
+    patterns:
+      - pattern: reinterpret_cast<$T>($ARG)
+      - metavariable-regex:
+          metavariable: $T
+          regex: ^(.*int.*|.*double.*|.*float.*|.*char.*)$ # this probably needs to be tweaked

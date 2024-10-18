@@ -1,0 +1,22 @@
+rules:
+  - id: unsafe_cpp_constructs
+    metadata:
+      author: Artem Chaikin
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/unsafe_cpp_constructs.yaml
+      assignees: |
+        stoletheminerals
+        thypon
+        cdesouza-chromium
+    languages: [cpp]
+    message: "Potentially unsafe C++ construct detected"
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: "UNSAFE_TODO(...)"
+          - pattern: "UNSAFE_BUFFERS(...)"
+          - pattern: "std::next(...)"
+          - pattern: "std::advance(...)"
+          - pattern: "std::prev(...)"
+          - pattern-regex: "void\\*"
