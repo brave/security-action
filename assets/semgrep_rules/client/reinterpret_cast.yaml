@@ -4,7 +4,7 @@ rules:
       author: Artem Chaikin
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/docs/unsafe_buffers.md#Avoid-reinterpret_cast
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/reinterpret_casts.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/reinterpret_cast.yaml
       assignees: |
         stoletheminerals
         thypon
