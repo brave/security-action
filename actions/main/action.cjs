@@ -226,6 +226,12 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     const actor = githubToSlack[lowerActor] ? githubToSlack[lowerActor] : `@${context.actor}`
     core.setSecret(actor)
 
+    // if actor starts with hashtag, return eagerly
+    if (actor.startsWith('#')) {
+      debugLog('Actor starts with hashtag, exiting eagerly!')
+      return
+    }
+
     if (fs.existsSync('reviewdog.fail.log')) {
       // print reviewdog.fail.log to the console
       const log = fs.readFileSync('reviewdog.fail.log', 'UTF-8').replaceAll(/^/g, CONSOLE_BLUE)
