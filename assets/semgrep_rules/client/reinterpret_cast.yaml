@@ -10,7 +10,7 @@ rules:
         thypon
         cdesouza-chromium
     languages: [cpp]
-    message: "Using `reinterpret_cast` against some data types may lead to undefined bheaviour. In general, when needing to do these conversions, check how Chromium upstream does them. Most of the times a reinterpret_cast is wrong and there's no guarantee the compiler will generate the code that you thought it would."
+    message: "Using `reinterpret_cast` against some data types may lead to undefined behaviour. In general, when needing to do these conversions, check how Chromium upstream does them. Most of the times a reinterpret_cast is wrong and there's no guarantee the compiler will generate the code that you thought it would."
     severity: WARNING
     patterns:
       - pattern: reinterpret_cast<$T>($ARG)
