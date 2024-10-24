@@ -50,6 +50,8 @@ export default async function sendSlackMessage ({
     throw new Error('message || token is required!')
   }
 
+  const filteredMessage = message?.replace(/Findings: \d+/g, 'Findings: n+')
+
   if (colorCodes[color]) {
     color = colorCodes[color]
   }
@@ -68,7 +70,7 @@ export default async function sendSlackMessage ({
   const crypto = await import('crypto')
   const hash = crypto.createHash('sha256')
   if (text !== null) hash.update(text)
-  if (message !== null) hash.update(message)
+  if (filteredMessage !== null) hash.update(filteredMessage)
   if (color !== null) hash.update(color)
   const hashHex = hash.digest('hex')
 
