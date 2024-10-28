@@ -20,4 +20,4 @@ rules:
           - pattern: "std::advance(...)"
           - pattern: "std::prev(...)"
           - pattern-regex: "void\\*"
-          - pattern-regex: "#pragma\\s+allow_unsafe_buffers"
+          - pattern-regex: "#pragma allow_unsafe_buffers"
