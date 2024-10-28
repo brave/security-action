@@ -1,7 +1,7 @@
-// ruleid: unsafe_cpp_constructs
 #ifdef UNSAFE_BUFFERS_BUILD
 // TODO(): Remove this and
 // convert code to safer constructs.
+// ruleid: unsafe_cpp_constructs
 #pragma allow_unsafe_buffers
 #endif
 // ruleid: unsafe_cpp_constructs
