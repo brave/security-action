@@ -1,4 +1,10 @@
 // ruleid: unsafe_cpp_constructs
+#ifdef UNSAFE_BUFFERS_BUILD
+// TODO(): Remove this and
+// convert code to safer constructs.
+#pragma allow_unsafe_buffers
+#endif
+// ruleid: unsafe_cpp_constructs
 UNSAFE_BUFFERS(data());
 // ruleid: unsafe_cpp_constructs
 UNSAFE_TODO(base::make_span(&web_script_source, 1u));
