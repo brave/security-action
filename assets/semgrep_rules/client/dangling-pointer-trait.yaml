@@ -10,7 +10,7 @@ rules:
         thypon
         cdesouza-chromium
     pattern-regex: |
-      ^.*raw_(ptr|ref)<.*(DanglingUntriaged|DisableDanglingPtrDetection|FlakyDanglingUntriaged|AcrossTasksDanglingUntriaged|AllowPtrArithmetic|AllowUninitialized|LeakedDanglingUntriaged|VectorExperimental|SetExperimental|CtnExperimental).*>.*$
+      \braw_(ptr|ref)<[^,>]+,\s*(DanglingUntriaged|DisableDanglingPtrDetection|FlakyDanglingUntriaged|AcrossTasksDanglingUntriaged|AllowPtrArithmetic|AllowUninitialized|LeakedDanglingUntriaged|VectorExperimental|SetExperimental|CtnExperimental)\b\s*>
     message: "Detected use of a trait that disables dangling pointer checks. This requires security team approval."
     severity: WARNING
     languages:
