@@ -29,3 +29,8 @@ const raw_ref<const AppListConfig, DanglingUntriaged> app_list_config_;
 const raw_ref<base::WaitableEvent, AcrossTasksDanglingUntriaged> on_destroyed_;
 // ruleid: dangling-pointer-trait
 const raw_ref<AshProxy, LeakedDanglingUntriaged> ash_;
+// ruleid: dangling-pointer-trait
+const raw_ptr<Delegate, AllowPtrArithmetic | FlakyDanglingUntriaged | LeakedDanglingUntriaged> delegate_;
+// ruleid: dangling-pointer-trait
+const raw_ptr<Delegate, AllowPtrArithmetic 
+                                         | FlakyDanglingUntriaged> delegate_;

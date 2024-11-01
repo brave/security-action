@@ -9,7 +9,7 @@ rules:
         stoletheminerals
         thypon
         cdesouza-chromium
-    pattern-regex: \braw_(ptr|ref)<[^,>]+,\s*(DanglingUntriaged|DisableDanglingPtrDetection|FlakyDanglingUntriaged|AcrossTasksDanglingUntriaged|AllowPtrArithmetic|AllowUninitialized|LeakedDanglingUntriaged|VectorExperimental|SetExperimental|CtnExperimental)\b\s*>
+    pattern-regex: \braw_(ptr|ref)<[^,>]+,\s*(?:\b(DanglingUntriaged|DisableDanglingPtrDetection|FlakyDanglingUntriaged|AcrossTasksDanglingUntriaged|AllowPtrArithmetic|AllowUninitialized|LeakedDanglingUntriaged|VectorExperimental|SetExperimental|CtnExperimental)\b(?:\s*\|\s*)?){1,}\s*>
     message: "Detected use of a trait that disables dangling pointer checks. This requires security team approval."
     severity: WARNING
     languages:
