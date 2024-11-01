@@ -32,5 +32,4 @@ const raw_ref<AshProxy, LeakedDanglingUntriaged> ash_;
 // ruleid: dangling-pointer-trait
 const raw_ptr<Delegate, AllowPtrArithmetic | FlakyDanglingUntriaged | LeakedDanglingUntriaged> delegate_;
 // ruleid: dangling-pointer-trait
-const raw_ptr<Delegate, AllowPtrArithmetic 
-                                         | FlakyDanglingUntriaged> delegate_;
+const raw_ptr<Delegate, AllowPtrArithmetic | FlakyDanglingUntriaged> delegate_;

@@ -9,8 +9,30 @@ rules:
         stoletheminerals
         thypon
         cdesouza-chromium
-    pattern-regex: \braw_(ptr|ref)<[^,>]+,\s*(?:\b(DanglingUntriaged|DisableDanglingPtrDetection|FlakyDanglingUntriaged|AcrossTasksDanglingUntriaged|AllowPtrArithmetic|AllowUninitialized|LeakedDanglingUntriaged|VectorExperimental|SetExperimental|CtnExperimental)\b(?:\s*\|\s*)?){1,}\s*>
+    patterns:
+      - pattern-either:
+        - pattern-inside: raw_ptr<...>
+        - pattern-inside: raw_ref<...>          
+      - pattern-either:
+        - pattern: DanglingUntriaged
+        - pattern: DisableDanglingPtrDetection
+        - pattern: FlakyDanglingUntriaged
+        - pattern: AcrossTasksDanglingUntriaged
+        - pattern: AllowPtrArithmetic
+        - pattern: AllowUninitialized
+        - pattern: LeakedDanglingUntriaged
+        - pattern: VectorExperimental
+        - pattern: SetExperimental
+        - pattern: CtnExperimental
     message: "Detected use of a trait that disables dangling pointer checks. This requires security team approval."
     severity: WARNING
     languages:
-      - cpp
+      - generic
+    paths:
+      include:
+        - "*.c"
+        - "*.cpp"
+        - "*.cc"
+        - "*.h"
+        - "*.hh"
+        - "*.hcc"
