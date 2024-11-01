@@ -1,0 +1,38 @@
+rules:
+  - id: dangling-pointer-trait
+    metadata:
+      author: Artem Chaikin
+      references:
+        - https://chromium.googlesource.com/chromium/src.git/+/main/docs/dangling_ptr.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/dangling-pointer-trait.yaml
+      assignees: |
+        stoletheminerals
+        thypon
+        cdesouza-chromium
+    patterns:
+      - pattern-either:
+        - pattern-inside: raw_ptr<...>
+        - pattern-inside: raw_ref<...>          
+      - pattern-either:
+        - pattern: DanglingUntriaged
+        - pattern: DisableDanglingPtrDetection
+        - pattern: FlakyDanglingUntriaged
+        - pattern: AcrossTasksDanglingUntriaged
+        - pattern: AllowPtrArithmetic
+        - pattern: AllowUninitialized
+        - pattern: LeakedDanglingUntriaged
+        - pattern: VectorExperimental
+        - pattern: SetExperimental
+        - pattern: CtnExperimental
+    message: "Detected use of a trait that disables dangling pointer checks. This requires security team approval."
+    severity: WARNING
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.c"
+        - "*.cpp"
+        - "*.cc"
+        - "*.h"
+        - "*.hh"
+        - "*.hcc"
