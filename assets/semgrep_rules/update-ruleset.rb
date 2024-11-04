@@ -127,7 +127,7 @@ class Categoriser
 		Dir.chdir(directory) do
 			Dir[filenames].each do |fname|
 				keys = fname[0..-6].split('/').map { |token| token.to_sym }	
-				keys << YAML.load(File.read(fname))['rules']
+				keys << YAML.safe_load(File.read(fname))['rules']
 				c.categories.recurse_add(*keys)
 			end
 		end
@@ -227,7 +227,7 @@ categoriser = Categoriser.new
 
 CPP_YAML_FILES.each do |cpp_yaml_file|
 	puts "Downloading ruleset for 0xdea/#{cpp_yaml_file}"
-	ret = YAML.load(URI.open("https://raw.githubusercontent.com/#{CPP_GITHUB_REPO}/main/#{cpp_yaml_file}").read)['rules']
+	ret = YAML.safe_load(URI.open("https://raw.githubusercontent.com/#{CPP_GITHUB_REPO}/main/#{cpp_yaml_file}").read)['rules']
 
 	ret.each do |rule|
 		next if BLOCKLIST.include?(rule['metadata']['source'])
@@ -243,10 +243,17 @@ end
 
 RULESETS.each do |ruleset|
 	print "Downloading ruleset for /#{ruleset}: "
-	ret = JSON.parse(URI.open("#{HOST}/c/#{ruleset}",
+	ret = nil
+	retbody = URI.open("#{HOST}/c/#{ruleset}",
 		"User-Agent" => "Semgrep/#{SEMGREP_VERSION} (command/unset)",
 		"Accept" => "application/json",
-		"Connection" => "keep-alive").read)['rules']
+		"Connection" => "keep-alive").read
+	begin
+		ret = JSON.parse(retbody)['rules']
+	rescue
+		puts "\n\nFailed to parse JSON, try with\n\n"
+		ret = YAML.load(retbody)['rules']
+	end
 	puts ret.length
 
 	ret.each do |rule|
@@ -256,6 +263,12 @@ RULESETS.each do |ruleset|
 
 		# Fix improper metadata
 		if rule['id'] == 'python.lang.security.audit.subprocess-shell-true.subprocess-shell-true'
+			rule['metadata']['category'] = 'security'
+			rule['metadata']['subcategory'] = ['audit']
+		end
+
+		# if rule id starts with "gitlab." then it's an audit rule
+		if rule['id'].start_with? 'gitlab.'
 			rule['metadata']['category'] = 'security'
 			rule['metadata']['subcategory'] = ['audit']
 		end
