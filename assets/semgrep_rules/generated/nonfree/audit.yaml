@@ -2981,6 +2981,406 @@ rules:
         version_id: 6xTDg3J
         url: https://semgrep.dev/playground/r/6xTDg3J/generic.secrets.security.detected-generic-secret.detected-generic-secret
         origin: community
+- id: generic.secrets.security.detected-github-token.detected-github-token
+  patterns:
+  - pattern-either:
+    - pattern: "$VAR = $SECRET\n"
+    - pattern: "$VAR: $SECRET\n"
+    - pattern: "$VAR = '$SECRET'\n"
+    - pattern: "$VAR: '$SECRET'\n"
+    - pattern: "'$VAR' = '$SECRET'\n"
+    - pattern: "'$VAR': '$SECRET'\n"
+    - pattern: '"[hH][tT][tT][pP][sS]?://.*$SECRET.*"
+
+        '
+  - metavariable-regex:
+      metavariable: "$SECRET"
+      regex: gh[pousr]_[A-Za-z0-9_]{36,251}
+  - metavariable-analysis:
+      analyzer: entropy
+      metavariable: "$SECRET"
+  languages:
+  - generic
+  message: GitHub Token detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.blog/changelog/2021-03-04-authentication-token-format-updates/
+    category: security
+    technology:
+    - secrets
+    - github
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-github-token.detected-github-token
+    shortlink: https://sg.run/PpOv
+    semgrep.dev:
+      rule:
+        r_id: 11589
+        rv_id: 833769
+        rule_id: eqUv7b
+        version_id: o5TBEv9
+        url: https://semgrep.dev/playground/r/o5TBEv9/generic.secrets.security.detected-github-token.detected-github-token
+        origin: community
+- id: generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account
+  pattern-regex: (("|'|`)?type("|'|`)?\s{0,50}(:|=>|=)\s{0,50}("|'|`)?service_account("|'|`)?,?)
+  languages:
+  - regex
+  message: Google (GCM) Service account detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
+    category: security
+    technology:
+    - secrets
+    - google-cloud
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account
+    shortlink: https://sg.run/6nXj
+    semgrep.dev:
+      rule:
+        r_id: 9059
+        rv_id: 833772
+        rule_id: NbUkL8
+        version_id: 2KT7xeR
+        url: https://semgrep.dev/playground/r/2KT7xeR/generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account
+        origin: community
+- id: generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token
+  pattern-regex: ya29\.[0-9A-Za-z\-_]+
+  languages:
+  - regex
+  message: Google OAuth Access Token detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
+    category: security
+    technology:
+    - secrets
+    - google
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token
+    shortlink: https://sg.run/ox2n
+    semgrep.dev:
+      rule:
+        r_id: 9060
+        rv_id: 833773
+        rule_id: kxUkpo
+        version_id: X0T5NEk
+        url: https://semgrep.dev/playground/r/X0T5NEk/generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token
+        origin: community
+- id: generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key
+  pattern-regex: "[hH][eE][rR][oO][kK][uU].*[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}"
+  languages:
+  - regex
+  message: Heroku API Key detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
+    category: security
+    technology:
+    - secrets
+    - heroku
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key
+    shortlink: https://sg.run/pxXR
+    semgrep.dev:
+      rule:
+        r_id: 9062
+        rv_id: 833775
+        rule_id: x8UnOB
+        version_id: 1QTPLBk
+        url: https://semgrep.dev/playground/r/1QTPLBk/generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key
+        origin: community
+- id: generic.secrets.security.detected-hockeyapp.detected-hockeyapp
+  pattern-regex: (?i)hockey.{0,50}(\\\"|'|`)?[0-9a-f]{32}(\\\"|'|`)?
+  languages:
+  - regex
+  message: HockeyApp detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
+    category: security
+    technology:
+    - secrets
+    - hockeyapp
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-hockeyapp.detected-hockeyapp
+    shortlink: https://sg.run/2xoY
+    semgrep.dev:
+      rule:
+        r_id: 9063
+        rv_id: 833776
+        rule_id: OrU3zo
+        version_id: 9lTJ02n
+        url: https://semgrep.dev/playground/r/9lTJ02n/generic.secrets.security.detected-hockeyapp.detected-hockeyapp
+        origin: community
+- id: generic.secrets.security.detected-jwt-token.detected-jwt-token
+  pattern-regex: eyJ[A-Za-z0-9-_=]{14,}\.[A-Za-z0-9-_=]{13,}\.?[A-Za-z0-9-_.+/=]*?
+  languages:
+  - regex
+  message: JWT token detected
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/Yelp/detect-secrets/blob/master/detect_secrets/plugins/jwt.py
+    category: security
+    technology:
+    - secrets
+    - jwt
+    confidence: LOW
+    references:
+    - https://semgrep.dev/blog/2020/hardcoded-secrets-unverified-tokens-and-other-common-jwt-mistakes/
+    cwe:
+    - 'CWE-321: Use of Hard-coded Cryptographic Key'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/generic.secrets.security.detected-jwt-token.detected-jwt-token
+    shortlink: https://sg.run/05N5
+    semgrep.dev:
+      rule:
+        r_id: 12854
+        rv_id: 833777
+        rule_id: kxU8E8
+        version_id: yeTN18Q
+        url: https://semgrep.dev/playground/r/yeTN18Q/generic.secrets.security.detected-jwt-token.detected-jwt-token
+        origin: community
+- id: generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key
+  pattern-regex: k2sk_v[0-9]_[0-9a-zA-Z]{24}
+  languages:
+  - regex
+  message: Kolide API Key detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    category: security
+    technology:
+    - secrets
+    - kolide
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key
+    shortlink: https://sg.run/d2YQ
+    semgrep.dev:
+      rule:
+        r_id: 14734
+        rv_id: 833778
+        rule_id: JDULYW
+        version_id: rxTDzqX
+        url: https://semgrep.dev/playground/r/rxTDzqX/generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key
+        origin: community
+- id: generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key
+  pattern-regex: "[0-9a-f]{32}-us[0-9]{1,2}"
+  languages:
+  - regex
+  message: MailChimp API Key detected
+  severity: ERROR
+  metadata:
+    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
+    category: security
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    technology:
+    - secrets
+    - mailchimp
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key
+    shortlink: https://sg.run/XBde
+    semgrep.dev:
+      rule:
+        r_id: 9064
+        rv_id: 833779
+        rule_id: eqU8QR
+        version_id: bZTBerP
+        url: https://semgrep.dev/playground/r/bZTBerP/generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key
+        origin: community
+- id: generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key
+  pattern-regex: key-[0-9a-zA-Z]{32}
+  languages:
+  - regex
+  message: Mailgun API Key detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
+    category: security
+    technology:
+    - secrets
+    - mailgun
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key
+    shortlink: https://sg.run/jRL2
+    semgrep.dev:
+      rule:
+        r_id: 9065
+        rv_id: 833780
+        rule_id: v8UneY
+        version_id: NdTB2LW
+        url: https://semgrep.dev/playground/r/NdTB2LW/generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key
+        origin: community
+- id: generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
+  patterns:
+  - pattern: "$AUTHTOKEN = $VALUE"
+  - metavariable-regex:
+      metavariable: "$AUTHTOKEN"
+      regex: _(authToken|auth|password)
+  - pattern-not: "$AUTHTOKEN = ${...}"
+  languages:
+  - generic
+  message: NPM registry authentication token detected
+  paths:
+    include:
+    - "*npmrc*"
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    category: security
+    technology:
+    - secrets
+    - npm
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
+    shortlink: https://sg.run/Ppg3
+    semgrep.dev:
+      rule:
+        r_id: 10045
+        rv_id: 833781
+        rule_id: 5rU4pe
+        version_id: kbT2lp0
+        url: https://semgrep.dev/playground/r/kbT2lp0/generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token
+        origin: community
 - id: generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token
   pattern-regex: "(?:api_live(?:_[a-zA-Z]{2})?\\.[a-zA-Z0-9-_]{11}\\.[-_a-zA-Z0-9]{32})"
   languages:
@@ -3013,6 +3413,122 @@ rules:
         rule_id: WAUW9q3
         version_id: 2KTdZdb
         url: https://semgrep.dev/playground/r/2KTdZdb/generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token
+        origin: community
+- id: generic.secrets.security.detected-outlook-team.detected-outlook-team
+  pattern-regex: https://outlook\.office\.com/webhook/[0-9a-f-]{36}
+  languages:
+  - regex
+  message: Outlook Team detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/grab/secret-scanner/blob/master/scanner/signatures/pattern.go
+    category: security
+    technology:
+    - secrets
+    - outlook
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-outlook-team.detected-outlook-team
+    shortlink: https://sg.run/1ZwQ
+    semgrep.dev:
+      rule:
+        r_id: 9066
+        rv_id: 833782
+        rule_id: d8UjXq
+        version_id: w8TAxrB
+        url: https://semgrep.dev/playground/r/w8TAxrB/generic.secrets.security.detected-outlook-team.detected-outlook-team
+        origin: community
+- id: generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token
+  pattern-regex: access_token\$production\$[0-9a-z]{16}\$[0-9a-z]{32}
+  languages:
+  - regex
+  message: PayPal Braintree Access Token detected
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
+    category: security
+    technology:
+    - secrets
+    - paypal
+    - braintree
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token
+    shortlink: https://sg.run/9oBR
+    semgrep.dev:
+      rule:
+        r_id: 9067
+        rv_id: 833783
+        rule_id: ZqU507
+        version_id: xyTNeOg
+        url: https://semgrep.dev/playground/r/xyTNeOg/generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token
+        origin: community
+- id: generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block
+  pattern-regex: "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+  languages:
+  - regex
+  message: Something that looks like a PGP private key block is detected. This is
+    a potential hardcoded secret that could be leaked if this code is committed. Instead,
+    remove this code block from the commit.
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-798: Use of Hard-coded Credentials'
+    source-rule-url: https://github.com/dxa4481/truffleHogRegexes/blob/master/truffleHogRegexes/regexes.json
+    category: security
+    technology:
+    - secrets
+    confidence: LOW
+    owasp:
+    - A07:2021 - Identification and Authentication Failures
+    references:
+    - https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures
+    cwe2022-top25: true
+    cwe2021-top25: true
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block
+    shortlink: https://sg.run/ydKd
+    semgrep.dev:
+      rule:
+        r_id: 9068
+        rv_id: 833784
+        rule_id: nJUzXz
+        version_id: O9TJWz9
+        url: https://semgrep.dev/playground/r/O9TJWz9/generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block
         origin: community
 - id: generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key
   pattern-regex: sk_live_[0-9a-z]{32}
@@ -11028,53 +11544,6 @@ rules:
   fix-regex:
     regex: "<%-(.*?)%>"
     replacement: "<%=\\1%>"
-- id: javascript.express.security.audit.xss.ejs.var-in-href.var-in-href
-  message: 'Detected a template variable used in an anchor tag with the ''href'' attribute.
-    This allows a malicious actor to input the ''javascript:'' URI and is subject
-    to cross- site scripting (XSS) attacks. If using a relative URL, start with a
-    literal forward slash and concatenate the URL, like this: href=''/<%= link %>''.
-    You may also consider setting the Content Security Policy (CSP) header.'
-  metadata:
-    cwe:
-    - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site
-      Scripting'')'
-    owasp:
-    - A07:2017 - Cross-Site Scripting (XSS)
-    - A03:2021 - Injection
-    references:
-    - https://flask.palletsprojects.com/en/1.1.x/security/#cross-site-scripting-xss#:~:text=javascript:%20URI
-    - https://github.com/pugjs/pug/issues/2952
-    category: security
-    technology:
-    - express
-    cwe2022-top25: true
-    cwe2021-top25: true
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Cross-Site-Scripting (XSS)
-    source: https://semgrep.dev/r/javascript.express.security.audit.xss.ejs.var-in-href.var-in-href
-    shortlink: https://sg.run/Zv0p
-    semgrep.dev:
-      rule:
-        r_id: 9279
-        rv_id: 834083
-        rule_id: PeUZrg
-        version_id: NdTB2yr
-        url: https://semgrep.dev/playground/r/NdTB2yr/javascript.express.security.audit.xss.ejs.var-in-href.var-in-href
-        origin: community
-  languages:
-  - regex
-  severity: WARNING
-  paths:
-    include:
-    - "*.ejs"
-    - "*.html"
-  pattern-regex: "<a.*href\\s*=[^>]*?[^\\/&=]<%.*?%>.*?>"
 - id: javascript.express.security.audit.xss.ejs.var-in-script-src.var-in-script-src
   message: Detected a template variable used as the 'src' in a script tag. Although
     template variables are HTML escaped, HTML escaping does not always prevent malicious
