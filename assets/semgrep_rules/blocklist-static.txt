@@ -1,1 +1,2 @@
 https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/var-in-href.yaml
+https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/var-in-script-tag.yaml
