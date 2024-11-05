@@ -1,5 +1,46 @@
 ---
 rules:
+- id: gitlab.eslint.detect-object-injection
+  patterns:
+  - pattern: "$O[$ARG]"
+  - pattern-not: $O["..."]
+  - pattern-not: "$O[($ARG : float)]"
+  - pattern-not-inside: |
+      $ARG = [$V];
+      ...
+      <... $O[$ARG] ...>;
+  - pattern-not-inside: |
+      $ARG = $V;
+      ...
+      <... $O[$ARG] ...>;
+  - metavariable-regex:
+      metavariable: "$ARG"
+      regex: "(?![0-9]+)"
+  message: Bracket object notation with user input is present, this might allow an
+    attacker to access all properties of the object and even it's prototype, leading
+    to possible code execution.
+  languages:
+  - javascript
+  - typescript
+  severity: WARNING
+  metadata:
+    cwe: 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
+    primary_identifier: eslint.detect-object-injection
+    secondary_identifiers:
+    - name: ESLint rule ID security/detect-object-injection
+      type: eslint_rule_id
+      value: security/detect-object-injection
+    license: MIT
+    source: https://semgrep.dev/r/gitlab.eslint.detect-object-injection
+    shortlink: https://sg.run/8nbQ
+    semgrep.dev:
+      rule:
+        r_id: 11584
+        rv_id: 56280
+        rule_id: NbUAnd
+        version_id: rxTqor
+        url: https://semgrep.dev/playground/r/rxTqor/gitlab.eslint.detect-object-injection
+        origin: community
 - id: mobsf.mobsfscan.android.hidden_ui.android_hidden_ui
   patterns:
   - pattern-either:
