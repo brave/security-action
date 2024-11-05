@@ -1536,8 +1536,10 @@ rules:
 - id: csharp.lang.security.stacktrace-disclosure.stacktrace-disclosure
   patterns:
   - pattern: "$APP.UseDeveloperExceptionPage(...);"
-  - pattern-not-inside: "if ($ENV.IsDevelopment(...)) {\n  ... \n  $APP.UseDeveloperExceptionPage(...);
-      \n  ...\n}\n"
+  - pattern-not-inside: |
+      if ($ENV.IsDevelopment(...)) {
+        ...
+      }
   message: Stacktrace information is displayed in a non-Development environment. Accidentally
     disclosing sensitive stack trace information in a production environment aids
     an attacker in reconnaissance and information gathering.
@@ -1566,10 +1568,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 26720
-        rv_id: 833449
+        rv_id: 928283
         rule_id: lBU6Dv
-        version_id: qkTQnr2
-        url: https://semgrep.dev/playground/r/qkTQnr2/csharp.lang.security.stacktrace-disclosure.stacktrace-disclosure
+        version_id: BjTKwQb
+        url: https://semgrep.dev/playground/r/BjTKwQb/csharp.lang.security.stacktrace-disclosure.stacktrace-disclosure
         origin: community
   languages:
   - csharp
@@ -1709,10 +1711,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 47272
-        rv_id: 833485
+        rv_id: 928285
         rule_id: ReUW9E
-        version_id: ZRTlPJZ
-        url: https://semgrep.dev/playground/r/ZRTlPJZ/dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
+        version_id: WrTYvkG
+        url: https://semgrep.dev/playground/r/WrTYvkG/dockerfile.security.missing-user-entrypoint.missing-user-entrypoint
         origin: community
 - id: dockerfile.security.missing-user.missing-user
   patterns:
@@ -1755,10 +1757,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 20148
-        rv_id: 833486
+        rv_id: 928286
         rule_id: AbUN06
-        version_id: nWTy4lK
-        url: https://semgrep.dev/playground/r/nWTy4lK/dockerfile.security.missing-user.missing-user
+        version_id: 0bTpAQq
+        url: https://semgrep.dev/playground/r/0bTpAQq/dockerfile.security.missing-user.missing-user
         origin: community
 - id: dockerfile.security.no-sudo-in-dockerfile.no-sudo-in-dockerfile
   patterns:
@@ -3736,7 +3738,9 @@ rules:
         url: https://semgrep.dev/playground/r/nWTy4jg/generic.secrets.security.detected-slack-token.detected-slack-token
         origin: community
 - id: generic.secrets.security.detected-slack-webhook.detected-slack-webhook
-  pattern-regex: https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8,10}/B[a-zA-Z0-9_]{8,10}/[a-zA-Z0-9_]{24}
+  patterns:
+  - pattern-regex: https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8,10}/B[a-zA-Z0-9_]{8,10}/[a-zA-Z0-9_]{24}
+  - pattern-not: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
   languages:
   - regex
   message: Slack Webhook detected
@@ -3768,10 +3772,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9073
-        rv_id: 833790
+        rv_id: 928287
         rule_id: gxU1dy
-        version_id: ExTrDOD
-        url: https://semgrep.dev/playground/r/ExTrDOD/generic.secrets.security.detected-slack-webhook.detected-slack-webhook
+        version_id: K3TwdPQ
+        url: https://semgrep.dev/playground/r/K3TwdPQ/generic.secrets.security.detected-slack-webhook.detected-slack-webhook
         origin: community
 - id: generic.secrets.security.detected-snyk-api-key.detected-snyk-api-key
   pattern-regex: (?i)snyk.{0,50}['|"|`]?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}['"\s]?
@@ -12841,10 +12845,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9314
-        rv_id: 834159
+        rv_id: 928291
         rule_id: 9AU17r
-        version_id: JdTlrWL
-        url: https://semgrep.dev/playground/r/JdTlrWL/javascript.lang.security.detect-disable-mustache-escape.detect-disable-mustache-escape
+        version_id: JdTod2O
+        url: https://semgrep.dev/playground/r/JdTod2O/javascript.lang.security.detect-disable-mustache-escape.detect-disable-mustache-escape
         origin: community
   languages:
   - javascript
@@ -20467,10 +20471,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9630
-        rv_id: 834585
+        rv_id: 928298
         rule_id: nJUzeK
-        version_id: yeTNgBr
-        url: https://semgrep.dev/playground/r/yeTNgBr/python.lang.security.audit.conn_recv.multiprocessing-recv
+        version_id: WrTYvkB
+        url: https://semgrep.dev/playground/r/WrTYvkB/python.lang.security.audit.conn_recv.multiprocessing-recv
         origin: community
   pattern-either:
   - pattern: multiprocessing.connection.Connection.recv(...)
@@ -20739,44 +20743,6 @@ rules:
           $SQL = f"...{$X}..."
           ...
     - pattern: "$DB.execute($SQL)"
-- id: python.lang.security.audit.ftplib.ftplib
-  pattern: ftplib.$ANYTHING(...)
-  message: FTP does not encrypt communications by default. This can lead to sensitive
-    data being exposed. Ensure use of FTP here does not expose sensitive data.
-  metadata:
-    source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L265
-    cwe:
-    - 'CWE-319: Cleartext Transmission of Sensitive Information'
-    owasp:
-    - A03:2017 - Sensitive Data Exposure
-    - A02:2021 - Cryptographic Failures
-    bandit-code: B321
-    references:
-    - https://docs.python.org/3/library/telnetlib.html
-    category: security
-    technology:
-    - ftplib
-    subcategory:
-    - audit
-    likelihood: LOW
-    impact: MEDIUM
-    confidence: LOW
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Mishandled Sensitive Information
-    source: https://semgrep.dev/r/python.lang.security.audit.ftplib.ftplib
-    shortlink: https://sg.run/7oyZ
-    semgrep.dev:
-      rule:
-        r_id: 9638
-        rv_id: 834611
-        rule_id: 4bUkv7
-        version_id: A8T3lzL
-        url: https://semgrep.dev/playground/r/A8T3lzL/python.lang.security.audit.ftplib.ftplib
-        origin: community
-  severity: WARNING
-  languages:
-  - python
 - id: python.lang.security.audit.hardcoded-password-default-argument.hardcoded-password-default-argument
   message: Hardcoded password is used as a default argument to '$FUNC'. This could
     be dangerous if a real password is not supplied.
@@ -20895,12 +20861,12 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9650
-        rv_id: 904326
+        rv_id: 928300
         rule_id: qNUjlR
-        version_id: O9Tvq3Y
-        url: https://semgrep.dev/playground/r/O9Tvq3Y/python.lang.security.audit.insecure-transport.ftplib.use-ftp-tls.use-ftp-tls
+        version_id: K3TwdP1
+        url: https://semgrep.dev/playground/r/K3TwdP1/python.lang.security.audit.insecure-transport.ftplib.use-ftp-tls.use-ftp-tls
         origin: community
-  severity: WARNING
+  severity: INFO
   languages:
   - python
 - id: python.lang.security.audit.insecure-transport.requests.request-session-http-in-with-context.request-session-http-in-with-context
@@ -23021,10 +22987,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9676
-        rv_id: 834666
+        rv_id: 928302
         rule_id: 7KUQNL
-        version_id: GxTDX0N
-        url: https://semgrep.dev/playground/r/GxTDX0N/python.lang.security.deserialization.pickle.avoid-cPickle
+        version_id: l4TX7eO
+        url: https://semgrep.dev/playground/r/l4TX7eO/python.lang.security.deserialization.pickle.avoid-cPickle
         origin: community
   languages:
   - python
@@ -23063,10 +23029,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9677
-        rv_id: 834667
+        rv_id: 928303
         rule_id: L1Uy60
-        version_id: RGTKxPy
-        url: https://semgrep.dev/playground/r/RGTKxPy/python.lang.security.deserialization.pickle.avoid-dill
+        version_id: YDTYJzb
+        url: https://semgrep.dev/playground/r/YDTYJzb/python.lang.security.deserialization.pickle.avoid-dill
         origin: community
   languages:
   - python
@@ -23105,10 +23071,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9675
-        rv_id: 834665
+        rv_id: 928301
         rule_id: EwU2BJ
-        version_id: 5PTyG4j
-        url: https://semgrep.dev/playground/r/5PTyG4j/python.lang.security.deserialization.pickle.avoid-pickle
+        version_id: qkTpk98
+        url: https://semgrep.dev/playground/r/qkTpk98/python.lang.security.deserialization.pickle.avoid-pickle
         origin: community
   languages:
   - python
@@ -23150,10 +23116,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9678
-        rv_id: 834668
+        rv_id: 928304
         rule_id: 8GUje2
-        version_id: A8T3lWw
-        url: https://semgrep.dev/playground/r/A8T3lWw/python.lang.security.deserialization.pickle.avoid-shelve
+        version_id: 6xTydA9
+        url: https://semgrep.dev/playground/r/6xTydA9/python.lang.security.deserialization.pickle.avoid-shelve
         origin: community
   languages:
   - python

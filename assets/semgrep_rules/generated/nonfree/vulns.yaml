@@ -827,10 +827,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 36773
-        rv_id: 833414
+        rv_id: 928281
         rule_id: 0oUqWP
-        version_id: jQTrXLw
-        url: https://semgrep.dev/playground/r/jQTrXLw/csharp.dotnet.security.use_ecb_mode.use_ecb_mode
+        version_id: RGT25BR
+        url: https://semgrep.dev/playground/r/RGT25BR/csharp.dotnet.security.use_ecb_mode.use_ecb_mode
         origin: community
   languages:
   - csharp
@@ -879,10 +879,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 36774
-        rv_id: 833415
+        rv_id: 928282
         rule_id: KxU3Nq
-        version_id: 1QTPL0o
-        url: https://semgrep.dev/playground/r/1QTPL0o/csharp.dotnet.security.use_weak_rng_for_keygeneration.use_weak_rng_for_keygeneration
+        version_id: A8TNAyg
+        url: https://semgrep.dev/playground/r/A8TNAyg/csharp.dotnet.security.use_weak_rng_for_keygeneration.use_weak_rng_for_keygeneration
         origin: community
   languages:
   - csharp
@@ -34173,6 +34173,8 @@ rules:
   mode: taint
   options:
     symbolic_propagation: true
+  pattern-sanitizers:
+  - pattern: shlex.quote(...)
   pattern-sources:
   - patterns:
     - pattern-either:
@@ -34250,7 +34252,7 @@ rules:
     - focus-metavariable: "$CMD"
   message: Detected subprocess function '$FUNC' with user controlled data. A malicious
     actor could leverage this to perform command injection. You may consider using
-    'shlex.escape()'.
+    'shlex.quote()'.
   metadata:
     owasp:
     - A01:2017 - Injection
@@ -34286,10 +34288,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 27262
-        rv_id: 834602
+        rv_id: 928299
         rule_id: AbUgrZ
-        version_id: gETyX1k
-        url: https://semgrep.dev/playground/r/gETyX1k/python.lang.security.audit.dangerous-subprocess-use-tainted-env-args.dangerous-subprocess-use-tainted-env-args
+        version_id: 0bTpAQn
+        url: https://semgrep.dev/playground/r/0bTpAQn/python.lang.security.audit.dangerous-subprocess-use-tainted-env-args.dangerous-subprocess-use-tainted-env-args
         origin: community
   languages:
   - python
@@ -46852,10 +46854,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 31441
-        rv_id: 835309
+        rv_id: 928306
         rule_id: OrUQvK
-        version_id: gETyX5O
-        url: https://semgrep.dev/playground/r/gETyX5O/yaml.github-actions.security.github-script-injection.github-script-injection
+        version_id: zyTGpX4
+        url: https://semgrep.dev/playground/r/zyTGpX4/yaml.github-actions.security.github-script-injection.github-script-injection
         origin: community
   patterns:
   - pattern-inside: 'steps: [...]'
@@ -46894,6 +46896,8 @@ rules:
         - pattern: "${{ github.event.pull_request.head.repo.default_branch }}"
         - pattern: "${{ github.head_ref }}"
         - pattern: "${{ github.event.inputs ... }}"
+        - pattern: "${{ github.event.discussion.title }}"
+        - pattern: "${{ github.event.discussion.body }}"
   severity: ERROR
 - id: yaml.github-actions.security.run-shell-injection.run-shell-injection
   languages:
@@ -46933,10 +46937,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 13162
-        rv_id: 835311
+        rv_id: 928307
         rule_id: v8UjQj
-        version_id: 3ZT3wxR
-        url: https://semgrep.dev/playground/r/3ZT3wxR/yaml.github-actions.security.run-shell-injection.run-shell-injection
+        version_id: pZTbKqK
+        url: https://semgrep.dev/playground/r/pZTbKqK/yaml.github-actions.security.run-shell-injection.run-shell-injection
         origin: community
   patterns:
   - pattern-inside: 'steps: [...]'
@@ -46967,6 +46971,8 @@ rules:
         - pattern: "${{ github.event.pull_request.head.repo.default_branch }}"
         - pattern: "${{ github.head_ref }}"
         - pattern: "${{ github.event.inputs ... }}"
+        - pattern: "${{ github.event.discussion.title }}"
+        - pattern: "${{ github.event.discussion.body }}"
   severity: ERROR
 - id: yaml.github-actions.security.workflow-run-target-code-checkout.workflow-run-target-code-checkout
   languages:

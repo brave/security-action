@@ -268,7 +268,7 @@ RULESETS.each do |ruleset|
 		end
 
 		# if rule id starts with "gitlab." then it's an audit rule
-		if rule['id'].start_with? 'gitlab.'
+		if rule['id'].start_with?('gitlab.') && !rule['id'].start_with?('gitlab.eslint.') && !rule['id'].start_with?('gitlab.find_sec_bugs.HARD_CODE_KEY')
 			rule['metadata']['category'] = 'security'
 			rule['metadata']['subcategory'] = ['audit']
 		end
