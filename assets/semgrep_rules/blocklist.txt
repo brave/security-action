@@ -32,3 +32,4 @@ https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-1
 https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-2
 https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-3
 https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-4
+https://semgrep.dev/r/gitlab.bandit.B101
