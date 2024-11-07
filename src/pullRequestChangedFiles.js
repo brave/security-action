@@ -23,6 +23,7 @@ export default async function pullRequestChangedFIles ({ github, githubToken, ow
             path
             additions
             deletions
+            changeType
           }
         }
       }
@@ -49,6 +50,10 @@ export default async function pullRequestChangedFIles ({ github, githubToken, ow
     // check for additions only, deletions are not relevant, in this case
     paths = paths.concat(
       files.nodes.filter(file => file.additions /* + file.deletions */ > 0).map(file => file.path))
+
+    // add binary files too
+    paths = paths.concat(
+      files.nodes.filter(file => file.additions === 0 && file.deletions === 0 && file.changeType === 'ADDED').map(file => file.path))
   }
 
   return paths
