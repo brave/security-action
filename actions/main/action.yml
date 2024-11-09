@@ -125,3 +125,5 @@ runs:
           const script = require('${{ github.action_path }}/action.cjs')
           await script({github, context, inputs, actionPath, core,
             debug: process.env.DEBUG === 'true'})
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v3

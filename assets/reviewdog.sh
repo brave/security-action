@@ -9,23 +9,19 @@ export SEC_ACTION_DEBUG=$SEC_ACTION_DEBUG
 export ASSIGNEES=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')
 
 RUNNERS="safesvg tfsec semgrep sveltegrep npm-audit pip-audit" # disabled: brakeman
+# redefine RUNNERS with $1 if it is set
+if [ -n "$1" ]; then
+    RUNNERS=$1
+fi
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
+    mkdir -p ../results
+
     for runner in $RUNNERS; do
-        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.log || true
+        reviewdog -reporter=sarif -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > ../results/$runner.sarif 2>> reviewdog.log || true
         grep -H "" reviewdog.$runner.stderr.log >> reviewdog.fail.log || true
         [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" reviewdog.$runner.stderr.log || true
     done
-
-    for runner in $RUNNERS; do
-        cat $runner.log | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' \
-          || cat $runner.log >> reviewdog.fail.log
-        grep -H "" $runner.log >> reviewdog.log || true
-        echo -n "$runner: "
-        echo "${runner//-/_}_count=$(grep -c "^" $runner.log)" >> $GITHUB_OUTPUT || true
-        [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" $runner.log || true
-    done
-
 else
     git ls-files | tr '\n' '\0' > $SCRIPTPATH/all_changed_files.txt
     reviewdog \
