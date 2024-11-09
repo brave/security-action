@@ -125,5 +125,16 @@ runs:
           const script = require('${{ github.action_path }}/action.cjs')
           await script({github, context, inputs, actionPath, core,
             debug: process.env.DEBUG === 'true'})
-    - name: Upload SARIF file
+    # execute only if the `../results` directory is not empty
+    - id: results-dir
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          const fs = require('fs')
+          const path = require('path')
+          const resultsDir = path.join('..', 'results')
+          const files = fs.readdirSync(resultsDir)
+          return files.length > 0
+    - if: ${{ steps.results-dir.outputs.result == 'true' }}
+      name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3
