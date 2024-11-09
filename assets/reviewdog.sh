@@ -21,6 +21,7 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
         reviewdog -reporter=sarif -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > ../results/$runner.sarif 2>> reviewdog.log || true
         grep -H "" reviewdog.$runner.stderr.log >> reviewdog.fail.log || true
         [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" reviewdog.$runner.stderr.log || true
+        find ../results/$runner.sarif -type f -empty -delete
     done
 else
     git ls-files | tr '\n' '\0' > $SCRIPTPATH/all_changed_files.txt
