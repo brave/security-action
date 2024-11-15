@@ -107,7 +107,7 @@ export default async function renovateSanityCheck ({
       continue
     }
 
-    if (!(renovateConfig.extends?.includes(`local>${org}/renovate-config`))) {
+    if (!renovateConfig.extends?.includes(`local>${org}/renovate-config`) || !renovateConfig.extends?.includes('local>brave/renovate-config')) {
       const message = `https://github.com/${org}/${repo.name} does not extend the company renovate config!`
       if (debug) console.log(message)
 
