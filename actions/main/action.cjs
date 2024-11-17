@@ -91,7 +91,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   // Install semgrep & pip-audit
   await runCommand(`pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`, { shell: true })
-  debugLog('Installed semgrep & pip-audit')
+  debugLog('Installed semgrep & pip-audit & fickling')
   // Install xmllint for safesvg
   await runCommand('sudo apt-get install -y libxml2-utils', { shell: true })
   debugLog('Installed xmllint')

@@ -1,3 +1,4 @@
 # Also alter semgrep self test yml
 semgrep~=1.95.0
 pip-audit~=2.7.0
+fickling~=0.1.3

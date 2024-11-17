@@ -85,3 +85,8 @@ runner:
     cmd: "set -e\n(python3 $SCRIPTPATH/pip-audit.py \\\n| $SCRIPTPATH/cleaner.rb) 2> /dev/null # reviewdog.pip-audit.stderr.log \n"
     errorformat:
       - "%t:%f:%l %m"
+  fickling:
+    name: fickling
+    cmd: "set -e\npython $SCRIPTPATH/fickling-audit.py | $SCRIPTPATH/cleaner.rb 2> reviewdog.fickling.stderr.log"
+    errorformat:
+      - "%t:%f:%l %m"
