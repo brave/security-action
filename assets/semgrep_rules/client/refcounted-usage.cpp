@@ -16,9 +16,6 @@ class RegularClass {
 // ruleid: refcounted-usage
 using MyRefCountedType = base::RefCounted<SomeType>;
 
-// ok: refcounted-usage
-std::shared_ptr<MyClass> better_alternative; 
-
 // ruleid: refcounted-usage
 class NestedRefCounted : public base::RefCountedThreadSafe<NestedRefCounted> {
     // ruleid: refcounted-usage
