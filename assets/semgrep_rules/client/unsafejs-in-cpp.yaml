@@ -19,6 +19,7 @@ rules:
         - "*.h"
         - "*.hpp"
         - "*.hh"
+        - "*.mm"
       exclude:
         - test/
         - "*.test.cc"
