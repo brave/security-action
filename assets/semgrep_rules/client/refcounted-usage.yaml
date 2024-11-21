@@ -1,0 +1,27 @@
+rules:
+  - id: refcounted-usage
+    metadata:
+      author: Artem Chaikin
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/refcounted-usage.yaml
+      assignees: |
+        stoletheminerals
+        thypon
+        cdesouza-chromium
+        bridiver
+    pattern-either:
+      - pattern: base::RefCounted<...>
+      - pattern: base::RefCountedThreadSafe<...>
+      - pattern: base::RefCountedData<...>
+    message: "Reference counting is occasionally useful but is more often a sign that someone isn't thinking carefully about ownership. Use it when ownership is truly shared (for example, multiple tabs sharing the same renderer process), not for when lifetime management is difficult to reason about."
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.c"
+        - "*.cpp"
+        - "*.cc"
+        - "*.h"
+        - "*.hh"
+        - "*.hcc"
+        - "*.mm"
+    severity: WARNING
