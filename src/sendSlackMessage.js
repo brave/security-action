@@ -93,7 +93,9 @@ export default async function sendSlackMessage ({
     let mdBlocks = await markdownToBlocks(message)
     // slack blocks have a limit of 50 blocks, remove the last blocks if there are more
     if (mdBlocks.length > 50) {
-      mdBlocks = mdBlocks.slice(0, 49)
+      // last block should contain the Cc, so we don't want to remove it
+      const lastBlock = mdBlocks[mdBlocks.length - 1]
+      mdBlocks = mdBlocks.slice(0, 48)
       mdBlocks.push({
         type: 'section',
         text: {
@@ -101,6 +103,7 @@ export default async function sendSlackMessage ({
           text: '...and more'
         }
       })
+      mdBlocks.push(lastBlock)
     }
     if (colored) {
       attachments = [{
