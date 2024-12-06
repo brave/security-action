@@ -14,6 +14,7 @@ rules:
       license: MIT
       original_source: https://raw.githubusercontent.com/0xdea/semgrep-rules/main/c/typos.yaml
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/typos.yaml
+      category: security
       # NOTE: common issues with comments are not covered.
       # NOTE: constructs such as assert(var == val) lead to false positives.
     message: >-

@@ -4,6 +4,7 @@ rules:
       author: Ben Caller
       confidence: MEDIUM
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/path-travesal-by-string-interpolation.yaml
+      category: security
     message: The code contains new security hotspots which should be checked manually by a security team member! Could a user perform path traversal by setting a variable to include `../`?
     severity: INFO
     languages:

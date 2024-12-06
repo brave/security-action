@@ -10,6 +10,7 @@ rules:
         - https://github.com/returntocorp/semgrep/issues/4939
       confidence: MEDIUM
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-missing-break-in-switch.yaml
+      category: security
       # NOTE: we should also check for default blocks that miss the
       # break/return/exit or equivalent statement/function call.
     message: >-

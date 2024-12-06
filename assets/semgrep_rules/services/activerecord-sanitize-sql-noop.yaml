@@ -25,3 +25,4 @@ rules:
         - https://api.rubyonrails.org/classes/ActiveRecord/Sanitization/ClassMethods.html
       confidence: LOW
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/activerecord-sanitize-sql-noop.yaml
+      category: security
