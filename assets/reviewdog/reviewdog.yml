@@ -13,7 +13,7 @@ runner:
           --quiet \
           $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
           --json \
-      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br>,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
+      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --semgrep --assignees) 2> reviewdog.semgrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
@@ -44,7 +44,7 @@ runner:
         '--include=*.extractedscript.js' \
         '--include=*.extractedscript.html' \
         ./ \
-        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br>,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
+        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
         | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep && \
       find . -type f -name '*.extractedscript.*' -delete) 2> reviewdog.sveltegrep.stderr.log
     errorformat:

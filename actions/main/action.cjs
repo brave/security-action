@@ -129,7 +129,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     const { default: cleanupComments } = await import(`${actionPath}/src/steps/cleanupComments.js`)
     debugLog('Comments before:', await commentsNumber({ context, github }))
 
-    const commentsBefore = await commentsNumber({ context, github })
+    const { number: commentsBefore } = await commentsNumber({ context, github })
     await cleanupComments({ context, github })
 
     // unverified-commits steps
@@ -161,7 +161,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Reviewdog PR step completed')
 
     // comments-after step
-    const commentsAfter = await commentsNumber({ context, github })
+    const { number: commentsAfter, categories } = await commentsNumber({ context, github })
     debugLog('Comments after:', commentsAfter)
 
     // assignees-after step
@@ -184,14 +184,16 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Should trigger:', shouldTrigger)
 
     if (shouldTrigger) {
-      // add label step
-      await github.rest.issues.addLabels({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: context.issue.number,
-        labels: ['needs-security-review']
-      })
-      debugLog('Added needs-security-review label')
+      if (categories.includes('security')) {
+        // add label step
+        await github.rest.issues.addLabels({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          labels: ['needs-security-review']
+        })
+        debugLog('Added needs-security-review label')
+      }
       // add assignees step
       await github.rest.issues.addAssignees({
         owner: context.repo.owner,
