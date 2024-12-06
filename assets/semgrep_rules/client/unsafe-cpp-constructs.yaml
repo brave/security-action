@@ -9,6 +9,7 @@ rules:
         stoletheminerals
         thypon
         cdesouza-chromium
+      category: security
     languages: [cpp]
     message: "Potentially unsafe C++ construct detected"
     severity: WARNING

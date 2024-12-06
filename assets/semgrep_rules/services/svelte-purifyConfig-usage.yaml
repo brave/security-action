@@ -7,7 +7,8 @@ rules:
         - https://cwe.mitre.org/data/definitions/615
         - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
       confidence: LOW
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/svelte-purifyConfig-usages.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/svelte-purifyConfig-usage.yaml
+      category: security
     message: >-
       The code contains new security hotspots (`purifyConfig`) which should be checked manually by a security team member!
     severity: INFO

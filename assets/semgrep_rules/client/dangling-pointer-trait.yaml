@@ -9,6 +9,7 @@ rules:
         stoletheminerals
         thypon
         cdesouza-chromium
+      category: security
     patterns:
       - pattern-either:
         - pattern-inside: raw_ptr<...>

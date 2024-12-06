@@ -1,11 +1,13 @@
 rules:
   - id: find-links-without-no-index
-    author: Artem Chaikin
-    source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/find-links-without-no-index.yaml
-    references:
+    metadata:
+      author: Artem Chaikin
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/find-links-without-no-index.yaml
+      references:
         - https://portswigger.net/daily-swig/dependency-confusion-attack-mounted-via-pypi-repo-exposes-flawed-package-installer-behavior
         - https://www.bleepingcomputer.com/news/security/pytorch-discloses-malicious-dependency-chain-compromise-over-holidays/
-    confidence: LOW
+      confidence: LOW
+      category: security
     pattern-either:
       - pattern-regex: ^(?!.*--no-index).*--find-links
       - pattern-regex: ^(?!.*--no-index).*(pip|pip3)\s.*\s-f

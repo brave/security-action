@@ -10,6 +10,7 @@ rules:
       assignees: |
         thypon
         kdenhartog
+      category: security
     severity: INFO
     languages:
       - go

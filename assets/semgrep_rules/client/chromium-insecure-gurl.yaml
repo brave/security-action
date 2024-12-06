@@ -6,6 +6,7 @@ rules:
       assignees: |
         thypon
         fmarier
+      category: security
     pattern-either:
       - patterns:
           - pattern: $TYPE $VAR = ...;

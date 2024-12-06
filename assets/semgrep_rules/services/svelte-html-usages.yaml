@@ -8,6 +8,7 @@ rules:
         - https://btlr.dev/blog/how-to-find-vulnerabilities-in-code-bad-words
       confidence: LOW
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/svelte-html-usages.yaml
+      category: security
     message: >-
       The code contains new security hotspots (`{@html expression}`) which should be checked manually by a security team member!
     severity: INFO

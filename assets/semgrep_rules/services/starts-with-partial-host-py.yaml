@@ -4,6 +4,7 @@ rules:
       author: Ben Caller
       confidence: LOW
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/starts-with-partial-host-py.yaml
+      category: security
     patterns:
       - pattern: $URL.startswith("$PREFIX")
       - metavariable-regex:

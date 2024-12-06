@@ -6,6 +6,7 @@ rules:
         fmarier
         thypon
         bridiver
+      category: security
     patterns:
       - pattern: ($CAST)($TYPE $X)
       - metavariable-regex:

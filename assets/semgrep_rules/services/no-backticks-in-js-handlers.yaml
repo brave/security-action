@@ -3,6 +3,7 @@ rules:
     metadata:
       author: Andrea Brancaleoni @ Brave
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/no-backticks-in-js-handlers.yaml
+      category: security
     patterns:
       - pattern-either:
           - pattern-inside: $HANDLER="..."

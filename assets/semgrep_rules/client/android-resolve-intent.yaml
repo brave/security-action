@@ -16,6 +16,7 @@ rules:
       author: Artem Chaikin
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/android-resolve-intent.yaml
       assignees: stoletheminerals
+      category: security
     message: Implicit intents in resolveComponent and queryComponent methods for component launch may pose security risks, as other installed apps can register similar components with higher priority. Instead, it is recommended to use hardcoded package names for third-party components launch or getApplicationContext().getPackageName() for local component launch.
     languages: [java, kotlin]
     severity: WARNING

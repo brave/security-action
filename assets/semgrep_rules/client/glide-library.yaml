@@ -8,6 +8,7 @@ rules:
       assignees: |
         stoletheminerals
         bridiver
+      category: security
     message: "The Glide image loading library is not yet approved, new usages should not be implemented until the security team has given their approval."
     languages: [java]
     severity: WARNING

@@ -9,6 +9,7 @@ rules:
       references:
         - https://nodejs.org/api/url.html#urlparseurlstring-parsequerystring-slashesdenotehost
         - https://nodejs.org/api/url.html#the-whatwg-url-api
+      category: security
     pattern-either:
       - pattern: url.parse(...)
       - pattern: require('url').parse(...)

@@ -8,6 +8,7 @@ rules:
       assignees: |
         stoletheminerals
         bridiver
+      category: security
     message: |
       $FUNC usages should be vet by the security-team.
 

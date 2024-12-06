@@ -9,6 +9,7 @@ rules:
       assignees: |
         bridiver
         thypon
+      category: security
     paths:
       include:
         - "*.gn"
