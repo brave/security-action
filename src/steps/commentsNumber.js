@@ -47,7 +47,7 @@ export default async function commentsNumber ({
           reviewThread.comments.nodes[0].author.login === 'github-actions' &&
           reviewThread.comments.nodes[0].body.includes('<br>Cc ')
     )
-  )
+  ).map(reviewThread => reviewThread.comments.nodes[0])
 
   for (const comment of comments) {
     const category = comment.body.match(categoryRegex)?.[1]
