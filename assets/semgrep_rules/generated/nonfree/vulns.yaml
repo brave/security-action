@@ -18161,10 +18161,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9274
-        rv_id: 834077
+        rv_id: 940578
         rule_id: 8GUjkk
-        version_id: jQTrX5y
-        url: https://semgrep.dev/playground/r/jQTrX5y/javascript.express.security.audit.express-xml2json-xxe-event.express-xml2json-xxe-event
+        version_id: yeT0Rp1
+        url: https://semgrep.dev/playground/r/yeT0Rp1/javascript.express.security.audit.express-xml2json-xxe-event.express-xml2json-xxe-event
         origin: community
   languages:
   - javascript
@@ -18212,6 +18212,7 @@ rules:
           ...
     - pattern: "$REQ.on('...', function(...) { ... $EXPAT.toJson($INPUT,...); ...
         })"
+    - focus-metavariable: "$INPUT"
 - id: javascript.express.security.audit.remote-property-injection.remote-property-injection
   message: Bracket object notation with user input is present, this might allow an
     attacker to access all properties of the object and even it's prototype. Use literal
@@ -18411,10 +18412,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9277
-        rv_id: 834081
+        rv_id: 940579
         rule_id: 3qUPA1
-        version_id: rxTDzKl
-        url: https://semgrep.dev/playground/r/rxTDzKl/javascript.express.security.audit.xss.direct-response-write.direct-response-write
+        version_id: rxT6yKv
+        url: https://semgrep.dev/playground/r/rxT6yKv/javascript.express.security.audit.xss.direct-response-write.direct-response-write
         origin: community
   languages:
   - javascript
@@ -21172,6 +21173,142 @@ rules:
     - pattern-not: JSON.parse("...",...)
   pattern-sinks:
   - pattern: Object.assign(...)
+- id: javascript.node-crypto.security.aead-no-final.aead-no-final
+  message: The 'final' call of a Decipher object checks the authentication tag in
+    a mode for authenticated encryption. Failing to call 'final' will invalidate all
+    integrity guarantees of the released ciphertext.
+  metadata:
+    cwe:
+    - 'CWE-310: CWE CATEGORY: Cryptographic Issues'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - node-crypto
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    references:
+    - https://nodejs.org/api/crypto.html#deciphersetauthtagbuffer-encoding
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/javascript.node-crypto.security.aead-no-final.aead-no-final
+    shortlink: https://sg.run/r6EEA
+    semgrep.dev:
+      rule:
+        r_id: 146569
+        rv_id: 928292
+        rule_id: 2ZUz884
+        version_id: 5PTNXBl
+        url: https://semgrep.dev/playground/r/5PTNXBl/javascript.node-crypto.security.aead-no-final.aead-no-final
+        origin: community
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern: |
+      $DECIPHER = $CRYPTO.createDecipheriv('$ALGO', ...)
+      ...
+      $DECIPHER.update(...)
+  - pattern-not-inside: |
+      $DECIPHER = $CRYPTO.createDecipheriv('$ALGO', ...)
+      ...
+      $DECIPHER.final(...)
+  - metavariable-regex:
+      metavariable: "$ALGO"
+      regex: ".*(-gcm|-ccm|-ocb|chacha20-poly1305)$"
+- id: javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv
+  message: The deprecated functions 'createCipher' and 'createDecipher' generate the
+    same initialization vector every time. For counter modes such as CTR, GCM, or
+    CCM this leads to break of both confidentiality and integrity, if the key is used
+    more than once. Other modes are still affected in their strength, though they're
+    not completely broken. Use 'createCipheriv' or 'createDecipheriv' instead.
+  metadata:
+    cwe:
+    - 'CWE-1204: Generation of Weak Initialization Vector (IV)'
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - node-crypto
+    likelihood: HIGH
+    impact: MEDIUM
+    confidence: HIGH
+    references:
+    - https://nodejs.org/api/crypto.html#cryptocreatecipheralgorithm-password-options
+    - https://nodejs.org/api/crypto.html#cryptocreatedecipheralgorithm-password-options
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv
+    shortlink: https://sg.run/bw33r
+    semgrep.dev:
+      rule:
+        r_id: 146570
+        rv_id: 928293
+        rule_id: X5UQRR7
+        version_id: GxToQ45
+        url: https://semgrep.dev/playground/r/GxToQ45/javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv
+        origin: community
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern-either:
+    - pattern: "$CRYPTO.createCipher(...)\n"
+    - pattern: "$CRYPTO.createDecipher(...)\n"
+- id: javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length
+  message: The call to 'createDecipheriv' with the Galois Counter Mode (GCM) mode
+    of operation is missing an expected authentication tag length. If the expected
+    authentication tag length is not specified or otherwise checked, the application
+    might be tricked into verifying a shorter-than-expected authentication tag. This
+    can be abused by an attacker to spoof ciphertexts or recover the implicit authentication
+    key of GCM, allowing arbitrary forgeries.
+  metadata:
+    cwe:
+    - 'CWE-310: CWE CATEGORY: Cryptographic Issues'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    category: security
+    subcategory:
+    - vuln
+    technology:
+    - node-crypto
+    likelihood: MEDIUM
+    impact: MEDIUM
+    confidence: MEDIUM
+    references:
+    - https://www.securesystems.de/blog/forging_ciphertexts_under_Galois_Counter_Mode_for_the_Node_js_crypto_module/
+    - https://nodejs.org/api/crypto.html#cryptocreatedecipherivalgorithm-key-iv-options
+    - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length
+    shortlink: https://sg.run/NbGG1
+    semgrep.dev:
+      rule:
+        r_id: 146571
+        rv_id: 928294
+        rule_id: j2UgPP3
+        version_id: RGT25BZ
+        url: https://semgrep.dev/playground/r/RGT25BZ/javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length
+        origin: community
+  languages:
+  - javascript
+  - typescript
+  severity: ERROR
+  patterns:
+  - pattern: "$CRYPTO.createDecipheriv('$ALGO', $KEY, $IV)\n"
+  - metavariable-regex:
+      metavariable: "$ALGO"
+      regex: ".*(-gcm)$"
 - id: javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret
   message: A hard-coded credential was detected. It is not recommended to store credentials
     in source-code, as this risks secrets being leaked and used by either an internal
@@ -22331,6 +22468,68 @@ rules:
       - pattern-inside: xml_set_element_handler($PARSER, $CALLABLE, $CALLABLE)
       - pattern-inside: xml_set_notation_decl_handler($PARSER, $CALLABLE)
       - pattern-inside: Yar_Concurrent_Client::loop($CALLABLE, ...)
+- id: php.lang.security.injection.tainted-exec.tainted-exec
+  languages:
+  - php
+  severity: WARNING
+  message: User input is passed to a function that executes a shell command. This
+    can lead to remote code execution.
+  metadata:
+    cwe:
+    - 'CWE-78: Improper Neutralization of Special Elements used in an OS Command (''OS
+      Command Injection'')'
+    category: security
+    technology:
+    - php
+    owasp:
+    - A03:2021 - Injection
+    references:
+    - https://owasp.org/Top10/A03_2021-Injection
+    subcategory:
+    - vuln
+    impact: HIGH
+    likelihood: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Command Injection
+    source: https://semgrep.dev/r/php.lang.security.injection.tainted-exec.tainted-exec
+    shortlink: https://sg.run/kxEEz
+    semgrep.dev:
+      rule:
+        r_id: 146572
+        rv_id: 928295
+        rule_id: 10UOGG5
+        version_id: A8TNAyO
+        url: https://semgrep.dev/playground/r/A8TNAyO/php.lang.security.injection.tainted-exec.tainted-exec
+        origin: community
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern: "$_GET"
+      - pattern: "$_POST"
+      - pattern: "$_COOKIE"
+      - pattern: "$_REQUEST"
+      - pattern: file_get_contents('php://input')
+  pattern-sanitizers:
+  - patterns:
+    - pattern-either:
+      - pattern: escapeshellcmd(...)
+      - pattern: escapeshellarg(...)
+  pattern-sinks:
+  - patterns:
+    - pattern-either:
+      - pattern: exec(...)
+      - pattern: system(...)
+      - pattern: passthru(...)
+      - patterns:
+        - pattern: proc_open(...)
+        - pattern-not: proc_open([...], ...)
+      - pattern: popen(...)
+      - pattern: expect_popen(...)
+      - pattern: shell_exec(...)
+      - pattern: "`...`\n"
 - id: php.lang.security.injection.tainted-filename.tainted-filename
   severity: WARNING
   message: File name based on user input risks server-side request forgery.
@@ -41015,10 +41214,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 20050
-        rv_id: 834839
+        rv_id: 938320
         rule_id: WAUY8B
-        version_id: e1TDKDo
-        url: https://semgrep.dev/playground/r/e1TDKDo/scala.lang.security.audit.tainted-sql-string.tainted-sql-string
+        version_id: e1T9R5A
+        url: https://semgrep.dev/playground/r/e1T9R5A/scala.lang.security.audit.tainted-sql-string.tainted-sql-string
         origin: community
   pattern-sources:
   - patterns:
@@ -41066,6 +41265,7 @@ rules:
           - pattern: f"..."
         - pattern-regex: ".*\\b(?i)(select|delete|insert|create|update|alter|drop)\\b.*\n"
     - pattern-not-inside: println(...)
+    - pattern-not-inside: throw new $EXCEPTION(...)
   pattern-sanitizers:
   - pattern-either:
     - patterns:
@@ -46580,51 +46780,51 @@ rules:
     semgrep.dev:
       rule:
         r_id: 9766
-        rv_id: 835296
+        rv_id: 940582
         rule_id: NbUA3O
-        version_id: kbT2PZK
-        url: https://semgrep.dev/playground/r/kbT2PZK/typescript.react.security.react-insecure-request.react-insecure-request
+        version_id: kbTYdGX
+        url: https://semgrep.dev/playground/r/kbTYdGX/typescript.react.security.react-insecure-request.react-insecure-request
         origin: community
   languages:
   - typescript
   - javascript
   severity: ERROR
-  pattern-either:
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $AXIOS from 'axios';
-          ...
-          $AXIOS.$METHOD(...)
-      - pattern-inside: |
-          $AXIOS = require('axios');
-          ...
-          $AXIOS.$METHOD(...)
-    - pattern-either:
-      - pattern: $AXIOS.get("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.post("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.delete("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.head("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.patch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.put("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-      - pattern: $AXIOS.options("=~/[Hh][Tt][Tt][Pp]:\/\/.*/",...)
-  - patterns:
-    - pattern-either:
-      - pattern-inside: |
-          import $AXIOS from 'axios';
-          ...
-          $AXIOS(...)
-      - pattern-inside: |
-          $AXIOS = require('axios');
-          ...
-          $AXIOS(...)
-    - pattern-either:
-      - pattern: '$AXIOS({url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}, ...)'
-      - pattern: |
-          $OPTS = {url: "=~/[Hh][Tt][Tt][Pp]:\/\/.*/"}
-          ...
-          $AXIOS($OPTS, ...)
-  - pattern: fetch("=~/[Hh][Tt][Tt][Pp]:\/\/.*/", ...)
+  patterns:
+  - pattern-either:
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            import $AXIOS from 'axios';
+            ...
+            $AXIOS.$METHOD(...)
+        - pattern-inside: |
+            $AXIOS = require('axios');
+            ...
+            $AXIOS.$METHOD(...)
+      - pattern: $AXIOS.$VERB("$URL",...)
+      - metavariable-regex:
+          metavariable: "$VERB"
+          regex: "^(get|post|delete|head|patch|put|options)"
+    - patterns:
+      - pattern-either:
+        - pattern-inside: |
+            import $AXIOS from 'axios';
+            ...
+            $AXIOS(...)
+        - pattern-inside: |
+            $AXIOS = require('axios');
+            ...
+            $AXIOS(...)
+      - pattern-either:
+        - pattern: '$AXIOS({url: "$URL"}, ...)'
+        - pattern: |
+            $OPTS = {url: "$URL"}
+            ...
+            $AXIOS($OPTS, ...)
+    - pattern: fetch("$URL", ...)
+  - metavariable-regex:
+      metavariable: "$URL"
+      regex: "^([Hh][Tt][Tt][Pp]:\\/\\/(?!localhost).*)"
 - id: yaml.argo.security.argo-workflow-parameter-command-injection.argo-workflow-parameter-command-injection
   message: Using input or workflow parameters in here-scripts can lead to command
     injection or code injection. Convert the parameters to env variables instead.

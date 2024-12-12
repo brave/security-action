@@ -191,10 +191,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14223
-        rv_id: 833267
+        rv_id: 937958
         rule_id: 8GUzNK
-        version_id: 2KT7x5g
-        url: https://semgrep.dev/playground/r/2KT7x5g/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
+        version_id: xyTqL9d
+        url: https://semgrep.dev/playground/r/xyTqL9d/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
         origin: community
   patterns:
   - pattern-either:
@@ -255,10 +255,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 14222
-        rv_id: 833268
+        rv_id: 937959
         rule_id: L1U5Gz
-        version_id: X0T5Nkv
-        url: https://semgrep.dev/playground/r/X0T5Nkv/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
+        version_id: O9TXj4X
+        url: https://semgrep.dev/playground/r/O9TXj4X/trailofbits.go.missing-unlock-before-return.missing-unlock-before-return
         origin: community
   patterns:
   - pattern-either:
