@@ -1622,6 +1622,54 @@ rules:
     include:
     - "*.cshtml"
   severity: ERROR
+- id: dockerfile.security.dockerd-socket-mount.dockerfile-dockerd-socket-mount
+  message: The Dockerfile(image) mounts docker.sock to the container which may allow
+    an attacker already inside of the container to escape container and execute arbitrary
+    commands on the host machine.
+  languages:
+  - dockerfile
+  - yaml
+  severity: ERROR
+  metadata:
+    cwe:
+    - 'CWE-862: Missing Authorization'
+    - 'CWE-269: Improper Privilege Management'
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    subcategory:
+    - audit
+    technology:
+    - dockerfile
+    category: security
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+    - https://redfoxsec.com/blog/insecure-volume-mounts-in-docker/
+    - https://blog.quarkslab.com/why-is-exposing-the-docker-socket-a-really-bad-idea.html
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/dockerfile.security.dockerd-socket-mount.dockerfile-dockerd-socket-mount
+    shortlink: https://sg.run/10AAQ
+    semgrep.dev:
+      rule:
+        r_id: 146566
+        rv_id: 928284
+        rule_id: oqUgAAk
+        version_id: DkT2D3w
+        url: https://semgrep.dev/playground/r/DkT2D3w/dockerfile.security.dockerd-socket-mount.dockerfile-dockerd-socket-mount
+        origin: community
+  pattern-either:
+  - patterns:
+    - pattern: VOLUME $X
+    - metavariable-regex:
+        metavariable: "$X"
+        regex: "/var/run/docker.sock"
+  - patterns:
+    - pattern-regex: '- "/var/run/docker.sock:.*"'
+    - pattern-inside: |
+        volumes:
+          ...
 - id: dockerfile.security.last-user-is-root.last-user-is-root
   patterns:
   - pattern: USER root
@@ -6349,6 +6397,52 @@ rules:
         rule_id: oqUeqn
         version_id: yeTN1o1
         url: https://semgrep.dev/playground/r/yeTN1o1/go.lang.security.decompression_bomb.potential-dos-via-decompression-bomb
+        origin: community
+- id: go.lang.security.reverseproxy-director.reverseproxy-director
+  message: ReverseProxy can remove headers added by Director. Consider using ReverseProxy.Rewrite
+    instead of ReverseProxy.Director.
+  languages:
+  - go
+  severity: WARNING
+  patterns:
+  - pattern-inside: |
+      import "net/http/httputil"
+      ...
+  - pattern-either:
+    - pattern: "$PROXY.Director = $FUNC"
+    - patterns:
+      - pattern-inside: |
+          httputil.ReverseProxy{
+              ...
+          }
+      - pattern: 'Director: $FUNC
+
+          '
+  metadata:
+    cwe:
+    - 'CWE-115: Misinterpretation of Input'
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - go
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: LOW
+    references:
+    - https://github.com/golang/go/issues/50580
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/go.lang.security.reverseproxy-director.reverseproxy-director
+    shortlink: https://sg.run/9AYYR
+    semgrep.dev:
+      rule:
+        r_id: 146567
+        rv_id: 928288
+        rule_id: zdUKzzA
+        version_id: qkTpk9K
+        url: https://semgrep.dev/playground/r/qkTpk9K/go.lang.security.reverseproxy-director.reverseproxy-director
         origin: community
 - id: go.lang.security.zip.path-traversal-inside-zip-extraction
   message: File traversal when extracting zip archive
@@ -18351,53 +18445,6 @@ rules:
     - "*.html"
   severity: WARNING
   pattern-regex: "{{.*?\\|\\s+safeseq(\\s+}})?"
-- id: python.django.security.django-no-csrf-token.django-no-csrf-token
-  patterns:
-  - pattern: "<form...>...</form>"
-  - pattern-either:
-    - pattern: '<form ... method="$METHOD" ...>...</form>
-
-        '
-    - pattern: "<form ... method='$METHOD' ...>...</form>\n"
-    - pattern: "<form ... method=$METHOD ...>...</form>\n"
-  - metavariable-regex:
-      metavariable: "$METHOD"
-      regex: "(?i)(post|put|delete|patch)"
-  - pattern-not-inside: "<form...>...{% csrf_token %}...</form>"
-  - pattern-not-inside: "<form...>...{{ $VAR.csrf_token }}...</form>"
-  message: Manually-created forms in django templates should specify a csrf_token
-    to prevent CSRF attacks.
-  languages:
-  - generic
-  severity: WARNING
-  metadata:
-    category: security
-    cwe: 'CWE-352: Cross-Site Request Forgery (CSRF)'
-    references:
-    - https://docs.djangoproject.com/en/4.2/howto/csrf/
-    confidence: MEDIUM
-    likelihood: MEDIUM
-    impact: MEDIUM
-    subcategory:
-    - audit
-    technology:
-    - django
-    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-    vulnerability_class:
-    - Cross-Site Request Forgery (CSRF)
-    source: https://semgrep.dev/r/python.django.security.django-no-csrf-token.django-no-csrf-token
-    shortlink: https://sg.run/N0Bp
-    semgrep.dev:
-      rule:
-        r_id: 73471
-        rv_id: 834427
-        rule_id: PeUyYG
-        version_id: yeTNgk0
-        url: https://semgrep.dev/playground/r/yeTNgk0/python.django.security.django-no-csrf-token.django-no-csrf-token
-        origin: community
-  paths:
-    include:
-    - "*.html"
 - id: python.django.security.django-using-request-post-after-is-valid.django-using-request-post-after-is-valid
   patterns:
   - pattern-inside: |
@@ -23176,6 +23223,52 @@ rules:
   pattern-either:
   - pattern: hashlib.new("=~/[M|m][D|d][4|5]/", ...)
   - pattern: hashlib.new(..., name="=~/[M|m][D|d][4|5]/", ...)
+- id: python.lang.security.insecure-uuid-version.insecure-uuid-version
+  patterns:
+  - pattern: uuid.uuid1(...)
+  message: Using UUID version 1 for UUID generation can lead to predictable UUIDs
+    based on system information (e.g., MAC address, timestamp). This may lead to security
+    risks such as the sandwich attack. Consider using `uuid.uuid4()` instead for better
+    randomness and security.
+  metadata:
+    references:
+    - https://www.landh.tech/blog/20230811-sandwich-attack/
+    cwe:
+    - 'CWE-330: Use of Insufficiently Random Values'
+    owasp:
+    - A02:2021 - Cryptographic Failures
+    asvs:
+      section: V6 Stored Cryptography Verification Requirements
+      control_id: 6.3.2 Insecure UUID Generation
+      control_url: https://github.com/OWASP/ASVS/blob/master/4.0/en/0x14-V6-Cryptography.md#v63-random-values
+      version: '4'
+    category: security
+    technology:
+    - python
+    subcategory:
+    - audit
+    likelihood: LOW
+    impact: MEDIUM
+    confidence: MEDIUM
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/python.lang.security.insecure-uuid-version.insecure-uuid-version
+    shortlink: https://sg.run/BYBgW
+    semgrep.dev:
+      rule:
+        r_id: 148295
+        rv_id: 940581
+        rule_id: kxUd1yD
+        version_id: NdTq3yj
+        url: https://semgrep.dev/playground/r/NdTq3yj/python.lang.security.insecure-uuid-version.insecure-uuid-version
+        origin: community
+  languages:
+  - python
+  severity: WARNING
+  fix-regex:
+    regex: uuid1
+    replacement: uuid4
 - id: python.lang.security.unverified-ssl-context.unverified-ssl-context
   patterns:
   - pattern-either:
@@ -32810,3 +32903,63 @@ rules:
   languages:
   - yaml
   severity: WARNING
+- id: yaml.openapi.security.openai-consequential-action-false.openai-consequential-action-false
+  languages:
+  - yaml
+  message: 'Found ''x-openai-isConsequential: false'' in a state-changing HTTP method:
+    $METHOD $PATH. This Action configuration will enable the ''Always Allow'' option
+    for state-changing HTTP methods, such as POST, PUT, PATCH, or DELETE. The risk
+    of a user selecting the ''Always Allow'' button is that the agent could perform
+    unintended actions on behalf of the user. When working with sensitive functionality,
+    it is always best to include a Human In The Loop (HITL) type of control. Consider
+    the trade-off between security  and user friction and then make a risk-based decision
+    about this function.'
+  severity: WARNING
+  pattern-either:
+  - pattern-inside: |
+      post:
+        ...
+        x-openai-isConsequential: false
+  - pattern-inside: |
+      put:
+        ...
+        x-openai-isConsequential: false
+  - pattern-inside: |
+      patch:
+        ...
+        x-openai-isConsequential: false
+  - pattern-inside: |
+      delete:
+        ...
+        x-openai-isConsequential: false
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    technology:
+    - openapi
+    - openai
+    likelihood: HIGH
+    impact: HIGH
+    confidence: HIGH
+    cwe: 'CWE-441: Unintended Proxy or Intermediary (''Confused Deputy'')'
+    owasp:
+    - A04:2021 Insecure Design
+    - LLM08:2023 - Excessive Agency
+    references:
+    - https://platform.openai.com/docs/actions/consequential-flag
+    - https://owasp.org/Top10/A04_2021-Insecure_Design/
+    - https://owasp.org/www-project-top-10-for-large-language-model-applications/assets/PDF/OWASP-Top-10-for-LLMs-2023-v1_1.pdf
+    license: Commons Clause License Condition v1.0[LGPL-2.1-only]
+    vulnerability_class:
+    - Server-Side Request Forgery (SSRF)
+    source: https://semgrep.dev/r/yaml.openapi.security.openai-consequential-action-false.openai-consequential-action-false
+    shortlink: https://sg.run/x8EEP
+    semgrep.dev:
+      rule:
+        r_id: 146574
+        rv_id: 928308
+        rule_id: yyURooD
+        version_id: 2KTdgAD
+        url: https://semgrep.dev/playground/r/2KTdgAD/yaml.openapi.security.openai-consequential-action-false.openai-consequential-action-false
+        origin: community

@@ -1,71 +1,5 @@
 ---
 rules:
-- id: gitlab.bandit.B101
-  languages:
-  - python
-  message: |
-    The application was found using `assert` in non-test code. Usually reserved for debug and test
-    code, the `assert`
-    function is commonly used to test conditions before continuing execution. However, enclosed
-    code will be removed
-    when compiling Python code to optimized byte code. Depending on the assertion and subsequent
-    logic, this could
-    lead to undefined behavior of the application or application crashes.
-
-    To remediate this issue, remove the `assert` calls. If necessary, replace them with either `if`
-    conditions or
-    `try/except` blocks.
-
-    Example using `try/except` instead of `assert`:
-    ```
-    # Below try/except is equal to the assert statement of:
-    # assert user.is_authenticated(), "user must be authenticated"
-    try:
-        if not user.is_authenticated():
-            raise AuthError("user must be authenticated")
-    except AuthError as e:
-        # Handle error
-        # ...
-        # Return, do not continue processing
-        return
-    ```
-  metadata:
-    cwe: CWE-754
-    category: security
-    shortDescription: Improper check for unusual or exceptional conditions
-    owasp:
-    - A6:2017-Security Misconfiguration
-    - A05:2021-Security Misconfiguration
-    security-severity: Info
-    primary_identifier: bandit.B101
-    secondary_identifiers:
-    - name: Bandit Test ID B101
-      type: bandit_test_id
-      value: B101
-    license: MIT
-    vulnerability_class:
-    - Other
-    source: https://semgrep.dev/r/gitlab.bandit.B101
-    shortlink: https://sg.run/yzWA
-    semgrep.dev:
-      rule:
-        r_id: 11524
-        rv_id: 920076
-        rule_id: KxU4lp
-        version_id: rxTjvjK
-        url: https://semgrep.dev/playground/r/rxTjvjK/gitlab.bandit.B101
-        origin: community
-    subcategory:
-    - audit
-  patterns:
-  - pattern: assert(...)
-  - pattern-not-inside: |
-      import pytest
-      ...
-  - pattern-not-inside: |
-      import unittest
-      ...
-  severity: INFO
 - id: gitlab.bandit.B102
   languages:
   - python
@@ -29863,6 +29797,42 @@ rules:
         - pattern: pread
         - pattern: recv
         - pattern: recvfrom
+- id: trailofbits.generic.amqp-unencrypted-transport.amqp-unencrypted-transport
+  message: 'Found unencrypted AMQP connection, prefer TLS encrypted `amqps://` transport
+
+    '
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - amqp
+    - rabbitmq
+    references:
+    - https://www.rabbitmq.com/docs/uri-spec#the-amqps-uri-scheme
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.generic.amqp-unencrypted-transport.amqp-unencrypted-transport
+    shortlink: https://sg.run/3qYKK
+    semgrep.dev:
+      rule:
+        r_id: 150287
+        rv_id: 943181
+        rule_id: lBU4nKK
+        version_id: PkTQWoY
+        url: https://semgrep.dev/playground/r/PkTQWoY/trailofbits.generic.amqp-unencrypted-transport.amqp-unencrypted-transport
+        origin: community
+  options:
+    generic_ellipsis_max_span: 0
+  pattern: amqp://...
 - id: trailofbits.generic.container-privileged.container-privileged
   message: Found container command (docker, podman) with extended privileges
   languages:
@@ -30095,6 +30065,120 @@ rules:
         url: https://semgrep.dev/playground/r/DkTG0Xg/trailofbits.generic.installer-allow-untrusted.installer-allow-untrusted
         origin: community
   pattern: installer ... -allowUntrusted
+- id: trailofbits.generic.mongodb-insecure-transport.mongodb-insecure-transport
+  message: |
+    Found insecure MongoDB connection, prefer TLS encrypted transport by
+    setting the `tls=true` connection option and ensuring proper verification
+  languages:
+  - regex
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - mongodb
+    references:
+    - https://www.mongodb.com/docs/manual/reference/connection-string/#connection-options
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.mongodb-insecure-transport.mongodb-insecure-transport
+    shortlink: https://sg.run/4b6q5
+    semgrep.dev:
+      rule:
+        r_id: 150288
+        rv_id: 943182
+        rule_id: PeUJPl9
+        version_id: JdTD3Lg
+        url: https://semgrep.dev/playground/r/JdTD3Lg/trailofbits.generic.mongodb-insecure-transport.mongodb-insecure-transport
+        origin: community
+  pattern-either:
+  - patterns:
+    - pattern-regex: "(?i)mongodb://.+$"
+    - pattern-not-regex: "(?i)(?:(.)?)?mongodb://.+[?&]tls=true(?:\\g{1}|$|&).*"
+    - pattern-not-regex: "(?i)(?:(.)?)?mongodb://.+[?&]ssl=true(?:\\g{1}|$|&).*"
+  - pattern-regex: "(?i)mongodb://.+[?&]tlsAllowInvalidCertificates=true.*$"
+  - pattern-regex: "(?i)mongodb://.+[?&]tlsAllowInvalidHostnames=true.*$"
+  - pattern-regex: "(?i)mongodb://.+[?&]tlsInsecure=true.*$"
+- id: trailofbits.generic.mysql-insecure-sslmode.mysql-insecure-sslmode
+  message: 'Found MySQL connection string disabling SSL verification
+
+    '
+  languages:
+  - regex
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: MEDIUM
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - mysql
+    references:
+    - https://dev.mysql.com/doc/connector-net/en/connector-net-8-0-connection-options.html
+    - https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-security.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.mysql-insecure-sslmode.mysql-insecure-sslmode
+    shortlink: https://sg.run/Pe0nz
+    semgrep.dev:
+      rule:
+        r_id: 150289
+        rv_id: 943183
+        rule_id: JDUN9Bb
+        version_id: 5PT9PLn
+        url: https://semgrep.dev/playground/r/5PT9PLn/trailofbits.generic.mysql-insecure-sslmode.mysql-insecure-sslmode
+        origin: community
+  pattern-either:
+  - pattern-regex: "(?i)Ssl[ -]?Mode=(Disabled|None|Preferred)"
+  - pattern-regex: "(?i)sslMode=(DISABLED|PREFERRED)"
+  - pattern-regex: "(?i)useSSL=false"
+- id: trailofbits.generic.node-disable-certificate-validation.node-disable-certificate-validation
+  message: |
+    Setting this environment variable disables TLS certificate validation.
+    This makes TLS, and HTTPS by extension, insecure. The use of this
+    environment variable is strongly discouraged.
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - nodejs
+    references:
+    - https://nodejs.org/api/cli.html#node_tls_reject_unauthorizedvalue
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.node-disable-certificate-validation.node-disable-certificate-validation
+    shortlink: https://sg.run/JDGny
+    semgrep.dev:
+      rule:
+        r_id: 150290
+        rv_id: 943184
+        rule_id: 5rUdgRW
+        version_id: GxTPxzL
+        url: https://semgrep.dev/playground/r/GxTPxzL/trailofbits.generic.node-disable-certificate-validation.node-disable-certificate-validation
+        origin: community
+  pattern-either:
+  - pattern: NODE_TLS_REJECT_UNAUTHORIZED=0
+  - pattern: NODE_TLS_REJECT_UNAUTHORIZED='0'
+  - pattern: NODE_TLS_REJECT_UNAUTHORIZED="0"
 - id: trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
   message: Found `openssl` command using insecure flags
   languages:
@@ -30132,6 +30216,80 @@ rules:
   - pattern: 'openssl ... -nodes '
   - pattern: 'openssl ... -noenc '
   - pattern: 'openssl ... -sha1 '
+- id: trailofbits.generic.postgres-insecure-sslmode.postgres-insecure-sslmode
+  message: 'Found PostgreSQL connection string disabling SSL verification
+
+    '
+  languages:
+  - regex
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe: 'CWE-295: Improper Certificate Validation'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - postgresql
+    references:
+    - https://www.postgresql.org/docs/current/libpq-connect.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.generic.postgres-insecure-sslmode.postgres-insecure-sslmode
+    shortlink: https://sg.run/5rol0
+    semgrep.dev:
+      rule:
+        r_id: 150291
+        rv_id: 943185
+        rule_id: GdUvdn1
+        version_id: RGTAQqD
+        url: https://semgrep.dev/playground/r/RGTAQqD/trailofbits.generic.postgres-insecure-sslmode.postgres-insecure-sslmode
+        origin: community
+  pattern-either:
+  - pattern-regex: "(?i)postgresql://.+[?&]sslmode=(disable|allow|prefer).*$"
+  - pattern-regex: "(?i)postgresql://.+[?&]requiressl=0.*$"
+  - pattern-regex: "(?i)postgresql://.+[?&]ssl=false.*$"
+  - pattern-regex: "(?i)postgres://.+[?&]sslmode=(disable|allow|prefer).*$"
+  - pattern-regex: "(?i)postgres://.+[?&]requiressl=0.*$"
+  - pattern-regex: "(?i)postgres://.+[?&]ssl=false.*$"
+- id: trailofbits.generic.redis-unencrypted-transport.redis-unencrypted-transport
+  message: 'Found unencrypted Redis connection, prefer TLS encrypted `rediss://` transport
+
+    '
+  languages:
+  - generic
+  severity: WARNING
+  metadata:
+    category: security
+    subcategory:
+    - audit
+    cwe: 'CWE-319: Cleartext Transmission of Sensitive Information'
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - redis
+    references:
+    - https://redis.io/docs/latest/develop/connect/cli/#host-port-password-and-database
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Mishandled Sensitive Information
+    source: https://semgrep.dev/r/trailofbits.generic.redis-unencrypted-transport.redis-unencrypted-transport
+    shortlink: https://sg.run/GdP8q
+    semgrep.dev:
+      rule:
+        r_id: 150292
+        rv_id: 943186
+        rule_id: ReUD46j
+        version_id: A8TJrek
+        url: https://semgrep.dev/playground/r/A8TJrek/trailofbits.generic.redis-unencrypted-transport.redis-unencrypted-transport
+        origin: community
+  options:
+    generic_ellipsis_max_span: 0
+  pattern: redis://...
 - id: trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key-checking
   message: Found `ssh` command disabling host key checking
   languages:
@@ -30625,6 +30783,568 @@ rules:
       $X, ... = strconv.ParseUint(..., ..., 8)
       ...
       int8($X)
+- id: trailofbits.hcl.nomad.docker-hardcoded-password.docker-hardcoded-password
+  message: 'Found Nomad task using Docker auth with hardcoded password
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - nomad
+    - docker
+    - podman
+    references:
+    - https://developer.hashicorp.com/nomad/docs/drivers/docker#password
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.hcl.nomad.docker-hardcoded-password.docker-hardcoded-password
+    shortlink: https://sg.run/Reqnq
+    semgrep.dev:
+      rule:
+        r_id: 150293
+        rv_id: 943187
+        rule_id: AbU9oOo
+        version_id: BjT1DzD
+        url: https://semgrep.dev/playground/r/BjT1DzD/trailofbits.hcl.nomad.docker-hardcoded-password.docker-hardcoded-password
+        origin: community
+  patterns:
+  - pattern-inside: |
+      task "..." {
+        ...
+        driver = "$RUNTIME"
+        ...
+        config {
+          ...
+          auth {
+            ...
+          }
+          ...
+        }
+        ...
+      }
+  - pattern: password = "..."
+  - metavariable-regex:
+      metavariable: "$RUNTIME"
+      regex: "(docker|podman)"
+- id: trailofbits.hcl.nomad.docker-privileged-mode.docker-privileged-mode
+  message: 'Found Nomad task using Docker containers in privileged mode
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-250: Execution with Unnecessary Privileges'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - nomad
+    - docker
+    - podman
+    references:
+    - https://developer.hashicorp.com/nomad/docs/drivers/docker#privileged
+    - https://developer.hashicorp.com/nomad/docs/drivers/docker#allow_privileged
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/trailofbits.hcl.nomad.docker-privileged-mode.docker-privileged-mode
+    shortlink: https://sg.run/Abkr2
+    semgrep.dev:
+      rule:
+        r_id: 150294
+        rv_id: 943188
+        rule_id: BYUX3g0
+        version_id: DkTN9xp
+        url: https://semgrep.dev/playground/r/DkTN9xp/trailofbits.hcl.nomad.docker-privileged-mode.docker-privileged-mode
+        origin: community
+  pattern-either:
+  - patterns:
+    - pattern-inside: |
+        task "..." {
+          ...
+          config {
+            ...
+          }
+          ...
+        }
+    - pattern: privileged = true
+  - patterns:
+    - pattern-inside: |
+        plugin "$RUNTIME" {
+          ...
+          config {
+            ...
+          }
+          ...
+        }
+    - pattern: allow_privileged = true
+    - metavariable-regex:
+        metavariable: "$RUNTIME"
+        regex: "(docker|podman)"
+- id: trailofbits.hcl.nomad.podman-tls-verify-disabled.podman-tls-verify-disabled
+  message: 'Found Nomad task using Podman with registry TLS verification disabled
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - nomad
+    - podman
+    references:
+    - https://developer.hashicorp.com/nomad/plugins/drivers/podman#auth
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.hcl.nomad.podman-tls-verify-disabled.podman-tls-verify-disabled
+    shortlink: https://sg.run/BYwbA
+    semgrep.dev:
+      rule:
+        r_id: 150295
+        rv_id: 943189
+        rule_id: DbU6rPy
+        version_id: WrTElNZ
+        url: https://semgrep.dev/playground/r/WrTElNZ/trailofbits.hcl.nomad.podman-tls-verify-disabled.podman-tls-verify-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      task "..." {
+        ...
+        driver = "podman"
+        ...
+        config {
+          ...
+          auth {
+            ...
+          }
+          ...
+        }
+        ...
+      }
+  - pattern: tlsVerify = false
+- id: trailofbits.hcl.nomad.root-user.root-user
+  message: 'Found Nomad task using root user
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-250: Execution with Unnecessary Privileges'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: LOW
+    technology:
+    - nomad
+    references:
+    - https://developer.hashicorp.com/nomad/docs/job-specification/task#user
+    - https://developer.hashicorp.com/nomad/docs/configuration/client#user-denylist
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/trailofbits.hcl.nomad.root-user.root-user
+    shortlink: https://sg.run/DbOnP
+    semgrep.dev:
+      rule:
+        r_id: 150296
+        rv_id: 943190
+        rule_id: WAUW4XK
+        version_id: 0bT17rJ
+        url: https://semgrep.dev/playground/r/0bT17rJ/trailofbits.hcl.nomad.root-user.root-user
+        origin: community
+  patterns:
+  - pattern-inside: task "..." { ... }
+  - pattern-either:
+    - pattern: user = "root"
+    - pattern: user = "Administrator"
+- id: trailofbits.hcl.nomad.tls-hostname-verification-disabled.tls-hostname-verification-disabled
+  message: 'Found Nomad `tls` block with server hostname verification disabled
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - terraform
+    references:
+    - https://developer.hashicorp.com/nomad/docs/configuration/tls
+    - https://github.com/hashicorp/nomad/blob/v1.8.0/nomad/structs/config/tls.go#L25-L31
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.hcl.nomad.tls-hostname-verification-disabled.tls-hostname-verification-disabled
+    shortlink: https://sg.run/WAzn2
+    semgrep.dev:
+      rule:
+        r_id: 150297
+        rv_id: 943191
+        rule_id: 0oULP8X
+        version_id: K3TJz57
+        url: https://semgrep.dev/playground/r/K3TJz57/trailofbits.hcl.nomad.tls-hostname-verification-disabled.tls-hostname-verification-disabled
+        origin: community
+  patterns:
+  - pattern-inside: |
+      tls {
+        ...
+        ca_file = ...
+        ...
+      }
+  - pattern-inside: |
+      tls {
+        ...
+        cert_file = ...
+        ...
+      }
+  - pattern-inside: |
+      tls {
+        ...
+        key_file = ...
+        ...
+      }
+  - pattern-either:
+    - patterns:
+      - pattern-inside: tls { ... }
+      - pattern: verify_server_hostname = false
+    - patterns:
+      - pattern: tls { ... }
+      - pattern-not: |
+          tls {
+            ...
+            verify_server_hostname = $ANY
+            ...
+          }
+- id: trailofbits.hcl.terraform.aws-oidc-role-policy-duplicate-condition.aws-oidc-role-policy-duplicate-condition
+  message: |
+    Found AWS role policy for GitHub Actions with duplicate condition.
+    This overrides previous conditions, and the last condition with the
+    duplicated key "wins." This likely breaks access controls and allows
+    unauthorized access.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-284: Improper Access Control'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - terraform
+    - aws
+    references:
+    - https://securitylabs.datadoghq.com/articles/exploring-github-to-aws-keyless-authentication-flaws/
+    - https://www.rezonate.io/blog/github-misconfigurations-put-gcp-aws-in-account-takeover-risk
+    - https://github.com/Rezonate-io/github-oidc-checker/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/trailofbits.hcl.terraform.aws-oidc-role-policy-duplicate-condition.aws-oidc-role-policy-duplicate-condition
+    shortlink: https://sg.run/0oKDj
+    semgrep.dev:
+      rule:
+        r_id: 150298
+        rv_id: 943192
+        rule_id: KxUvWD0
+        version_id: qkT41WW
+        url: https://semgrep.dev/playground/r/qkT41WW/trailofbits.hcl.terraform.aws-oidc-role-policy-duplicate-condition.aws-oidc-role-policy-duplicate-condition
+        origin: community
+  patterns:
+  - pattern-inside: |
+      {
+        ...
+        Statement = [...]
+        ...
+      }
+  - pattern-inside: |
+      {
+        ...,
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        ...
+      }
+  - pattern-either:
+    - pattern: |
+        {
+          ...
+          "Condition": {
+              ...
+              "$KEY": {...}
+              ...
+              "$KEY": {...}
+              ...
+          }
+          ...
+        }
+    - pattern: |
+        {
+          ...
+          "Condition": {
+              ...
+              "StringEquals": {
+                  ...
+                  "$KEY": ...,
+                  ...
+                  "$KEY": ...,
+                  ...
+              }
+              ...
+          }
+          ...
+        }
+    - pattern: |
+        {
+          ...
+          "Condition": {
+              ...
+              "StringLike": {
+                  ...
+                  "$KEY": ...,
+                  ...
+                  "$KEY": ...,
+                  ...
+              }
+              ...
+          }
+          ...
+        }
+- id: trailofbits.hcl.terraform.aws-oidc-role-policy-missing-sub.aws-oidc-role-policy-missing-sub
+  message: |
+    Found AWS role policy for GitHub Actions missing OIDC subject. This
+    means any GitHub repository can assume this role in CI.
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-284: Improper Access Control'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - terraform
+    - aws
+    references:
+    - https://securitylabs.datadoghq.com/articles/exploring-github-to-aws-keyless-authentication-flaws/
+    - https://www.rezonate.io/blog/github-misconfigurations-put-gcp-aws-in-account-takeover-risk
+    - https://github.com/Rezonate-io/github-oidc-checker/
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authorization
+    source: https://semgrep.dev/r/trailofbits.hcl.terraform.aws-oidc-role-policy-missing-sub.aws-oidc-role-policy-missing-sub
+    shortlink: https://sg.run/KxRn5
+    semgrep.dev:
+      rule:
+        r_id: 150299
+        rv_id: 943193
+        rule_id: qNU28dk
+        version_id: l4TxrWy
+        url: https://semgrep.dev/playground/r/l4TxrWy/trailofbits.hcl.terraform.aws-oidc-role-policy-missing-sub.aws-oidc-role-policy-missing-sub
+        origin: community
+  patterns:
+  - pattern-inside: |
+      {
+        ...
+        Statement = [...]
+        ...
+      }
+  - pattern-inside: |
+      {
+        ...,
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        ...
+      }
+  - pattern: |
+      {
+        ...
+        "Condition": {
+            ...
+            "StringEquals": {
+                ...
+                "token.actions.githubusercontent.com:aud": ...,
+                ...
+            }
+            ...
+        }
+        ...
+      }
+  - pattern-not: |
+      {
+        ...
+        "Condition": {
+            ...
+            "StringEquals": {
+                ...
+                "token.actions.githubusercontent.com:sub": ...,
+                ...
+                "token.actions.githubusercontent.com:aud": ...,
+                ...
+            }
+            ...
+        }
+        ...
+      }
+  - pattern-not: |
+      {
+        ...
+        "Condition": {
+            ...
+            "StringEquals": {
+                ...
+                "token.actions.githubusercontent.com:aud": ...,
+                ...
+                "token.actions.githubusercontent.com:sub": ...,
+                ...
+            }
+            ...
+        }
+        ...
+      }
+  - pattern-not: |
+      {
+        ...
+        "Condition": {
+            ...
+            "StringLike": {
+                ...
+                "token.actions.githubusercontent.com:sub": ...,
+                ...
+            }
+            ...
+            "StringEquals": {
+                ...
+                "token.actions.githubusercontent.com:aud": ...,
+                ...
+            }
+            ...
+        }
+        ...
+      }
+  - pattern-not: |
+      {
+        ...
+        "Condition": {
+            ...
+            "StringEquals": {
+                ...
+                "token.actions.githubusercontent.com:aud": ...,
+                ...
+            }
+            ...
+            "StringLike": {
+                ...
+                "token.actions.githubusercontent.com:sub": ...,
+                ...
+            }
+            ...
+        }
+        ...
+      }
+- id: trailofbits.hcl.terraform.vault-hardcoded-token.vault-hardcoded-token
+  message: 'Found Terraform Vault instance with hardcoded token
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - terraform
+    references:
+    - https://registry.terraform.io/providers/hashicorp/vault/latest/docs#token
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.hcl.terraform.vault-hardcoded-token.vault-hardcoded-token
+    shortlink: https://sg.run/4b6qz
+    semgrep.dev:
+      rule:
+        r_id: 150300
+        rv_id: 943194
+        rule_id: lBU4nKL
+        version_id: YDTv6AY
+        url: https://semgrep.dev/playground/r/YDTv6AY/trailofbits.hcl.terraform.vault-hardcoded-token.vault-hardcoded-token
+        origin: community
+  patterns:
+  - pattern-inside: provider "vault" { ... }
+  - pattern: token = "..."
+- id: trailofbits.hcl.terraform.vault-skip-tls-verify.vault-skip-tls-verify
+  message: 'Found Terraform Vault instance with TLS verification disabled
+
+    '
+  languages:
+  - hcl
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - terraform
+    references:
+    - https://registry.terraform.io/providers/hashicorp/vault/latest/docs#skip_tls_verify
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.hcl.terraform.vault-skip-tls-verify.vault-skip-tls-verify
+    shortlink: https://sg.run/Pe0nW
+    semgrep.dev:
+      rule:
+        r_id: 150301
+        rv_id: 943195
+        rule_id: YGUp91o
+        version_id: 6xTx5Ex
+        url: https://semgrep.dev/playground/r/6xTx5Ex/trailofbits.hcl.terraform.vault-skip-tls-verify.vault-skip-tls-verify
+        origin: community
+  patterns:
+  - pattern-inside: provider "vault" { ... }
+  - pattern: skip_tls_verify = true
 - id: trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad-cors
   languages:
   - js
@@ -31159,6 +31879,592 @@ rules:
             fn $FUNC(...) -> $RETTYPE {
                 ...
             }
+- id: trailofbits.ruby.action-dispatch-insecure-ssl.action-dispatch-insecure-ssl
+  message: 'Found Rails application with insecure SSL setting.
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - rails
+    references:
+    - https://api.rubyonrails.org/v7.1.3.4/classes/ActionDispatch/SSL.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.action-dispatch-insecure-ssl.action-dispatch-insecure-ssl
+    shortlink: https://sg.run/JDGnW
+    semgrep.dev:
+      rule:
+        r_id: 150302
+        rv_id: 943196
+        rule_id: 6JUvPlK
+        version_id: o5TZy2l
+        url: https://semgrep.dev/playground/r/o5TZy2l/trailofbits.ruby.action-dispatch-insecure-ssl.action-dispatch-insecure-ssl
+        origin: community
+  patterns:
+  - pattern-inside: |
+      Rails.application.configure do
+        ...
+      end
+  - pattern-either:
+    - pattern: config.force_ssl = false
+    - pattern: 'config.ssl_options = { ..., secure_cookies: false, ... }'
+    - pattern: 'config.ssl_options = { ..., hsts: false, ... }'
+    - pattern: 'config.ssl_options = { ..., hsts: { ..., subdomains: false, ... },
+        ... }'
+- id: trailofbits.ruby.action-mailer-insecure-tls.action-mailer-insecure-tls
+  message: |
+    Found ActionMailer SMTP configuration with insecure TLS setting. These
+    settings do not require a successful, encrypted, verified TLS connection
+    is made. Set `enable_starttls: true` and `openssl_verify_mode` to verify
+    peer
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - rails
+    - actionmailer
+    references:
+    - https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.action-mailer-insecure-tls.action-mailer-insecure-tls
+    shortlink: https://sg.run/5rolX
+    semgrep.dev:
+      rule:
+        r_id: 150303
+        rv_id: 943197
+        rule_id: oqUg83Y
+        version_id: zyTlAnD
+        url: https://semgrep.dev/playground/r/zyTlAnD/trailofbits.ruby.action-mailer-insecure-tls.action-mailer-insecure-tls
+        origin: community
+  pattern-either:
+  - pattern: 'ActionMailer::Base.smtp_settings = { ..., openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
+      ... }'
+  - pattern: 'ActionMailer::Base.smtp_settings = { ..., openssl_verify_mode: ''none'',
+      ... }'
+  - pattern: 'ActionMailer::Base.smtp_settings = { ..., enable_starttls_auto: true,
+      ... }'
+- id: trailofbits.ruby.active-record-encrypts-misorder.active-record-encrypts-misorder
+  message: |
+    Found an ActiveRecord value with encryption before serialization. The
+    declaration of the serialized attribute should go before the encryption
+    declaration.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-311: Missing Encryption of Sensitive Data'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - rails
+    - activerecord
+    references:
+    - https://guides.rubyonrails.org/active_record_encryption.html#supported-types
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Cryptographic Issues
+    source: https://semgrep.dev/r/trailofbits.ruby.active-record-encrypts-misorder.active-record-encrypts-misorder
+    shortlink: https://sg.run/GdP12
+    semgrep.dev:
+      rule:
+        r_id: 150304
+        rv_id: 943198
+        rule_id: zdUK7Oq
+        version_id: pZTN6z0
+        url: https://semgrep.dev/playground/r/pZTN6z0/trailofbits.ruby.active-record-encrypts-misorder.active-record-encrypts-misorder
+        origin: community
+  patterns:
+  - pattern-inside: |
+      class $CLS < ApplicationRecord
+        ...
+      end
+  - pattern: |
+      encrypts($SYM, ...)
+      ...
+      serialize($SYM, ...)
+- id: trailofbits.ruby.active-record-hardcoded-encryption-key.active-record-hardcoded-encryption-key
+  message: 'Found hardcoded ActiveRecord encryption key
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - rails
+    - activerecord
+    references:
+    - https://guides.rubyonrails.org/active_record_encryption.html#supported-types
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.ruby.active-record-hardcoded-encryption-key.active-record-hardcoded-encryption-key
+    shortlink: https://sg.run/ReqRe
+    semgrep.dev:
+      rule:
+        r_id: 150305
+        rv_id: 943199
+        rule_id: pKU1781
+        version_id: 2KTYQLp
+        url: https://semgrep.dev/playground/r/2KTYQLp/trailofbits.ruby.active-record-hardcoded-encryption-key.active-record-hardcoded-encryption-key
+        origin: community
+  pattern-either:
+  - pattern: config.active_record.encryption.primary_key = "..."
+  - pattern: config.active_record.encryption.primary_key = [..., "...", ...]
+  - pattern: config.active_record.encryption.deterministic_key = "..."
+  - pattern: config.active_record.encryption.deterministic_key = [..., "...", ...]
+- id: trailofbits.ruby.faraday-disable-verification.faraday-disable-verification
+  message: 'Found Faraday HTTP request disabling SSL/TLS verification.
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - faraday
+    references:
+    - https://lostisland.github.io/faraday/#/customization/ssl-options
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.faraday-disable-verification.faraday-disable-verification
+    shortlink: https://sg.run/Abko8
+    semgrep.dev:
+      rule:
+        r_id: 150306
+        rv_id: 943200
+        rule_id: 2ZUzJZG
+        version_id: X0TLwgY
+        url: https://semgrep.dev/playground/r/X0TLwgY/trailofbits.ruby.faraday-disable-verification.faraday-disable-verification
+        origin: community
+  pattern-either:
+  - pattern: 'Faraday.new(..., ssl: { ..., verify: false, ... }, ...)'
+  - pattern: 'Faraday.new(..., ssl: { ..., verify_hostname: false, ... }, ...)'
+  - pattern: 'Faraday.new(..., ssl: { ..., verify_mode: OpenSSL::SSL::VERIFY_NONE,
+      ... }, ...)'
+- id: trailofbits.ruby.global-timeout.global-timeout
+  message: |
+    Found `Timeout::timeout` (or `timeout`) use. Setting a global timeout
+    can cause an exception to be raised anywhere in the passed block of code.
+    This precludes any possible clean up action typically associated with
+    rescuing from exceptions. This can lead to denial-of-service, data
+    integrity failure, and general availability concerns. Instead prefer to
+    use the library's built in timeout functionality, if it has any, to
+    ensure processing happens as expected. If it does not have built in
+    timeout functionality, then consider implementing it.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-460: Improper Cleanup on Thrown Exception'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: LOW
+    technology:
+    - ruby
+    references:
+    - https://ruby-doc.org/3.3.2/stdlibs/timeout/Timeout.html
+    - https://jvns.ca/blog/2015/11/27/why-rubys-timeout-is-dangerous-and-thread-dot-raise-is-terrifying/
+    - https://www.mikeperham.com/2015/05/08/timeout-rubys-most-dangerous-api/
+    - http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.ruby.global-timeout.global-timeout
+    shortlink: https://sg.run/BYwz2
+    semgrep.dev:
+      rule:
+        r_id: 150307
+        rv_id: 943201
+        rule_id: X5UQ61w
+        version_id: jQTz6QD
+        url: https://semgrep.dev/playground/r/jQTz6QD/trailofbits.ruby.global-timeout.global-timeout
+        origin: community
+  pattern-either:
+  - pattern: Timeout::timeout(...)
+  - pattern: Timeout.timeout(...)
+  - pattern: timeout(...)
+- id: trailofbits.ruby.insecure-rails-cookie-session-store.insecure-rails-cookie-session-store
+  message: |
+    Found Rails session cookie missing SameSite=Secure. As of Rails 7.2,
+    session cookies default to SameSite=Lax.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: LOW
+    technology:
+    - rails
+    references:
+    - https://api.rubyonrails.org/classes/ActionDispatch/Session/CookieStore.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.insecure-rails-cookie-session-store.insecure-rails-cookie-session-store
+    shortlink: https://sg.run/DbO2o
+    semgrep.dev:
+      rule:
+        r_id: 150308
+        rv_id: 943202
+        rule_id: j2Ug78v
+        version_id: 1QTob5Q
+        url: https://semgrep.dev/playground/r/1QTob5Q/trailofbits.ruby.insecure-rails-cookie-session-store.insecure-rails-cookie-session-store
+        origin: community
+  patterns:
+  - pattern: Rails.application.config.session_store(:cookie_store, ...)
+  - pattern-not: 'Rails.application.config.session_store(:cookie_store, ..., same_site:
+      :secure, ...)'
+- id: trailofbits.ruby.json-create-deserialization.json-create-deserialization
+  message: |
+    Found `json_create` class method. This implies custom JSON deserialization
+    is occuring. This can lead to RCE and other deserialization-type bugs.
+    Usage should be audited and, at least, fuzzed.
+  languages:
+  - ruby
+  severity: INFO
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: LOW
+    impact: HIGH
+    technology:
+    - ruby
+    references:
+    - https://github.blog/2024-06-20-execute-commands-by-sending-json-learn-how-unsafe-deserialization-vulnerabilities-work-in-ruby-projects/
+    - https://github.com/github/codeql/blob/main/ruby/ql/lib/codeql/ruby/security/UnsafeDeserializationCustomizations.qll
+    - https://stackoverflow.com/questions/17226402/whats-the-difference-between-json-load-and-json-parse-methods-of-ruby-lib
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.ruby.json-create-deserialization.json-create-deserialization
+    shortlink: https://sg.run/WAz0g
+    semgrep.dev:
+      rule:
+        r_id: 150309
+        rv_id: 943203
+        rule_id: 10UOqrZ
+        version_id: 9lTyoZX
+        url: https://semgrep.dev/playground/r/9lTyoZX/trailofbits.ruby.json-create-deserialization.json-create-deserialization
+        origin: community
+  patterns:
+  - pattern-inside: |
+      class $CLS
+        ...
+      end
+  - pattern: |
+      def self.json_create($OBJ)
+        ...
+      end
+- id: trailofbits.ruby.rails-cache-store-marshal.rails-cache-store-marshal
+  message: |
+    Found Rails cache store configured to allow Marshaling. As of Rails 7.1
+    the default serializer is `:marshal_7_1`. If an attacker can inject
+    data into the cache store (SSRF, etc.), then they can achieve code
+    execution when the object is later deserialized. Consider using a
+    custom serializer like JSON or MessagePack that does not fallback on
+    Marshal.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - audit
+    confidence: MEDIUM
+    likelihood: LOW
+    impact: LOW
+    technology:
+    - rails
+    references:
+    - https://github.com/rails/rails/blob/v7.1.4/activesupport/lib/active_support/cache.rb#L327
+    - https://github.com/rails/rails/blob/v7.1.4/activesupport/lib/active_support/cache/serializer_with_fallback.rb#L166-L172
+    - https://api.rubyonrails.org/v7.1.3.4/classes/ActiveSupport/Cache/MemCacheStore.html
+    - https://api.rubyonrails.org/v7.1.3.4/classes/ActiveSupport/Cache/Store.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.ruby.rails-cache-store-marshal.rails-cache-store-marshal
+    shortlink: https://sg.run/0oKN5
+    semgrep.dev:
+      rule:
+        r_id: 150310
+        rv_id: 943204
+        rule_id: 9AUdPvk
+        version_id: yeT0BAd
+        url: https://semgrep.dev/playground/r/yeT0BAd/trailofbits.ruby.rails-cache-store-marshal.rails-cache-store-marshal
+        origin: community
+  patterns:
+  - pattern-inside: |
+      Rails.application.configure do
+      ...
+      end
+  - pattern-either:
+    - patterns:
+      - pattern: config.cache_store = $STORE
+      - pattern-not: config.cache_store = $STORE2, ..., { ... }
+    - patterns:
+      - pattern: config.cache_store = $STORE, ..., { ... }
+      - pattern-not: 'config.cache_store = $STORE, ..., { ..., serializer: ..., ...
+          }'
+    - patterns:
+      - pattern: config.cache_store = $STORE, ..., $OPTIONS
+      - metavariable-pattern:
+          metavariable: "$OPTIONS"
+          patterns:
+          - pattern: "{ ..., serializer: :passthrough, ... }"
+          - pattern: "{ ..., serializer: :marshal_6_1, ... }"
+          - pattern: "{ ..., serializer: :marshal_7_0, ... }"
+          - pattern: "{ ..., serializer: :marshal_7_1, ... }"
+          - pattern: "{ ..., serializer: :message_pack, ... }"
+  - metavariable-pattern:
+      metavariable: "$STORE"
+      pattern-either:
+      - pattern: ":file_store"
+      - pattern: ":mem_cache_store"
+      - pattern: ":redis_cache_store"
+- id: trailofbits.ruby.rails-cookie-attributes.rails-cookie-attributes
+  message: 'Found Rails cookie set with insecure attribute.
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: LOW
+    technology:
+    - rails
+    references:
+    - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+    - https://api.rubyonrails.org/classes/ActionDispatch/Session/CookieStore.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.rails-cookie-attributes.rails-cookie-attributes
+    shortlink: https://sg.run/KxRbX
+    semgrep.dev:
+      rule:
+        r_id: 150311
+        rv_id: 943205
+        rule_id: yyUR7EP
+        version_id: rxT6o2b
+        url: https://semgrep.dev/playground/r/rxT6o2b/trailofbits.ruby.rails-cookie-attributes.rails-cookie-attributes
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern-inside: cookies[$ANY] = ...
+    - pattern-inside: cookies. ... .$ATTR[$ANY] = ...
+  - pattern-either:
+    - pattern: "{..., same_site: :none, ...}"
+    - pattern: "{..., same_site: :lax, ...}"
+    - pattern: "{..., httponly: false, ...}"
+    - pattern: "{..., secure: false, ...}"
+- id: trailofbits.ruby.rest-client-disable-verification.rest-client-disable-verification
+  message: 'Found RestClient HTTP request disabling SSL/TLS verification.
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-295: Improper Certificate Validation'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: HIGH
+    technology:
+    - restclient
+    references:
+    - https://github.com/rest-client/rest-client#ssl-client-certificates
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.rest-client-disable-verification.rest-client-disable-verification
+    shortlink: https://sg.run/qNnOy
+    semgrep.dev:
+      rule:
+        r_id: 150312
+        rv_id: 943206
+        rule_id: r6Uy7E2
+        version_id: bZTXKzJ
+        url: https://semgrep.dev/playground/r/bZTXKzJ/trailofbits.ruby.rest-client-disable-verification.rest-client-disable-verification
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: "$FUNC(..., :verify_ssl => false, ...)"
+    - pattern: "$FUNC(..., :verify_ssl => OpenSSL::SSL::VERIFY_NONE, ...)"
+  - metavariable-pattern:
+      metavariable: "$FUNC"
+      pattern-either:
+      - pattern: RestClient::Resource.new
+      - pattern: RestClient::Request.new
+      - pattern: RestClient::Request.execute
+- id: trailofbits.ruby.ruby-saml-skip-validation.ruby-saml-skip-validation
+  message: 'SAML response validation disabled for $KEY.
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-345: Insufficient Verification of Data Authenticity'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: MEDIUM
+    technology:
+    - saml
+    references:
+    - https://github.com/SAML-Toolkits/ruby-saml/blob/v1.16.0/lib/onelogin/ruby-saml/response.rb
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Improper Authentication
+    source: https://semgrep.dev/r/trailofbits.ruby.ruby-saml-skip-validation.ruby-saml-skip-validation
+    shortlink: https://sg.run/lBLO9
+    semgrep.dev:
+      rule:
+        r_id: 150313
+        rv_id: 943207
+        rule_id: bwUbjnB
+        version_id: NdTq9Xv
+        url: https://semgrep.dev/playground/r/NdTq9Xv/trailofbits.ruby.ruby-saml-skip-validation.ruby-saml-skip-validation
+        origin: community
+  pattern-either:
+  - pattern: 'OneLogin::RubySaml::Response.new($RESPONSE, {..., skip_audience: true,
+      ...})'
+  - pattern: 'OneLogin::RubySaml::Response.new($RESPONSE, {..., skip_authnstatement:
+      true, ...})'
+  - pattern: 'OneLogin::RubySaml::Response.new($RESPONSE, {..., skip_conditions: true,
+      ...})'
+  - pattern: 'OneLogin::RubySaml::Response.new($RESPONSE, {..., skip_destination:
+      true, ...})'
+  - pattern: 'OneLogin::RubySaml::Response.new($RESPONSE, {..., skip_recipient_check:
+      true, ...})'
+  - pattern: 'OneLogin::RubySaml::Response.new($RESPONSE, {..., skip_subject_confirmation:
+      true, ...})'
+  - patterns:
+    - pattern-either:
+      - pattern: |
+          $SETTINGS = OneLogin::RubySaml::Settings.new(...)
+          ...
+          $SETTINGS.$KEY = true
+      - pattern: |
+          $SETTINGS = OneLogin::RubySaml::Settings.new
+          ...
+          $SETTINGS.$KEY = true
+    - focus-metavariable: "$KEY"
+    - metavariable-pattern:
+        metavariable: "$KEY"
+        pattern-either:
+        - pattern: skip_audience
+        - pattern: skip_authnstatement
+        - pattern: skip_conditions
+        - pattern: skip_destination
+        - pattern: skip_recipient_check
+        - pattern: skip_subject_confirmation
+- id: trailofbits.ruby.yaml-unsafe-load.yaml-unsafe-load
+  message: 'Found YAML call to `unsafe_load`. This can lead to deserialization bugs
+    and RCE.
+
+    '
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-502: Deserialization of Untrusted Data'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - yaml
+    references:
+    - https://bishopfox.com/blog/ruby-vulnerabilities-exploits
+    - https://github.com/semgrep/semgrep-rules/blob/develop/ruby/lang/security/bad-deserialization-yaml.yaml
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - 'Insecure Deserialization '
+    source: https://semgrep.dev/r/trailofbits.ruby.yaml-unsafe-load.yaml-unsafe-load
+    shortlink: https://sg.run/YG2q4
+    semgrep.dev:
+      rule:
+        r_id: 150314
+        rv_id: 943208
+        rule_id: NbU3wbe
+        version_id: kbTYj6v
+        url: https://semgrep.dev/playground/r/kbTYj6v/trailofbits.ruby.yaml-unsafe-load.yaml-unsafe-load
+        origin: community
+  patterns:
+  - pattern-either:
+    - pattern: YAML.unsafe_load(...)
+    - pattern: Psych.unsafe_load(...)
+    - pattern: 'serialize(..., yaml: { ..., unsafe_load: true, ... }, ...)'
+  - pattern-not: YAML.unsafe_load("...")
+  - pattern-not: Psych.unsafe_load("...")
 - id: trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-url
   message: Found apt key download with unencrypted URL (e.g. HTTP, FTP, etc.)
   languages:
@@ -31944,3 +33250,331 @@ rules:
   - metavariable-regex:
       metavariable: "$VALUE"
       regex: "(?i)^(http|ftp)://.*"
+- id: trailofbits.yaml.github-actions.aws-secret-key.aws-secret-key
+  message: |
+    Found long-term access key. Instead prefer AWS role assumption and
+    temporary OIDC security credentials.
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - aws
+    - github-actions
+    references:
+    - https://docs.aws.amazon.com/IAM/latest/UserGuide/security-creds.html#sec-alternatives-to-long-term-access-keys
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+    - https://github.com/aws-actions/configure-aws-credentials
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.aws-secret-key.aws-secret-key
+    shortlink: https://sg.run/6JzRB
+    semgrep.dev:
+      rule:
+        r_id: 150315
+        rv_id: 943209
+        rule_id: kxUdnEY
+        version_id: w8TKzld
+        url: https://semgrep.dev/playground/r/w8TKzld/trailofbits.yaml.github-actions.aws-secret-key.aws-secret-key
+        origin: community
+  patterns:
+  - pattern-inside: |
+      uses: $ACTION
+      ...
+  - metavariable-regex:
+      metavariable: "$ACTION"
+      regex: "^aws-actions/configure-aws-credentials"
+  - pattern-either:
+    - pattern: |
+        with:
+          ...
+          aws-secret-access-key: ...
+    - pattern: |
+        env:
+          ...
+          AWS_SECRET_ACCESS_KEY: ...
+- id: trailofbits.yaml.github-actions.azure-principal-secret.azure-principal-secret
+  message: |
+    Found long-term access key. Instead prefer Azure subscription ID and
+    temporary OIDC security credentials.
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - azure
+    - github-actions
+    references:
+    - https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure
+    - https://github.com/Azure/login
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.azure-principal-secret.azure-principal-secret
+    shortlink: https://sg.run/oqgdR
+    semgrep.dev:
+      rule:
+        r_id: 150316
+        rv_id: 943210
+        rule_id: wdU97En
+        version_id: xyTqAGD
+        url: https://semgrep.dev/playground/r/xyTqAGD/trailofbits.yaml.github-actions.azure-principal-secret.azure-principal-secret
+        origin: community
+  patterns:
+  - pattern-inside: |
+      uses: $ACTION
+      ...
+  - metavariable-regex:
+      metavariable: "$ACTION"
+      regex: "^azure/login"
+  - pattern: |
+      with:
+        ...
+        creds: ...
+- id: trailofbits.yaml.github-actions.gcp-credentials-json.gcp-credentials-json
+  message: |
+    Found long-term access key. Instead prefer GCP workload identity
+    federation and temporary OIDC security credentials.
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - gcp
+    - github-actions
+    references:
+    - https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-google-cloud-platform
+    - https://github.com/google-github-actions/auth
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.gcp-credentials-json.gcp-credentials-json
+    shortlink: https://sg.run/zdneW
+    semgrep.dev:
+      rule:
+        r_id: 150317
+        rv_id: 943211
+        rule_id: x8UK7Ep
+        version_id: O9TXnlq
+        url: https://semgrep.dev/playground/r/O9TXnlq/trailofbits.yaml.github-actions.gcp-credentials-json.gcp-credentials-json
+        origin: community
+  patterns:
+  - pattern-inside: |
+      uses: $ACTION
+      ...
+  - metavariable-regex:
+      metavariable: "$ACTION"
+      regex: "^google-github-actions/auth"
+  - pattern: |
+      with:
+        ...
+        credentials_json: ...
+- id: trailofbits.yaml.github-actions.jfrog-hardcoded-credential.jfrog-hardcoded-credential
+  message: 'Found long-term access key. Instead prefer JFrog temporary OIDC security
+    credentials
+
+    '
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - jfrog
+    - artifactory
+    - github-actions
+    references:
+    - https://jfrog.com/help/r/jfrog-platform-administration-documentation/openid-connect-integration
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-jfrog
+    - https://github.com/jfrog/setup-jfrog-cli#authorization
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.jfrog-hardcoded-credential.jfrog-hardcoded-credential
+    shortlink: https://sg.run/pKnOL
+    semgrep.dev:
+      rule:
+        r_id: 150318
+        rv_id: 943212
+        rule_id: OrUNg9p
+        version_id: e1T9Lrl
+        url: https://semgrep.dev/playground/r/e1T9Lrl/trailofbits.yaml.github-actions.jfrog-hardcoded-credential.jfrog-hardcoded-credential
+        origin: community
+  patterns:
+  - pattern-inside: |
+      uses: $ACTION
+      ...
+  - metavariable-regex:
+      metavariable: "$ACTION"
+      regex: "^jfrog/setup-jfrog-cli"
+  - pattern: |
+      env:
+        ...
+        $VAR: ...
+  - focus-metavariable: "$VAR"
+  - metavariable-regex:
+      metavariable: "$VAR"
+      regex: "^(JF_PASSWORD|JF_ACCESS_TOKEN|JF_ENV_.+)$"
+- id: trailofbits.yaml.github-actions.pypi-publish-password.pypi-publish-password
+  message: |
+    Found long-term access key. Instead prefer PyPI trusted publishing and
+    temporary OIDC security credentials.
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - pypi
+    - github-actions
+    references:
+    - https://docs.pypi.org/trusted-publishers/
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-pypi
+    - https://github.com/pypa/gh-action-pypi-publish
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.pypi-publish-password.pypi-publish-password
+    shortlink: https://sg.run/2ZlPD
+    semgrep.dev:
+      rule:
+        r_id: 150319
+        rv_id: 943213
+        rule_id: eqU0Nle
+        version_id: vdTGp4g
+        url: https://semgrep.dev/playground/r/vdTGp4g/trailofbits.yaml.github-actions.pypi-publish-password.pypi-publish-password
+        origin: community
+  patterns:
+  - pattern-inside: |
+      uses: $ACTION
+      ...
+  - metavariable-regex:
+      metavariable: "$ACTION"
+      regex: "^pypa/gh-action-pypi-publish"
+  - pattern: |
+      with:
+        ...
+        password: ...
+- id: trailofbits.yaml.github-actions.rubygems-publish-key.rubygems-publish-key
+  message: |
+    Found long-term access key. Instead prefer RubyGems trusted publishing and
+    temporary OIDC security credentials.
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: LOW
+    impact: MEDIUM
+    technology:
+    - rubygems
+    - github-actions
+    references:
+    - https://guides.rubygems.org/trusted-publishing/
+    - https://guides.rubygems.org/api-key-scopes/#usage-with-gem-cli
+    - https://github.com/rubygems/release-gem
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.rubygems-publish-key.rubygems-publish-key
+    shortlink: https://sg.run/X5pKb
+    semgrep.dev:
+      rule:
+        r_id: 150320
+        rv_id: 943214
+        rule_id: v8UY7EL
+        version_id: d6TPQ4X
+        url: https://semgrep.dev/playground/r/d6TPQ4X/trailofbits.yaml.github-actions.rubygems-publish-key.rubygems-publish-key
+        origin: community
+  pattern: GEM_HOST_API_KEY
+- id: trailofbits.yaml.github-actions.vault-token.vault-token
+  message: |
+    Found long-term access key. Instead prefer Vault role assumption and
+    temporary OIDC security credentials.
+  languages:
+  - yaml
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-798: Use of Hard-coded Credentials'
+    subcategory:
+    - audit
+    confidence: HIGH
+    likelihood: HIGH
+    impact: MEDIUM
+    technology:
+    - vault
+    - github-actions
+    references:
+    - https://developer.hashicorp.com/vault/docs/platform/github-actions
+    - https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-hashicorp-vault
+    - https://github.com/hashicorp/vault-action
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Hard-coded Secrets
+    source: https://semgrep.dev/r/trailofbits.yaml.github-actions.vault-token.vault-token
+    shortlink: https://sg.run/j2n3J
+    semgrep.dev:
+      rule:
+        r_id: 150321
+        rv_id: 943215
+        rule_id: d8Urdo7
+        version_id: ZRT37Gb
+        url: https://semgrep.dev/playground/r/ZRT37Gb/trailofbits.yaml.github-actions.vault-token.vault-token
+        origin: community
+  patterns:
+  - pattern-inside: |
+      uses: $ACTION
+      ...
+  - metavariable-regex:
+      metavariable: "$ACTION"
+      regex: "^hashicorp/vault-action"
+  - pattern-either:
+    - pattern: |
+        with:
+          ...
+          token: ...
+    - pattern: |
+        env:
+          ...
+          VAULT_TOKEN: ...
