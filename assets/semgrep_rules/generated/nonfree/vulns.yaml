@@ -4859,7 +4859,7 @@ rules:
         url: https://semgrep.dev/playground/r/GxTDEKp/generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
         origin: community
   patterns:
-  - pattern-regex: (?i)(?:administrator_login_password|password)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}("[a-z0-9=_\-]{8,20}")(?:['|\"|\n|\r|\s|\x60|;]|$)
+  - pattern-regex: (?i)(?!password_env\s*=\s*"MSK_FETCHER_PASSWORD"$)(?:administrator_login_password|password)(?:[0-9a-z\-_\t .]{0,20})(?:[\s|']|[\s|"]){0,3}(?:=|>|:{1,3}=|\|\|:|<=|=>|:|\?=)(?:'|\"|\s|=|\x60){0,5}("[a-z0-9=_\-]{8,20}")(?:['|\"|\n|\r|\s|\x60|;]|$)
 - id: generic.secrets.gitleaks.heroku-api-key.heroku-api-key
   message: A gitleaks heroku-api-key was detected which attempts to identify hard-coded
     credentials. It is not recommended to store credentials in source-code, as this
