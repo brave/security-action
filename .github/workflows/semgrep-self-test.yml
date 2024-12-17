@@ -15,14 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Set repository variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
       - run: |
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
       - run: |
-          cd assets/semgrep_rules/; semgrep --test --disable-version-check --strict --metrics=off
+          cd assets/semgrep_rules/
+          SEMGREP_REPO_NAME=$REPO_NAME semgrep --test --disable-version-check --strict --metrics=off
         shell: bash
       - run: |
-          JSON=$(semgrep \
+          JSON=$(SEMGREP_REPO_NAME=$REPO_NAME semgrep \
             --disable-version-check --strict --metrics=off --json \
             $(find assets/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name '*.test.yml' -not -name '*.test.yaml' -not -path "assets/semgrep_rules/generated/*" | sed 's/^/-c /g') \
             assets/semgrep_rules/{client,services} || true)
