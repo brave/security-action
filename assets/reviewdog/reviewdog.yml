@@ -5,9 +5,9 @@ runner:
       set -e
       (semgrep \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
-          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
+          -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/vulns.yaml \
           -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
-          -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
+          -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/audit.yaml \
           $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
           --metrics=off \
           --quiet \
@@ -32,9 +32,9 @@ runner:
         --all-changed-files-suffix .svelte && \
       semgrep \
         -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/vulns.yaml \
+        -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/vulns.yaml \
         -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/nonfree/audit.yaml \
+        -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/vulns.yaml \
         $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
         --metrics=off \
         --json \
