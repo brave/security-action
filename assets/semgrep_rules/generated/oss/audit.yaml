@@ -29981,10 +29981,10 @@ rules:
     semgrep.dev:
       rule:
         r_id: 113215
-        rv_id: 833254
+        rv_id: 975175
         rule_id: DbU6R39
-        version_id: A8T370Z
-        url: https://semgrep.dev/playground/r/A8T370Z/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
+        version_id: 1QTokGb
+        url: https://semgrep.dev/playground/r/1QTokGb/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
         origin: community
   patterns:
   - pattern-either:
@@ -29992,6 +29992,9 @@ rules:
     - pattern: curl ... ftp://
   - pattern-not-inside: curl ... http://127.0.0.1
   - pattern-not-inside: curl ... http://localhost
+  - pattern-not-inside: curl ... http://169.254.169.254
+  - pattern-not-inside: curl ... http://[fd00:ec2::254]
+  - pattern-not-inside: curl ... http://metadata.google.internal
 - id: trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
   message: Found `gpg` command using insecure flags
   languages:
@@ -32317,6 +32320,52 @@ rules:
     - pattern: "{..., same_site: :lax, ...}"
     - pattern: "{..., httponly: false, ...}"
     - pattern: "{..., secure: false, ...}"
+- id: trailofbits.ruby.rails-params-json.rails-params-json
+  message: |
+    Found Rails parameters (`params`) using the `_json` parameter. This
+    parameter is subject to parser juggling. This may allow an attacker to
+    exploit differences in parameter processing at different points in the
+    request processing lifecycle. For example, object ID processing during
+    the authentication/authorization phase and action execution phase.
+  languages:
+  - ruby
+  severity: WARNING
+  metadata:
+    category: security
+    cwe: 'CWE-843: Access of Resource Using Incompatible Type (''Type Confusion'')'
+    subcategory:
+    - audit
+    confidence: LOW
+    likelihood: MEDIUM
+    impact: HIGH
+    technology:
+    - rails
+    references:
+    - https://nastystereo.com/security/rails-_json-juggling-attack.html
+    - https://api.rubyonrails.org/v5.1.7/classes/ActionDispatch/Http/Parameters.html
+    - https://api.rubyonrails.org/classes/ActionController/Parameters.html
+    license: AGPL-3.0 license
+    vulnerability_class:
+    - Other
+    source: https://semgrep.dev/r/trailofbits.ruby.rails-params-json.rails-params-json
+    shortlink: https://sg.run/Reqz2
+    semgrep.dev:
+      rule:
+        r_id: 150949
+        rv_id: 973913
+        rule_id: qNU28qG
+        version_id: w8TKy6N
+        url: https://semgrep.dev/playground/r/w8TKy6N/trailofbits.ruby.rails-params-json.rails-params-json
+        origin: community
+  pattern-either:
+  - pattern: params[:_json]
+  - pattern: params['_json']
+  - pattern: params.require(:_json)
+  - pattern: params.require('_json')
+  - pattern: params.fetch(:_json, ...)
+  - pattern: params.fetch('_json', ...)
+  - pattern: params.dig(:_json, ...)
+  - pattern: params.dig('_json', ...)
 - id: trailofbits.ruby.rest-client-disable-verification.rest-client-disable-verification
   message: 'Found RestClient HTTP request disabling SSL/TLS verification.
 

@@ -69,6 +69,8 @@ FileUtils.mkdir_p GENERATED_DIR
 
 BLOCKLIST = Set.new File.readlines("#{__dir__}/blocklist.txt").map(&:strip)
 
+LICENSES = Set.new
+
 class Hash
 	def recurse_add(*keys)
 		if keys.length > 2
@@ -87,6 +89,8 @@ class Categoriser
 	attr_reader :categories
 
 	NONFREE_LICENSES = Set.new ['CC-BY-NC-SA-4.0', 'Commons Clause License Condition v1.0[LGPL-2.1-only]']
+	NONREDIST_LICENSES = Set.new ['Semgrep Rules License v1.0. For more details, visit semgrep.dev/legal/rules-license']
+	OSS_LICENSES = Set.new ["MIT", "AGPL-3.0 license", "LGPL-3.0-or-later"]
 
 	CATEGORIZER = {
 		:security_noaudit_novuln => {
@@ -108,7 +112,15 @@ class Categoriser
 			rule: lambda { |rule| Categoriser::NONFREE_LICENSES.include? rule['metadata']['license'] },
 			inner: Categoriser::CATEGORIZER
 		},
+		:nonredist => {
+			rule: lambda { |rule| Categoriser::NONREDIST_LICENSES.include? rule['metadata']['license'] },
+			inner: Categoriser::CATEGORIZER
+		},
 		:oss => {
+			rule: lambda { |rule| Categoriser::OSS_LICENSES.include? rule['metadata']['license'] },
+			inner: Categoriser::CATEGORIZER
+		},
+		:others => {
 			rule: lambda { |_| true },
 			inner: Categoriser::CATEGORIZER
 		}
@@ -119,6 +131,7 @@ class Categoriser
 	end
 
 	def <<(other)
+		LICENSES << other['metadata']['license']
 		recurse_add(other, LICENSE_CATEGORIZER, @categories)
 	end
 
@@ -172,8 +185,8 @@ class Categoriser
 	private
 	def recurse_add(other, categorizer, c)
 
-		categorizer.each do |key, value|
-			if value[:rule][other]
+		categorizer.each do |key, value| # e.g. key: :nonfree, value: {rule: lambda { |rule| Categoriser::NONFREE_LICENSES.include? rule['metadata']['license'] }, inner: Categoriser::CATEGORIZER}
+			if value[:rule][other] # call categorizer rule, with the other argument
 				if value[:inner]
 					c[key] = {} unless c[key]
 
@@ -281,8 +294,6 @@ old_categories = Categoriser.from_files(GENERATED_DIR, "**/*.yaml")
 
 puts fmt_diff(categoriser.diff(old_categories))
 
+puts "LICENSES: #{LICENSES.to_a.join(', ')}"
+
 categoriser.write_files(GENERATED_DIR)
-
-# require 'pry'
-# binding.pry
-
