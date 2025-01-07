@@ -4,7 +4,7 @@ SEMGREP_VERSION = `semgrep --version`.strip
 
 HOST = 'https://semgrep.dev'
 
-files = Dir['client/*.yaml', 'services/*.yaml', 'generated/*/vulns.yaml', 'generated/*/audit.yaml']
+files = Dir['client/*.yaml', 'services/*.yaml', 'frozen/*/vuln.yaml', 'frozen/*/audit.yml', 'generated/*/vulns.yaml', 'generated/*/audit.yaml']
 
 rules = {'rules' => []}
 
