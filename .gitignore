@@ -635,3 +635,7 @@ tags
 # Ignore all local history of files
 .history
 .ionide
+
+### Some Rules are nonredist, avoid including them ###
+nonredist/
+assets/semgrep_rules/generated/nonredist/
