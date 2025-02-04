@@ -1,0 +1,23 @@
+rules:
+  - id: get-visible-entry
+    metadata:
+      author: Brian Johnson <bjohnson@brave.com>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/get-visible-entry.yaml
+      assignees: |
+        thypon
+        diracdeltas
+        bridiver
+      category: security
+    message: |
+      $FUNC usages should be vet by the security-team. Most of the time you want the last committed entry/url
+    severity: INFO
+    languages:
+      - cpp
+    patterns:
+      - pattern: $OBJ.$FUNC(...)
+      - metavariable-regex:
+            metavariable: $FUNC
+            regex: ^(GetVisibleEntry|GetVisibleURL)$

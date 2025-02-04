@@ -1,0 +1,27 @@
+rules:
+  - id: web-contents-user-data
+    metadata:
+      author: Brian Johnson <bjohnson@brave.com>
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/in-process-browser-test.yaml
+      assignees: |
+        goodov
+        cdesouza-chromium
+        bridiver
+      category: correctness
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/chrome_browser_design_principles.md#structure_modularity
+    pattern-either:
+      - pattern: public content::WebContentsUserData
+      - pattern: public WebContentsUserData
+    message: |
+      Prefer dependency injection
+
+      References:
+      - https://chromium.googlesource.com/chromium/src/+/main/docs/chrome_browser_design_principles.md#structure_modularity
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.cc"
+        - "*.h"
+    severity: INFO
