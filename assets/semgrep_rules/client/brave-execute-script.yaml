@@ -15,7 +15,7 @@ rules:
       $FUNC usages should be vet by the security-team.
 
       References:
-      - https://github.com/brave/brave-browser/wiki/Security-reviews (point 13)
+      - https://github.com/brave/brave-browser/wiki/Security-reviews (point 12)
     severity: INFO
     languages:
       - cpp
