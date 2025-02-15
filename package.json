@@ -9,7 +9,7 @@
         "lint-fix": "standard --fix --ignore assets/semgrep_rules"
     },
     "dependencies": {
-        "@octokit/core": "^5.0.2",
+        "@octokit/core": "^6.1.4",
         "@slack/web-api": "^7.0.0",
         "@tryfabric/mack": "^1.2.1",
         "glob": "^10.4.1",
