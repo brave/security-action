@@ -1,0 +1,38 @@
+rules:
+  - id: web-ui-origin-encoding
+    languages:
+      - typescript
+    severity: WARNING
+    message: URI components should be encoded using encodeURIComponent. This
+      prevents passed URLs and other encoded data from causing the WebUI URL
+      from being malformed or parsed incorrectly.
+    metadata:
+      author: |
+        Kyle Den Hartog <kdenhartog@brave.com>
+        Andrea Brancaleoni <abc@pompel.me>
+      confidence: LOW
+      assignees: |
+        kdenhartog
+        thypon
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/web-ui-origin-encoding.yaml
+      category: security
+      references:
+        - https://github.com/brave/brave-browser/issues/43367
+        - null
+    paths:
+      include:
+        - "*.ts"
+        - "*.js"
+        - "*.tsx"
+      exclude:
+        - test/
+        - "*.test.ts"
+    patterns:
+      - pattern-inside: '"..."' # get only strings
+      - pattern-either:
+          - pattern-regex: chrome:// # pattern should start with chrome:// to detect WebUI URLs
+          - pattern-regex: brave://wallet # pattern should start with chrome:// to detect WebUI URLs
+      - pattern-regex: .*(\$\{|\+).* # pattern should either contain a variable expansion with ${...} or adding a new string
+      - pattern-not-regex: .*encodeURIComponent(...).* # pattern should not contain encodeURIComponent
+      - pattern-not-regex: chrome://favicon/size/ # negate chrome://favicon legacy version which needs to be unencoded
+      - pattern-not-regex: brave://wallet(\$\{)([A-Za-z0-9\/]++)\} # ignore cases where wallet routing via paths are in use
