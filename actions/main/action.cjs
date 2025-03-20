@@ -10,7 +10,6 @@ kdenhartog`
 const HOTWORDS = `password
 cryptography
 login
-policy
 authentication
 authorization
 authn
