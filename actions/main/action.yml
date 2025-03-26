@@ -107,7 +107,7 @@ runs:
       shell: bash
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install tfsec
-      uses: jaxxstorm/action-install-gh-release@25d5e2dd555cd74f1fab9ac1e6ea117acde2c0c4 # v1.12.0
+      uses: jaxxstorm/action-install-gh-release@4304621e8c48d66093a8a214af5d5b5bc3b3d943 # v2.0.0
       with: # Grab a specific tag with caching
         repo: aquasecurity/tfsec
         tag: v1.28.1
