@@ -18,7 +18,6 @@ rules:
       category: security
       references:
         - https://github.com/brave/brave-browser/issues/43367
-        - null
     paths:
       include:
         - "*.ts"
@@ -35,4 +34,4 @@ rules:
       - pattern-regex: .*(\$\{|\+).* # pattern should either contain a variable expansion with ${...} or adding a new string
       - pattern-not-regex: .*encodeURIComponent(...).* # pattern should not contain encodeURIComponent
       - pattern-not-regex: chrome://favicon/size/ # negate chrome://favicon legacy version which needs to be unencoded
-      - pattern-not-regex: brave://wallet(\$\{)([A-Za-z0-9\/]++)\} # ignore cases where wallet routing via paths are in use
+      - pattern-not-regex: brave://wallet(\$\{)([A-Za-z0-9\/]+)\} # ignore cases where wallet routing via paths are in use
