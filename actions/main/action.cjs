@@ -179,7 +179,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
-    const shouldTrigger = reviewdogEnabledPr && context.payload.pull_request.draft === false && !assigneeRemovedLabel && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
+    const shouldTrigger = reviewdogEnabledPr && !assigneeRemovedLabel && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
     debugLog('Should trigger:', shouldTrigger)
 
     if (shouldTrigger) {
