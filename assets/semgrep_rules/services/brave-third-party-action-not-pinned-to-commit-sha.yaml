@@ -1,28 +1,36 @@
 rules:
   - id: brave-third-party-action-not-pinned-to-commit-sha
+    languages:
+      - yaml
+    severity: ERROR
+    message: An action sourced from a third-party repository on GitHub is not pinned
+      to a full length commit SHA. Pinning an action to a full length commit SHA
+      is currently the only way to use an action as an immutable release.
+      Pinning to a particular SHA helps mitigate the risk of a bad actor adding
+      a backdoor to the action's repository, as they would need to generate a
+      SHA-1 collision for a valid Git object payload.
     patterns:
       - pattern-inside: "{steps: ...}"
-      - pattern: |
-          uses: "$USES"
       - metavariable-pattern:
           metavariable: $USES
           language: generic
           patterns:
             - pattern-not-regex: ^[.]/
-            - pattern-not-regex: ^actions/
             - pattern-not-regex: ^brave/
             - pattern-not-regex: ^brave-intl/
             - pattern-not-regex: ^brave-experiments/
-            - pattern-not-regex: ^github/
-            - pattern-not-regex: ^aws-actions/
-            - pattern-not-regex: ^ruby/
-            - pattern-not-regex: ^slackapi/
             - pattern-not-regex: "@[0-9a-f]{40}$"
             - pattern-not-regex: ^docker://.*@sha256:[0-9a-f]{64}$
-    message: An action sourced from a third-party repository on GitHub is not pinned to a full length commit SHA. Pinning an action to a full length commit SHA is currently the only way to use an action as an immutable release. Pinning to a particular SHA helps mitigate the risk of a bad actor adding a backdoor to the action's repository, as they would need to generate a SHA-1 collision for a valid Git object payload.
-    languages:
-      - yaml
-    severity: WARNING
+      - pattern-either:
+        - patterns:
+          - pattern-regex: uses:\s+['"]?(?<USES>[^\s'"]*)['"]?(#\s+(?<VERSION>.*))
+          - metavariable-pattern:
+              metavariable: $VERSION
+              language: generic
+              patterns:
+                - pattern-not-regex: ^v\d+\.\d+\.\d+
+                - pattern-not-regex: ^\d+\.\d+\.\d+
+        - pattern-regex: uses:\s+['"]?(?<USES>[^\s'"]*)['"]?
     metadata:
       cwe:
         - "CWE-1357: Reliance on Insufficiently Trustworthy Component"
