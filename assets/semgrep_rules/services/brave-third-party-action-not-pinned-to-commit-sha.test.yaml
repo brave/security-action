@@ -59,6 +59,10 @@ jobs:
       - uses: docker://gcr.io/cloud-builders/gradle
       # ruleid: brave-third-party-action-not-pinned-to-commit-sha
       - uses: docker://alpine:3.8
+      - name: Notify Slack of success
+      # ruleid: brave-third-party-action-not-pinned-to-commit-sha
+        uses: 8398a7/action-slack@28ba43ae48961b90635b50953d216767a6bea486
+
   build2:
     name: Build and test using a local workflow
     # ok: brave-third-party-action-not-pinned-to-commit-sha

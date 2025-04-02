@@ -10,7 +10,7 @@ rules:
       a backdoor to the action's repository, as they would need to generate a
       SHA-1 collision for a valid Git object payload.
     patterns:
-      - pattern-inside: "{steps: ...}"
+      - pattern-regex: "uses:\\s+(?<USES>.*)\\s*$"
       - metavariable-pattern:
           metavariable: $USES
           language: generic
@@ -19,18 +19,8 @@ rules:
             - pattern-not-regex: ^brave/
             - pattern-not-regex: ^brave-intl/
             - pattern-not-regex: ^brave-experiments/
-            - pattern-not-regex: "@[0-9a-f]{40}$"
-            - pattern-not-regex: ^docker://.*@sha256:[0-9a-f]{64}$
-      - pattern-either:
-        - patterns:
-          - pattern-regex: uses:\s+['"]?(?<USES>[^\s'"]*)['"]?(#\s+(?<VERSION>.*))
-          - metavariable-pattern:
-              metavariable: $VERSION
-              language: generic
-              patterns:
-                - pattern-not-regex: ^v\d+\.\d+\.\d+
-                - pattern-not-regex: ^\d+\.\d+\.\d+
-        - pattern-regex: uses:\s+['"]?(?<USES>[^\s'"]*)['"]?
+            - pattern-not-regex: "@[0-9a-f]{40}\\s+#\\s+v?\\d+\\.\\d+\\.\\d+$"
+            - pattern-not-regex: "^docker://.*@sha256:[0-9a-f]{64}\\s+#\\s+v?\\d+\\.\\d+\\.\\d+$"
     metadata:
       cwe:
         - "CWE-1357: Reliance on Insufficiently Trustworthy Component"
