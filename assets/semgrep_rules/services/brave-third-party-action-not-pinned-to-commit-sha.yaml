@@ -3,12 +3,21 @@ rules:
     languages:
       - yaml
     severity: ERROR
-    message: An action sourced from a third-party repository on GitHub is not pinned
-      to a full length commit SHA. Pinning an action to a full length commit SHA
-      is currently the only way to use an action as an immutable release.
-      Pinning to a particular SHA helps mitigate the risk of a bad actor adding
-      a backdoor to the action's repository, as they would need to generate a
-      SHA-1 collision for a valid Git object payload.
+    message: |
+      An action sourced from a third-party repository on GitHub is not pinned to a full length commit SHA or is missing the semver reference comment
+
+      You can use pinact - https://github.com/suzuki-shunsuke/pinact - to pin them
+
+      👍
+
+      `uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1`
+      
+      👎
+      
+      `uses: actions/cache@v3`
+      `uses: actions/cache@v3.3.1`
+
+      [GHA Policies](https://github.com/brave/internal/wiki/Pull-request-security-audit-checklist)
     patterns:
       - pattern-regex: "uses:\\s+(?<USES>.*)\\s*$"
       - metavariable-pattern:
