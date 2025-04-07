@@ -1,0 +1,1 @@
+https://semgrep.dev/r/typescript.react.portability.i18next.jsx-label-not-i18n.jsx-label-not-i18n
