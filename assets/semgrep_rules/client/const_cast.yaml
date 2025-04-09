@@ -9,7 +9,7 @@ rules:
         bridiver
         cdesouza-chromium
     languages: [cpp]
-    message: "Avoid const_cast to remove const, except when implementing non-const getters in terms of const getters."
+    message: Avoid const_cast to remove const, except when implementing non-const getters in terms of const getters.
     severity: WARNING
     patterns:
       - pattern: const_cast<$T>($ARG)
