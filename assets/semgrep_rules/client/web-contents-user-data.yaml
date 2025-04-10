@@ -2,7 +2,7 @@ rules:
   - id: web-contents-user-data
     metadata:
       author: Brian Johnson <bjohnson@brave.com>
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/in-process-browser-test.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/web-contents-user-data.yaml
       assignees: |
         goodov
         cdesouza-chromium
