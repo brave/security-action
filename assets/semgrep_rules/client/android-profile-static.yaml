@@ -1,0 +1,15 @@
+rules:
+  - id: android-profile-static
+    patterns:
+      - pattern-either:
+          - pattern: 'ProfileManager.getLastUsedRegularProfile()'
+          - pattern: 'Utils.getProfile()'
+          - pattern: 'BraveLeoPrefUtils.getProfile()'
+    metadata:
+      author: Brian Johnson
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/android-profile-static.yaml
+      assignees: bridiver
+      category: correctness
+    message: Static methods to access the profile will become a problem when android allows multiple profiles. Also these methods can be dangerous when we need to distinguish between the regular and incognito profile (services factories, etc...)
+    languages: [java, kotlin]
+    severity: ERROR
