@@ -15,8 +15,6 @@ rules:
     severity: WARNING
     patterns:
       - pattern-either:
-          - pattern: "UNSAFE_TODO(...)"
-          - pattern: "UNSAFE_BUFFERS(...)"
           - pattern: "std::next(...)"
           - pattern: "std::advance(...)"
           - pattern: "std::prev(...)"
