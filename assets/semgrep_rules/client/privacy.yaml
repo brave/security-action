@@ -28,5 +28,3 @@ rules:
       - pattern: "unhackable"
       - pattern: "hackerproof"
       - pattern: "hacker-proof"
-      - pattern: "privacy-preserving"
-      - pattern: "privacy preserving"
