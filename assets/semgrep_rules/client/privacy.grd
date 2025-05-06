@@ -839,7 +839,7 @@ Or change later at <ph name="SETTINGS_EXTENIONS_LINK">$2<ex>brave://settings/ext
         Disable
       </message>
       <message name="IDS_BRAVE_P3A_ENABLE_SETTING" desc="Description that shows in settings for toggling P3A">
-        // ruleid: privacy
+        // ok: privacy
         Allow privacy-preserving product analytics (P3A)
       </message>
       <message name="IDS_BRAVE_P3A_ENABLE_SETTING_SUBITEM" desc="Description that shows under main toggle setting for P3A">
