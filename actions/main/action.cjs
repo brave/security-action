@@ -79,7 +79,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
-  const reviewdogEnabledPr = options.baseline_scan_only && context.eventName === 'pull_request' && context.actor !== 'dependabot[bot]'
+  const reviewdogEnabledPr = options.baseline_scan_only && context.eventName === 'pull_request'
   debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}, context.actor: ${context.actor}`)
   // reviewdog-enabled-full steps
   const reviewdogEnabledFull = !reviewdogEnabledPr && (!options.baseline_scan_only || context.eventName === 'workflow_dispatch')
@@ -113,7 +113,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Reviewdog full step completed')
   }
 
-  if (reviewdogEnabledPr) {
+  if (reviewdogEnabledPr && context.actor !== 'dependabot[bot]') {
     // changed-files steps
     const { default: pullRequestChangedFiles } = await import(`${actionPath}/src/pullRequestChangedFiles.js`)
     const changedFiles = await pullRequestChangedFiles({ github, owner: context.repo.owner, name: context.repo.repo, prnumber: context.payload.pull_request.number })
@@ -275,5 +275,14 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       })
       debugLog('Comments after:', commentsAfter)
     }
+  } else if (context.actor === 'dependabot[bot]') {
+    // if the actor is dependabot[bot], add security label to PR, and nothing more
+    await github.rest.issues.addLabels({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      issue_number: context.issue.number,
+      labels: ['security']
+    })
+    debugLog('Added security label to PR')
   }
 }
