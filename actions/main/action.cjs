@@ -233,7 +233,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       return
     }
 
-    if (fs.existsSync('reviewdog.fail.log') && options.debug) {
+    if (fs.existsSync('reviewdog.fail.log')) {
       // print reviewdog.fail.log to the console
       const log = fs.readFileSync('reviewdog.fail.log', 'UTF-8').replaceAll(/^/g, CONSOLE_BLUE)
       console.log(`${CONSOLE_RED}This action encountered an error while reporting the following findings via the Github API:`)
