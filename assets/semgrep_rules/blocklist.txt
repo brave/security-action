@@ -35,5 +35,5 @@ https://semgrep.dev/r/gitlab.find_sec_bugs.HARD_CODE_KEY-4
 https://semgrep.dev/r/gitlab.bandit.B101
 https://semgrep.dev/r/python.django.security.django-no-csrf-token.django-no-csrf-token
 https://semgrep.dev/r/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
-MSK_PASSWORD
+https://semgrep.dev/r/generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
 https://semgrep.dev/r/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
