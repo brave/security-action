@@ -5,7 +5,6 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/refcounted-usage.yaml
       assignees: |
         stoletheminerals
-        thypon
         cdesouza-chromium
         bridiver
     pattern-either:

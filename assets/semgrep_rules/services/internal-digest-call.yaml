@@ -9,6 +9,5 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/internal-digest-call.yaml
       assignees: |
         stoletheminerals
-        thypon
         cdesouza-chromium
         bridiver

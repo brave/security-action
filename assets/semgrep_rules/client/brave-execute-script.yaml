@@ -7,7 +7,7 @@ rules:
       confidence: MEDIUM
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-execute-script.yaml
       assignees: |
-        thypon
+        stoletheminerals
         diracdeltas
         bridiver
       category: security

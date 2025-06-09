@@ -4,7 +4,6 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/cast-signed-to-unsigned.yaml
       assignees: |
         fmarier
-        thypon
         bridiver
       category: security
     patterns:
