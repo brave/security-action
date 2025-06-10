@@ -281,7 +281,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.issue.number,
-      labels: ['security', 'p2']
+      labels: ['security', 'P2']
     })
     debugLog('Added security label to PR')
   }
