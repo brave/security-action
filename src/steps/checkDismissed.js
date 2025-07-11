@@ -15,9 +15,9 @@ export default async function checkDismissed ({
 
     // Check if any assignee has dismissed the PR
     const assigneesArray = assignees.split(/\s+/).filter((str) => str !== '')
-    const dismissedByAssignee = assigneesArray.some(assignee => 
-      comments.some(comment => 
-        comment.user.login === 'github-actions[bot]' && 
+    const dismissedByAssignee = assigneesArray.some(assignee =>
+      comments.some(comment =>
+        comment.user.login === 'github-actions[bot]' &&
         comment.body.includes(`✅ Security alerts dismissed by @${assignee}`)
       )
     )

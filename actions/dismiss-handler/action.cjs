@@ -1,5 +1,3 @@
-const { execSync } = require('child_process')
-
 module.exports = async function ({ github, context, inputs, actionPath, core, debug }) {
   try {
     // Only process issue comments on PRs
@@ -59,8 +57,8 @@ module.exports = async function ({ github, context, inputs, actionPath, core, de
       issue_number: prNumber
     })
 
-    const existingDismissal = comments.find(comment => 
-      comment.user.login === 'github-actions[bot]' && 
+    const existingDismissal = comments.find(comment =>
+      comment.user.login === 'github-actions[bot]' &&
       comment.body.includes(`✅ Security alerts dismissed by @${commentAuthor}`)
     )
 
@@ -82,7 +80,7 @@ module.exports = async function ({ github, context, inputs, actionPath, core, de
     if (inputs.slack_token) {
       try {
         const replyToSlackThread = require(actionPath + 'src/replyToSlackThread.js').default
-        
+
         let userMap = {}
         if (inputs.gh_to_slack_user_map) {
           userMap = JSON.parse(inputs.gh_to_slack_user_map)
@@ -94,10 +92,10 @@ module.exports = async function ({ github, context, inputs, actionPath, core, de
         const result = await replyToSlackThread({
           token: inputs.slack_token,
           channel: '#secops-hotspots',
-          prNumber: prNumber,
-          repoName: repoName,
-          replyText: replyText,
-          debug: debug
+          prNumber,
+          repoName,
+          replyText,
+          debug
         })
 
         if (result) {
@@ -112,7 +110,6 @@ module.exports = async function ({ github, context, inputs, actionPath, core, de
 
     console.log(`Successfully processed dismiss command from ${commentAuthor} on PR #${prNumber}`)
     core.setOutput('dismissed', 'true')
-
   } catch (error) {
     console.error('Error in dismiss handler:', error)
     core.setFailed(error.message)

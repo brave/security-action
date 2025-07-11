@@ -65,29 +65,31 @@ export default async function replyToSlackThread ({
   // Look for messages that mention this PR
   const prPattern = new RegExp(`#${prNumber}(?:\\s|$|\\)|\\])`, 'i')
   const repoPattern = new RegExp(repoName, 'i')
-  
+
   const existingMessage = history.messages.find(message => {
     if (message.username !== username && message.bot_id !== username) {
       return false
     }
-    
+
     // Check message text and blocks for PR reference
     const messageText = message.text || ''
-    const blocksText = message.blocks ? 
-      message.blocks.map(block => 
-        block.text?.text || 
+    const blocksText = message.blocks
+      ? message.blocks.map(block =>
+        block.text?.text ||
         block.elements?.map(el => el.text?.text || el.text || '').join(' ') || ''
-      ).join(' ') : ''
-    const attachmentsText = message.attachments ? 
-      message.attachments.map(att => 
-        att.blocks?.map(block => 
-          block.text?.text || 
+      ).join(' ')
+      : ''
+    const attachmentsText = message.attachments
+      ? message.attachments.map(att =>
+        att.blocks?.map(block =>
+          block.text?.text ||
           block.elements?.map(el => el.text?.text || el.text || '').join(' ') || ''
         ).join(' ') || ''
-      ).join(' ') : ''
-    
+      ).join(' ')
+      : ''
+
     const fullText = `${messageText} ${blocksText} ${attachmentsText}`
-    
+
     return prPattern.test(fullText) && repoPattern.test(fullText)
   })
 
