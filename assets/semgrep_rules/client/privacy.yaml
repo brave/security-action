@@ -7,7 +7,6 @@ rules:
         bridiver
         arthuredelstein
         ShivanKaul
-        thypon
       source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/privacy.yaml
     message: "Privacy claim found"
     languages:
