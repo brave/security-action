@@ -173,13 +173,18 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     const assigneeRemovedLabel = await assigneeRemoved({ context, github, assignees: assigneesAfterVal })
     debugLog('Assignee removed:', assigneeRemovedLabel)
 
+    // check-dismissed step
+    const { default: checkDismissed } = await import(`${actionPath}/src/steps/checkDismissed.js`)
+    const dismissedByAssignee = await checkDismissed({ context, github, assignees: assigneesAfterVal })
+    debugLog('Dismissed by assignee:', dismissedByAssignee)
+
     // add description-contains-hotwords step
     const { default: hotwords } = await import(`${actionPath}/src/steps/hotwords.js`)
     const descriptionContainsHotwords = (context.actor !== 'renovate[bot]' && options.hotwords_enabled) ? await hotwords({ context, github, hotwords: options.hotwords }) : false
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
-    const shouldTrigger = reviewdogEnabledPr && !assigneeRemovedLabel && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
+    const shouldTrigger = reviewdogEnabledPr && !assigneeRemovedLabel && !dismissedByAssignee && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
     debugLog('Should trigger:', shouldTrigger)
 
     if (shouldTrigger) {
