@@ -9,5 +9,5 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debug
   })
 
-  if (message.length > 0) { await sendSlackMessage({ debug, username: 'renovate-sanity-check', message, color: 'yellow', channel: '#secops-hotspots', token: inputs.slack_token }) }
+  if (message && message.length > 0) { await sendSlackMessage({ debug, username: 'renovate-sanity-check', message, color: 'yellow', channel: '#secops-hotspots', token: inputs.slack_token }) }
 }
