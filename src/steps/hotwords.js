@@ -22,7 +22,7 @@ export default async function hotwords ({
     prnumber: context.issue.number
   }
   const result = await github.graphql(pullRequestQuery, variables)
-  const content = (result.repository.pullRequest.title + result.repository.pullRequest.body).toLowerCase()
+  const content = (result.repository.pullRequest.title + '\n' + result.repository.pullRequest.body).toLowerCase()
   console.log('Body: %s', content)
 
   const ret = hotwords.some((word) => content.includes(word))
