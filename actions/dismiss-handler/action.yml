@@ -1,0 +1,37 @@
+name: 'Dismiss Handler'
+description: 'Process /dismiss commands in PR comments to prevent redundant notifications'
+inputs:
+  github_token:
+    description: |
+      Secret token to interact with the repository
+    required: true
+  slack_token:
+    description: |
+      Secret token to forward dismissal notifications to slack
+    required: false
+  gh_to_slack_user_map:
+    description: JSON map of github usernames to slack usernames
+    required: false
+  debug:
+    description: enables debug output for this action
+    required: false
+    default: 'false'
+outputs:
+  dismissed:
+    description: true if a dismissal was processed
+    value: ${{ steps.script.outputs.dismissed }}
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      id: script
+      env:
+        DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
+      with:
+        script: |-
+          const actionPath = '${{ github.action_path }}/../../'
+          const inputs = ${{ toJson(inputs) }}
+
+          const script = require('${{ github.action_path }}/action.cjs')
+          await script({github, context, inputs, actionPath, core,
+            debug: process.env.DEBUG === 'true'})
