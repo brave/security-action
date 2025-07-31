@@ -11,6 +11,11 @@ server:
   host: "localhost"
   region: us-west
 
+# Test array items
+languages:
+  - yaml
+  - json
+
 # This should NOT trigger the rule
 database:
   name: "production"
@@ -19,3 +24,9 @@ database:
   ssl: true
   debug: false
   cache: null
+
+# Properly quoted arrays (should NOT trigger)
+frameworks:
+  - "react"
+  - "vue"
+  - 'angular'
