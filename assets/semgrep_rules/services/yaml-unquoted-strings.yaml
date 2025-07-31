@@ -1,0 +1,33 @@
+rules:
+  - id: yaml-unquoted-string
+    patterns:
+      - pattern: |
+          $KEY: $VALUE
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: '^[a-zA-Z][a-zA-Z0-9_.-]*$'
+      - pattern-not: |
+          $KEY: "$VALUE"
+      - pattern-not: |
+          $KEY: '$VALUE'
+      - pattern-not: |
+          $KEY: true
+      - pattern-not: |
+          $KEY: false
+      - pattern-not: |
+          $KEY: null
+    message: Found unquoted string value in YAML file. Consider quoting string values to avoid parsing ambiguity.
+    metadata:
+      category: security
+      technology:
+        - yaml
+      subcategory:
+        - audit
+      likelihood: LOW
+      impact: LOW
+      confidence: MEDIUM
+      license: MPL-2.0
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/yaml-unquoted-string.yaml
+    languages:
+      - yaml
+    severity: INFO

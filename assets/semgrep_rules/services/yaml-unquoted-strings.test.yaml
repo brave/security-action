@@ -1,0 +1,21 @@
+# Test file for yaml-unquoted-string rule
+# This should trigger the rule (unquoted strings)
+
+config:
+  name: production
+  type: database
+  environment: staging
+
+server:
+  port: 8080
+  host: "localhost"
+  region: us-west
+
+# This should NOT trigger the rule
+database:
+  name: "production"
+  type: 'mysql'
+  port: 3306
+  ssl: true
+  debug: false
+  cache: null
