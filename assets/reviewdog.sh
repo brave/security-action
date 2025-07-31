@@ -12,7 +12,7 @@ RUNNERS="safesvg tfsec semgrep sveltegrep npm-audit pip-audit" # disabled: brake
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
-        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.log || true
+        reviewdog -reporter=local -runners=$runner -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff -U0 origin/$GITHUB_BASE_REF" > $runner.log 2>> reviewdog.log || true
         grep -H "" reviewdog.$runner.stderr.log >> reviewdog.fail.log || true
         [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" reviewdog.$runner.stderr.log || true
     done
