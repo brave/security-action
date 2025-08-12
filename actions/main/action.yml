@@ -110,7 +110,7 @@ runs:
       uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
       with: # Grab a specific tag with caching
         repo: aquasecurity/tfsec
-        tag: v1.28.1
+        tag: v1.28.14
         cache: enable
     - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
