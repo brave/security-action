@@ -15,7 +15,6 @@ rules:
       assignees: |
         thypon
         goodov
-        iefremov
       category: security
     message: |
       base::Unretained is most of the time unrequited, and a weak reference is better suited for secure coding.
@@ -36,7 +35,6 @@ rules:
       assignees: |
         thypon
         goodov
-        iefremov
     patterns:
       - patterns:
           - pattern-either:
