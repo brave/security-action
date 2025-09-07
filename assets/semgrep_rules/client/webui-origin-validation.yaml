@@ -1,0 +1,43 @@
+rules:
+  - id: chromium-webui-origin-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/web-platform-security-guidelines.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/webui-origin-validation.yaml
+      assignees: |
+        thypon
+        diracdeltas
+        fmarier
+      category: security
+    languages: [cpp, c]
+    message: |
+      WebUI pages (chrome:// and chrome-untrusted://) that handle external data
+      should validate the origin of requests. WebUI components have elevated
+      privileges and can be targets for cross-origin attacks. Always validate
+      that requests come from expected origins.
+    severity: WARNING
+    patterns:
+      - patterns:
+          - pattern-either:
+              - pattern-regex: void\s+Handle\w*\([^)]*std::string[^)]*\)
+              - pattern-regex: void\s+Handle\w*\([^)]*GURL[^)]*\)
+              - pattern-regex: void\s+Handle\w*\([^)]*base::Value[^)]*\)
+          - pattern-not-regex: class\s+RegularController\s*\{[\s\S]*?\}
+          - pattern-not-inside: |
+              void $METHOD(...) {
+                if (!IsValidOrigin($VAR)) {
+                  ...
+                  return;
+                  ...
+                }
+                ...
+              }
+          - pattern-not-inside: |
+              void $METHOD(...) {
+                if (web_ui()->GetWebContents()->GetURL().SchemeIs("chrome")) {
+                  ...
+                }
+                ...
+              }

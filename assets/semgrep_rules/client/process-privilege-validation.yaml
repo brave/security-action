@@ -1,0 +1,22 @@
+rules:
+  - id: chromium-process-privilege-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/ipc-reviews.md
+        - https://chromium.googlesource.com/chromium/src/+/main/content/browser/child_process_security_policy.h
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/process-privilege-validation.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+        fmarier
+      category: security
+    languages: [cpp, c]
+    message: |
+      Navigation and resource access should validate process privileges using
+      CanCommitURL() and CanAccessDataForOrigin(). Missing checks can allow
+      compromised renderers to access resources they shouldn't be able to reach.
+    severity: ERROR
+    patterns:
+      - pattern-regex: void\s+\w*(Commit|Navigate|Access)\w*\([^)]*\)|bool\s+\w*Load\w*\([^)]*RenderProcessHost[^)]*\)
+      - pattern-not-regex: void\s+(Safe|Do)\w*

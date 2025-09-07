@@ -1,0 +1,51 @@
+rules:
+  - id: chromium-sensitive-data-access-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/web-platform-security-guidelines.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/sensitive-data-access-validation.yaml
+      assignees: |
+        thypon
+        fmarier
+        diracdeltas
+      category: security
+    languages: [cpp, c]
+    message: |
+      Access to sensitive user data (cookies, passwords, private browsing data)
+      requires security review. Ensure proper permission checks, incognito mode
+      isolation, and that sensitive data cannot leak across contexts.
+    severity: WARNING
+    patterns:
+      - patterns:
+          - pattern-either:
+              - pattern: GetCookies($URL, ...)
+              - pattern: SetCookie($URL, $COOKIE, ...)
+              - pattern: GetStoredPasswords(...)
+              - pattern: SavePassword($CREDENTIAL, ...)
+              - pattern: GetIncognitoProfile()
+              - pattern: IsOffTheRecord()
+              - pattern: GetPrivateBrowsingData(...)
+              - pattern: AccessHistoryData($QUERY, ...)
+          - pattern-not-inside: |
+              if (!HasPermission(Permission::kCookies)) {
+                ...
+                return;
+                ...
+              }
+              ...
+          - pattern-not-inside: |
+              if (profile->IsOffTheRecord() && !allow_incognito_) {
+                ...
+                return;
+                ...
+              }
+              ...
+          - pattern-not-inside: |
+              if (!IsAuthorizedForSensitiveData($...ARGS)) {
+                ...
+                return;
+                ...
+              }
+              ...

@@ -1,0 +1,20 @@
+rules:
+  - id: chromium-weakptr-factory-placement
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/base/memory/weak_ptr.h
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/dangling_ptr.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/weakptr-factory-placement.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+      category: security
+    languages: [cpp, c]
+    message: |
+      WeakPtrFactory should be the last member variable in the class to ensure
+      proper destruction order. When WeakPtrFactory is destroyed, it invalidates
+      all WeakPtr instances, which should happen before other members are destroyed
+      to avoid use-after-free issues.
+    severity: WARNING
+    pattern-regex: class\s+\w+\s*\{[\s\S]*?base::WeakPtrFactory<[^>]+>\s+\w+_;[^}]*?(?:std::|int\s|bool\s|\w+\s+\w+_)[^}]*\}

@@ -1,0 +1,41 @@
+rules:
+  - id: chromium-mojo-privilege-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/mojo.md#Validate-privilege-presuming-data-received-over-IPC
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/ipc-reviews.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/mojo-security-validation.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+      category: security
+    languages: [cpp, c]
+    message: |
+      Mojo interface methods that receive privilege-presuming data (like file paths,
+      origins, or URLs) should validate this data using ChildProcessSecurityPolicy
+      before use. Untrusted processes can send arbitrary data over IPC.
+      Use methods like CanAccessDataForOrigin(), CanReadFile(), etc.
+    severity: WARNING
+    patterns:
+      - patterns:
+          - pattern-either:
+              - pattern-regex: void\s+\w*\([^)]*FilePath[^)]*\)\s*override
+              - pattern-regex: void\s+\w*\([^)]*GURL[^)]*\)\s*override
+              - pattern-regex: void\s+\w*\([^)]*Origin[^)]*\)\s*override
+          - pattern-not-inside: |
+              void $METHOD(...) override {
+                ...
+                if (!policy->CanReadFile($...ARGS)) {
+                  ...
+                }
+                ...
+              }
+          - pattern-not-inside: |
+              void $METHOD(...) override {
+                ...
+                if (!policy->CanAccessDataForOrigin($...ARGS)) {
+                  ...
+                }
+                ...
+              }

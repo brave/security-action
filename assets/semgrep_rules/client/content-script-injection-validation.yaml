@@ -1,0 +1,43 @@
+rules:
+  - id: chromium-content-script-injection-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/web-platform-security-guidelines.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/content-script-injection-validation.yaml
+      assignees: |
+        stoletheminerals
+        diracdeltas
+        bridiver
+      category: security
+    languages: [cpp, c]
+    message: |
+      Content script injection requires security review. Scripts injected into
+      web pages can access sensitive data and bypass CSP. Ensure proper origin
+      validation, CSP compliance, and that injected scripts cannot be abused for XSS.
+    severity: WARNING
+    patterns:
+      - patterns:
+          - pattern-either:
+              - pattern: ExecuteScript($SCRIPT, ...)
+              - pattern: InjectScript($CODE, ...)
+              - pattern: AddContentScript($SCRIPT_NAME, ...)
+              - pattern: RegisterContentScript($DETAILS, ...)
+              - pattern: $WEBCONTENTS->ExecuteJavaScript($...CODE, ...)
+          - pattern-not-inside: |
+              if (!IsAllowedOrigin($ORIGIN)) {
+                ...
+                return;
+              }
+              ...
+          - pattern-not-inside: |
+              if (!ValidateCSP($CODE)) {
+                ...
+                return;
+              }
+              ...
+          - pattern-not-inside: |
+              if (script_source == ScriptSource::kTrusted) {
+                ...
+              }
