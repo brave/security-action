@@ -1,0 +1,30 @@
+rules:
+  - id: chromium-runloop-quit-closure-lifecycle
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/base/run_loop.h
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/threading_and_tasks.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/runloop-lifecycle-safety.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+      category: correctness
+    languages: [cpp, c]
+    message: |
+      RunLoop quit closures should not be stored beyond the RunLoop's lifetime.
+      The closure becomes invalid when the RunLoop is destroyed or Run() completes.
+      Store the closure in a scoped variable or ensure the RunLoop outlives the closure usage.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $MEMBER = $LOOP.QuitClosure()
+          - pattern: $MEMBER = $LOOP.QuitWhenIdleClosure()
+      - metavariable-regex:
+          metavariable: $MEMBER
+          regex: .*_$|this->.*|.*callback.*
+      - pattern-inside: |
+          {
+            base::RunLoop $LOOP;
+            ...
+          }
