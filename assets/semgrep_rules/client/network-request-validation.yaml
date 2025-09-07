@@ -1,0 +1,53 @@
+rules:
+  - id: chromium-network-request-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/ipc-reviews.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/network-request-validation.yaml
+      assignees: |
+        thypon
+        fmarier
+        cdesouza-chromium
+      category: security
+    languages: [cpp, c]
+    message: |
+      Network requests and URL modifications require security review. Ensure
+      proper origin validation, URL sanitization, and that requests cannot
+      be abused for SSRF attacks or to bypass security policies.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern: $LOADER->LoadRequest($REQUEST, ...)
+              - pattern-not-inside: |
+                  if (!IsUrlAllowed($URL)) {
+                    return;
+                  }
+              - pattern-not-inside: |
+                  // ok: chromium-network-request-validation
+                  ...
+          - patterns:
+              - pattern: URLRequest::Create($URL, ...)
+              - pattern-not-inside: |
+                  if ($VAR.SchemeIsHTTPOrHTTPS()) {
+                    ...
+                  }
+              - pattern-not-inside: |
+                  // ok: chromium-network-request-validation
+                  ...
+          - patterns:
+              - pattern: RewriteURL($ORIGINAL_URL)
+              - pattern-not-inside: |
+                  if (!IsValidRewrite($ORIGINAL_URL, $URL)) {
+                    ...
+                  }
+              - pattern-not-inside: |
+                  // ok: chromium-network-request-validation
+                  ...
+          - patterns:
+              - pattern: SimpleURLLoader::Create($REQUEST, ...)
+              - metavariable-regex:
+                  metavariable: $REQUEST
+                  regex: .*user.*|.*external.*|.*untrusted.*
