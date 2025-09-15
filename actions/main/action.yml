@@ -74,7 +74,7 @@ runs:
       # )
       if: ${{ inputs.enabled != 'false' && ( (inputs.baseline_scan_only != 'false' && github.event_name == 'pull_request') || (inputs.baseline_scan_only == 'false' || github.event_name == 'workflow_dispatch') )}}
       id: reviewdog-enabled
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
       with:
         script: return true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
@@ -112,7 +112,7 @@ runs:
         repo: aquasecurity/tfsec
         tag: v1.28.14
         cache: enable
-    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+    - uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
       if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       id: script
       env:
