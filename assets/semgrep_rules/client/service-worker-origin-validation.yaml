@@ -1,0 +1,38 @@
+rules:
+  - id: chromium-service-worker-origin-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/service-worker-security-faq.md
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/service-worker-origin-validation.yaml
+      assignees: |
+        thypon
+        diracdeltas
+        bridiver
+      category: security
+    languages: [cpp, c]
+    message: |
+      Service Worker registration and access must validate origins to prevent
+      cross-origin attacks. Service Workers have elevated privileges and must
+      enforce same-origin policy strictly.
+    severity: WARNING
+    patterns:
+      - patterns:
+          - pattern-either:
+              - pattern: RegisterServiceWorker($URL, $SCOPE, ...)
+              - pattern: StartServiceWorker($URL, ...)
+              - pattern: $SW_CONTEXT->PostMessage($MESSAGE, $ORIGIN)
+              - pattern: navigator.serviceWorker.register($URL, ...)
+          - pattern-not-inside: |
+              if ($ORIGIN.IsSameOriginWith($EXPECTED_ORIGIN)) {
+                ...
+              }
+              ...
+          - pattern-not-inside: |
+              if (!IsValidServiceWorkerOrigin($...ARGS)) {
+                ...
+                return;
+                ...
+              }
+              ...
