@@ -7,4 +7,3 @@ updates:
     exclude-paths:
       - "t3sts/**"
     open-pull-requests-limit: 10
-    security-updates-only: true
