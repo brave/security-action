@@ -1,0 +1,20 @@
+version: 2
+exclude:
+  - directory: "/t3sts"
+
+updates:
+  - package-ecosystem: "bundler"
+    directory: "/"
+    security-updates-only: true
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    security-updates-only: true
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    security-updates-only: true
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    security-updates-only: true
