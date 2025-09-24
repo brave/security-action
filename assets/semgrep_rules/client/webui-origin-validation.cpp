@@ -62,6 +62,7 @@ class GoodWebUIController : public content::WebUIController {
   }
   
   // SHOULD NOT TRIGGER: Internal method without external data
+  // ok: chromium-webui-origin-validation
   void HandleInternalConfig() {
     // Internal configuration, no external data
     base::Value internal_config = LoadInternalConfig();
@@ -69,6 +70,7 @@ class GoodWebUIController : public content::WebUIController {
   }
   
   // SHOULD NOT TRIGGER: No sensitive parameters
+  // ok: chromium-webui-origin-validation
   void HandleSimpleRequest() {
     // Simple request with no external data
     RefreshUI();
@@ -90,6 +92,7 @@ class GoodWebUIController : public content::WebUIController {
 // SHOULD NOT TRIGGER: Not a WebUI controller
 class RegularController {
  public:
+  // ok: chromium-webui-origin-validation
   void HandleUserData(const std::string& data) {
     // Not a WebUI, so different security model applies
     ProcessData(data);

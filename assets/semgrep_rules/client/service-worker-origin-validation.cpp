@@ -29,6 +29,7 @@ class ServiceWorkerSecurityExamples {
     url::Origin sw_origin = url::Origin::Create(sw_url);
     if (sw_origin.IsSameOriginWith(expected_origin_)) {
       GURL scope("https://trusted-site.com/");
+      // ok: chromium-service-worker-origin-validation
       RegisterServiceWorker(sw_url, scope, callback_);
     }
     
