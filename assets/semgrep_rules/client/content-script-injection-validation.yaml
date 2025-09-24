@@ -25,6 +25,13 @@ rules:
               - pattern: AddContentScript($SCRIPT_NAME, ...)
               - pattern: RegisterContentScript($DETAILS, ...)
               - pattern: $WEBCONTENTS->ExecuteJavaScript($...CODE, ...)
+              - pattern: $OBJ.ExecuteMethodAndReturnValue(...)
+              - pattern: $OBJ.CallFunctionEvenIfScriptDisabled(...)
+              - patterns:
+                  - pattern: $OBJ.$FUNC(...)
+                  - metavariable-regex:
+                      metavariable: $FUNC
+                      regex: .*ExecuteScript.*
           - pattern-not-inside: |
               if (!IsAllowedOrigin($ORIGIN)) {
                 ...

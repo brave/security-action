@@ -2,6 +2,8 @@
 #include "content/public/browser/web_contents.h"
 #include "extensions/browser/extension_host.h"
 #include "url/origin.h"
+#include "third_party/blink/public/web/web_frame.h"
+#include "third_party/blink/public/web/web_script_source.h"
 
 enum class ScriptSource {
   kTrusted,
@@ -37,6 +39,18 @@ class ContentScriptInjectionExamples {
     std::string script_name = "dynamic_script";
     // ruleid: chromium-content-script-injection-validation
     AddContentScript(script_name, script_source_, target_origins_);
+
+    // SHOULD TRIGGER: ExecuteScriptInIsolatedWorld without validation
+    // ruleid: chromium-content-script-injection-validation
+    web_frame_->ExecuteScriptInIsolatedWorld(
+        isolated_world_id_,
+        blink::WebScriptSource(
+            blink::WebString::FromUTF16(foobar_)),
+        blink::BackForwardCacheAware::kAllow);
+
+    // SHOULD TRIGGER: GetPrimaryMainFrame()->ExecuteJavaScript without validation
+    // ruleid: chromium-content-script-injection-validation
+    web_contents_->GetPrimaryMainFrame()->ExecuteJavaScript(k_script_, base::NullCallback());
   }
   
   void GoodScriptInjection1() {
@@ -81,10 +95,14 @@ class ContentScriptInjectionExamples {
  private:
   content::WebContents* web_contents_ = nullptr;
   content::RenderFrameHost* target_frame_ = nullptr;
+  blink::WebFrame* web_frame_ = nullptr;
   ScriptSource script_source_ = ScriptSource::kUntrusted;
   std::vector<url::Origin> target_origins_;
   base::OnceCallback<void()> callback_;
   base::OnceCallback<void()> completion_callback_;
+  int isolated_world_id_ = 1;
+  std::u16string foobar_ = u"test script";
+  std::u16string k_script_ = u"console.log('test')";
   
   std::string GetUserProvidedScript() { return "user_script()"; }
   std::string GetTrustedScript() { return "trusted_script()"; }
