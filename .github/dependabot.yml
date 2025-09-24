@@ -1,6 +1,4 @@
 version: 2
-exclude:
-  - directory: "/t3sts"
 
 updates:
   - package-ecosystem: "bundler"
