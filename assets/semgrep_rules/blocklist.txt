@@ -4,6 +4,7 @@ https://github.com/0xdea/semgrep-rules/blob/main/c/missing-break-in-switch.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/missing-default-in-switch.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/signed-unsigned-conversion.yaml
 https://github.com/0xdea/semgrep-rules/blob/main/c/typos.yaml
+https://github.com/0xdea/semgrep-rules/blob/main/c/insecure-api-rand-srand.yaml
 https://semgrep.dev/r/generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var
 https://semgrep.dev/r/generic.html-templates.security.var-in-href.var-in-href
 https://semgrep.dev/r/generic.html-templates.security.var-in-script-src.var-in-script-src

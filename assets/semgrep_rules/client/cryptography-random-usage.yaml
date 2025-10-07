@@ -1,0 +1,36 @@
+rules:
+  - id: chromium-cryptography-random-usage
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/web-platform-security-guidelines.md
+      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/cryptography-random-usage.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+        fmarier
+      category: security
+    languages: [cpp, c]
+    message: |
+      Usage of cryptographic functions or random number generation requires
+      security review according to Brave security guidelines. Ensure proper
+      entropy sources, secure random generation, and cryptographic best practices
+      are followed. Weak randomness can lead to serious security vulnerabilities.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: rand()
+          - pattern: srand($SEED)
+          - pattern: random()
+          - pattern: srandom($SEED)
+          - pattern: std::rand()
+          - pattern: std::srand($SEED)
+          - pattern: base::RandInt($MIN, $MAX)
+          - pattern: base::RandUint64()
+          - pattern: base::RandGenerator($SIZE)
+          - pattern: crypto::RandBytes($BUFFER, $SIZE)
+          - pattern: RAND_bytes($BUFFER, $SIZE)
+          - pattern: EVP_CIPHER_CTX_new()
+          - pattern: EVP_EncryptInit($CTX, ...)
+          - pattern: EVP_DecryptInit($CTX, ...)
