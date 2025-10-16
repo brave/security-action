@@ -60,6 +60,12 @@ export default async function renovateSanityCheck ({
     .filter(r => !skipRepositories.includes(r.name))
 
   for (const repo of repos) {
+    // Skip empty repositories - they don't need Renovate
+    if (repo.size === 0 || !repo.default_branch) {
+      if (debug) console.log(`Skipping ${repo.name} - empty repository`)
+      continue
+    }
+
     // renovate.json
     // renovate.json5
     // .github/renovate.json
