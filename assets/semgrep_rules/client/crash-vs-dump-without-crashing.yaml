@@ -13,9 +13,10 @@ rules:
       - cpp
       - c
     message: |
-      Direct use of base::debug::DumpWithoutCrashing() should be replaced with
-      DUMP_WILL_BE_CHECK() macro when possible, as it communicates intent to
-      eventually become a CHECK and provides better debugging information.
+      Consider using DUMP_WILL_BE_CHECK() instead of base::debug::DumpWithoutCrashing()
+      when the intent is to eventually become a CHECK, as it better communicates this
+      intent and provides better debugging information. However, DumpWithoutCrashing()
+      is appropriate for debugging issues that may not become CHECKs.
     severity: INFO
     patterns:
       - pattern: base::debug::DumpWithoutCrashing()

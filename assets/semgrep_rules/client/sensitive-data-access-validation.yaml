@@ -24,8 +24,7 @@ rules:
               - pattern: SetCookie($URL, $COOKIE, ...)
               - pattern: GetStoredPasswords(...)
               - pattern: SavePassword($CREDENTIAL, ...)
-              - pattern: GetIncognitoProfile()
-              - pattern: IsOffTheRecord()
+              - pattern: GetOffTheRecordProfile()
               - pattern: GetPrivateBrowsingData(...)
               - pattern: AccessHistoryData($QUERY, ...)
           - pattern-not-inside: |

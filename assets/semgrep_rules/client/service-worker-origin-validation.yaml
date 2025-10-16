@@ -13,17 +13,18 @@ rules:
       category: security
     languages: [cpp, c]
     message: |
-      Service Worker registration and access must validate origins to prevent
+      Service Worker operations via ServiceWorkerContext must validate origins to prevent
       cross-origin attacks. Service Workers have elevated privileges and must
-      enforce same-origin policy strictly.
+      enforce same-origin policy strictly. Validate origins before registration or message passing.
     severity: WARNING
     patterns:
       - patterns:
           - pattern-either:
-              - pattern: RegisterServiceWorker($URL, $SCOPE, ...)
-              - pattern: StartServiceWorker($URL, ...)
-              - pattern: $SW_CONTEXT->PostMessage($MESSAGE, $ORIGIN)
-              - pattern: navigator.serviceWorker.register($URL, ...)
+              - pattern: $CTX->RegisterServiceWorker($URL, ...)
+              - pattern: $CTX->StartServiceWorker($URL, ...)
+              - pattern: $CTX->StartServiceWorkerAndDispatchMessage($URL, ...)
+              - pattern: $CTX->StartWorkerForScope($SCOPE, ...)
+              - pattern: ServiceWorkerContext::$METHOD($URL, ...)
           - pattern-not-inside: |
               if ($ORIGIN.IsSameOriginWith($EXPECTED_ORIGIN)) {
                 ...

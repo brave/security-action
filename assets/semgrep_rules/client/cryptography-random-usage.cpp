@@ -58,17 +58,30 @@ class CryptoUsageExamples {
     EVP_DecryptInit(ctx, EVP_aes_256_gcm(), key_, iv_);
   }
   
-  void AcceptableUsage() {
-    // SHOULD NOT TRIGGER: Non-crypto random usage patterns
+  void BadStdRandomUsage() {
+    // SHOULD TRIGGER: std::random engines/generators are banned per Chromium style guide
+    // Use base::RandomBitGenerator instead
+    // ruleid: chromium-cryptography-random-usage
     std::random_device rd;
+    // ruleid: chromium-cryptography-random-usage
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(1, 6);
-    int dice_roll = dis(gen);  // For gaming/simulation, not security
-    
+    int dice_roll = dis(gen);
+
+    // ruleid: chromium-cryptography-random-usage
+    std::default_random_engine engine;
+  }
+
+  void AcceptableUsage() {
+    // SHOULD NOT TRIGGER: Correct usage with base::RandomBitGenerator
+    base::RandomBitGenerator rng;
+    std::uniform_int_distribution<> dis(1, 6);
+    int dice_roll = dis(rng);
+
     // SHOULD NOT TRIGGER: Hash functions (different security concern)
     std::hash<std::string> hasher;
     size_t hash = hasher("some string");
-    
+
     // SHOULD NOT TRIGGER: Time-based operations
     auto now = std::chrono::steady_clock::now();
     auto timestamp = now.time_since_epoch().count();

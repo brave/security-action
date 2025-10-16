@@ -13,41 +13,17 @@ rules:
       category: security
     languages: [cpp, c]
     message: |
-      Network requests and URL modifications require security review. Ensure
-      proper origin validation, URL sanitization, and that requests cannot
-      be abused for SSRF attacks or to bypass security policies.
+      Network requests require security review and proper traffic annotation.
+      All network requests should use net::DefineNetworkTrafficAnnotation to
+      document purpose and data handling. Ensure proper origin validation,
+      URL sanitization, and that requests cannot be abused for SSRF attacks.
     severity: WARNING
     patterns:
-      - pattern-either:
-          - patterns:
-              - pattern: $LOADER->LoadRequest($REQUEST, ...)
-              - pattern-not-inside: |
-                  if (!IsUrlAllowed($URL)) {
-                    return;
-                  }
-              - pattern-not-inside: |
-                  // ok: chromium-network-request-validation
-                  ...
-          - patterns:
-              - pattern: URLRequest::Create($URL, ...)
-              - pattern-not-inside: |
-                  if ($VAR.SchemeIsHTTPOrHTTPS()) {
-                    ...
-                  }
-              - pattern-not-inside: |
-                  // ok: chromium-network-request-validation
-                  ...
-          - patterns:
-              - pattern: RewriteURL($ORIGINAL_URL)
-              - pattern-not-inside: |
-                  if (!IsValidRewrite($ORIGINAL_URL, $URL)) {
-                    ...
-                  }
-              - pattern-not-inside: |
-                  // ok: chromium-network-request-validation
-                  ...
-          - patterns:
-              - pattern: SimpleURLLoader::Create($REQUEST, ...)
-              - metavariable-regex:
-                  metavariable: $REQUEST
-                  regex: .*user.*|.*external.*|.*untrusted.*
+      - patterns:
+          - pattern-either:
+              - pattern: SimpleURLLoader::Create($REQUEST, $ANNOTATION)
+              - pattern: $LOADER = SimpleURLLoader::Create($REQUEST, $ANNOTATION)
+              - pattern: std::make_unique<SimpleURLLoader>($REQUEST, $ANNOTATION)
+          - metavariable-regex:
+              metavariable: $REQUEST
+              regex: .*(user|external|untrusted).*

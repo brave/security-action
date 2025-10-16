@@ -34,9 +34,9 @@ class SensitiveDataAccessExamples {
     // ruleid: chromium-sensitive-data-access-validation
     SavePassword(credential, save_callback_);
     
-    // SHOULD TRIGGER: Incognito profile access without checks
+    // SHOULD TRIGGER: Off-the-record profile access without checks
     // ruleid: chromium-sensitive-data-access-validation
-    Profile* incognito = GetIncognitoProfile();
+    Profile* incognito = GetOffTheRecordProfile();
     ProcessIncognitoData(incognito);
     
     // SHOULD TRIGGER: Private browsing data access
@@ -104,7 +104,7 @@ class SensitiveDataAccessExamples {
   }
   
   Profile* GetCurrentProfile() { return nullptr; }
-  Profile* GetIncognitoProfile() { return nullptr; }
+  Profile* GetOffTheRecordProfile() { return nullptr; }
   url::Origin GetRequestingOrigin() { 
     return url::Origin::Create(GURL("https://requester.com")); 
   }
