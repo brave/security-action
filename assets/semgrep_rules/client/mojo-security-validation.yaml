@@ -20,9 +20,9 @@ rules:
     patterns:
       - patterns:
           - pattern-either:
-              - pattern-regex: void\s+\w*\([^)]*FilePath[^)]*\)\s*override
-              - pattern-regex: void\s+\w*\([^)]*GURL[^)]*\)\s*override
-              - pattern-regex: void\s+\w*\([^)]*Origin[^)]*\)\s*override
+              - pattern-regex: void\s+\w+\([^)]*base::FilePath[^)]*\)\s*override\s*\{
+              - pattern-regex: void\s+\w+\([^)]*GURL[^)]*\)\s*override\s*\{
+              - pattern-regex: void\s+\w+\([^)]*url::Origin[^)]*\)\s*override\s*\{
           - pattern-not-inside: |
               void $METHOD(...) override {
                 ...

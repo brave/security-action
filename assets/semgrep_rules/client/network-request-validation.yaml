@@ -19,11 +19,17 @@ rules:
       URL sanitization, and that requests cannot be abused for SSRF attacks.
     severity: WARNING
     patterns:
-      - patterns:
-          - pattern-either:
-              - pattern: SimpleURLLoader::Create($REQUEST, $ANNOTATION)
-              - pattern: $LOADER = SimpleURLLoader::Create($REQUEST, $ANNOTATION)
-              - pattern: std::make_unique<SimpleURLLoader>($REQUEST, $ANNOTATION)
-          - metavariable-regex:
-              metavariable: $REQUEST
-              regex: .*(user|external|untrusted).*
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: SimpleURLLoader::Create($REQUEST, $ANNOTATION)
+                  - pattern: $LOADER = SimpleURLLoader::Create($REQUEST, $ANNOTATION)
+                  - pattern: std::make_unique<SimpleURLLoader>($REQUEST, $ANNOTATION)
+              - metavariable-regex:
+                  metavariable: $REQUEST
+                  regex: .*(user|external|untrusted).*
+          - patterns:
+              - pattern: net::DefineNetworkTrafficAnnotation($NAME, ...)
+              - metavariable-regex:
+                  metavariable: $NAME
+                  regex: .*(user|external|untrusted).*
