@@ -91,6 +91,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   // Install semgrep & pip-audit
   await runCommand(`pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`, { shell: true })
   debugLog('Installed semgrep & pip-audit')
+  // Disable man-db auto-update to speed up apt-get operations
+  await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
   // Install xmllint for safesvg
   await runCommand('sudo apt-get install -y libxml2-utils || sudo apt update -qq && sudo apt-get install -y libxml2-utils', { shell: true })
   debugLog('Installed xmllint')
