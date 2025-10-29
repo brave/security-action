@@ -1,5 +1,5 @@
-name: 'Semgrep Compare'
-description: 'Compare Semgrep findings between base branch and current branch, or scan external repository'
+name: 'Opengrep Compare'
+description: 'Compare Opengrep findings between base branch and current branch, or scan external repository'
 inputs:
   github_token:
     description: 'GitHub token for API access'
@@ -27,7 +27,7 @@ inputs:
     default: 'true'
 outputs:
   new_findings_count:
-    description: 'Number of new Semgrep findings from rule changes'
+    description: 'Number of new Opengrep findings from rule changes'
     value: ${{ steps.script.outputs.new_findings_count }}
   has_new_findings:
     description: 'Whether there are new findings (true/false)'
@@ -49,12 +49,19 @@ runs:
       with:
         python-version: '3.13'
 
-    - name: Install Semgrep
+    - name: Install Opengrep
+      uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
+      with:
+        repo: opengrep/opengrep
+        tag: v1.11.2
+        cache: enable
+
+    - name: Install Python dependencies
       shell: bash
       run: |
         python3 -m pip --disable-pip-version-check install -r ${{ github.action_path }}/../../requirements.txt
 
-    - name: Run Semgrep Comparison
+    - name: Run Opengrep Comparison
       id: script
       uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       with:

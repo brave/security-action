@@ -53,19 +53,19 @@ OptionParser.new do |opts|
     options[:assignees] = true
   end
 
-  opts.on("--sveltegrep", "Remove Extracted Script Extension, and use semgrep blocklist") do |v|
+  opts.on("--sveltegrep", "Remove Extracted Script Extension, and use opengrep blocklist") do |v|
     options[:sveltegrep] = true
-    options[:matcher].push "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt"
+    options[:matcher].push "#{ENV["SCRIPTPATH"]}/opengrep_rules/blocklist.txt"
   end
 
-  opts.on("--semgrep", "Use semgrep blocklist") do |v|
-    options[:semgrep] = true
-    options[:matcher].push "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist.txt"
+  opts.on("--opengrep", "Use opengrep blocklist") do |v|
+    options[:opengrep] = true
+    options[:matcher].push "#{ENV["SCRIPTPATH"]}/opengrep_rules/blocklist.txt"
   end
 end.parse!
 
 if ENV['REMOTE_RUNTIME']
-  options[:matcher].push "#{ENV["SCRIPTPATH"]}/semgrep_rules/blocklist-#{ENV['REMOTE_RUNTIME']}.txt"
+  options[:matcher].push "#{ENV["SCRIPTPATH"]}/opengrep_rules/blocklist-#{ENV['REMOTE_RUNTIME']}.txt"
 end
 
 options[:matcher].init()

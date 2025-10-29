@@ -638,4 +638,4 @@ tags
 
 ### Some Rules are nonredist, avoid including them ###
 nonredist/
-assets/semgrep_rules/generated/nonredist/
+assets/opengrep_rules/generated/nonredist/

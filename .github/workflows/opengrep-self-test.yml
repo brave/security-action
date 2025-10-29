@@ -1,4 +1,4 @@
-name: semgrep-self-test
+name: opengrep-self-test
 on:
   workflow_dispatch:
   push:
@@ -10,32 +10,38 @@ permissions:
   # This is a public repo, no permissions required to clone
   contents: none
 jobs:
-  semgrep-self-test:
-    name: semgrep-self-test
+  opengrep-self-test:
+    name: opengrep-self-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Install opengrep
+        uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
+        with:
+          repo: opengrep/opengrep
+          tag: v1.11.2
+          cache: enable
       - run: |
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
       - run: |
-          cd assets/semgrep_rules/; semgrep --test --disable-version-check --strict --metrics=off
+          cd assets/opengrep_rules/; opengrep --test --disable-version-check --strict --metrics=off
         shell: bash
       - run: |
-          JSON=$(semgrep \
+          JSON=$(opengrep \
             --disable-version-check --strict --metrics=off --json \
-            $(find assets/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name '*.test.yml' -not -name '*.test.yaml' -not -path "assets/semgrep_rules/generated/*" | sed 's/^/-c /g') \
-            assets/semgrep_rules/{client,services} || true)
+            $(find assets/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name '*.test.yml' -not -name '*.test.yaml' -not -path "assets/opengrep_rules/generated/*" | sed 's/^/-c /g') \
+            assets/opengrep_rules/{client,services} || true)
           ERRORS=$(echo "$JSON" | jq '.errors' || true)
           BADERRS=$(echo "$ERRORS" | jq '.[] | select(.level == "error")' || true)
           if [[ -n "$BADERRS" ]]; then
-            echo "Semgrep rule / version issue: $BADERRS"
+            echo "Opengrep rule / version issue: $BADERRS"
             exit 123
           fi
           RESULTCOUNT=$(echo "$JSON" | tr '\n' ' ' | tr '\t' ' ' | jq '.results | length')
           NUMRESULTS=$(grep -R ruleid: | wc -l)
           if [[ "$RESULTCOUNT" -lt "$NUMRESULTS" ]]; then
-            echo "Found fewer than $NUMRESULTS semgrep results"
+            echo "Found fewer than $NUMRESULTS opengrep results"
             exit 122
           fi
         shell: bash

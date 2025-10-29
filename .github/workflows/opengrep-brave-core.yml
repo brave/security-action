@@ -1,4 +1,4 @@
-name: Semgrep Brave Core Check
+name: Opengrep Brave Core Check
 on:
   workflow_dispatch:
   schedule:
@@ -7,22 +7,22 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'assets/semgrep_rules/**'
+      - 'assets/opengrep_rules/**'
 
 permissions:
   contents: read
 
 jobs:
-  semgrep-brave-core:
-    name: Check Brave Core with Semgrep Rules
+  opengrep-brave-core:
+    name: Check Brave Core with Opengrep Rules
     runs-on: ubuntu-latest
     steps:
       - name: Checkout security-action
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Run Semgrep on Brave Core
-        id: semgrep-scan
-        uses: ./actions/semgrep-compare
+      - name: Run Opengrep on Brave Core
+        id: opengrep-scan
+        uses: ./actions/opengrep-compare
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           target_repo: brave/brave-core

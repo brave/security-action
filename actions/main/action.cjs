@@ -88,9 +88,9 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
   debugLog('Security Action enabled for reviewdog')
 
-  // Install semgrep & pip-audit
+  // Install pip-audit (opengrep is installed via action.yml)
   await runCommand(`pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`, { shell: true })
-  debugLog('Installed semgrep & pip-audit')
+  debugLog('Installed pip-audit')
   // Disable man-db auto-update to speed up apt-get operations
   await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
   // Install xmllint for safesvg

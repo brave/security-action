@@ -1,20 +1,20 @@
 runner:
-  semgrep:
-    name: semgrep
+  opengrep:
+    name: opengrep
     cmd: |
       set -e
-      (semgrep \
-          -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
-          -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/vulns.yaml \
-          -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
-          -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/audit.yaml \
-          $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+      (opengrep \
+          -c $SCRIPTPATH/opengrep_rules/generated/oss/vulns.yaml \
+          -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
+          -c $SCRIPTPATH/opengrep_rules/generated/oss/audit.yaml \
+          -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/audit.yaml \
+          $(find $SCRIPTPATH/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/opengrep_rules/generated/*" | sed 's/^/-c /g') \
           --metrics=off \
           --quiet \
           $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
           --json \
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
-      | $SCRIPTPATH/cleaner.rb --semgrep --assignees) 2> reviewdog.semgrep.stderr.log
+      | $SCRIPTPATH/cleaner.rb --opengrep --assignees) 2> reviewdog.opengrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   sveltegrep:
@@ -30,12 +30,12 @@ runner:
         --suffix .extractedscript.ts \
         --ignore-no-files \
         --all-changed-files-suffix .svelte && \
-      semgrep \
-        -c $SCRIPTPATH/semgrep_rules/generated/oss/vulns.yaml \
-        -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/vulns.yaml \
-        -c $SCRIPTPATH/semgrep_rules/generated/oss/audit.yaml \
-        -c $SCRIPTPATH/semgrep_rules/frozen/nonfree/vulns.yaml \
-        $(find $SCRIPTPATH/semgrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/semgrep_rules/generated/*" | sed 's/^/-c /g') \
+      opengrep \
+        -c $SCRIPTPATH/opengrep_rules/generated/oss/vulns.yaml \
+        -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
+        -c $SCRIPTPATH/opengrep_rules/generated/oss/audit.yaml \
+        -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
+        $(find $SCRIPTPATH/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/opengrep_rules/generated/*" | sed 's/^/-c /g') \
         --metrics=off \
         --json \
         --quiet \

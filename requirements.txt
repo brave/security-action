@@ -1,4 +1,2 @@
-# Also alter semgrep self test yml
-semgrep~=1.130.0
 pip-audit~=2.9.0
 setuptools~=79.0.1
