@@ -16,10 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install opengrep
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v1.11.2
-          echo "$HOME/.opengrep/cli/latest" >> $GITHUB_PATH
-        shell: bash
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |-
+            const installOpengrep = (await import('${{ github.workspace }}/src/installOpengrep.js')).default
+            await installOpengrep()
       - run: |
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
