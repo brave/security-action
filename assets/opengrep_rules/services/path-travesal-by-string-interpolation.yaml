@@ -16,9 +16,22 @@ rules:
         - "*.server.js"
         - path-travesal-by-string-interpolation.ts
         - path-travesal-by-string-interpolation.svelte
-    patterns:
-      - pattern: fetch($URL, ...)
-      - metavariable-regex:
-          metavariable: $URL
-          # Trigger on /x/${v} but don't trigger on /x/?y=${v}
-          regex: (`.[^#?]+\$)
+    mode: taint
+    pattern-sources:
+      - label: TAINTED
+        patterns:
+          - pattern-either:
+              - pattern: $VAR
+          - metavariable-pattern:
+              metavariable: $VAR
+              patterns:
+                - pattern-not-regex: ^(env|process|config)\.
+    pattern-sinks:
+      - requires: TAINTED
+        patterns:
+          - pattern: fetch($URL, ...)
+          - focus-metavariable: $URL
+          - metavariable-pattern:
+              metavariable: $URL
+              patterns:
+                - pattern-regex: (`.[^#?]+\$)
