@@ -5,7 +5,7 @@ rules:
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/checks.md
         - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++.md#CHECK_DCHECK_and_NOTREACHED
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/check-vs-dcheck.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/check-vs-dcheck.yaml
       assignees: |
         thypon
         cdesouza-chromium

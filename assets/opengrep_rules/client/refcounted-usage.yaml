@@ -2,7 +2,7 @@ rules:
   - id: refcounted-usage
     metadata:
       author: Artem Chaikin
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/refcounted-usage.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/refcounted-usage.yaml
       assignees: |
         stoletheminerals
         cdesouza-chromium

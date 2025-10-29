@@ -4,7 +4,7 @@ rules:
       author: Artem Chaikin
       references:
         - https://github.com/brave/brave-browser/wiki/Security-reviews
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-execute-script-ios.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/brave-execute-script-ios.yaml
       assignees: |
         stoletheminerals
         bridiver

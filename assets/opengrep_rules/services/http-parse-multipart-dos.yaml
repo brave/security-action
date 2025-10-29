@@ -6,7 +6,7 @@ rules:
       references:
         - https://pkg.go.dev/net/http#Request.ParseMultipartForm
         - https://pkg.go.dev/net/http#MaxBytesReader
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/http-parse-multipart-dos.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/http-parse-multipart-dos.yaml
       assignees: |
         thypon
         kdenhartog

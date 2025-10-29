@@ -5,7 +5,7 @@ rules:
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/docs/security/mojo.md#Validate-privilege-presuming-data-received-over-IPC
         - https://chromium.googlesource.com/chromium/src/+/main/docs/security/ipc-reviews.md
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/mojo-security-validation.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/mojo-security-validation.yaml
       assignees: |
         thypon
         cdesouza-chromium

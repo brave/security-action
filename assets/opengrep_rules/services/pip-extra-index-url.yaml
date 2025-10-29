@@ -6,7 +6,7 @@ rules:
         - https://portswigger.net/daily-swig/dependency-confusion-attack-mounted-via-pypi-repo-exposes-flawed-package-installer-behavior
         - https://www.bleepingcomputer.com/news/security/pytorch-discloses-malicious-dependency-chain-compromise-over-holidays/
       confidence: LOW
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/pip-extra-index-url.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/pip-extra-index-url.yaml
       category: security
     message: >-
       Use --index-url instead of --extra-index-url to avoid dependency confusion. When using --extra-index-url, pip looks on pypi.org as well as the private index. It may install a malicious package from pypi.org with the same name as your private package instead of the package in your private index.

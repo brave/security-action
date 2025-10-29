@@ -2,7 +2,7 @@ rules:
   - id: chromium-insecure-gurl
     metadata:
       author: Andrea Brancaleoni <abc@pompel.me>
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/chromium-insecure-gurl.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/chromium-insecure-gurl.yaml
       assignees: |
         thypon
         fmarier

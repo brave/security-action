@@ -4,7 +4,7 @@ rules:
       author: Artem Chaikin
       references:
         - https://chromium.googlesource.com/chromium/src.git/+/main/docs/dangling_ptr.md
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/dangling-pointer-trait.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/dangling-pointer-trait.yaml
       assignees: |
         stoletheminerals
         thypon

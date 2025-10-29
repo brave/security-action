@@ -5,7 +5,7 @@ rules:
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/docs/security/service-worker-security-faq.md
         - https://github.com/brave/brave-browser/wiki/Security-reviews
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/service-worker-origin-validation.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/service-worker-origin-validation.yaml
       assignees: |
         thypon
         diracdeltas

@@ -37,7 +37,7 @@ rules:
       references:
         - https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components
         - https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/brave-third-party-action-not-pinned-to-commit-sha.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/brave-third-party-action-not-pinned-to-commit-sha.yaml
       category: security
       technology:
         - github-actions

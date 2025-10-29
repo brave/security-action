@@ -4,7 +4,7 @@ rules:
       author: Andrea Brancaleoni <abc@pompel.me>
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/base/containers/README.md
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/container-performance-choice.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/container-performance-choice.yaml
       assignees: |
         thypon
         cdesouza-chromium

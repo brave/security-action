@@ -6,7 +6,7 @@ rules:
         - https://github.com/brave/brave-browser/wiki/Security-reviews
         - https://chromium.googlesource.com/chromium/src/+/main/docs/security/web-platform-security-guidelines.md
         - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++-features.md#engines-and-generators-from-random_banned
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/cryptography-random-usage.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/cryptography-random-usage.yaml
       assignees: |
         thypon
         cdesouza-chromium
