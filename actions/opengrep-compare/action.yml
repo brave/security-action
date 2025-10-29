@@ -50,13 +50,10 @@ runs:
         python-version: '3.13'
 
     - name: Install Opengrep
-      uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
-      with:
-        repo: opengrep/opengrep
-        tag: v1.11.2
-        platform: manylinux
-        arch: x86
-        cache: enable
+      shell: bash
+      run: |
+        curl -sSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v1.11.2
+        echo "$HOME/.opengrep/cli" >> $GITHUB_PATH
 
     - name: Install Python dependencies
       shell: bash

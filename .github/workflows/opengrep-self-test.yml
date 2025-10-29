@@ -16,13 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install opengrep
-        uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2 # v2.1.0
-        with:
-          repo: opengrep/opengrep
-          tag: v1.11.2
-          platform: manylinux
-          arch: x86
-          cache: enable
+        run: |
+          curl -sSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v1.11.2
+          echo "$HOME/.opengrep/cli" >> $GITHUB_PATH
+        shell: bash
       - run: |
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
