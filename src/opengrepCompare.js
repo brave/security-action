@@ -49,7 +49,7 @@ function getChangedRuleFiles (actionPath, baseRef) {
   }
 }
 
-async function runSemgrep (rulesPath, targetPath = '.', specificRules = null) {
+async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
   console.log(`Looking for rules in: ${rulesPath}`)
 
   let ruleFiles
@@ -74,7 +74,7 @@ async function runSemgrep (rulesPath, targetPath = '.', specificRules = null) {
   const configArgs = ruleFiles.map(f => `-c ${f}`).join(' ')
 
   console.log(`Running opengrep on: ${targetPath}`)
-  const command = `opengrep --disable-version-check --metrics=off --json ${configArgs} ${targetPath} 2>/dev/null || true`
+  const command = `opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`
 
   const output = execCommand(command, { maxBuffer: 50 * 1024 * 1024 })
 
@@ -273,7 +273,7 @@ export default async function opengrepCompare (options = {}) {
       })
     }
 
-    baseResults = await runSemgrep(baseRulesPath, scanPath, baseRuleFiles)
+    baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles)
     baseGrouped = groupFindingsByRule(baseResults.results)
 
     console.log(`Base branch findings: ${baseResults.results.length}`)
@@ -284,7 +284,7 @@ export default async function opengrepCompare (options = {}) {
   console.log('Scanning with CURRENT branch rules (HEAD)')
   console.log('='.repeat(60))
 
-  const currentResults = await runSemgrep(currentRulesPath, scanPath, currentRuleFiles)
+  const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles)
   const currentGrouped = groupFindingsByRule(currentResults.results)
 
   console.log(`Current branch findings: ${currentResults.results.length}`)

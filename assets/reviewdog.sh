@@ -8,7 +8,7 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 export SEC_ACTION_DEBUG=$SEC_ACTION_DEBUG
 export ASSIGNEES=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')
 
-RUNNERS="safesvg tfsec semgrep sveltegrep npm-audit pip-audit" # disabled: brakeman
+RUNNERS="safesvg tfsec opengrep sveltegrep npm-audit pip-audit" # disabled: brakeman
 
 if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do

@@ -1,10 +1,10 @@
-# Semgrep Compare Action
+# Opengrep Compare Action
 
-This GitHub Action compares Semgrep findings between the base branch rules and current branch rules, showing only the delta introduced by new or modified rules.
+This GitHub Action compares Opengrep findings between the base branch rules and current branch rules, showing only the delta introduced by new or modified rules.
 
 ## Features
 
-- **Ruleset Comparison**: Runs Semgrep twice - once with base branch rules, once with current branch rules
+- **Ruleset Comparison**: Runs Opengrep twice - once with base branch rules, once with current branch rules
 - **Delta Analysis**: Shows only new findings introduced by rule changes
 - **Percentage Metrics**: Displays percentage increase/decrease in findings
 - **Git Worktrees**: Uses git worktrees for efficient parallel rule comparison
@@ -19,8 +19,8 @@ This GitHub Action compares Semgrep findings between the base branch rules and c
 
 1. **Detects changed rule files** - Uses `git diff` to find modified/added rules
 2. **Creates git worktree** with base branch rules
-3. **Runs Semgrep with changed rules only** on target (base version)
-4. **Runs Semgrep with changed rules only** on target (current version)
+3. **Runs Opengrep with changed rules only** on target (base version)
+4. **Runs Opengrep with changed rules only** on target (current version)
 5. **Calculates delta** - New findings, removed findings, new rules
 6. **Reports only the changes** introduced by modified rules
 
@@ -42,12 +42,12 @@ Set `compare_rules: false` to skip comparison and just scan with current rules.
 ### Basic PR Workflow
 
 ```yaml
-name: Semgrep Compare
+name: Opengrep Compare
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'assets/semgrep_rules/**'
+      - 'assets/opengrep_rules/**'
 
 permissions:
   contents: read
@@ -61,7 +61,7 @@ jobs:
         with:
           fetch-depth: 0  # Need full history for worktrees
 
-      - uses: ./actions/semgrep-compare
+      - uses: ./actions/opengrep-compare
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           target_repo: brave/brave-core
@@ -86,7 +86,7 @@ jobs:
           repository: brave/brave-core
           path: brave-core
 
-      - uses: ./security-action/actions/semgrep-compare
+      - uses: ./security-action/actions/opengrep-compare
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           local_target: brave-core  # Use already checked out directory
@@ -96,19 +96,19 @@ jobs:
 
 ```bash
 # Compare base vs current rules on brave-core (clones repo)
-./run.js ./src/semgrepCompare.js --target-repo=brave/brave-core
+./run.js ./src/opengrepCompare.js --target-repo=brave/brave-core
 
 # Use local directory (skip clone)
-./run.js ./src/semgrepCompare.js --local-target=/path/to/brave-core
+./run.js ./src/opengrepCompare.js --local-target=/path/to/brave-core
 
 # Disable comparison (single scan only)
-./run.js ./src/semgrepCompare.js --target-repo=brave/brave-core --compare-rules=false
+./run.js ./src/opengrepCompare.js --target-repo=brave/brave-core --compare-rules=false
 
 # Custom base branch
-./run.js ./src/semgrepCompare.js --target-repo=brave/brave-core --base-ref=develop
+./run.js ./src/opengrepCompare.js --target-repo=brave/brave-core --base-ref=develop
 
 # Scan with all rules (not just changed ones)
-./run.js ./src/semgrepCompare.js --target-repo=brave/brave-core --changed-rules-only=false
+./run.js ./src/opengrepCompare.js --target-repo=brave/brave-core --changed-rules-only=false
 ```
 
 ## Inputs
@@ -142,7 +142,7 @@ jobs:
 The action posts a comment showing the delta:
 
 ```markdown
-## Semgrep Findings
+## Opengrep Findings
 
 📈 **Comparison Results**
 
@@ -184,10 +184,10 @@ The action posts a comment showing the delta:
 
 ### 1. PR Validation
 
-Ensure new Semgrep rules don't add excessive noise:
+Ensure new Opengrep rules don't add excessive noise:
 
 ```yaml
-- uses: ./actions/semgrep-compare
+- uses: ./actions/opengrep-compare
   id: compare
   with:
     github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -217,7 +217,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: ./actions/semgrep-compare
+      - uses: ./actions/opengrep-compare
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           target_repo: brave/brave-core
@@ -231,7 +231,7 @@ jobs:
 git clone https://github.com/brave/brave-core.git /tmp/brave-core
 
 # Test your rule changes multiple times
-./run.js ./src/semgrepCompare.js --local-target=/tmp/brave-core
+./run.js ./src/opengrepCompare.js --local-target=/tmp/brave-core
 ```
 
 ## Troubleshooting
@@ -247,4 +247,4 @@ git clone https://github.com/brave/brave-core.git /tmp/brave-core
 
 ## Examples
 
-See [`.github/workflows/semgrep-brave-core.yml`](../../.github/workflows/semgrep-brave-core.yml) for a complete example.
+See [`.github/workflows/opengrep-brave-core.yml`](../../.github/workflows/opengrep-brave-core.yml) for a complete example.

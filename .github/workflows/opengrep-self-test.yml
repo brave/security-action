@@ -24,11 +24,11 @@ jobs:
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
       - run: |
-          cd assets/opengrep_rules/; opengrep --test --disable-version-check --strict --metrics=off
+          cd assets/opengrep_rules/; opengrep --test --disable-version-check --strict
         shell: bash
       - run: |
           JSON=$(opengrep \
-            --disable-version-check --strict --metrics=off --json \
+            --disable-version-check --strict --json \
             $(find assets/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name '*.test.yml' -not -name '*.test.yaml' -not -path "assets/opengrep_rules/generated/*" | sed 's/^/-c /g') \
             assets/opengrep_rules/{client,services} || true)
           ERRORS=$(echo "$JSON" | jq '.errors' || true)
