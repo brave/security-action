@@ -53,7 +53,7 @@ runs:
       shell: bash
       run: |
         curl -sSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v1.11.2
-        echo "$HOME/.opengrep/cli" >> $GITHUB_PATH
+        echo "$HOME/.opengrep/cli/latest" >> $GITHUB_PATH
 
     - name: Install Python dependencies
       shell: bash
