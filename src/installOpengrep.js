@@ -42,9 +42,42 @@ function calculateSHA256 (buffer) {
 }
 
 /**
+ * Check if opengrep is already installed and working
+ */
+function isOpengrepInstalled () {
+  try {
+    const opengrepBin = path.join(os.homedir(), '.opengrep', 'cli', 'latest', 'opengrep')
+    if (!fs.existsSync(opengrepBin)) {
+      return false
+    }
+
+    // Verify it runs and reports the correct version
+    const output = execSync(`"${opengrepBin}" --version`, { encoding: 'utf-8' }).trim()
+    console.log(`Found existing opengrep: ${output}`)
+    return output.includes(OPENGREP_VERSION.replace('v', ''))
+  } catch (error) {
+    return false
+  }
+}
+
+/**
  * Main installation function
  */
 export default async function installOpengrep () {
+  // Add to PATH regardless (needed for subsequent steps)
+  const opengrepPath = path.join(os.homedir(), '.opengrep', 'cli', 'latest')
+  const githubPath = process.env.GITHUB_PATH
+
+  if (githubPath) {
+    fs.appendFileSync(githubPath, `${opengrepPath}\n`)
+  }
+
+  // Check if already installed
+  if (isOpengrepInstalled()) {
+    console.log(`✓ Opengrep ${OPENGREP_VERSION} already installed, skipping download`)
+    return
+  }
+
   console.log(`Downloading opengrep install script from ${OPENGREP_VERSION}...`)
   console.log(`URL: ${INSTALL_SCRIPT_URL}`)
 
@@ -78,17 +111,6 @@ export default async function installOpengrep () {
     })
 
     console.log('✓ Opengrep installed successfully')
-
-    // Add to PATH
-    const opengrepPath = path.join(os.homedir(), '.opengrep', 'cli', 'latest')
-    const githubPath = process.env.GITHUB_PATH
-
-    if (githubPath) {
-      fs.appendFileSync(githubPath, `${opengrepPath}\n`)
-      console.log(`✓ Added ${opengrepPath} to GITHUB_PATH`)
-    } else {
-      console.log(`Note: Add ${opengrepPath} to your PATH manually`)
-    }
   } finally {
     // Clean up temporary script
     fs.unlinkSync(scriptPath)

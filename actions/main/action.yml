@@ -113,6 +113,12 @@ runs:
         tag: v1.28.14
         cache: enable
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Cache opengrep
+      uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+      with:
+        path: ~/.opengrep
+        key: opengrep-v1.11.2-${{ runner.os }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install opengrep
       uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       with:
