@@ -21,6 +21,7 @@ jobs:
           repo: opengrep/opengrep
           tag: v1.11.2
           platform: manylinux
+          arch: x86
           cache: enable
       - run: |
           python3 -m pip --disable-pip-version-check install -r requirements.txt
