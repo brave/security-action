@@ -27,7 +27,7 @@ function getChangedRuleFiles (actionPath, baseRef) {
   try {
     // Get modified, added, renamed rule files (paths relative to repo root)
     const diffOutput = execCommand(
-      `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/semgrep_rules/`,
+      `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/opengrep_rules/`,
       { cwd: actionPath }
     )
 
@@ -49,7 +49,7 @@ function getChangedRuleFiles (actionPath, baseRef) {
   }
 }
 
-async function runSemgrep (rulesPath, targetPath = '.', specificRules = null) {
+async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
   console.log(`Looking for rules in: ${rulesPath}`)
 
   let ruleFiles
@@ -73,15 +73,15 @@ async function runSemgrep (rulesPath, targetPath = '.', specificRules = null) {
 
   const configArgs = ruleFiles.map(f => `-c ${f}`).join(' ')
 
-  console.log(`Running semgrep on: ${targetPath}`)
-  const command = `semgrep --disable-version-check --metrics=off --json ${configArgs} ${targetPath} 2>/dev/null || true`
+  console.log(`Running opengrep on: ${targetPath}`)
+  const command = `opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`
 
   const output = execCommand(command, { maxBuffer: 50 * 1024 * 1024 })
 
   try {
     return JSON.parse(output)
   } catch (e) {
-    console.error('Failed to parse semgrep output')
+    console.error('Failed to parse opengrep output')
     console.error('Output:', output.substring(0, 1000))
     return { results: [], errors: [] }
   }
@@ -152,7 +152,7 @@ function calculateDelta (baseGrouped, currentGrouped) {
   return delta
 }
 
-export default async function semgrepCompare (options = {}) {
+export default async function opengrepCompare (options = {}) {
   const targetRepo = options['target-repo'] || options.target_repo
   const targetPath = options['target-path'] || options.target_path
   const localTarget = options['local-target'] || options.local_target
@@ -163,7 +163,7 @@ export default async function semgrepCompare (options = {}) {
   const actionPath = path.join(__dirname, '..')
 
   console.log('='.repeat(60))
-  console.log('Semgrep Compare')
+  console.log('Opengrep Compare')
   console.log('='.repeat(60))
 
   // Detect changed rule files if enabled
@@ -195,7 +195,7 @@ export default async function semgrepCompare (options = {}) {
     scanPath = localTarget
   } else if (targetRepo) {
     console.log(`Target repository: ${targetRepo}`)
-    tempDir = path.join('/tmp', `semgrep-scan-${Date.now()}`)
+    tempDir = path.join('/tmp', `opengrep-scan-${Date.now()}`)
     execCommand(`mkdir -p ${tempDir}`)
     console.log(`Cloning ${targetRepo} (shallow clone)...`)
     execCommand(`git clone --depth 1 https://github.com/${targetRepo}.git ${tempDir}`)
@@ -214,7 +214,7 @@ export default async function semgrepCompare (options = {}) {
   let currentWorktree = null
 
   // Create worktree for current branch (to avoid uncommitted changes)
-  currentWorktree = path.join('/tmp', `semgrep-rules-current-${Date.now()}`)
+  currentWorktree = path.join('/tmp', `opengrep-rules-current-${Date.now()}`)
   try {
     execCommand(`git worktree add ${currentWorktree} HEAD`, { cwd: actionPath })
   } catch (e) {
@@ -222,15 +222,15 @@ export default async function semgrepCompare (options = {}) {
     throw e
   }
 
-  const currentRulesPath = path.join(currentWorktree, 'assets/semgrep_rules')
+  const currentRulesPath = path.join(currentWorktree, 'assets/opengrep_rules')
 
   // Map changed rule files to current worktree
   let currentRuleFiles = null
   if (changedRuleFilesRelative) {
     currentRuleFiles = changedRuleFilesRelative.map(f => {
-      // f is already relative like "assets/semgrep_rules/client/foo.yaml"
-      // Just extract the part after "assets/semgrep_rules/"
-      const relativePath = f.replace('assets/semgrep_rules/', '')
+      // f is already relative like "assets/opengrep_rules/client/foo.yaml"
+      // Just extract the part after "assets/opengrep_rules/"
+      const relativePath = f.replace('assets/opengrep_rules/', '')
       return path.join(currentRulesPath, relativePath)
     })
   }
@@ -242,7 +242,7 @@ export default async function semgrepCompare (options = {}) {
     console.log('='.repeat(60))
 
     // Create worktree for base branch rules
-    baseWorktree = path.join('/tmp', `semgrep-rules-base-${Date.now()}`)
+    baseWorktree = path.join('/tmp', `opengrep-rules-base-${Date.now()}`)
     try {
       execCommand(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
     } catch (e) {
@@ -252,14 +252,14 @@ export default async function semgrepCompare (options = {}) {
       execCommand(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
     }
 
-    const baseRulesPath = path.join(baseWorktree, 'assets/semgrep_rules')
+    const baseRulesPath = path.join(baseWorktree, 'assets/opengrep_rules')
 
     // Get the same rule files from base branch (if they exist)
     let baseRuleFiles = null
     if (changedRuleFilesRelative) {
       baseRuleFiles = changedRuleFilesRelative.map(f => {
-        // f is already relative like "assets/semgrep_rules/client/foo.yaml"
-        const relativePath = f.replace('assets/semgrep_rules/', '')
+        // f is already relative like "assets/opengrep_rules/client/foo.yaml"
+        const relativePath = f.replace('assets/opengrep_rules/', '')
         return path.join(baseRulesPath, relativePath)
       }).filter(f => {
         // Only include files that exist in base branch
@@ -273,7 +273,7 @@ export default async function semgrepCompare (options = {}) {
       })
     }
 
-    baseResults = await runSemgrep(baseRulesPath, scanPath, baseRuleFiles)
+    baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles)
     baseGrouped = groupFindingsByRule(baseResults.results)
 
     console.log(`Base branch findings: ${baseResults.results.length}`)
@@ -284,7 +284,7 @@ export default async function semgrepCompare (options = {}) {
   console.log('Scanning with CURRENT branch rules (HEAD)')
   console.log('='.repeat(60))
 
-  const currentResults = await runSemgrep(currentRulesPath, scanPath, currentRuleFiles)
+  const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles)
   const currentGrouped = groupFindingsByRule(currentResults.results)
 
   console.log(`Current branch findings: ${currentResults.results.length}`)
@@ -402,10 +402,10 @@ export default async function semgrepCompare (options = {}) {
 }
 
 export function generateMarkdownSummary (findings, ruleStats, delta, percentageIncrease, baseTotal, targetRepo, baseRef) {
-  let markdown = '## Semgrep Findings\n\n'
+  let markdown = '## Opengrep Findings\n\n'
 
   if (Object.keys(findings).length === 0) {
-    markdown += '✅ No Semgrep findings detected.\n'
+    markdown += '✅ No Opengrep findings detected.\n'
     return markdown
   }
 

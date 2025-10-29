@@ -1,6 +1,6 @@
 require 'yaml'
 
-SEMGREP_VERSION = `semgrep --version`.strip
+SEMGREP_VERSION = `opengrep --version`.strip
 
 HOST = 'https://semgrep.dev'
 

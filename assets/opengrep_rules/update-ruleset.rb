@@ -5,7 +5,7 @@ require 'fileutils'
 require 'yaml'
 require 'pp'
 
-SEMGREP_VERSION = `semgrep --version`.strip
+SEMGREP_VERSION = `opengrep --version`.strip
 RULESETS = [
 	'r/c.lang.security.insecure-use-memset.insecure-use-memset',
 	'r/c.lang.security.info-leak-on-non-formatted-string.info-leak-on-non-formated-string',

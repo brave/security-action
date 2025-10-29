@@ -9,23 +9,23 @@ async function findExistingComment (github, owner, repo, issueNumber) {
 
   return comments.data.find(comment =>
     comment.user.login === 'github-actions[bot]' &&
-    comment.body.includes('## Semgrep Findings')
+    comment.body.includes('## Opengrep Findings')
   )
 }
 
 module.exports = async ({ github, context, inputs, actionPath, core }) => {
-  console.log('Starting Semgrep scan...')
+  console.log('Starting Opengrep scan...')
 
   const targetRepo = inputs.target_repo || null
   const targetPath = inputs.target_path || null
   const baseRef = context.payload.pull_request?.base?.ref || inputs.base_ref || 'main'
 
-  // Import the shared semgrep compare logic
-  const semgrepModule = await import(path.join(actionPath, 'src/semgrepCompare.js'))
-  const semgrepCompare = semgrepModule.default
-  const generateMarkdownSummary = semgrepModule.generateMarkdownSummary
+  // Import the shared opengrep compare logic
+  const opengrepModule = await import(path.join(actionPath, 'src/opengrepCompare.js'))
+  const opengrepCompare = opengrepModule.default
+  const generateMarkdownSummary = opengrepModule.generateMarkdownSummary
 
-  // Run the semgrep scan
+  // Run the opengrep scan
   const options = {
     'target-repo': targetRepo,
     'target-path': targetPath,
@@ -34,10 +34,10 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
 
   let result
   try {
-    result = await semgrepCompare(options)
+    result = await opengrepCompare(options)
   } catch (error) {
-    console.error('Semgrep scan failed:', error)
-    core.setFailed('Semgrep scan failed: ' + error.message)
+    console.error('Opengrep scan failed:', error)
+    core.setFailed('Opengrep scan failed: ' + error.message)
     return
   }
 
@@ -112,5 +112,5 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
     .addRaw(markdown)
     .write()
 
-  console.log('Semgrep scan complete!')
+  console.log('Opengrep scan complete!')
 }

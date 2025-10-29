@@ -5,8 +5,8 @@
         "email": "security@brave.com"
     },
     "scripts": {
-        "lint": "standard --ignore assets/semgrep_rules",
-        "lint-fix": "standard --fix --ignore assets/semgrep_rules"
+        "lint": "standard --ignore assets/opengrep_rules",
+        "lint-fix": "standard --fix --ignore assets/opengrep_rules"
     },
     "dependencies": {
         "@octokit/core": "^6.1.4",

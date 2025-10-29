@@ -6,6 +6,6 @@
   ],
   "ignorePaths": [
     "t3sts/",
-    "assets/semgrep_rules/"
+    "assets/opengrep_rules/"
   ]
 }
