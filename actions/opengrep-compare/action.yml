@@ -54,6 +54,7 @@ runs:
       with:
         repo: opengrep/opengrep
         tag: v1.11.2
+        platform: manylinux
         cache: enable
 
     - name: Install Python dependencies
