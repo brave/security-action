@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install opengrep
         run: |
-          curl -sSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v1.11.2
+          curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash -s -- -v v1.11.2
           echo "$HOME/.opengrep/cli/latest" >> $GITHUB_PATH
         shell: bash
       - run: |
