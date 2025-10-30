@@ -1,0 +1,36 @@
+rules:
+  - id: chromium-security-dcheck-should-be-check
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/checks.md
+        - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++.md#CHECK_DCHECK_and_NOTREACHED
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/check-vs-dcheck.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+      category: security
+    languages: [cpp, c]
+    message: |
+      DCHECK() should not be used for security-critical invariants that must be verified in production.
+      Use CHECK() instead to ensure the invariant is always verified, not just in debug builds.
+      Common security-critical patterns: origin validation, bounds checking, privilege verification.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: DCHECK($CONDITION);
+          - pattern: DCHECK_EQ(..., $CONDITION);
+          - pattern: DCHECK_EQ($CONDITION, ...);
+          - pattern: DCHECK_NE($CONDITION, ...);
+          - pattern: DCHECK_NE(..., $CONDITION);
+          - pattern: DCHECK_LT($CONDITION, ...);
+          - pattern: DCHECK_LT(..., $CONDITION);
+          - pattern: DCHECK_LE(..., $CONDITION);
+          - pattern: DCHECK_LE($CONDITION, ...);
+          - pattern: DCHECK_GT(..., $CONDITION);
+          - pattern: DCHECK_GT($CONDITION, ...);
+          - pattern: DCHECK_GE(..., $CONDITION);
+          - pattern: DCHECK_GE($CONDITION, ...);
+      - metavariable-regex:
+          metavariable: $CONDITION
+          regex: .*(origin|security|privilege|auth|permission|bound|size|index|offset|length|capacity).*

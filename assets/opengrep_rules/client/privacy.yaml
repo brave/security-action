@@ -7,7 +7,7 @@ rules:
         bridiver
         arthuredelstein
         ShivanKaul
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/privacy.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/privacy.yaml
     message: "Privacy claim found"
     languages:
       - generic

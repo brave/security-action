@@ -2,7 +2,7 @@ rules:
   - id: in-process-browser-test
     metadata:
       author: Brian Johnson <bjohnson@brave.com>
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/in-process-browser-test.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/in-process-browser-test.yaml
       assignees: |
         goodov
         cdesouza-chromium

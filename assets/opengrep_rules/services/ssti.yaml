@@ -1,11 +1,9 @@
 rules:
   - id: go-ssti
-    patterns:
-      - pattern-inside: |
-          import ("html/template")
-          ...
-      - pattern: $TEMPLATE = fmt.Sprintf("...", $ARG, ...)
-      - patterns:
+    mode: taint
+    pattern-sources:
+      - label: USER_INPUT
+        patterns:
           - pattern-either:
               - pattern-inside: |
                   func $FN(..., $REQ *http.Request, ...){
@@ -19,26 +17,40 @@ rules:
                   func(..., $REQ *http.Request, ...){
                   ...
                   }
+          - pattern-either:
+              - pattern: $REQ.URL.Query().Get(...)
+              - pattern: $REQ.Form.Get(...)
+              - pattern: $REQ.PostForm.Get(...)
+              - pattern: $REQ.FormValue(...)
+              - pattern: $REQ.PostFormValue(...)
+    pattern-sanitizers:
       - patterns:
           - pattern-either:
-              - pattern-inside: |
-                  $ARG := $REQ.URL.Query().Get(...)
-                  ...
-                  $T, $ERR := $TMPL.Parse($TEMPLATE)
-              - pattern-inside: |
-                  $ARG := $REQ.Form.Get(...)
-                  ...
-                  $T, $ERR := $TMPL.Parse($TEMPLATE)
-              - pattern-inside: |
-                  $ARG := $REQ.PostForm.Get(...)
-                  ...
-                  $T, $ERR := $TMPL.Parse($TEMPLATE)
+              - pattern: html.EscapeString($X)
+              - pattern: template.HTMLEscapeString($X)
+              - pattern: $SANITIZE($X)
+          - metavariable-regex:
+              metavariable: $SANITIZE
+              regex: (?i)(sanitize|validate|escape|clean)
+    pattern-sinks:
+      - requires: USER_INPUT
+        patterns:
+          - pattern-inside: |
+              import ("html/template")
+              ...
+          - pattern-either:
+              - pattern: |
+                  var $TEMPLATE = fmt.Sprintf("...", ...)
+              - pattern: |
+                  $TEMPLATE := fmt.Sprintf("...", ...)
+              - pattern: |
+                  $TEMPLATE = fmt.Sprintf("...", ...)
     message: >-
       A server-side template injection occurs when an attacker is able to use native template syntax to inject a malicious payload into a template, which is then executed server-side. When using "html/template" always check that user inputs are validated and sanitized before included within the template.
     languages: [go]
     severity: ERROR
     metadata:
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/ssti.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/ssti.yaml
       original_source: https://github.com/returntocorp/semgrep-rules/blob/5b098c252feec688d243cef046d07597a546c25b/go/template/security/ssti.yaml
       category: security
       cwe:

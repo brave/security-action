@@ -3,7 +3,7 @@ rules:
     metadata:
       author: Ben Caller
       confidence: MEDIUM
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/path-travesal-by-string-interpolation.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/path-travesal-by-string-interpolation.yaml
       category: security
     message: The code contains new security hotspots which should be checked manually by a security team member! Could a user perform path traversal by setting a variable to include `../`?
     severity: INFO
@@ -16,9 +16,22 @@ rules:
         - "*.server.js"
         - path-travesal-by-string-interpolation.ts
         - path-travesal-by-string-interpolation.svelte
-    patterns:
-      - pattern: fetch($URL, ...)
-      - metavariable-regex:
-          metavariable: $URL
-          # Trigger on /x/${v} but don't trigger on /x/?y=${v}
-          regex: (`.[^#?]+\$)
+    mode: taint
+    pattern-sources:
+      - label: TAINTED
+        patterns:
+          - pattern-either:
+              - pattern: $VAR
+          - metavariable-pattern:
+              metavariable: $VAR
+              patterns:
+                - pattern-not-regex: ^(env|process|config)\.
+    pattern-sinks:
+      - requires: TAINTED
+        patterns:
+          - pattern: fetch($URL, ...)
+          - focus-metavariable: $URL
+          - metavariable-pattern:
+              metavariable: $URL
+              patterns:
+                - pattern-regex: (`.[^#?]+\$)

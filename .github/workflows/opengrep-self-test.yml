@@ -30,7 +30,8 @@ jobs:
           python3 -m pip --disable-pip-version-check install -r requirements.txt
         shell: bash
       - run: |
-          cd assets/opengrep_rules/; opengrep --test --disable-version-check --strict
+          set -e
+          cd assets/opengrep_rules/; opengrep test --strict .
         shell: bash
       - run: |
           JSON=$(opengrep \

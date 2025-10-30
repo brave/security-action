@@ -6,7 +6,7 @@ rules:
       - python
     severity: WARNING
     metadata:
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/internal-digest-call.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/internal-digest-call.yaml
       assignees: |
         stoletheminerals
         cdesouza-chromium
