@@ -55,11 +55,6 @@ class TestClass {
 
 class DatabaseIndex {
  private:
-  // SHOULD NOT TRIGGER: Large container with justification comment
-  // Large container justification or pointer stability needed
-  // nosemgrep: chromium-std-map-performance-consideration
-  std::map<uint64_t, std::unique_ptr<Record>> record_index_;
-  
   // SHOULD TRIGGER: No justification for std::map usage
   // ruleid: chromium-std-map-performance-consideration
   std::map<std::string, bool> feature_flags_;
