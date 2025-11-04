@@ -1,0 +1,47 @@
+rules:
+  - id: chromium-cryptography-random-usage
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/web-platform-security-guidelines.md
+        - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++-features.md#engines-and-generators-from-random_banned
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/cryptography-random-usage.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+        fmarier
+      category: security
+    languages: [cpp, c]
+    message: |
+      Usage of cryptographic functions or random number generation requires
+      security review according to Brave security guidelines. Use crypto::RandBytes()
+      for cryptographic purposes and base::RandomBitGenerator for non-cryptographic
+      randomness. Do not use engines/generators from <random> - use base::RandomBitGenerator
+      instead. Weak randomness can lead to serious security vulnerabilities.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: rand()
+          - pattern: srand($SEED)
+          - pattern: random()
+          - pattern: srandom($SEED)
+          - pattern: std::rand()
+          - pattern: std::srand($SEED)
+          - pattern-regex: std::random_device\s+\w+
+          - pattern-regex: std::mt19937\s+\w+
+          - pattern-regex: std::mt19937_64\s+\w+
+          - pattern-regex: std::minstd_rand\s+\w+
+          - pattern-regex: std::minstd_rand0\s+\w+
+          - pattern-regex: std::ranlux24\s+\w+
+          - pattern-regex: std::ranlux48\s+\w+
+          - pattern-regex: std::knuth_b\s+\w+
+          - pattern-regex: std::default_random_engine\s+\w+
+          - pattern: base::RandInt($MIN, $MAX)
+          - pattern: base::RandUint64()
+          - pattern: base::RandGenerator($SIZE)
+          - pattern: crypto::RandBytes($BUFFER, $SIZE)
+          - pattern: RAND_bytes($BUFFER, $SIZE)
+          - pattern: EVP_CIPHER_CTX_new()
+          - pattern: EVP_EncryptInit($CTX, ...)
+          - pattern: EVP_DecryptInit($CTX, ...)
