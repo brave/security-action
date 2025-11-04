@@ -7,7 +7,7 @@ rules:
         thypon
         diracdeltas
         bridiver
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/brave-isolated-world.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/brave-isolated-world.yaml
       category: security
     message: Security hotspot found (`ISOLATED_WORLD`). A security-team member should analyze the code security for possible vulnerabilities.
     severity: WARNING

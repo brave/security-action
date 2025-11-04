@@ -6,7 +6,7 @@ rules:
       assignees: |
         diracdeltas
         thypon
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/unsafejs-in-cpp.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/unsafejs-in-cpp.yaml
       category: security
     message: Unsafe JS in CPP strings
     languages:

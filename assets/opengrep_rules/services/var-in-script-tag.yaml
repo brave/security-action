@@ -24,7 +24,7 @@ rules:
       likelihood: LOW
       impact: MEDIUM
       license: Commons Clause License Condition v1.0[LGPL-2.1-only]
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/var-in-script-tag.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/var-in-script-tag.yaml
     languages:
       - generic
     paths:

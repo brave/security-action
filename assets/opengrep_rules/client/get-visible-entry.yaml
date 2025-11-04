@@ -5,7 +5,7 @@ rules:
       references:
         - https://github.com/brave/brave-browser/wiki/Security-reviews
       confidence: MEDIUM
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/get-visible-entry.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/get-visible-entry.yaml
       assignees: |
         thypon
         diracdeltas

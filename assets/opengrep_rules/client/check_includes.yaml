@@ -5,7 +5,7 @@ rules:
     severity: ERROR
     metadata:
       author: Andrea Brancaleoni <abc@pompel.me>
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/check_includes.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/check_includes.yaml
       assignees: |
         bridiver
         thypon

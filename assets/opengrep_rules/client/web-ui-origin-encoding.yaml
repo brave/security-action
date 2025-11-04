@@ -14,7 +14,7 @@ rules:
       assignees: |
         kdenhartog
         thypon
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/web-ui-origin-encoding.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/web-ui-origin-encoding.yaml
       category: security
       references:
         - https://github.com/brave/brave-browser/issues/43367

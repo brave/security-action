@@ -15,4 +15,4 @@ rules:
       category: security
       references:
         - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/not-using-hasownproperty-proto-access.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/not-using-hasownproperty-proto-access.yaml

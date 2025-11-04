@@ -4,7 +4,7 @@ rules:
       author: Artem Chaikin
       references:
         - https://github.com/brave/reviews/issues/1391
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/glide-library.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/glide-library.yaml
       assignees: |
         stoletheminerals
         bridiver

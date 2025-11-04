@@ -23,7 +23,7 @@ rules:
       impact: MEDIUM
       vulnerability_class:
         - Cross-Site-Scripting (XSS)
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/react-href-var.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/react-href-var.yaml
       original_source: https://semgrep.dev/r/typescript.react.security.audit.react-href-var.react-href-var
     languages:
       - typescript

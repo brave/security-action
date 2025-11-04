@@ -4,7 +4,7 @@ rules:
       author: Brian Johnson
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++-dos-and-donts.md#use-correctly
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/const_cast.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/const_cast.yaml
       assignees: |
         bridiver
         cdesouza-chromium

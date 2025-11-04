@@ -7,7 +7,7 @@ rules:
         diracdeltas
         fmarier
         thypon
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/licensing.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/licensing.yaml
       category: security
     message: "Non-free license detected"
     severity: ERROR

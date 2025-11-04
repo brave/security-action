@@ -4,7 +4,7 @@ rules:
       author: Brian Johnson <bjohnson@brave.com>
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/docs/chrome_browser_design_principles.md#structure_modularity
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/browser-dependency-inversion.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/browser-dependency-inversion.yaml
       assignees: |
         goodov
         cdesouza-chromium

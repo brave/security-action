@@ -5,7 +5,7 @@ rules:
           - pattern: '....getOriginalProfile()'
     metadata:
       author: Brian Johnson
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/client/android-profile-original.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/android-profile-original.yaml
       assignees: bridiver
       category: correctness
     message: Getting the original profile explicitly can lead to security and privacy issues

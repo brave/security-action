@@ -49,7 +49,7 @@ rules:
       vulnerability_class:
         - Improper Authorization
       source-rule-url: https://semgrep.dev/r/yaml.docker-compose.security.no-new-privileges.no-new-privileges
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/docker-compose-no-new-privileges.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/docker-compose-no-new-privileges.yaml
     languages:
       - yaml
     severity: WARNING

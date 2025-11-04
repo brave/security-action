@@ -18,7 +18,7 @@ rules:
       likelihood: LOW
       impact: LOW
       license: MIT
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/missing-noopener-window-open.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/missing-noopener-window-open.yaml
     languages:
       - generic
     paths:
@@ -78,7 +78,7 @@ rules:
       likelihood: LOW
       impact: LOW
       license: MIT
-      source: https://github.com/brave/security-action/blob/main/assets/semgrep_rules/services/missing-noopener-window-open.yaml
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/missing-noopener-window-open.yaml
     languages:
       - typescript
       - javascript
