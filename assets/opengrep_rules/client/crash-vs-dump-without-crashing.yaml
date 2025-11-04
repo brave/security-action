@@ -1,0 +1,28 @@
+rules:
+  - id: chromium-crash-vs-dump-without-crashing
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/base/check.h#324
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/crash-vs-dump-without-crashing.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+      category: correctness
+    languages:
+      - cpp
+      - c
+    message: |
+      Consider using DUMP_WILL_BE_CHECK() instead of base::debug::DumpWithoutCrashing()
+      when the intent is to eventually become a CHECK, as it better communicates this
+      intent and provides better debugging information. However, DumpWithoutCrashing()
+      is appropriate for debugging issues that may not become CHECKs.
+    severity: INFO
+    patterns:
+      - pattern: base::debug::DumpWithoutCrashing()
+      - pattern-not-inside: |
+          void $FUNC(...) {
+            ...
+            base::debug::DumpWithoutCrashing($LOCATION, $INTERVAL);
+            ...
+          }
