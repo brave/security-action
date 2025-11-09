@@ -11,10 +11,3 @@ brave_chrome_browser_deps = [
   # ok:sources_gni
   "//brave/app:brave_generated_resources_grit",
 ]
-
-brave_java_sources = [
-  # ruleid:sources_gni
-  "../../brave/android/java/org/chromium/chrome/browser/BraveAdFreeCalloutDialogFragment.java",
-  # ruleid:sources_gni
-  "BraveAppHooks.java",
-]

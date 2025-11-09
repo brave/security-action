@@ -1,0 +1,21 @@
+rules:
+  - id: java_sources_gni
+    metadata:
+      author: Brian Johnson
+      references:
+        - https://github.com/brave/brave-core/blob/master/docs/gni_sources.md
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/sources_gni.yaml
+      assignees: |
+        brave/Android
+    languages: [generic]
+    severity: ERROR
+    paths:
+      include:
+        - "brave_java_sources.gni"
+    message: >
+      New source files should not be added to sources.gni. Please see
+      https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for
+      details
+    pattern-either:
+      - pattern-regex: .*\.java
+      - pattern-regex: brave_java_sources \+= .*
