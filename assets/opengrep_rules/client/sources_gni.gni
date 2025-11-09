@@ -1,0 +1,18 @@
+# ruleid:sources_gni
+brave_chrome_browser_sources = [
+  "//brave/browser/brave_browser_features.cc",
+  "//brave/browser/brave_browser_features.h",
+  "//brave/browser/brave_browser_main_extra_parts.cc",
+  "//brave/browser/brave_browser_main_extra_parts.h",
+  "//brave/browser/brave_browser_main_parts.cc",
+  "//brave/browser/brave_browser_main_parts.h",
+]
+
+# ok:sources_gni
+brave_chrome_browser_deps = [
+  "//base",
+  "//brave/app:brave_generated_resources_grit",
+  "//brave/browser:browser_process",
+  "//brave/browser:sparkle_buildflags",
+  "//brave/browser/ai_chat",
+]

@@ -1,0 +1,25 @@
+rules:
+  - id: sources_gni
+    metadata:
+      author: Brian Johnson
+      references:
+        - https://github.com/brave/brave-core/blob/master/docs/gni_sources.md
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/sources_gni.yaml
+      assignees: |
+        brave/sources-gni-reviewers
+    languages: [generic]
+    severity: ERROR
+    paths:
+      include:
+        - "*_sources.gni"
+        - "sources.gni"
+    message: >
+      New source files should not be added to sources.gni. Please see
+      https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for
+      details
+    pattern-either:
+      - pattern-regex: .*\.h
+      - pattern-regex: .*\.cc
+      - pattern-regex: .*\.mm
+      - pattern-regex: .*\.cpp
+      - pattern-regex: .*\.hpp
