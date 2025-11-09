@@ -13,6 +13,7 @@ rules:
       include:
         - "*_sources.gni"
         - "sources.gni"
+        - "sources_gni.gni"
     message: >
       New source files should not be added to sources.gni. Please see
       https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for

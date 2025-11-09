@@ -12,6 +12,7 @@ rules:
     paths:
       include:
         - "brave_java_sources.gni"
+        - "*_sources.gni"
     message: >
       New source files should not be added to sources.gni. Please see
       https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for
