@@ -11,7 +11,7 @@ rules:
     severity: ERROR
     paths:
       include:
-        - "*java*sources.gni"
+        - "*java*sources*.gni"
     message: >
       New source files should not be added to sources.gni. Please see
       https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for
