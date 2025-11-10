@@ -6,12 +6,12 @@ rules:
         - https://github.com/brave/brave-core/blob/master/docs/gni_sources.md
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/sources_gni.yaml
       assignees: |
-        brave/Android
+        brave/java-sources-gni-reviewers
     languages: [generic]
     severity: ERROR
     paths:
       include:
-        - "*java*sources*.gni"
+        - "*java*_sources*.gni"
     message: >
       New source files should not be added to sources.gni. Please see
       https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for
