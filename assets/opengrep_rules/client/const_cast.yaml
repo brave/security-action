@@ -2,6 +2,7 @@ rules:
   - id: const_cast
     metadata:
       author: Brian Johnson
+      category: correctness
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/styleguide/c++/c++-dos-and-donts.md#use-correctly
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/const_cast.yaml

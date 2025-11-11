@@ -1,6 +1,7 @@
 rules:
   - id: cast-signed-to-unsigned
     metadata:
+      author: Andrea Brancaleoni
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/cast-signed-to-unsigned.yaml
       assignees: |
         fmarier

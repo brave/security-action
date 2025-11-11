@@ -6,6 +6,8 @@ rules:
       - python
     severity: WARNING
     metadata:
+      author: Andrea Brancaleoni
+      category: security
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/internal-digest-call.yaml
       assignees: |
         stoletheminerals
