@@ -94,7 +94,7 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
   }
 }
 
-function groupFindingsByRule (results) {
+function groupFindingsByRule (results, basePath = null) {
   const grouped = {}
 
   for (const result of results) {
@@ -102,8 +102,15 @@ function groupFindingsByRule (results) {
     if (!grouped[ruleId]) {
       grouped[ruleId] = []
     }
+
+    // Strip basePath from result.path if provided (for external repo scans)
+    let cleanPath = result.path
+    if (basePath && result.path.startsWith(basePath)) {
+      cleanPath = result.path.substring(basePath.length).replace(/^\//, '')
+    }
+
     grouped[ruleId].push({
-      path: result.path,
+      path: cleanPath,
       line: result.start.line,
       severity: result.extra.severity,
       message: result.extra.message
@@ -304,7 +311,7 @@ export default async function opengrepCompare (options = {}) {
       baseGrouped = {}
     } else {
       baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles)
-      baseGrouped = groupFindingsByRule(baseResults.results)
+      baseGrouped = groupFindingsByRule(baseResults.results, tempDir)
     }
 
     console.log(`Base branch findings: ${baseResults.results.length}`)
@@ -316,7 +323,7 @@ export default async function opengrepCompare (options = {}) {
   console.log('='.repeat(60))
 
   const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles)
-  const currentGrouped = groupFindingsByRule(currentResults.results)
+  const currentGrouped = groupFindingsByRule(currentResults.results, tempDir)
 
   console.log(`Current branch findings: ${currentResults.results.length}`)
 
