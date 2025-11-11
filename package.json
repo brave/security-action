@@ -6,7 +6,8 @@
     },
     "scripts": {
         "lint": "standard --ignore assets/opengrep_rules",
-        "lint-fix": "standard --fix --ignore assets/opengrep_rules"
+        "lint-fix": "standard --fix --ignore assets/opengrep_rules",
+        "lint-rules": "node src/checkRuleMetadata.js"
     },
     "dependencies": {
         "@octokit/core": "^6.1.4",
