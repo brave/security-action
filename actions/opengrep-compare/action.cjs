@@ -75,7 +75,8 @@ module.exports = async ({ github, context, inputs, actionPath, core }) => {
   core.setOutput('total_findings', totalFindings)
 
   // Generate markdown summary
-  const markdown = generateMarkdownSummary(findings, ruleStats, delta, percentageIncrease, baseTotal, targetRepo, baseRef)
+  const targetRepoBranch = result.targetRepoDefaultBranch
+  const markdown = generateMarkdownSummary(findings, ruleStats, delta, percentageIncrease, baseTotal, targetRepo, targetRepoBranch)
 
   // Post comment if this is a PR
   if (context.eventName === 'pull_request' && context.payload.pull_request) {

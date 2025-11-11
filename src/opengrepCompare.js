@@ -209,6 +209,7 @@ export default async function opengrepCompare (options = {}) {
   let scanPath
   let tempDir = null
   let shouldCleanup = false
+  let targetRepoDefaultBranch = null
 
   // Determine scan target
   if (localTarget) {
@@ -222,6 +223,15 @@ export default async function opengrepCompare (options = {}) {
     execCommand(`git clone --depth 1 https://github.com/${targetRepo}.git ${tempDir}`)
     scanPath = targetPath ? path.join(tempDir, targetPath) : tempDir
     shouldCleanup = true
+
+    // Detect the default branch of the target repo
+    try {
+      targetRepoDefaultBranch = execCommand(`git -C ${tempDir} rev-parse --abbrev-ref HEAD`)
+      console.log(`Target repo default branch: ${targetRepoDefaultBranch}`)
+    } catch (e) {
+      console.warn('Failed to detect target repo default branch, defaulting to "main"')
+      targetRepoDefaultBranch = 'main'
+    }
   } else {
     console.log('Scanning current directory')
     scanPath = '.'
@@ -435,11 +445,12 @@ export default async function opengrepCompare (options = {}) {
     delta: delta || null,
     percentageIncrease: delta ? parseFloat(percentageIncrease) : 0,
     baseTotal: baseResults ? baseResults.results.length : null,
-    noChanges: false
+    noChanges: false,
+    targetRepoDefaultBranch
   }
 }
 
-export function generateMarkdownSummary (findings, ruleStats, delta, percentageIncrease, baseTotal, targetRepo, baseRef) {
+export function generateMarkdownSummary (findings, ruleStats, delta, percentageIncrease, baseTotal, targetRepo, targetRepoBranch) {
   let markdown = '## Opengrep Findings\n\n'
 
   if (Object.keys(findings).length === 0) {
@@ -509,8 +520,8 @@ export function generateMarkdownSummary (findings, ruleStats, delta, percentageI
       const maxFindings = fileFindings.slice(0, 3)
       for (const f of maxFindings) {
         // Generate GitHub link if we have target repo
-        if (targetRepo) {
-          const githubUrl = `https://github.com/${targetRepo}/blob/${baseRef}/${f.path}#L${f.line}`
+        if (targetRepo && targetRepoBranch) {
+          const githubUrl = `https://github.com/${targetRepo}/blob/${targetRepoBranch}/${f.path}#L${f.line}`
           markdown += `  - [Line ${f.line}](${githubUrl})\n`
         } else {
           markdown += `  - Line ${f.line}\n`
