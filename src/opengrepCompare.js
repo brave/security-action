@@ -24,29 +24,23 @@ function execCommand (command, options = {}) {
 function getChangedRuleFiles (actionPath, baseRef) {
   console.log(`Detecting changed rule files between current branch and ${baseRef}...`)
 
-  try {
-    // Get modified, added, renamed rule files (paths relative to repo root)
-    const diffOutput = execCommand(
-      `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/opengrep_rules/`,
-      { cwd: actionPath }
-    )
+  // Get modified, added, renamed rule files (paths relative to repo root)
+  const diffOutput = execCommand(
+    `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/opengrep_rules/`,
+    { cwd: actionPath }
+  )
 
-    const changedFiles = diffOutput
-      .split('\n')
-      .filter(f => f.trim())
-      .filter(f => (f.endsWith('.yml') || f.endsWith('.yaml')))
-      .filter(f => !f.includes('.test.'))
-      .filter(f => !f.includes('/generated/'))
+  const changedFiles = diffOutput
+    .split('\n')
+    .filter(f => f.trim())
+    .filter(f => (f.endsWith('.yml') || f.endsWith('.yaml')))
+    .filter(f => !f.includes('.test.'))
+    .filter(f => !f.includes('/generated/'))
 
-    console.log(`Found ${changedFiles.length} changed rule files:`)
-    changedFiles.forEach(f => console.log(`  - ${f}`))
+  console.log(`Found ${changedFiles.length} changed rule files:`)
+  changedFiles.forEach(f => console.log(`  - ${f}`))
 
-    return changedFiles
-  } catch (error) {
-    console.error('Failed to detect changed files:', error.message)
-    console.error('Falling back to all rules')
-    return null
-  }
+  return changedFiles
 }
 
 async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
@@ -169,19 +163,26 @@ export default async function opengrepCompare (options = {}) {
   // Detect changed rule files if enabled
   let changedRuleFilesRelative = null
   if (changedRulesOnly) {
-    changedRuleFilesRelative = getChangedRuleFiles(actionPath, baseRef)
-    if (!changedRuleFilesRelative || changedRuleFilesRelative.length === 0) {
-      console.log('\n⚠️  No rule files changed. Nothing to scan.')
-      return {
-        total: 0,
-        rules: 0,
-        summary: [],
-        findings: {},
-        delta: null,
-        percentageIncrease: 0,
-        baseTotal: 0,
-        noChanges: true
+    try {
+      changedRuleFilesRelative = getChangedRuleFiles(actionPath, baseRef)
+      if (!changedRuleFilesRelative || changedRuleFilesRelative.length === 0) {
+        console.log('\n⚠️  No rule files changed. Nothing to scan.')
+        return {
+          total: 0,
+          rules: 0,
+          summary: [],
+          findings: {},
+          delta: null,
+          percentageIncrease: 0,
+          baseTotal: 0,
+          noChanges: true
+        }
       }
+    } catch (error) {
+      console.error('\n❌ Failed to detect changed rule files')
+      console.error('This usually means the base branch is not fetched.')
+      console.error('Error:', error.message)
+      throw new Error(`Failed to detect changed rule files: ${error.message}`)
     }
   }
 
@@ -218,8 +219,9 @@ export default async function opengrepCompare (options = {}) {
   try {
     execCommand(`git worktree add ${currentWorktree} HEAD`, { cwd: actionPath })
   } catch (e) {
-    console.error('Failed to create current worktree:', e.message)
-    throw e
+    console.error('\n❌ Failed to create current worktree')
+    console.error('Error:', e.message)
+    throw new Error(`Failed to create current worktree: ${e.message}`)
   }
 
   const currentRulesPath = path.join(currentWorktree, 'assets/opengrep_rules')
@@ -248,8 +250,16 @@ export default async function opengrepCompare (options = {}) {
     } catch (e) {
       // Try fetching first if worktree fails
       console.log(`Fetching ${baseRef}...`)
-      execCommand(`git fetch origin ${baseRef}`, { cwd: actionPath })
-      execCommand(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
+      try {
+        execCommand(`git fetch origin ${baseRef}`, { cwd: actionPath })
+        execCommand(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
+      } catch (fetchError) {
+        console.error('\n❌ Failed to create base branch worktree')
+        console.error('This usually means the base branch is not available.')
+        console.error('Make sure to checkout with fetch-depth: 0 and fetch the base branch.')
+        console.error('Error:', fetchError.message)
+        throw new Error(`Failed to create base branch worktree for ${baseRef}: ${fetchError.message}`)
+      }
     }
 
     const baseRulesPath = path.join(baseWorktree, 'assets/opengrep_rules')
