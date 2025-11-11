@@ -12,6 +12,7 @@ rules:
       - ts
     severity: WARNING
     metadata:
+      author: Andrea Brancaleoni
       category: security
       references:
         - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty

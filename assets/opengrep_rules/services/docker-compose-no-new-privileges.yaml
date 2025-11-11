@@ -26,6 +26,7 @@ rules:
       - focus-metavariable: "$SERVICE"
     message: Service '$SERVICE' allows for privilege escalation via setuid or setgid binaries. Add 'no-new-privileges=true' in 'security_opt' to prevent this.
     metadata:
+      author: Andrea Brancaleoni
       cwe:
         - 'CWE-732: Incorrect Permission Assignment for Critical Resource'
       owasp:

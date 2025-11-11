@@ -1,6 +1,7 @@
 rules:
   - id: missing-integrity
     metadata:
+      author: Andrea Brancaleoni
       category: security
       technology:
         - html

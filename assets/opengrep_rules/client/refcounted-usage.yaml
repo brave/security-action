@@ -2,6 +2,7 @@ rules:
   - id: refcounted-usage
     metadata:
       author: Artem Chaikin
+      category: security
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/refcounted-usage.yaml
       assignees: |
         stoletheminerals

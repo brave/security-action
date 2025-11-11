@@ -50,6 +50,7 @@ rules:
     languages: [go]
     severity: ERROR
     metadata:
+      author: Andrea Brancaleoni
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/ssti.yaml
       original_source: https://github.com/returntocorp/semgrep-rules/blob/5b098c252feec688d243cef046d07597a546c25b/go/template/security/ssti.yaml
       category: security

@@ -2,6 +2,7 @@ rules:
   - id: reinterpret_cast
     metadata:
       author: Artem Chaikin
+      category: security
       references:
         - https://chromium.googlesource.com/chromium/src/+/main/docs/unsafe_buffers.md#Avoid-reinterpret_cast
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/reinterpret_cast.yaml

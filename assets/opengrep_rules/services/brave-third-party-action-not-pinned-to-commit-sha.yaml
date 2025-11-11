@@ -31,6 +31,7 @@ rules:
             - pattern-not-regex: "@[0-9a-f]{40}\\s+#\\s+v?\\d+\\.\\d+\\.\\d+$"
             - pattern-not-regex: "^docker://.*@sha256:[0-9a-f]{64}\\s+#\\s+v?\\d+\\.\\d+\\.\\d+$"
     metadata:
+      author: Andrea Brancaleoni
       cwe:
         - "CWE-1357: Reliance on Insufficiently Trustworthy Component"
       owasp: A06:2021 - Vulnerable and Outdated Components

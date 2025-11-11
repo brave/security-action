@@ -2,6 +2,7 @@ rules:
   - id: privacy
     metadata:
       author: Andrea Brancaleoni <abc@pompel.me>
+      category: privacy
       confidence: LOW
       assignees: |
         bridiver
