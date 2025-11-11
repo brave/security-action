@@ -2,6 +2,7 @@ rules:
   - id: sources_gni
     metadata:
       author: Brian Johnson
+      category: correctness
       references:
         - https://github.com/brave/brave-core/blob/master/docs/gni_sources.md
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/sources_gni.yaml
