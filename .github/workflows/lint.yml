@@ -25,3 +25,4 @@ jobs:
       - if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]' }}
         run: npm audit
       - run: npm run lint
+      - run: npm run lint-rules
