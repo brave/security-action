@@ -47,10 +47,18 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
   console.log(`Looking for rules in: ${rulesPath}`)
 
   let ruleFiles
+  let configArgs
 
   if (specificRules && specificRules.length > 0) {
     console.log(`Using ${specificRules.length} specific rule files`)
     ruleFiles = specificRules
+
+    // Use relative paths from rulesPath to avoid temp directory in rule IDs
+    // This ensures rule IDs are clean like "client.java_sources_gni" instead of "tmp.opengrep-rules-current-xxx.assets..."
+    configArgs = ruleFiles.map(f => {
+      const relativePath = path.relative(rulesPath, f)
+      return `-c ${relativePath}`
+    }).join(' ')
   } else {
     // Find all rule files, excluding test files and generated rules
     ruleFiles = execCommand(
@@ -58,6 +66,12 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
     ).split('\n').filter(f => f.trim())
 
     console.log(`Found ${ruleFiles.length} rule files`)
+
+    // Use relative paths
+    configArgs = ruleFiles.map(f => {
+      const relativePath = path.relative(rulesPath, f)
+      return `-c ${relativePath}`
+    }).join(' ')
   }
 
   if (ruleFiles.length === 0) {
@@ -65,10 +79,9 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
     return { results: [], errors: [] }
   }
 
-  const configArgs = ruleFiles.map(f => `-c ${f}`).join(' ')
-
   console.log(`Running opengrep on: ${targetPath}`)
-  const command = `opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`
+  // Change working directory to rulesPath so relative paths work correctly
+  const command = `cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`
 
   const output = execCommand(command, { maxBuffer: 50 * 1024 * 1024 })
 
@@ -283,8 +296,16 @@ export default async function opengrepCompare (options = {}) {
       })
     }
 
-    baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles)
-    baseGrouped = groupFindingsByRule(baseResults.results)
+    // If all changed rules are new (don't exist in base), skip base scan
+    if (changedRuleFilesRelative && baseRuleFiles && baseRuleFiles.length === 0) {
+      console.log('\n⚠️  All changed rules are new. Skipping base branch scan.')
+      console.log('Comparison will show all findings as new.')
+      baseResults = { results: [], errors: [] }
+      baseGrouped = {}
+    } else {
+      baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles)
+      baseGrouped = groupFindingsByRule(baseResults.results)
+    }
 
     console.log(`Base branch findings: ${baseResults.results.length}`)
   }
