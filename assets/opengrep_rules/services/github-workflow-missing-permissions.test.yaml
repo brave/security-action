@@ -1,0 +1,228 @@
+# Test cases for github-workflow-missing-permissions rule
+
+# ruleid: github-workflow-missing-permissions
+name: Build without permissions
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: npm test
+
+---
+# ruleid: github-workflow-missing-permissions
+name: Multiple jobs without permissions
+on:
+  pull_request:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
+
+---
+# ok: github-workflow-missing-permissions
+name: Top-level permissions defined
+on:
+  push:
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
+
+---
+# ok: github-workflow-missing-permissions
+name: Job-level permissions defined
+on:
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
+
+---
+# ok: github-workflow-missing-permissions
+name: Empty permissions (restrict all)
+on:
+  push:
+permissions: {}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "No permissions needed"
+
+---
+# ok: github-workflow-missing-permissions
+name: Multiple permission scopes
+on:
+  push:
+permissions:
+  actions: read
+  checks: write
+  contents: read
+  deployments: write
+  id-token: write
+  issues: write
+  discussions: write
+  packages: read
+  pages: write
+  pull-requests: write
+  security-events: write
+  statuses: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
+
+---
+# ok: github-workflow-missing-permissions
+name: Mixed - top-level and job-level permissions
+on:
+  push:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      deployments: write
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm run deploy
+
+---
+# ruleid: github-workflow-missing-permissions
+name: Workflow dispatch without permissions
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "Deploying to ${{ github.event.inputs.environment }}"
+
+---
+# ok: github-workflow-missing-permissions
+name: Read-only permissions
+on:
+  pull_request:
+permissions: read-all
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm audit
+
+---
+# ok: github-workflow-missing-permissions
+name: Write-all permissions (explicit)
+on:
+  push:
+    branches:
+      - main
+permissions: write-all
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm run release
+
+---
+# ruleid: github-workflow-missing-permissions
+name: Schedule trigger without permissions
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm run nightly-build
+
+---
+# ok: github-workflow-missing-permissions
+name: Permissions before on trigger
+permissions:
+  contents: read
+  issues: write
+on:
+  issues:
+    types:
+      - opened
+      - labeled
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "Triaging issue"
+
+---
+# ruleid: github-workflow-missing-permissions
+name: Pull request target without permissions
+on:
+  pull_request_target:
+    types:
+      - opened
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "Adding comment"
+
+---
+# ok: github-workflow-missing-permissions
+name: Reusable workflow with permissions
+on:
+  workflow_call:
+    inputs:
+      config:
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm test
