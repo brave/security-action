@@ -1,0 +1,12 @@
+brave_java_sources = [
+  # ruleid:java_sources_gni
+  "../../brave/android/java/org/chromium/chrome/browser/BraveAdFreeCalloutDialogFragment.java",
+  # ruleid:java_sources_gni
+  "BraveAppHooks.java",
+]
+
+# ruleid:java_sources_gni
+brave_java_sources += brave_ads_java_sources
+
+# ok:java_sources_gni
+brave_java_deps += brave_ads_java_deps
