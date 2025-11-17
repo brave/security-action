@@ -7,7 +7,7 @@ rules:
         - https://github.com/brave/brave-core/blob/master/docs/gni_sources.md#circular-dependencies-circular-dependencies
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/ui_build_gn.yaml
       assignees: |
-        bridiver petemill
+        brave/ui-build-gn-reviewers
     languages: [generic]
     severity: ERROR
     paths:
