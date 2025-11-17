@@ -1,0 +1,13 @@
+brave_chrome_browser_sources = [
+  # ruleid:sources_gni
+  "//brave/browser/brave_browser_features.cc",
+  # ruleid:sources_gni
+  "brave_browser_features.h",
+]
+
+brave_chrome_browser_deps = [
+  # ok:sources_gni
+  "//base",
+  # ok:sources_gni
+  "//brave/app:brave_generated_resources_grit",
+]
