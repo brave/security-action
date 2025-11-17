@@ -13,6 +13,8 @@ rules:
     paths:
       include:
         - "browser/ui/BUILD.gn"
+        # For testing only
+        - "ui_build_gn.gn"
     message: >
       brave/browser/ui/BUILD.gn should not have new source files added to it. see
       https://github.com/brave/brave-core/blob/master/docs/gni_sources.md#circular-dependencies-circular-dependencies
