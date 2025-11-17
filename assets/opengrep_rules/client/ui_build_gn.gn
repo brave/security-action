@@ -1,0 +1,13 @@
+sources = [
+  # ruleid:ui_build_gn
+  "//brave/browser/brave_browser_features.cc",
+  # ruleid:ui_build_gn
+  "brave_browser_features.h",
+]
+
+deps = [
+  # ok:ui_build_gn
+  "//base",
+  # ok:ui_build_gn
+  "//brave/app:brave_generated_resources_grit",
+]
