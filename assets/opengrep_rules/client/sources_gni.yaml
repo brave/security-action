@@ -25,4 +25,3 @@ rules:
       - pattern-regex: .*\.mm
       - pattern-regex: .*\.cpp
       - pattern-regex: .*\.hpp
-      - pattern-regex: .*\.java
