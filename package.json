@@ -13,7 +13,7 @@
         "@octokit/core": "^6.1.4",
         "@slack/web-api": "^7.0.0",
         "@tryfabric/mack": "^1.2.1",
-        "glob": "^10.4.1",
+        "glob": "^12.0.0",
         "js-yaml": "^4.1.1",
         "markdown-to-txt": "^2.0.1"
     },
