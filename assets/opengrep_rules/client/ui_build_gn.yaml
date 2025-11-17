@@ -1,0 +1,24 @@
+rules:
+  - id: ui_build_gn
+    metadata:
+      author: Brian Johnson
+      category: correctness
+      references:
+        - https://github.com/brave/brave-core/blob/master/docs/gni_sources.md#circular-dependencies-circular-dependencies
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/ui_build_gn.yaml
+      assignees: |
+        bridiver petemill
+    languages: [generic]
+    severity: ERROR
+    paths:
+      include:
+        - "browser/ui/BUILD.gn"
+    message: >
+      brave/browser/ui/BUILD.gn should not have new source files added to it. see
+      https://github.com/brave/brave-core/blob/master/docs/gni_sources.md#circular-dependencies-circular-dependencies
+    pattern-either:
+      - pattern-regex: .*\.h
+      - pattern-regex: .*\.cc
+      - pattern-regex: .*\.mm
+      - pattern-regex: .*\.cpp
+      - pattern-regex: .*\.hpp
