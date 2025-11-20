@@ -19,7 +19,7 @@ function generateFileDiffHash (filePath) {
 /**
  * Format file list with collapsible details if needed
  */
-function formatFileList (files, repoOwner, repoName, prNumber, maxVisible = MAX_FILES_BEFORE_COLLAPSE) {
+function formatFileList (files, repoOwner, repoName, prNumber, maxVisible = MAX_FILES_BEFORE_COLLAPSE, maxCollapsed = null) {
   const sortedFiles = files.sort()
 
   if (sortedFiles.length === 0) {
@@ -39,13 +39,20 @@ function formatFileList (files, repoOwner, repoName, prNumber, maxVisible = MAX_
   // Collapse remaining files if more than maxVisible
   if (sortedFiles.length > maxVisible) {
     const remainingFiles = sortedFiles.slice(maxVisible)
+    const collapsedFiles = maxCollapsed ? remainingFiles.slice(0, maxCollapsed) : remainingFiles
+    const truncatedCount = remainingFiles.length - collapsedFiles.length
+
     output += '\n<details>\n'
     output += `<summary>... and ${remainingFiles.length} more files</summary>\n\n`
 
-    for (const file of remainingFiles) {
+    for (const file of collapsedFiles) {
       const diffHash = generateFileDiffHash(file)
       const fileUrl = `https://github.com/${repoOwner}/${repoName}/pull/${prNumber}/files#diff-${diffHash}`
       output += `- [\`${file}\`](${fileUrl})\n`
+    }
+
+    if (truncatedCount > 0) {
+      output += `\n_... and ${truncatedCount} more files (truncated due to comment length limit)_\n`
     }
 
     output += '</details>\n'
@@ -55,9 +62,9 @@ function formatFileList (files, repoOwner, repoName, prNumber, maxVisible = MAX_
 }
 
 /**
- * Generate markdown comment body
+ * Generate markdown comment body with automatic truncation if too long
  */
-function generateCommentBody (matchResult, repoOwner, repoName, prNumber) {
+function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCollapsed = null) {
   const { ownersToFiles, filesWithoutOwners, stats } = matchResult
 
   let body = COMMENT_IDENTIFIER + '\n'
@@ -89,7 +96,7 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber) {
     for (const [owner, files] of Object.entries(ownersToFiles)) {
       const ownerDisplay = owner.startsWith('@') ? owner : `@${owner}`
       body += `#### ${ownerDisplay} — ${files.length} file(s)\n\n`
-      body += formatFileList(files, repoOwner, repoName, prNumber)
+      body += formatFileList(files, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
       body += '\n'
     }
   }
@@ -97,7 +104,7 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber) {
   // Show files without owners
   if (filesWithoutOwners.length > 0) {
     body += '### ⚠️ Files Without Owners\n\n'
-    body += formatFileList(filesWithoutOwners, repoOwner, repoName, prNumber)
+    body += formatFileList(filesWithoutOwners, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
   }
 
   return body
@@ -145,6 +152,9 @@ export default async function codeownersComment ({
   matchResult,
   debug = false
 }) {
+  const MAX_COMMENT_LENGTH = 65536
+  const TRUNCATION_LIMITS = [100, 50, 20, 10, 5, 2, 1, 0]
+
   debug = debug === 'true' || debug === true
 
   if (debug) {
@@ -158,15 +168,44 @@ export default async function codeownersComment ({
     console.log('Deleted existing codeowners comment')
   }
 
-  // Generate new comment body
-  const body = generateCommentBody(
+  // Generate comment body, trying different truncation limits if needed
+  let body = generateCommentBody(
     matchResult,
     context.repo.owner,
     context.repo.repo,
-    context.issue.number
+    context.issue.number,
+    null // No truncation initially
   )
 
+  // If body is too long, progressively reduce collapsed file limit
+  let truncationIndex = 0
+  while (body.length > MAX_COMMENT_LENGTH && truncationIndex < TRUNCATION_LIMITS.length) {
+    const maxCollapsed = TRUNCATION_LIMITS[truncationIndex]
+    if (debug) {
+      console.log(`Comment too long (${body.length} chars), reducing collapsed files to ${maxCollapsed}...`)
+    }
+
+    body = generateCommentBody(
+      matchResult,
+      context.repo.owner,
+      context.repo.repo,
+      context.issue.number,
+      maxCollapsed
+    )
+    truncationIndex++
+  }
+
+  // If still too long, truncate the body directly as last resort
+  if (body.length > MAX_COMMENT_LENGTH) {
+    const truncationMessage = '\n\n---\n\n_Comment truncated due to length limit. See PR Files tab for complete list._'
+    body = body.substring(0, MAX_COMMENT_LENGTH - truncationMessage.length) + truncationMessage
+    if (debug) {
+      console.log(`Comment still too long, truncated to ${MAX_COMMENT_LENGTH} chars`)
+    }
+  }
+
   if (debug) {
+    console.log(`Final comment length: ${body.length} chars`)
     console.log('Comment body:')
     console.log(body)
   }
