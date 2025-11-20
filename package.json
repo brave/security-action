@@ -7,7 +7,8 @@
     "scripts": {
         "lint": "standard --ignore assets/opengrep_rules",
         "lint-fix": "standard --fix --ignore assets/opengrep_rules",
-        "lint-rules": "node src/checkRuleMetadata.js"
+        "lint-rules": "node src/checkRuleMetadata.js",
+        "test": "find src -name '*.test.js' -type f -exec node {} \\;"
     },
     "dependencies": {
         "@octokit/core": "^6.1.4",
