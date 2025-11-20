@@ -161,6 +161,16 @@ export default async function codeownersComment ({
     console.log('Generating codeowners comment...')
   }
 
+  // Skip if no files have owners (no CODEOWNERS matches)
+  if (matchResult.stats.filesWithOwners === 0) {
+    if (debug) {
+      console.log('No files have code owners, skipping comment')
+    }
+    // Still delete any existing comment
+    await deleteExistingComment({ context, github })
+    return null
+  }
+
   // Delete existing comment first
   const deleted = await deleteExistingComment({ context, github })
 
