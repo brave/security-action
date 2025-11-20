@@ -125,6 +125,24 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
     debugLog('Wrote changed files to file')
 
+    // codeowners matching step
+    const { default: matchCodeowners } = await import(`${actionPath}/src/matchCodeowners.js`)
+    const { default: codeownersComment } = await import(`${actionPath}/src/steps/codeownersComment.js`)
+
+    const codeownersMatch = matchCodeowners({
+      changedFiles,
+      basePath: process.cwd(),
+      debug: options.debug
+    })
+
+    await codeownersComment({
+      context,
+      github,
+      matchResult: codeownersMatch,
+      debug: options.debug
+    })
+    debugLog('Posted codeowners comment')
+
     // comments-before steps
     const { default: commentsNumber } = await import(`${actionPath}/src/steps/commentsNumber.js`)
     const { default: cleanupComments } = await import(`${actionPath}/src/steps/cleanupComments.js`)
