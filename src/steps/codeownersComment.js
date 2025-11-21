@@ -182,6 +182,16 @@ export default async function codeownersComment ({
     return null
   }
 
+  // Skip if no teams/groups are assigned (only individuals)
+  if (matchResult.stats.teams === 0) {
+    if (debug) {
+      console.log('No teams assigned, only individuals, skipping comment')
+    }
+    // Still delete any existing comment
+    await deleteExistingComment({ context, github })
+    return null
+  }
+
   // Delete existing comment first
   const deleted = await deleteExistingComment({ context, github })
 
