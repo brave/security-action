@@ -65,19 +65,24 @@ function formatFileList (files, repoOwner, repoName, prNumber, maxVisible = MAX_
  * Generate markdown comment body with automatic truncation if too long
  */
 function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCollapsed = null) {
-  const { ownersToFiles, filesWithoutOwners, stats } = matchResult
+  const { ownersToFiles, stats } = matchResult
 
   let body = COMMENT_IDENTIFIER + '\n'
   body += '## 📋 Code Owners Summary\n\n'
 
-  if (stats.uniqueOwners === 0 && stats.filesWithoutOwners === 0) {
+  if (stats.uniqueOwners === 0) {
     body += '_No files require code owner review._\n'
     return body
   }
 
   body += `**${stats.totalFiles}** file(s) changed\n`
   body += `- **${stats.filesWithOwners}** with assigned owners\n`
-  body += `- **${stats.filesWithoutOwners}** without owners\n\n`
+
+  if (stats.filesWithoutOwners > 0) {
+    body += `- **${stats.filesWithoutOwners}** without owners\n`
+  }
+
+  body += '\n'
 
   if (stats.teams > 0) {
     body += `**${stats.teams}** team(s) affected: ${stats.teamsList.join(', ')}\n`
@@ -99,12 +104,6 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
       body += formatFileList(files, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
       body += '\n'
     }
-  }
-
-  // Show files without owners
-  if (filesWithoutOwners.length > 0) {
-    body += '### ⚠️ Files Without Owners\n\n'
-    body += formatFileList(filesWithoutOwners, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
   }
 
   return body
