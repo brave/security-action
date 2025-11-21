@@ -154,22 +154,11 @@ export default async function codeownersComment ({
 }) {
   const MAX_COMMENT_LENGTH = 65536
   const TRUNCATION_LIMITS = [100, 50, 20, 10, 5, 2, 1, 0]
-  const MIN_FILES_THRESHOLD = 50
 
   debug = debug === 'true' || debug === true
 
   if (debug) {
     console.log('Generating codeowners comment...')
-  }
-
-  // Skip if PR has fewer than MIN_FILES_THRESHOLD files
-  if (matchResult.stats.totalFiles < MIN_FILES_THRESHOLD) {
-    if (debug) {
-      console.log(`PR has ${matchResult.stats.totalFiles} files (< ${MIN_FILES_THRESHOLD}), skipping comment`)
-    }
-    // Still delete any existing comment
-    await deleteExistingComment({ context, github })
-    return null
   }
 
   // Skip if no files have owners (no CODEOWNERS matches)
