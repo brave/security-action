@@ -149,15 +149,41 @@ export default async function codeownersComment ({
   context,
   github,
   matchResult,
-  debug = false
+  debug = false,
+  minFiles = 50,
+  mode = 'groups'
 }) {
   const MAX_COMMENT_LENGTH = 65536
   const TRUNCATION_LIMITS = [100, 50, 20, 10, 5, 2, 1, 0]
 
   debug = debug === 'true' || debug === true
 
+  // Parse minFiles as integer
+  const MIN_FILES_THRESHOLD = typeof minFiles === 'string' ? parseInt(minFiles, 10) : minFiles
+
   if (debug) {
     console.log('Generating codeowners comment...')
+    console.log(`Mode: ${mode}, Min files: ${MIN_FILES_THRESHOLD}`)
+  }
+
+  // Skip if mode is 'never'
+  if (mode === 'never') {
+    if (debug) {
+      console.log('Codeowners mode is "never", skipping comment')
+    }
+    // Still delete any existing comment
+    await deleteExistingComment({ context, github })
+    return null
+  }
+
+  // Skip if PR has fewer than MIN_FILES_THRESHOLD files
+  if (matchResult.stats.totalFiles < MIN_FILES_THRESHOLD) {
+    if (debug) {
+      console.log(`PR has ${matchResult.stats.totalFiles} files (< ${MIN_FILES_THRESHOLD}), skipping comment`)
+    }
+    // Still delete any existing comment
+    await deleteExistingComment({ context, github })
+    return null
   }
 
   // Skip if no files have owners (no CODEOWNERS matches)
@@ -170,10 +196,10 @@ export default async function codeownersComment ({
     return null
   }
 
-  // Skip if no teams/groups are assigned (only individuals)
-  if (matchResult.stats.teams === 0) {
+  // Skip if mode is 'groups' and no teams/groups are assigned (only individuals)
+  if (mode === 'groups' && matchResult.stats.teams === 0) {
     if (debug) {
-      console.log('No teams assigned, only individuals, skipping comment')
+      console.log('Mode is "groups" but no teams assigned, only individuals, skipping comment')
     }
     // Still delete any existing comment
     await deleteExistingComment({ context, github })

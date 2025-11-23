@@ -41,6 +41,12 @@ inputs:
   gh_to_slack_user_map:
     description: JSON map of github usernames to slack usernames
     required: false
+  codeowners_min_files:
+    description: Minimum number of changed files to trigger codeowners comment (default 50)
+    required: false
+  codeowners_mode:
+    description: 'When to post codeowners comment: never, groups, always (default: groups)'
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
