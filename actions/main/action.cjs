@@ -63,7 +63,9 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     baseline_scan_only: 'true',
     assignees: ASSIGNEES,
     hotwords: HOTWORDS,
-    hotwords_enabled: 'true'
+    hotwords_enabled: 'true',
+    codeowners_min_files: '50',
+    codeowners_mode: 'groups'
   }, config, properties, inputs)
 
   options.enabled = options.enabled === 'true'
@@ -139,7 +141,9 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       context,
       github,
       matchResult: codeownersMatch,
-      debug: options.debug
+      debug: options.debug,
+      minFiles: options.codeowners_min_files,
+      mode: options.codeowners_mode
     })
     debugLog('Posted codeowners comment')
 
