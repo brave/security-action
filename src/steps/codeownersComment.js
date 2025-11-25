@@ -110,32 +110,34 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
 }
 
 /**
- * Find existing codeowners comment
+ * Find all existing codeowners comments (using pagination to find all)
  */
-async function findExistingComment ({ context, github }) {
-  const comments = await github.rest.issues.listComments({
+async function findExistingComments ({ context, github }) {
+  const comments = await github.paginate(github.rest.issues.listComments, {
     owner: context.repo.owner,
     repo: context.repo.repo,
     issue_number: context.issue.number
   })
 
-  return comments.data.find(comment =>
+  return comments.filter(comment =>
     comment.body && comment.body.includes(COMMENT_IDENTIFIER)
   )
 }
 
 /**
- * Delete existing codeowners comment
+ * Delete all existing codeowners comments
  */
-async function deleteExistingComment ({ context, github }) {
-  const existingComment = await findExistingComment({ context, github })
+async function deleteExistingComments ({ context, github }) {
+  const existingComments = await findExistingComments({ context, github })
 
-  if (existingComment) {
-    await github.rest.issues.deleteComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      comment_id: existingComment.id
-    })
+  if (existingComments.length > 0) {
+    for (const comment of existingComments) {
+      await github.rest.issues.deleteComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        comment_id: comment.id
+      })
+    }
     return true
   }
 
@@ -172,7 +174,7 @@ export default async function codeownersComment ({
       console.log('Codeowners mode is "never", skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComments({ context, github })
     return null
   }
 
@@ -182,7 +184,7 @@ export default async function codeownersComment ({
       console.log(`PR has ${matchResult.stats.totalFiles} files (< ${MIN_FILES_THRESHOLD}), skipping comment`)
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComments({ context, github })
     return null
   }
 
@@ -192,7 +194,7 @@ export default async function codeownersComment ({
       console.log('No files have code owners, skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComments({ context, github })
     return null
   }
 
@@ -202,12 +204,12 @@ export default async function codeownersComment ({
       console.log('Mode is "groups" but no teams assigned, only individuals, skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComments({ context, github })
     return null
   }
 
-  // Delete existing comment first
-  const deleted = await deleteExistingComment({ context, github })
+  // Delete existing comments first
+  const deleted = await deleteExistingComments({ context, github })
 
   if (debug && deleted) {
     console.log('Deleted existing codeowners comment')
