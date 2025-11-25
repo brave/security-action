@@ -85,11 +85,11 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
   body += '\n'
 
   if (stats.teams > 0) {
-    body += `**${stats.teams}** team(s) affected: ${stats.teamsList.join(', ')}\n`
+    body += `**${stats.teams}** team(s) affected: ${stats.teamsList.map(team => `\`${team}\``).join(', ')}\n`
   }
 
   if (stats.individuals > 0) {
-    body += `**${stats.individuals}** individual(s) affected: ${stats.individualsList.join(', ')}\n`
+    body += `**${stats.individuals}** individual(s) affected: ${stats.individualsList.map(individual => `\`${individual}\``).join(', ')}\n`
   }
 
   body += '\n---\n\n'
@@ -100,7 +100,7 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
 
     for (const [owner, files] of Object.entries(ownersToFiles)) {
       const ownerDisplay = owner.startsWith('@') ? owner : `@${owner}`
-      body += `#### ${ownerDisplay} — ${files.length} file(s)\n\n`
+      body += `#### \`${ownerDisplay}\` — ${files.length} file(s)\n\n`
       body += formatFileList(files, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
       body += '\n'
     }
