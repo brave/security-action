@@ -75,14 +75,7 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
     return body
   }
 
-  body += `**${stats.totalFiles}** file(s) changed\n`
-  body += `- **${stats.filesWithOwners}** with assigned owners\n`
-
-  if (stats.filesWithoutOwners > 0) {
-    body += `- **${stats.filesWithoutOwners}** without owners\n`
-  }
-
-  body += '\n'
+  body += `**${stats.totalFiles}** file(s) changed, **${stats.filesWithOwners}** with assigned owners\n\n`
 
   if (stats.teams > 0) {
     body += `**${stats.teams}** team(s) affected: ${stats.teamsList.map(team => `\`${team}\``).join(', ')}\n`
