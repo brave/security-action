@@ -5,8 +5,7 @@ rules:
       category: privacy
       confidence: LOW
       assignees: |
-        bridiver
-        arthuredelstein
+        fmarier
         ShivanKaul
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/privacy.yaml
     message: "Privacy claim found"
