@@ -1,6 +1,6 @@
 /**
  * Generate and post a GitHub comment showing code owners for changed files.
- * Removes old codeowners comments and posts a new one.
+ * Updates existing comment if present, otherwise creates a new one.
  */
 
 import crypto from 'crypto'
@@ -103,34 +103,32 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
 }
 
 /**
- * Find all existing codeowners comments (using pagination to find all)
+ * Find the first existing codeowners comment
  */
-async function findExistingComments ({ context, github }) {
+async function findExistingComment ({ context, github }) {
   const comments = await github.paginate(github.rest.issues.listComments, {
     owner: context.repo.owner,
     repo: context.repo.repo,
     issue_number: context.issue.number
   })
 
-  return comments.filter(comment =>
+  return comments.find(comment =>
     comment.body && comment.body.includes(COMMENT_IDENTIFIER)
-  )
+  ) || null
 }
 
 /**
- * Delete all existing codeowners comments
+ * Delete existing codeowners comment if present
  */
-async function deleteExistingComments ({ context, github }) {
-  const existingComments = await findExistingComments({ context, github })
+async function deleteExistingComment ({ context, github }) {
+  const existingComment = await findExistingComment({ context, github })
 
-  if (existingComments.length > 0) {
-    for (const comment of existingComments) {
-      await github.rest.issues.deleteComment({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        comment_id: comment.id
-      })
-    }
+  if (existingComment) {
+    await github.rest.issues.deleteComment({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      comment_id: existingComment.id
+    })
     return true
   }
 
@@ -167,7 +165,7 @@ export default async function codeownersComment ({
       console.log('Codeowners mode is "never", skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComments({ context, github })
+    await deleteExistingComment({ context, github })
     return null
   }
 
@@ -177,7 +175,7 @@ export default async function codeownersComment ({
       console.log(`PR has ${matchResult.stats.totalFiles} files (< ${MIN_FILES_THRESHOLD}), skipping comment`)
     }
     // Still delete any existing comment
-    await deleteExistingComments({ context, github })
+    await deleteExistingComment({ context, github })
     return null
   }
 
@@ -187,7 +185,7 @@ export default async function codeownersComment ({
       console.log('No files have code owners, skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComments({ context, github })
+    await deleteExistingComment({ context, github })
     return null
   }
 
@@ -197,15 +195,15 @@ export default async function codeownersComment ({
       console.log('Mode is "groups" but no teams assigned, only individuals, skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComments({ context, github })
+    await deleteExistingComment({ context, github })
     return null
   }
 
-  // Delete existing comments first
-  const deleted = await deleteExistingComments({ context, github })
+  // Find existing comment to update
+  const existingComment = await findExistingComment({ context, github })
 
-  if (debug && deleted) {
-    console.log('Deleted existing codeowners comment')
+  if (debug && existingComment) {
+    console.log('Found existing codeowners comment to update')
   }
 
   // Generate comment body, trying different truncation limits if needed
@@ -250,16 +248,28 @@ export default async function codeownersComment ({
     console.log(body)
   }
 
-  // Post new comment
-  const comment = await github.rest.issues.createComment({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    issue_number: context.issue.number,
-    body
-  })
-
-  if (debug) {
-    console.log(`Posted codeowners comment: ${comment.data.html_url}`)
+  // Update existing comment or create new one
+  let comment
+  if (existingComment) {
+    comment = await github.rest.issues.updateComment({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      comment_id: existingComment.id,
+      body
+    })
+    if (debug) {
+      console.log(`Updated codeowners comment: ${comment.data.html_url}`)
+    }
+  } else {
+    comment = await github.rest.issues.createComment({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      issue_number: context.issue.number,
+      body
+    })
+    if (debug) {
+      console.log(`Posted codeowners comment: ${comment.data.html_url}`)
+    }
   }
 
   return comment.data
