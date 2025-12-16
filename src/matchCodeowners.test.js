@@ -13,9 +13,12 @@ console.log('Testing parseCodeowners...')
 const mockCodeownersContent = `# This is a comment
 * @global-owner
 
+# Asset files
 /assets/ @acme/assets-team
 *.js @javascript-team
+# Documentation
 docs/ @myorg/docs-team @bob
+
 /src/**/*.test.js @test-team
 `
 const originalReadFileSync = fs.readFileSync
@@ -37,10 +40,12 @@ fs.existsSync = (path) => {
 
 const patterns = parseCodeowners('test-codeowners')
 assert.equal(patterns.length, 5, 'Should parse 5 patterns')
-assert.deepEqual(patterns[0], ['*', ['@global-owner']], 'First pattern should be global owner')
-assert.deepEqual(patterns[1], ['/assets/', ['@acme/assets-team']], 'Second pattern should be assets team')
-assert.deepEqual(patterns[3], ['docs/', ['@myorg/docs-team', '@bob']], 'Fourth pattern should have multiple owners')
-console.log('✓ parseCodeowners works correctly')
+assert.deepEqual(patterns[0], ['*', ['@global-owner'], 'This is a comment'], 'First pattern should have comment')
+assert.deepEqual(patterns[1], ['/assets/', ['@acme/assets-team'], 'Asset files'], 'Second pattern should have Asset files comment')
+assert.deepEqual(patterns[2], ['*.js', ['@javascript-team'], 'Asset files'], 'Third pattern should inherit Asset files comment')
+assert.deepEqual(patterns[3], ['docs/', ['@myorg/docs-team', '@bob'], 'Documentation'], 'Fourth pattern should have Documentation comment')
+assert.deepEqual(patterns[4], ['/src/**/*.test.js', ['@test-team'], null], 'Fifth pattern should have no comment after blank line')
+console.log('✓ parseCodeowners works correctly with comments')
 
 // Test patternToRegex
 console.log('\nTesting patternToRegex...')
@@ -69,21 +74,24 @@ console.log('\nTesting findOwners...')
 
 // Last matching pattern wins (most specific)
 const testPatterns = [
-  ['*', ['@global-owner']],
-  ['*.js', ['@javascript-team']],
-  ['/src/**/*.test.js', ['@test-team']]
+  ['*', ['@global-owner'], 'Global files'],
+  ['*.js', ['@javascript-team'], 'JavaScript files'],
+  ['/src/**/*.test.js', ['@test-team'], null]
 ]
 
-let owners = findOwners('README.md', testPatterns)
-assert.deepEqual(owners, ['@global-owner'], 'README.md should match global owner')
+let findResult = findOwners('README.md', testPatterns)
+assert.deepEqual(findResult.owners, ['@global-owner'], 'README.md should match global owner')
+assert.equal(findResult.comment, 'Global files', 'README.md should have Global files comment')
 
-owners = findOwners('script.js', testPatterns)
-assert.deepEqual(owners, ['@javascript-team'], 'script.js should match javascript team')
+findResult = findOwners('script.js', testPatterns)
+assert.deepEqual(findResult.owners, ['@javascript-team'], 'script.js should match javascript team')
+assert.equal(findResult.comment, 'JavaScript files', 'script.js should have JavaScript files comment')
 
-owners = findOwners('src/foo/bar.test.js', testPatterns)
-assert.deepEqual(owners, ['@test-team'], 'Test file should match test team (most specific)')
+findResult = findOwners('src/foo/bar.test.js', testPatterns)
+assert.deepEqual(findResult.owners, ['@test-team'], 'Test file should match test team (most specific)')
+assert.equal(findResult.comment, null, 'Test file should have no comment')
 
-console.log('✓ findOwners works correctly')
+console.log('✓ findOwners works correctly with comments')
 
 // Test findCodeownersPath
 console.log('\nTesting findCodeownersPath...')
@@ -134,7 +142,10 @@ console.log('\nTesting team vs individual detection...')
 const testFiles = ['file1.js', 'file2.md', 'file3.txt']
 fs.readFileSync = (path) => {
   if (path === 'test-codeowners-2') {
-    return `*.js @acme/frontend-team @github/security
+    return `# Frontend files
+*.js @acme/frontend-team @github/security
+
+# Documentation files
 *.md @alice
 *.txt @bob`
   }
@@ -157,6 +168,18 @@ assert.ok(result.stats.individualsList.includes('@alice'), 'Should include @alic
 assert.ok(result.stats.individualsList.includes('@bob'), 'Should include @bob')
 
 console.log('✓ Team vs individual detection works correctly')
+
+// Test comment groups
+console.log('\nTesting comment groups...')
+assert.ok(result.commentGroups, 'Should have commentGroups')
+assert.ok(result.commentGroups['Frontend files'], 'Should have "Frontend files" comment group')
+assert.ok(result.commentGroups['Documentation files'], 'Should have "Documentation files" comment group')
+assert.deepEqual(result.commentGroups['Frontend files']['@acme/frontend-team'], ['file1.js'], 'Frontend team should have file1.js')
+assert.deepEqual(result.commentGroups['Frontend files']['@github/security'], ['file1.js'], 'Security team should have file1.js')
+assert.deepEqual(result.commentGroups['Documentation files']['@alice'], ['file2.md'], 'Alice should have file2.md')
+assert.deepEqual(result.commentGroups['Documentation files']['@bob'], ['file3.txt'], 'Bob should have file3.txt')
+
+console.log('✓ Comment groups work correctly')
 
 // Restore mocks
 fs.readFileSync = originalReadFileSync

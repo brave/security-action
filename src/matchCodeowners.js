@@ -29,8 +29,9 @@ export function findCodeownersPath (basePath = '.') {
 }
 
 /**
- * Parse CODEOWNERS file and return list of [pattern, owners] entries.
+ * Parse CODEOWNERS file and return list of [pattern, owners, comment] entries.
  * Returns patterns in order (more specific patterns should come first).
+ * Comments apply to all subsequent entries until a blank line is encountered.
  */
 export function parseCodeowners (codeownersPath) {
   const patterns = []
@@ -42,14 +43,40 @@ export function parseCodeowners (codeownersPath) {
   const content = fs.readFileSync(codeownersPath, 'utf-8')
   const lines = content.split('\n')
 
+  let currentComment = null
+  const commentLines = []
+  let lastLineWasPattern = false
+
   for (const line of lines) {
     const trimmed = line.trim()
 
-    // Skip empty lines and comments
-    if (!trimmed || trimmed.startsWith('#')) {
+    // Empty line - reset accumulated comments
+    if (!trimmed) {
+      if (commentLines.length > 0) {
+        commentLines.length = 0
+        currentComment = null
+      }
+      lastLineWasPattern = false
       continue
     }
 
+    // Comment line - accumulate or reset based on context
+    if (trimmed.startsWith('#')) {
+      const commentText = trimmed.substring(1).trim()
+      // Skip empty comments and separator lines (like "# ===")
+      if (commentText && !commentText.match(/^[=\-*]+$/)) {
+        // If we had a pattern before this comment, start a new comment group
+        if (lastLineWasPattern) {
+          commentLines.length = 0
+        }
+        commentLines.push(commentText)
+        currentComment = commentLines.join(' ')
+      }
+      lastLineWasPattern = false
+      continue
+    }
+
+    // Pattern line
     const parts = trimmed.split(/\s+/)
     if (parts.length < 2) {
       continue
@@ -57,7 +84,8 @@ export function parseCodeowners (codeownersPath) {
 
     const pattern = parts[0]
     const owners = parts.slice(1)
-    patterns.push([pattern, owners])
+    patterns.push([pattern, owners, currentComment])
+    lastLineWasPattern = true
   }
 
   return patterns
@@ -109,21 +137,24 @@ export function patternToRegex (pattern) {
 }
 
 /**
- * Find owners for a given file path.
- * Returns the most specific matching pattern's owners.
+ * Find owners and comment for a given file path.
+ * Returns the most specific matching pattern's owners and comment.
  * CODEOWNERS uses the last matching pattern (most specific).
+ * @returns {Object} { owners: string[], comment: string|null }
  */
 export function findOwners (filePath, patterns) {
   let matchedOwners = []
+  let matchedComment = null
 
-  for (const [pattern, owners] of patterns) {
+  for (const [pattern, owners, comment] of patterns) {
     const regex = patternToRegex(pattern)
     if (regex.test(filePath)) {
       matchedOwners = owners
+      matchedComment = comment
     }
   }
 
-  return matchedOwners
+  return { owners: matchedOwners, comment: matchedComment }
 }
 
 /**
@@ -178,11 +209,26 @@ export default function matchCodeowners ({
   const ownersToFiles = {}
   const filesWithoutOwners = []
 
+  // Group by comment first, then by owner
+  const commentGroups = {}
+
   for (const filePath of changedFiles) {
-    const owners = findOwners(filePath, patterns)
+    const { owners, comment } = findOwners(filePath, patterns)
 
     if (owners.length > 0) {
+      const commentKey = comment || null
+
+      if (!commentGroups[commentKey]) {
+        commentGroups[commentKey] = {}
+      }
+
       for (const owner of owners) {
+        if (!commentGroups[commentKey][owner]) {
+          commentGroups[commentKey][owner] = []
+        }
+        commentGroups[commentKey][owner].push(filePath)
+
+        // Also maintain flat ownersToFiles for backward compatibility
         if (!ownersToFiles[owner]) {
           ownersToFiles[owner] = []
         }
@@ -211,6 +257,7 @@ export default function matchCodeowners ({
 
   const result = {
     ownersToFiles: Object.fromEntries(sortedOwners),
+    commentGroups,
     filesWithoutOwners,
     stats: {
       totalFiles: changedFiles.length,

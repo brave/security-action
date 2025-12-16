@@ -65,7 +65,7 @@ function formatFileList (files, repoOwner, repoName, prNumber, maxVisible = MAX_
  * Generate markdown comment body with automatic truncation if too long
  */
 function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCollapsed = null) {
-  const { ownersToFiles, stats } = matchResult
+  const { ownersToFiles, commentGroups, stats } = matchResult
 
   let body = COMMENT_IDENTIFIER + '\n'
   body += '## 📋 Code Owners Summary\n\n'
@@ -87,15 +87,44 @@ function generateCommentBody (matchResult, repoOwner, repoName, prNumber, maxCol
 
   body += '\n---\n\n'
 
-  // Show owners sorted by number of files
-  if (Object.keys(ownersToFiles).length > 0) {
-    body += '### Owners and Their Files\n\n'
+  // If commentGroups is available, show grouped by comment
+  if (commentGroups && Object.keys(commentGroups).length > 0) {
+    // Sort comment groups: null (no comment) goes last
+    const sortedCommentKeys = Object.keys(commentGroups).sort((a, b) => {
+      if (a === 'null') return 1
+      if (b === 'null') return -1
+      return 0
+    })
 
-    for (const [owner, files] of Object.entries(ownersToFiles)) {
-      const ownerDisplay = owner.startsWith('@') ? owner : `@${owner}`
-      body += `#### \`${ownerDisplay}\` — ${files.length} file(s)\n\n`
-      body += formatFileList(files, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
-      body += '\n'
+    for (const commentKey of sortedCommentKeys) {
+      const ownersInGroup = commentGroups[commentKey]
+
+      // Show comment if present
+      if (commentKey !== 'null' && commentKey) {
+        body += `### 📝 ${commentKey}\n\n`
+      }
+
+      // Sort owners by number of files
+      const sortedOwners = Object.entries(ownersInGroup).sort((a, b) => b[1].length - a[1].length)
+
+      for (const [owner, files] of sortedOwners) {
+        const ownerDisplay = owner.startsWith('@') ? owner : `@${owner}`
+        body += `#### \`${ownerDisplay}\` — ${files.length} file(s)\n\n`
+        body += formatFileList(files, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
+        body += '\n'
+      }
+    }
+  } else {
+    // Fallback to old behavior if commentGroups not available
+    if (Object.keys(ownersToFiles).length > 0) {
+      body += '### Owners and Their Files\n\n'
+
+      for (const [owner, files] of Object.entries(ownersToFiles)) {
+        const ownerDisplay = owner.startsWith('@') ? owner : `@${owner}`
+        body += `#### \`${ownerDisplay}\` — ${files.length} file(s)\n\n`
+        body += formatFileList(files, repoOwner, repoName, prNumber, MAX_FILES_BEFORE_COLLAPSE, maxCollapsed)
+        body += '\n'
+      }
     }
   }
 
