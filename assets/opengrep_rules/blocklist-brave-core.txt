@@ -1,1 +1,2 @@
 https://semgrep.dev/r/gitlab.bandit.B404
+https://semgrep.dev/r/python.lang.security.audit.eval-detected.eval-detected
