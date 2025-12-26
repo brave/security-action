@@ -101,7 +101,7 @@ runs:
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Setup Ruby
       id: ruby
-      uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1.267.0
+      uses: ruby/setup-ruby@ed55d55e820a01da7d3e4863a8c51a61d73c3228 # v1.274.0
       env:
         BUNDLE_GEMFILE: ${{ github.action_path }}/../../Gemfile
       with:
