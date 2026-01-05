@@ -48,55 +48,103 @@ function runCommand () {
   })
 }
 
-module.exports = async ({ github, context, inputs, actionPath, core, debug = false }) => {
+module.exports = async ({
+  github,
+  context,
+  inputs,
+  actionPath,
+  core,
+  debug = false
+}) => {
   const { default: getConfig } = await import(`${actionPath}/src/getConfig.js`)
-  const { default: getProperties } = await import(`${actionPath}/src/getProperties.js`)
+  const { default: getProperties } = await import(
+    `${actionPath}/src/getProperties.js`
+  )
 
   // delete if empty string in inputs value
-  Object.keys(inputs).forEach(key => inputs[key] === '' && delete inputs[key])
+  Object.keys(inputs).forEach(
+    (key) => inputs[key] === '' && delete inputs[key]
+  )
 
-  const config = await getConfig({ owner: context.repo.owner, repo: context.repo.repo, path: '.github/security-action.json', debug, github })
-  const properties = await getProperties({ owner: context.repo.owner, repo: context.repo.repo, debug, github, prefix: 'security_action_' })
+  const config = await getConfig({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    path: '.github/security-action.json',
+    debug,
+    github
+  })
+  const properties = await getProperties({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    debug,
+    github,
+    prefix: 'security_action_'
+  })
 
-  const options = Object.assign({
-    enabled: 'true',
-    baseline_scan_only: 'true',
-    assignees: ASSIGNEES,
-    hotwords: HOTWORDS,
-    hotwords_enabled: 'true',
-    codeowners_min_files: '50',
-    codeowners_mode: 'groups'
-  }, config, properties, inputs)
+  const options = Object.assign(
+    {
+      enabled: 'true',
+      baseline_scan_only: 'true',
+      assignees: ASSIGNEES,
+      hotwords: HOTWORDS,
+      hotwords_enabled: 'true',
+      codeowners_min_files: '50',
+      codeowners_mode: 'groups'
+    },
+    config,
+    properties,
+    inputs
+  )
 
   options.enabled = options.enabled === 'true'
   options.hotwords_enabled = options.hotwords_enabled === 'true'
   options.baseline_scan_only = options.baseline_scan_only === 'true'
-  options.debug = options.debug ? (options.debug === 'true') : debug
+  options.debug = options.debug ? options.debug === 'true' : debug
 
   const debugLog = options.debug ? console.log : () => {}
 
   debugLog('Options: ', options)
 
-  if (!options.enabled) { return }
+  if (!options.enabled) {
+    return
+  }
 
   debugLog('Security Action enabled')
   // reviewdog-enabled-pr steps
-  const reviewdogEnabledPr = options.baseline_scan_only && context.eventName === 'pull_request'
-  debugLog(`Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}, context.actor: ${context.actor}`)
+  const reviewdogEnabledPr =
+    options.baseline_scan_only && context.eventName === 'pull_request'
+  debugLog(
+    `Security Action enabled for PR: ${reviewdogEnabledPr}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}, context.actor: ${context.actor}`
+  )
   // reviewdog-enabled-full steps
-  const reviewdogEnabledFull = !reviewdogEnabledPr && (!options.baseline_scan_only || context.eventName === 'workflow_dispatch')
-  debugLog(`Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}`)
+  const reviewdogEnabledFull =
+    !reviewdogEnabledPr &&
+    (!options.baseline_scan_only || context.eventName === 'workflow_dispatch')
+  debugLog(
+    `Security Action enabled for full: ${reviewdogEnabledFull}, baseline_scan_only: ${options.baseline_scan_only}, GITHUB_EVENT_NAME: ${context.eventName}`
+  )
   // reviewdog-enabled steps
-  if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
+  if (!reviewdogEnabledPr && !reviewdogEnabledFull) {
+    return
+  }
   debugLog('Security Action enabled for reviewdog')
 
   // Install pip-audit (opengrep is installed via action.yml)
-  await runCommand(`pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`, { shell: true })
+  await runCommand(
+    `pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`,
+    { shell: true }
+  )
   debugLog('Installed pip-audit')
   // Disable man-db auto-update to speed up apt-get operations
-  await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
+  await runCommand(
+    'sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"',
+    { shell: true }
+  )
   // Install xmllint for safesvg
-  await runCommand('sudo apt-get install -y libxml2-utils || sudo apt update -qq && sudo apt-get install -y libxml2-utils', { shell: true })
+  await runCommand(
+    'sudo apt-get install -y libxml2-utils || sudo apt update -qq && sudo apt-get install -y libxml2-utils',
+    { shell: true }
+  )
   debugLog('Installed xmllint')
 
   // debug step
@@ -119,17 +167,31 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   if (reviewdogEnabledPr && context.actor !== 'dependabot[bot]') {
     // changed-files steps
-    const { default: pullRequestChangedFiles } = await import(`${actionPath}/src/pullRequestChangedFiles.js`)
-    const changedFiles = await pullRequestChangedFiles({ github, owner: context.repo.owner, name: context.repo.repo, prnumber: context.payload.pull_request.number })
+    const { default: pullRequestChangedFiles } = await import(
+      `${actionPath}/src/pullRequestChangedFiles.js`
+    )
+    const changedFiles = await pullRequestChangedFiles({
+      github,
+      owner: context.repo.owner,
+      name: context.repo.repo,
+      prnumber: context.payload.pull_request.number
+    })
     debugLog('Changed files:', changedFiles)
 
     // Write changed files to file
-    fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
+    fs.writeFileSync(
+      `${actionPath}/assets/all_changed_files.txt`,
+      changedFiles.join('\0')
+    )
     debugLog('Wrote changed files to file')
 
     // codeowners matching step
-    const { default: matchCodeowners } = await import(`${actionPath}/src/matchCodeowners.js`)
-    const { default: codeownersComment } = await import(`${actionPath}/src/steps/codeownersComment.js`)
+    const { default: matchCodeowners } = await import(
+      `${actionPath}/src/matchCodeowners.js`
+    )
+    const { default: codeownersComment } = await import(
+      `${actionPath}/src/steps/codeownersComment.js`
+    )
 
     const codeownersMatch = matchCodeowners({
       changedFiles,
@@ -148,15 +210,24 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Posted codeowners comment')
 
     // comments-before steps
-    const { default: commentsNumber } = await import(`${actionPath}/src/steps/commentsNumber.js`)
-    const { default: cleanupComments } = await import(`${actionPath}/src/steps/cleanupComments.js`)
+    const { default: commentsNumber } = await import(
+      `${actionPath}/src/steps/commentsNumber.js`
+    )
+    const { default: cleanupComments } = await import(
+      `${actionPath}/src/steps/cleanupComments.js`
+    )
     debugLog('Comments before:', await commentsNumber({ context, github }))
 
-    const { number: commentsBefore } = await commentsNumber({ context, github })
+    const { number: commentsBefore } = await commentsNumber({
+      context,
+      github
+    })
     await cleanupComments({ context, github })
 
     // unverified-commits steps
-    const { default: unverifiedCommits } = await import(`${actionPath}/src/steps/unverifiedCommits.js`)
+    const { default: unverifiedCommits } = await import(
+      `${actionPath}/src/steps/unverifiedCommits.js`
+    )
 
     // add unverified-commits label step
     const unverifiedCommitsSteps = await unverifiedCommits({ context, github })
@@ -184,26 +255,49 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Reviewdog PR step completed')
 
     // comments-after step
-    const { number: commentsAfter, categories } = await commentsNumber({ context, github })
+    const { number: commentsAfter, categories } = await commentsNumber({
+      context,
+      github
+    })
     debugLog('Comments after:', commentsAfter)
 
     // assignees-after step
-    const { default: assigneesAfter } = await import(`${actionPath}/src/steps/assigneesAfter.js`)
-    const assigneesAfterVal = await assigneesAfter({ context, github, assignees: options.assignees })
+    const { default: assigneesAfter } = await import(
+      `${actionPath}/src/steps/assigneesAfter.js`
+    )
+    const assigneesAfterVal = await assigneesAfter({
+      context,
+      github,
+      assignees: options.assignees
+    })
     debugLog('Assignees after:', assigneesAfterVal)
 
     // assignee-removed-label step
-    const { default: assigneeRemoved } = await import(`${actionPath}/src/steps/assigneeRemoved.js`)
-    const assigneeRemovedLabel = await assigneeRemoved({ context, github, assignees: assigneesAfterVal })
+    const { default: assigneeRemoved } = await import(
+      `${actionPath}/src/steps/assigneeRemoved.js`
+    )
+    const assigneeRemovedLabel = await assigneeRemoved({
+      context,
+      github,
+      assignees: assigneesAfterVal
+    })
     debugLog('Assignee removed:', assigneeRemovedLabel)
 
     // add description-contains-hotwords step
-    const { default: hotwords } = await import(`${actionPath}/src/steps/hotwords.js`)
-    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]' && options.hotwords_enabled) ? await hotwords({ context, github, hotwords: options.hotwords }) : false
+    const { default: hotwords } = await import(
+      `${actionPath}/src/steps/hotwords.js`
+    )
+    const descriptionContainsHotwords =
+      context.actor !== 'renovate[bot]' && options.hotwords_enabled
+        ? await hotwords({ context, github, hotwords: options.hotwords })
+        : false
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
-    const shouldTrigger = reviewdogEnabledPr && !assigneeRemovedLabel && ((commentsBefore < commentsAfter) || descriptionContainsHotwords)
+    const shouldTrigger =
+      reviewdogEnabledPr &&
+      !assigneeRemovedLabel &&
+      (commentsBefore < commentsAfter || descriptionContainsHotwords)
     debugLog('Should trigger:', shouldTrigger)
 
     if (shouldTrigger) {
@@ -227,9 +321,15 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       debugLog('Added assignees')
     }
 
-    const { default: sendSlackMessage } = await import(`${actionPath}/src/sendSlackMessage.js`)
+    const { default: sendSlackMessage } = await import(
+      `${actionPath}/src/sendSlackMessage.js`
+    )
+    const { default: securityReviewCompleted } = await import(
+      `${actionPath}/src/steps/securityReviewCompleted.js`
+    )
 
     const repoName = `${context.repo.owner}/${context.repo.repo}`
+    const prIdentifier = `${context.repo.owner}/${context.repo.repo}#${context.payload.pull_request.number}`
 
     const message = `Repository: [${repoName}](https://github.com/${repoName})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}`
 
@@ -241,14 +341,22 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     }
 
     // assignees-slack step
-    const assignees = assigneesAfterVal.toLowerCase().split(/\s+/).map(e => e.trim()).filter(Boolean)
-    const slackAssignees = assignees.map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`).join(' ')
+    const assignees = assigneesAfterVal
+      .toLowerCase()
+      .split(/\s+/)
+      .map((e) => e.trim())
+      .filter(Boolean)
+    const slackAssignees = assignees
+      .map((m) => (githubToSlack[m] ? githubToSlack[m] : `@${m}`))
+      .join(' ')
     core.setSecret(slackAssignees)
     debugLog('Slack assignees:', slackAssignees)
 
     // actor-slack step
     const lowerActor = context.actor.toLowerCase()
-    const actor = githubToSlack[lowerActor] ? githubToSlack[lowerActor] : `@${context.actor}`
+    const actor = githubToSlack[lowerActor]
+      ? githubToSlack[lowerActor]
+      : `@${context.actor}`
     core.setSecret(actor)
 
     // if actor starts with hashtag, return eagerly
@@ -259,15 +367,27 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
     if (fs.existsSync('reviewdog.fail.log')) {
       // print reviewdog.fail.log to the console
-      const log = fs.readFileSync('reviewdog.fail.log', 'UTF-8').replaceAll(/^/g, CONSOLE_BLUE)
-      console.log(`${CONSOLE_RED}This action encountered an error while reporting the following findings via the Github API:`)
+      const log = fs
+        .readFileSync('reviewdog.fail.log', 'UTF-8')
+        .replaceAll(/^/g, CONSOLE_BLUE)
+      console.log(
+        `${CONSOLE_RED}This action encountered an error while reporting the following findings via the Github API:`
+      )
       console.log(log)
-      console.log(`${CONSOLE_RED}The failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action ${RESET_CONSOLE_COLOR}`)
+      console.log(
+        `${CONSOLE_RED}The failure of this action should not prevent you from merging your PR. Please report this failure to the maintainers of https://github.com/brave/security-action ${RESET_CONSOLE_COLOR}`
+      )
       debugLog('Error log printed to console')
 
       if (options.slack_token) {
         // reviewdog-fail-log-head step
-        const reviewdogFailLogHead = '\n' + fs.readFileSync('reviewdog.fail.log', 'UTF-8').split('\n').slice(0, 4).join('\n')
+        const reviewdogFailLogHead =
+          '\n' +
+          fs
+            .readFileSync('reviewdog.fail.log', 'UTF-8')
+            .split('\n')
+            .slice(0, 4)
+            .join('\n')
         debugLog('Reviewdog fail log head:', reviewdogFailLogHead)
 
         // send error slack message, if there is any error
@@ -277,13 +397,18 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
           message,
           channel: '#secops-hotspots',
           color: 'red',
-          username: 'security-action'
+          username: 'security-action',
+          prIdentifier
         })
         debugLog('Sent error slack message')
       } else {
         // throw error if no slack token is provided, and there is an error log
-        debugLog('Error was thrown and Slack token is missing, exiting eagerly!')
-        throw new Error('Error was thrown and Slack token is missing, exiting eagerly!')
+        debugLog(
+          'Error was thrown and Slack token is missing, exiting eagerly!'
+        )
+        throw new Error(
+          'Error was thrown and Slack token is missing, exiting eagerly!'
+        )
       }
     }
 
@@ -295,9 +420,34 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
         message,
         channel: '#secops-hotspots',
         color: 'green',
-        username: 'security-action'
+        username: 'security-action',
+        prIdentifier
       })
       debugLog('Comments after:', commentsAfter)
+    }
+
+    // Check if security review was just completed (label removed by assignee)
+    const reviewCompleted = await securityReviewCompleted({
+      context,
+      github,
+      assignees: options.assignees
+    })
+    debugLog('Security review completed:', reviewCompleted)
+
+    if (options.slack_token && reviewCompleted) {
+      const completionMessage = `Repository: [${repoName}](https://github.com/${repoName})\npull-request: ${context.payload.pull_request.html_url}\n\n✅ Security review completed by ${context.actor}`
+
+      await sendSlackMessage({
+        token: options.slack_token,
+        text: `✅ Security review completed by ${actor}`,
+        message: completionMessage,
+        channel: '#secops-hotspots',
+        color: 'green',
+        username: 'security-action',
+        prIdentifier,
+        isCompletion: true
+      })
+      debugLog('Sent security review completion message')
     }
   } else if (context.actor === 'dependabot[bot]') {
     // if the actor is dependabot[bot], add security label to PR, and nothing more

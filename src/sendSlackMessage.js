@@ -3,7 +3,9 @@ async function findChannelId (web, name) {
 
   while (true) {
     const r = await web.conversations.list({ cursor })
-    const f = r.channels.find(c => c.name === name || c.name === name.substring(1))
+    const f = r.channels.find(
+      (c) => c.name === name || c.name === name.substring(1)
+    )
 
     if (f) {
       return f.id
@@ -14,6 +16,55 @@ async function findChannelId (web, name) {
     }
 
     cursor = r.response_metadata.next_cursor
+  }
+}
+
+/**
+ * Find existing thread for a PR by searching message metadata
+ * @param {object} web - Slack WebClient instance
+ * @param {string} channelId - Channel ID to search
+ * @param {string} prIdentifier - PR identifier (e.g., "brave/repo#123")
+ * @returns {string|null} Thread timestamp if found, null otherwise
+ */
+export async function findExistingThreadForPR (web, channelId, prIdentifier) {
+  // Search last 100 messages from the last 30 days for a thread parent
+  const history = await web.conversations.history({
+    channel: channelId,
+    limit: 100,
+    oldest: Date.now() / 1000 - 60 * 60 * 24 * 30 // 30 days ago
+  })
+
+  // Find message with matching PR identifier in metadata
+  const existingThread = history.messages.find(
+    (m) =>
+      m.metadata?.event_type === 'security_action_thread' &&
+      m.metadata?.event_payload?.pr_identifier === prIdentifier
+  )
+
+  return existingThread?.ts || null
+}
+
+/**
+ * Add a completion reaction (checkmark) to a message
+ * @param {object} web - Slack WebClient instance
+ * @param {string} channelId - Channel ID
+ * @param {string} threadTs - Timestamp of the message to react to
+ * @returns {boolean} True if successful
+ */
+export async function addCompletionReaction (web, channelId, threadTs) {
+  try {
+    await web.reactions.add({
+      channel: channelId,
+      timestamp: threadTs,
+      name: 'white_check_mark' // ✅ emoji
+    })
+    return true
+  } catch (error) {
+    // Reaction may already exist, which is fine
+    if (error.data?.error === 'already_reacted') {
+      return true
+    }
+    throw error
   }
 }
 
@@ -36,7 +87,9 @@ export default async function sendSlackMessage ({
   message = null,
   debug = false,
   color = null,
-  username = 'github-actions'
+  username = 'github-actions',
+  prIdentifier = null, // e.g., "brave/brave-browser#12345" - enables threading
+  isCompletion = false // true when review is complete - adds reaction to parent
 }) {
   if (!token) {
     throw new Error('token is required!')
@@ -50,6 +103,9 @@ export default async function sendSlackMessage ({
     throw new Error('message || token is required!')
   }
 
+  // Determine if we should use threading mode
+  const useThreading = prIdentifier !== null
+
   const filteredMessage = message?.replace(/Findings: \d+/g, 'Findings: n+')
 
   if (colorCodes[color]) {
@@ -60,7 +116,11 @@ export default async function sendSlackMessage ({
 
   debug = debug === 'true' || debug === true
 
-  if (debug) { console.log(`token.length: ${token.length}, channel: ${channel}, message: ${message}`) }
+  if (debug) {
+    console.log(
+      `token.length: ${token.length}, channel: ${channel}, message: ${message}`
+    )
+  }
 
   const { WebClient } = await import('@slack/web-api')
 
@@ -106,39 +166,65 @@ export default async function sendSlackMessage ({
       mdBlocks.push(lastBlock)
     }
     if (colored) {
-      attachments = [{
-        color,
-        blocks: mdBlocks
-      }]
+      attachments = [
+        {
+          color,
+          blocks: mdBlocks
+        }
+      ]
     } else {
       blocks.push(...mdBlocks)
     }
-    if (debug) { console.log(mdBlocks) }
+    if (debug) {
+      console.log(mdBlocks)
+    }
   }
 
   // get the channel id
   const channelId = await findChannelId(web, channel)
 
-  // get last 50 messages from the channel, in the last day
-  const history = await web.conversations.history({
-    channel: channelId,
-    limit: 50,
-    oldest: Date.now() / 1000 - 60 * 60 * 24 // a day ago
-  })
+  let threadTs = null
+  let isNewThread = false
 
-  // debounce messages if the same message was sent in the last day
-  if (history.messages.some(m => m.metadata?.event_type === hashHex)) {
+  if (useThreading) {
+    // Look for existing thread for this PR
+    threadTs = await findExistingThreadForPR(web, channelId, prIdentifier)
+    isNewThread = threadTs === null
+
     if (debug) {
-      throw new Error('debounce message')
-    } else {
-      return
+      console.log(
+        `Thread discovery: prIdentifier=${prIdentifier}, existingThread=${threadTs}, isNew=${isNewThread}`
+      )
+    }
+  } else {
+    // Non-threaded mode: use existing debounce logic
+    const history = await web.conversations.history({
+      channel: channelId,
+      limit: 50,
+      oldest: Date.now() / 1000 - 60 * 60 * 24 // a day ago
+    })
+
+    // debounce messages if the same message was sent in the last day
+    if (history.messages.some((m) => m.metadata?.event_type === hashHex)) {
+      if (debug) {
+        throw new Error('debounce message')
+      } else {
+        return
+      }
     }
   }
 
-  const metadata = { event_type: hashHex, event_payload: { } }
+  // Build metadata for thread parent (only used for new threads)
+  const metadata =
+    useThreading && isNewThread
+      ? {
+          event_type: 'security_action_thread',
+          event_payload: { pr_identifier: prIdentifier }
+        }
+      : { event_type: hashHex, event_payload: {} }
 
-  // send the message
-  const result = await web.chat.postMessage({
+  // Build message options
+  const messageOptions = {
     username,
     text: text || `${username} alert`,
     channel,
@@ -146,11 +232,31 @@ export default async function sendSlackMessage ({
     unfurl_links: true,
     unfurl_media: true,
     blocks,
-    attachments,
-    metadata
-  })
+    attachments
+  }
 
-  if (debug) { console.log(`result: ${JSON.stringify(result)}`) }
+  // Add threading if we have an existing thread
+  if (threadTs) {
+    messageOptions.thread_ts = threadTs
+  } else {
+    // Only add metadata to parent messages (new threads or non-threaded)
+    messageOptions.metadata = metadata
+  }
+
+  // send the message
+  const result = await web.chat.postMessage(messageOptions)
+
+  if (debug) {
+    console.log(`result: ${JSON.stringify(result)}`)
+  }
+
+  // If this is a completion message and we have a thread, add reaction to parent
+  if (isCompletion && threadTs) {
+    await addCompletionReaction(web, channelId, threadTs)
+    if (debug) {
+      console.log('Added completion reaction to thread parent')
+    }
+  }
 
   return result
 }
