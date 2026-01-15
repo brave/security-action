@@ -1,3 +1,5 @@
+import JSON5 from 'json5'
+
 async function getConfig ({ github, owner, repo, paths, debug }) {
   if (typeof paths === 'string') {
     paths = [paths]
@@ -12,7 +14,7 @@ async function getConfig ({ github, owner, repo, paths, debug }) {
       })
       const fileContent = Buffer.from(data.content, 'base64').toString('utf8')
       if (debug) console.log(fileContent)
-      return JSON.parse(fileContent)
+      return JSON5.parse(fileContent)
     } catch (err) {
       if (debug) console.log(err)
     }
