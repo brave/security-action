@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, unlabeled]
     branches: [main]
 permissions:
   actions: read
@@ -29,4 +29,5 @@ jobs:
         with:
           debug: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
           gh_to_slack_user_map: ${{ secrets.GH_TO_SLACK_USER_MAP }}
