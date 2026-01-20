@@ -1,0 +1,26 @@
+rules:
+  - id: chromium-std-map-performance-consideration
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://chromium.googlesource.com/chromium/src/+/main/base/containers/README.md
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/container-performance-choice.yaml
+      assignees: |
+        thypon
+        cdesouza-chromium
+      category: correctness
+    languages: [cpp, c]
+    message: |
+      Consider using base::flat_map/base::flat_set instead of std::map/std::set
+      for small containers or write-once scenarios. Chromium guidelines suggest:
+      - Use base::flat_map for small collections (< ~100 elements)
+      - Use base::flat_map for write-once, read-many scenarios
+      - Only use std::map for large containers with frequent writes
+      - Use std::map if you need pointer stability
+    severity: INFO
+    patterns:
+      - pattern-either:
+          - pattern: std::map<$KEY, $VALUE> $VAR;
+          - pattern: std::set<$TYPE> $VAR;
+          - pattern: std::multimap<$KEY, $VALUE> $VAR;
+          - pattern: std::multiset<$TYPE> $VAR;
