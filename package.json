@@ -2,7 +2,7 @@
     "type": "module",
     "bugs": {
         "url": "https://github.com/brave/security-action/issues",
-        "email": "security@brave.com"
+        "email": "mixbanana@brave.com"
     },
     "scripts": {
         "lint": "standard --ignore assets/opengrep_rules",
