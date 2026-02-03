@@ -29,18 +29,30 @@ rules:
           - pattern: std::rand()
           - pattern: std::srand($SEED)
           - pattern-regex: std::random_device\s+\w+
+          - pattern-regex: std::seed_seq\s+\w+
+          - pattern-regex: std::linear_congruential_engine\s+\w+
+          - pattern-regex: std::mersenne_twister_engine\s+\w+
+          - pattern-regex: std::subtract_with_carry_engine\s+\w+
+          - pattern-regex: std::discard_block_engine\s+\w+
+          - pattern-regex: std::independent_bits_engine\s+\w+
+          - pattern-regex: std::shuffle_order_engine\s+\w+
           - pattern-regex: std::mt19937\s+\w+
           - pattern-regex: std::mt19937_64\s+\w+
           - pattern-regex: std::minstd_rand\s+\w+
           - pattern-regex: std::minstd_rand0\s+\w+
           - pattern-regex: std::ranlux24\s+\w+
           - pattern-regex: std::ranlux48\s+\w+
+          - pattern-regex: std::ranlux24_base\s+\w+
+          - pattern-regex: std::ranlux48_base\s+\w+
           - pattern-regex: std::knuth_b\s+\w+
           - pattern-regex: std::default_random_engine\s+\w+
           - pattern: base::RandInt($MIN, $MAX)
           - pattern: base::RandUint64()
           - pattern: base::RandGenerator($SIZE)
+          - pattern: base::RandBytesAsVector($SIZE)
           - pattern: crypto::RandBytes($BUFFER, $SIZE)
+          - pattern: crypto::RandBytesAsVector($SIZE)
+          - pattern: crypto::RandBytesAsArray<$SIZE>()
           - pattern: RAND_bytes($BUFFER, $SIZE)
           - pattern: EVP_CIPHER_CTX_new()
           - pattern: EVP_EncryptInit($CTX, ...)

@@ -36,6 +36,10 @@ class CryptoUsageExamples {
     uint8_t buffer[32];
     // ruleid: chromium-cryptography-random-usage
     base::RandGenerator(sizeof(buffer));
+    
+    // SHOULD TRIGGER: base::RandBytesAsVector (need security review)
+    // ruleid: chromium-cryptography-random-usage
+    std::vector<uint8_t> random_bytes = base::RandBytesAsVector(16);
   }
   
   void CryptographicUsage() {
@@ -43,6 +47,14 @@ class CryptoUsageExamples {
     uint8_t crypto_buffer[32];
     // ruleid: chromium-cryptography-random-usage
     crypto::RandBytes(crypto_buffer, sizeof(crypto_buffer));
+    
+    // SHOULD TRIGGER: crypto::RandBytesAsVector (need security review)
+    // ruleid: chromium-cryptography-random-usage
+    std::vector<uint8_t> crypto_vector = crypto::RandBytesAsVector(32);
+    
+    // SHOULD TRIGGER: crypto::RandBytesAsArray (need security review)
+    // ruleid: chromium-cryptography-random-usage
+    std::array<uint8_t, 16> crypto_array = crypto::RandBytesAsArray<16>();
     
     // SHOULD TRIGGER: OpenSSL random functions (need security review)
     uint8_t ssl_buffer[16];
@@ -70,6 +82,38 @@ class CryptoUsageExamples {
 
     // ruleid: chromium-cryptography-random-usage
     std::default_random_engine engine;
+    
+    // SHOULD TRIGGER: Additional STL random engine types
+    // ruleid: chromium-cryptography-random-usage
+    std::mt19937_64 gen64;
+    // ruleid: chromium-cryptography-random-usage
+    std::minstd_rand minstd;
+    // ruleid: chromium-cryptography-random-usage
+    std::minstd_rand0 minstd0;
+    // ruleid: chromium-cryptography-random-usage
+    std::ranlux24 ranlux24_gen;
+    // ruleid: chromium-cryptography-random-usage
+    std::ranlux48 ranlux48_gen;
+    // ruleid: chromium-cryptography-random-usage
+    std::ranlux24_base ranlux24_base_gen;
+    // ruleid: chromium-cryptography-random-usage
+    std::ranlux48_base ranlux48_base_gen;
+    // ruleid: chromium-cryptography-random-usage
+    std::knuth_b knuth_gen;
+    // ruleid: chromium-cryptography-random-usage
+    std::seed_seq seed;
+    // ruleid: chromium-cryptography-random-usage
+    std::linear_congruential_engine<unsigned int, 1, 0, 10> lce;
+    // ruleid: chromium-cryptography-random-usage
+    std::mersenne_twister_engine<unsigned int, 32, 624, 397, 31, 0x9908b0df> mte;
+    // ruleid: chromium-cryptography-random-usage
+    std::subtract_with_carry_engine<unsigned int, 24, 10, 24> swce;
+    // ruleid: chromium-cryptography-random-usage
+    std::discard_block_engine<std::ranlux24_base, 223, 23> dbe;
+    // ruleid: chromium-cryptography-random-usage
+    std::independent_bits_engine<std::mt19937, 10, unsigned int> ibe;
+    // ruleid: chromium-cryptography-random-usage
+    std::shuffle_order_engine<std::mt19937, 256> soe;
   }
 
   void AcceptableUsage() {
