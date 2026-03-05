@@ -95,7 +95,7 @@ runs:
         path: ~/.cache/pip/
         key: ${{ runner.os }}-pip
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
+      uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
       with:
         reviewdog_version: v0.17.5 # Optional. [latest,nightly,v.X.Y.Z]
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
