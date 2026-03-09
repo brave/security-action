@@ -1,21 +1,6 @@
-async function findChannelId (web, name) {
-  let cursor = null
-
-  while (true) {
-    const r = await web.conversations.list({ cursor })
-    const f = r.channels.find(c => c.name === name || c.name === name.substring(1))
-
-    if (f) {
-      return f.id
-    }
-
-    if (!r.response_metadata.next_cursor) {
-      throw new Error('channel not found')
-    }
-
-    cursor = r.response_metadata.next_cursor
-  }
-}
+import {
+  findChannelId
+} from './slackUtils.js'
 
 const colorCodes = {
   black: '#000000',

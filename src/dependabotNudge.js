@@ -134,25 +134,46 @@ export default async function dependabotNudge ({
       if (alerts.length > 0) {
         if (debug) { console.log(`alerts len: ${alerts.length}`) }
 
-        // Assign maintainers to each alert via the GitHub Dependabot alert assignees API
+        // Assign maintainers to each alert via the
+        // GitHub Dependabot alert assignees API.
         if (uniqueGithubMaintainers.length > 0) {
           for (const alert of alerts) {
             try {
               if (debug) {
-                console.log(`Would assign ${uniqueGithubMaintainers.join(', ')} to alert #${alert.number} in ${org}/${repo.name}`)
+                console.log(
+                  'Would assign ' +
+                  uniqueGithubMaintainers.join(', ') +
+                  ` to alert #${alert.number}` +
+                  ` in ${org}/${repo.name}`
+                )
               } else {
-                await github.request('PATCH /repos/{owner}/{repo}/dependabot/alerts/{alert_number}', {
-                  owner: org,
-                  repo: repo.name,
-                  alert_number: alert.number,
-                  assignees: uniqueGithubMaintainers,
-                  headers: {
-                    'X-GitHub-Api-Version': '2022-11-28'
+                await github.request(
+                  'PATCH /repos/{owner}/{repo}' +
+                  '/dependabot/alerts/{alert_number}',
+                  {
+                    owner: org,
+                    repo: repo.name,
+                    alert_number: alert.number,
+                    assignees: uniqueGithubMaintainers,
+                    headers: {
+                      'X-GitHub-Api-Version':
+                        '2022-11-28'
+                    }
                   }
-                })
+                )
+                // Small delay to avoid hitting
+                // GitHub secondary rate limits.
+                await new Promise(
+                  r => setTimeout(r, 200)
+                )
               }
             } catch (assignErr) {
-              console.error(`Failed to assign maintainers to alert #${alert.number} in ${org}/${repo.name}: ${assignErr.message}`)
+              console.error(
+                'Failed to assign maintainers to' +
+                ` alert #${alert.number}` +
+                ` in ${org}/${repo.name}:` +
+                ` ${assignErr.message}`
+              )
             }
           }
         }

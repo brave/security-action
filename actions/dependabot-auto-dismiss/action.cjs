@@ -3,15 +3,15 @@ module.exports = async ({
   debug = false
 }) => {
   const { default: sendSlackMessage } =
-    await import(`${actionPath}/src/sendSlackMessage.js`)
-  const { default: deleteSlackMessages } =
     await import(
-      `${actionPath}/src/deleteSlackMessages.js`
+      `${actionPath}/src/sendSlackMessage.js`
     )
-  const { listSlackMessageRepos } =
-    await import(
-      `${actionPath}/src/deleteSlackMessages.js`
-    )
+  const {
+    default: deleteSlackMessages,
+    listSlackMessageRepos
+  } = await import(
+    `${actionPath}/src/deleteSlackMessages.js`
+  )
   const { default: dependabotDismiss } =
     await import(
       `${actionPath}/src/dependabotDismiss.js`
@@ -19,7 +19,8 @@ module.exports = async ({
 
   const org = context.repo.owner
   const dismissConfig =
-    `${actionPath}/actions/dependabot-auto-dismiss/dismiss.txt`
+    `${actionPath}/actions/dependabot-auto-dismiss` +
+    '/dismiss.txt'
 
   const { message, dismissedRepos } =
     await dependabotDismiss({
@@ -39,9 +40,9 @@ module.exports = async ({
     })
   }
 
-  // Reconciliation: find nudge messages for repos that
-  // no longer have any qualifying open alerts (e.g.
-  // alerts fixed manually, auto-closed, or dismissed
+  // Reconciliation: find nudge messages for repos
+  // that no longer have any qualifying open alerts
+  // (e.g. fixed manually, auto-closed, or dismissed
   // in a prior run).
   const nudgeChannel = '#secops-hotspots'
   const nudgeUsername = 'dependabot'
@@ -51,6 +52,14 @@ module.exports = async ({
     'inefficient regular expression',
     'regular expression complexity'
   ]
+
+  // Use the same date-based severity logic that
+  // dependabotNudge uses: 'medium' on the first
+  // Monday of the month, 'high' otherwise.
+  const today = new Date()
+  const severityFilter = today.getDate() <= 7
+    ? ['medium', 'high', 'critical']
+    : ['high', 'critical']
 
   const nudgedRepos = await listSlackMessageRepos({
     token: inputs.slack_token,
@@ -67,12 +76,13 @@ module.exports = async ({
   const staleRepos = []
 
   for (const repoFullName of toReconcile) {
-    const [repoOrg, repoName] = repoFullName.split('/')
+    const [repoOrg, repoName] =
+      repoFullName.split('/')
     if (!repoOrg || !repoName) continue
 
     try {
-      // Fetch open dependabot alerts, same filters
-      // that dependabotNudge uses.
+      // Fetch open dependabot alerts with the same
+      // severity filter that dependabotNudge uses.
       const alerts = await github.paginate(
         'GET /repos/{owner}/{repo}/dependabot/alerts',
         {
@@ -83,11 +93,11 @@ module.exports = async ({
           },
           sort: 'updated',
           state: 'open',
-          severity: ['medium', 'high', 'critical']
+          severity: severityFilter
         }
       )
 
-      // Apply the same filters as dependabotNudge:
+      // Apply the same post-filters as nudge:
       // - skip hotword matches
       // - require a patched version
       const qualifying = alerts.filter(a => {
@@ -108,14 +118,15 @@ module.exports = async ({
         staleRepos.push(repoFullName)
         if (debug) {
           console.log(
-            `reconcile: ${repoFullName} has 0 ` +
-            'qualifying alerts, marking stale'
+            `reconcile: ${repoFullName} has 0` +
+            ' qualifying alerts, marking stale'
           )
         }
       }
     } catch (err) {
-      // Repo may have been archived/deleted/no access.
-      // Treat as stale so the nudge message is removed.
+      // Repo may have been archived/deleted/no
+      // access. Treat as stale so the nudge
+      // message is removed.
       if (debug) {
         console.log(
           `reconcile: error checking ` +
@@ -129,9 +140,9 @@ module.exports = async ({
   if (staleRepos.length > 0) {
     if (debug) {
       console.log(
-        'reconcile: cleaning up nudge messages ' +
-        `for ${staleRepos.length} stale repo(s): ` +
-        staleRepos.join(', ')
+        'reconcile: cleaning up nudge messages' +
+        ` for ${staleRepos.length} stale ` +
+        `repo(s): ${staleRepos.join(', ')}`
       )
     }
     await deleteSlackMessages({

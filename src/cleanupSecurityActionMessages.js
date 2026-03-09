@@ -9,6 +9,8 @@
 //           linked PR are resolved by a security
 //           assignee
 
+import { findChannelId } from './slackUtils.js'
+
 const CHECKMARK_REACTIONS = [
   'white_check_mark',
   'heavy_check_mark',
@@ -20,9 +22,11 @@ const THUMBSUP_REACTIONS = ['thumbsup', '+1']
 const SECURITY_ACTION_USERNAME = 'security-action'
 
 // Parse /cc @user1 @user2 from Slack message text.
+// Only captures @-prefixed tokens to avoid matching
+// log fragments or other trailing content.
 function parseCcUsers (text) {
   if (!text) return []
-  const match = text.match(/\/cc\s+(.+?)(\n|$)/)
+  const match = text.match(/\/cc\s+((?:@\S+\s*)+)/)
   if (!match) return []
   return match[1]
     .split(/\s+/)
@@ -116,26 +120,6 @@ function resolveUserIds (names, userMap) {
     }
   }
   return ids
-}
-
-async function findChannelId (web, name) {
-  let cursor = null
-
-  while (true) {
-    const r = await web.conversations.list({ cursor })
-    const f = r.channels.find(
-      c => c.name === name
-        || c.name === name.substring(1)
-    )
-
-    if (f) return f.id
-
-    if (!r.response_metadata.next_cursor) {
-      throw new Error('channel not found')
-    }
-
-    cursor = r.response_metadata.next_cursor
-  }
 }
 
 // Query review threads for a PR, including
@@ -276,19 +260,26 @@ function checkAllThreadsResolved (threads, assignees) {
 // @param {string} opts.channel      - Slack channel
 // @param {boolean} [opts.debug]
 // @param {string[]} opts.defaultAssignees
-//   - Fallback security assignees (GitHub usernames)
+//   - Fallback security assignees (GitHub usernames).
+//     Caller must provide this; no hardcoded default.
 export default async function cleanupSecurityActionMessages ({
   token = null,
   github = null,
   channel = '#secops-hotspots',
   debug = false,
-  defaultAssignees = ['thypon', 'kdenhartog']
+  defaultAssignees = []
 }) {
   if (!token) {
     throw new Error('token is required!')
   }
   if (!github) {
     throw new Error('github is required!')
+  }
+  if (defaultAssignees.length === 0) {
+    console.log(
+      'cleanup: no defaultAssignees provided, ' +
+      'signals C/D may not work correctly'
+    )
   }
 
   debug = debug === 'true' || debug === true
@@ -465,6 +456,9 @@ export default async function cleanupSecurityActionMessages ({
       `cleanup: ${toDelete.length} message(s) ` +
       'marked for deletion'
     )
+    for (const msg of toDelete) {
+      console.log(`  would delete ts=${msg.ts}`)
+    }
     return toDelete.length
   }
 
@@ -487,9 +481,7 @@ export default async function cleanupSecurityActionMessages ({
     }
   }
 
-  if (debug) {
-    console.log(`cleanup: deleted ${deleted} message(s)`)
-  }
+  console.log(`cleanup: deleted ${deleted} message(s)`)
 
   return deleted
 }
