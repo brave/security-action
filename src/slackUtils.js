@@ -8,8 +8,8 @@ export async function findChannelId (web, name) {
   while (true) {
     const r = await web.conversations.list({ cursor })
     const f = r.channels.find(
-      c => c.name === name
-        || c.name === name.substring(1)
+      c => c.name === name ||
+        c.name === name.substring(1)
     )
 
     if (f) return f.id
@@ -61,8 +61,8 @@ export async function deleteMessages (
   if (debug) {
     for (const m of msgs) {
       const repo =
-        m.metadata?.event_payload?.repo
-        || '(text match)'
+        m.metadata?.event_payload?.repo ||
+        '(text match)'
       console.log(
         `  would delete ts=${m.ts} repo=${repo}`
       )
@@ -79,7 +79,7 @@ export async function deleteMessages (
       deleted++
 
       if (msgs.length > 1) {
-        await new Promise(r => setTimeout(r, 1200))
+        await new Promise(resolve => setTimeout(resolve, 1200))
       }
     } catch (err) {
       console.error(

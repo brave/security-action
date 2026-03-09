@@ -24,7 +24,9 @@ module.exports = async ({
 
   const { message, dismissedRepos } =
     await dependabotDismiss({
-      debug, org, github,
+      debug,
+      org,
+      github,
       dependabotDismissConfig: dismissConfig
     })
 
@@ -129,7 +131,7 @@ module.exports = async ({
       // message is removed.
       if (debug) {
         console.log(
-          `reconcile: error checking ` +
+          'reconcile: error checking ' +
           `${repoFullName}: ${err.message}`
         )
       }

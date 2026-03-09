@@ -182,8 +182,8 @@ function extractAssigneesFromThreads (
     ...new Set(
       threads.nodes
         .filter(t =>
-          t.comments.nodes[0]?.author?.login
-            === 'github-actions' &&
+          t.comments.nodes[0]?.author?.login ===
+            'github-actions' &&
           t.comments.nodes[0]?.body
             ?.includes('<br>Cc ')
         )
@@ -223,8 +223,8 @@ async function checkLabelRemoved (
     item =>
       item.label?.name === 'needs-security-review' &&
       assignees.some(
-        a => item.actor?.login?.toLowerCase()
-          === a.toLowerCase()
+        a => item.actor?.login?.toLowerCase() ===
+          a.toLowerCase()
       )
   )
 }
@@ -234,8 +234,8 @@ async function checkLabelRemoved (
 function checkAllThreadsResolved (threads, assignees) {
   const securityThreads = threads.nodes.filter(
     t =>
-      t.comments.nodes[0]?.author?.login
-        === 'github-actions' &&
+      t.comments.nodes[0]?.author?.login ===
+        'github-actions' &&
       t.comments.nodes[0]?.body
         ?.includes('<br>Cc ')
   )
@@ -333,7 +333,7 @@ export default async function cleanupSecurityActionMessages ({
     } catch (err) {
       if (debug) {
         console.log(
-          `cleanup: reactions.get failed for ` +
+          'cleanup: reactions.get failed for ' +
           `ts=${msg.ts}: ${err.message}`
         )
       }
@@ -443,7 +443,7 @@ export default async function cleanupSecurityActionMessages ({
     } catch (err) {
       if (debug) {
         console.log(
-          `cleanup: error checking PR ` +
+          'cleanup: error checking PR ' +
           `${prUrl}: ${err.message}`
         )
       }
@@ -471,7 +471,7 @@ export default async function cleanupSecurityActionMessages ({
       deleted++
 
       if (toDelete.length > 1) {
-        await new Promise(r => setTimeout(r, 1200))
+        await new Promise(resolve => setTimeout(resolve, 1200))
       }
     } catch (err) {
       console.error(

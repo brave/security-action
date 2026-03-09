@@ -160,7 +160,7 @@ export default async function deleteSlackMessages ({
 
   if (debug) {
     console.log(
-      `deleteSlackMessages: found ` +
+      'deleteSlackMessages: found ' +
       `${toDelete.length} message(s) to delete ` +
       `for repos: ${repos.join(', ')}`
     )

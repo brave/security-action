@@ -164,7 +164,7 @@ export default async function dependabotNudge ({
                 // Small delay to avoid hitting
                 // GitHub secondary rate limits.
                 await new Promise(
-                  r => setTimeout(r, 200)
+                  resolve => setTimeout(resolve, 200)
                 )
               }
             } catch (assignErr) {
