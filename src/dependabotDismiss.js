@@ -25,6 +25,7 @@ export default async function dependabotDismiss ({
 }) {
   const watermark = 'The following alerts were dismissed:\n\n'
   let message = ''
+  const dismissedRepos = new Set()
 
   let dependabotDismissIds = []
 
@@ -76,6 +77,7 @@ export default async function dependabotDismiss ({
     }
 
     message += `- [${a.security_advisory.summary} in \`${org}/${a.repository.name}\`](${a.html_url})\n`
+    dismissedRepos.add(`${org}/${a.repository.name}`)
 
     if (debug) {
       console.log(dismissComment)
@@ -98,9 +100,8 @@ export default async function dependabotDismiss ({
     })
   }
 
-  if (message.length > 0) {
-    return watermark + message
-  } else {
-    return ''
+  return {
+    message: message.length > 0 ? watermark + message : '',
+    dismissedRepos: Array.from(dismissedRepos)
   }
 }

@@ -36,7 +36,8 @@ export default async function sendSlackMessage ({
   message = null,
   debug = false,
   color = null,
-  username = 'github-actions'
+  username = 'github-actions',
+  eventPayload = {}
 }) {
   if (!token) {
     throw new Error('token is required!')
@@ -135,7 +136,7 @@ export default async function sendSlackMessage ({
     }
   }
 
-  const metadata = { event_type: hashHex, event_payload: { } }
+  const metadata = { event_type: hashHex, event_payload: eventPayload }
 
   // send the message
   const result = await web.chat.postMessage({
