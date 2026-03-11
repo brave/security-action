@@ -5,6 +5,11 @@ brave_chrome_browser_sources = [
   "brave_browser_features.h",
 ]
 
+brave_settings_ts_files = [
+  # ok:sources_gni
+  "brave_settings_app.html.ts",
+]
+
 brave_chrome_browser_deps = [
   # ok:sources_gni
   "//base",
