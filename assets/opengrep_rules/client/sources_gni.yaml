@@ -20,8 +20,8 @@ rules:
       https://github.com/brave/brave-core/blob/master/docs/gni_sources.md for
       details
     pattern-either:
-      - pattern-regex: .*\.h
-      - pattern-regex: .*\.cc
-      - pattern-regex: .*\.mm
-      - pattern-regex: .*\.cpp
-      - pattern-regex: .*\.hpp
+      - pattern-regex: '.*\.h"'
+      - pattern-regex: '.*\.cc"'
+      - pattern-regex: '.*\.mm"'
+      - pattern-regex: '.*\.cpp"'
+      - pattern-regex: '.*\.hpp"'
