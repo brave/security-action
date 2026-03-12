@@ -117,16 +117,66 @@ export default async function dependabotNudge ({
       })).filter(a => !skipHotwords.some(h => a.security_advisory.summary.toLowerCase().includes(h)))
         .filter(a => a.security_vulnerability?.first_patched_version?.identifier)
 
-      // get property values for this repository
-      let maintainers = (props.maintainers || '').toLowerCase().split(',').filter(Boolean)
+      // Resolve GitHub usernames for alert assignment (before Slack name conversion)
+      const githubMaintainers = (props.maintainers || '').toLowerCase().split(',').filter(Boolean)
         .map(m => options.elected_maintainers[m] || m)
-        .map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`) || []
+
+      // Remove duplicates
+      const uniqueGithubMaintainers = Array.from(new Set(githubMaintainers))
+
+      // Convert to Slack handles for the message
+      let maintainers = uniqueGithubMaintainers
+        .map(m => githubToSlack[m] ? githubToSlack[m] : `@${m}`)
 
       // remove duplicates
       maintainers = Array.from(new Set(maintainers))
 
       if (alerts.length > 0) {
         if (debug) { console.log(`alerts len: ${alerts.length}`) }
+
+        // Assign maintainers to each alert via the
+        // GitHub Dependabot alert assignees API.
+        if (uniqueGithubMaintainers.length > 0) {
+          for (const alert of alerts) {
+            try {
+              if (debug) {
+                console.log(
+                  'Would assign ' +
+                  uniqueGithubMaintainers.join(', ') +
+                  ` to alert #${alert.number}` +
+                  ` in ${org}/${repo.name}`
+                )
+              } else {
+                await github.request(
+                  'PATCH /repos/{owner}/{repo}' +
+                  '/dependabot/alerts/{alert_number}',
+                  {
+                    owner: org,
+                    repo: repo.name,
+                    alert_number: alert.number,
+                    assignees: uniqueGithubMaintainers,
+                    headers: {
+                      'X-GitHub-Api-Version':
+                        '2022-11-28'
+                    }
+                  }
+                )
+                // Small delay to avoid hitting
+                // GitHub secondary rate limits.
+                await new Promise(
+                  resolve => setTimeout(resolve, 200)
+                )
+              }
+            } catch (assignErr) {
+              console.error(
+                'Failed to assign maintainers to' +
+                ` alert #${alert.number}` +
+                ` in ${org}/${repo.name}:` +
+                ` ${assignErr.message}`
+              )
+            }
+          }
+        }
 
         let msg = `[${org}/${repo.name}](https://github.com/${org}/${repo.name}) has \`${alerts.length}\` open security issue(s) in depedencies`
         const critLen = alerts.filter(s => Severity[s.severity] >= Severity.critical).length
@@ -165,12 +215,12 @@ export default async function dependabotNudge ({
           msg += `**No maintainers listed for the given vulnerabilities, consider migrating and archiving this repository** - ${defaultContact.map(c => `@${c}`).join(', ')}`
         }
 
-        messages.push(msg)
+        messages.push({ repo: `${org}/${repo.name}`, message: msg })
       }
     } catch (e) {
       console.error(e)
     }
   }
 
-  if (debug || singleOutputMessage) { return messages.join('\n\n') } else { return messages }
+  if (debug || singleOutputMessage) { return messages.map(m => m.message).join('\n\n') } else { return messages }
 }
