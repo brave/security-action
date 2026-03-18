@@ -1,21 +1,6 @@
-async function findChannelId (web, name) {
-  let cursor = null
-
-  while (true) {
-    const r = await web.conversations.list({ cursor })
-    const f = r.channels.find(c => c.name === name || c.name === name.substring(1))
-
-    if (f) {
-      return f.id
-    }
-
-    if (!r.response_metadata.next_cursor) {
-      throw new Error('channel not found')
-    }
-
-    cursor = r.response_metadata.next_cursor
-  }
-}
+import {
+  findChannelId
+} from './slackUtils.js'
 
 const colorCodes = {
   black: '#000000',
@@ -36,7 +21,8 @@ export default async function sendSlackMessage ({
   message = null,
   debug = false,
   color = null,
-  username = 'github-actions'
+  username = 'github-actions',
+  eventPayload = {}
 }) {
   if (!token) {
     throw new Error('token is required!')
@@ -135,7 +121,7 @@ export default async function sendSlackMessage ({
     }
   }
 
-  const metadata = { event_type: hashHex, event_payload: { } }
+  const metadata = { event_type: hashHex, event_payload: eventPayload }
 
   // send the message
   const result = await web.chat.postMessage({
