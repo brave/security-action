@@ -19,9 +19,11 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   const messages = await dependabotNudge({ debug, org: context.repo.owner, github, minlevel, githubToSlack, actionPath })
 
-  for (const message of messages) {
+  const channel = inputs.slack_channel || '#secops-hotspots'
+
+  for (const { repo, message } of messages) {
     try {
-      await sendSlackMessage({ debug, username: 'dependabot', message, channel: '#secops-hotspots', token: inputs.slack_token })
+      await sendSlackMessage({ debug, username: 'dependabot', message, channel, token: inputs.slack_token, eventPayload: { repo } })
     } catch (error) {
       if (debug) { console.log(error) }
     }

@@ -20,6 +20,7 @@
         "markdown-to-txt": "^2.0.1"
     },
     "devDependencies": {
+        "dotenv": "^17.3.1",
         "standard": "17.1.2"
     }
 }

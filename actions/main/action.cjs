@@ -229,6 +229,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
     const { default: sendSlackMessage } = await import(`${actionPath}/src/sendSlackMessage.js`)
 
+    const channel = options.slack_channel || '#secops-hotspots'
     const repoName = `${context.repo.owner}/${context.repo.repo}`
 
     const message = `Repository: [${repoName}](https://github.com/${repoName})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}`
@@ -275,7 +276,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
           token: options.slack_token,
           text: `[error] ${actor} action failed, plz take a look. /cc ${slackAssignees} ${reviewdogFailLogHead}`,
           message,
-          channel: '#secops-hotspots',
+          channel,
           color: 'red',
           username: 'security-action'
         })
@@ -293,11 +294,38 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
         token: options.slack_token,
         text: `${actor} pushed commits. /cc ${slackAssignees}`,
         message,
-        channel: '#secops-hotspots',
+        channel,
         color: 'green',
         username: 'security-action'
       })
       debugLog('Comments after:', commentsAfter)
+    }
+
+    // Cleanup stale security-action Slack messages.
+    // Removes messages that have been acknowledged via
+    // reactions, label removal, or thread resolution.
+    if (options.slack_token) {
+      try {
+        const { default: cleanupMessages } =
+          await import(
+            `${actionPath}/src/cleanupSecurityActionMessages.js`
+          )
+        const cleaned = await cleanupMessages({
+          token: options.slack_token,
+          github,
+          channel,
+          debug: options.debug,
+          defaultAssignees: assignees
+        })
+        debugLog(
+          'Cleaned up stale messages:', cleaned
+        )
+      } catch (cleanupErr) {
+        console.error(
+          'Slack message cleanup failed:',
+          cleanupErr.message
+        )
+      }
     }
   } else if (context.actor === 'dependabot[bot]') {
     // if the actor is dependabot[bot], add security label to PR, and nothing more
