@@ -159,15 +159,19 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     const { default: unverifiedCommits } = await import(`${actionPath}/src/steps/unverifiedCommits.js`)
 
     // add unverified-commits label step
-    const unverifiedCommitsSteps = await unverifiedCommits({ context, github })
-    if (unverifiedCommitsSteps === '"UNVERIFIED-CHANGED"') {
-      await github.rest.issues.addLabels({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: context.issue.number,
-        labels: ['unverified-commits']
-      })
-      debugLog('Added unverified-commits label')
+    try {
+      const unverifiedCommitsSteps = await unverifiedCommits({ context, github })
+      if (unverifiedCommitsSteps === 'UNVERIFIED-CHANGED') {
+        await github.rest.issues.addLabels({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          labels: ['unverified-commits']
+        })
+        debugLog('Added unverified-commits label')
+      }
+    } catch (e) {
+      console.error('Unverified commits check failed:', e.message)
     }
 
     // run-reviewdog-pr step
