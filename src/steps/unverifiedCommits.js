@@ -53,7 +53,7 @@ export default async function unverifiedCommits ({
     }
     if (!commentExists) {
       console.log('Creating new comment')
-      github.rest.issues.createComment({
+      await github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.issue.number,

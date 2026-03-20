@@ -50,7 +50,7 @@ export default async function hotwords ({
     const messages = (await github.graphql(pullRequestCommentsQuery, variables)).repository.pullRequest.comments.nodes.map(node => node.body)
 
     if (!messages.includes(m)) {
-      github.rest.issues.createComment({
+      await github.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: context.issue.number,
