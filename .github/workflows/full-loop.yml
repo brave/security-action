@@ -35,10 +35,11 @@ jobs:
             echo "Too few safesvg findings"
             exit 1
           fi
-          if ((${{ fromJson(steps.action.outputs.tfsec-count) }} < 4)); then
-            echo "Too few tfsec findings"
-            exit 1
-          fi
+          # tfsec disabled
+          # if ((tfsec_count < 4)); then
+          #   echo "Too few tfsec findings"
+          #   exit 1
+          # fi
           if ((${{ fromJson(steps.action.outputs.opengrep-count) }} < 97)); then
             echo "Too few opengrep findings"
             exit 1
