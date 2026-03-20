@@ -63,7 +63,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     baseline_scan_only: 'true',
     assignees: ASSIGNEES,
     hotwords: HOTWORDS,
-    hotwords_enabled: 'true',
+    hotwords_enabled: 'false',
     codeowners_min_files: '50',
     codeowners_mode: 'groups'
   }, config, properties, inputs)
