@@ -1,0 +1,40 @@
+rules:
+  - id: sveltekit-event-fetch-path-traversal
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/sveltekit-event-fetch-path-traversal.yaml
+      category: security
+      references:
+        - https://cwe.mitre.org/data/definitions/22.html
+        - https://owasp.org/www-community/attacks/Path_Traversal
+      cwe:
+        - "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+    message: >
+      User-supplied parameter is interpolated into an `event.fetch()`
+      URL without sanitization. An attacker can inject `../` sequences to reach
+      arbitrary internal API endpoints. Wrap the value with
+      `validateURLParam()` or `encodeURIComponent()` before interpolation.
+    severity: WARNING
+    languages:
+      - ts
+      - js
+    paths:
+      include:
+        - "*.server.ts"
+        - "*.server.js"
+        - sveltekit-event-fetch-path-traversal.ts
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: $DATA.get('...') as $TYPE
+              - pattern: $DATA.get('...')
+              - pattern: $EVENT.url.searchParams.get('...')
+    pattern-sanitizers:
+      - patterns:
+          - pattern-either:
+              - pattern: validateURLParam(...)
+              - pattern: encodeURIComponent(...)
+    pattern-sinks:
+      - pattern: event.fetch(`...${...}...`, ...)
