@@ -1,2 +1,2 @@
-pip-audit~=2.9.0
+pip-audit~=2.10.0
 setuptools~=79.0.1
