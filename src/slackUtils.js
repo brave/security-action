@@ -37,7 +37,8 @@ export async function fetchMessages (
       channel: channelId,
       oldest,
       limit: 200,
-      cursor
+      cursor,
+      include_all_metadata: true
     })
 
     messages.push(...response.messages)

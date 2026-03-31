@@ -160,6 +160,29 @@ console.log('  fetchMessages: multi-page pagination')
 }
 console.log('  fetchMessages: correct oldest timestamp')
 
+// Test: passes include_all_metadata: true
+{
+  let receivedParams
+  const mockWeb = {
+    conversations: {
+      history: async (params) => {
+        receivedParams = params
+        return {
+          messages: [],
+          has_more: false,
+          response_metadata: {}
+        }
+      }
+    }
+  }
+  await fetchMessages(mockWeb, 'C001', 7)
+  assert.equal(
+    receivedParams.include_all_metadata, true,
+    'Should request metadata so downstream consumers can read event_payload'
+  )
+}
+console.log('  fetchMessages: requests metadata')
+
 // ---- deleteMessages ----
 
 console.log('\nTesting deleteMessages...')
