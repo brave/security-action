@@ -109,7 +109,8 @@ export default async function sendSlackMessage ({
   const history = await web.conversations.history({
     channel: channelId,
     limit: 50,
-    oldest: Date.now() / 1000 - 60 * 60 * 24 // a day ago
+    oldest: Date.now() / 1000 - 60 * 60 * 24, // a day ago
+    include_all_metadata: true
   })
 
   // debounce messages if the same message was sent in the last day
