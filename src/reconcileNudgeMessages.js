@@ -29,7 +29,7 @@ async function isRepoStale (
         },
         sort: 'updated',
         state: 'open',
-        severity: severityKeys.join(',')
+        severity: severityKeys
       }
     )
 
@@ -61,15 +61,15 @@ async function isRepoStale (
     }
     return false
   } catch (err) {
-    // Repo may have been archived/deleted/no access.
-    // Treat as stale so the nudge message is removed.
-    if (debug) {
-      console.log(
-        'reconcile: error checking ' +
-        `${repoFullName}: ${err.message}`
-      )
-    }
-    return true
+    // On any error (rate limit, transient 5xx,
+    // permissions, etc.) keep the message and retry
+    // on the next scheduled run.
+    console.log(
+      'reconcile: error checking ' +
+      `${repoFullName}: ${err.message}` +
+      ' — keeping message until next run'
+    )
+    return false
   }
 }
 
@@ -124,6 +124,14 @@ export default async function reconcileNudgeMessages ({
       skipHotwords, debug
     )
     if (stale) staleRepos.push(repoFullName)
+
+    // Delay between API calls to avoid secondary
+    // rate limits when checking many repos.
+    if (toReconcile.length > 1) {
+      await new Promise(resolve =>
+        setTimeout(resolve, 1000)
+      )
+    }
   }
 
   if (staleRepos.length > 0) {
