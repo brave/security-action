@@ -165,7 +165,7 @@ console.log('  alerts without patched version are filtered')
 }
 console.log('  already-dismissed repos are excluded')
 
-// Test: API errors mark repo as stale
+// Test: API errors keep the message (don't delete)
 {
   const github = {
     paginate: async () => {
@@ -184,9 +184,10 @@ console.log('  already-dismissed repos are excluded')
     deleteSlackMessages: del.fn
   })
 
-  assert.deepEqual(stale, ['org/deleted-repo'])
+  assert.deepEqual(stale, [])
+  assert.equal(del.calls.length, 0, 'Should not delete on error')
 }
-console.log('  API errors mark repo as stale')
+console.log('  API errors keep the message')
 
 // Test: no nudged repos means no work done
 {
