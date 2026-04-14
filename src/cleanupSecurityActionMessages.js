@@ -7,7 +7,10 @@
 //           a security assignee on the linked PR
 // Signal D: all github-actions review threads on the
 //           linked PR are resolved by a security
-//           assignee
+//           assignee (or no security threads exist)
+//
+// Signal E (strikethrough, not delete): a /cc'd
+//           person replied in the Slack thread
 
 import { findChannelId, fetchMessages } from './slackUtils.js'
 
@@ -191,7 +194,7 @@ export function checkAllThreadsResolved (threads, assignees) {
         ?.includes('<br>Cc ')
   )
 
-  if (securityThreads.length === 0) return false
+  if (securityThreads.length === 0) return true
 
   return securityThreads.every(t => {
     if (!t.isResolved) return false
@@ -201,6 +204,36 @@ export function checkAllThreadsResolved (threads, assignees) {
       a => a.toLowerCase() === resolver
     )
   })
+}
+
+// Check Signal E: a /cc'd person replied in the Slack
+// thread. Requires fetching thread replies via the API.
+export async function checkThreadRepliesFromCcUsers (
+  web, channelId, messageTs, ccUserIds
+) {
+  if (ccUserIds.length === 0) return false
+
+  const result = await web.conversations.replies({
+    channel: channelId,
+    ts: messageTs,
+    limit: 200
+  })
+
+  // First message in replies is the parent; skip it.
+  const replies = (result.messages || []).slice(1)
+  return replies.some(
+    r => ccUserIds.includes(r.user)
+  )
+}
+
+// Apply strikethrough to a Slack message by wrapping
+// each line of its text in ~tildes~.
+export function strikethroughText (text) {
+  if (!text) return '~(empty)~'
+  return text
+    .split('\n')
+    .map(line => line.trim() ? `~${line}~` : line)
+    .join('\n')
 }
 
 // Main cleanup function.
@@ -266,6 +299,7 @@ export default async function cleanupSecurityActionMessages ({
   }
 
   const toDelete = []
+  const toStrikethrough = []
 
   for (const msg of messages) {
     // Reactions are included in the history response,
@@ -325,71 +359,99 @@ export default async function cleanupSecurityActionMessages ({
     // For signals C and D we need the PR URL.
     const prUrl = extractPrUrl(msg)
     const pr = parsePrUrl(prUrl)
-    if (!pr) {
-      if (debug) {
-        console.log(
-          `cleanup: ts=${msg.ts} no PR URL found`
+    if (pr) {
+      try {
+        // Fetch review threads (for assignees + D).
+        const threadResult = await github.graphql(
+          REVIEW_THREADS_QUERY,
+          {
+            owner: pr.owner,
+            name: pr.repo,
+            prnumber: pr.number
+          }
         )
+        const threads =
+          threadResult.repository.pullRequest
+            .reviewThreads
+
+        // Determine the assignees for this PR.
+        const assignees = extractAssigneesFromThreads(
+          threads, defaultAssignees
+        )
+
+        // Signal C: label removed by assignee.
+        const labelRemoved = await checkLabelRemoved(
+          github, pr, assignees
+        )
+        if (labelRemoved) {
+          if (debug) {
+            console.log(
+              `cleanup: ts=${msg.ts} label removed ` +
+              'by assignee'
+            )
+          }
+          toDelete.push(msg)
+          continue
+        }
+
+        // Signal D: all threads resolved by assignee
+        // (includes the case where no security
+        // threads exist on the PR).
+        const allResolved = checkAllThreadsResolved(
+          threads, assignees
+        )
+        if (allResolved) {
+          if (debug) {
+            console.log(
+              `cleanup: ts=${msg.ts} all threads ` +
+              'resolved by assignee'
+            )
+          }
+          toDelete.push(msg)
+          continue
+        }
+      } catch (err) {
+        if (debug) {
+          console.log(
+            'cleanup: error checking PR ' +
+            `${prUrl}: ${err.message}`
+          )
+        }
+        // Don't delete on error — fall through to
+        // Signal E.
       }
-      continue
+    } else if (debug) {
+      console.log(
+        `cleanup: ts=${msg.ts} no PR URL found`
+      )
     }
 
-    try {
-      // Fetch review threads (for assignees + D).
-      const threadResult = await github.graphql(
-        REVIEW_THREADS_QUERY,
-        {
-          owner: pr.owner,
-          name: pr.repo,
-          prnumber: pr.number
+    // Signal E: a /cc'd person replied in the Slack
+    // thread. Strikethrough instead of delete.
+    if (ccUserIds.length > 0) {
+      try {
+        const hasReply =
+          await checkThreadRepliesFromCcUsers(
+            web, channelId, msg.ts, ccUserIds
+          )
+        if (hasReply) {
+          if (debug) {
+            console.log(
+              `cleanup: ts=${msg.ts} has reply ` +
+              'from cc\'d person (strikethrough)'
+            )
+          }
+          toStrikethrough.push(msg)
+          continue
         }
-      )
-      const threads =
-        threadResult.repository.pullRequest
-          .reviewThreads
-
-      // Determine the assignees for this PR.
-      const assignees = extractAssigneesFromThreads(
-        threads, defaultAssignees
-      )
-
-      // Signal C: label removed by assignee.
-      const labelRemoved = await checkLabelRemoved(
-        github, pr, assignees
-      )
-      if (labelRemoved) {
+      } catch (err) {
         if (debug) {
           console.log(
-            `cleanup: ts=${msg.ts} label removed ` +
-            'by assignee'
+            'cleanup: error checking replies ' +
+            `ts=${msg.ts}: ${err.message}`
           )
         }
-        toDelete.push(msg)
-        continue
       }
-
-      // Signal D: all threads resolved by assignee.
-      const allResolved = checkAllThreadsResolved(
-        threads, assignees
-      )
-      if (allResolved) {
-        if (debug) {
-          console.log(
-            `cleanup: ts=${msg.ts} all threads ` +
-            'resolved by assignee'
-          )
-        }
-        toDelete.push(msg)
-        continue
-      }
-    } catch (err) {
-      if (debug) {
-        console.log(
-          'cleanup: error checking PR ' +
-          `${prUrl}: ${err.message}`
-        )
-      }
-      // Don't delete on error — leave the message.
     }
   }
 
@@ -401,7 +463,16 @@ export default async function cleanupSecurityActionMessages ({
     for (const msg of toDelete) {
       console.log(`  would delete ts=${msg.ts}`)
     }
-    return toDelete.length
+    console.log(
+      `cleanup: ${toStrikethrough.length} message(s) ` +
+      'marked for strikethrough'
+    )
+    for (const msg of toStrikethrough) {
+      console.log(
+        `  would strikethrough ts=${msg.ts}`
+      )
+    }
+    return toDelete.length + toStrikethrough.length
   }
 
   let deleted = 0
@@ -423,7 +494,31 @@ export default async function cleanupSecurityActionMessages ({
     }
   }
 
-  console.log(`cleanup: deleted ${deleted} message(s)`)
+  let struck = 0
+  for (const msg of toStrikethrough) {
+    try {
+      await web.chat.update({
+        channel: channelId,
+        ts: msg.ts,
+        text: strikethroughText(msg.text)
+      })
+      struck++
 
-  return deleted
+      if (toStrikethrough.length > 1) {
+        await new Promise(resolve => setTimeout(resolve, 1200))
+      }
+    } catch (err) {
+      console.error(
+        'cleanup: failed to strikethrough ' +
+        `ts=${msg.ts}: ${err.message}`
+      )
+    }
+  }
+
+  console.log(
+    `cleanup: deleted ${deleted}, ` +
+    `struck through ${struck} message(s)`
+  )
+
+  return deleted + struck
 }
