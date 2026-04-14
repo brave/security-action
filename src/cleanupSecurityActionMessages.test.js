@@ -7,7 +7,8 @@ import {
   extractPrUrl,
   parsePrUrl,
   extractAssigneesFromThreads,
-  checkAllThreadsResolved
+  checkAllThreadsResolved,
+  strikethroughText
 } from './cleanupSecurityActionMessages.js'
 
 // ---- parseCcUserIds ----
@@ -316,7 +317,8 @@ console.log('  checkAllThreadsResolved: false when unresolved')
 }
 console.log('  checkAllThreadsResolved: false for non-assignee resolver')
 
-// Test: false when no security threads
+// Test: true when no security threads (no github-actions
+// threads means nothing to review — treat as resolved)
 {
   const threads = {
     nodes: [{
@@ -332,11 +334,22 @@ console.log('  checkAllThreadsResolved: false for non-assignee resolver')
   }
   assert.equal(
     checkAllThreadsResolved(threads, ['alice']),
-    false,
-    'Should return false when no security threads'
+    true,
+    'Should return true when no security threads'
   )
 }
-console.log('  checkAllThreadsResolved: false for no security threads')
+console.log('  checkAllThreadsResolved: true for no security threads')
+
+// Test: true when threads are completely empty
+{
+  const threads = { nodes: [] }
+  assert.equal(
+    checkAllThreadsResolved(threads, ['alice']),
+    true,
+    'Should return true for empty threads'
+  )
+}
+console.log('  checkAllThreadsResolved: true for empty threads')
 
 // Test: case-insensitive login comparison
 {
@@ -359,5 +372,36 @@ console.log('  checkAllThreadsResolved: false for no security threads')
   )
 }
 console.log('  checkAllThreadsResolved: case-insensitive')
+
+// ---- strikethroughText ----
+
+console.log('\nTesting strikethroughText...')
+
+// Test: wraps each line in tildes
+{
+  const result = strikethroughText('line one\nline two')
+  assert.equal(result, '~line one~\n~line two~')
+}
+console.log('  strikethroughText: wraps each line')
+
+// Test: preserves empty lines
+{
+  const result = strikethroughText('line one\n\nline three')
+  assert.equal(result, '~line one~\n\n~line three~')
+}
+console.log('  strikethroughText: preserves empty lines')
+
+// Test: handles single line
+{
+  const result = strikethroughText('single line')
+  assert.equal(result, '~single line~')
+}
+console.log('  strikethroughText: single line')
+
+// Test: handles null/undefined
+assert.equal(strikethroughText(null), '~(empty)~')
+assert.equal(strikethroughText(undefined), '~(empty)~')
+assert.equal(strikethroughText(''), '~(empty)~')
+console.log('  strikethroughText: handles null/undefined/empty')
 
 console.log('\n✅ All cleanupSecurityActionMessages tests passed!')
