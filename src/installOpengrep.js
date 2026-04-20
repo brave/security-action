@@ -11,9 +11,9 @@ import os from 'os'
 import path from 'path'
 
 // Configuration
-const OPENGREP_VERSION = 'v1.11.2'
+const OPENGREP_VERSION = 'v1.19.0'
 const INSTALL_SCRIPT_URL = `https://raw.githubusercontent.com/opengrep/opengrep/refs/tags/${OPENGREP_VERSION}/install.sh`
-const EXPECTED_SHA256 = 'a74388d0aec282eddf15fc8d42884de6531e1fc5a7bdc3ac31863c854e974eee'
+const EXPECTED_SHA256 = 'd00ea682170261f09d483496d7cc9864ce58f8e527f1e134a71351b23cd1f9ed'
 
 /**
  * Download content from URL
