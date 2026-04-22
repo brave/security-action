@@ -28,22 +28,3 @@ rules:
       - any other class member destroyed when the class is deallocated
     languages: [cpp, c]
     severity: WARNING
-  - id: chromium-bind-uaf
-    metadata:
-      author: Andrea Brancaleoni <abc@pompel.me>
-      category: security
-      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/chromium-uaf.yaml
-      assignees: |
-        thypon
-        goodov
-    patterns:
-      - patterns:
-          - pattern-either:
-              - pattern: base::BindOnce($FIRST_ARG, $...REST_ARGS)
-              - pattern: base::BindRepeating($FIRST_ARG, $...REST_ARGS)
-          - metavariable-comparison:
-              comparison: not re.match("::", str($FIRST_ARG)) and re.match("this", str($...REST_ARGS))
-    message: |
-      BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle.<br/>Verify the occurrences manually.
-    languages: [cpp, c]
-    severity: WARNING

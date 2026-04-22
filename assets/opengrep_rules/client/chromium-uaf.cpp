@@ -13,31 +13,8 @@ v8::Local<v8::Promise> uaf(v8::Isolate* isolate) {
       v8::Global<v8::Context>(isolate, isolate->GetCurrentContext()));
   auto promise_resolver(
       v8::Global<v8::Promise::Resolver>(isolate, resolver.ToLocalChecked()));
-	// ok: chromium-bind-uaf
-  DistillPageText(
-      render_frame(),
-      base::BindOnce(&PageContentExtractor::OnDistillResult,
-                     weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
-	// ok: chromium-bind-uaf
-  DistillPageText(
-      render_frame(),
-      base::BindOnce(&PageContentExtractor::OnDistillResult,
   // ruleid: chromium-unretained-uaf
-                     base::Unretained(this), std::move(callback)));
-
-  // this is bad and most likely will explode:
-  auto func = [](MyClass* c, int val) {
-    if (val > 10) {
-      c->DoSomething();
-    } else {
-      c->DoSomethingElse();
-    }
-  };
-  // ruleid: chromium-bind-uaf
-  base::BindOnce(&func, this);
-
-  // ok: chromium-bind-uaf
-  base::BindOnce(&MyClass::DoSomethingConditionally, weak_ptr_factory_.GetWeakPtr());
+                     base::Unretained(this);
 
   // ok: chromium-unretained-uaf
   web_ui()->RegisterMessageCallback(
