@@ -1,0 +1,23 @@
+name: SemgrepPublish
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep-publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+    container:
+      image: returntocorp/semgrep
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - run: semgrep publish --visibility=org_private assets/opengrep_rules/client/
+      - run: semgrep publish --visibility=org_private assets/opengrep_rules/services/
