@@ -21,3 +21,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - run: semgrep publish --visibility=org_private assets/opengrep_rules/client/
       - run: semgrep publish --visibility=org_private assets/opengrep_rules/services/
+      - name: Set published rules to Comment mode
+        run: >
+          python3 scripts/semgrep-set-policy-mode.py --mode MODE_COMMENT
+          assets/opengrep_rules/client/ assets/opengrep_rules/services/
