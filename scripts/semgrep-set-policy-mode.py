@@ -2,6 +2,8 @@
 """Set published Semgrep rules to a specified policy mode via the Semgrep API.
 
 Only updates rules whose IDs match those found in the given YAML directories.
+Constructs rule paths as '<org_slug>.<rule_id>' and calls the UpdatePolicy API
+for each one, which adds the rule to the policy if not already present.
 
 Usage:
   SEMGREP_APP_TOKEN=<token> python3 semgrep-set-policy-mode.py \
@@ -56,32 +58,14 @@ def collect_rule_ids(directories):
     return rule_ids
 
 
-def matches_local_rule(rule_path, local_ids):
-    """Check if a remote rule path corresponds to one of our local rule IDs.
-
-    Published rules have paths like 'org-slug.rule-id'. We match if the
-    path itself is a known ID, or the part after the last '.' is a known ID.
-    """
-    if rule_path in local_ids:
-        return True
-    # org-slug.rule-id format
-    dot_idx = rule_path.find(".")
-    if dot_idx != -1:
-        suffix = rule_path[dot_idx + 1:]
-        if suffix in local_ids:
-            return True
-    return False
-
-
-def get_deployment_id(token):
+def get_deployment(token):
     data = api("GET", "/deployments", token)
     deployments = data.get("deployments", [])
     if not deployments:
         raise RuntimeError("No deployments found")
-    dep_id = deployments[0]["id"]
-    dep_name = deployments[0].get("name", "")
-    print(f"Deployment: {dep_name} (id={dep_id})")
-    return dep_id
+    dep = deployments[0]
+    print(f"Deployment: {dep.get('name', '')} (id={dep['id']}, slug={dep.get('slug', '')})")
+    return dep
 
 
 def get_policies(token, deployment_id):
@@ -91,26 +75,9 @@ def get_policies(token, deployment_id):
     return policies
 
 
-def get_rules(token, deployment_id, policy_id, page_size=2000):
-    """Fetch all rules in a policy, handling pagination."""
-    all_rules = []
-    cursor = None
-    while True:
-        path = f"/deployments/{deployment_id}/policies/{policy_id}?pageSize={page_size}"
-        if cursor:
-            path += f"&cursor={cursor}"
-        data = api("GET", path, token)
-        rules = data.get("rules", [])
-        all_rules.extend(rules)
-        cursor = data.get("cursor")
-        if not cursor or not rules:
-            break
-    return all_rules
-
-
 def set_rule_mode(token, deployment_id, policy_id, rule_path, mode):
     body = {"rulePath": rule_path, "policyMode": mode}
-    api("PUT", f"/deployments/{deployment_id}/policies/{policy_id}", token, body)
+    return api("PUT", f"/deployments/{deployment_id}/policies/{policy_id}", token, body)
 
 
 def main():
@@ -121,11 +88,19 @@ def main():
 
     target_mode = DEFAULT_MODE
     directories = []
+    dry_run = False
+    org_slug = None
     args = sys.argv[1:]
     i = 0
     while i < len(args):
         if args[i] == "--mode" and i + 1 < len(args):
             target_mode = args[i + 1]
+            i += 2
+        elif args[i] == "--dry-run":
+            dry_run = True
+            i += 1
+        elif args[i] == "--org-slug" and i + 1 < len(args):
+            org_slug = args[i + 1]
             i += 2
         else:
             directories.append(args[i])
@@ -133,7 +108,8 @@ def main():
 
     if not directories:
         print("Error: no rule directories specified", file=sys.stderr)
-        print("Usage: semgrep-set-policy-mode.py [--mode MODE] <dir> [<dir>...]", file=sys.stderr)
+        print("Usage: semgrep-set-policy-mode.py [--mode MODE] [--org-slug SLUG] [--dry-run] <dir> [<dir>...]",
+              file=sys.stderr)
         sys.exit(1)
 
     local_ids = collect_rule_ids(directories)
@@ -141,43 +117,61 @@ def main():
         print("Warning: no rule IDs found in specified directories", file=sys.stderr)
         sys.exit(0)
 
-    print(f"Target mode: {target_mode}")
+    print(f"Target mode: {target_mode}{' (dry run)' if dry_run else ''}")
     print(f"Local rule IDs ({len(local_ids)}): {', '.join(sorted(local_ids))}")
 
-    deployment_id = get_deployment_id(token)
+    deployment = get_deployment(token)
+    deployment_id = deployment["id"]
+
+    # Use deployment slug as org slug if not explicitly provided
+    if not org_slug:
+        org_slug = deployment.get("slug", "")
+    if not org_slug:
+        print("Error: could not determine org slug from deployment", file=sys.stderr)
+        sys.exit(1)
+    print(f"Org slug: {org_slug}")
+
     policies = get_policies(token, deployment_id)
+    # Use the first SAST policy (Global Policy), skip secrets policies
+    sast_policies = [p for p in policies if p.get("productType", "") != "PRODUCT_TYPE_SECRETS"]
+    if not sast_policies:
+        sast_policies = policies[:1]  # fallback to first policy
+
+    if not sast_policies:
+        print("Error: no policies found", file=sys.stderr)
+        sys.exit(1)
+
+    policy = sast_policies[0]
+    policy_id = policy["id"]
+    policy_name = policy.get("name", policy_id)
+    print(f"Using policy: {policy_name} (id={policy_id})")
 
     updated = 0
     skipped = 0
-    ignored = 0
     errors = 0
 
-    for policy in policies:
-        policy_id = policy["id"]
-        policy_name = policy.get("name", policy_id)
-        print(f"\nPolicy: {policy_name} (id={policy_id})")
-
-        rules = get_rules(token, deployment_id, policy_id)
-        print(f"  Total rules: {len(rules)}")
-
-        for rule in rules:
-            path = rule["path"]
-            if not matches_local_rule(path, local_ids):
-                ignored += 1
-                continue
-            current_mode = rule.get("policyMode", "UNKNOWN")
-            if current_mode == target_mode:
+    for rule_id in sorted(local_ids):
+        rule_path = f"{org_slug}.{rule_id}"
+        if dry_run:
+            print(f"  [DRY RUN] {rule_path} -> {target_mode}")
+            updated += 1
+            continue
+        try:
+            set_rule_mode(token, deployment_id, policy_id, rule_path, target_mode)
+            print(f"  {rule_path}: -> {target_mode}")
+            updated += 1
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                print(f"  {rule_path}: not found in registry (skipped)")
                 skipped += 1
-                continue
-            try:
-                set_rule_mode(token, deployment_id, policy_id, path, target_mode)
-                print(f"  {path}: {current_mode} -> {target_mode}")
-                updated += 1
-            except Exception as e:
-                print(f"  ERROR {path}: {e}", file=sys.stderr)
+            else:
+                print(f"  ERROR {rule_path}: HTTP {e.code}", file=sys.stderr)
                 errors += 1
+        except Exception as e:
+            print(f"  ERROR {rule_path}: {e}", file=sys.stderr)
+            errors += 1
 
-    print(f"\nDone: {updated} updated, {skipped} already correct, {ignored} not ours, {errors} errors")
+    print(f"\nDone: {updated} updated, {skipped} skipped, {errors} errors")
     if errors:
         sys.exit(1)
 
