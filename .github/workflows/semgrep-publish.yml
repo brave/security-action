@@ -19,5 +19,22 @@ jobs:
       image: returntocorp/semgrep
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - run: semgrep publish --visibility=org_private assets/opengrep_rules/client/
-      - run: semgrep publish --visibility=org_private assets/opengrep_rules/services/
+      - name: Publish client rules
+        id: publish-client
+        run: |
+          output=$(semgrep publish --visibility=org_private assets/opengrep_rules/client/ 2>&1)
+          echo "$output"
+          slug=$(echo "$output" | sed -n 's|.*semgrep.dev/r/\([^.]*\)\..*|\1|p' | head -1)
+          echo "org_slug=$slug" >> "$GITHUB_OUTPUT"
+      - name: Publish services rules
+        run: semgrep publish --visibility=org_private assets/opengrep_rules/services/
+      - name: Set policy modes for published rules
+        run: >
+          python3 scripts/semgrep-set-policy-mode.py
+          --org-slug "${{ steps.publish-client.outputs.org_slug }}"
+          --blocklist assets/opengrep_rules/blocklist.txt
+          --blocklist assets/opengrep_rules/blocklist-static.txt
+          --blocklist assets/opengrep_rules/blocklist-brave-core.txt
+          --blocklist assets/opengrep_rules/blocklist-internal.txt
+          --blocklist assets/opengrep_rules/blocklist-bsg.txt
+          assets/opengrep_rules/client/ assets/opengrep_rules/services/
