@@ -14,13 +14,11 @@ Usage:
 
 Requires: Python 3.x with stdlib only (no pip dependencies).
 """
-import concurrent.futures
 import glob
 import json
 import os
 import re
 import sys
-import threading
 import time
 import urllib.request
 import urllib.error
@@ -266,44 +264,40 @@ def main():
             print(f"  {path}: {current} -> {target}")
         return
 
-    # Apply updates in parallel
+    # Apply updates sequentially with a gap between calls.
+    # Semgrep's UpdatePolicyRule has a race condition: concurrent PUT calls
+    # read-modify-write the entire rules JSON array, so concurrent writers
+    # clobber each other (HTTP 200 but changes lost). Serializing with a
+    # small delay avoids the race until a batch endpoint is available.
+    CALL_GAP = 0.05  # 50ms between calls
     updated = 0
     not_found = 0
     errors = 0
-    max_workers = 5
 
-    def update_rule(item):
-        path, current, target = item
+    print(f"\nApplying {len(to_update)} updates (sequential, {CALL_GAP * 1000:.0f}ms gap)...", flush=True)
+    t0 = time.time()
+    for done, (path, current, target) in enumerate(to_update, 1):
         try:
             set_rule_mode(token, deployment_id, policy_id, path, target)
-            return ("ok", path, current, target)
+            updated += 1
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                return ("not_found", path, current, target)
-            return ("error", path, f"HTTP {e.code}", target)
-        except Exception as e:
-            return ("error", path, str(e), target)
-
-    print(f"\nApplying {len(to_update)} updates ({max_workers} workers)...", flush=True)
-    t0 = time.time()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(update_rule, item): item for item in to_update}
-        done = 0
-        for future in concurrent.futures.as_completed(futures):
-            done += 1
-            status, path, prev, target = future.result()
-            if status == "ok":
-                updated += 1
-            elif status == "not_found":
                 not_found += 1
             else:
-                print(f"  ERROR {path}: {prev}", file=sys.stderr, flush=True)
+                print(f"  ERROR {path}: HTTP {e.code}", file=sys.stderr, flush=True)
                 errors += 1
-            if done % 50 == 0:
-                elapsed = time.time() - t0
-                rate = done / elapsed if elapsed > 0 else 0
-                eta = (len(to_update) - done) / rate if rate > 0 else 0
-                print(f"  Progress: {done}/{len(to_update)} ({rate:.1f}/s, ETA {eta:.0f}s) | ok={updated} err={errors} 404={not_found}", flush=True)
+        except Exception as e:
+            print(f"  ERROR {path}: {e}", file=sys.stderr, flush=True)
+            errors += 1
+
+        if done % 50 == 0:
+            elapsed = time.time() - t0
+            rate = done / elapsed if elapsed > 0 else 0
+            eta = (len(to_update) - done) / rate if rate > 0 else 0
+            print(f"  Progress: {done}/{len(to_update)} ({rate:.1f}/s, ETA {eta:.0f}s) | ok={updated} err={errors} 404={not_found}", flush=True)
+
+        if done < len(to_update):
+            time.sleep(CALL_GAP)
 
     elapsed = time.time() - t0
     print(f"\nDone in {elapsed:.0f}s: {updated} updated, {not_found} not found, {errors} errors")
