@@ -5,8 +5,6 @@ const CONSOLE_BLUE = '\x1B[0;34m'
 const CONSOLE_RED = '\x1b[0;31m'
 const RESET_CONSOLE_COLOR = '\x1b[0m'
 
-const ASSIGNEES = `thypon
-kdenhartog`
 const HOTWORDS = `password
 cryptography
 login

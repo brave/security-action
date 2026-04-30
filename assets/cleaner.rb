@@ -83,12 +83,12 @@ STDIN.each_line(chomp: true).sort.uniq.to_a.each do |l|
 
   if options[:assignees]
     if l =~ /,null$/
-      l.gsub!(/,null$/, "<br>Cc #{ENV['ASSIGNEES']}")
+      l.gsub!(/,null$/, "<br>Cc #{ENV['ASSIGNEES']}<br><br>Please consider an alternative approach that avoids this security concern, or request a review from the sec-team on slack.")
     else
       l.gsub!(/,([^,]+)$/) { |_| "<br>Cc #{$1.split.map { |s| "@"+s }.join(' ')}" }
     end
   else
-    l.gsub!(/$/, "<br>Cc #{ENV['ASSIGNEES']}")
+    l.gsub!(/$/, "<br>Cc #{ENV['ASSIGNEES']}<br><br>Please consider an alternative approach that avoids this security concern, or request a review from the sec-team on slack")
   end
 
   puts l unless options[:matcher].match?(l)
