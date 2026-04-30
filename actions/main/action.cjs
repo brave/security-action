@@ -59,7 +59,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   const options = Object.assign({
     enabled: 'true',
     baseline_scan_only: 'true',
-    assignees: ASSIGNEES,
+    assignees: '',
     hotwords: HOTWORDS,
     hotwords_enabled: 'false',
     codeowners_min_files: '50',
