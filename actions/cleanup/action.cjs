@@ -1,5 +1,5 @@
 const ASSIGNEES = `thypon
-kdenhartog`
+t2micro`
 
 module.exports = async ({
   github, context, inputs, actionPath, core,
