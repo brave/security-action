@@ -1,0 +1,56 @@
+# Test file for yaml-unquoted-string rule
+# This should trigger the rule (unquoted strings)
+
+config:
+  name: production
+  type: database
+  environment: staging
+
+server:
+  port: 8080
+  host: "localhost"
+  region: us-west
+
+# Test array items
+languages:
+  - yaml
+  - json
+
+# This should NOT trigger the rule
+database:
+  name: "production"
+  type: 'mysql'
+  port: 3306
+  ssl: true
+  debug: false
+  cache: null
+
+# Properly quoted arrays (should NOT trigger)
+frameworks:
+  - "react"
+  - "vue"
+  - 'angular'
+
+# Additional test cases for modified rule
+
+# These should NOT trigger the rule (should not require quotes):
+new_config:
+  phrase: rule-of-thumb  # has hyphen - should not match
+  description: Alice and bob  # has spaces - should not match
+  float_version: 1.0  # simple numeric - should not match
+  setting_name: some_value  # has underscore - should not match
+
+new_arrays:
+  - rule-of-thumb  # has hyphen - should not match
+  - Alice and bob  # has spaces - should not match
+  - 1.0  # simple numeric - should not match
+  - some_value  # has underscore - should not match
+
+# These SHOULD trigger the rule (should require quotes):
+new_environment:
+  version: 1.2.3  # version string - should match
+  protocol: 802.11.x  # complex version - should match
+
+new_simple_array:
+  - 1.2.3  # version string - should match
+  - 802.11.x  # complex version - should match
