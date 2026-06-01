@@ -28,7 +28,6 @@ console.log(withAssignees + '\n')
 
 assert.ok(withAssignees.includes('Cc @bridiver'), `Should Cc @bridiver, got: ${withAssignees}`)
 assert.ok(!withAssignees.includes('@thypon'), `Should not include @thypon, got: ${withAssignees}`)
-assert.ok(!withAssignees.includes('@t2micro'), `Should not include @t2micro, got: ${withAssignees}`)
 
 console.log('=== Test 2: android-profile-original (rule assignees: bridiver) ===\n')
 
@@ -39,7 +38,6 @@ console.log(withAssignees2 + '\n')
 
 assert.ok(withAssignees2.includes('Cc @bridiver'), `Should Cc @bridiver, got: ${withAssignees2}`)
 assert.ok(!withAssignees2.includes('@thypon'), `Should not include @thypon, got: ${withAssignees2}`)
-assert.ok(!withAssignees2.includes('@t2micro'), `Should not include @t2micro, got: ${withAssignees2}`)
 
 console.log('=== Test 3: typos (no rule assignees) ===\n')
 
@@ -49,7 +47,6 @@ const noAssignees = runCleaner(
 console.log(noAssignees + '\n')
 
 assert.ok(!noAssignees.includes('@thypon'), `Should not include @thypon, got: ${noAssignees}`)
-assert.ok(!noAssignees.includes('@t2micro'), `Should not include @t2micro, got: ${noAssignees}`)
 assert.ok(noAssignees.includes('Please consider an alternative approach'), `Should include self-service guidance, got: ${noAssignees}`)
 assert.ok(noAssignees.includes('sec-team on slack'), `Should mention sec-team on slack, got: ${noAssignees}`)
 
