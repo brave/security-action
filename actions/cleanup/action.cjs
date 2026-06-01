@@ -1,5 +1,4 @@
-const ASSIGNEES = `thypon
-t2micro`
+const ASSIGNEES = `thypon`
 
 module.exports = async ({
   github, context, inputs, actionPath, core,

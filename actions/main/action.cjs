@@ -5,6 +5,7 @@ const CONSOLE_BLUE = '\x1B[0;34m'
 const CONSOLE_RED = '\x1b[0;31m'
 const RESET_CONSOLE_COLOR = '\x1b[0m'
 
+const ASSIGNEES = `thypon`
 const HOTWORDS = `password
 cryptography
 login
@@ -59,7 +60,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   const options = Object.assign({
     enabled: 'true',
     baseline_scan_only: 'true',
-    assignees: '',
+    assignees: ASSIGNEES,
     hotwords: HOTWORDS,
     hotwords_enabled: 'false',
     codeowners_min_files: '50',
