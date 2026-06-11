@@ -38,3 +38,4 @@ https://semgrep.dev/r/python.django.security.django-no-csrf-token.django-no-csrf
 https://semgrep.dev/r/typescript.react.portability.i18next.jsx-not-internationalized.jsx-not-internationalized
 https://semgrep.dev/r/generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
 https://semgrep.dev/r/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
+https://semgrep.dev/r/gitlab.bandit.B311
