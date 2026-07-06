@@ -19,7 +19,7 @@ rules:
 
       [GHA Policies](https://github.com/brave/internal/wiki/Pull-request-security-audit-checklist)
     patterns:
-      - pattern-regex: "uses:\\s+(?<USES>.*)\\s*$"
+      - pattern-regex: "\\buses:\\s+(?<USES>.*)\\s*$"
       - metavariable-pattern:
           metavariable: $USES
           language: generic
