@@ -63,6 +63,9 @@ jobs:
       # ruleid: brave-third-party-action-not-pinned-to-commit-sha
         uses: 8398a7/action-slack@28ba43ae48961b90635b50953d216767a6bea486
 
+      # ok: brave-third-party-action-not-pinned-to-commit-sha
+      - statuses: 2.0.2
+
   build2:
     name: Build and test using a local workflow
     # ok: brave-third-party-action-not-pinned-to-commit-sha
