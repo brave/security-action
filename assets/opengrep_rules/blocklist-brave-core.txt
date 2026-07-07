@@ -1,2 +1,4 @@
 https://semgrep.dev/r/gitlab.bandit.B404
 https://semgrep.dev/r/python.lang.security.audit.eval-detected.eval-detected
+https://semgrep.dev/r/java.lang.security.audit.unsafe-reflection.unsafe-reflection
+https://semgrep.dev/r/gitlab.bandit.B603
