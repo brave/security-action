@@ -22,7 +22,11 @@ export default async function sendSlackMessage ({
   debug = false,
   color = null,
   username = 'github-actions',
-  eventPayload = {}
+  eventPayload = {},
+  threadTs = null,
+  eventType = null,
+  _web = null,
+  _findChannelId = null
 }) {
   if (!token) {
     throw new Error('token is required!')
@@ -48,16 +52,18 @@ export default async function sendSlackMessage ({
 
   if (debug) { console.log(`token.length: ${token.length}, channel: ${channel}, message: ${message}`) }
 
-  const { WebClient } = await import('@slack/web-api')
-
-  const web = new WebClient(token)
+  let web = _web
+  if (!web) {
+    const { WebClient } = await import('@slack/web-api')
+    web = new WebClient(token)
+  }
 
   // calculate the sha256 hash of the message
   const crypto = await import('crypto')
   const hash = crypto.createHash('sha256')
   if (text !== null) hash.update(text)
-  if (filteredMessage !== null) hash.update(filteredMessage)
-  if (color !== null) hash.update(color)
+  if (filteredMessage != null) hash.update(filteredMessage)
+  if (color != null) hash.update(color)
   const hashHex = hash.digest('hex')
 
   const blocks = []
@@ -103,15 +109,27 @@ export default async function sendSlackMessage ({
   }
 
   // get the channel id
-  const channelId = await findChannelId(web, channel)
+  const channelId = _findChannelId
+    ? await _findChannelId(web, channel)
+    : await findChannelId(web, channel)
 
-  // get last 50 messages from the channel, in the last day
-  const history = await web.conversations.history({
-    channel: channelId,
-    limit: 50,
-    oldest: Date.now() / 1000 - 60 * 60 * 24, // a day ago
-    include_all_metadata: true
-  })
+  // When posting into a thread, dedup by scanning the
+  // thread's replies instead of the channel history.
+  // conversations.history only returns top-level messages
+  // and would miss threaded replies.
+  const history = threadTs
+    ? await web.conversations.replies({
+      channel: channelId,
+      ts: threadTs,
+      limit: 200,
+      include_all_metadata: true
+    })
+    : await web.conversations.history({
+      channel: channelId,
+      limit: 50,
+      oldest: Date.now() / 1000 - 60 * 60 * 24, // a day ago
+      include_all_metadata: true
+    })
 
   // debounce messages if the same message was sent in the last day
   if (history.messages.some(m => m.metadata?.event_type === hashHex)) {
@@ -122,7 +140,7 @@ export default async function sendSlackMessage ({
     }
   }
 
-  const metadata = { event_type: hashHex, event_payload: eventPayload }
+  const metadata = { event_type: eventType ?? hashHex, event_payload: eventPayload }
 
   // send the message
   const result = await web.chat.postMessage({
@@ -134,7 +152,8 @@ export default async function sendSlackMessage ({
     unfurl_media: true,
     blocks,
     attachments,
-    metadata
+    metadata,
+    ...(threadTs ? { thread_ts: threadTs } : {})
   })
 
   if (debug) { console.log(`result: ${JSON.stringify(result)}`) }

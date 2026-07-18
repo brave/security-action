@@ -1,4 +1,4 @@
-const ASSIGNEES = `thypon`
+const ASSIGNEES = 'thypon'
 
 module.exports = async ({
   github, context, inputs, actionPath, core,

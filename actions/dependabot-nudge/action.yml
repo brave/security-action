@@ -10,6 +10,10 @@ inputs:
   gh_to_slack_user_map:
     description: 'JSON map of github usernames to slack usernames'
     required: false
+  slack_channel:
+    description: 'Slack channel to post the weekly nudge thread to'
+    required: false
+    default: '#secops-hotspots'
   debug:
     description: 'Debug mode'
     required: false
