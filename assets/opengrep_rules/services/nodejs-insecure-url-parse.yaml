@@ -5,7 +5,6 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/nodejs-insecure-url-parse.yaml
       assignees: |
         thypon
-        fmarier
       references:
         - https://nodejs.org/api/url.html#urlparseurlstring-parsequerystring-slashesdenotehost
         - https://nodejs.org/api/url.html#the-whatwg-url-api
