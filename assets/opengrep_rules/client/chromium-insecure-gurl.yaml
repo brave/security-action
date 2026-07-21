@@ -5,7 +5,6 @@ rules:
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/chromium-insecure-gurl.yaml
       assignees: |
         thypon
-        fmarier
       category: security
     pattern-either:
       - patterns:
