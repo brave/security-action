@@ -126,6 +126,35 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
     debugLog('Wrote changed files to file')
 
+    // ═══════════════════════════════════════════════════════════════════════
+    // MODELSCAN — binary model file security scanner
+    //
+    // Configured via the `modelscan_enabled` action input (comma-separated list):
+    //   'all' (default)          → every scanner
+    //   'pickle,numpy,pytorch'   → lightweight only (skips h5/keras/saved_model)
+    //   'false' / ''             → disable modelscan entirely
+    //
+    // Heavyweight scanners (h5/keras/saved_model) need h5py/tensorflow installed
+    // (see requirements.txt). If enabled here but dep missing, modelscan skips
+    // the file with a DependencyError — no crash.
+    //
+    // Posts file-level review comments via createReviewComment with
+    // subject_type:'file' — reviewdog cannot handle binary files
+    // (see brave/security-action#707).
+    // ═══════════════════════════════════════════════════════════════════════
+    const modelscanList = (inputs.modelscan_enabled || 'all').trim().toLowerCase()
+    if (modelscanList && modelscanList !== 'false') {
+      const { default: modelscanPostComments } = await import(`${actionPath}/src/modelscanPostComments.js`)
+      await modelscanPostComments({
+        github,
+        context,
+        actionPath,
+        assignees: options.assignees,
+        debug: options.debug,
+        enabledScanners: modelscanList
+      })
+    }
+
     // codeowners matching step
     const { default: matchCodeowners } = await import(`${actionPath}/src/matchCodeowners.js`)
     const { default: codeownersComment } = await import(`${actionPath}/src/steps/codeownersComment.js`)
