@@ -1,5 +1,5 @@
 pip-audit~=2.9.0
-setuptools~=79.0.1
+setuptools~=83.0.0
 # ── modelscan scanner deps ───────────────────────────────────────────────────
 # Base package enables lightweight scanners (pickle/numpy/pytorch).
 # Heavyweight scanners need the extras below — to slim the install:
