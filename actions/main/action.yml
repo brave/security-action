@@ -57,7 +57,6 @@ inputs:
       To permanently drop heavyweight deps, also remove h5py/tensorflow from
       requirements.txt (see comments there).
     required: false
-    default: 'all'
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings

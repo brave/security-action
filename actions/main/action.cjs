@@ -64,7 +64,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     hotwords: HOTWORDS,
     hotwords_enabled: 'false',
     codeowners_min_files: '50',
-    codeowners_mode: 'groups'
+    codeowners_mode: 'groups',
+    modelscan_enabled: 'all'
   }, config, properties, inputs)
 
   options.enabled = options.enabled === 'true'
