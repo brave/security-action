@@ -60,19 +60,19 @@ Tools that accept a pre-constructed `github` (Octokit) instance will create one 
 Before committing, always run:
 
 ```bash
-npx standard --fix --ignore assets/opengrep_rules
+pnpm exec standard --fix --ignore assets/opengrep_rules
 ```
 
 ### Testing
 
 ```bash
-npm test
+pnpm test
 ```
 
 ### Rule Metadata Validation
 
 ```bash
-npm run lint-rules
+pnpm run lint-rules
 ```
 
 ### Opengrep Rule Testing
