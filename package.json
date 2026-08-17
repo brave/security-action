@@ -23,8 +23,5 @@
         "dotenv": "^17.3.1",
         "standard": "17.1.2"
     },
-    "overrides": {
-        "flatted": ">=3.4.2",
-        "fast-xml-parser": ">=5.5.7"
-    }
+    "packageManager": "pnpm@11.22.0"
 }
