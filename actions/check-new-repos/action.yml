@@ -17,7 +17,9 @@ runs:
       with:
         node-version: '24.x'
     - id: npm
-      run: cd ${{ github.action_path }}/../..; npm ci
+      env:
+        COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+      run: cd ${{ github.action_path }}/../.. && corepack pnpm install --frozen-lockfile
       shell: bash
     - name: Check New Repos
       id: check-new-repos

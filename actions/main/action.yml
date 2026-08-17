@@ -109,7 +109,9 @@ runs:
         bundler-cache: true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       id: npm
-      run: cd ${{ github.action_path }}/../..; npm ci
+      env:
+        COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+      run: cd ${{ github.action_path }}/../.. && corepack pnpm install --frozen-lockfile
       shell: bash
     # - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
     #   name: Install tfsec
