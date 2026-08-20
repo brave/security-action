@@ -20,6 +20,12 @@ module.exports = async ({
     await import(
       `${actionPath}/src/reconcileNudgeMessages.js`
     )
+  const { default: refreshNudgeThread } =
+    await import(
+      `${actionPath}/src/refreshNudgeThread.js`
+    )
+  const { prepareSlackContext } =
+    await import(`${actionPath}/src/slackUtils.js`)
 
   const org = context.repo.owner
   const channel = '#secops-hotspots'
@@ -27,7 +33,7 @@ module.exports = async ({
     `${actionPath}/actions/dependabot-auto-dismiss` +
     '/dismiss.txt'
 
-  const { message, dismissedRepos } =
+  const { message } =
     await dependabotDismiss({
       debug,
       org,
@@ -35,28 +41,30 @@ module.exports = async ({
       dependabotDismissConfig: dismissConfig
     })
 
-  // Remove stale nudge messages for repos that had
-  // alerts dismissed in this run.
-  if (dismissedRepos.length > 0) {
-    await deleteSlackMessages({
-      debug,
-      token: inputs.slack_token,
-      channel,
-      username: 'dependabot',
-      repos: dismissedRepos
-    })
-  }
+  // Reconciliation, including the repos touched by the
+  // dismissal above: threads for repos with no qualifying
+  // alerts left are deleted, and threads that still have
+  // alerts are rewritten so the dismissed ones disappear
+  // and the count on the parent stays truthful.
+  const { web, channelId, messages: slackMessages } =
+    await prepareSlackContext(inputs.slack_token, channel, 8)
 
-  // Reconciliation: find nudge messages for repos
-  // that no longer have any qualifying open alerts.
   await reconcileNudgeMessages({
     github,
     slackToken: inputs.slack_token,
     channel,
-    dismissedRepos,
     debug,
     listSlackMessageRepos,
-    deleteSlackMessages
+    deleteSlackMessages,
+    refreshNudgeThread: ({ repoFullName, alerts }) =>
+      refreshNudgeThread({
+        web,
+        channelId,
+        messages: slackMessages,
+        repoFullName,
+        alerts,
+        debug
+      })
   })
 
   if (message.length > 0) {
