@@ -2,7 +2,11 @@
  * Tests for slackUtils module
  */
 import { strict as assert } from 'assert'
-import { findChannelId, fetchMessages, deleteMessages } from './slackUtils.js'
+import { findChannelId, fetchMessages, fetchThreadReplies, deleteMessages, chunkNudgeMessage, isBotOwned, nudgeThreadProgress, createSlackClient, prepareSlackContext, pace } from './slackUtils.js'
+
+// Keep the suite fast: cap every rate-limit delay.
+const realSetTimeout = globalThis.setTimeout
+globalThis.setTimeout = (fn, ms) => realSetTimeout(fn, Math.min(Number(ms) || 0, 1))
 
 // ---- findChannelId ----
 
@@ -183,6 +187,134 @@ console.log('  fetchMessages: correct oldest timestamp')
 }
 console.log('  fetchMessages: requests metadata')
 
+// ---- fetchThreadReplies ----
+
+console.log('\nTesting fetchThreadReplies...')
+
+// Test: thread replies paginate until has_more clears
+{
+  const pages = [
+    {
+      messages: [{ ts: '1.1' }, { ts: '1.2' }],
+      has_more: true,
+      response_metadata: { next_cursor: 'c2' }
+    },
+    {
+      messages: [{ ts: '1.3' }],
+      has_more: false,
+      response_metadata: {}
+    }
+  ]
+  const seen = []
+  const mockWeb = {
+    conversations: {
+      replies: async (params) => {
+        seen.push(params)
+        return pages.shift()
+      }
+    }
+  }
+  const replies = await fetchThreadReplies(mockWeb, 'C001', '1.0')
+  assert.equal(replies.length, 3, 'Should concatenate every page')
+  assert.deepEqual(
+    seen.map(p => p.cursor), [undefined, 'c2'],
+    'Should follow the cursor between pages'
+  )
+  assert.equal(
+    seen[0].include_all_metadata, true,
+    'Should request metadata for ownership checks'
+  )
+  assert.equal(seen[0].ts, '1.0', 'Should query the thread parent')
+}
+console.log('  fetchThreadReplies: paginates a long thread')
+
+// Test: a single-page thread (no has_more) returns as-is
+{
+  const mockWeb = {
+    conversations: {
+      replies: async () => ({ messages: [{ ts: '1.1' }] })
+    }
+  }
+  const replies = await fetchThreadReplies(mockWeb, 'C001', '1.0')
+  assert.equal(replies.length, 1, 'Should return the single page')
+}
+console.log('  fetchThreadReplies: handles a single page')
+
+// ---- isBotOwned ----
+
+console.log('\nTesting isBotOwned...')
+
+assert.equal(
+  isBotOwned({ bot_id: 'B001', ts: '1' }), false,
+  'Should preserve an untagged bot post without parent identity'
+)
+assert.equal(
+  isBotOwned({ subtype: 'bot_message', ts: '1' }), false,
+  'Should preserve an untagged bot_message without parent identity'
+)
+assert.equal(
+  isBotOwned({
+    metadata: { event_payload: { kind: 'alerts' } }
+  }),
+  true,
+  'Should treat tagged nudge replies as bot-owned'
+)
+assert.equal(
+  isBotOwned({ ts: '1', user: 'UHUMAN', text: 'looking' }),
+  false,
+  'Should not treat a human reply as bot-owned'
+)
+console.log('  isBotOwned: manages only tagged replies without parent identity')
+
+assert.equal(
+  isBotOwned({ bot_id: 'BNUDGE' }, 'BNUDGE'), true,
+  'Should treat this bot\'s own post as managed'
+)
+assert.equal(
+  isBotOwned({ bot_id: 'BOTHER', subtype: 'bot_message' }, 'BNUDGE'),
+  false,
+  'Should not treat another integration\'s reply as managed'
+)
+assert.equal(
+  isBotOwned({
+    metadata: { event_payload: { kind: 'alerts' } }
+  }, 'BNUDGE'),
+  false,
+  'Without a bot_id a tagged reply cannot be proven ours, so preserve it'
+)
+assert.equal(
+  isBotOwned({ subtype: 'bot_message', metadata: { event_payload: { kind: 'alerts' } } }, 'BNUDGE'),
+  false,
+  'The owning bot identity is the only proof that counts'
+)
+console.log('  isBotOwned: compares against the owning bot identity')
+
+// ---- nudgeThreadProgress ----
+
+console.log('\nTesting nudgeThreadProgress...')
+
+{
+  const progress = nudgeThreadProgress([
+    { ts: '1' },
+    { ts: '1.1', metadata: { event_payload: { kind: 'alerts' } } },
+    { ts: '1.2', metadata: { event_payload: { kind: 'alerts' } } }
+  ], '1')
+  assert.equal(progress.complete, false, 'Missing cc means incomplete')
+  assert.equal(progress.postedAlerts, 2, 'Should count findings replies')
+}
+console.log('  nudgeThreadProgress: incomplete without cc')
+
+{
+  const progress = nudgeThreadProgress([
+    { ts: '1' },
+    { ts: '1.1', metadata: { event_payload: { kind: 'alerts' } } },
+    { ts: '1.2', metadata: { event_payload: { kind: 'cc' } } }
+  ], '1')
+  assert.equal(progress.complete, true, 'cc reply is the completion marker')
+  assert.equal(progress.postedAlerts, 1)
+}
+console.log('  nudgeThreadProgress: complete once cc is present')
+
 // ---- deleteMessages ----
 
 console.log('\nTesting deleteMessages...')
@@ -232,5 +364,272 @@ console.log('  deleteMessages: deletes and returns count')
   assert.equal(count, 0, 'Should return 0 when all deletes fail')
 }
 console.log('  deleteMessages: handles errors gracefully')
+
+// Test: a failed reply deletion aborts the thread teardown
+// so the parent is not deleted out from under the orphaned
+// reply
+{
+  const deleted = []
+  const mockWeb = {
+    chat: {
+      delete: async ({ ts }) => {
+        if (ts === '1.2') throw new Error('rate_limited')
+        deleted.push(ts)
+      }
+    },
+    conversations: {
+      replies: async ({ ts }) => ({
+        messages: [
+          { ts, bot_id: 'B001' },
+          { ts: '1.1', bot_id: 'B001' },
+          { ts: '1.2', bot_id: 'B001' }
+        ]
+      })
+    }
+  }
+  const count = await deleteMessages(
+    mockWeb, 'C001', [{ ts: '1', reply_count: 2, bot_id: 'B001' }], false
+  )
+  assert.deepEqual(deleted, ['1.1'], 'Should stop at the failed reply')
+  assert.ok(
+    !deleted.includes('1'),
+    'Should keep the parent for the next run to retry'
+  )
+  assert.equal(count, 1)
+}
+console.log('  deleteMessages: keeps parent when a reply delete fails')
+
+// Test: a reply from another bot is preserved like a human
+// reply, so the parent is not deleted out from under it
+{
+  const deleted = []
+  const mockWeb = {
+    chat: {
+      delete: async ({ ts }) => { deleted.push(ts) }
+    },
+    conversations: {
+      replies: async ({ ts }) => ({
+        messages: [
+          { ts, bot_id: 'BNUDGE' },
+          { ts: '1.1', bot_id: 'BNUDGE' },
+          {
+            ts: '1.9',
+            bot_id: 'BOTHER',
+            subtype: 'bot_message',
+            text: 'zapier did this'
+          }
+        ]
+      })
+    }
+  }
+  const count = await deleteMessages(
+    mockWeb, 'C001',
+    [{ ts: '1', reply_count: 2, bot_id: 'BNUDGE' }],
+    false
+  )
+  assert.deepEqual(deleted, ['1.1'], 'Should delete only this bot\'s reply')
+  assert.ok(
+    !deleted.includes('1'),
+    'Should preserve the parent while another app replied'
+  )
+  assert.equal(count, 1)
+}
+console.log('  deleteMessages: preserves parent when another bot replied')
+
+// Test: deletes thread replies before the parent, otherwise
+// Slack leaves them behind a "message deleted" placeholder
+{
+  const deleted = []
+  const mockWeb = {
+    chat: {
+      delete: async ({ ts }) => { deleted.push(ts) }
+    },
+    conversations: {
+      replies: async ({ ts }) => ({
+        messages: [
+          { ts },
+          { ts: '1.1', bot_id: 'B001' },
+          { ts: '1.2', bot_id: 'B001' }
+        ]
+      })
+    }
+  }
+  const msgs = [{ ts: '1', reply_count: 2, bot_id: 'B001' }]
+  const count = await deleteMessages(mockWeb, 'C001', msgs, false)
+  assert.equal(count, 3, 'Should delete the parent and both replies')
+  assert.deepEqual(
+    deleted, ['1.1', '1.2', '1'],
+    'Should delete replies first, parent last'
+  )
+}
+console.log('  deleteMessages: deletes thread replies with the parent')
+
+// Test: human replies are left in place, and so is the
+// parent, so discussion is not orphaned under a placeholder
+{
+  const deleted = []
+  const mockWeb = {
+    chat: {
+      delete: async ({ ts }) => { deleted.push(ts) }
+    },
+    conversations: {
+      replies: async ({ ts }) => ({
+        messages: [
+          { ts, bot_id: 'B001' },
+          { ts: '1.1', bot_id: 'B001' },
+          { ts: '1.2', user: 'UHUMAN', text: 'looking at this' }
+        ]
+      })
+    }
+  }
+  const count = await deleteMessages(
+    mockWeb, 'C001', [{ ts: '1', reply_count: 2, bot_id: 'B001' }], false
+  )
+  assert.equal(count, 1, 'Should delete the bot reply only')
+  assert.deepEqual(deleted, ['1.1'])
+  assert.ok(!deleted.includes('1'), 'Should preserve the parent')
+  assert.ok(
+    !deleted.includes('1.2'),
+    'Should not attempt to delete a human reply'
+  )
+}
+console.log('  deleteMessages: preserves parent when a human replied')
+
+// Test: leaves the parent in place when listing replies
+// fails, rather than orphaning unknown thread discussion
+{
+  const deleted = []
+  const mockWeb = {
+    chat: {
+      delete: async ({ ts }) => { deleted.push(ts) }
+    },
+    conversations: {
+      replies: async () => { throw new Error('rate_limited') }
+    }
+  }
+  const count = await deleteMessages(
+    mockWeb, 'C001', [{ ts: '1', reply_count: 2, bot_id: 'B001' }], false
+  )
+  assert.equal(count, 0, 'Should not delete when replies cannot be listed')
+  assert.deepEqual(deleted, [])
+}
+console.log('  deleteMessages: skips a parent when replies lookup fails')
+
+// ---- chunkNudgeMessage ----
+
+console.log('\nTesting chunkNudgeMessage...')
+
+// Build a message shaped like dependabotNudge output:
+// a header, one part per alert, and a trailing separator.
+function buildNudgeMessage (alertCount) {
+  const parts = ['org/repo has alerts']
+  for (let i = 1; i <= alertCount; i++) {
+    parts.push(`alert ${i}`)
+  }
+  return parts.join('\n\n---\n\n') + '\n\n---\n\n'
+}
+
+// Test: short message stays in a single chunk
+{
+  const chunks = chunkNudgeMessage(buildNudgeMessage(3))
+  assert.equal(chunks.length, 1, 'Should not split a short message')
+  assert.ok(chunks[0].includes('org/repo has alerts'), 'Should keep the header')
+  assert.ok(chunks[0].includes('alert 3'), 'Should keep the last alert')
+}
+console.log('  chunkNudgeMessage: short message is one chunk')
+
+// Test: long message splits and keeps every alert
+{
+  const chunks = chunkNudgeMessage(buildNudgeMessage(25))
+  assert.ok(chunks.length > 1, 'Should split a long message')
+  for (let i = 1; i <= 25; i++) {
+    assert.ok(
+      chunks.some(c => c.includes(`alert ${i}`)),
+      `Should keep alert ${i}`
+    )
+  }
+}
+console.log('  chunkNudgeMessage: long message splits without loss')
+
+// Test: drops the empty part left by the trailing separator,
+// so no chunk renders as a stray divider
+{
+  const chunks = chunkNudgeMessage(buildNudgeMessage(3))
+  assert.ok(
+    chunks.every(c => c.trim().length > 0),
+    'Should not emit empty chunks'
+  )
+  assert.equal(
+    chunks[chunks.length - 1].endsWith('---'), false,
+    'Should not end a chunk with a dangling separator'
+  )
+}
+console.log('  chunkNudgeMessage: drops the trailing empty part')
+
+// Test: honours a custom chunk size
+{
+  // 1 header + 9 alerts = 10 non-empty parts
+  const chunks = chunkNudgeMessage(buildNudgeMessage(9), 2)
+  assert.equal(chunks.length, 5, 'Should split 10 parts into 5 chunks of 2')
+}
+console.log('  chunkNudgeMessage: honours maxAlertsPerMessage')
+
+// ---- createSlackClient / prepareSlackContext / pace ----
+
+console.log('\nTesting createSlackClient, prepareSlackContext, pace...')
+
+// Test: createSlackClient builds a working SDK client
+{
+  const web = await createSlackClient('xoxb-test')
+  assert.equal(
+    typeof web.chat.postMessage, 'function',
+    'Should expose the Slack chat API'
+  )
+}
+console.log('  createSlackClient: builds an SDK client')
+
+// Test: prepareSlackContext wires client, channel and
+// history together in one call
+{
+  const mockWeb = {
+    conversations: {
+      list: async () => ({
+        channels: [{ name: 'secops-hotspots', id: 'C002' }],
+        response_metadata: {}
+      }),
+      history: async () => ({
+        messages: [{ ts: '1' }, { ts: '2' }],
+        has_more: false,
+        response_metadata: {}
+      })
+    }
+  }
+  const ctx = await prepareSlackContext(
+    'xoxb-test', '#secops-hotspots', 7, mockWeb
+  )
+  assert.equal(ctx.web, mockWeb, 'Should reuse the injected client')
+  assert.equal(ctx.channelId, 'C002', 'Should resolve the channel')
+  assert.equal(ctx.messages.length, 2, 'Should fetch the history')
+}
+console.log('  prepareSlackContext: returns web, channelId, messages')
+
+// Test: pace hands the requested delay to setTimeout
+{
+  // Assert on the delay handed to the timer rather than wall-clock
+  // timing: libuv truncates loop time to whole ms, so a real-time
+  // assertion can flake by up to a millisecond on loaded runners.
+  const real = globalThis.setTimeout
+  let captured = null
+  globalThis.setTimeout = (fn, ms) => {
+    captured = ms
+    return real(fn, 0)
+  }
+  await pace(7)
+  assert.equal(captured, 7, 'Should request the requested milliseconds')
+  await pace()
+  assert.equal(captured, 1200, 'Should default to 1200ms')
+  globalThis.setTimeout = (fn, ms) => real(fn, Math.min(Number(ms) || 0, 1))
+}
+console.log('  pace: forwards delay to setTimeout (default 1200ms)')
 
 console.log('\n✅ All slackUtils tests passed!')
