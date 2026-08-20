@@ -1,7 +1,6 @@
 import {
-  findChannelId,
-  fetchMessages,
-  deleteMessages
+  deleteMessages,
+  prepareSlackContext
 } from './slackUtils.js'
 
 // Extract the repo full name from a Slack message.
@@ -31,21 +30,6 @@ export function extractRepoFromMessage (m) {
   if (urlMatch) return urlMatch[1]
 
   return null
-}
-
-// Helper: create a WebClient, resolve channel, and
-// fetch messages. Shared by both exported functions
-// to avoid creating duplicate clients/fetches.
-async function prepareSlackContext (
-  token, channel, lookbackDays
-) {
-  const { WebClient } = await import('@slack/web-api')
-  const web = new WebClient(token)
-  const channelId = await findChannelId(web, channel)
-  const messages = await fetchMessages(
-    web, channelId, lookbackDays
-  )
-  return { web, channelId, messages }
 }
 
 // List unique repo names that have Slack messages from

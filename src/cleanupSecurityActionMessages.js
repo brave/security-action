@@ -12,7 +12,7 @@
 // Signal E (strikethrough, not delete): a /cc'd
 //           person replied in the Slack thread
 
-import { findChannelId, fetchMessages } from './slackUtils.js'
+import { createSlackClient, fetchMessages, fetchThreadReplies, findChannelId } from './slackUtils.js'
 
 const CHECKMARK_REACTIONS = [
   'white_check_mark',
@@ -213,14 +213,10 @@ export async function checkThreadRepliesFromCcUsers (
 ) {
   if (ccUserIds.length === 0) return false
 
-  const result = await web.conversations.replies({
-    channel: channelId,
-    ts: messageTs,
-    limit: 200
-  })
+  const all = await fetchThreadReplies(web, channelId, messageTs)
 
   // First message in replies is the parent; skip it.
-  const replies = (result.messages || []).slice(1)
+  const replies = all.slice(1)
   return replies.some(
     r => ccUserIds.includes(r.user)
   )
@@ -268,8 +264,7 @@ export default async function cleanupSecurityActionMessages ({
 
   debug = debug === 'true' || debug === true
 
-  const { WebClient } = await import('@slack/web-api')
-  const web = new WebClient(token)
+  const web = await createSlackClient(token)
 
   const channelId = await findChannelId(web, channel)
 
