@@ -9,14 +9,14 @@ import {
   severityKeysAbove
 } from './dependabotConstants.js'
 
-// Check a single repo for qualifying open alerts.
-// Returns true if the repo has zero qualifying alerts
-// (i.e. its nudge message is stale).
-async function isRepoStale (
+// Fetch a repo's qualifying open alerts.
+// Returns an array (empty means the nudge message is
+// stale), or null when the check could not be completed.
+async function qualifyingAlerts (
   github, repoFullName, severityKeys, skipHotwords, debug
 ) {
   const [repoOrg, repoName] = repoFullName.split('/')
-  if (!repoOrg || !repoName) return false
+  if (!repoOrg || !repoName) return null
 
   try {
     const alerts = await github.paginate(
@@ -50,16 +50,14 @@ async function isRepoStale (
       return !!patched
     })
 
-    if (qualifying.length === 0) {
-      if (debug) {
-        console.log(
-          `reconcile: ${repoFullName} has 0` +
-          ' qualifying alerts, marking stale'
-        )
-      }
-      return true
+    if (qualifying.length === 0 && debug) {
+      console.log(
+        `reconcile: ${repoFullName} has 0` +
+        ' qualifying alerts, marking stale'
+      )
     }
-    return false
+
+    return qualifying
   } catch (err) {
     // On any error (rate limit, transient 5xx,
     // permissions, etc.) keep the message and retry
@@ -69,7 +67,7 @@ async function isRepoStale (
       `${repoFullName}: ${err.message}` +
       ' — keeping message until next run'
     )
-    return false
+    return null
   }
 }
 
@@ -86,6 +84,9 @@ async function isRepoStale (
 // @param {string[]} [opts.skipHotwords]
 // @param {Function} opts.listSlackMessageRepos
 // @param {Function} opts.deleteSlackMessages
+// @param {Function} [opts.refreshNudgeThread] - Called as
+//   ({repoFullName, alerts, debug}) for repos that still
+//   have alerts, to sync the thread with what is left
 // @returns {Promise<string[]>} List of stale repo names
 export default async function reconcileNudgeMessages ({
   github,
@@ -95,7 +96,8 @@ export default async function reconcileNudgeMessages ({
   debug = false,
   skipHotwords = DEFAULT_SKIP_HOTWORDS,
   listSlackMessageRepos,
-  deleteSlackMessages
+  deleteSlackMessages,
+  refreshNudgeThread = null
 }) {
   debug = debug === 'true' || debug === true
 
@@ -119,11 +121,28 @@ export default async function reconcileNudgeMessages ({
   const staleRepos = []
 
   for (const repoFullName of toReconcile) {
-    const stale = await isRepoStale(
+    const alerts = await qualifyingAlerts(
       github, repoFullName, severityKeys,
       skipHotwords, debug
     )
-    if (stale) staleRepos.push(repoFullName)
+
+    if (alerts && alerts.length === 0) {
+      staleRepos.push(repoFullName)
+    } else if (alerts && refreshNudgeThread) {
+      // Alerts remain, but some may have been dismissed or
+      // fixed: rewrite the thread so the listed alerts and
+      // the count on the parent match reality.
+      try {
+        await refreshNudgeThread({
+          repoFullName, alerts, debug
+        })
+      } catch (err) {
+        console.error(
+          `reconcile: failed to refresh ${repoFullName}: ` +
+          err.message
+        )
+      }
+    }
 
     // Delay between API calls to avoid secondary
     // rate limits when checking many repos.
