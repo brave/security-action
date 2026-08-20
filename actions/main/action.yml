@@ -55,7 +55,7 @@ inputs:
       Heavyweight: h5 (h5py), keras & saved_model (tensorflow).
       Set to 'false' or empty to disable modelscan entirely.
       To permanently drop heavyweight deps, also remove h5py/tensorflow from
-      requirements.txt (see comments there).
+      pyproject.toml and re-lock (uv lock) — see comments there.
     required: false
 outputs:
   reviewdog-findings:
@@ -98,12 +98,10 @@ runs:
       with:
         python-version: '3.12'
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      name: Cache pip cache
-      id: cache-pip
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      name: Setup uv
+      uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
       with:
-        path: ~/.cache/pip/
-        key: ${{ runner.os }}-pip
+        enable-cache: true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
       with:

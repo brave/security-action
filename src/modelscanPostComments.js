@@ -50,10 +50,16 @@ export default async function modelscanPostComments ({
     MODELSCAN_ENABLED_SCANNERS: enabledScanners || 'all'
   }
 
-  // Spawn without cwd: all_changed_files.txt holds repo-relative paths, so the
-  // audit script must run in the workspace (the github-script working dir),
-  // not the action checkout.
-  const result = runSpawn('python3', [path.join(assetsDir, 'modelscan-audit.py')], {
+  // Run the audit via uv against the action's locked project (uv.lock) —
+  // deps are synced by action.cjs before this runs, so --no-sync just execs
+  // the project venv python. No cwd: all_changed_files.txt holds
+  // repo-relative paths, so the script must run in the workspace
+  // (the github-script working dir), not the action checkout.
+  const result = runSpawn('uv', [
+    'run', '--frozen', '--no-sync',
+    '--project', actionPath,
+    'python', path.join(assetsDir, 'modelscan-audit.py')
+  ], {
     env,
     encoding: 'utf-8',
     timeout: 120_000,

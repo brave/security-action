@@ -27,9 +27,6 @@ jobs:
             const installOpengrep = (await import('${{ github.workspace }}/src/installOpengrep.js')).default
             await installOpengrep()
       - run: |
-          python3 -m pip --disable-pip-version-check install -r requirements.txt
-        shell: bash
-      - run: |
           set -e
           cd assets/opengrep_rules/; opengrep test --strict .
         shell: bash

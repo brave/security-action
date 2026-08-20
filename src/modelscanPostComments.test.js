@@ -304,12 +304,17 @@ console.log('  multiple assignees each mentioned')
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Test: spawn env passes SCRIPTPATH so audit script finds all_changed_files.txt;
-// cwd must stay the workspace (all_changed_files.txt holds repo-relative paths)
+// cwd must stay the workspace (all_changed_files.txt holds repo-relative paths);
+// audit runs via uv against the action's locked project
 {
   const gh = mockGithub()
   const ctx = mockContext()
+  let spawnCmd = null
+  let spawnArgs = null
   let spawnOpts = null
   const captureSpawn = (cmd, args, opts) => {
+    spawnCmd = cmd
+    spawnArgs = args
     spawnOpts = opts
     return { stdout: '', stderr: '' }
   }
@@ -324,9 +329,13 @@ console.log('  multiple assignees each mentioned')
   })
 
   assert.ok(spawnOpts, 'spawn called')
+  assert.equal(spawnCmd, 'uv', `must spawn uv, got: ${spawnCmd}`)
+  assert.ok(spawnArgs.includes('run'), `uv run required, got: ${spawnArgs}`)
+  assert.ok(spawnArgs.includes('--project'), 'uv run must target the action project')
+  assert.ok(spawnArgs.some(a => String(a).endsWith('modelscan-audit.py')), `audit script in args, got: ${spawnArgs}`)
   assert.equal(spawnOpts.env.SCRIPTPATH, path.join(ACTION_PATH, 'assets'), `SCRIPTPATH must be assets dir, got: ${spawnOpts.env.SCRIPTPATH}`)
   assert.equal(spawnOpts.cwd, undefined, `cwd must default to the workspace, got: ${spawnOpts.cwd}`)
 }
-console.log('  spawn env includes SCRIPTPATH, cwd stays workspace')
+console.log('  spawn via uv run, SCRIPTPATH set, cwd stays workspace')
 
 console.log('\n✅ All modelscanPostComments tests passed!')

@@ -90,9 +90,11 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
   debugLog('Security Action enabled for reviewdog')
 
-  // Install pip-audit (opengrep is installed via action.yml)
-  await runCommand(`pip install --disable-pip-version-check -r ${actionPath}/requirements.txt`, { shell: true })
-  debugLog('Installed pip-audit')
+  // Sync python deps from the uv lockfile (uv installed via action.yml).
+  // Creates ${actionPath}/.venv — reviewdog runners and the modelscan audit
+  // script resolve python3/pip-audit from it via PATH / uv run.
+  await runCommand(`uv sync --frozen --project ${actionPath}`, { shell: true })
+  debugLog('Synced python dependencies (uv)')
   // Disable man-db auto-update to speed up apt-get operations
   await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
   // Install xmllint for safesvg
@@ -113,6 +115,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   if (reviewdogEnabledFull) {
     const env = { ...process.env }
     delete env.GITHUB_BASE_REF
+    env.PATH = `${actionPath}/.venv/bin:${process.env.PATH}`
     await runCommand(`${actionPath}/assets/reviewdog.sh`, { env })
     debugLog('Reviewdog full step completed')
   }
@@ -206,6 +209,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     // run-reviewdog-pr step
     const env = {
       ...process.env,
+      PATH: `${actionPath}/.venv/bin:${process.env.PATH}`,
       ASSIGNEES: options.assignees,
       REMOTE_RUNTIME: options.runtime,
       REVIEWDOG_GITHUB_API_TOKEN: options.github_token,

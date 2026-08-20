@@ -18,7 +18,7 @@
 #
 #   ── Heavyweight (h5py / tensorflow) ─────────────────────────────────────
 #   ↓↓↓ To disable: drop from modelscan_enabled AND remove the matching line ↓↓↓
-#   ↓↓↓ from requirements.txt                                              ↓↓↓
+#   ↓↓↓ from pyproject.toml (then re-lock with `uv lock`)                   ↓↓↓
 #     h5           .h5                                     (h5py ~10MB)
 #     keras        .keras                                  (tensorflow ~500MB)
 #     saved_model  .pb                                     (tensorflow ~500MB)
