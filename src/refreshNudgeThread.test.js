@@ -390,6 +390,39 @@ console.log('  refreshNudgeThread: skips an up-to-date thread')
 }
 console.log('  refreshNudgeThread: preserves parent cc pending reply retry')
 
+// Test: threads written before the inline-cc format carry the
+// mentions in a standalone section block; refresh must still
+// extract and preserve them.
+{
+  const legacyParent = {
+    ...parentMsg,
+    blocks: [
+      { type: 'section', text: { type: 'mrkdwn', text: '[brave/foo](https://github.com/brave/foo) has `2` open Dependabot issues' } },
+      { type: 'section', text: { type: 'mrkdwn', text: ccText } }
+    ]
+  }
+  const { web, calls } = buildMockWeb([
+    legacyParent,
+    {
+      ts: '101.0',
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
+    }
+  ])
+  await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [legacyParent],
+    repoFullName: 'brave/foo',
+    alerts: [makeAlert(1)]
+  })
+  const parentUpdate = calls.updated.find(u => u.ts === legacyParent.ts)
+  assert.ok(
+    parentSummary(parentUpdate).includes(ccText),
+    'Should preserve legacy-format parent mentions'
+  )
+}
+console.log('  refreshNudgeThread: preserves legacy parent cc')
+
 // Test: zero remaining alerts deletes the thread, replies
 // first so Slack does not leave placeholders
 {
