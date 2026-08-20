@@ -45,7 +45,7 @@ node run.js ./src/dependabotNudge.js --org=brave --singleOutputMessage=true
 
 ## Output
 
-Returns an array of `{ repo, message }` objects (one per repo with alerts), or a single joined Markdown string if `singleOutputMessage` or `debug` is true.
+Returns an array of `{ repo, message, cc, total, critical, alerts }` objects (one per repo with alerts), or a single joined Markdown string if `singleOutputMessage` is true. `debug` enables verbose logging and a dry-run without changing the return type.
 
 ## Prerequisites
 

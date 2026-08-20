@@ -9,7 +9,7 @@ const assetsDir = path.resolve(__dirname, '../assets')
 function runCleaner (input) {
   const tmpFile = execSync('mktemp').toString().trim()
   execSync(`printf '%s' '${input.replace(/'/g, "'\\''")}' > ${tmpFile}`)
-  const result = execSync(`/Users/kyle/.rvm/rubies/ruby-3.0.2/bin/ruby ${assetsDir}/cleaner.rb --opengrep --assignees < ${tmpFile}`, {
+  const result = execSync(`ruby ${assetsDir}/cleaner.rb --opengrep --assignees < ${tmpFile}`, {
     env: { ...process.env, ASSIGNEES: '', SCRIPTPATH: assetsDir },
     encoding: 'utf-8'
   }).trim()

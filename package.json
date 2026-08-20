@@ -1,27 +1,27 @@
 {
-    "type": "module",
-    "bugs": {
-        "url": "https://github.com/brave/security-action/issues",
-        "email": "security@brave.com"
-    },
-    "scripts": {
-        "lint": "standard --ignore assets/opengrep_rules",
-        "lint-fix": "standard --fix --ignore assets/opengrep_rules",
-        "lint-rules": "node src/checkRuleMetadata.js",
-        "test": "find src -name '*.test.js' -type f -exec node {} \\;"
-    },
-    "dependencies": {
-        "@octokit/core": "^6.1.4",
-        "@slack/web-api": "^7.0.0",
-        "@tryfabric/mack": "^1.2.1",
-        "glob": "^12.0.0",
-        "js-yaml": "^4.1.1",
-        "json5": "^2.2.3",
-        "markdown-to-txt": "^2.0.1"
-    },
-    "devDependencies": {
-        "dotenv": "^17.3.1",
-        "standard": "17.1.2"
-    },
-    "packageManager": "pnpm@11.22.0"
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/brave/security-action/issues",
+    "email": "security@brave.com"
+  },
+  "scripts": {
+    "lint": "standard --ignore assets/opengrep_rules",
+    "lint-fix": "standard --fix --ignore assets/opengrep_rules",
+    "lint-rules": "node src/checkRuleMetadata.js",
+    "test": "node --test 'src/**/*.test.js'"
+  },
+  "dependencies": {
+    "@octokit/core": "^6.1.4",
+    "@slack/web-api": "^7.0.0",
+    "@tryfabric/mack": "^1.2.1",
+    "glob": "^12.0.0",
+    "js-yaml": "^4.1.1",
+    "json5": "^2.2.3",
+    "markdown-to-txt": "^2.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^17.3.1",
+    "standard": "17.1.2"
+  },
+  "packageManager": "pnpm@11.22.0"
 }
