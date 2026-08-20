@@ -2,7 +2,7 @@
  * Tests for slackUtils module
  */
 import { strict as assert } from 'assert'
-import { findChannelId, fetchMessages, fetchThreadReplies, deleteMessages, chunkNudgeMessage, isBotOwned, nudgeThreadProgress, createSlackClient, prepareSlackContext, pace } from './slackUtils.js'
+import { findChannelId, fetchMessages, fetchThreadReplies, deleteMessages, chunkNudgeMessage, isBotOwned, createSlackClient, prepareSlackContext, pace } from './slackUtils.js'
 
 // Keep the suite fast: cap every rate-limit delay.
 const realSetTimeout = globalThis.setTimeout
@@ -289,32 +289,6 @@ assert.equal(
 )
 console.log('  isBotOwned: compares against the owning bot identity')
 
-// ---- nudgeThreadProgress ----
-
-console.log('\nTesting nudgeThreadProgress...')
-
-{
-  const progress = nudgeThreadProgress([
-    { ts: '1' },
-    { ts: '1.1', metadata: { event_payload: { kind: 'alerts' } } },
-    { ts: '1.2', metadata: { event_payload: { kind: 'alerts' } } }
-  ], '1')
-  assert.equal(progress.complete, false, 'Missing cc means incomplete')
-  assert.equal(progress.postedAlerts, 2, 'Should count findings replies')
-}
-console.log('  nudgeThreadProgress: incomplete without cc')
-
-{
-  const progress = nudgeThreadProgress([
-    { ts: '1' },
-    { ts: '1.1', metadata: { event_payload: { kind: 'alerts' } } },
-    { ts: '1.2', metadata: { event_payload: { kind: 'cc' } } }
-  ], '1')
-  assert.equal(progress.complete, true, 'cc reply is the completion marker')
-  assert.equal(progress.postedAlerts, 1)
-}
-console.log('  nudgeThreadProgress: complete once cc is present')
-
 // ---- deleteMessages ----
 
 console.log('\nTesting deleteMessages...')
@@ -529,14 +503,18 @@ function buildNudgeMessage (alertCount) {
   return parts.join('\n\n---\n\n') + '\n\n---\n\n'
 }
 
-// Test: short message stays in a single chunk
+// Test: the default is one alert per chunk so each finding
+// lands as its own thread reply
 {
   const chunks = chunkNudgeMessage(buildNudgeMessage(3))
-  assert.equal(chunks.length, 1, 'Should not split a short message')
+  assert.equal(
+    chunks.length, 4,
+    'Header and three alerts are four chunks'
+  )
   assert.ok(chunks[0].includes('org/repo has alerts'), 'Should keep the header')
-  assert.ok(chunks[0].includes('alert 3'), 'Should keep the last alert')
+  assert.equal(chunks[1], 'alert 1', 'Each alert is its own chunk')
 }
-console.log('  chunkNudgeMessage: short message is one chunk')
+console.log('  chunkNudgeMessage: one alert per chunk by default')
 
 // Test: long message splits and keeps every alert
 {

@@ -111,8 +111,9 @@ function run (web, messages, opts = {}) {
 
 console.log('Testing postNudgeThreads...')
 
-// Test: a fresh repo gets a parent, findings replies, the
-// parent edit, and the cc completion marker last
+// Test: a fresh repo gets a parent carrying the cc inline
+// (the thread's only notification), then one reply per
+// alert, and never a cc reply or a parent edit
 {
   const { web, calls } = buildMockWeb()
   await run(web, [])
@@ -129,61 +130,43 @@ console.log('Testing postNudgeThreads...')
     parentPost.metadata.event_payload.weekId, '2026-W34',
     'The parent should be tagged with the week'
   )
+  const parentText = parentPost.blocks[0].text.text
+  assert.ok(
+    parentText.includes('open Dependabot issues'),
+    'The parent carries the summary'
+  )
+  assert.ok(
+    parentText.endsWith(`(${ccText})`),
+    'The parent carries the cc inline: its post is the single notification'
+  )
 
   const chunkPosts = calls.posted.filter(
     p => p.metadata?.event_payload?.kind === 'alerts'
   )
-  assert.equal(chunkPosts.length, 1, 'Should post the findings chunk')
   assert.equal(
-    chunkPosts[0].thread_ts, PARENT_TS,
-    'Findings belong in the thread'
+    chunkPosts.length, alerts.length,
+    'One reply per alert, not one aggregated message'
   )
-
-  const ccPost = calls.posted.find(
-    p => p.metadata?.event_payload?.kind === 'cc'
-  )
-  assert.ok(ccPost, 'Should post the cc reply')
-  assert.equal(ccPost.thread_ts, PARENT_TS, 'The cc is a thread reply')
-  assert.equal(ccPost.text, ccText, 'The cc is sent as raw text')
+  for (const post of chunkPosts) {
+    assert.equal(
+      post.thread_ts, PARENT_TS,
+      'Findings belong in the thread'
+    )
+  }
 
   assert.ok(
-    calls.updated.some(u => u.ts === PARENT_TS),
-    'Should edit the parent with the maintainer line'
-  )
-  assert.ok(
-    calls.sequence.indexOf(`update:${PARENT_TS}`) <
-      calls.sequence.indexOf('post:cc'),
-    'The parent must be finalized before the cc marker'
+    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
+    'No duplicate cc reply: the parent already shows it'
   )
   assert.equal(
-    calls.sequence[calls.sequence.length - 1], 'post:cc',
-    'The cc completion marker is the last write'
+    calls.updated.length, 0,
+    'The parent is complete at post time, no edit needed'
   )
 }
-console.log('  postNudgeThreads: posts parent, chunks, parent edit, cc last')
+console.log('  postNudgeThreads: parent with inline cc, one reply per alert')
 
-// Test: a thread whose cc marker already exists is skipped
-{
-  const parent = { ...parentMessage(), reply_count: 1 }
-  const { web, calls } = buildMockWeb({
-    channelMessages: [parent],
-    thread: [
-      parent,
-      {
-        ts: '201.1',
-        text: ccText,
-        metadata: { event_payload: { repo: 'brave/foo', kind: 'cc' } }
-      }
-    ]
-  })
-  await run(web, [parent])
-  assert.equal(calls.posted.length, 0, 'Should not re-post a complete thread')
-  assert.equal(calls.updated.length, 0, 'Should not edit a complete thread')
-}
-console.log('  postNudgeThreads: skips threads completed this week')
-
-// Test: an incomplete thread is refreshed, chunks are not
-// re-posted, and the cc lands after the refresh
+// Test: an existing thread is refreshed in place, never
+// re-posted or re-pinged
 {
   const parent = { ...parentMessage(), reply_count: 1 }
   const { web, calls } = buildMockWeb({
@@ -197,24 +180,19 @@ console.log('  postNudgeThreads: skips threads completed this week')
     ]
   })
   await run(web, [parent])
-
-  assert.ok(
-    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'alerts'),
-    'A refreshed thread must not re-post findings chunks'
-  )
-  const ccPost = calls.posted.find(
-    p => p.metadata?.event_payload?.kind === 'cc'
-  )
-  assert.ok(ccPost, 'Should complete the refreshed thread with the cc')
   assert.equal(
-    calls.sequence[calls.sequence.length - 1], 'post:cc',
-    'The cc is still the last write'
+    calls.posted.filter(p => p.metadata?.event_type === PARENT_EVENT_TYPE).length, 0,
+    'Should not post a second parent'
+  )
+  assert.ok(
+    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
+    'No cc reply is ever posted'
   )
 }
-console.log('  postNudgeThreads: completes a refreshed thread')
+console.log('  postNudgeThreads: refreshes an existing thread in place')
 
 // Test: when the refresh reports a failure the thread is
-// left incomplete so the next run retries it
+// left as-is so the next run retries it
 {
   const parent = { ...parentMessage(), reply_count: 1 }
   const { web, calls } = buildMockWeb({
@@ -229,29 +207,12 @@ console.log('  postNudgeThreads: completes a refreshed thread')
     updateFail: ['201.1']
   })
   await run(web, [parent])
-
-  assert.ok(
-    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
-    'A failed refresh must not be marked complete'
+  assert.equal(
+    calls.posted.filter(p => p.metadata?.event_type === PARENT_EVENT_TYPE).length, 0,
+    'A failed refresh must not fall back to posting a new thread'
   )
 }
-console.log('  postNudgeThreads: no cc after a failed refresh')
-
-// Test: a failed parent edit keeps the cc marker away too
-{
-  const { web, calls } = buildMockWeb({ updateFail: [PARENT_TS] })
-  await run(web, [])
-
-  assert.ok(
-    calls.posted.some(p => p.metadata?.event_payload?.kind === 'alerts'),
-    'Findings are posted before the parent edit'
-  )
-  assert.ok(
-    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
-    'A failed parent edit must not be marked complete'
-  )
-}
-console.log('  postNudgeThreads: no cc after a failed parent edit')
+console.log('  postNudgeThreads: leaves a failed refresh for the next run')
 
 // Test: a parent from an earlier week does not satisfy the
 // current week's nudge
@@ -267,8 +228,7 @@ console.log('  postNudgeThreads: no cc after a failed parent edit')
       oldParent,
       {
         ts: '101.1',
-        text: ccText,
-        metadata: { event_payload: { repo: 'brave/foo', kind: 'cc' } }
+        metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
       }
     ]
   })
@@ -297,7 +257,7 @@ console.log('  postNudgeThreads: posts a new thread for a new week')
   const chunkPosts = calls.posted.filter(
     p => p.metadata?.event_payload?.kind === 'alerts'
   )
-  assert.ok(chunkPosts.length > 0, 'Should still post the findings')
+  assert.ok(chunkPosts.length > 0, 'Should still fill in the findings')
   assert.equal(
     chunkPosts[0].thread_ts, PARENT_TS,
     'Findings belong to the adopted thread'

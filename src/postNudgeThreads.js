@@ -3,24 +3,15 @@
 // orchestration is unit-testable without spinning GitHub
 // Actions.
 //
-// One thread per repo: the parent carries the counts, the
-// replies carry the findings, and the maintainers are tagged
-// in the very last reply. Slack has no way to post a reply
-// without notifying, and a mention added by editing a
-// message notifies nobody, so mentioning once at the end is
-// what keeps it to a single ping.
-//
-// The cc reply doubles as the completion marker for the
-// week: it is only posted once every other write of the
-// thread is known to have succeeded, so a partial failure
-// stays recoverable on the next run instead of being
-// permanently marked complete.
+// One thread per repo: the parent carries the counts and the
+// maintainer mentions inline, and each alert gets its own
+// reply. Posting the parent is the thread's single
+// notification: mentions in a posted message notify, mentions
+// added later by editing do not, and the replies never carry
+// mentions at all.
 
 import sendSlackMessage from './sendSlackMessage.js'
-import {
-  buildParentText,
-  buildParentBlocks
-} from './dependabotNudge.js'
+import { buildParentBlocks } from './dependabotNudge.js'
 import refreshNudgeThread, {
   findRepoParent,
   PARENT_EVENT_TYPE
@@ -28,12 +19,10 @@ import refreshNudgeThread, {
 import {
   chunkNudgeMessage,
   fetchMessages,
-  fetchThreadReplies,
-  nudgeThreadProgress,
   pace
 } from './slackUtils.js'
 
-// Post (or finish, or refresh) the weekly nudge threads.
+// Post (or refresh) the weekly nudge threads.
 //
 // @param {object} opts
 // @param {object} opts.web        - Slack WebClient
@@ -87,28 +76,11 @@ export default async function postNudgeThreads ({
         }
       }
 
-      let parentTs = parent?.ts
-      let skipChunks = false
-
-      // The cc reply is the completion marker. A parent
-      // with some replies may still be a partial failure
-      // (findings posted, cc never sent). Refresh rewrites
-      // those findings from the current alert list so we
-      // do not resume by chunk count after alerts change.
-      if (parentTs && parent.reply_count > 0) {
-        const thread = await fetchThreadReplies(
-          web, channelId, parentTs
-        )
-        const progress = nudgeThreadProgress(thread, parentTs)
-        if (progress.complete) {
-          if (debug) {
-            console.log(
-              'already posted this week, skipping ' +
-              `${repo} ${weekId} (thread ${parentTs})`
-            )
-          }
-          continue
-        }
+      // Existing thread: bring it in line with the current
+      // alerts. The refresh rewrites the findings, corrects
+      // the counts, and drops the legacy cc reply; editing
+      // never re-notifies, so refreshing every run is free.
+      if (parent) {
         const { ok } = await refreshNudgeThread({
           web,
           channelId,
@@ -118,89 +90,56 @@ export default async function postNudgeThreads ({
           debug
         })
         if (!ok) {
-          // Never mark a half-written thread complete: the
-          // next run refreshes and finishes it.
+          // Leave the thread as-is: the next run retries.
           console.error(
             `refresh failed for ${repo}; leaving thread ` +
-            `${parentTs} incomplete for retry`
+            `${parent.ts} for retry`
           )
-          continue
         }
-        skipChunks = true
-        if (alerts.length === 0) continue
-        await pace()
+        continue
       }
 
-      if (!parentTs) {
-        if (debug) { console.log(`creating thread for ${repo} ${weekId}`) }
+      if (debug) { console.log(`creating thread for ${repo} ${weekId}`) }
 
-        // The parent is the summary and nothing else: the
-        // findings go in the replies below it. Mentions are
-        // added later via chat.update so they show in the
-        // channel without a second notification.
-        const parentResult = await sendSlackMessage({
-          ...slack,
-          debug,
-          message: buildParentText({ repo, total, critical }),
-          eventType: PARENT_EVENT_TYPE,
-          eventPayload: { org, repo, weekId }
-        })
-        parentTs = parentResult?.ts
-        await pace()
-      } else {
-        if (debug) { console.log(`finishing thread ${parentTs} for ${repo} ${weekId}`) }
-      }
-
+      // The parent is posted with the mentions already in
+      // place: this post is the one notification the thread
+      // sends. The blocks are built directly rather than from
+      // markdown so the <@U123> mention pills survive
+      // unescaped.
+      const parentResult = await web.chat.postMessage({
+        channel: channelId,
+        username: 'dependabot',
+        text: 'dependabot alert',
+        link_names: true,
+        unfurl_links: true,
+        unfurl_media: true,
+        blocks: await buildParentBlocks({
+          repo, total, critical, cc
+        }),
+        metadata: {
+          event_type: PARENT_EVENT_TYPE,
+          event_payload: { org, repo, weekId }
+        }
+      })
+      const parentTs = parentResult?.ts
       if (!parentTs) {
         console.error(`failed to obtain thread ts for ${repo}; skipping replies`)
         continue
       }
+      await pace()
 
-      if (!skipChunks) {
-        for (const chunk of chunkNudgeMessage(message)) {
-          await sendSlackMessage({
-            ...slack,
-            debug,
-            message: chunk,
-            threadTs: parentTs,
-            eventPayload: { repo, kind: 'alerts' }
-          })
-          await pace()
-        }
-      }
-
-      // The parent is finalized before the cc reply: the
-      // mentions it adds notify nobody, and the thread must
-      // not be marked complete while this write can still
-      // fail.
-      try {
-        await web.chat.update({
-          channel: channelId,
-          ts: parentTs,
-          text: 'dependabot alert',
-          blocks: await buildParentBlocks({
-            repo, total, critical, cc
-          })
+      // One reply per alert; none of them mention anyone, so
+      // the thread stays at a single notification.
+      for (const chunk of chunkNudgeMessage(message)) {
+        await sendSlackMessage({
+          ...slack,
+          debug,
+          message: chunk,
+          threadTs: parentTs,
+          eventPayload: { repo, kind: 'alerts' }
         })
-      } catch (err) {
-        console.error(
-          `failed to add maintainers to parent for ${repo}: ${err.message}`
-        )
-        continue
+        await pace()
       }
-      await pace()
-
-      // Sent as `text` rather than `message`: the
-      // markdown-to-blocks conversion escapes `<@U123>`
-      // mentions, which silently drops the notification.
-      await sendSlackMessage({
-        ...slack,
-        debug,
-        text: cc,
-        threadTs: parentTs,
-        eventPayload: { repo, kind: 'cc' }
-      })
-      await pace()
     } catch (error) {
       console.error(`failed to nudge ${repo}: ${error.message}`)
       if (debug) { console.log(error) }
