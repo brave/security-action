@@ -1,0 +1,312 @@
+// Keep an existing nudge thread in sync with reality.
+//
+// When some of a repo's alerts get dismissed or fixed but
+// others remain, the thread would otherwise keep showing
+// the resolved ones and a stale count. This re-renders the
+// remaining alerts and edits the messages in place.
+//
+// chat.update is a revision, not a delivery, so refreshing a
+// thread never re-notifies the maintainers tagged in it.
+//
+// If nothing remains, the whole thread (replies then parent)
+// is deleted so the channel does not keep an empty shell.
+// Human replies cannot be removed by this bot, so a thread
+// with discussion is kept and only the bot's messages are
+// cleared.
+
+import {
+  buildRepoMessage,
+  buildParentBlocks
+} from './dependabotNudge.js'
+import { messageToBlocks } from './sendSlackMessage.js'
+import {
+  chunkNudgeMessage,
+  fetchThreadReplies,
+  isBotOwned,
+  pace
+} from './slackUtils.js'
+
+export const PARENT_EVENT_TYPE = 'dependabot-nudge-repo-parent'
+export const ALERTS_EVENT_TYPE = 'dependabot-nudge-alerts'
+
+// Compare rendered content, ignoring the block_id values
+// Slack assigns on post, so unchanged threads are left
+// alone instead of being rewritten on every run.
+function blocksSignature (blocks) {
+  return (blocks || [])
+    .map(b => `${b.type}:${b.text?.text || ''}`)
+    .join('\n')
+}
+
+// Find the newest nudge parent for a repo among messages
+// already fetched from the channel. When weekId is given,
+// only that week's parent matches.
+export function findRepoParent (messages, repoFullName, weekId = null) {
+  return messages
+    .filter(m =>
+      m.metadata?.event_type === PARENT_EVENT_TYPE &&
+      m.metadata?.event_payload?.repo === repoFullName &&
+      (weekId === null ||
+        m.metadata?.event_payload?.weekId === weekId))
+    .sort((a, b) => parseFloat(b.ts) - parseFloat(a.ts))[0]
+}
+
+// Tear down a thread whose alerts are all gone. Bot replies
+// are deleted first; the parent goes last so Slack does not
+// leave replies behind a "message deleted" placeholder. When
+// the thread has conversation this bot cannot delete (human
+// or other-app replies), the parent stays and is zeroed
+// instead so the discussion is not orphaned.
+async function deleteThread ({
+  web, channelId, parent, replies, repoFullName, debug
+}) {
+  const others = (replies || []).filter(m => m.ts !== parent.ts)
+  const conversation =
+    others.filter(m => !isBotOwned(m, parent.bot_id))
+  const managed =
+    others.filter(m => isBotOwned(m, parent.bot_id))
+  const keepParent = conversation.length > 0
+
+  if (debug) {
+    console.log(
+      `refresh: would clear thread ${parent.ts} ` +
+      `(${managed.length} bot repl(ies), ` +
+      `${conversation.length} to keep)`
+    )
+    return { touched: managed.length, ok: true }
+  }
+
+  let touched = 0
+  for (const m of managed) {
+    try {
+      if (touched > 0) await pace()
+      await web.chat.delete({ channel: channelId, ts: m.ts })
+      touched++
+    } catch (err) {
+      console.error(
+        `refresh: failed to delete ts=${m.ts}: ${err.message}`
+      )
+      // Leave the rest (and the parent) in place so nothing
+      // is orphaned; the next run retries the thread.
+      return { touched, ok: false }
+    }
+  }
+
+  try {
+    // Pace the parent write off the last deletion so it is
+    // not rejected as a duplicate.
+    if (touched > 0) await pace()
+    if (keepParent) {
+      await web.chat.update({
+        channel: channelId,
+        ts: parent.ts,
+        text: 'dependabot alert',
+        blocks: await buildParentBlocks({
+          repo: repoFullName, total: 0, critical: 0
+        })
+      })
+    } else {
+      await web.chat.delete({ channel: channelId, ts: parent.ts })
+    }
+    touched++
+  } catch (err) {
+    const what = keepParent ? 'update' : 'delete'
+    console.error(
+      `refresh: failed to ${what} parent ts=${parent.ts}: ` +
+      err.message
+    )
+    return { touched, ok: false }
+  }
+
+  return { touched, ok: true }
+}
+
+// Refresh one repo's thread against its current alerts.
+//
+// @param {object} opts
+// @param {object} opts.web           - Slack WebClient
+// @param {string} opts.channelId     - Slack channel ID
+// @param {object[]} opts.messages    - Channel history
+// @param {string} opts.repoFullName  - 'org/repo'
+// @param {object[]} opts.alerts      - Qualifying open alerts
+// @param {boolean} [opts.debug]
+// @returns {Promise<{touched: number, ok: boolean}>}
+//   touched - messages written; ok - false when any write
+//   failed, so callers do not mark the thread complete on
+//   top of stale content.
+export default async function refreshNudgeThread ({
+  web,
+  channelId,
+  messages = [],
+  repoFullName,
+  alerts = [],
+  debug = false
+}) {
+  debug = debug === 'true' || debug === true
+
+  const parent = findRepoParent(messages, repoFullName)
+  if (!parent) {
+    if (debug) {
+      console.log(
+        `refresh: no nudge thread found for ${repoFullName}`
+      )
+    }
+    return { touched: 0, ok: true }
+  }
+
+  const thread = await fetchThreadReplies(
+    web, channelId, parent.ts
+  )
+
+  const { message, total, critical } =
+    buildRepoMessage({ alerts })
+  const chunks = chunkNudgeMessage(message)
+
+  // No alerts left: tear the thread down, or zero the parent
+  // when its discussion has to stay.
+  if (chunks.length === 0) {
+    return deleteThread({
+      web, channelId, parent, replies: thread, repoFullName, debug
+    })
+  }
+
+  // Only the detail replies are rewritten. The cc reply is
+  // left alone: it carries the mentions and its content
+  // does not depend on which alerts are still open. Human
+  // replies in the thread are ignored the same way.
+  const details = thread.filter(m =>
+    m.ts !== parent.ts &&
+    m.metadata?.event_payload?.kind === 'alerts'
+  )
+  const ccReply = thread.find(m =>
+    m.ts !== parent.ts &&
+    m.metadata?.event_payload?.kind === 'cc'
+  )
+  // The parent keeps its cc section until the cc reply
+  // lands: reuse it when the reply is missing so the retry
+  // does not strip the mentions from the summary.
+  const parentCc = parent.blocks?.find(block =>
+    block.text?.type === 'mrkdwn' &&
+    block.text.text.startsWith('cc ')
+  )?.text.text || ''
+  const cc = ccReply?.text || parentCc
+
+  if (debug) {
+    console.log(
+      `refresh: ${repoFullName} -> ${total} alert(s), ` +
+      `${chunks.length} chunk(s) over ${details.length} ` +
+      'existing repl(ies)'
+    )
+    return { touched: chunks.length + details.length, ok: true }
+  }
+
+  let touched = 0
+  let ok = true
+
+  // Rewrite the detail replies that are still needed.
+  for (let i = 0; i < chunks.length && i < details.length; i++) {
+    try {
+      const blocks = await messageToBlocks(chunks[i])
+
+      // Nothing changed for this reply: leave it as it is.
+      if (
+        blocksSignature(blocks) ===
+        blocksSignature(details[i].blocks)
+      ) {
+        continue
+      }
+
+      await web.chat.update({
+        channel: channelId,
+        ts: details[i].ts,
+        text: 'dependabot alert',
+        blocks
+      })
+      touched++
+      await pace()
+    } catch (err) {
+      ok = false
+      console.error(
+        `refresh: failed to update ts=${details[i].ts}: ` +
+        err.message
+      )
+    }
+  }
+
+  // More chunks than replies means alerts were added since
+  // the thread was created; append the remainder so nothing
+  // is hidden behind a count that claims otherwise.
+  for (let i = details.length; i < chunks.length; i++) {
+    try {
+      await web.chat.postMessage({
+        channel: channelId,
+        thread_ts: parent.ts,
+        username: 'dependabot',
+        text: 'dependabot alert',
+        blocks: await messageToBlocks(chunks[i]),
+        metadata: {
+          event_type: ALERTS_EVENT_TYPE,
+          event_payload: { repo: repoFullName, kind: 'alerts' }
+        }
+      })
+      touched++
+      await pace()
+    } catch (err) {
+      ok = false
+      console.error(
+        `refresh: failed to append chunk ${i} to ` +
+        `${repoFullName}: ${err.message}`
+      )
+    }
+  }
+
+  // Drop the replies that are no longer needed because
+  // alerts were resolved. If this was the last findings
+  // message, the whole thread is already handled above.
+  for (let i = chunks.length; i < details.length; i++) {
+    try {
+      await web.chat.delete({
+        channel: channelId, ts: details[i].ts
+      })
+      touched++
+      await pace()
+    } catch (err) {
+      ok = false
+      console.error(
+        `refresh: failed to delete ts=${details[i].ts}: ` +
+        err.message
+      )
+    }
+  }
+
+  // Correct the count on the thread parent and keep the
+  // maintainers visible in the channel overview. Editing
+  // does not re-notify.
+  try {
+    const parentBlocks = await buildParentBlocks({
+      repo: repoFullName, total, critical, cc
+    })
+    if (
+      blocksSignature(parentBlocks) ===
+      blocksSignature(parent.blocks)
+    ) {
+      return { touched, ok }
+    }
+
+    await web.chat.update({
+      channel: channelId,
+      ts: parent.ts,
+      text: 'dependabot alert',
+      blocks: parentBlocks
+    })
+    touched++
+  } catch (err) {
+    ok = false
+    console.error(
+      `refresh: failed to update parent ts=${parent.ts}: ` +
+      err.message
+    )
+  }
+
+  return { touched, ok }
+}
