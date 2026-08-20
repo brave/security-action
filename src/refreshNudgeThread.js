@@ -29,6 +29,20 @@ import {
 export const PARENT_EVENT_TYPE = 'dependabot-nudge-repo-parent'
 export const ALERTS_EVENT_TYPE = 'dependabot-nudge-alerts'
 
+// Extract the cc line from a thread parent: appended
+// inline to the summary ('... (cc <@U1>)') since the
+// summary-line change, or in its own 'cc ...' section on
+// threads written before it.
+function parentCcLine (blocks) {
+  for (const block of blocks || []) {
+    if (block.text?.type !== 'mrkdwn') continue
+    if (block.text.text.startsWith('cc ')) return block.text.text
+    const inline = block.text.text.match(/\((cc [^)]+)\)\s*$/)
+    if (inline) return inline[1]
+  }
+  return ''
+}
+
 // Compare rendered content, ignoring the block_id values
 // Slack assigns on post, so unchanged threads are left
 // alone instead of being rewritten on every run.
@@ -182,14 +196,10 @@ export default async function refreshNudgeThread ({
     m.ts !== parent.ts &&
     m.metadata?.event_payload?.kind === 'cc'
   )
-  // The parent keeps its cc section until the cc reply
-  // lands: reuse it when the reply is missing so the retry
-  // does not strip the mentions from the summary.
-  const parentCc = parent.blocks?.find(block =>
-    block.text?.type === 'mrkdwn' &&
-    block.text.text.startsWith('cc ')
-  )?.text.text || ''
-  const cc = ccReply?.text || parentCc
+  // The parent keeps its cc until the cc reply lands: reuse
+  // it when the reply is missing so the retry does not strip
+  // the mentions from the summary.
+  const cc = ccReply?.text || parentCcLine(parent.blocks)
 
   if (debug) {
     console.log(

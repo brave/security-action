@@ -110,15 +110,28 @@ console.log('  buildCcLine: tags maintainers')
     critical: 1,
     cc: 'cc <@U1>'
   })
-  const body = JSON.stringify(blocks)
-  assert.ok(body.includes('open Dependabot issues'))
-  assert.ok(body.includes('(*1 critical*)'))
-  assert.ok(body.includes('cc <@U1>'))
+  const sections = blocks.filter(b => b.type === 'section')
+  assert.equal(
+    sections.length, 1,
+    'The cc must join the summary, not add a section'
+  )
   assert.ok(
-    !body.includes('pkg-'),
+    sections[0].text.text.includes('open Dependabot issues'),
+    'Summary stays on the line'
+  )
+  assert.ok(
+    sections[0].text.text.includes('(*1 critical*)'),
+    'Critical count stays on the line'
+  )
+  assert.ok(
+    sections[0].text.text.endsWith(' (cc <@U1>)'),
+    'cc is inline at the end of the summary line'
+  )
+  assert.ok(
+    !JSON.stringify(blocks).includes('pkg-'),
     'Parent blocks must not include finding details'
   )
 }
-console.log('  buildParentBlocks: summary plus cc, no findings')
+console.log('  buildParentBlocks: summary with inline cc, no findings')
 
 console.log('\n✅ All dependabotNudge builder tests passed!')

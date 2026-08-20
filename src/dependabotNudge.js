@@ -90,9 +90,11 @@ export function buildCcLine (maintainers, defaultContact = []) {
   return `cc ${fallback} - *No maintainers listed for the given vulnerabilities, consider migrating and archiving this repository*`
 }
 
-// Parent blocks: markdown summary, plus a raw mrkdwn cc
-// section so Slack mention pills show in the channel
-// without going through markdown escaping.
+// Parent blocks: the cc is appended inline to the summary
+// line, as raw mrkdwn, so the Slack mention pills render in
+// the channel overview. It is appended after the markdown-
+// to-blocks conversion, which would otherwise escape the
+// <@U123> mentions into &lt;@U123&gt;.
 export async function buildParentBlocks ({
   repo, total, critical, cc = ''
 }) {
@@ -100,10 +102,10 @@ export async function buildParentBlocks ({
     buildParentText({ repo, total, critical })
   )
   if (cc) {
-    blocks.push({
-      type: 'section',
-      text: { type: 'mrkdwn', text: cc }
-    })
+    const section = blocks.find(b => b.type === 'section')
+    if (section) {
+      section.text.text += ` (${cc})`
+    }
   }
   return blocks
 }
