@@ -7,16 +7,21 @@ dependencies = [
     "pip-audit~=2.9.0",
     "setuptools~=83.0.0",
     # ── modelscan scanner deps ──────────────────────────────────────────────
-    # Base package enables lightweight scanners (pickle/numpy/pytorch).
-    # Heavyweight scanners need the extras below — to slim the install:
-    #   1. Set modelscan_enabled action input to exclude h5/keras/saved_model
-    #      (e.g. modelscan_enabled: 'pickle,numpy,pytorch')
-    #   2. Remove the matching line(s) below.
+    # Base package enables lightweight scanners (pickle/numpy/pytorch) plus
+    # the h5 scanner (.h5, via h5py). The keras (.keras) and saved_model (.pb)
+    # scanners need the `tensorflow` dependency group — installed only when
+    # the PR touches such files (see src/modelscanNeedsTensorflow.js) or when
+    # SEC_ACTION_MODELSCAN_HEAVY is set. To slim the install further:
+    # set modelscan_enabled to exclude scanners (e.g. 'pickle,numpy,pytorch').
     "modelscan~=0.8",
     "numpy>=1.20",
-    "h5py>=3.0",        # heavyweight (~10MB) — h5 scanner (.h5)
-    "tensorflow>=2.10", # heavyweight (~500MB) — keras (.keras) + saved_model (.pb)
+    "h5py>=3.0"         # ~10MB — h5 scanner (.h5)
 ]
+
+[dependency-groups]
+# ~500MB — only synced with `uv sync --group tensorflow`, decided per run by
+# src/modelscanNeedsTensorflow.js (model file in PR or env var override).
+tensorflow = ["tensorflow>=2.10"]
 
 [tool.uv]
 # No python package is built from this repo; uv only manages the dependency
