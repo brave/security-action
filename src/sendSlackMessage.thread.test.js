@@ -108,6 +108,25 @@ test('sendSlackMessage: default event_type stays as message hash', async () => {
   assert.match(calls.postMessage[0].metadata.event_type, /^[0-9a-f]{64}$/)
 })
 
+test('sendSlackMessage: injected channelId skips the channel lookup', async () => {
+  const { web, calls } = buildFakeWeb()
+  // No conversations.list mock: resolving the channel name
+  // would crash, proving the lookup never happens.
+  const { default: sendSlackMessage } = await import('./sendSlackMessage.js')
+
+  await sendSlackMessage({
+    token: 'xoxb-test',
+    channel: '#test',
+    channelId: 'C9',
+    text: 'direct post',
+    _web: web
+  })
+
+  assert.strictEqual(calls.postMessage.length, 1)
+  assert.strictEqual(calls.postMessage[0].channel, 'C9')
+  assert.strictEqual(calls.history[0].channel, 'C9')
+})
+
 test('sendSlackMessage: dedup via thread replies skips duplicate', async () => {
   const crypto = await import('crypto')
   const hash = crypto.createHash('sha256')
