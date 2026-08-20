@@ -47,6 +47,16 @@ inputs:
   codeowners_mode:
     description: 'When to post codeowners comment: never, groups, always (default: groups)'
     required: false
+  modelscan_enabled:
+    description: |
+      Comma-separated list of modelscan scanners to enable, or 'all' (default).
+      Options: all, pickle, numpy, pytorch, h5, keras, saved_model.
+      Lightweight: pickle, numpy, pytorch (numpy dep only).
+      Heavyweight: h5 (h5py), keras & saved_model (tensorflow).
+      Set to 'false' or empty to disable modelscan entirely.
+      To permanently drop heavyweight deps, also remove h5py/tensorflow from
+      requirements.txt (see comments there).
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
@@ -86,7 +96,7 @@ runs:
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
       with:
-        python-version: '3.13'
+        python-version: '3.12'
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Cache pip cache
       id: cache-pip
