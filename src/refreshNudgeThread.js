@@ -184,10 +184,11 @@ export default async function refreshNudgeThread ({
     })
   }
 
-  // Only the detail replies are rewritten. The cc reply is
-  // left alone: it carries the mentions and its content
-  // does not depend on which alerts are still open. Human
-  // replies in the thread are ignored the same way.
+  // Only the detail replies are rewritten. A legacy cc reply
+  // is handled after the parent update below: it carries the
+  // mentions, so it must survive until the parent shows
+  // them. Human replies in the thread are ignored the same
+  // way.
   const details = thread.filter(m =>
     m.ts !== parent.ts &&
     m.metadata?.event_payload?.kind === 'alerts'
@@ -292,30 +293,47 @@ export default async function refreshNudgeThread ({
   // Correct the count on the thread parent and keep the
   // maintainers visible in the channel overview. Editing
   // does not re-notify.
+  let parentOk = true
   try {
     const parentBlocks = await buildParentBlocks({
       repo: repoFullName, total, critical, cc
     })
-    if (
-      blocksSignature(parentBlocks) ===
-      blocksSignature(parent.blocks)
-    ) {
-      return { touched, ok }
+    if (blocksSignature(parentBlocks) !== blocksSignature(parent.blocks)) {
+      await web.chat.update({
+        channel: channelId,
+        ts: parent.ts,
+        text: 'dependabot alert',
+        blocks: parentBlocks
+      })
+      touched++
     }
-
-    await web.chat.update({
-      channel: channelId,
-      ts: parent.ts,
-      text: 'dependabot alert',
-      blocks: parentBlocks
-    })
-    touched++
   } catch (err) {
+    parentOk = false
     ok = false
     console.error(
       `refresh: failed to update parent ts=${parent.ts}: ` +
       err.message
     )
+  }
+
+  // Threads posted before the parent carried the cc inline
+  // end with a 'cc' reply. It duplicates the parent's
+  // mentions now, so drop it once the parent is known to
+  // show them; keep it when the parent write failed so the
+  // mentions are never lost.
+  if (ccReply && cc && parentOk) {
+    try {
+      await web.chat.delete({
+        channel: channelId, ts: ccReply.ts
+      })
+      touched++
+    } catch (err) {
+      ok = false
+      console.error(
+        `refresh: failed to delete cc reply ts=${ccReply.ts}: ` +
+        err.message
+      )
+    }
   }
 
   return { touched, ok }

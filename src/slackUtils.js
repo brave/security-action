@@ -108,13 +108,14 @@ export async function fetchThreadReplies (web, channelId, ts) {
   return messages
 }
 
-// Split a repo nudge findings message into thread-sized
-// chunks on the '\n\n---\n\n' alert separator. Slack caps a
-// message at 50 blocks and each alert renders as ~4 blocks,
-// so chunking keeps long repos from being truncated. The
-// parent summary and cc line are posted separately.
+// Split a repo nudge findings message into one chunk per
+// alert on the '\n\n---\n\n' separator, so each finding
+// lands as its own thread reply instead of one super-long
+// message. Slack caps a message at 50 blocks and each alert
+// renders as ~4 blocks, so one alert per reply also keeps
+// long repos from being truncated.
 export function chunkNudgeMessage (
-  message, maxAlertsPerMessage = 10
+  message, maxAlertsPerMessage = 1
 ) {
   const separator = '\n\n---\n\n'
   const parts = message
@@ -147,21 +148,6 @@ export function isBotOwned (message, botId = null) {
   }
 
   return Boolean(tagged)
-}
-
-// Whether a weekly nudge thread finished posting. The cc
-// reply is the completion marker: findings chunks can land
-// before it, so reply_count alone is not enough.
-export function nudgeThreadProgress (thread, parentTs) {
-  const replies = (thread || []).filter(m => m.ts !== parentTs)
-  return {
-    complete: replies.some(
-      m => m.metadata?.event_payload?.kind === 'cc'
-    ),
-    postedAlerts: replies.filter(
-      m => m.metadata?.event_payload?.kind === 'alerts'
-    ).length
-  }
 }
 
 // Collect the timestamps to delete for a message: its own,
