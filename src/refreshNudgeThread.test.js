@@ -388,3 +388,261 @@ console.log('  refreshNudgeThread: skips an up-to-date thread')
     'Should preserve parent mentions when the cc reply is missing'
   )
 }
+console.log('  refreshNudgeThread: preserves parent cc pending reply retry')
+
+// Test: zero remaining alerts deletes the thread, replies
+// first so Slack does not leave placeholders
+{
+  const { web, calls } = buildMockWeb()
+  const { touched, ok } = await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parentMsg],
+    repoFullName: 'brave/foo',
+    alerts: []
+  })
+  assert.ok(touched >= 4, 'Should delete parent, findings, and cc')
+  assert.equal(ok, true, 'A fully deleted thread is a success')
+  assert.deepEqual(
+    calls.deleted,
+    ['101.0', '102.0', '103.0', '100.0'],
+    'Should delete replies first, parent last'
+  )
+  assert.equal(calls.updated.length, 0, 'Should not rewrite a doomed thread')
+}
+console.log('  refreshNudgeThread: deletes the thread when no alerts remain')
+
+// Test: human replies in the thread are not rewritten or
+// deleted just because they sit next to findings
+{
+  const { web, calls } = buildMockWeb([
+    parentMsg,
+    {
+      ts: '101.0',
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
+    },
+    {
+      ts: '150.0',
+      text: 'looking at this',
+      user: 'UHUMAN'
+    },
+    {
+      ts: '103.0',
+      text: ccText,
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'cc' } }
+    }
+  ])
+  await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parentMsg],
+    repoFullName: 'brave/foo',
+    alerts: [makeAlert(1)]
+  })
+  assert.ok(
+    !calls.deleted.includes('150.0'),
+    'Should not delete a human reply'
+  )
+  assert.ok(
+    !calls.updated.some(u => u.ts === '150.0'),
+    'Should not rewrite a human reply'
+  )
+}
+console.log('  refreshNudgeThread: leaves human replies alone')
+
+// Test: zero remaining alerts with a human reply keeps the
+// parent (and the discussion) instead of orphaning it
+{
+  const { web, calls } = buildMockWeb([
+    parentMsg,
+    {
+      ts: '101.0',
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
+    },
+    {
+      ts: '150.0',
+      text: 'looking at this',
+      user: 'UHUMAN'
+    },
+    {
+      ts: '103.0',
+      text: ccText,
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'cc' } }
+    }
+  ])
+  const { touched, ok } = await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parentMsg],
+    repoFullName: 'brave/foo',
+    alerts: []
+  })
+  assert.ok(touched >= 3, 'Should clear bot findings and update the parent')
+  assert.equal(ok, true, 'Clearing findings is a success when writes pass')
+  assert.deepEqual(
+    calls.deleted.sort(),
+    ['101.0', '103.0'],
+    'Should delete bot replies only'
+  )
+  assert.ok(
+    !calls.deleted.includes('150.0'),
+    'Should not attempt to delete a human reply'
+  )
+  assert.ok(
+    !calls.deleted.includes('100.0'),
+    'Should preserve the parent while discussion remains'
+  )
+  const parentUpdate = calls.updated.find(u => u.ts === '100.0')
+  assert.ok(parentUpdate, 'Should mark the parent as resolved')
+  assert.ok(
+    parentSummary(parentUpdate).includes('`0` open Dependabot issues'),
+    'Should correct the parent count to zero'
+  )
+}
+console.log('  refreshNudgeThread: preserves parent when a human replied')
+
+// Test: a failed reply deletion aborts the thread teardown,
+// so the reply is not orphaned behind a deleted parent
+{
+  const deleted = []
+  const web = {
+    chat: {
+      delete: async ({ ts }) => {
+        if (ts === '102.0') throw new Error('rate_limited')
+        deleted.push(ts)
+        return { ok: true }
+      },
+      update: async () => ({ ok: true })
+    },
+    conversations: {
+      replies: async () => ({ messages: threadReplies() })
+    }
+  }
+  const { touched, ok } = await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parentMsg],
+    repoFullName: 'brave/foo',
+    alerts: []
+  })
+  assert.equal(ok, false, 'Failed reply delete must be reported')
+  assert.deepEqual(
+    deleted, ['101.0'],
+    'Should stop deleting at the failure'
+  )
+  assert.ok(
+    !deleted.includes('100.0'),
+    'Parent must stay so the thread can be retried'
+  )
+  assert.equal(touched, 1)
+}
+console.log('  refreshNudgeThread: aborts teardown when a reply delete fails')
+
+// Test: a failed write is reported so the caller does not
+// mark the thread complete on top of stale content
+{
+  const { web, calls } = buildMockWeb()
+  web.chat.update = async (p) => {
+    if (p.ts === '101.0') throw new Error('rate_limited')
+    calls.updated.push(p)
+    return { ok: true }
+  }
+  const { ok } = await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parentMsg],
+    repoFullName: 'brave/foo',
+    alerts: [makeAlert(1)]
+  })
+  assert.equal(ok, false, 'Failed detail update must be reported')
+}
+console.log('  refreshNudgeThread: reports failed writes')
+
+// Test: a reply from another integration is preserved like
+// a human reply when the thread is torn down
+{
+  const parent = { ...parentMsg, bot_id: 'BNUDGE' }
+  const replies = [
+    parent,
+    {
+      ts: '101.0',
+      bot_id: 'BNUDGE',
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
+    },
+    {
+      ts: '150.0',
+      bot_id: 'BOTHER',
+      subtype: 'bot_message',
+      text: 'zapier did this'
+    },
+    {
+      ts: '103.0',
+      bot_id: 'BNUDGE',
+      text: ccText,
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'cc' } }
+    }
+  ]
+  const { web, calls } = buildMockWeb(replies)
+  const { ok } = await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parent],
+    repoFullName: 'brave/foo',
+    alerts: []
+  })
+  assert.deepEqual(
+    calls.deleted.sort(), ['101.0', '103.0'],
+    'Should delete only this bot\'s replies'
+  )
+  assert.ok(
+    !calls.deleted.includes('150.0'),
+    'Should not attempt to delete another integration\'s reply'
+  )
+  assert.ok(
+    !calls.deleted.includes('100.0'),
+    'Should preserve the parent while another app replied'
+  )
+  assert.equal(ok, true)
+}
+console.log('  refreshNudgeThread: preserves parents with other-bot replies')
+
+// Test: without a parent bot_id, only tagged nudge replies
+// are safe to manage; another app's untagged reply must stay.
+{
+  const replies = [
+    parentMsg,
+    {
+      ts: '101.0',
+      metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
+    },
+    {
+      ts: '150.0',
+      bot_id: 'BOTHER',
+      subtype: 'bot_message',
+      text: 'zapier did this'
+    }
+  ]
+  const { web, calls } = buildMockWeb(replies)
+  await refreshNudgeThread({
+    web,
+    channelId: 'C001',
+    messages: [parentMsg],
+    repoFullName: 'brave/foo',
+    alerts: []
+  })
+  assert.deepEqual(
+    calls.deleted, ['101.0'],
+    'Should delete only the tagged nudge reply'
+  )
+  assert.ok(
+    !calls.deleted.includes('150.0'),
+    'Should preserve an untagged reply from another integration'
+  )
+  assert.ok(
+    !calls.deleted.includes(parentMsg.ts),
+    'Should preserve the parent while another app replied'
+  )
+}
+console.log('  refreshNudgeThread: preserves other bots without parent bot_id')
+
+console.log('\n✅ All refreshNudgeThread tests passed!')
