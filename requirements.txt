@@ -1,2 +1,15 @@
 pip-audit~=2.9.0
-setuptools~=79.0.1
+setuptools~=83.0.0
+# ── modelscan scanner deps ───────────────────────────────────────────────────
+# Base package enables lightweight scanners (pickle/numpy/pytorch).
+# Heavyweight scanners need the extras below — to slim the install:
+#   1. Set modelscan_enabled action input to exclude h5/keras/saved_model
+#      (e.g. modelscan_enabled: 'pickle,numpy,pytorch')
+#   2. Remove the matching line(s) below.
+modelscan~=0.8
+numpy>=1.20
+# ↓ heavyweight (~10MB) — remove to drop h5 scanner ↓
+h5py>=3.0    # required by H5LambdaDetectScan (.h5)
+# ↓↓↓ heavyweight (~500MB) — remove to drop keras + saved_model scanners ↓↓↓
+tensorflow>=2.10    # required by KerasLambdaDetectScan (.keras) + SavedModelLambdaDetectScan (.pb)
+# ─────────────────────────────────────────────────────────────────────────────
