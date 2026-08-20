@@ -54,9 +54,11 @@ inputs:
       Lightweight: pickle, numpy, pytorch (numpy dep only).
       Heavyweight: h5 (h5py), keras & saved_model (tensorflow).
       Set to 'false' or empty to disable modelscan entirely.
-      tensorflow (~500MB) is only installed when the PR contains .keras/.pb
-      files; set the SEC_ACTION_MODELSCAN_HEAVY env var on the job to always
-      install it (for repos that include model files).
+      Model deps are only installed when the PR contains model files
+      (.pkl/.pickle/.joblib/.dill/.dat/.data/.npy/.bin/.pt/.pth/.ckpt/.h5
+      → modelscan group; .keras/.pb → also tensorflow group). Set the
+      SEC_ACTION_MODELSCAN_HEAVY env var on the job to always install both
+      groups (for repos that include model files).
     required: false
 outputs:
   reviewdog-findings:

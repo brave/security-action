@@ -1,178 +1,167 @@
 import { strict as assert } from 'assert'
-import modelscanNeedsTensorflow from './modelscanNeedsTensorflow.js'
+import modelscanDependencyGroups from './modelscanDependencyGroups.js'
 
-console.log('Testing modelscanNeedsTensorflow...')
+console.log('Testing modelscanDependencyGroups...')
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: default — no model files in PR → no tensorflow
+// Test: no model files → no groups (modelscan not installed at all)
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['src/index.js', 'README.md'],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, false, 'no model files → false')
+  assert.deepStrictEqual(groups, [], 'no model files → []')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: .keras file present → tensorflow needed
-{
-  const result = modelscanNeedsTensorflow({
-    changedFiles: ['src/index.js', 'models/foo.keras'],
+// Test: pickle suffixes → modelscan group only
+for (const file of ['model.pkl', 'model.pickle', 'model.joblib', 'model.dill', 'model.dat', 'model.data']) {
+  const groups = modelscanDependencyGroups({
+    changedFiles: [file],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, true, '.keras → true')
+  assert.deepStrictEqual(groups, ['modelscan'], `${file} → ['modelscan']`)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: .pb file present (saved_model) → tensorflow needed
-{
-  const result = modelscanNeedsTensorflow({
-    changedFiles: ['model.pb', 'src/index.js'],
+// Test: numpy/pytorch suffixes → modelscan group only
+for (const file of ['array.npy', 'weights.bin', 'weights.pt', 'weights.pth', 'model.ckpt']) {
+  const groups = modelscanDependencyGroups({
+    changedFiles: [file],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, true, '.pb → true')
+  assert.deepStrictEqual(groups, ['modelscan'], `${file} → ['modelscan']`)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: .h5 only → no tensorflow (h5py is a base dependency)
+// Test: h5 suffix → modelscan group only (h5py rides in the modelscan group)
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['weights.h5'],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, false, '.h5 → false (h5py in base deps)')
+  assert.deepStrictEqual(groups, ['modelscan'], '.h5 → modelscan only')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: .pbtxt must not match .pb suffix
+// Test: tensorflow suffixes → both groups
+for (const file of ['model.keras', 'model.pb']) {
+  const groups = modelscanDependencyGroups({
+    changedFiles: ['src/index.js', file],
+    modelscanEnabled: 'all',
+    env: {}
+  })
+  assert.deepStrictEqual(groups, ['modelscan', 'tensorflow'], `${file} → both groups`)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Test: .pbtxt must not trigger tensorflow (.pb is a full-suffix match)
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['graph.pbtxt'],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, false, '.pbtxt → false')
+  assert.deepStrictEqual(groups, [], '.pbtxt → no groups')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Test: suffix match is case-insensitive
 {
-  const result = modelscanNeedsTensorflow({
-    changedFiles: ['MODEL.KERAS'],
+  const groups = modelscanDependencyGroups({
+    changedFiles: ['MODEL.PKL'],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, true, 'uppercase .KERAS → true')
+  assert.deepStrictEqual(groups, ['modelscan'], 'uppercase .PKL → modelscan')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: modelscan disabled → no tensorflow even with model files
+// Test: modelscan disabled → no groups even with model files
 {
-  const result = modelscanNeedsTensorflow({
-    changedFiles: ['model.keras'],
+  const groups = modelscanDependencyGroups({
+    changedFiles: ['model.pkl', 'model.pb'],
     modelscanEnabled: 'false',
     env: {}
   })
-  assert.strictEqual(result, false, 'modelscan disabled → false')
+  assert.deepStrictEqual(groups, [], 'modelscan disabled → []')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: scanner list excludes keras/saved_model → no tensorflow
+// Test: scanner list excludes keras/saved_model → .keras never scanned → no groups
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['model.keras'],
     modelscanEnabled: 'pickle,numpy,pytorch',
     env: {}
   })
-  assert.strictEqual(result, false, 'lightweight scanners only → false')
+  assert.deepStrictEqual(groups, [], 'lightweight scanners + .keras → []')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: scanner list includes keras → tensorflow needed with .keras file
+// Test: scanner list includes keras → both groups with .keras file
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['model.keras'],
-    modelscanEnabled: 'keras',
+    modelscanEnabled: 'pickle,keras',
     env: {}
   })
-  assert.strictEqual(result, true, 'keras scanner + .keras → true')
+  assert.deepStrictEqual(groups, ['modelscan', 'tensorflow'], 'keras scanner + .keras → both')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: scanner list includes saved_model → tensorflow needed with .pb file
+// Test: env var forces both groups regardless of changed files
 {
-  const result = modelscanNeedsTensorflow({
-    changedFiles: ['model.pb'],
-    modelscanEnabled: 'pickle,saved_model',
-    env: {}
-  })
-  assert.strictEqual(result, true, 'saved_model scanner + .pb → true')
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Test: scanner list includes keras but no model file → no tensorflow
-{
-  const result = modelscanNeedsTensorflow({
-    changedFiles: ['src/index.js'],
-    modelscanEnabled: 'keras',
-    env: {}
-  })
-  assert.strictEqual(result, false, 'keras scanner but no model file → false')
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Test: env var forces tensorflow regardless of changed files
-{
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['src/index.js'],
     modelscanEnabled: 'all',
     env: { SEC_ACTION_MODELSCAN_HEAVY: 'true' }
   })
-  assert.strictEqual(result, true, 'env var override → true')
+  assert.deepStrictEqual(groups, ['modelscan', 'tensorflow'], 'env var override → both')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: env var set to 'false' does not force
+// Test: env var 'false' does not force
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: ['src/index.js'],
     modelscanEnabled: 'all',
     env: { SEC_ACTION_MODELSCAN_HEAVY: 'false' }
   })
-  assert.strictEqual(result, false, "env var 'false' → no force")
+  assert.deepStrictEqual(groups, [], "env var 'false' → no force")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: modelscan disabled wins over env var (no modelscan run at all)
+// Test: modelscan disabled wins over env var
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: [],
     modelscanEnabled: 'false',
     env: { SEC_ACTION_MODELSCAN_HEAVY: 'true' }
   })
-  assert.strictEqual(result, false, 'modelscan disabled beats env var')
+  assert.deepStrictEqual(groups, [], 'modelscan disabled beats env var')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: empty changed files list → false
+// Test: empty changed files list → no groups
 {
-  const result = modelscanNeedsTensorflow({
+  const groups = modelscanDependencyGroups({
     changedFiles: [],
     modelscanEnabled: 'all',
     env: {}
   })
-  assert.strictEqual(result, false, 'empty list → false')
+  assert.deepStrictEqual(groups, [], 'empty list → []')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: defaults — no args → false, no crash
+// Test: defaults — no args → no groups, no crash
 {
-  const result = modelscanNeedsTensorflow()
-  assert.strictEqual(result, false, 'no args → false')
+  const groups = modelscanDependencyGroups()
+  assert.deepStrictEqual(groups, [], 'no args → []')
 }
 
-console.log('All modelscanNeedsTensorflow tests passed')
+console.log('All modelscanDependencyGroups tests passed')

@@ -619,28 +619,32 @@ name = "security-action"
 version = "0.0.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "h5py" },
-    { name = "modelscan" },
-    { name = "numpy" },
     { name = "pip-audit" },
     { name = "setuptools" },
 ]
 
 [package.dev-dependencies]
+modelscan = [
+    { name = "h5py" },
+    { name = "modelscan" },
+    { name = "numpy" },
+]
 tensorflow = [
     { name = "tensorflow" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "h5py", specifier = ">=3.0" },
-    { name = "modelscan", specifier = "~=0.8" },
-    { name = "numpy", specifier = ">=1.20" },
     { name = "pip-audit", specifier = "~=2.9.0" },
     { name = "setuptools", specifier = "~=83.0.0" },
 ]
 
 [package.metadata.requires-dev]
+modelscan = [
+    { name = "h5py", specifier = ">=3.0" },
+    { name = "modelscan", specifier = "~=0.8" },
+    { name = "numpy", specifier = ">=1.20" },
+]
 tensorflow = [{ name = "tensorflow", specifier = ">=2.10" }]
 
 [[package]]
