@@ -209,4 +209,36 @@ console.log('  API errors keep the message')
 }
 console.log('  no nudged repos = no work')
 
+// Test: remaining alerts are refreshed rather than deleted
+{
+  const github = mockGithub({
+    'org/repo1': [{
+      security_advisory: { summary: 'XSS vulnerability' },
+      security_vulnerability: {
+        first_patched_version: { identifier: '1.0.1' }
+      }
+    }]
+  })
+  const del = mockDeleteMessages()
+  const refreshed = []
+
+  const stale = await reconcileNudgeMessages({
+    github,
+    slackToken: 'xoxb-test',
+    channel: '#test',
+    dismissedRepos: [],
+    debug: false,
+    listSlackMessageRepos: mockListRepos(['org/repo1']),
+    deleteSlackMessages: del.fn,
+    refreshNudgeThread: async (opts) => { refreshed.push(opts) }
+  })
+
+  assert.deepEqual(stale, [])
+  assert.equal(del.calls.length, 0, 'Should not delete while alerts remain')
+  assert.equal(refreshed.length, 1, 'Should refresh the remaining thread')
+  assert.equal(refreshed[0].repoFullName, 'org/repo1')
+  assert.equal(refreshed[0].alerts.length, 1)
+}
+console.log('  remaining alerts refresh the thread')
+
 console.log('\n✅ All reconcileNudgeMessages tests passed!')
