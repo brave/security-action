@@ -1,0 +1,24 @@
+[project]
+name = "security-action"
+version = "0.0.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    # dependency auditing (reviewdog pip-audit runner)
+    "pip-audit~=2.9.0",
+    "setuptools~=83.0.0",
+    # ── modelscan scanner deps ──────────────────────────────────────────────
+    # Base package enables lightweight scanners (pickle/numpy/pytorch).
+    # Heavyweight scanners need the extras below — to slim the install:
+    #   1. Set modelscan_enabled action input to exclude h5/keras/saved_model
+    #      (e.g. modelscan_enabled: 'pickle,numpy,pytorch')
+    #   2. Remove the matching line(s) below.
+    "modelscan~=0.8",
+    "numpy>=1.20",
+    "h5py>=3.0",        # heavyweight (~10MB) — h5 scanner (.h5)
+    "tensorflow>=2.10", # heavyweight (~500MB) — keras (.keras) + saved_model (.pb)
+]
+
+[tool.uv]
+# No python package is built from this repo; uv only manages the dependency
+# environment (uv.lock pins every version).
+package = false
