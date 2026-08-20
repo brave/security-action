@@ -54,8 +54,9 @@ inputs:
       Lightweight: pickle, numpy, pytorch (numpy dep only).
       Heavyweight: h5 (h5py), keras & saved_model (tensorflow).
       Set to 'false' or empty to disable modelscan entirely.
-      To permanently drop heavyweight deps, also remove h5py/tensorflow from
-      pyproject.toml and re-lock (uv lock) — see comments there.
+      tensorflow (~500MB) is only installed when the PR contains .keras/.pb
+      files; set the SEC_ACTION_MODELSCAN_HEAVY env var on the job to always
+      install it (for repos that include model files).
     required: false
 outputs:
   reviewdog-findings:

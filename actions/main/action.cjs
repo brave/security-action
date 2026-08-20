@@ -90,10 +90,34 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   if (!reviewdogEnabledPr && !reviewdogEnabledFull) { return }
   debugLog('Security Action enabled for reviewdog')
 
+  // Fetch changed files early (PR runs) — the list decides whether the
+  // heavyweight tensorflow dependency group is needed (uv sync below) and
+  // is consumed by modelscan / codeowners later.
+  let changedFiles = null
+  if (reviewdogEnabledPr && context.actor !== 'dependabot[bot]') {
+    const { default: pullRequestChangedFiles } = await import(`${actionPath}/src/pullRequestChangedFiles.js`)
+    changedFiles = await pullRequestChangedFiles({ github, owner: context.repo.owner, name: context.repo.repo, prnumber: context.payload.pull_request.number })
+    debugLog('Changed files:', changedFiles)
+
+    // Write changed files to file
+    fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
+    debugLog('Wrote changed files to file')
+  }
+
   // Sync python deps from the uv lockfile (uv installed via action.yml).
   // Creates ${actionPath}/.venv — reviewdog runners and the modelscan audit
   // script resolve python3/pip-audit from it via PATH / uv run.
-  await runCommand(`uv sync --frozen --project ${actionPath}`, { shell: true })
+  // tensorflow (~500MB) is a separate dependency group, synced only when the
+  // PR actually contains keras/saved_model model files (or the
+  // SEC_ACTION_MODELSCAN_HEAVY env var is set for model-hosting repos).
+  const { default: modelscanNeedsTensorflow } = await import(`${actionPath}/src/modelscanNeedsTensorflow.js`)
+  const needsTensorflow = modelscanNeedsTensorflow({
+    changedFiles: changedFiles || [],
+    modelscanEnabled: options.modelscan_enabled
+  })
+  const tensorflowGroup = needsTensorflow ? ' --group tensorflow' : ''
+  debugLog(`Installing tensorflow dependency group: ${needsTensorflow}`)
+  await runCommand(`uv sync --frozen${tensorflowGroup} --project ${actionPath}`, { shell: true })
   debugLog('Synced python dependencies (uv)')
   // Disable man-db auto-update to speed up apt-get operations
   await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
@@ -121,15 +145,6 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   }
 
   if (reviewdogEnabledPr && context.actor !== 'dependabot[bot]') {
-    // changed-files steps
-    const { default: pullRequestChangedFiles } = await import(`${actionPath}/src/pullRequestChangedFiles.js`)
-    const changedFiles = await pullRequestChangedFiles({ github, owner: context.repo.owner, name: context.repo.repo, prnumber: context.payload.pull_request.number })
-    debugLog('Changed files:', changedFiles)
-
-    // Write changed files to file
-    fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
-    debugLog('Wrote changed files to file')
-
     // ═══════════════════════════════════════════════════════════════════════
     // MODELSCAN — binary model file security scanner
     //
@@ -139,8 +154,9 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     // 'pickle,numpy,pytorch' → lightweight only; 'false' / '' → disable entirely.
     //
     // Heavyweight scanners (h5/keras/saved_model) need h5py/tensorflow installed
-    // (see requirements.txt). If enabled here but dep missing, modelscan skips
-    // the file with a DependencyError — no crash.
+    // (see pyproject.toml; tensorflow group is only synced when the PR touches
+    // .keras/.pb files — see modelscanNeedsTensorflow). If enabled here but dep
+    // missing, modelscan skips the file with a DependencyError — no crash.
     //
     // Posts file-level review comments via createReviewComment with
     // subject_type:'file' — reviewdog cannot handle binary files
