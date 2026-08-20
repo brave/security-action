@@ -21,4 +21,8 @@ dependencies = [
 [tool.uv]
 # No python package is built from this repo; uv only manages the dependency
 # environment (uv.lock pins every version).
+# Dependency cooldown: exclude packages published within the window when
+# re-locking, so a freshly published malicious release can't be picked up
+# immediately (CI always runs --frozen, this only affects `uv lock`).
+exclude-newer = "7 days"
 package = false
