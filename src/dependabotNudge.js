@@ -2,6 +2,7 @@ import {
   Severity,
   DEFAULT_SKIP_HOTWORDS
 } from './dependabotConstants.js'
+import { messageToBlocks } from './sendSlackMessage.js'
 
 // original code at: https://stackoverflow.com/questions/44195322/a-plain-javascript-way-to-decode-html-entities-works-on-both-browsers-and-node
 function decodeEntities (encodedString) {
@@ -19,6 +20,92 @@ function decodeEntities (encodedString) {
     const num = parseInt(numStr, 10)
     return String.fromCharCode(num)
   })
+}
+
+function criticalCount (alerts) {
+  return alerts.filter(a =>
+    Severity[a.security_advisory?.severity || a.severity] >=
+    Severity.critical
+  ).length
+}
+
+// Render the alert list for one repository: the findings
+// only, no summary line. The summary belongs on the thread
+// parent (buildParentText), the findings in the replies.
+// Shared with the refresh path (refreshNudgeThread.js) so an
+// updated thread is rendered exactly like the original nudge.
+export function buildRepoMessage ({ alerts }) {
+  let message = ''
+
+  for (const alert of alerts) {
+    const descFirstLine = alert.security_advisory.description
+      .split('\n')
+      .filter(d => d[0] !== '#')
+      .filter(d => d.trim().length > 0)
+      .splice(0, 1)
+      .map(d => `&gt; ${decodeEntities(d).substring(0, 40)}`)
+      .shift()
+
+    const devAppend = alert.dependency.scope === 'development' ? ' (dev)' : ''
+
+    message += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity *${alert.security_advisory.summary}*`
+    message += devAppend
+    message += '\n\n'
+
+    if (descFirstLine && descFirstLine.length > 0) {
+      message += descFirstLine
+      message += '...\n\n'
+    }
+
+    message += `Handle this alert at ${alert.html_url}\n\n`
+    message += '\n\n---\n\n'
+  }
+
+  return {
+    message,
+    total: alerts.length,
+    critical: criticalCount(alerts)
+  }
+}
+
+// The one-line summary posted as the thread parent. Shared
+// with the refresh path so the counts can be corrected in
+// place when alerts are dismissed or fixed. Critical count
+// is omitted when there are none.
+export function buildParentText ({ repo, total, critical }) {
+  let text = `[${repo}](https://github.com/${repo}) has \`${total}\` open Dependabot issues`
+  if (critical > 0) {
+    text += ` (**${critical} critical**)`
+  }
+  return text
+}
+
+// Mentions for the thread reply (which notifies) and for
+// the later parent edit (which does not).
+export function buildCcLine (maintainers, defaultContact = []) {
+  if (maintainers.length > 0) {
+    return `cc ${maintainers.join(' ')}`
+  }
+  const fallback = defaultContact.map(c => `@${c}`).join(' ')
+  return `cc ${fallback} - *No maintainers listed for the given vulnerabilities, consider migrating and archiving this repository*`
+}
+
+// Parent blocks: markdown summary, plus a raw mrkdwn cc
+// section so Slack mention pills show in the channel
+// without going through markdown escaping.
+export async function buildParentBlocks ({
+  repo, total, critical, cc = ''
+}) {
+  const blocks = await messageToBlocks(
+    buildParentText({ repo, total, critical })
+  )
+  if (cc) {
+    blocks.push({
+      type: 'section',
+      text: { type: 'mrkdwn', text: cc }
+    })
+  }
+  return blocks
 }
 
 export default async function dependabotNudge ({
@@ -177,49 +264,43 @@ export default async function dependabotNudge ({
           }
         }
 
-        let msg = `[${org}/${repo.name}](https://github.com/${org}/${repo.name}) has \`${alerts.length}\` open security issue(s) in dependencies`
-        const critLen = alerts.filter(s => Severity[s.severity] >= Severity.critical).length
-        if (critLen > 0) {
-          msg += `, **\`${critLen}\` of which are critical**`
-        }
-        msg += '\n\n---\n\n'
+        const { message: msg, critical: critLen } =
+          buildRepoMessage({ alerts })
 
-        for (const alert of alerts) {
-          const descFirstLine = alert.security_advisory.description
-            .split('\n')
-            .filter(d => d[0] !== '#')
-            .filter(d => d.trim().length > 0)
-            .splice(0, 1)
-            .map(d => `&gt; ${decodeEntities(d).substring(0, 40)}`)
-            .shift()
+        // The cc line is kept out of `message` on purpose:
+        // it has to be posted through Slack's raw mrkdwn
+        // path, because the markdown-to-blocks conversion
+        // escapes `<@U123>` mentions into `&lt;@U123&gt;`
+        // and nobody gets notified. Posting it last also
+        // keeps it to a single notification per thread.
+        const cc = buildCcLine(maintainers, defaultContact)
 
-          const devAppend = alert.dependency.scope === 'development' ? ' (dev)' : ''
-
-          msg += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity *${alert.security_advisory.summary}*`
-          msg += devAppend
-          msg += '\n\n'
-
-          if (descFirstLine && descFirstLine.length > 0) {
-            msg += descFirstLine
-            msg += '...\n\n'
-          }
-
-          msg += `Handle this alert at ${alert.html_url}\n\n`
-          msg += '\n\n---\n\n'
-        }
-
-        if (maintainers.length > 0) {
-          msg += `Maintainers: ${maintainers.join(', ')}`
-        } else {
-          msg += `**No maintainers listed for the given vulnerabilities, consider migrating and archiving this repository** - ${defaultContact.map(c => `@${c}`).join(', ')}`
-        }
-
-        messages.push({ repo: `${org}/${repo.name}`, message: msg })
+        messages.push({
+          repo: `${org}/${repo.name}`,
+          message: msg,
+          cc,
+          total: alerts.length,
+          critical: critLen,
+          alerts
+        })
       }
     } catch (e) {
       console.error(e)
     }
   }
 
-  if (debug || singleOutputMessage) { return messages.map(m => m.message).join('\n\n') } else { return messages }
+  // Only singleOutputMessage flattens the result: debug must
+  // not change the return type, or the per-repo caller ends
+  // up iterating the characters of a string.
+  // The flattened form has no thread parent to carry the
+  // summary, so it gets one prepended per repo.
+  if (singleOutputMessage) {
+    return messages
+      .map(m =>
+        buildParentText(m) + '\n\n---\n\n' + m.message + m.cc
+      )
+      .join('\n\n')
+  } else {
+    return messages
+  }
 }
