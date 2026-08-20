@@ -10,12 +10,13 @@
 // added later by editing do not, and the replies never carry
 // mentions at all.
 
-import sendSlackMessage from './sendSlackMessage.js'
 import { buildParentBlocks } from './dependabotNudge.js'
-import refreshNudgeThread, {
+import refreshNudgeThread from './refreshNudgeThread.js'
+import {
   findRepoParent,
+  postAlertReply,
   PARENT_EVENT_TYPE
-} from './refreshNudgeThread.js'
+} from './nudgeThread.js'
 import {
   chunkNudgeMessage,
   fetchMessages,
@@ -27,8 +28,6 @@ import {
 // @param {object} opts
 // @param {object} opts.web        - Slack WebClient
 // @param {string} opts.channelId  - Slack channel ID
-// @param {string} opts.channel    - Channel name, for posts
-// @param {string} opts.token      - Slack bot token
 // @param {string} opts.org        - GitHub org name
 // @param {object[]} opts.messages - Channel history
 // @param {object[]} opts.nudges   - dependabotNudge() output
@@ -39,8 +38,6 @@ import {
 export default async function postNudgeThreads ({
   web,
   channelId,
-  channel,
-  token,
   org,
   messages = [],
   nudges = [],
@@ -48,14 +45,6 @@ export default async function postNudgeThreads ({
   lookbackDays = 7,
   debug = false
 }) {
-  const slack = {
-    channel,
-    channelId,
-    token,
-    username: 'dependabot',
-    _web: web
-  }
-
   for (const { repo, message, cc, total, critical, alerts } of nudges) {
     try {
       let parent = findRepoParent(messages, repo, weekId)
@@ -131,13 +120,7 @@ export default async function postNudgeThreads ({
       // One reply per alert; none of them mention anyone, so
       // the thread stays at a single notification.
       for (const chunk of chunkNudgeMessage(message)) {
-        await sendSlackMessage({
-          ...slack,
-          debug,
-          message: chunk,
-          threadTs: parentTs,
-          eventPayload: { repo, kind: 'alerts' }
-        })
+        await postAlertReply(web, channelId, parentTs, chunk, repo)
         await pace()
       }
     } catch (error) {

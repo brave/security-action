@@ -110,6 +110,21 @@ export async function buildParentBlocks ({
   return blocks
 }
 
+// Extract the cc line from a thread parent's blocks: appended
+// inline to the summary ('... (cc <@U1>)') by buildParentBlocks
+// above, or in its own 'cc ...' section on threads written
+// before the inline change. Lives next to the producer so the
+// format has a single owner.
+export function parentCcLine (blocks) {
+  for (const block of blocks || []) {
+    if (block.text?.type !== 'mrkdwn') continue
+    if (block.text.text.startsWith('cc ')) return block.text.text
+    const inline = block.text.text.match(/\((cc [^)]+)\)\s*$/)
+    if (inline) return inline[1]
+  }
+  return ''
+}
+
 export default async function dependabotNudge ({
   org,
   githubToken = null,
