@@ -17,11 +17,15 @@
 #     pytorch      .bin .pt .pth .ckpt                    (numpy ~30MB, zip+pickle)
 #
 #   ── Heavyweight (h5py / tensorflow) ─────────────────────────────────────
-#   ↓↓↓ To disable: drop from modelscan_enabled AND remove the matching line ↓↓↓
-#   ↓↓↓ from pyproject.toml (then re-lock with `uv lock`)                   ↓↓↓
-#     h5           .h5                                     (h5py ~10MB)
+#     h5           .h5                                     (h5py ~5MB)
 #     keras        .keras                                  (tensorflow ~500MB)
 #     saved_model  .pb                                     (tensorflow ~500MB)
+#
+# NOTE (install gating): the action only installs the modelscan/tensorflow
+# dependency groups when a changed file has a model suffix (see
+# src/modelscanDependencyGroups.js) or SEC_ACTION_MODELSCAN_HEAVY is set.
+# A model file with an unusual suffix may therefore go unscanned — set the
+# env var on repos that carry models.
 # ─────────────────────────────────────────────────────────────────────────────
 
 import json

@@ -107,17 +107,17 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   // Sync python deps from the uv lockfile (uv installed via action.yml).
   // Creates ${actionPath}/.venv — reviewdog runners and the modelscan audit
   // script resolve python3/pip-audit from it via PATH / uv run.
-  // tensorflow (~500MB) is a separate dependency group, synced only when the
-  // PR actually contains keras/saved_model model files (or the
-  // SEC_ACTION_MODELSCAN_HEAVY env var is set for model-hosting repos).
-  const { default: modelscanNeedsTensorflow } = await import(`${actionPath}/src/modelscanNeedsTensorflow.js`)
-  const needsTensorflow = modelscanNeedsTensorflow({
+  // modelscan deps (~20MB) and tensorflow (~685MB) are separate dependency
+  // groups, synced only when the PR contains model files (see
+  // src/modelscanDependencyGroups.js) or SEC_ACTION_MODELSCAN_HEAVY is set.
+  const { default: modelscanDependencyGroups } = await import(`${actionPath}/src/modelscanDependencyGroups.js`)
+  const depGroups = modelscanDependencyGroups({
     changedFiles: changedFiles || [],
     modelscanEnabled: options.modelscan_enabled
   })
-  const tensorflowGroup = needsTensorflow ? ' --group tensorflow' : ''
-  debugLog(`Installing tensorflow dependency group: ${needsTensorflow}`)
-  await runCommand(`uv sync --frozen${tensorflowGroup} --project ${actionPath}`, { shell: true })
+  const groupArgs = depGroups.map(g => ` --group ${g}`).join('')
+  debugLog(`modelscan dependency groups: ${depGroups.join(', ') || 'none'}`)
+  await runCommand(`uv sync --frozen${groupArgs} --project ${actionPath}`, { shell: true })
   debugLog('Synced python dependencies (uv)')
   // Disable man-db auto-update to speed up apt-get operations
   await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
@@ -153,17 +153,17 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     // options): 'all' (default) → every scanner;
     // 'pickle,numpy,pytorch' → lightweight only; 'false' / '' → disable entirely.
     //
-    // Heavyweight scanners (h5/keras/saved_model) need h5py/tensorflow installed
-    // (see pyproject.toml; tensorflow group is only synced when the PR touches
-    // .keras/.pb files — see modelscanNeedsTensorflow). If enabled here but dep
-    // missing, modelscan skips the file with a DependencyError — no crash.
+    // Skipped entirely unless a changed file has a model suffix — the deps
+    // would not be installed (see modelscanDependencyGroups above). If a
+    // scanner is enabled but its dep is missing (e.g. tensorflow group not
+    // synced), modelscan skips the file with a DependencyError — no crash.
     //
     // Posts file-level review comments via createReviewComment with
     // subject_type:'file' — reviewdog cannot handle binary files
     // (see brave/security-action#707).
     // ═══════════════════════════════════════════════════════════════════════
     const modelscanList = (options.modelscan_enabled || 'all').trim().toLowerCase()
-    if (modelscanList && modelscanList !== 'false') {
+    if (modelscanList && modelscanList !== 'false' && depGroups.includes('modelscan')) {
       const { default: modelscanPostComments } = await import(`${actionPath}/src/modelscanPostComments.js`)
       await modelscanPostComments({
         github,

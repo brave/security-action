@@ -6,21 +6,24 @@ dependencies = [
     # dependency auditing (reviewdog pip-audit runner)
     "pip-audit~=2.9.0",
     "setuptools~=83.0.0",
-    # ── modelscan scanner deps ──────────────────────────────────────────────
-    # Base package enables lightweight scanners (pickle/numpy/pytorch) plus
-    # the h5 scanner (.h5, via h5py). The keras (.keras) and saved_model (.pb)
-    # scanners need the `tensorflow` dependency group — installed only when
-    # the PR touches such files (see src/modelscanNeedsTensorflow.js) or when
-    # SEC_ACTION_MODELSCAN_HEAVY is set. To slim the install further:
-    # set modelscan_enabled to exclude scanners (e.g. 'pickle,numpy,pytorch').
-    "modelscan~=0.8",
-    "numpy>=1.20",
-    "h5py>=3.0"         # ~10MB — h5 scanner (.h5)
 ]
 
 [dependency-groups]
-# ~500MB — only synced with `uv sync --group tensorflow`, decided per run by
-# src/modelscanNeedsTensorflow.js (model file in PR or env var override).
+# Model scanning deps are installed on demand (`uv sync --group ...`), decided
+# per run by src/modelscanDependencyGroups.js — the uv cache rarely helps
+# (the action does not run on the default branch, so PR runs start cold).
+#
+# modelscan group: all scanners except keras/saved_model — pickle, numpy,
+# pytorch (zip+pickle, no torch needed), h5. numpy is a hard modelscan dep,
+# h5py is only ~5MB on top. ~20MB over the pip-audit-only install.
+modelscan = [
+    "modelscan~=0.8",
+    "numpy>=1.20",
+    "h5py>=3.0",
+]
+# tensorflow group: keras (.keras) + saved_model (.pb) scanners.
+# ~685MB with transitive deps — synced only when the PR actually touches
+# such files (or SEC_ACTION_MODELSCAN_HEAVY is set).
 tensorflow = ["tensorflow>=2.10"]
 
 [tool.uv]
