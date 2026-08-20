@@ -1,4 +1,6 @@
 import {
+  createSlackClient,
+  fetchThreadReplies,
   findChannelId
 } from './slackUtils.js'
 
@@ -13,11 +15,37 @@ const colorCodes = {
   white: '#FFFFFF'
 }
 
+// Convert a markdown message to Slack blocks. Exported so
+// the nudge refresh path can rebuild a message body for
+// chat.update with the same rendering.
+export async function messageToBlocks (message) {
+  const { markdownToBlocks } = await import('@tryfabric/mack')
+
+  let mdBlocks = await markdownToBlocks(message)
+  // slack blocks have a limit of 50 blocks, remove the last blocks if there are more
+  if (mdBlocks.length > 50) {
+    // last block should contain the Cc, so we don't want to remove it
+    const lastBlock = mdBlocks[mdBlocks.length - 1]
+    mdBlocks = mdBlocks.slice(0, 48)
+    mdBlocks.push({
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: '...and more'
+      }
+    })
+    mdBlocks.push(lastBlock)
+  }
+
+  return mdBlocks
+}
+
 // send markdown message to slack channel
 export default async function sendSlackMessage ({
   token = null,
   text = null,
   channel = null,
+  channelId = null,
   message = null,
   debug = false,
   color = null,
@@ -54,8 +82,7 @@ export default async function sendSlackMessage ({
 
   let web = _web
   if (!web) {
-    const { WebClient } = await import('@slack/web-api')
-    web = new WebClient(token)
+    web = await createSlackClient(token)
   }
 
   // calculate the sha256 hash of the message
@@ -80,23 +107,7 @@ export default async function sendSlackMessage ({
   }
 
   if (message !== null) {
-    const { markdownToBlocks } = await import('@tryfabric/mack')
-
-    let mdBlocks = await markdownToBlocks(message)
-    // slack blocks have a limit of 50 blocks, remove the last blocks if there are more
-    if (mdBlocks.length > 50) {
-      // last block should contain the Cc, so we don't want to remove it
-      const lastBlock = mdBlocks[mdBlocks.length - 1]
-      mdBlocks = mdBlocks.slice(0, 48)
-      mdBlocks.push({
-        type: 'section',
-        text: {
-          type: 'mrkdwn',
-          text: '...and more'
-        }
-      })
-      mdBlocks.push(lastBlock)
-    }
+    const mdBlocks = await messageToBlocks(message)
     if (colored) {
       attachments = [{
         color,
@@ -108,24 +119,28 @@ export default async function sendSlackMessage ({
     if (debug) { console.log(mdBlocks) }
   }
 
-  // get the channel id
-  const channelId = _findChannelId
-    ? await _findChannelId(web, channel)
-    : await findChannelId(web, channel)
+  // Resolve the channel once per call. Callers that already
+  // know the channel ID (the nudge run resolved it up front)
+  // skip the paginated conversations.list entirely.
+  const targetChannelId = channelId ||
+    (_findChannelId
+      ? await _findChannelId(web, channel)
+      : await findChannelId(web, channel))
 
   // When posting into a thread, dedup by scanning the
   // thread's replies instead of the channel history.
   // conversations.history only returns top-level messages
-  // and would miss threaded replies.
+  // and would miss threaded replies. Replies paginate: a
+  // single page could hide an earlier copy of this message
+  // past the 200-reply mark.
   const history = threadTs
-    ? await web.conversations.replies({
-      channel: channelId,
-      ts: threadTs,
-      limit: 200,
-      include_all_metadata: true
-    })
+    ? {
+        messages: await fetchThreadReplies(
+          web, targetChannelId, threadTs
+        )
+      }
     : await web.conversations.history({
-      channel: channelId,
+      channel: targetChannelId,
       limit: 50,
       oldest: Date.now() / 1000 - 60 * 60 * 24, // a day ago
       include_all_metadata: true
@@ -146,7 +161,7 @@ export default async function sendSlackMessage ({
   const result = await web.chat.postMessage({
     username,
     text: text || `${username} alert`,
-    channel,
+    channel: targetChannelId,
     link_names: true,
     unfurl_links: true,
     unfurl_media: true,
