@@ -123,13 +123,25 @@ def _scan_pickle_based(scan_fn_name, model_format):
     return scan
 
 
-def _scan_optional_dep(scanner_module, scanner_class, dep_name):
-    """h5/keras share one flow: import optional-dep scanner, run, log errors."""
-    def scan(model_path):
-        from importlib import import_module
+def _import_h5_scan():
+    from modelscan.scanners.h5.scan import H5LambdaDetectScan
 
+    return H5LambdaDetectScan
+
+
+def _import_keras_scan():
+    from modelscan.scanners.keras.scan import KerasLambdaDetectScan
+
+    return KerasLambdaDetectScan
+
+
+def _scan_optional_dep(import_scanner, scanner_class_name, dep_name):
+    """h5/keras share one flow: import optional-dep scanner, run, log errors.
+    import_scanner is a zero-arg callable doing the static import — no
+    importlib.import_module on computed strings (semgrep: non-literal-import)."""
+    def scan(model_path):
         try:
-            module = import_module(scanner_module)
+            scanner_class = import_scanner()
         except ImportError:
             sys.stderr.write(
                 f"ERROR: {dep_name} not installed — cannot scan {model_path}\n"
@@ -140,10 +152,10 @@ def _scan_optional_dep(scanner_module, scanner_class, dep_name):
         from modelscan.model import Model
 
         try:
-            return getattr(module, scanner_class)(DEFAULT_SETTINGS).scan(Model(model_path))
+            return scanner_class(DEFAULT_SETTINGS).scan(Model(model_path))
         except Exception as e:
             sys.stderr.write(
-                f"ERROR scanning {model_path} with {scanner_class}: {e}\n"
+                f"ERROR scanning {model_path} with {scanner_class_name}: {e}\n"
             )
             return None
     return scan
@@ -187,8 +199,8 @@ SCAN_DISPATCH = {
     "pickle": _scan_pickle_based("scan_pickle_bytes", "PICKLE"),
     "numpy": _scan_pickle_based("scan_numpy", "NUMPY"),
     "pytorch": _scan_pickle_based("scan_pytorch", "PYTORCH"),
-    "h5": _scan_optional_dep("modelscan.scanners.h5.scan", "H5LambdaDetectScan", "h5py"),
-    "keras": _scan_optional_dep("modelscan.scanners.keras.scan", "KerasLambdaDetectScan", "tensorflow"),
+    "h5": _scan_optional_dep(_import_h5_scan, "H5LambdaDetectScan", "h5py"),
+    "keras": _scan_optional_dep(_import_keras_scan, "KerasLambdaDetectScan", "tensorflow"),
     "saved_model": _scan_saved_model,
 }
 
