@@ -4,6 +4,7 @@ import importlib.util
 import io
 import json
 import os
+import sys
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -142,6 +143,57 @@ class TestEmitIssue(unittest.TestCase):
         self.assertEqual(payload["module"], "os")
         self.assertEqual(payload["scanner"], "pytorch")
         self.assertEqual(payload["severity"], "CRITICAL")
+
+
+class TestOptionalDepScan(unittest.TestCase):
+    """_scan_optional_dep takes an importer callable (static import inside),
+    not a module string — keeps importlib.import_module out of the codebase."""
+
+    def _settings_modules(self):
+        return {
+            "modelscan.settings": SimpleNamespace(DEFAULT_SETTINGS="SETTINGS"),
+            "modelscan.model": SimpleNamespace(Model=lambda p: ("MODEL", p)),
+        }
+
+    def test_missing_dep_logs_and_returns_none(self):
+        def missing():
+            raise ImportError("no tensorflow")
+
+        scan = audit._scan_optional_dep(missing, "FakeScan", "tensorflow")
+        err = io.StringIO()
+        with redirect_stderr(err):
+            self.assertIsNone(scan("m.keras"))
+        self.assertIn("tensorflow", err.getvalue())
+
+    def test_scan_exception_logs_and_returns_none(self):
+        class ExplodingScan:
+            def __init__(self, settings):
+                pass
+
+            def scan(self, model):
+                raise RuntimeError("boom")
+
+        scan = audit._scan_optional_dep(lambda: ExplodingScan, "ExplodingScan", "tensorflow")
+        err = io.StringIO()
+        with patch.dict(sys.modules, self._settings_modules()):
+            with redirect_stderr(err):
+                self.assertIsNone(scan("m.keras"))
+        self.assertIn("boom", err.getvalue())
+        self.assertIn("ExplodingScan", err.getvalue())
+
+    def test_result_passthrough(self):
+        sentinel = object()
+
+        class OkScan:
+            def __init__(self, settings):
+                self.settings = settings
+
+            def scan(self, model):
+                return sentinel
+
+        scan = audit._scan_optional_dep(lambda: OkScan, "OkScan", "tensorflow")
+        with patch.dict(sys.modules, self._settings_modules()):
+            self.assertIs(scan("m.keras"), sentinel)
 
 
 class TestMain(unittest.TestCase):
