@@ -303,7 +303,8 @@ console.log('  non-zero exit still posts partial findings')
 console.log('  multiple assignees each mentioned')
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Test: spawn env passes SCRIPTPATH so audit script finds all_changed_files.txt
+// Test: spawn env passes SCRIPTPATH so audit script finds all_changed_files.txt;
+// cwd must stay the workspace (all_changed_files.txt holds repo-relative paths)
 {
   const gh = mockGithub()
   const ctx = mockContext()
@@ -324,7 +325,8 @@ console.log('  multiple assignees each mentioned')
 
   assert.ok(spawnOpts, 'spawn called')
   assert.equal(spawnOpts.env.SCRIPTPATH, path.join(ACTION_PATH, 'assets'), `SCRIPTPATH must be assets dir, got: ${spawnOpts.env.SCRIPTPATH}`)
+  assert.equal(spawnOpts.cwd, undefined, `cwd must default to the workspace, got: ${spawnOpts.cwd}`)
 }
-console.log('  spawn env includes SCRIPTPATH')
+console.log('  spawn env includes SCRIPTPATH, cwd stays workspace')
 
 console.log('\n✅ All modelscanPostComments tests passed!')

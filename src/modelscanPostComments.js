@@ -50,9 +50,11 @@ export default async function modelscanPostComments ({
     MODELSCAN_ENABLED_SCANNERS: enabledScanners || 'all'
   }
 
+  // Spawn without cwd: all_changed_files.txt holds repo-relative paths, so the
+  // audit script must run in the workspace (the github-script working dir),
+  // not the action checkout.
   const result = runSpawn('python3', [path.join(assetsDir, 'modelscan-audit.py')], {
     env,
-    cwd: actionPath,
     encoding: 'utf-8',
     timeout: 120_000,
     maxBuffer: 10 * 1024 * 1024
