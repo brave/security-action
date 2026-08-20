@@ -2,7 +2,8 @@
  * Tests for refreshNudgeThread module
  */
 import { strict as assert } from 'assert'
-import refreshNudgeThread, { findRepoParent, PARENT_EVENT_TYPE } from './refreshNudgeThread.js'
+import refreshNudgeThread from './refreshNudgeThread.js'
+import { PARENT_EVENT_TYPE } from './nudgeThread.js'
 import {
   buildRepoMessage,
   buildParentBlocks
@@ -83,76 +84,6 @@ function buildMockWeb (replies = threadReplies()) {
 function parentSummary (update) {
   return JSON.stringify(update.blocks)
 }
-
-// ---- findRepoParent ----
-
-console.log('Testing findRepoParent...')
-
-{
-  const messages = [
-    parentMsg,
-    {
-      ts: '200.0',
-      metadata: {
-        event_type: PARENT_EVENT_TYPE,
-        event_payload: { repo: 'brave/bar' }
-      }
-    }
-  ]
-  assert.equal(
-    findRepoParent(messages, 'brave/foo')?.ts, '100.0',
-    'Should find the parent for the requested repo'
-  )
-  assert.equal(
-    findRepoParent(messages, 'brave/nope'), undefined,
-    'Should return undefined when the repo has no thread'
-  )
-}
-console.log('  findRepoParent: matches on repo metadata')
-
-{
-  const messages = [
-    parentMsg,
-    {
-      ts: '300.0',
-      metadata: {
-        event_type: PARENT_EVENT_TYPE,
-        event_payload: { repo: 'brave/foo' }
-      }
-    }
-  ]
-  assert.equal(
-    findRepoParent(messages, 'brave/foo').ts, '300.0',
-    'Should prefer the newest parent'
-  )
-}
-console.log('  findRepoParent: prefers the newest thread')
-
-{
-  const messages = [
-    parentMsg,
-    {
-      ts: '50.0',
-      metadata: {
-        event_type: PARENT_EVENT_TYPE,
-        event_payload: { repo: 'brave/foo', weekId: '2026-W33' }
-      }
-    }
-  ]
-  assert.equal(
-    findRepoParent(messages, 'brave/foo', '2026-W33')?.ts, '50.0',
-    'Should match the requested week'
-  )
-  assert.equal(
-    findRepoParent(messages, 'brave/foo', '2026-W99'), undefined,
-    'Should not match another week'
-  )
-  assert.equal(
-    findRepoParent(messages, 'brave/foo')?.ts, '100.0',
-    'Without a weekId the newest parent still matches'
-  )
-}
-console.log('  findRepoParent: filters by weekId when given')
 
 // ---- refreshNudgeThread ----
 

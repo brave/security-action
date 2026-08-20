@@ -3,7 +3,7 @@
  */
 import { strict as assert } from 'assert'
 import postNudgeThreads from './postNudgeThreads.js'
-import { PARENT_EVENT_TYPE } from './refreshNudgeThread.js'
+import { PARENT_EVENT_TYPE } from './nudgeThread.js'
 import { buildRepoMessage } from './dependabotNudge.js'
 
 // Keep the suite fast: cap every rate-limit delay.
@@ -99,8 +99,6 @@ function run (web, messages, opts = {}) {
   return postNudgeThreads({
     web,
     channelId: 'C001',
-    channel: '#secops-hotspots',
-    token: 'xoxb-test',
     messages,
     nudges,
     weekId: '2026-W34',

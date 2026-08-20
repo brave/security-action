@@ -6,7 +6,8 @@ import {
   buildRepoMessage,
   buildParentText,
   buildCcLine,
-  buildParentBlocks
+  buildParentBlocks,
+  parentCcLine
 } from './dependabotNudge.js'
 
 function makeAlert (n, severity = 'high') {
@@ -133,5 +134,46 @@ console.log('  buildCcLine: tags maintainers')
   )
 }
 console.log('  buildParentBlocks: summary with inline cc, no findings')
+
+{
+  const blocks = await buildParentBlocks({
+    repo: 'brave/foo',
+    total: 3,
+    critical: 1,
+    cc: 'cc <@U1> <@U2>'
+  })
+  assert.equal(
+    parentCcLine(blocks), 'cc <@U1> <@U2>',
+    'parentCcLine must read back exactly what buildParentBlocks writes'
+  )
+}
+console.log('  parentCcLine: round-trips the inline cc')
+
+{
+  const blocks = [
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: '[brave/foo](https://github.com/brave/foo) has `2` open Dependabot issues'
+      }
+    },
+    { type: 'section', text: { type: 'mrkdwn', text: 'cc <@U1>' } }
+  ]
+  assert.equal(
+    parentCcLine(blocks), 'cc <@U1>',
+    'Should read the standalone cc section of pre-inline threads'
+  )
+}
+console.log('  parentCcLine: reads the legacy cc section')
+
+assert.equal(
+  parentCcLine([{
+    type: 'section',
+    text: { type: 'mrkdwn', text: 'no cc anywhere' }
+  }]), '',
+  'Should return empty when the parent carries no cc'
+)
+console.log('  parentCcLine: empty when no cc')
 
 console.log('\n✅ All dependabotNudge builder tests passed!')

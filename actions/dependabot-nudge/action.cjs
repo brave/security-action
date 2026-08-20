@@ -37,8 +37,6 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   await postNudgeThreads({
     web,
     channelId,
-    channel,
-    token: inputs.slack_token,
     org: context.repo.owner,
     messages,
     nudges,

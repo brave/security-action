@@ -16,32 +16,17 @@
 
 import {
   buildRepoMessage,
-  buildParentBlocks
+  buildParentBlocks,
+  parentCcLine
 } from './dependabotNudge.js'
 import { messageToBlocks } from './sendSlackMessage.js'
+import { findRepoParent, postAlertReply } from './nudgeThread.js'
 import {
   chunkNudgeMessage,
   fetchThreadReplies,
   isBotOwned,
   pace
 } from './slackUtils.js'
-
-export const PARENT_EVENT_TYPE = 'dependabot-nudge-repo-parent'
-export const ALERTS_EVENT_TYPE = 'dependabot-nudge-alerts'
-
-// Extract the cc line from a thread parent: appended
-// inline to the summary ('... (cc <@U1>)') since the
-// summary-line change, or in its own 'cc ...' section on
-// threads written before it.
-function parentCcLine (blocks) {
-  for (const block of blocks || []) {
-    if (block.text?.type !== 'mrkdwn') continue
-    if (block.text.text.startsWith('cc ')) return block.text.text
-    const inline = block.text.text.match(/\((cc [^)]+)\)\s*$/)
-    if (inline) return inline[1]
-  }
-  return ''
-}
 
 // Compare rendered content, ignoring the block_id values
 // Slack assigns on post, so unchanged threads are left
@@ -50,19 +35,6 @@ function blocksSignature (blocks) {
   return (blocks || [])
     .map(b => `${b.type}:${b.text?.text || ''}`)
     .join('\n')
-}
-
-// Find the newest nudge parent for a repo among messages
-// already fetched from the channel. When weekId is given,
-// only that week's parent matches.
-export function findRepoParent (messages, repoFullName, weekId = null) {
-  return messages
-    .filter(m =>
-      m.metadata?.event_type === PARENT_EVENT_TYPE &&
-      m.metadata?.event_payload?.repo === repoFullName &&
-      (weekId === null ||
-        m.metadata?.event_payload?.weekId === weekId))
-    .sort((a, b) => parseFloat(b.ts) - parseFloat(a.ts))[0]
 }
 
 // Tear down a thread whose alerts are all gone. Bot replies
@@ -249,17 +221,9 @@ export default async function refreshNudgeThread ({
   // is hidden behind a count that claims otherwise.
   for (let i = details.length; i < chunks.length; i++) {
     try {
-      await web.chat.postMessage({
-        channel: channelId,
-        thread_ts: parent.ts,
-        username: 'dependabot',
-        text: 'dependabot alert',
-        blocks: await messageToBlocks(chunks[i]),
-        metadata: {
-          event_type: ALERTS_EVENT_TYPE,
-          event_payload: { repo: repoFullName, kind: 'alerts' }
-        }
-      })
+      await postAlertReply(
+        web, channelId, parent.ts, chunks[i], repoFullName
+      )
       touched++
       await pace()
     } catch (err) {
