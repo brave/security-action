@@ -2,7 +2,11 @@
  * Update opengrep version in installOpengrep.js
  * This script fetches the latest opengrep release and updates:
  * - OPENGREP_VERSION constant
- * - EXPECTED_SHA256 hash of the install.sh script
+ * - EXPECTED_SHA256 hash of the pinned install.sh script
+ *
+ * install.sh is pinned to a fixed upstream commit (not the tag) because old tags
+ * ship an install.sh that rejects versions via the unpaginated GitHub API
+ * (opengrep/opengrep#792). New versions install via that pinned script.
  */
 
 import https from 'https'
@@ -139,9 +143,11 @@ export default async function updateOpengrepVersion () {
 
     console.log(`Updating from ${currentVersion} to ${latestVersion}...`)
 
-    // Download install script and calculate hash
-    const installScriptUrl = `https://raw.githubusercontent.com/opengrep/opengrep/refs/tags/${latestVersion}/install.sh`
-    console.log(`Downloading install script from ${installScriptUrl}...`)
+    // Download the pinned install script and calculate its hash.
+    // The script is pinned to a specific commit instead of the tag; see
+    // src/installOpengrep.js for the rationale.
+    const installScriptUrl = 'https://raw.githubusercontent.com/opengrep/opengrep/0b445193f95b14b828bc3ede8fea9725feb45e64/install.sh'
+    console.log(`Downloading pinned install script from ${installScriptUrl}...`)
 
     const scriptContent = await downloadFile(installScriptUrl)
     const sha256Hash = calculateSHA256(scriptContent)
