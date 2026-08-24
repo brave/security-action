@@ -27,3 +27,4 @@ GHSA-52cp-r559-cp3m
 GHSA-2v37-7h3g-55p8
 GHSA-4w2j-m93h-cj5j
 GHSA-5p4m-2wfm-xmqj
+CVE-2026-59874
