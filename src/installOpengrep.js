@@ -1,6 +1,7 @@
 /**
  * Secure Opengrep installer
- * Downloads install.sh from pinned tag, verifies SHA256 hash, and executes it
+ * Downloads install.sh from a pinned upstream commit, verifies SHA256, and
+ * executes it with the desired Opengrep version.
  */
 
 import https from 'https'
@@ -11,9 +12,13 @@ import os from 'os'
 import path from 'path'
 
 // Configuration
+// install.sh pinned to commit 0b44519 (opengrep/opengrep#796): tag scripts
+// reject versions past the first releases API page (opengrep/opengrep#792).
+// TODO: drop the pin once opengrep >=v1.28.0 ships the fixed script in a tag.
 const OPENGREP_VERSION = 'v1.11.5'
-const INSTALL_SCRIPT_URL = `https://raw.githubusercontent.com/opengrep/opengrep/refs/tags/${OPENGREP_VERSION}/install.sh`
-const EXPECTED_SHA256 = 'a74388d0aec282eddf15fc8d42884de6531e1fc5a7bdc3ac31863c854e974eee'
+const INSTALL_SCRIPT_COMMIT = '0b445193f95b14b828bc3ede8fea9725feb45e64'
+const INSTALL_SCRIPT_URL = `https://raw.githubusercontent.com/opengrep/opengrep/${INSTALL_SCRIPT_COMMIT}/install.sh`
+const EXPECTED_SHA256 = '4643968d05a2d5f9d4130c0c170fc096d6adf8131aca002ba2fd0e482ac52d0d'
 
 /**
  * Download content from URL
