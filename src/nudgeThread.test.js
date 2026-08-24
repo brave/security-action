@@ -5,8 +5,10 @@ import { strict as assert } from 'assert'
 import {
   findRepoParent,
   postAlertReply,
+  postCcReply,
   PARENT_EVENT_TYPE,
-  ALERTS_EVENT_TYPE
+  ALERTS_EVENT_TYPE,
+  CC_EVENT_TYPE
 } from './nudgeThread.js'
 
 const parentMsg = {
@@ -136,5 +138,63 @@ console.log('\nTesting postAlertReply...')
   )
 }
 console.log('  postAlertReply: posts one chunk as an alerts-tagged thread reply')
+
+// ---- postCcReply ----
+
+console.log('\nTesting postCcReply...')
+
+{
+  const calls = []
+  const web = {
+    chat: {
+      postMessage: async (p) => {
+        calls.push(p)
+        return { ok: true, ts: '103.0' }
+      }
+    }
+  }
+  const cc = 'cc <@U1> <@U2>'
+
+  const result = await postCcReply(
+    web, 'C001', '100.0', cc, 'brave/foo'
+  )
+
+  assert.equal(result.ts, '103.0', 'Should return the posted reply')
+  assert.equal(calls.length, 1, 'Should post exactly one reply')
+  assert.equal(calls[0].channel, 'C001', 'Should target the channel')
+  assert.equal(
+    calls[0].thread_ts, '100.0',
+    'The cc belongs to the parent thread'
+  )
+  assert.equal(
+    calls[0].username, 'dependabot',
+    'The cc is posted as the dependabot user'
+  )
+  assert.equal(
+    calls[0].text, cc,
+    'The cc is sent as raw mrkdwn text so mentions notify'
+  )
+  assert.equal(
+    JSON.stringify(calls[0].blocks),
+    JSON.stringify([{
+      type: 'section',
+      text: { type: 'mrkdwn', text: cc }
+    }]),
+    'The cc renders as a single mrkdwn section, unescaped'
+  )
+  assert.equal(
+    calls[0].metadata.event_type, CC_EVENT_TYPE,
+    'The reply is tagged with the cc event type'
+  )
+  assert.equal(
+    calls[0].metadata.event_payload.kind, 'cc',
+    'The reply payload is tagged as the completion marker'
+  )
+  assert.equal(
+    calls[0].metadata.event_payload.repo, 'brave/foo',
+    'The reply payload carries the repo'
+  )
+}
+console.log('  postCcReply: posts raw-text cc as the completing thread reply')
 
 console.log('\n✅ All nudgeThread tests passed!')

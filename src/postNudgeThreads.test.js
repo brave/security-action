@@ -109,9 +109,10 @@ function run (web, messages, opts = {}) {
 
 console.log('Testing postNudgeThreads...')
 
-// Test: a fresh repo gets a parent carrying the cc inline
-// (the thread's only notification), then one reply per
-// alert, and never a cc reply or a parent edit
+// Test: a fresh repo gets a parent without the cc (no
+// notification), then one reply per alert, then the parent
+// is edited to show the cc (edits never notify), and the
+// raw-text cc reply lands last as the single notification
 {
   const { web, calls } = buildMockWeb()
   await run(web, [])
@@ -134,8 +135,8 @@ console.log('Testing postNudgeThreads...')
     'The parent carries the summary'
   )
   assert.ok(
-    parentText.endsWith(`(${ccText})`),
-    'The parent carries the cc inline: its post is the single notification'
+    !parentText.includes('cc <@'),
+    'The parent is posted without the cc: its post must not notify'
   )
 
   const chunkPosts = calls.posted.filter(
@@ -152,19 +153,50 @@ console.log('Testing postNudgeThreads...')
     )
   }
 
+  const parentEdit = calls.updated.find(u => u.ts === PARENT_TS)
+  assert.ok(parentEdit, 'Should edit the parent to show the cc inline')
   assert.ok(
-    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
-    'No duplicate cc reply: the parent already shows it'
+    JSON.stringify(parentEdit.blocks).includes(ccText),
+    'The parent edit carries the mentions for the channel overview'
   )
+
+  const ccPost = calls.posted.find(
+    p => p.metadata?.event_payload?.kind === 'cc'
+  )
+  assert.ok(ccPost, 'Should post the cc reply')
+  assert.equal(ccPost.thread_ts, PARENT_TS, 'The cc is a thread reply')
+  assert.equal(ccPost.text, ccText, 'The cc is sent as raw text')
   assert.equal(
-    calls.updated.length, 0,
-    'The parent is complete at post time, no edit needed'
+    calls.sequence[calls.sequence.length - 1], 'post:cc',
+    'The cc completion marker is the last write'
+  )
+  assert.ok(
+    calls.sequence.indexOf(`update:${PARENT_TS}`) <
+      calls.sequence.indexOf('post:cc'),
+    'The parent must be finalized before the cc marker'
   )
 }
-console.log('  postNudgeThreads: parent with inline cc, one reply per alert')
+console.log('  postNudgeThreads: parent, per-alert replies, parent edit, cc last')
+
+// Test: a failed parent edit keeps the cc marker away so the
+// thread stays incomplete for the next run
+{
+  const { web, calls } = buildMockWeb({ updateFail: [PARENT_TS] })
+  await run(web, [])
+
+  assert.ok(
+    calls.posted.some(p => p.metadata?.event_payload?.kind === 'alerts'),
+    'Findings are posted before the parent edit'
+  )
+  assert.ok(
+    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
+    'A failed parent edit must not be marked complete'
+  )
+}
+console.log('  postNudgeThreads: no cc after a failed parent edit')
 
 // Test: an existing thread is refreshed in place, never
-// re-posted or re-pinged
+// re-posted, and completed with its cc reply
 {
   const parent = { ...parentMessage(), reply_count: 1 }
   const { web, calls } = buildMockWeb({
@@ -182,10 +214,14 @@ console.log('  postNudgeThreads: parent with inline cc, one reply per alert')
     calls.posted.filter(p => p.metadata?.event_type === PARENT_EVENT_TYPE).length, 0,
     'Should not post a second parent'
   )
-  assert.ok(
-    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
-    'No cc reply is ever posted'
+  const ccPost = calls.posted.find(
+    p => p.metadata?.event_payload?.kind === 'cc'
   )
+  assert.equal(
+    calls.posted.filter(p => p.metadata?.event_payload?.kind === 'cc').length, 1,
+    'The refreshed thread is completed with exactly one cc reply'
+  )
+  assert.equal(ccPost.thread_ts, PARENT_TS, 'The cc lands in the thread')
 }
 console.log('  postNudgeThreads: refreshes an existing thread in place')
 

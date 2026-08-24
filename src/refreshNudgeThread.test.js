@@ -94,7 +94,7 @@ console.log('\nTesting refreshNudgeThread...')
 {
   const { web, calls } = buildMockWeb()
   // Two multi-alert replies become one reply per alert, and
-  // the legacy cc reply is dropped once the parent shows it.
+  // the cc reply survives: it carries the notification.
   await refreshNudgeThread({
     web,
     channelId: 'C001',
@@ -133,12 +133,16 @@ console.log('\nTesting refreshNudgeThread...')
     'Should rewrite the second detail reply too'
   )
   assert.equal(
-    calls.posted.length, 1,
+    calls.posted.filter(p => p.metadata?.event_payload?.kind === 'alerts').length, 1,
     'The third alert needs a new reply'
   )
   assert.deepEqual(
-    calls.deleted, ['103.0'],
-    'Should drop the legacy cc reply once the parent shows it'
+    calls.deleted, [],
+    'The cc reply is kept: it is the thread\'s notification'
+  )
+  assert.ok(
+    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
+    'The cc reply already exists, none is posted'
   )
   assert.ok(
     !calls.updated.some(u => u.ts === '103.0'),
@@ -223,8 +227,8 @@ console.log('  refreshNudgeThread: omits criticals when none are left')
     'Appended replies must be tagged as findings, not a parent'
   )
   assert.ok(
-    calls.deleted.includes('103.0'),
-    'The legacy cc reply is dropped once the parent shows the mentions'
+    !calls.deleted.includes('103.0'),
+    'The cc reply survives the refresh'
   )
 }
 console.log('  refreshNudgeThread: appends when alerts grew')
@@ -262,7 +266,8 @@ console.log('  refreshNudgeThread: no-op without a thread')
 }
 console.log('  refreshNudgeThread: debug mode is read-only')
 
-// Test: an already-accurate thread is left untouched, so
+// Test: an already-accurate thread (inline-cc parent, one
+// reply per alert, cc reply present) is left untouched, so
 // routine runs don't rewrite every message
 {
   const alerts = [makeAlert(1)]
@@ -298,14 +303,16 @@ console.log('  refreshNudgeThread: debug mode is read-only')
     alerts
   })).touched
 
-  assert.equal(touched, 1, 'Only the redundant cc reply is touched')
+  assert.equal(touched, 0, 'An up-to-date thread is untouched')
   assert.equal(calls.updated.length, 0, 'Should issue no updates')
-  assert.deepEqual(calls.deleted, ['103.0'], 'Should drop the legacy cc reply')
+  assert.equal(calls.deleted.length, 0, 'Should issue no deletes')
+  assert.equal(calls.posted.length, 0, 'Should issue no posts')
 }
-console.log('  refreshNudgeThread: skips an up-to-date thread, dedupes the cc')
+console.log('  refreshNudgeThread: skips an up-to-date thread')
 
-// Test: a missing cc reply must not strip the existing parent
-// mentions before postNudgeThreads retries the reply.
+// Test: a missing cc reply (earlier partial failure) is
+// completed by the refresh, and the parent keeps its
+// mentions until the reply lands.
 {
   const parent = {
     ...parentMsg,
@@ -332,12 +339,18 @@ console.log('  refreshNudgeThread: skips an up-to-date thread, dedupes the cc')
     parentSummary(parentUpdate).includes(ccText),
     'Should preserve parent mentions when the cc reply is missing'
   )
+  const ccPost = calls.posted.find(
+    p => p.metadata?.event_payload?.kind === 'cc'
+  )
+  assert.ok(ccPost, 'Should complete the thread with the missing cc reply')
+  assert.equal(ccPost.thread_ts, parent.ts, 'The cc lands in the thread')
+  assert.equal(ccPost.text, ccText, 'The cc is sent as raw text')
 }
-console.log('  refreshNudgeThread: preserves parent cc pending reply retry')
+console.log('  refreshNudgeThread: completes a missing cc reply')
 
 // Test: threads written before the inline-cc format carry the
 // mentions in a standalone section block; refresh must still
-// extract and preserve them.
+// extract, preserve, and complete them with a cc reply.
 {
   const legacyParent = {
     ...parentMsg,
@@ -365,10 +378,14 @@ console.log('  refreshNudgeThread: preserves parent cc pending reply retry')
     parentSummary(parentUpdate).includes(ccText),
     'Should preserve legacy-format parent mentions'
   )
+  assert.ok(
+    calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
+    'Should complete a legacy thread missing its cc reply'
+  )
 }
 console.log('  refreshNudgeThread: preserves legacy parent cc')
 
-// Test: when the parent update fails, the legacy cc reply
+// Test: when the parent update fails, the cc reply
 // must survive: it is the only place the mentions notify
 // from until the parent write succeeds.
 {
@@ -389,42 +406,52 @@ console.log('  refreshNudgeThread: preserves legacy parent cc')
     !calls.deleted.includes('103.0'),
     'The cc reply must stay while the parent update fails'
   )
+  assert.ok(
+    !calls.posted.some(p => p.metadata?.event_payload?.kind === 'cc'),
+    'The cc reply exists already, none is posted'
+  )
 }
 console.log('  refreshNudgeThread: keeps the cc reply when the parent write fails')
 
-// Test: a thread already in the current format (inline cc
-// parent, one reply per alert, no cc reply) is left alone
+// Test: a missing cc reply is still delivered when the
+// parent update fails: the reply carries the mentions and
+// the notification on its own.
 {
-  const alerts = [makeAlert(1), makeAlert(2)]
-  const { message, total, critical } = buildRepoMessage({ alerts })
-  const chunks = chunkNudgeMessage(message)
-  const freshParent = {
+  const parent = {
     ...parentMsg,
     blocks: await buildParentBlocks({
-      repo: 'brave/foo', total, critical, cc: ccText
+      repo: 'brave/foo', total: 1, critical: 0, cc: ccText
     })
   }
   const { web, calls } = buildMockWeb([
-    freshParent,
-    ...await Promise.all(chunks.map(async (c, i) => ({
-      ts: `10${i + 1}.0`,
-      blocks: await messageToBlocks(c),
+    parent,
+    {
+      ts: '101.0',
       metadata: { event_payload: { repo: 'brave/foo', kind: 'alerts' } }
-    })))
+    }
   ])
-  const { touched, ok } = await refreshNudgeThread({
+  web.chat.update = async (p) => {
+    if (p.ts === '100.0') throw new Error('rate_limited')
+    calls.updated.push(p)
+    return { ok: true }
+  }
+  await refreshNudgeThread({
     web,
     channelId: 'C001',
-    messages: [freshParent],
+    messages: [parent],
     repoFullName: 'brave/foo',
-    alerts
+    alerts: [makeAlert(1)]
   })
-  assert.equal(ok, true)
-  assert.equal(touched, 0, 'A current-format thread is untouched')
-  assert.equal(calls.updated.length, 0)
-  assert.equal(calls.deleted.length, 0)
+  const ccPost = calls.posted.find(
+    p => p.metadata?.event_payload?.kind === 'cc'
+  )
+  assert.ok(
+    ccPost,
+    'The missing cc reply is posted even when the parent write fails'
+  )
+  assert.equal(ccPost.text, ccText, 'The cc is sent as raw text')
 }
-console.log('  refreshNudgeThread: leaves a current-format thread alone')
+console.log('  refreshNudgeThread: completes a missing cc despite a failed parent write')
 
 // Test: zero remaining alerts deletes the thread, replies
 // first so Slack does not leave placeholders

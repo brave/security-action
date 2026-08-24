@@ -8,6 +8,7 @@ import { messageToBlocks } from './sendSlackMessage.js'
 
 export const PARENT_EVENT_TYPE = 'dependabot-nudge-repo-parent'
 export const ALERTS_EVENT_TYPE = 'dependabot-nudge-alerts'
+export const CC_EVENT_TYPE = 'dependabot-nudge-cc'
 
 // Find the newest nudge parent for a repo among messages
 // already fetched from the channel. When weekId is given,
@@ -40,6 +41,35 @@ export async function postAlertReply (
     metadata: {
       event_type: ALERTS_EVENT_TYPE,
       event_payload: { repo: repoFullName, kind: 'alerts' }
+    }
+  })
+}
+
+// Post the maintainer cc as the thread's final reply. The cc
+// is sent as raw mrkdwn text rather than through the
+// markdown-to-blocks conversion, which escapes '<@U123>'
+// mentions and silently drops the notification. The reply is
+// the thread's single notification and doubles as its
+// completion marker, so it only lands once every other write
+// is known to have succeeded.
+export async function postCcReply (
+  web, channelId, parentTs, cc, repoFullName
+) {
+  return web.chat.postMessage({
+    channel: channelId,
+    thread_ts: parentTs,
+    username: 'dependabot',
+    text: cc,
+    link_names: true,
+    unfurl_links: true,
+    unfurl_media: true,
+    blocks: [{
+      type: 'section',
+      text: { type: 'mrkdwn', text: cc }
+    }],
+    metadata: {
+      event_type: CC_EVENT_TYPE,
+      event_payload: { repo: repoFullName, kind: 'cc' }
     }
   })
 }

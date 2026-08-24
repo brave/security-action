@@ -1,1 +1,14 @@
 * @brave/sec-team
+
+# Dependabot nudge thread pipeline
+/src/dependabotNudge.js @brave/sec-team @mschfh
+/src/dependabotNudge.test.js @brave/sec-team @mschfh
+/src/nudgeThread.js @brave/sec-team @mschfh
+/src/nudgeThread.test.js @brave/sec-team @mschfh
+/src/postNudgeThreads.js @brave/sec-team @mschfh
+/src/postNudgeThreads.test.js @brave/sec-team @mschfh
+/src/refreshNudgeThread.js @brave/sec-team @mschfh
+/src/refreshNudgeThread.test.js @brave/sec-team @mschfh
+/src/reconcileNudgeMessages.js @brave/sec-team @mschfh
+/src/reconcileNudgeMessages.test.js @brave/sec-team @mschfh
+/actions/dependabot-nudge/ @brave/sec-team @mschfh
