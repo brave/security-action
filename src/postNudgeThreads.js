@@ -3,18 +3,28 @@
 // orchestration is unit-testable without spinning GitHub
 // Actions.
 //
-// One thread per repo: the parent carries the counts and the
-// maintainer mentions inline, and each alert gets its own
-// reply. Posting the parent is the thread's single
-// notification: mentions in a posted message notify, mentions
-// added later by editing do not, and the replies never carry
-// mentions at all.
+// One thread per repo: the parent carries the counts, the
+// replies carry the findings, and the maintainers are tagged
+// in the final cc reply. Slack has no way to post a reply
+// without notifying, and a mention added by editing a
+// message notifies nobody, so the thread keeps to a single
+// ping: the parent is posted and the findings are laid down
+// without any mentions, the parent is then edited to show
+// the cc inline (edits never notify), and the cc reply is
+// posted last as the one notification.
+//
+// The cc reply doubles as the completion marker for the
+// week: it is only posted once every other write of the
+// thread is known to have succeeded, so a partial failure
+// stays recoverable on the next run instead of being
+// permanently marked complete.
 
 import { buildParentBlocks } from './dependabotNudge.js'
 import refreshNudgeThread from './refreshNudgeThread.js'
 import {
   findRepoParent,
   postAlertReply,
+  postCcReply,
   PARENT_EVENT_TYPE
 } from './nudgeThread.js'
 import {
@@ -67,8 +77,10 @@ export default async function postNudgeThreads ({
 
       // Existing thread: bring it in line with the current
       // alerts. The refresh rewrites the findings, corrects
-      // the counts, and drops the legacy cc reply; editing
-      // never re-notifies, so refreshing every run is free.
+      // the counts, and completes the thread by posting the
+      // cc reply when an earlier run failed to deliver it;
+      // editing never re-notifies, so refreshing every run
+      // is free.
       if (parent) {
         const { ok } = await refreshNudgeThread({
           web,
@@ -76,6 +88,7 @@ export default async function postNudgeThreads ({
           messages: [parent],
           repoFullName: repo,
           alerts,
+          providedCc: cc,
           debug
         })
         if (!ok) {
@@ -90,11 +103,9 @@ export default async function postNudgeThreads ({
 
       if (debug) { console.log(`creating thread for ${repo} ${weekId}`) }
 
-      // The parent is posted with the mentions already in
-      // place: this post is the one notification the thread
-      // sends. The blocks are built directly rather than from
-      // markdown so the <@U123> mention pills survive
-      // unescaped.
+      // The parent is posted as the summary and nothing else:
+      // no mentions, so the post notifies nobody. The mentions
+      // are added later by editing, which never re-notifies.
       const parentResult = await web.chat.postMessage({
         channel: channelId,
         username: 'dependabot',
@@ -103,7 +114,7 @@ export default async function postNudgeThreads ({
         unfurl_links: true,
         unfurl_media: true,
         blocks: await buildParentBlocks({
-          repo, total, critical, cc
+          repo, total, critical
         }),
         metadata: {
           event_type: PARENT_EVENT_TYPE,
@@ -123,6 +134,33 @@ export default async function postNudgeThreads ({
         await postAlertReply(web, channelId, parentTs, chunk, repo)
         await pace()
       }
+
+      // The parent is finalized before the cc reply: the
+      // mentions this edit adds notify nobody, but the thread
+      // must not be marked complete while this write can
+      // still fail.
+      try {
+        await web.chat.update({
+          channel: channelId,
+          ts: parentTs,
+          text: 'dependabot alert',
+          blocks: await buildParentBlocks({
+            repo, total, critical, cc
+          })
+        })
+      } catch (err) {
+        console.error(
+          `failed to add maintainers to parent for ${repo}: ${err.message}`
+        )
+        continue
+      }
+      await pace()
+
+      // Sent as raw text rather than blocks: the cc carries
+      // the mentions, so its post is the thread's single
+      // notification and its completion marker.
+      await postCcReply(web, channelId, parentTs, cc, repo)
+      await pace()
     } catch (error) {
       console.error(`failed to nudge ${repo}: ${error.message}`)
       if (debug) { console.log(error) }

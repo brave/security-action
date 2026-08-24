@@ -20,7 +20,7 @@ import {
   parentCcLine
 } from './dependabotNudge.js'
 import { messageToBlocks } from './sendSlackMessage.js'
-import { findRepoParent, postAlertReply } from './nudgeThread.js'
+import { findRepoParent, postAlertReply, postCcReply } from './nudgeThread.js'
 import {
   chunkNudgeMessage,
   fetchThreadReplies,
@@ -115,6 +115,9 @@ async function deleteThread ({
 // @param {object[]} opts.messages    - Channel history
 // @param {string} opts.repoFullName  - 'org/repo'
 // @param {object[]} opts.alerts      - Qualifying open alerts
+// @param {string} [opts.providedCc]  - This run's maintainer
+//   cc line, used when the thread carries none anywhere
+//   (an earlier run failed before the parent edit landed)
 // @param {boolean} [opts.debug]
 // @returns {Promise<{touched: number, ok: boolean}>}
 //   touched - messages written; ok - false when any write
@@ -126,6 +129,7 @@ export default async function refreshNudgeThread ({
   messages = [],
   repoFullName,
   alerts = [],
+  providedCc = null,
   debug = false
 }) {
   debug = debug === 'true' || debug === true
@@ -156,11 +160,10 @@ export default async function refreshNudgeThread ({
     })
   }
 
-  // Only the detail replies are rewritten. A legacy cc reply
-  // is handled after the parent update below: it carries the
-  // mentions, so it must survive until the parent shows
-  // them. Human replies in the thread are ignored the same
-  // way.
+  // Only the detail replies are rewritten. The cc reply is
+  // left alone: it carries the mentions and its content
+  // does not depend on which alerts are still open. Human
+  // replies in the thread are ignored the same way.
   const details = thread.filter(m =>
     m.ts !== parent.ts &&
     m.metadata?.event_payload?.kind === 'alerts'
@@ -169,10 +172,14 @@ export default async function refreshNudgeThread ({
     m.ts !== parent.ts &&
     m.metadata?.event_payload?.kind === 'cc'
   )
-  // The parent keeps its cc until the cc reply lands: reuse
-  // it when the reply is missing so the retry does not strip
-  // the mentions from the summary.
-  const cc = ccReply?.text || parentCcLine(parent.blocks)
+  // The parent keeps its cc until the cc reply lands: the
+  // posted reply is authoritative (it is what notified),
+  // then the parent's inline cc, then this run's cc line
+  // for threads whose earlier run failed before the parent
+  // edit landed.
+  const cc = ccReply?.text ||
+    parentCcLine(parent.blocks) ||
+    providedCc
 
   if (debug) {
     console.log(
@@ -257,7 +264,6 @@ export default async function refreshNudgeThread ({
   // Correct the count on the thread parent and keep the
   // maintainers visible in the channel overview. Editing
   // does not re-notify.
-  let parentOk = true
   try {
     const parentBlocks = await buildParentBlocks({
       repo: repoFullName, total, critical, cc
@@ -272,7 +278,6 @@ export default async function refreshNudgeThread ({
       touched++
     }
   } catch (err) {
-    parentOk = false
     ok = false
     console.error(
       `refresh: failed to update parent ts=${parent.ts}: ` +
@@ -280,21 +285,18 @@ export default async function refreshNudgeThread ({
     )
   }
 
-  // Threads posted before the parent carried the cc inline
-  // end with a 'cc' reply. It duplicates the parent's
-  // mentions now, so drop it once the parent is known to
-  // show them; keep it when the parent write failed so the
-  // mentions are never lost.
-  if (ccReply && cc && parentOk) {
+  // The cc reply is the thread's completion marker: when an
+  // earlier run failed to post it, complete the thread now
+  // so the maintainers still get their single ping.
+  if (!ccReply && cc) {
     try {
-      await web.chat.delete({
-        channel: channelId, ts: ccReply.ts
-      })
+      await postCcReply(web, channelId, parent.ts, cc, repoFullName)
       touched++
+      await pace()
     } catch (err) {
       ok = false
       console.error(
-        `refresh: failed to delete cc reply ts=${ccReply.ts}: ` +
+        `refresh: failed to post cc reply for ${repoFullName}: ` +
         err.message
       )
     }
