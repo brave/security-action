@@ -123,6 +123,8 @@ export function makeMockSlackWeb ({
  * - commitsByRepo: map 'owner/repo' -> commit arrays
  * - contentByPath: map 'owner/repo/path' -> string | object | { __error, message }
  * - requestHandler: fn(route, params) for github.request
+ * - commentsList: array for paginate(github.rest.issues.listComments)
+ * - pullCommits: array returned by rest.pulls.listCommits (data)
  * - extend: fn(github, rec) to add further endpoints
  */
 export function makeMockGithub ({
@@ -137,6 +139,8 @@ export function makeMockGithub ({
   commitsByRepo = {},
   contentByPath = {},
   requestHandler = null,
+  commentsList = null,
+  pullCommits = null,
   pullHeadSha = 'abc1234',
   extend
 } = {}) {
@@ -151,6 +155,7 @@ export function makeMockGithub ({
         if (url === github.rest.orgs.listMembers) return orgMembers ?? []
         if (url === github.rest.repos.listContributors) return contributorsByRepo[key] ?? []
         if (url === github.rest.repos.listCommits) return commitsByRepo[key] ?? []
+        if (url === github.rest.issues.listComments) return commentsList ?? []
         return []
       }
       if (key in alertsByRepo) return alertsByRepo[key]
@@ -200,6 +205,10 @@ export function makeMockGithub ({
         listFiles: async (params) => {
           rec.record('pulls.listFiles', params)
           return { data: [] }
+        },
+        listCommits: async (params) => {
+          rec.record('pulls.listCommits', params)
+          return { data: pullCommits ?? [] }
         }
       },
       issues: {
