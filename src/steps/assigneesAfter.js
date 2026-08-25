@@ -56,7 +56,7 @@ export default async function assigneesAfter ({
   ).map(
     e => e.comments.nodes[0].body
       .replace(/\n<!--(.*) -->\n/, '')
-      .replace(/.*<br>Cc(.*)/, '$1')
+      .replace(/.*<br>Cc([^<]*).*/, '$1')
       .replaceAll('@', '').trim().split(' ')
   ).flat())]
 
