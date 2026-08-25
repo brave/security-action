@@ -26,10 +26,10 @@ export const Severity = {
 //   - 'high' otherwise
 //
 // The nudge action (action.cjs) uses getDate() <= 7;
-// this helper replicates that logic exactly.
-export function nudgeSeverityForToday () {
-  const today = new Date()
-  return today.getDate() <= 7 ? 'medium' : 'high'
+// this helper replicates that logic exactly. An optional `date`
+// may be injected for testing.
+export function nudgeSeverityForToday (date = new Date()) {
+  return date.getDate() <= 7 ? 'medium' : 'high'
 }
 
 // Return the severity keys at or above `minlevel`.
