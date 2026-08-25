@@ -37,6 +37,21 @@ test = [
 [tool.pytest.ini_options]
 testpaths = ["assets/tests"]
 
+[tool.coverage.run]
+branch = true
+source = ["assets"]
+
+[tool.coverage.report]
+include = [
+    "assets/modelscan-audit.py",
+    "assets/npm-audit.py",
+    "assets/pip-audit.py",
+    "assets/scripttagextractor.py",
+]
+exclude_lines = [
+    "if __name__ == .__main__.:",
+]
+
 [tool.uv]
 # No python package is built from this repo; uv only manages the dependency
 # environment (uv.lock pins every version).

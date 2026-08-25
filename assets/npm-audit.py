@@ -7,7 +7,30 @@ import tempfile
 from os import environ, path
 
 
-def main():
+def find_lock_file_line(lock_file_lines, node_name):
+    """1-based line number of a package-lock.json entry for node_name.
+
+    Looks for `"node_name": {` first; when the node is nested under
+    node_modules/ and not found directly, retries with the prefix stripped.
+    Raises StopIteration when no entry matches.
+    """
+    search_for = f'"{node_name}": {{'
+    try:
+        return next(
+            lineno for lineno, line in enumerate(lock_file_lines)
+            if line.strip() == search_for
+        ) + 2
+    except StopIteration:
+        if not node_name.startswith("node_modules/"):
+            raise
+        search_for = f'"{node_name[len("node_modules/"):]}": {{'
+        return next(
+            lineno for lineno, line in enumerate(lock_file_lines)
+            if line.strip() == search_for
+        ) + 2
+
+
+def main(_run=subprocess.run, _which=shutil.which, _mkdtemp=tempfile.TemporaryDirectory, _copy=shutil.copy):
     with open(path.join(environ["SCRIPTPATH"], "all_changed_files.txt")) as all_changed_files:
         files = all_changed_files.read()
         changed_lock_files = [
@@ -16,14 +39,14 @@ def main():
         ]
     # Create temporary directory just for the package-lock.json file
     # without a parent directory containing package.json files
-    with tempfile.TemporaryDirectory(dir="../") as temp_dir:
+    with _mkdtemp(dir="../") as temp_dir:
         temp_file_path = path.join(temp_dir, 'package-lock.json')
         for lock_path in changed_lock_files:
             with open(lock_path) as lock_file:
                 lock_file_lines = lock_file.readlines()
-            shutil.copy(lock_path, temp_file_path)
-            process_output = subprocess.run(
-                [shutil.which("npm"), "audit", "--package-lock-only", "--json"],
+            _copy(lock_path, temp_file_path)
+            process_output = _run(
+                [_which("npm"), "audit", "--package-lock-only", "--json"],
                 cwd=temp_dir,
                 capture_output=True,
             )
@@ -34,22 +57,11 @@ def main():
                     via = vulnerability["via"][0]
                     source = via.get("url", "")
                     node_name = vulnerability["nodes"][0]
-                    search_for = f'"{node_name}": {{'
                     try:
-                        line = next(
-                            lineno for lineno, line in enumerate(lock_file_lines)
-                            if line.strip() == search_for
-                        ) + 2
+                        line = find_lock_file_line(lock_file_lines, node_name)
                     except StopIteration:
-                        if node_name.startswith("node_modules/"):
-                            search_for = f'"{node_name[len("node_modules/"):]}": {{'
-                            line = next(
-                                lineno for lineno, line in enumerate(lock_file_lines)
-                                if line.strip() == search_for
-                            ) + 2
-                        else:
-                            print("Cannot find", search_for, vulnerability, file=sys.stderr)
-                            raise
+                        print("Cannot find", f'"{node_name}": {{', vulnerability, file=sys.stderr)
+                        raise
                     if source:
                         source = f"<br /><br />See {source}"
                     print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}")
