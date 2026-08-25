@@ -66,8 +66,42 @@ pnpm exec standard --fix --ignore assets/opengrep_rules
 ### Testing
 
 ```bash
-pnpm test
+pnpm test          # node:test unit + property tests, then cucumber-js scenarios
+pnpm run test:bdd  # BDD scenarios only (features/*.feature)
+uv run --group test pytest  # Python pytest-bdd suite (assets/tests/)
 ```
+
+Tests are BDD-first: Gherkin features live in `features/`, step definitions in
+`features/step_definitions/` (shared world + mock factories in
+`features/support/world.js`), Python features in `assets/tests/features/` with
+steps in `assets/tests/step_defs/`. Property tests (fast-check for JS,
+Hypothesis for Python) live next to the suites as `*.property.test.js` and
+`assets/tests/test_properties.py`.
+
+### Coverage Gates
+
+CI (`.github/workflows/lint.yml`) enforces 80% lines and 80% branches:
+
+```bash
+pnpm run coverage    # JS: unit + BDD under c8, gate at 80/80
+pnpm run coverage:py # Python: pytest --cov + separate 80/80 gate
+```
+
+Scope: `src/**/*.js` (excluding `*.test.js`) and the four Python scanners in
+`assets/` (`modelscan-audit.py`, `npm-audit.py`, `pip-audit.py`,
+`scripttagextractor.py`).
+
+### Symbolic Verification (manual, not a CI gate)
+
+```bash
+bash scripts/symbolic/run-crosshair.sh  # CrossHair contracts for the Python scanners
+bash scripts/symbolic/run-expose.sh     # ExpoSE harnesses for pure src functions
+```
+
+Also available via the `symbolic verification` workflow_dispatch workflow.
+ExpoSE is best-effort: it vendors a 2019-era z3 fork that modern clang cannot
+compile (works on Linux with older GCC). The property suites remain the
+soundness gate.
 
 ### Rule Metadata Validation
 
