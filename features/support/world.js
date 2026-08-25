@@ -173,7 +173,7 @@ export function makeMockGithub ({
         getContent: async (params) => {
           rec.record('repos.getContent', params)
           const key = `${params.owner}/${params.repo}/${params.path}`
-          if (key in contentByPath) {
+          if (Object.prototype.hasOwnProperty.call(contentByPath, key)) {
             const val = contentByPath[key]
             if (val && val.__error) throw new Error(val.message || '404 Not Found')
             const text = typeof val === 'string' ? val : JSON.stringify(val)
