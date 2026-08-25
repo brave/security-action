@@ -247,7 +247,8 @@ export default async function cleanupSecurityActionMessages ({
   github = null,
   channel = '#secops-hotspots',
   debug = false,
-  defaultAssignees = []
+  defaultAssignees = [],
+  _web = null
 }) {
   if (!token) {
     throw new Error('token is required!')
@@ -264,7 +265,7 @@ export default async function cleanupSecurityActionMessages ({
 
   debug = debug === 'true' || debug === true
 
-  const web = await createSlackClient(token)
+  const web = _web || await createSlackClient(token)
 
   const channelId = await findChannelId(web, channel)
 

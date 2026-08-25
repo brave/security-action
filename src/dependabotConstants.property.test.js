@@ -10,13 +10,13 @@ const ORDERED = ['low', 'medium', 'high', 'critical']
 const levelArb = fc.constantFrom(...ORDERED)
 
 test('property: keys at or above always include the level itself', async () => {
-  await fc.assert(fc.property(levelArb, level => {
+  await fc.assert(fc.asyncProperty(levelArb, level => {
     assert.ok(severityKeysAbove(level).includes(level))
   }))
 })
 
 test('property: keys at or above form a contiguous suffix of the ordered levels', async () => {
-  await fc.assert(fc.property(levelArb, level => {
+  await fc.assert(fc.asyncProperty(levelArb, level => {
     const keys = severityKeysAbove(level)
     const expected = ORDERED.slice(ORDERED.indexOf(level))
     assert.deepEqual(keys, expected)
@@ -24,7 +24,7 @@ test('property: keys at or above form a contiguous suffix of the ordered levels'
 })
 
 test('property: numeric and string levels agree', async () => {
-  await fc.assert(fc.property(levelArb, level => {
+  await fc.assert(fc.asyncProperty(levelArb, level => {
     assert.deepEqual(severityKeysAbove(Severity[level]), severityKeysAbove(level))
   }))
 })
@@ -37,7 +37,7 @@ test('property: severity values strictly increase low -> critical', () => {
 })
 
 test('property: nudge severity is medium exactly within the first 7 days of the month', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.integer({ min: 2000, max: 2100 }),
     fc.integer({ min: 0, max: 11 }),
     fc.integer({ min: 1, max: 28 }),
@@ -50,7 +50,7 @@ test('property: nudge severity is medium exactly within the first 7 days of the 
 })
 
 test('property: nudge severity is always medium or high', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.integer({ min: 2000, max: 2100 }),
     fc.integer({ min: 0, max: 11 }),
     fc.integer({ min: 1, max: 28 }),

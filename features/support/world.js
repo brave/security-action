@@ -51,7 +51,8 @@ export function makeMockSlackWeb ({
   historyPages = null,
   repliesByTs = {},
   postMessageResult = { ts: '1234.5678' },
-  chatDeleteOk = true
+  chatDeleteOk = true,
+  chatDeleteFailFor = []
 } = {}) {
   const rec = new Recorder()
   const pages = channelPages.length ? channelPages : [[{ name: 'general', id: 'C001' }]]
@@ -95,7 +96,10 @@ export function makeMockSlackWeb ({
       },
       delete: async (params) => {
         rec.record('chat.delete', params)
-        return { ok: chatDeleteOk }
+        if (!chatDeleteOk || chatDeleteFailFor.includes(params.ts)) {
+          throw new Error('cant_delete_message')
+        }
+        return { ok: true }
       }
     }
   }
@@ -115,6 +119,7 @@ export function makeMockSlackWeb ({
 export function makeMockGithub ({
   alertsByRepo = {},
   graphqlBody = null,
+  graphqlHandler = null,
   propertyRepos = null,
   pullHeadSha = 'abc1234',
   extend
@@ -130,7 +135,8 @@ export function makeMockGithub ({
       return []
     },
     graphql: async (query, variables) => {
-      rec.record('graphql', { query: String(query).slice(0, 60), variables })
+      rec.record('graphql', { query: String(query), variables })
+      if (graphqlHandler) return graphqlHandler(String(query), variables)
       return graphqlBody || { repository: { pullRequest: { reviewThreads: { nodes: [] } } } }
     },
     rest: {
