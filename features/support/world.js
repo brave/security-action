@@ -1,4 +1,14 @@
-import { setWorldConstructor, World } from '@cucumber/cucumber'
+import { setWorldConstructor, World, defineParameterType } from '@cucumber/cucumber'
+
+// "2026-08-25" -> Date at local midnight (modules use local getDate())
+defineParameterType({
+  name: 'iso-date',
+  regexp: /\d{4}-\d{2}-\d{2}/,
+  transformer: (iso) => {
+    const [y, m, d] = iso.split('-').map(Number)
+    return new Date(y, m - 1, d)
+  }
+})
 
 /**
  * Shared test doubles for BDD step definitions.
