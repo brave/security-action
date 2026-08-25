@@ -7,7 +7,7 @@ export SCRIPTPATH
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 export SEC_ACTION_DEBUG=$SEC_ACTION_DEBUG
-ASSIGNEES=$(echo "$ASSIGNEES" | sed 's|\([^ ]\)|@\1|' | tr -s '\n' ' ')
+ASSIGNEES=$(echo "$ASSIGNEES" | sed 's|[^ ]\+|@&|g' | tr -s '\n' ' ')
 export ASSIGNEES
 
 RUNNERS="safesvg opengrep sveltegrep npm-audit pip-audit" # disabled: tfsec brakeman
