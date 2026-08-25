@@ -8,4 +8,8 @@ export SCRIPTPATH
 # Only check SVGs
 [[ "$1" == *".svg" ]] || exit 0
 
-xmllint --dtdvalid "$SCRIPTPATH/dtd/svg11-secure-flat.dtd" --noout "$1" 2>&1 | grep -v '^Document'
+OUT=$(xmllint --dtdvalid "$SCRIPTPATH/dtd/svg11-secure-flat.dtd" --noout "$1" 2>&1) || {
+    echo "$OUT"
+    exit 1
+}
+echo "$OUT" | grep -v '^Document'
