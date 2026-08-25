@@ -69,7 +69,7 @@ When('installing opengrep', async function () {
     _exec: this.exec,
     _download: this.download,
     _fs: this.fsx,
-    _homedir: () => HOME,
+    _binPath: BIN,
     _expectedSha256: this.wrongHash ? null : (this.scriptSha || null)
   }))
 })
