@@ -24,11 +24,14 @@ After(function () {
 })
 
 Given('a CODEOWNERS file only at {string}', function (location) {
+  if (!LOCATIONS.includes(location)) {
+    throw new Error(`unknown CODEOWNERS location: ${location}`)
+  }
   for (const loc of LOCATIONS) {
     const stale = path.join(this.workspace, loc)
     fs.rmSync(stale, { force: true })
   }
-  const target = path.join(this.workspace, location)
+  const target = `${this.workspace}/${location}`
   fs.mkdirSync(path.dirname(target), { recursive: true })
   fs.writeFileSync(target, '* @someone\n')
 })
