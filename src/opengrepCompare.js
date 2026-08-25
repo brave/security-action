@@ -21,11 +21,11 @@ function execCommand (command, options = {}) {
   }
 }
 
-function getChangedRuleFiles (actionPath, baseRef) {
+function getChangedRuleFiles (actionPath, baseRef, exec = execCommand) {
   console.log(`Detecting changed rule files between current branch and ${baseRef}...`)
 
   // Get modified, added, renamed rule files (paths relative to repo root)
-  const diffOutput = execCommand(
+  const diffOutput = exec(
     `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/opengrep_rules/`,
     { cwd: actionPath }
   )
@@ -43,7 +43,7 @@ function getChangedRuleFiles (actionPath, baseRef) {
   return changedFiles
 }
 
-async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
+async function runOpengrep (rulesPath, targetPath = '.', specificRules = null, exec = execCommand) {
   console.log(`Looking for rules in: ${rulesPath}`)
 
   let ruleFiles
@@ -61,7 +61,7 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
     }).join(' ')
   } else {
     // Find all rule files, excluding test files and generated rules
-    ruleFiles = execCommand(
+    ruleFiles = exec(
       `find ${rulesPath} -name '*.yml' -or -name '*.yaml' | grep -v '\\.test\\.' | grep -v '/generated/'`
     ).split('\n').filter(f => f.trim())
 
@@ -83,7 +83,7 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
   // Change working directory to rulesPath so relative paths work correctly
   const command = `cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`
 
-  const output = execCommand(command, { maxBuffer: 50 * 1024 * 1024 })
+  const output = exec(command, { maxBuffer: 50 * 1024 * 1024 })
 
   try {
     return JSON.parse(output)
@@ -94,7 +94,7 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null) {
   }
 }
 
-function groupFindingsByRule (results, basePath = null) {
+export function groupFindingsByRule (results, basePath = null) {
   const grouped = {}
 
   for (const result of results) {
@@ -120,7 +120,7 @@ function groupFindingsByRule (results, basePath = null) {
   return grouped
 }
 
-function calculateDelta (baseGrouped, currentGrouped) {
+export function calculateDelta (baseGrouped, currentGrouped) {
   const delta = {
     newRules: [], // Rules that only exist in current
     newFindings: {}, // Additional findings in existing rules
@@ -173,6 +173,7 @@ export default async function opengrepCompare (options = {}) {
   const baseRef = options['base-ref'] || options.base_ref || 'main'
   const compareRules = options['compare-rules'] !== false // Default true
   const changedRulesOnly = options['changed-rules-only'] !== false // Default true
+  const exec = options._exec || execCommand
 
   const actionPath = path.join(__dirname, '..')
 
@@ -184,7 +185,7 @@ export default async function opengrepCompare (options = {}) {
   let changedRuleFilesRelative = null
   if (changedRulesOnly) {
     try {
-      changedRuleFilesRelative = getChangedRuleFiles(actionPath, baseRef)
+      changedRuleFilesRelative = getChangedRuleFiles(actionPath, baseRef, exec)
       if (!changedRuleFilesRelative || changedRuleFilesRelative.length === 0) {
         console.log('\n⚠️  No rule files changed. Nothing to scan.')
         return {
@@ -218,15 +219,15 @@ export default async function opengrepCompare (options = {}) {
   } else if (targetRepo) {
     console.log(`Target repository: ${targetRepo}`)
     tempDir = path.join('/tmp', `opengrep-scan-${Date.now()}`)
-    execCommand(`mkdir -p ${tempDir}`)
+    exec(`mkdir -p ${tempDir}`)
     console.log(`Cloning ${targetRepo} (shallow clone)...`)
-    execCommand(`git clone --depth 1 https://github.com/${targetRepo}.git ${tempDir}`)
+    exec(`git clone --depth 1 https://github.com/${targetRepo}.git ${tempDir}`)
     scanPath = targetPath ? path.join(tempDir, targetPath) : tempDir
     shouldCleanup = true
 
     // Detect the default branch of the target repo
     try {
-      targetRepoDefaultBranch = execCommand(`git -C ${tempDir} rev-parse --abbrev-ref HEAD`)
+      targetRepoDefaultBranch = exec(`git -C ${tempDir} rev-parse --abbrev-ref HEAD`)
       console.log(`Target repo default branch: ${targetRepoDefaultBranch}`)
     } catch (e) {
       console.warn('Failed to detect target repo default branch, defaulting to "main"')
@@ -247,7 +248,7 @@ export default async function opengrepCompare (options = {}) {
   // Create worktree for current branch (to avoid uncommitted changes)
   currentWorktree = path.join('/tmp', `opengrep-rules-current-${Date.now()}`)
   try {
-    execCommand(`git worktree add ${currentWorktree} HEAD`, { cwd: actionPath })
+    exec(`git worktree add ${currentWorktree} HEAD`, { cwd: actionPath })
   } catch (e) {
     console.error('\n❌ Failed to create current worktree')
     console.error('Error:', e.message)
@@ -276,13 +277,13 @@ export default async function opengrepCompare (options = {}) {
     // Create worktree for base branch rules
     baseWorktree = path.join('/tmp', `opengrep-rules-base-${Date.now()}`)
     try {
-      execCommand(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
+      exec(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
     } catch (e) {
       // Try fetching first if worktree fails
       console.log(`Fetching ${baseRef}...`)
       try {
-        execCommand(`git fetch origin ${baseRef}`, { cwd: actionPath })
-        execCommand(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
+        exec(`git fetch origin ${baseRef}`, { cwd: actionPath })
+        exec(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
       } catch (fetchError) {
         console.error('\n❌ Failed to create base branch worktree')
         console.error('This usually means the base branch is not available.')
@@ -304,7 +305,7 @@ export default async function opengrepCompare (options = {}) {
       }).filter(f => {
         // Only include files that exist in base branch
         try {
-          execCommand(`test -f "${f}"`)
+          exec(`test -f "${f}"`)
           return true
         } catch {
           console.log(`  Skipping ${path.basename(f)} (new file, doesn't exist in base)`)
@@ -320,7 +321,7 @@ export default async function opengrepCompare (options = {}) {
       baseResults = { results: [], errors: [] }
       baseGrouped = {}
     } else {
-      baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles)
+      baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles, exec)
       baseGrouped = groupFindingsByRule(baseResults.results, tempDir)
     }
 
@@ -332,7 +333,7 @@ export default async function opengrepCompare (options = {}) {
   console.log('Scanning with CURRENT branch rules (HEAD)')
   console.log('='.repeat(60))
 
-  const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles)
+  const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles, exec)
   const currentGrouped = groupFindingsByRule(currentResults.results, tempDir)
 
   console.log(`Current branch findings: ${currentResults.results.length}`)
@@ -415,17 +416,17 @@ export default async function opengrepCompare (options = {}) {
   // Cleanup
   if (currentWorktree) {
     console.log('\nCleaning up current branch worktree...')
-    execCommand(`git worktree remove ${currentWorktree}`, { cwd: actionPath })
+    exec(`git worktree remove ${currentWorktree}`, { cwd: actionPath })
   }
 
   if (baseWorktree) {
     console.log('Cleaning up base branch worktree...')
-    execCommand(`git worktree remove ${baseWorktree}`, { cwd: actionPath })
+    exec(`git worktree remove ${baseWorktree}`, { cwd: actionPath })
   }
 
   if (shouldCleanup && tempDir) {
     console.log('Cleaning up target repository...')
-    execCommand(`rm -rf ${tempDir}`)
+    exec(`rm -rf ${tempDir}`)
   }
 
   console.log('\n' + '='.repeat(60))

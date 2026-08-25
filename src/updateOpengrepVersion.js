@@ -90,8 +90,8 @@ function calculateSHA256 (buffer) {
 /**
  * Get current version from installOpengrep.js
  */
-function getCurrentVersion () {
-  const content = fs.readFileSync(INSTALL_SCRIPT, 'utf-8')
+function getCurrentVersion (fsx) {
+  const content = fsx.readFileSync(INSTALL_SCRIPT, 'utf-8')
   const match = content.match(/const OPENGREP_VERSION = '(v[\d.]+)'/)
   return match ? match[1] : null
 }
@@ -99,8 +99,8 @@ function getCurrentVersion () {
 /**
  * Update version and hash in installOpengrep.js
  */
-function updateInstallScript (version, sha256Hash) {
-  let content = fs.readFileSync(INSTALL_SCRIPT, 'utf-8')
+function updateInstallScript (version, sha256Hash, fsx) {
+  let content = fsx.readFileSync(INSTALL_SCRIPT, 'utf-8')
 
   // Update version
   content = content.replace(
@@ -114,22 +114,35 @@ function updateInstallScript (version, sha256Hash) {
     `const EXPECTED_SHA256 = '${sha256Hash}'`
   )
 
-  fs.writeFileSync(INSTALL_SCRIPT, content)
+  fsx.writeFileSync(INSTALL_SCRIPT, content)
   console.log(`✓ Updated ${path.relative(path.join(__dirname, '..'), INSTALL_SCRIPT)}`)
 }
 
 /**
  * Main update function
+ *
+ * Test seams (all optional, default to real implementations):
+ * - _fetchRelease: replaces fetchLatestRelease (-> release object)
+ * - _download: replaces downloadFile (url -> Buffer)
+ * - _fs: replaces fs (readFileSync/writeFileSync)
  */
-export default async function updateOpengrepVersion () {
+export default async function updateOpengrepVersion ({
+  _fetchRelease = null,
+  _download = null,
+  _fs = null
+} = {}) {
+  const fetchRelease = _fetchRelease || fetchLatestRelease
+  const download = _download || downloadFile
+  const fsx = _fs || fs
+
   try {
     console.log('Fetching latest opengrep release...')
-    const release = await fetchLatestRelease()
+    const release = await fetchRelease()
     const latestVersion = release.tag_name
 
     console.log(`Latest version: ${latestVersion}`)
 
-    const currentVersion = getCurrentVersion()
+    const currentVersion = getCurrentVersion(fsx)
     console.log(`Current version: ${currentVersion}`)
 
     if (currentVersion === latestVersion) {
@@ -149,13 +162,13 @@ export default async function updateOpengrepVersion () {
     const installScriptUrl = 'https://raw.githubusercontent.com/opengrep/opengrep/0b445193f95b14b828bc3ede8fea9725feb45e64/install.sh'
     console.log(`Downloading pinned install script from ${installScriptUrl}...`)
 
-    const scriptContent = await downloadFile(installScriptUrl)
+    const scriptContent = await download(installScriptUrl)
     const sha256Hash = calculateSHA256(scriptContent)
 
     console.log(`Calculated SHA256: ${sha256Hash}`)
 
     // Update file
-    updateInstallScript(latestVersion, sha256Hash)
+    updateInstallScript(latestVersion, sha256Hash, fsx)
 
     console.log('\n✓ File updated successfully!')
 
