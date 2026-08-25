@@ -14,4 +14,7 @@ if [ ! -f "$CONTRACTS" ]; then
   exit 0
 fi
 
-uv run --with crosshair python -m crosshair check "$CONTRACTS"
+# crosshair-tool is the symbolic-execution engine (PyPI package name;
+# the similarly named "crosshair" package is an unrelated SSH tool).
+# Contracts use PEP316 "post: retval" docstrings.
+uv run --with crosshair-tool crosshair check "$CONTRACTS"
