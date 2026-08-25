@@ -233,6 +233,7 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
+coverage.json
 nosetests.xml
 coverage.xml
 *.cover

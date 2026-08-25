@@ -9,13 +9,13 @@
     "lint-fix": "standard --fix --ignore assets/opengrep_rules",
     "lint-rules": "node src/checkRuleMetadata.js",
     "shellcheck": "shellcheck $(git ls-files '*.sh')",
-    "test:unit": "node --test 'src/**/*.test.js' && python3 assets/modelscan-audit.test.py",
+    "test:unit": "node --test 'src/**/*.test.js'",
     "test:bdd": "cucumber-js",
     "test:py": "uv run --group test pytest",
     "test": "pnpm run test:unit && pnpm run test:bdd",
     "coverage:unit": "c8 --no-clean --include 'src/**/*.js' --exclude 'src/**/*.test.js' node --test 'src/**/*.test.js'",
     "coverage:bdd": "c8 --no-clean --include 'src/**/*.js' --exclude 'src/**/*.test.js' cucumber-js",
-    "coverage:py": "uv run --group test pytest --cov --cov-fail-under=80",
+    "coverage:py": "uv run --group test pytest --cov && uv run --group test coverage json && uv run --group test python scripts/check_py_coverage.py",
     "coverage": "rm -rf coverage && pnpm run coverage:unit && pnpm run coverage:bdd && c8 report --check-coverage --lines 80 --branches 80"
   },
   "dependencies": {
