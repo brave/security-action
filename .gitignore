@@ -639,3 +639,5 @@ tags
 ### Some Rules are nonredist, avoid including them ###
 nonredist/
 assets/opengrep_rules/generated/nonredist/
+# local scratch (ExpoSE clones, symbolic harnesses)
+/tmp/

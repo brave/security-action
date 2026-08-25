@@ -25,6 +25,17 @@ modelscan = [
 # ~685MB with transitive deps — synced only when the PR actually touches
 # such files (or SEC_ACTION_MODELSCAN_HEAVY is set).
 tensorflow = ["tensorflow>=2.10"]
+# test group: pytest-bdd + property/symbolic verification tooling for the
+# Python scanners (run via `uv run --group test pytest`).
+test = [
+    "pytest>=8",
+    "pytest-bdd>=7",
+    "pytest-cov>=5",
+    "hypothesis>=6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["assets/tests"]
 
 [tool.uv]
 # No python package is built from this repo; uv only manages the dependency
