@@ -49,15 +49,15 @@ function calculateSHA256 (buffer) {
 /**
  * Check if opengrep is already installed and working
  */
-function isOpengrepInstalled () {
+function isOpengrepInstalled (exec, fsx, homedir) {
   try {
-    const opengrepBin = path.join(os.homedir(), '.opengrep', 'cli', 'latest', 'opengrep')
-    if (!fs.existsSync(opengrepBin)) {
+    const opengrepBin = path.join(homedir(), '.opengrep', 'cli', 'latest', 'opengrep')
+    if (!fsx.existsSync(opengrepBin)) {
       return false
     }
 
     // Verify it runs and reports the correct version
-    const output = execSync(`"${opengrepBin}" --version`, { encoding: 'utf-8' }).trim()
+    const output = exec(`"${opengrepBin}" --version`, { encoding: 'utf-8' }).trim()
     console.log(`Found existing opengrep: ${output}`)
     return output.includes(OPENGREP_VERSION.replace('v', ''))
   } catch (error) {
@@ -67,18 +67,37 @@ function isOpengrepInstalled () {
 
 /**
  * Main installation function
+ *
+ * Test seams (all optional, default to real implementations):
+ * - _exec: replaces execSync (command -> output)
+ * - _download: replaces downloadFile (url -> Buffer)
+ * - _fs: replaces fs (existsSync/appendFileSync/writeFileSync/unlinkSync)
+ * - _homedir: replaces os.homedir
+ * - _expectedSha256: overrides the pinned hash expectation
  */
-export default async function installOpengrep () {
+export default async function installOpengrep ({
+  _exec = null,
+  _download = null,
+  _fs = null,
+  _homedir = null,
+  _expectedSha256 = null
+} = {}) {
+  const exec = _exec || ((command, opts) => execSync(command, opts))
+  const download = _download || downloadFile
+  const fsx = _fs || fs
+  const homedir = _homedir || (() => os.homedir())
+  const expectedSha256 = _expectedSha256 || EXPECTED_SHA256
+
   // Add to PATH regardless (needed for subsequent steps)
-  const opengrepPath = path.join(os.homedir(), '.opengrep', 'cli', 'latest')
+  const opengrepPath = path.join(homedir(), '.opengrep', 'cli', 'latest')
   const githubPath = process.env.GITHUB_PATH
 
   if (githubPath) {
-    fs.appendFileSync(githubPath, `${opengrepPath}\n`)
+    fsx.appendFileSync(githubPath, `${opengrepPath}\n`)
   }
 
   // Check if already installed
-  if (isOpengrepInstalled()) {
+  if (isOpengrepInstalled(exec, fsx, homedir)) {
     console.log(`✓ Opengrep ${OPENGREP_VERSION} already installed, skipping download`)
     return
   }
@@ -87,15 +106,15 @@ export default async function installOpengrep () {
   console.log(`URL: ${INSTALL_SCRIPT_URL}`)
 
   // Download install script
-  const scriptContent = await downloadFile(INSTALL_SCRIPT_URL)
+  const scriptContent = await download(INSTALL_SCRIPT_URL)
   console.log(`Downloaded ${scriptContent.length} bytes`)
 
   // Verify SHA256 hash
   const actualSHA256 = calculateSHA256(scriptContent)
-  console.log(`Expected SHA256: ${EXPECTED_SHA256}`)
+  console.log(`Expected SHA256: ${expectedSha256}`)
   console.log(`Actual SHA256:   ${actualSHA256}`)
 
-  if (actualSHA256 !== EXPECTED_SHA256) {
+  if (actualSHA256 !== expectedSha256) {
     throw new Error('SHA256 hash mismatch! Install script may have been tampered with.')
   }
 
@@ -104,13 +123,13 @@ export default async function installOpengrep () {
   // Write script to temporary file
   const tmpDir = os.tmpdir()
   const scriptPath = path.join(tmpDir, `opengrep-install-${Date.now()}.sh`)
-  fs.writeFileSync(scriptPath, scriptContent, { mode: 0o755 })
+  fsx.writeFileSync(scriptPath, scriptContent, { mode: 0o755 })
 
   console.log(`Executing install script to install ${OPENGREP_VERSION}...`)
 
   try {
     // Execute install script with version parameter
-    execSync(`bash "${scriptPath}" -v ${OPENGREP_VERSION}`, {
+    exec(`bash "${scriptPath}" -v ${OPENGREP_VERSION}`, {
       stdio: 'inherit',
       env: process.env
     })
@@ -118,6 +137,6 @@ export default async function installOpengrep () {
     console.log('✓ Opengrep installed successfully')
   } finally {
     // Clean up temporary script
-    fs.unlinkSync(scriptPath)
+    fsx.unlinkSync(scriptPath)
   }
 }

@@ -263,6 +263,69 @@ export function makeMockSpawn (result = { stdout: '', stderr: '' }) {
   return spawn
 }
 
+/**
+ * Fake exec seam for modules accepting an _exec injection.
+ * handler(command, options) returns a string; throwing simulates command
+ * failure. All commands recorded on exec.__recorder.
+ */
+export function makeMockExec (handler) {
+  const rec = new Recorder()
+  const exec = (command, options = {}) => {
+    rec.record('exec', { command, options })
+    return handler(command, options)
+  }
+  exec.__recorder = rec
+  return exec
+}
+
+/**
+ * In-memory fs seam: readFileSync / writeFileSync / appendFileSync /
+ * existsSync / unlinkSync. Files map is shared (mutable) so writes are
+ * later visible to reads. All calls recorded on fs.__recorder.
+ */
+export function makeMockFs (files = {}) {
+  const rec = new Recorder()
+  const key = (p) => String(p)
+  const fsx = {
+    __recorder: rec,
+    __files: files,
+    readFileSync: (p, enc) => {
+      rec.record('readFileSync', { path: key(p), enc })
+      if (!(key(p) in files)) throw new Error(`ENOENT: ${key(p)}`)
+      return files[key(p)]
+    },
+    writeFileSync: (p, content, opts) => {
+      rec.record('writeFileSync', { path: key(p), content, opts })
+      files[key(p)] = content
+    },
+    appendFileSync: (p, content) => {
+      rec.record('appendFileSync', { path: key(p), content })
+      files[key(p)] = (files[key(p)] || '') + content
+    },
+    existsSync: (p) => {
+      rec.record('existsSync', { path: key(p) })
+      return key(p) in files
+    },
+    unlinkSync: (p) => {
+      rec.record('unlinkSync', { path: key(p) })
+      delete files[key(p)]
+    }
+  }
+  return fsx
+}
+
+/** Fake download seam: async () -> Buffer, or throws when fail is set. */
+export function makeMockDownload (content = 'fixture', { fail = null } = {}) {
+  const rec = new Recorder()
+  const download = async (url) => {
+    rec.record('download', { url })
+    if (fail) throw new Error(fail)
+    return Buffer.from(content)
+  }
+  download.__recorder = rec
+  return download
+}
+
 class CustomWorld extends World {
   constructor (options) {
     super(options)
@@ -288,6 +351,9 @@ Object.assign(CustomWorld.prototype, {
   makeMockContext,
   makeMockCore,
   makeMockSpawn,
+  makeMockExec,
+  makeMockFs,
+  makeMockDownload,
   Recorder
 })
 
