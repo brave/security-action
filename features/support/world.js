@@ -108,19 +108,35 @@ export function makeMockSlackWeb ({
 
 /**
  * Fake Octokit instance covering the patterns used by src modules:
- * paginate (Dependabot alerts / repo properties), graphql (review threads,
- * timelines) and a few rest endpoints. All calls recorded on github.__recorder.
+ * paginate (Dependabot alerts / repo properties / org endpoints), graphql
+ * (review threads, timelines), repos.getContent and generic request.
+ * All calls recorded on github.__recorder.
  *
  * - alertsByRepo: map 'owner/repo' -> array of alert objects
+ * - orgAlerts: array returned for 'GET /orgs/{org}/dependabot/alerts'
  * - graphqlBody: object returned by every graphql call
+ * - graphqlHandler: fn(query, variables) overriding graphqlBody
  * - propertyRepos: array returned for org custom-property pagination
+ * - reposList: array for paginate(github.rest.repos.listForOrg)
+ * - orgMembers: array for paginate(github.rest.orgs.listMembers)
+ * - contributorsByRepo: map 'owner/repo' -> contributor arrays
+ * - commitsByRepo: map 'owner/repo' -> commit arrays
+ * - contentByPath: map 'owner/repo/path' -> string | object | { __error, message }
+ * - requestHandler: fn(route, params) for github.request
  * - extend: fn(github, rec) to add further endpoints
  */
 export function makeMockGithub ({
   alertsByRepo = {},
+  orgAlerts = null,
   graphqlBody = null,
   graphqlHandler = null,
   propertyRepos = null,
+  reposList = null,
+  orgMembers = null,
+  contributorsByRepo = {},
+  commitsByRepo = {},
+  contentByPath = {},
+  requestHandler = null,
   pullHeadSha = 'abc1234',
   extend
 } = {}) {
@@ -130,9 +146,22 @@ export function makeMockGithub ({
     paginate: async (url, opts = {}) => {
       rec.record('paginate', { url: String(url), opts })
       const key = `${opts.owner}/${opts.repo}`
+      if (typeof url === 'function') {
+        if (url === github.rest.repos.listForOrg) return reposList ?? []
+        if (url === github.rest.orgs.listMembers) return orgMembers ?? []
+        if (url === github.rest.repos.listContributors) return contributorsByRepo[key] ?? []
+        if (url === github.rest.repos.listCommits) return commitsByRepo[key] ?? []
+        return []
+      }
       if (key in alertsByRepo) return alertsByRepo[key]
+      if (orgAlerts !== null && String(url).includes('orgs/{org}/dependabot/alerts')) return orgAlerts
       if (propertyRepos !== null && String(url).includes('properties/values')) return propertyRepos
       return []
+    },
+    request: async (route, params = {}) => {
+      rec.record('request', { route: String(route), params })
+      if (requestHandler) return requestHandler(String(route), params)
+      return { status: 204, data: {} }
     },
     graphql: async (query, variables) => {
       rec.record('graphql', { query: String(query), variables })
@@ -140,6 +169,25 @@ export function makeMockGithub ({
       return graphqlBody || { repository: { pullRequest: { reviewThreads: { nodes: [] } } } }
     },
     rest: {
+      repos: {
+        getContent: async (params) => {
+          rec.record('repos.getContent', params)
+          const key = `${params.owner}/${params.repo}/${params.path}`
+          if (key in contentByPath) {
+            const val = contentByPath[key]
+            if (val && val.__error) throw new Error(val.message || '404 Not Found')
+            const text = typeof val === 'string' ? val : JSON.stringify(val)
+            return { data: { content: Buffer.from(text).toString('base64') } }
+          }
+          throw new Error('404 Not Found')
+        },
+        listForOrg: async () => ({ data: [] }),
+        listContributors: async () => ({ data: [] }),
+        listCommits: async () => ({ data: [] })
+      },
+      orgs: {
+        listMembers: async () => ({ data: [] })
+      },
       pulls: {
         get: async (params) => {
           rec.record('pulls.get', params)
@@ -198,7 +246,8 @@ export function makeMockCore () {
     error: (msg) => rec.record('error', { msg }),
     notice: (msg) => rec.record('notice', { msg }),
     setFailed: (msg) => rec.record('setFailed', { msg }),
-    setOutput: (name, value) => rec.record('setOutput', { name, value })
+    setOutput: (name, value) => rec.record('setOutput', { name, value }),
+    setSecret: (value) => rec.record('setSecret', { value })
   }
   return core
 }
