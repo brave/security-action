@@ -47,7 +47,8 @@ export async function listSlackMessageRepos ({
   channel = null,
   username = null,
   debug = false,
-  lookbackDays = 8
+  lookbackDays = 8,
+  _web = null
 }) {
   if (!token || !channel || !username) {
     throw new Error(
@@ -58,7 +59,7 @@ export async function listSlackMessageRepos ({
   debug = debug === 'true' || debug === true
 
   const { messages } = await prepareSlackContext(
-    token, channel, lookbackDays
+    token, channel, lookbackDays, _web
   )
 
   const repos = new Set()
@@ -97,7 +98,8 @@ export default async function deleteSlackMessages ({
   username = null,
   repos = [],
   debug = false,
-  lookbackDays = 8
+  lookbackDays = 8,
+  _web = null
 }) {
   if (!token) throw new Error('token is required!')
   if (!channel) {
@@ -113,7 +115,7 @@ export default async function deleteSlackMessages ({
 
   const { web, channelId, messages } =
     await prepareSlackContext(
-      token, channel, lookbackDays
+      token, channel, lookbackDays, _web
     )
 
   const toDelete = messages.filter(m => {

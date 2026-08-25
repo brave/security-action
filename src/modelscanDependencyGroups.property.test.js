@@ -28,7 +28,7 @@ const groupsFor = (changedFiles, modelscanEnabled, env) => modelscanDependencyGr
 })
 
 test('property: result only contains known groups', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.array(fc.oneof(normalFileArb, modelFileArb, tfFileArb), { maxLength: 10 }),
     enabledArb,
     envArb,
@@ -40,7 +40,7 @@ test('property: result only contains known groups', async () => {
 })
 
 test('property: tensorflow never appears without modelscan', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.array(fc.oneof(normalFileArb, modelFileArb, tfFileArb), { maxLength: 10 }),
     enabledArb,
     envArb,
@@ -55,7 +55,7 @@ test('property: tensorflow never appears without modelscan', async () => {
 })
 
 test('property: no model files and no heavy env yields no groups', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.array(normalFileArb, { maxLength: 10 }),
     enabledArb,
     (files, enabled) => {
@@ -65,7 +65,7 @@ test('property: no model files and no heavy env yields no groups', async () => {
 })
 
 test('property: heavy env forces both groups unless modelscan is disabled', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.array(fc.oneof(normalFileArb, modelFileArb), { maxLength: 10 }),
     fc.constantFrom('all', 'pickle', 'keras', 'saved_model', '', 'anything'),
     fc.constantFrom('1', 'true', 'yes'),
@@ -76,7 +76,7 @@ test('property: heavy env forces both groups unless modelscan is disabled', asyn
 })
 
 test('property: modelscan "false" yields no groups even for model files and heavy env', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.array(fc.oneof(modelFileArb, tfFileArb), { maxLength: 10 }),
     fc.constantFrom('1', 'true', 'yes'),
     (files, heavy) => {
@@ -86,7 +86,7 @@ test('property: modelscan "false" yields no groups even for model files and heav
 })
 
 test('property: suffix detection is case-insensitive', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     fc.constantFrom(...MODEL_SUFFIXES, ...TF_SUFFIXES),
     normalFileArb,
     (suffix, prefix) => {
@@ -98,7 +98,7 @@ test('property: suffix detection is case-insensitive', async () => {
 })
 
 test('property: any model-suffixed file yields at least the modelscan group', async () => {
-  await fc.assert(fc.property(
+  await fc.assert(fc.asyncProperty(
     modelFileArb,
     fc.constantFrom('all', 'pickle', 'keras', 'saved_model'),
     (file, enabled) => {
