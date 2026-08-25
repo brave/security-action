@@ -261,10 +261,11 @@ export function makeMockCore () {
   return core
 }
 
-/** Fixed-result spawn replacement for modules accepting an _spawn seam. */
+/** Fixed-result spawn replacement for modules accepting an _spawn seam.
+ *  Sync like child_process.spawnSync — the result is returned, not awaited. */
 export function makeMockSpawn (result = { stdout: '', stderr: '' }) {
   const rec = new Recorder()
-  const spawn = async (...args) => {
+  const spawn = (...args) => {
     rec.record('spawn', { args })
     return result
   }
