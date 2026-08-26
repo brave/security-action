@@ -8,6 +8,7 @@
     "lint": "standard --ignore assets/opengrep_rules",
     "lint-fix": "standard --fix --ignore assets/opengrep_rules",
     "lint-rules": "node src/checkRuleMetadata.js",
+    "shellcheck": "shellcheck $(git ls-files '*.sh')",
     "test": "node --test 'src/**/*.test.js' && python3 assets/modelscan-audit.test.py"
   },
   "dependencies": {
