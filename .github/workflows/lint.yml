@@ -28,6 +28,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
       - run: pnpm run lint-rules
+      - run: pnpm run shellcheck
       - run: pnpm test
       - if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]' }}
         run: pnpm audit
