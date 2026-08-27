@@ -16,16 +16,22 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     for runner in $RUNNERS; do
         reviewdog -reporter=local -runners="$runner" -conf="$SCRIPTPATH/reviewdog/reviewdog.yml" -diff="git diff -U0 origin/$GITHUB_BASE_REF" >"$runner.log" 2>>reviewdog.log || true
         grep -H "" "reviewdog.$runner.stderr.log" >>reviewdog.fail.log || true
-        [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" "reviewdog.$runner.stderr.log" || true
+        if [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]]; then
+            # || true: grep exit 1 just means empty file, not an error
+            grep -H "" "reviewdog.$runner.stderr.log" || true
+        fi
     done
 
     for runner in $RUNNERS; do
-        cat "$runner.log" | reviewdog -reporter=github-pr-review -efm='%f:%l: %m' ||
+        reviewdog -reporter=github-pr-review -efm='%f:%l: %m' < "$runner.log" ||
             cat "$runner.log" >>reviewdog.fail.log
         grep -H "" "$runner.log" >>reviewdog.log || true
         echo -n "$runner: "
         echo "${runner//-/_}_count=$(grep -c "^" "$runner.log")" >>"$GITHUB_OUTPUT" || true
-        [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]] && grep -H "" "$runner.log" || true
+        if [[ ${SEC_ACTION_DEBUG:-false} == 'true' ]]; then
+            # || true: grep exit 1 just means empty file, not an error
+            grep -H "" "$runner.log" || true
+        fi
     done
 
 else
@@ -47,7 +53,7 @@ else
     done
 fi
 
-cat reviewdog.log | grep 'failed with zero findings: The command itself failed' >>reviewdog.fail.log || true
+grep 'failed with zero findings: The command itself failed' reviewdog.log >>reviewdog.fail.log || true
 
 echo "findings=$(grep -c '^[A-Z]:[^:]*:' reviewdog.log)" >>"$GITHUB_OUTPUT"
 
