@@ -72,6 +72,7 @@ fi
 # node_modules/.bin is prepended to PATH instead.
 if [ ! -f "$EXPOSE_DIR/Distributor/bin/Distributor.js" ]; then
   echo "building ExpoSE (one-time setup)"
+  # shellcheck disable=SC1091  # build scripts only exist inside the cloned ExpoSE tree
   (cd "$EXPOSE_DIR" \
     && npm install --no-audit --no-fund --omit=dev \
     && export PATH="$EXPOSE_DIR/node_modules/.bin:$PATH" \
