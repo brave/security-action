@@ -25,5 +25,5 @@
     "dotenv": "^17.3.1",
     "standard": "17.1.2"
   },
-  "packageManager": "pnpm@11.22.0"
+  "packageManager": "pnpm@11.24.0"
 }
