@@ -4,7 +4,7 @@ version = "0.0.0"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     # dependency auditing (reviewdog pip-audit runner)
-    "pip-audit~=2.9.0",
+    "pip-audit~=2.10.1",
     "setuptools~=84.0.0",
 ]
 
