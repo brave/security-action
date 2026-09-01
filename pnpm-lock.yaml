@@ -38,16 +38,16 @@ importers:
         version: 5.0.5
     devDependencies:
       '@cucumber/cucumber':
-        specifier: ^13.2.1
+        specifier: 13.2.1
         version: 13.2.1
       c8:
-        specifier: ^12.0.0
+        specifier: 12.0.0
         version: 12.0.0
       dotenv:
-        specifier: ^17.3.1
+        specifier: 17.3.1
         version: 17.3.1
       fast-check:
-        specifier: ^4.9.0
+        specifier: 4.9.0
         version: 4.9.0
       standard:
         specifier: 17.1.2
