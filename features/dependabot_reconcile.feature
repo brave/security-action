@@ -60,3 +60,11 @@ Feature: Dependabot nudge message reconciliation
     And a completed nudge thread for "brave/app" built from 5 alerts
     When refreshing the nudge thread in notify mode
     Then the thread has 1 new alert replies
+
+  Scenario: A pre-grouping thread with duplicate advisories heals
+    Given the reconcile runs on 2026-09-01
+    And the repo "brave/app" has 2 duplicate-advisory alerts
+    And a legacy nudge thread for "brave/app" with one reply per alert
+    When reconciling nudge messages
+    Then no replies are posted to the thread
+    And the parent shows 1 open Dependabot issues
