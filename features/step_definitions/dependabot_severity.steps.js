@@ -4,6 +4,7 @@ import {
   DEFAULT_SKIP_HOTWORDS,
   Severity,
   nudgeSeverityForToday,
+  nudgeSeverityForWeek,
   severityKeysAbove
 } from '../../src/dependabotConstants.js'
 
@@ -30,6 +31,10 @@ Given('today is {iso-date}', function (date) {
 
 Then('the nudge severity for today is {string}', function (expected) {
   assert.equal(nudgeSeverityForToday(this.today), expected)
+})
+
+Then('the nudge severity for the nudge week is {string}', function (expected) {
+  assert.equal(nudgeSeverityForWeek(this.today), expected)
 })
 
 Then('the default skip hotwords include {string} and {string}', function (a, b) {

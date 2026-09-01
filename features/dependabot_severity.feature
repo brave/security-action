@@ -35,3 +35,23 @@ Feature: Dependabot severity constants
 
   Scenario: Default skip hotwords are defined
     Then the default skip hotwords include "dos" and "denial of service"
+
+  Scenario: Nudge week severity after a month boundary uses the week's Monday
+    Given today is 2026-09-01
+    Then the nudge severity for the nudge week is "high"
+
+  Scenario: Nudge week severity on the first Monday of the month
+    Given today is 2026-09-07
+    Then the nudge severity for the nudge week is "medium"
+
+  Scenario: Nudge week severity later in the first week of the month
+    Given today is 2026-09-10
+    Then the nudge severity for the nudge week is "medium"
+
+  Scenario: Nudge week severity on a Sunday uses its own week's Monday
+    Given today is 2026-09-06
+    Then the nudge severity for the nudge week is "high"
+
+  Scenario: Nudge week severity for a mid-month week
+    Given today is 2026-09-15
+    Then the nudge severity for the nudge week is "high"

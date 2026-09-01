@@ -5,7 +5,7 @@
 
 import {
   DEFAULT_SKIP_HOTWORDS,
-  nudgeSeverityForToday,
+  nudgeSeverityForWeek,
   severityKeysAbove
 } from './dependabotConstants.js'
 
@@ -87,6 +87,8 @@ async function qualifyingAlerts (
 // @param {Function} [opts.refreshNudgeThread] - Called as
 //   ({repoFullName, alerts, debug}) for repos that still
 //   have alerts, to sync the thread with what is left
+// @param {Date} [opts.now] - Injected clock for tests;
+//   defaults to the current time
 // @returns {Promise<string[]>} List of stale repo names
 export default async function reconcileNudgeMessages ({
   github,
@@ -97,13 +99,18 @@ export default async function reconcileNudgeMessages ({
   skipHotwords = DEFAULT_SKIP_HOTWORDS,
   listSlackMessageRepos,
   deleteSlackMessages,
-  refreshNudgeThread = null
+  refreshNudgeThread = null,
+  now = new Date()
 }) {
   debug = debug === 'true' || debug === true
 
   const nudgeUsername = 'dependabot'
 
-  const minlevel = nudgeSeverityForToday()
+  // Match the threshold of the nudge that produced the threads
+  // being reconciled: derive it from this ISO week's Monday, not
+  // from today, so a run just past a month boundary never
+  // qualifies more alerts than the week's nudge posted.
+  const minlevel = nudgeSeverityForWeek(now)
   const severityKeys = severityKeysAbove(minlevel)
 
   const nudgedRepos = await listSlackMessageRepos({

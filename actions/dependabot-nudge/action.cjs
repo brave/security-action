@@ -1,6 +1,7 @@
 module.exports = async ({ github, context, inputs, actionPath, core, debug = false }) => {
   const { default: dependabotNudge } = await import(`${actionPath}/src/dependabotNudge.js`)
   const { default: isoWeekId } = await import(`${actionPath}/src/isoWeekId.js`)
+  const { nudgeSeverityForWeek } = await import(`${actionPath}/src/dependabotConstants.js`)
   const { default: postNudgeThreads } = await import(`${actionPath}/src/postNudgeThreads.js`)
   const { prepareSlackContext } = await import(`${actionPath}/src/slackUtils.js`)
 
@@ -11,13 +12,12 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     if (debug) console.log('GH_TO_SLACK_USER_MAP is not valid JSON')
   }
 
-  // set minlevel to 'medium' if it's the first Monday of the month, otherwise stick to high or critical issues
-  let minlevel = 'medium'
+  // 'medium' when the ISO week's Monday falls in the first 7 days
+  // of the month, otherwise 'high'. Derived from the Monday (not
+  // today) so every run of the week shares the nudge's threshold.
   const today = new Date()
-  if (today.getDate() > 7) {
-    if (debug) { console.log('Not the first Monday of the month!') }
-    minlevel = 'high'
-  }
+  const minlevel = nudgeSeverityForWeek(today)
+  if (debug) { console.log(`nudge minlevel: ${minlevel}`) }
 
   const nudges = await dependabotNudge({ debug, org: context.repo.owner, github, minlevel, githubToSlack, actionPath })
 
