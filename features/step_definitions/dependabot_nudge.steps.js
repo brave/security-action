@@ -11,25 +11,6 @@ import dependabotNudge, {
 
 const ACTION_PATH = fileURLToPath(new URL('../..', import.meta.url))
 
-function makeAlert (n, severity = 'high', summary = `Vulnerability ${n}`) {
-  return {
-    number: n,
-    html_url: `https://github.com/brave/foo/security/dependabot/${n}`,
-    severity,
-    dependency: { package: { name: `pkg-${n}` }, scope: 'runtime' },
-    security_advisory: {
-      summary,
-      description: `# Title\n\nBad things in pkg-${n}.\n`,
-      severity,
-      cve_id: `CVE-2026-000${n}`,
-      ghsa_id: `GHSA-000${n}`
-    },
-    security_vulnerability: {
-      first_patched_version: { identifier: '1.2.3' }
-    }
-  }
-}
-
 async function withCappedTimers (fn) {
   const orig = globalThis.setTimeout
   globalThis.setTimeout = (cb, ms) => orig(cb, Math.min(ms, 1))
@@ -80,20 +61,20 @@ function addAlerts (name, count) {
   const start = this.alertsByRepo[key]?.length || 0
   this.alertsByRepo[key] = [
     ...(this.alertsByRepo[key] || []),
-    ...Array.from({ length: count }, (_, i) => makeAlert(start + i + 1))
+    ...Array.from({ length: count }, (_, i) => this.makeDependabotAlert(start + i + 1))
   ]
 }
 
 Given('repo {string} has an alert with severity {string}', function (name, severity) {
   const key = `${this.org}/${name}`
   const n = (this.alertsByRepo[key]?.length || 0) + 1
-  this.alertsByRepo[key] = [...(this.alertsByRepo[key] || []), makeAlert(n, severity)]
+  this.alertsByRepo[key] = [...(this.alertsByRepo[key] || []), this.makeDependabotAlert(n, { severity })]
 })
 
 Given('repo {string} has an alert with summary {string}', function (name, summary) {
   const key = `${this.org}/${name}`
   const n = (this.alertsByRepo[key]?.length || 0) + 1
-  this.alertsByRepo[key] = [...(this.alertsByRepo[key] || []), makeAlert(n, 'high', summary)]
+  this.alertsByRepo[key] = [...(this.alertsByRepo[key] || []), this.makeDependabotAlert(n, { summary })]
 })
 
 Given('repo {string} has an alert without a patched version', function (name) {
@@ -101,8 +82,41 @@ Given('repo {string} has an alert without a patched version', function (name) {
   const n = (this.alertsByRepo[key]?.length || 0) + 1
   this.alertsByRepo[key] = [
     ...(this.alertsByRepo[key] || []),
-    { ...makeAlert(n), security_vulnerability: {} }
+    { ...this.makeDependabotAlert(n), security_vulnerability: {} }
   ]
+})
+
+function dupAdvisoryAlert (world, n, pkg, advisory, severity) {
+  const isCve = advisory.startsWith('CVE-')
+  return world.makeDependabotAlert(n, {
+    pkg,
+    severity,
+    summary: `${pkg} affected by an open issue`,
+    cveId: isCve ? advisory : `CVE-2026-999${n}`,
+    ghsaId: isCve ? `GHSA-999${n}` : advisory
+  })
+}
+
+function addDupAlerts (name, pkg, advisory, severities) {
+  const key = `${this.org}/${name}`
+  const start = this.alertsByRepo[key]?.length || 0
+  this.alertsByRepo[key] = [
+    ...(this.alertsByRepo[key] || []),
+    ...severities.map((severity, i) =>
+      dupAdvisoryAlert(this, start + i + 1, pkg, advisory, severity))
+  ]
+}
+
+Given('repo {string} has an alert for package {string} advisory {string} with severity {string}', function (name, pkg, advisory, severity) {
+  addDupAlerts.call(this, name, pkg, advisory, [severity])
+})
+
+Given('repo {string} has {int} alerts for package {string} advisory {string} with severity {string}', function (name, count, pkg, advisory, severity) {
+  addDupAlerts.call(this, name, pkg, advisory, Array(count).fill(severity))
+})
+
+Given('repo {string} has 2 alerts for package {string} advisory {string} with severities {string} and {string}', function (name, pkg, advisory, sevA, sevB) {
+  addDupAlerts.call(this, name, pkg, advisory, [sevA, sevB])
 })
 
 Given('repo {string} has maintainers {string}', function (name, maintainers) {
@@ -188,14 +202,14 @@ When('building the parent text for repo {string} with {int} total and {int} crit
 })
 
 When('building the repo message for {int} alerts', function (count) {
-  const alerts = Array.from({ length: count }, (_, i) => makeAlert(i + 1))
-  alerts[alerts.length - 1] = makeAlert(count, 'critical')
+  const alerts = Array.from({ length: count }, (_, i) => this.makeDependabotAlert(i + 1))
+  alerts[alerts.length - 1] = this.makeDependabotAlert(count, { severity: 'critical' })
   this.repoMessage = buildRepoMessage({ alerts })
 })
 
 When('building the repo message for an alert with a missing top-level severity', function () {
   this.repoMessage = buildRepoMessage({
-    alerts: [{ ...makeAlert(1, 'critical'), severity: undefined }]
+    alerts: [{ ...this.makeDependabotAlert(1, { severity: 'critical' }), severity: undefined }]
   })
 })
 
@@ -240,6 +254,14 @@ Then('the message for {string} contains {string}', function (name, text) {
   const message = this.result.find(m => m.repo === `${this.org}/${name}`)
   assert.ok(message, `no message for ${this.org}/${name}`)
   assert.ok(message.message.includes(text), `expected message to contain ${text}`)
+})
+
+Then('the message for {string} contains {string} exactly {int} time', function (name, text, count) {
+  const message = this.result.find(m => m.repo === `${this.org}/${name}`)
+  assert.ok(message, `no message for ${this.org}/${name}`)
+  const occurrences = message.message.split(text).length - 1
+  assert.equal(occurrences, count,
+    `expected ${text} ${count} time(s), found ${occurrences}`)
 })
 
 Then('the message for {string} has cc line {string}', function (name, cc) {

@@ -22,22 +22,53 @@ function decodeEntities (encodedString) {
   })
 }
 
-function criticalCount (alerts) {
-  return alerts.filter(a =>
-    Severity[a.security_advisory?.severity || a.severity] >=
-    Severity.critical
-  ).length
+function alertSeverity (alert) {
+  return Severity[alert.security_advisory?.severity || alert.severity]
 }
 
-// Render the alert list for one repository: the findings
-// only, no summary line. The summary belongs on the thread
-// parent (buildParentText), the findings in the replies.
+// The most severe member of a group: a grouped issue is never
+// rendered or counted below its worst rating.
+function worstAlert (group) {
+  return group.reduce((worst, a) =>
+    alertSeverity(a) > alertSeverity(worst) ? a : worst)
+}
+
+function criticalCount (alerts) {
+  return alerts.filter(a => alertSeverity(a) >= Severity.critical).length
+}
+
+// Group alerts that are the same advisory on the same package.
+// Dependabot opens one alert per manifest, so a package present
+// in two lockfiles yields two alerts for a single issue; without
+// grouping the thread would show the same CVE twice (e.g. bn.js
+// CVE-2026-2739 as alerts #125 and #112). Grouping is per
+// package: the same advisory in two different packages is two
+// dependency problems, not one.
+export function groupAlerts (alerts) {
+  const groups = new Map()
+  for (const alert of alerts) {
+    const key =
+      `${alert.dependency.package.name}|` +
+      `${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(alert)
+  }
+  return [...groups.values()]
+}
+
+// Only the findings, no summary line. The summary belongs on the
+// thread parent (buildParentText), the findings in the replies.
 // Shared with the refresh path (refreshNudgeThread.js) so an
 // updated thread is rendered exactly like the original nudge.
+// Counts and entries are per unique advisory-package issue, not
+// per alert; duplicates list their extra alert URLs.
 export function buildRepoMessage ({ alerts }) {
   let message = ''
+  const groups = groupAlerts(alerts)
 
-  for (const alert of alerts) {
+  for (const group of groups) {
+    const alert = worstAlert(group)
+
     const descFirstLine = alert.security_advisory.description
       .split('\n')
       .filter(d => d[0] !== '#')
@@ -58,13 +89,16 @@ export function buildRepoMessage ({ alerts }) {
     }
 
     message += `Handle this alert at ${alert.html_url}\n\n`
+    for (const extra of group.slice(1)) {
+      message += `Also reported at ${extra.html_url}\n\n`
+    }
     message += '\n\n---\n\n'
   }
 
   return {
     message,
-    total: alerts.length,
-    critical: criticalCount(alerts)
+    total: groups.length,
+    critical: criticalCount(groups.map(worstAlert))
   }
 }
 
@@ -281,7 +315,7 @@ export default async function dependabotNudge ({
           }
         }
 
-        const { message: msg, critical: critLen } =
+        const { message: msg, total: issueCount, critical: critLen } =
           buildRepoMessage({ alerts })
 
         // The cc line is kept out of `message` on purpose:
@@ -296,7 +330,7 @@ export default async function dependabotNudge ({
           repo: `${org}/${repo.name}`,
           message: msg,
           cc,
-          total: alerts.length,
+          total: issueCount,
           critical: critLen,
           alerts
         })

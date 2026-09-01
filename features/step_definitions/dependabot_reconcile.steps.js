@@ -3,39 +3,32 @@ import assert from 'assert'
 import reconcileNudgeMessages from '../../src/reconcileNudgeMessages.js'
 import refreshNudgeThread from '../../src/refreshNudgeThread.js'
 import { buildRepoMessage, buildParentBlocks } from '../../src/dependabotNudge.js'
+import { PARENT_EVENT_TYPE, ALERTS_EVENT_TYPE, CC_EVENT_TYPE } from '../../src/nudgeThread.js'
 import { messageToBlocks } from '../../src/sendSlackMessage.js'
 import { chunkNudgeMessage } from '../../src/slackUtils.js'
 
 const REPO = 'brave/app'
-const PARENT_EVENT_TYPE = 'dependabot-nudge-repo-parent'
 
-function makeAlert (n, severity = 'high') {
-  return {
-    number: n,
-    html_url: `https://github.com/${REPO}/security/dependabot/${n}`,
-    severity,
-    dependency: { package: { name: `pkg-${n}` }, scope: 'runtime' },
-    security_advisory: {
-      summary: `advisory ${n}`,
-      description: `Description of advisory ${n}`,
-      severity,
-      cve_id: `CVE-2026-00${n}`,
-      ghsa_id: `GHSA-00${n}`
-    },
-    security_vulnerability: { first_patched_version: { identifier: '1.2.3' } }
-  }
-}
+const makeAlert = (world, n, overrides = {}) =>
+  world.makeDependabotAlert(n, { repo: REPO, ...overrides })
 
 function nextTs (ts) {
   return (parseFloat(ts) + 0.000001).toFixed(6)
 }
 
-// Build a realistic nudge thread: parent + one reply per alert
+// Build a realistic nudge thread: parent + one reply per chunk
 // (+ the cc completion reply), rendered through the same
 // builders the posting path uses.
-async function buildThreadFixture (world, { threadAlerts, withCc }) {
-  const { message, total, critical } = buildRepoMessage({ alerts: threadAlerts })
-  const chunks = chunkNudgeMessage(message)
+async function buildThreadFixture (world, { threadAlerts, chunks, withCc }) {
+  let built
+  if (chunks) {
+    const total = chunks.length
+    built = { chunks, total, critical: 0 }
+  } else {
+    const { message, total, critical } = buildRepoMessage({ alerts: threadAlerts })
+    built = { chunks: chunkNudgeMessage(message), total, critical }
+  }
+  const { chunks: rendered, total, critical } = built
   const parentTs = '1700000000.000001'
 
   const parent = {
@@ -55,7 +48,7 @@ async function buildThreadFixture (world, { threadAlerts, withCc }) {
 
   const replies = [parent]
   let ts = parentTs
-  for (const chunk of chunks) {
+  for (const chunk of rendered) {
     ts = nextTs(ts)
     replies.push({
       ts,
@@ -63,7 +56,7 @@ async function buildThreadFixture (world, { threadAlerts, withCc }) {
       text: 'dependabot alert',
       blocks: await messageToBlocks(chunk),
       metadata: {
-        event_type: 'dependabot-nudge-alerts',
+        event_type: ALERTS_EVENT_TYPE,
         event_payload: { repo: REPO, kind: 'alerts' }
       }
     })
@@ -75,7 +68,7 @@ async function buildThreadFixture (world, { threadAlerts, withCc }) {
       bot_id: 'BNUDGE',
       text: 'cc <@U123>',
       metadata: {
-        event_type: 'dependabot-nudge-cc',
+        event_type: CC_EVENT_TYPE,
         event_payload: { repo: REPO, kind: 'cc' }
       }
     })
@@ -96,21 +89,41 @@ Given('the reconcile runs on {iso-date}', function (date) {
 Given('the repo {string} has {int} open alerts', function (repo, count) {
   assert.equal(repo, REPO)
   this.reconcileRepo = repo
-  this.reconcileAlerts = Array.from({ length: count }, (_, i) => makeAlert(i + 1))
+  this.reconcileAlerts = Array.from({ length: count }, (_, i) => makeAlert(this, i + 1))
 })
 
 Given('a completed nudge thread for {string} built from {int} alerts', async function (repo, count) {
   assert.equal(repo, REPO)
   await buildThreadFixture(this, {
-    threadAlerts: Array.from({ length: count }, (_, i) => makeAlert(i + 1)),
+    threadAlerts: Array.from({ length: count }, (_, i) => makeAlert(this, i + 1)),
     withCc: true
   })
+})
+
+Given('the repo {string} has 2 duplicate-advisory alerts', function (repo) {
+  assert.equal(repo, REPO)
+  this.reconcileRepo = repo
+  this.reconcileAlerts = [1, 2].map(n => makeAlert(this, n, {
+    pkg: 'bn.js',
+    summary: 'bn.js affected by an infinite loop',
+    cveId: 'CVE-2026-2739',
+    ghsaId: 'GHSA-abcd-1234'
+  }))
+})
+
+Given('a legacy nudge thread for {string} with one reply per alert', async function (repo) {
+  assert.equal(repo, REPO)
+  // Pre-grouping format: one reply per alert, even when two
+  // alerts are the same advisory on the same package.
+  const chunks = this.reconcileAlerts.map(a =>
+    chunkNudgeMessage(buildRepoMessage({ alerts: [a] }).message)[0])
+  await buildThreadFixture(this, { chunks, withCc: true })
 })
 
 Given('an incomplete nudge thread for {string} built from {int} alerts', async function (repo, count) {
   assert.equal(repo, REPO)
   await buildThreadFixture(this, {
-    threadAlerts: Array.from({ length: count }, (_, i) => makeAlert(i + 1)),
+    threadAlerts: Array.from({ length: count }, (_, i) => makeAlert(this, i + 1)),
     withCc: false
   })
 })

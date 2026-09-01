@@ -174,3 +174,41 @@ Feature: Dependabot nudge
     When reading the parent cc line from blocks
       | no cc anywhere |
     Then the parent cc line is ""
+
+  Scenario: Duplicate advisories on one package render as one issue
+    Given the repository "brave/foo"
+    And repo "foo" has 2 alerts for package "bn.js" advisory "CVE-2026-2739" with severity "medium"
+    When running the dependabot nudge
+    Then the result has 1 message
+    And the message for "foo" totals 1 alerts with 0 critical
+    And the message for "foo" contains "CVE-2026-2739" exactly 1 time
+    And the message for "foo" contains "Also reported at"
+    And the message for "foo" contains "security/dependabot/1"
+    And the message for "foo" contains "security/dependabot/2"
+
+  Scenario: The same advisory on different packages stays separate
+    Given the repository "brave/foo"
+    And repo "foo" has an alert for package "left-pad" advisory "GHSA-aaaa-bbbb" with severity "high"
+    And repo "foo" has an alert for package "right-pad" advisory "GHSA-aaaa-bbbb" with severity "high"
+    When running the dependabot nudge
+    Then the message for "foo" totals 2 alerts with 0 critical
+
+  Scenario: Different advisories on one package stay separate
+    Given the repository "brave/foo"
+    And repo "foo" has an alert for package "bn.js" advisory "CVE-2026-2739" with severity "medium"
+    And repo "foo" has an alert for package "bn.js" advisory "CVE-2026-9999" with severity "high"
+    When running the dependabot nudge
+    Then the message for "foo" totals 2 alerts with 0 critical
+
+  Scenario: A duplicated critical advisory counts once
+    Given the repository "brave/foo"
+    And repo "foo" has 2 alerts for package "bn.js" advisory "CVE-2026-2739" with severity "critical"
+    When running the dependabot nudge
+    Then the message for "foo" totals 1 alerts with 1 critical
+
+  Scenario: A grouped issue shows its most severe member
+    Given the repository "brave/foo"
+    And repo "foo" has 2 alerts for package "bn.js" advisory "CVE-2026-2739" with severities "medium" and "critical"
+    When running the dependabot nudge
+    Then the message for "foo" totals 1 alerts with 1 critical
+    And the message for "foo" contains "`critical` severity"

@@ -107,6 +107,38 @@ export function makeMockSlackWeb ({
 }
 
 /**
+ * Canonical Dependabot alert fixture, shared by the nudge and
+ * reconcile step definitions. Options shape a scenario's alert;
+ * defaults render a plain high-severity runtime finding.
+ */
+export function makeDependabotAlert (n, {
+  repo = 'brave/foo',
+  severity = 'high',
+  summary = `Vulnerability ${n}`,
+  description = `# Title\n\nBad things in pkg-${n}.\n`,
+  pkg = `pkg-${n}`,
+  cveId = `CVE-2026-000${n}`,
+  ghsaId = `GHSA-000${n}`
+} = {}) {
+  return {
+    number: n,
+    html_url: `https://github.com/${repo}/security/dependabot/${n}`,
+    severity,
+    dependency: { package: { name: pkg }, scope: 'runtime' },
+    security_advisory: {
+      summary,
+      description,
+      severity,
+      cve_id: cveId,
+      ghsa_id: ghsaId
+    },
+    security_vulnerability: {
+      first_patched_version: { identifier: '1.2.3' }
+    }
+  }
+}
+
+/**
  * Fake Octokit instance covering the patterns used by src modules:
  * paginate (Dependabot alerts / repo properties / org endpoints), graphql
  * (review threads, timelines), repos.getContent and generic request.
@@ -364,6 +396,7 @@ Object.assign(CustomWorld.prototype, {
   makeMockExec,
   makeMockFs,
   makeMockDownload,
+  makeDependabotAlert,
   Recorder
 })
 
