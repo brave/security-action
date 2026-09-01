@@ -118,6 +118,14 @@ async function deleteThread ({
 // @param {string} [opts.providedCc]  - This run's maintainer
 //   cc line, used when the thread carries none anywhere
 //   (an earlier run failed before the parent edit landed)
+// @param {boolean} [opts.silent] - Maintenance mode between
+//   weekly nudges: a completed thread (its cc reply landed)
+//   never grows, because thread replies notify everyone
+//   following the thread. Alerts added mid-week stay hidden
+//   until the next weekly nudge renders them, and the parent
+//   keeps the count of what is displayed. An incomplete
+//   thread is still finished off: that completes the original
+//   send rather than adding a second one.
 // @param {boolean} [opts.debug]
 // @returns {Promise<{touched: number, ok: boolean}>}
 //   touched - messages written; ok - false when any write
@@ -130,6 +138,7 @@ export default async function refreshNudgeThread ({
   repoFullName,
   alerts = [],
   providedCc = null,
+  silent = false,
   debug = false
 }) {
   debug = debug === 'true' || debug === true
@@ -148,9 +157,9 @@ export default async function refreshNudgeThread ({
     web, channelId, parent.ts
   )
 
-  const { message, total, critical } =
+  let { message, total, critical } =
     buildRepoMessage({ alerts })
-  const chunks = chunkNudgeMessage(message)
+  let chunks = chunkNudgeMessage(message)
 
   // No alerts left: tear the thread down, or zero the parent
   // when its discussion has to stay.
@@ -190,6 +199,23 @@ export default async function refreshNudgeThread ({
     return { touched: chunks.length + details.length, ok: true }
   }
 
+  // Between weekly nudges a completed thread must not grow:
+  // every thread reply notifies the maintainers following it,
+  // so a daily reconcile appending newly created alerts would
+  // turn one weekly ping into an unprompted second wave. Trim
+  // the render to what the thread already shows instead; the
+  // next weekly nudge renders the new alerts. Rewrites and
+  // deletions stay allowed: chat.update is a revision, not a
+  // delivery, so syncing existing replies never re-notifies.
+  if (silent && ccReply && chunks.length > details.length) {
+    const capped = buildRepoMessage({
+      alerts: alerts.slice(0, details.length)
+    })
+    total = capped.total
+    critical = capped.critical
+    chunks = chunkNudgeMessage(capped.message)
+  }
+
   let touched = 0
   let ok = true
 
@@ -225,7 +251,9 @@ export default async function refreshNudgeThread ({
 
   // More chunks than replies means alerts were added since
   // the thread was created; append the remainder so nothing
-  // is hidden behind a count that claims otherwise.
+  // is hidden behind a count that claims otherwise. A silent
+  // refresh never reaches this loop for a completed thread:
+  // its visible chunks are capped at the existing replies.
   for (let i = details.length; i < chunks.length; i++) {
     try {
       await postAlertReply(

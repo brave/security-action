@@ -85,8 +85,11 @@ async function qualifyingAlerts (
 // @param {Function} opts.listSlackMessageRepos
 // @param {Function} opts.deleteSlackMessages
 // @param {Function} [opts.refreshNudgeThread] - Called as
-//   ({repoFullName, alerts, debug}) for repos that still
-//   have alerts, to sync the thread with what is left
+//   ({repoFullName, alerts, debug, silent: true}) for repos
+//   that still have alerts, to sync the thread with what is
+//   left. Silent: between weekly nudges the thread may be
+//   corrected but never grows, so the daily run stays
+//   invisible to the maintainers following the thread.
 // @param {Date} [opts.now] - Injected clock for tests;
 //   defaults to the current time
 // @returns {Promise<string[]>} List of stale repo names
@@ -141,7 +144,7 @@ export default async function reconcileNudgeMessages ({
       // the count on the parent match reality.
       try {
         await refreshNudgeThread({
-          repoFullName, alerts, debug
+          repoFullName, alerts, debug, silent: true
         })
       } catch (err) {
         console.error(
