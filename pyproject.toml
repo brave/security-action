@@ -1,7 +1,7 @@
 [project]
 name = "security-action"
 version = "0.0.0"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.14,<3.15"
 dependencies = [
     # dependency auditing (reviewdog pip-audit runner)
     "pip-audit~=2.9.0",
