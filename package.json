@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@octokit/core": "^7.0.0",
-    "@slack/web-api": "^7.0.0",
+    "@slack/web-api": "^8.0.0",
     "@tryfabric/mack": "^1.2.1",
     "glob": "^13.0.0",
     "js-yaml": "^4.1.1",
