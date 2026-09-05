@@ -2,7 +2,7 @@ import subprocess
 import tomllib
 
 from collections.abc import Iterator
-from os import environ, path
+from os import chdir, environ, getcwd, path
 
 from pip_audit._audit import Auditor
 from pip_audit._cli import VulnerabilityServiceChoice
@@ -39,10 +39,19 @@ def main():
             extra_install_args.extend(["--trusted-host", host])
 
     for lock_path in changed_lock_files:
-        for install_cmd, line_number in install_commands(lock_path):
+        install(lock_path, auditor, extra_install_args, index_url)
+
+
+def install(lock_path, auditor, extra_install_args, index_url=None):
+    install_commands_by_line = install_commands(lock_path)
+    try:
+        original_cwd = getcwd()
+        tmpdir = path.join(original_cwd, "./.venv-deleteme")
+        chdir(path.dirname(lock_path))
+        for install_cmd, line_number in install_commands_by_line:
             venv = VirtualEnv(install_cmd + extra_install_args, index_url=index_url)
             try:
-                venv.create("./.venv-deleteme")
+                venv.create(tmpdir)
             except VirtualEnvError as e:
                 print(e)
                 continue
@@ -63,7 +72,9 @@ def main():
                 print(e)
                 continue
             finally:
-                venv.clear_directory("./.venv-deleteme")
+                venv.clear_directory(tmpdir)
+    finally:
+        chdir(original_cwd)
 
 
 def install_commands(lock_path: str) -> Iterator[tuple[list[str], int]]:
@@ -90,13 +101,16 @@ def install_commands_for_requirements_txt(lock_file_lines: list[str], diff_lines
     zero_indexed_lineno = 0
     while zero_indexed_lineno < len(lock_file_lines):
         line = lock_file_lines[zero_indexed_lineno]
-        if line and line in diff_lines and not line.startswith(("#", "--", "-e ")):
+        if line and line in diff_lines and not line.startswith(("#", "--")):
             while line.endswith("\\"):
                 zero_indexed_lineno += 1
                 line = line[:-1].strip() + " " + lock_file_lines[zero_indexed_lineno]
-            # There could be quoted or escaped spaces, but unlikely in 1st word.
-            install_cmd = [line.strip().split(" ", 1)[0]]
-            yield (install_cmd, zero_indexed_lineno + 1)
+            # There could be quoted or escaped spaces, but unlikely to be affected.
+            # Ignore --hash= and anything commented out but allow @ and ;sys_platform
+            install_cmd = line.strip().split("#", 1)[0].split(" --", 1)[0].strip()
+            if install_cmd.startswith("-e "):
+                install_cmd = install_cmd[3:].strip()
+            yield ([install_cmd], zero_indexed_lineno + 1)
         zero_indexed_lineno += 1
 
 
