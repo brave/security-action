@@ -18,7 +18,7 @@ export default async function dependabotDismiss ({
   dependabotDismissConfig = 'dependabot-dismiss.txt'
 }) {
   const watermark = 'The following alerts were dismissed:\n\n'
-  let message = ''
+  const dismissed = []
   const dismissedRepos = new Set()
 
   let dependabotDismissIds = []
@@ -70,7 +70,12 @@ export default async function dependabotDismiss ({
       dismissComment += ` because the alert summary contains the hotword "${hotword}"`
     }
 
-    message += `- [${a.security_advisory.summary} in \`${org}/${a.repository.name}\`](${a.html_url})\n`
+    dismissed.push({
+      summary: a.security_advisory.summary,
+      repo: `${org}/${a.repository.name}`,
+      number: a.number,
+      html_url: a.html_url
+    })
     dismissedRepos.add(`${org}/${a.repository.name}`)
 
     if (debug) {
@@ -93,6 +98,25 @@ export default async function dependabotDismiss ({
       state: 'dismissed'
     })
   }
+
+  // One line per package+repo: repeated dismissals of the same
+  // advisory (e.g. the same manifest duplicated across lockfiles)
+  // collapse into a single bullet with back-references to the
+  // other alert numbers, and the list is sorted by summary so
+  // the same package lands in the same place every week.
+  const groups = new Map()
+  for (const d of dismissed) {
+    const key = `${d.summary.toLowerCase()}\n${d.repo}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(d)
+  }
+  const lines = [...groups.values()]
+    .map(group => group.sort((a, b) => a.number - b.number))
+    .map(([first, ...extras]) =>
+      `- [${first.summary} in \`${first.repo}\`](${first.html_url})` +
+      (extras.length > 0 ? ` (also in ${extras.map(e => `[#${e.number}](${e.html_url})`).join(', ')})` : ''))
+    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+  const message = lines.join('\n') + (lines.length > 0 ? '\n' : '')
 
   return {
     message: message.length > 0 ? watermark + message : '',

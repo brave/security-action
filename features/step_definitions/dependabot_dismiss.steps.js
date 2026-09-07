@@ -109,6 +109,12 @@ Then('the dismissed repos are {string}', function (repos) {
   assert.deepEqual(this.result.dismissedRepos, repos.split(','))
 })
 
+Then('the dismissal message is:', function (docstring) {
+  const actual = this.result.message.replace(/\n+$/, '')
+  const expected = docstring.replace(/\n+$/, '')
+  assert.equal(actual, expected)
+})
+
 Then('no repositories are in the dismissed list', function () {
   assert.deepEqual(this.result.dismissedRepos, [])
 })
