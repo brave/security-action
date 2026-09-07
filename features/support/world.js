@@ -118,13 +118,14 @@ export function makeDependabotAlert (n, {
   description = `# Title\n\nBad things in pkg-${n}.\n`,
   pkg = `pkg-${n}`,
   cveId = `CVE-2026-000${n}`,
-  ghsaId = `GHSA-000${n}`
+  ghsaId = `GHSA-000${n}`,
+  scope = 'runtime'
 } = {}) {
   return {
     number: n,
     html_url: `https://github.com/${repo}/security/dependabot/${n}`,
     severity,
-    dependency: { package: { name: pkg }, scope: 'runtime' },
+    dependency: { package: { name: pkg }, scope },
     security_advisory: {
       summary,
       description,

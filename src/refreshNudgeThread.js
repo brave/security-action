@@ -19,8 +19,7 @@ import {
   buildParentBlocks,
   parentCcLine
 } from './dependabotNudge.js'
-import { messageToBlocks } from './sendSlackMessage.js'
-import { findRepoParent, postAlertReply, postCcReply } from './nudgeThread.js'
+import { findRepoParent, nudgeReplyBlocks, postAlertReply, postCcReply } from './nudgeThread.js'
 import {
   chunkNudgeMessage,
   fetchThreadReplies,
@@ -224,7 +223,7 @@ export default async function refreshNudgeThread ({
   // Rewrite the detail replies that are still needed.
   for (let i = 0; i < chunks.length && i < details.length; i++) {
     try {
-      const blocks = await messageToBlocks(chunks[i])
+      const blocks = await nudgeReplyBlocks(chunks[i])
 
       // Nothing changed for this reply: leave it as it is.
       if (
