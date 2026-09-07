@@ -60,3 +60,31 @@ Feature: Dismissing Dependabot alerts
       | 1      | Denial of service in lodash | GHSA-aa   | repo1 |
     When dismissing alerts with a missing dismiss list
     Then 1 alert is dismissed
+
+  Scenario: Repeated dismissals of one advisory in one repo group into one line
+    Given the org has open dependabot alerts
+      | 3      | qs: DoS via isBuffer in search | GHSA-aa | repo2 |
+      | 1      | qs: DoS via isBuffer in search | GHSA-aa | repo1 |
+      | 2      | qs: DoS via isBuffer in search | GHSA-aa | repo1 |
+    When dismissing alerts
+    Then the dismissal message is:
+      """
+      The following alerts were dismissed:
+
+      - [qs: DoS via isBuffer in search in `test-org/repo1`](https://github.com/test-org/repo1/dependabot/alert/1) (also in [#2](https://github.com/test-org/repo1/dependabot/alert/2))
+      - [qs: DoS via isBuffer in search in `test-org/repo2`](https://github.com/test-org/repo2/dependabot/alert/3)
+      """
+
+  Scenario: The dismissal message is sorted by package
+    Given a dismiss list file containing "GHSA-aa" and "GHSA-bb"
+    And the org has open dependabot alerts
+      | 2      | Zeta overflow in parser | GHSA-bb | repo1 |
+      | 1      | Alpha leak in transport | GHSA-aa | repo2 |
+    When dismissing alerts
+    Then the dismissal message is:
+      """
+      The following alerts were dismissed:
+
+      - [Alpha leak in transport in `test-org/repo2`](https://github.com/test-org/repo2/dependabot/alert/1)
+      - [Zeta overflow in parser in `test-org/repo1`](https://github.com/test-org/repo1/dependabot/alert/2)
+      """
