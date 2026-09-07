@@ -188,15 +188,26 @@ When('running the dependabot nudge', async function () {
     }
   })
   this.github = github
-  await this.attempt(() => withCappedTimers(() => dependabotNudge({
-    org: this.org,
-    github,
-    skipRepositories: this.skipRepositories,
-    githubToSlack: this.githubToSlack,
-    singleOutputMessage: this.singleOutputMessage === true,
-    assignMaintainers: this.assignMaintainers !== false,
-    actionPath: ACTION_PATH
-  })))
+  const logs = []
+  const origLog = console.log
+  const origError = console.error
+  console.log = (...a) => logs.push(a.join(' '))
+  console.error = (...a) => logs.push(a.join(' '))
+  try {
+    await this.attempt(() => withCappedTimers(() => dependabotNudge({
+      org: this.org,
+      github,
+      skipRepositories: this.skipRepositories,
+      githubToSlack: this.githubToSlack,
+      singleOutputMessage: this.singleOutputMessage === true,
+      assignMaintainers: this.assignMaintainers !== false,
+      actionPath: ACTION_PATH
+    })))
+  } finally {
+    console.log = origLog
+    console.error = origError
+  }
+  this.nudgeLogs = logs
 })
 
 When('building the parent text for repo {string} with {int} total and {int} critical', function (repo, total, critical) {
@@ -415,4 +426,15 @@ Then('the dev alert reply is rendered in a lighter style', function () {
   }
   const text = blocks.map(b => b.elements.map(e => e.text).join('')).join('')
   assert.ok(text.includes('(dev)'), `dev reply keeps the dev marker: ${text}`)
+})
+
+Then('the nudge run reports {int} repos scanned, {int} nudged with {int} alerts and {int} error', function (scanned, nudged, alerts, errored) {
+  const summary = (this.nudgeLogs || []).find(l => l.includes('nudge summary:'))
+  assert.ok(summary, `expected a nudge summary line, got:\n${(this.nudgeLogs || []).join('\n')}`)
+  if (!new RegExp(
+    `nudge summary: scanned=${scanned} repos, ` +
+    `nudged=${nudged} \\(${alerts} alerts\\), ` +
+    `errored=${errored}`).test(summary)) {
+    assert.fail(`summary mismatch. all logs:\n${(this.nudgeLogs || []).join('\n')}`)
+  }
 })
