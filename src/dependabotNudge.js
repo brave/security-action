@@ -37,19 +37,19 @@ function criticalCount (alerts) {
   return alerts.filter(a => alertSeverity(a) >= Severity.critical).length
 }
 
-// Group alerts that are the same advisory on the same package.
-// Dependabot opens one alert per manifest, so a package present
-// in two lockfiles yields two alerts for a single issue; without
-// grouping the thread would show the same CVE twice (e.g. bn.js
-// CVE-2026-2739 as alerts #125 and #112). Grouping is per
-// package: the same advisory in two different packages is two
-// dependency problems, not one.
+// Group alerts by package (case-insensitive: manifests spell the
+// same PyPI/npm dependency as both "pillow" and "Pillow").
+// Dependabot opens one alert per manifest and per advisory, so a
+// package present in several lockfiles, or with several open
+// advisories, yields many alerts for a single dependency; without
+// grouping the thread would list the same dependency over and over
+// (e.g. nine Pillow entries for one upgrade). One group = one
+// maintainer action: bump the package. The same advisory in two
+// different packages stays separate: those are two upgrades.
 export function groupAlerts (alerts) {
   const groups = new Map()
   for (const alert of alerts) {
-    const key =
-      `${alert.dependency.package.name}|` +
-      `${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}`
+    const key = alert.dependency.package.name.toLowerCase()
     if (!groups.has(key)) groups.set(key, [])
     groups.get(key).push(alert)
   }
@@ -60,8 +60,8 @@ export function groupAlerts (alerts) {
 // thread parent (buildParentText), the findings in the replies.
 // Shared with the refresh path (refreshNudgeThread.js) so an
 // updated thread is rendered exactly like the original nudge.
-// Counts and entries are per unique advisory-package issue, not
-// per alert; duplicates list their extra alert URLs.
+// Counts and entries are per package, not per alert; extra
+// alerts list their URLs under the package's entry.
 export function buildRepoMessage ({ alerts }) {
   let message = ''
   const groups = groupAlerts(alerts)
@@ -89,8 +89,10 @@ export function buildRepoMessage ({ alerts }) {
     }
 
     message += `Handle this alert at ${alert.html_url}\n\n`
-    for (const extra of group.slice(1)) {
-      message += `Also reported at ${extra.html_url}\n\n`
+    for (const extra of group) {
+      if (extra !== alert) {
+        message += `Also reported at ${extra.html_url}\n\n`
+      }
     }
     message += '\n\n---\n\n'
   }

@@ -193,12 +193,26 @@ Feature: Dependabot nudge
     When running the dependabot nudge
     Then the message for "foo" totals 2 alerts with 0 critical
 
-  Scenario: Different advisories on one package stay separate
+  Scenario: Different advisories on one package group into one issue
     Given the repository "brave/foo"
     And repo "foo" has an alert for package "bn.js" advisory "CVE-2026-2739" with severity "medium"
     And repo "foo" has an alert for package "bn.js" advisory "CVE-2026-9999" with severity "high"
     When running the dependabot nudge
-    Then the message for "foo" totals 2 alerts with 0 critical
+    Then the message for "foo" totals 1 alerts with 0 critical
+    And the message for "foo" contains "`high` severity"
+    And the message for "foo" contains "CVE-2026-9999" exactly 1 time
+    And the message for "foo" contains "security/dependabot/1"
+    And the message for "foo" contains "security/dependabot/2"
+    And the message for "foo" contains "Also reported at"
+
+  Scenario: Package names group case-insensitively
+    Given the repository "brave/foo"
+    And repo "foo" has an alert for package "pillow" advisory "CVE-2026-59205" with severity "high"
+    And repo "foo" has an alert for package "Pillow" advisory "CVE-2026-59199" with severity "medium"
+    When running the dependabot nudge
+    Then the message for "foo" totals 1 alerts with 0 critical
+    And the message for "foo" contains "security/dependabot/1"
+    And the message for "foo" contains "security/dependabot/2"
 
   Scenario: A duplicated critical advisory counts once
     Given the repository "brave/foo"
