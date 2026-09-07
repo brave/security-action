@@ -19,7 +19,7 @@ function nextTs (ts) {
 // Build a realistic nudge thread: parent + one reply per chunk
 // (+ the cc completion reply), rendered through the same
 // builders the posting path uses.
-async function buildThreadFixture (world, { threadAlerts, chunks, withCc }) {
+async function buildThreadFixture (world, { threadAlerts, chunks, withCc, weekId = '2026-W36' }) {
   let built
   if (chunks) {
     const total = chunks.length
@@ -42,7 +42,7 @@ async function buildThreadFixture (world, { threadAlerts, chunks, withCc }) {
     }),
     metadata: {
       event_type: PARENT_EVENT_TYPE,
-      event_payload: { org: 'brave', repo: REPO, weekId: '2026-W36' }
+      event_payload: { org: 'brave', repo: REPO, weekId }
     }
   }
 
@@ -97,6 +97,15 @@ Given('a completed nudge thread for {string} built from {int} alerts', async fun
   await buildThreadFixture(this, {
     threadAlerts: Array.from({ length: count }, (_, i) => makeAlert(this, i + 1)),
     withCc: true
+  })
+})
+
+Given('a completed nudge thread for {string} from week {string} built from {int} alerts', async function (repo, weekId, count) {
+  assert.equal(repo, REPO)
+  await buildThreadFixture(this, {
+    threadAlerts: Array.from({ length: count }, (_, i) => makeAlert(this, i + 1)),
+    withCc: true,
+    weekId
   })
 })
 
@@ -179,6 +188,20 @@ Then('no replies are posted to the thread', function () {
   const posts = this.slackWeb.__recorder.find('chat.postMessage')
   assert.equal(posts.length, 0,
     `expected no posts, got ${JSON.stringify(posts.map(p => p.params.metadata?.event_payload))}`)
+})
+
+Then('the thread is left untouched', function () {
+  const updated = this.slackWeb.__recorder.find('chat.update')
+    .filter(u => u.params.ts === this.threadParentTs)
+  assert.equal(updated.length, 0,
+    `expected no updates, got ${updated.length}`)
+  const deleted = this.slackWeb.__recorder.find('chat.delete')
+  assert.equal(deleted.length, 0,
+    `expected no deletions, got ${deleted.length}`)
+})
+
+Then('the stale nudge messages are not deleted', function () {
+  assert.deepEqual(this.deletedStale, [])
 })
 
 Then('the thread has {int} new alert replies', function (count) {

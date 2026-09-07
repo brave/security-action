@@ -89,6 +89,7 @@ export default async function postNudgeThreads ({
           repoFullName: repo,
           alerts,
           providedCc: cc,
+          weekId,
           debug
         })
         if (!ok) {

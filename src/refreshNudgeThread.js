@@ -127,6 +127,11 @@ async function deleteThread ({
 //   thread is still finished off: that completes the original
 //   send rather than adding a second one.
 // @param {boolean} [opts.debug]
+// @param {string} [opts.weekId] - When set, only the thread for
+//   this ISO week is considered: runs between weekly nudges must
+//   never reach across the week boundary, or a Monday-morning
+//   reconcile would append to the previous week's thread instead
+//   of leaving it for the new week's nudge.
 // @returns {Promise<{touched: number, ok: boolean}>}
 //   touched - messages written; ok - false when any write
 //   failed, so callers do not mark the thread complete on
@@ -139,11 +144,12 @@ export default async function refreshNudgeThread ({
   alerts = [],
   providedCc = null,
   silent = false,
+  weekId = null,
   debug = false
 }) {
   debug = debug === 'true' || debug === true
 
-  const parent = findRepoParent(messages, repoFullName)
+  const parent = findRepoParent(messages, repoFullName, weekId)
   if (!parent) {
     if (debug) {
       console.log(
