@@ -5,6 +5,8 @@ Feature: Dependabot nudge message reconciliation
   never qualifies more alerts than the nudge actually posted, and the
   run is scoped to the current nudge week: once the week has rolled
   over, last week's thread waits untouched for next week's nudge.
+  The parent's finding count always reflects the current number of
+  open alerts, never the number of grouped entries.
 
   Scenario: Reconcile uses the nudge week's severity after a month boundary
     Given the reconcile runs on 2026-09-01
@@ -32,7 +34,7 @@ Feature: Dependabot nudge message reconciliation
     And a completed nudge thread for "brave/app" built from 5 alerts
     When reconciling nudge messages
     Then no replies are posted to the thread
-    And the parent still shows 5 open Dependabot issues
+    And the parent shows 6 open Dependabot issues
 
   Scenario: Alerts resolved mid-week are trimmed silently
     Given the reconcile runs on 2026-09-01
@@ -69,7 +71,7 @@ Feature: Dependabot nudge message reconciliation
     And a legacy nudge thread for "brave/app" with one reply per alert
     When reconciling nudge messages
     Then no replies are posted to the thread
-    And the parent shows 1 open Dependabot issues
+    And the parent shows 2 open Dependabot issues
 
   Scenario: Reconcile never touches a previous week's thread
     Given the reconcile runs on 2026-09-08

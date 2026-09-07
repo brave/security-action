@@ -60,8 +60,11 @@ export function groupAlerts (alerts) {
 // thread parent (buildParentText), the findings in the replies.
 // Shared with the refresh path (refreshNudgeThread.js) so an
 // updated thread is rendered exactly like the original nudge.
-// Counts and entries are per package, not per alert; extra
-// alerts list their URLs under the package's entry.
+// Entries are per package, not per alert; extra alerts list
+// their URLs under the package's entry. The counts stay
+// cumulative: they report every open alert, not the number of
+// grouped entries, so the parent count matches what Dependabot
+// itself reports.
 export function buildRepoMessage ({ alerts }) {
   let message = ''
   const groups = groupAlerts(alerts)
@@ -99,8 +102,8 @@ export function buildRepoMessage ({ alerts }) {
 
   return {
     message,
-    total: groups.length,
-    critical: criticalCount(groups.map(worstAlert))
+    total: alerts.length,
+    critical: criticalCount(alerts)
   }
 }
 
