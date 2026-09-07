@@ -122,10 +122,10 @@ async function deleteThread ({
 //   weekly nudges: a completed thread (its cc reply landed)
 //   never grows, because thread replies notify everyone
 //   following the thread. Alerts added mid-week stay hidden
-//   until the next weekly nudge renders them, and the parent
-//   keeps the count of what is displayed. An incomplete
-//   thread is still finished off: that completes the original
-//   send rather than adding a second one.
+//   until the next weekly nudge renders them, while the
+//   parent's count keeps tracking every open alert. An
+//   incomplete thread is still finished off: that completes
+//   the original send rather than adding a second one.
 // @param {boolean} [opts.debug]
 // @param {string} [opts.weekId] - When set, only the thread for
 //   this ISO week is considered: runs between weekly nudges must
@@ -163,7 +163,7 @@ export default async function refreshNudgeThread ({
     web, channelId, parent.ts
   )
 
-  let { message, total, critical } =
+  const { message, total, critical } =
     buildRepoMessage({ alerts })
   let chunks = chunkNudgeMessage(message)
 
@@ -208,18 +208,14 @@ export default async function refreshNudgeThread ({
   // Between weekly nudges a completed thread must not grow:
   // every thread reply notifies the maintainers following it,
   // so a daily reconcile appending newly created alerts would
-  // turn one weekly ping into an unprompted second wave. Trim
-  // the render to what the thread already shows instead; the
-  // next weekly nudge renders the new alerts. Rewrites and
-  // deletions stay allowed: chat.update is a revision, not a
-  // delivery, so syncing existing replies never re-notifies.
+  // turn one weekly ping into an unprompted second wave. Cap
+  // the replies at what the thread already shows instead; the
+  // next weekly nudge renders the new alerts. The parent's
+  // count stays current regardless: it tracks every open
+  // alert, and chat.update is a revision, not a delivery, so
+  // rewrites, deletions and count fixes never re-notify.
   if (silent && ccReply && chunks.length > details.length) {
-    const capped = buildRepoMessage({
-      alerts: alerts.slice(0, details.length)
-    })
-    total = capped.total
-    critical = capped.critical
-    chunks = chunkNudgeMessage(capped.message)
+    chunks = chunks.slice(0, details.length)
   }
 
   let touched = 0
