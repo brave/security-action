@@ -393,3 +393,26 @@ Then('the cc reply was posted after the parent edit', function () {
   assert.ok(updateIdx < ccIdx,
     'the cc reply must be posted after the parent edit')
 })
+
+Given('repo {string} has a dev-dependency alert with severity {string}', function (name, severity) {
+  const key = `${this.org}/${name}`
+  const n = (this.alertsByRepo[key]?.length || 0) + 1
+  this.alertsByRepo[key] = [
+    ...(this.alertsByRepo[key] || []),
+    this.makeDependabotAlert(n, { severity, scope: 'development' })
+  ]
+})
+
+Then('the dev alert reply is rendered in a lighter style', function () {
+  const replies = this.slackWeb.__recorder.find('chat.postMessage')
+    .filter(p => p.params.metadata?.event_payload?.kind === 'alerts')
+  assert.ok(replies.length > 0, 'expected an alert reply')
+  const blocks = replies[0].params.blocks || []
+  assert.ok(blocks.length > 0, 'expected blocks on the alert reply')
+  for (const block of blocks) {
+    assert.equal(block.type, 'context',
+      `dev alerts render as context blocks, got ${block.type}`)
+  }
+  const text = blocks.map(b => b.elements.map(e => e.text).join('')).join('')
+  assert.ok(text.includes('(dev)'), `dev reply keeps the dev marker: ${text}`)
+})

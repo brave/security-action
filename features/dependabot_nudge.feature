@@ -238,7 +238,27 @@ Feature: Dependabot nudge
   Scenario: The cc is edited into the parent, never posted with it
     Given the repository "brave/foo"
     And repo "foo" has 2 alerts
-    When posting the nudge thread for "brave/foo"
+    When posting the nudge thread for "foo"
     Then the parent was posted without any mentions
     And the parent was edited to carry the cc
     And the cc reply was posted after the parent edit
+
+  Scenario: Entries show no truncated description
+    Given the repository "brave/foo"
+    And repo "foo" has 2 alerts
+    When building the repo message for 2 alerts
+    Then the repo message does not contain "&gt; "
+    And the repo message does not contain "..."
+
+  Scenario: The advisory summary renders bold
+    Given the repository "brave/foo"
+    And repo "foo" has an alert with severity "high"
+    When building the repo message for 1 alerts
+    Then the repo message contains "**Vulnerability 1**"
+    And the repo message does not contain "severity *Vulnerability"
+
+  Scenario: A dev-dependency entry renders in a lighter style
+    Given the repository "brave/foo"
+    And repo "foo" has a dev-dependency alert with severity "high"
+    When posting the nudge thread for "foo"
+    Then the dev alert reply is rendered in a lighter style

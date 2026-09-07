@@ -4,24 +4,6 @@ import {
 } from './dependabotConstants.js'
 import { messageToBlocks } from './sendSlackMessage.js'
 
-// original code at: https://stackoverflow.com/questions/44195322/a-plain-javascript-way-to-decode-html-entities-works-on-both-browsers-and-node
-function decodeEntities (encodedString) {
-  const translateRe = /&(nbsp|amp|quot|lt|gt);/g
-  const translate = {
-    nbsp: ' ',
-    amp: '&',
-    quot: '"',
-    lt: '<',
-    gt: '>'
-  }
-  return encodedString.replace(translateRe, function (match, entity) {
-    return translate[entity]
-  }).replace(/&#(\d+);/gi, function (match, numStr) {
-    const num = parseInt(numStr, 10)
-    return String.fromCharCode(num)
-  })
-}
-
 function alertSeverity (alert) {
   return Severity[alert.security_advisory?.severity || alert.severity]
 }
@@ -72,24 +54,11 @@ export function buildRepoMessage ({ alerts }) {
   for (const group of groups) {
     const alert = worstAlert(group)
 
-    const descFirstLine = alert.security_advisory.description
-      .split('\n')
-      .filter(d => d[0] !== '#')
-      .filter(d => d.trim().length > 0)
-      .splice(0, 1)
-      .map(d => `&gt; ${decodeEntities(d).substring(0, 40)}`)
-      .shift()
-
     const devAppend = alert.dependency.scope === 'development' ? ' (dev)' : ''
 
-    message += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity *${alert.security_advisory.summary}*`
+    message += `\`${alert.dependency.package.name}\` by \`${alert.security_advisory.cve_id || alert.security_advisory.ghsa_id}\` with a \`${alert.security_advisory.severity}\` severity **${alert.security_advisory.summary}**`
     message += devAppend
     message += '\n\n'
-
-    if (descFirstLine && descFirstLine.length > 0) {
-      message += descFirstLine
-      message += '...\n\n'
-    }
 
     message += `Handle this alert at ${alert.html_url}\n\n`
     for (const extra of group) {
