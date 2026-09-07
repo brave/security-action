@@ -161,6 +161,10 @@ export default async function dependabotNudge ({
   }
 
   const messages = []
+  let scanned = 0
+  let nudged = 0
+  let alertsTotal = 0
+  let errored = 0
 
   debug = debug === 'true' || debug === true
   singleOutputMessage = singleOutputMessage === 'true' || singleOutputMessage === true
@@ -214,6 +218,10 @@ export default async function dependabotNudge ({
     if (skipRepositories.includes(repo.name)) {
       continue
     }
+
+    // Counted as scanned once its alerts are actually attempted:
+    // skipped repos never reach this point.
+    scanned++
 
     try {
       const alerts = Array.from(await github.paginate('GET /repos/{owner}/{repo}/dependabot/alerts', {
@@ -308,11 +316,23 @@ export default async function dependabotNudge ({
           critical: critLen,
           alerts
         })
+        nudged++
+        alertsTotal += alerts.length
       }
     } catch (e) {
+      errored++
       console.error(e)
     }
   }
+
+  // Always visible, even without debug: a run that silently
+  // scanned 0 repos or swallowed every fetch error (restricted
+  // token, transient API failure) would otherwise look
+  // identical to a run that legitimately found nothing.
+  console.log(
+    `nudge summary: scanned=${scanned} repos, ` +
+    `nudged=${nudged} (${alertsTotal} alerts), errored=${errored}`
+  )
 
   // Only singleOutputMessage flattens the result: debug must
   // not change the return type, or the per-repo caller ends

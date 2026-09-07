@@ -262,3 +262,12 @@ Feature: Dependabot nudge
     And repo "foo" has a dev-dependency alert with severity "high"
     When posting the nudge thread for "foo"
     Then the dev alert reply is rendered in a lighter style
+
+  Scenario: The run summary reports scanned, nudged and errored repos
+    Given the org "test-org"
+    And the repository "test-org/foo"
+    And the repository "test-org/bar"
+    And repo "foo" has 2 alerts
+    And repo "bar" fails to list alerts
+    When running the dependabot nudge
+    Then the nudge run reports 2 repos scanned, 1 nudged with 2 alerts and 1 error
