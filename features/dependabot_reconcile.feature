@@ -2,7 +2,9 @@ Feature: Dependabot nudge message reconciliation
   The daily dismiss run reconciles nudge threads: stale threads are
   deleted and threads with remaining alerts are refreshed. The severity
   threshold must match the one the week's nudge used, so a mid-week run
-  never qualifies more alerts than the nudge actually posted.
+  never qualifies more alerts than the nudge actually posted, and the
+  run is scoped to the current nudge week: once the week has rolled
+  over, last week's thread waits untouched for next week's nudge.
 
   Scenario: Reconcile uses the nudge week's severity after a month boundary
     Given the reconcile runs on 2026-09-01
@@ -68,3 +70,19 @@ Feature: Dependabot nudge message reconciliation
     When reconciling nudge messages
     Then no replies are posted to the thread
     And the parent shows 1 open Dependabot issues
+
+  Scenario: Reconcile never touches a previous week's thread
+    Given the reconcile runs on 2026-09-08
+    And the repo "brave/app" has 7 open alerts
+    And a completed nudge thread for "brave/app" from week "2026-W36" built from 5 alerts
+    When reconciling nudge messages
+    Then no replies are posted to the thread
+    And the thread is left untouched
+    And the stale nudge messages are not deleted
+
+  Scenario: A previous week's thread with no alerts left is still cleaned up
+    Given the reconcile runs on 2026-09-08
+    And the repo "brave/app" has 0 open alerts
+    And a completed nudge thread for "brave/app" from week "2026-W36" built from 5 alerts
+    When reconciling nudge messages
+    Then the stale nudge messages are deleted

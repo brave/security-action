@@ -56,14 +56,12 @@ module.exports = async ({
     debug,
     listSlackMessageRepos,
     deleteSlackMessages,
-    refreshNudgeThread: ({ repoFullName, alerts }) =>
+    refreshNudgeThread: (args) =>
       refreshNudgeThread({
         web,
         channelId,
         messages: slackMessages,
-        repoFullName,
-        alerts,
-        debug
+        ...args
       })
   })
 

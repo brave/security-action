@@ -8,6 +8,7 @@ import {
   nudgeSeverityForWeek,
   severityKeysAbove
 } from './dependabotConstants.js'
+import isoWeekId from './isoWeekId.js'
 
 // Fetch a repo's qualifying open alerts.
 // Returns an array (empty means the nudge message is
@@ -144,7 +145,14 @@ export default async function reconcileNudgeMessages ({
       // the count on the parent match reality.
       try {
         await refreshNudgeThread({
-          repoFullName, alerts, debug, silent: true
+          repoFullName,
+          alerts,
+          debug,
+          silent: true,
+          // Scope to this week's thread: once the ISO week has
+          // rolled over, last week's thread must wait untouched
+          // for the new week's nudge instead of growing.
+          weekId: isoWeekId(now)
         })
       } catch (err) {
         console.error(
