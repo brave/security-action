@@ -226,3 +226,11 @@ Feature: Dependabot nudge
     When running the dependabot nudge
     Then the message for "foo" totals 1 alerts with 1 critical
     And the message for "foo" contains "`critical` severity"
+
+  Scenario: The cc is edited into the parent, never posted with it
+    Given the repository "brave/foo"
+    And repo "foo" has 2 alerts
+    When posting the nudge thread for "brave/foo"
+    Then the parent was posted without any mentions
+    And the parent was edited to carry the cc
+    And the cc reply was posted after the parent edit
