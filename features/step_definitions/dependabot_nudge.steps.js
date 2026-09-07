@@ -8,6 +8,8 @@ import dependabotNudge, {
   buildParentBlocks,
   parentCcLine
 } from '../../src/dependabotNudge.js'
+import postNudgeThreads from '../../src/postNudgeThreads.js'
+import { PARENT_EVENT_TYPE } from '../../src/nudgeThread.js'
 
 const ACTION_PATH = fileURLToPath(new URL('../..', import.meta.url))
 
@@ -343,4 +345,51 @@ Then('the parent blocks do not contain {string}', function (text) {
 Then('the parent cc line is {string}', function (text) {
   const cc = this.parentBlocks ? parentCcLine(this.parentBlocks) : this.ccLine
   assert.equal(cc, text)
+})
+
+When('posting the nudge thread for {string}', async function (name) {
+  const repo = `${this.org}/${name}`
+  const alerts = this.alertsByRepo[repo] || []
+  const { message, total, critical } = buildRepoMessage({ alerts })
+  this.slackWeb = this.makeMockSlackWeb({})
+  await this.attempt(() => withCappedTimers(() => postNudgeThreads({
+    web: this.slackWeb,
+    channelId: 'C001',
+    org: this.org,
+    messages: [],
+    nudges: [{ repo, message, cc: 'cc <@U123>', total, critical, alerts }],
+    weekId: '2026-W37'
+  })))
+})
+
+Then('the parent was posted without any mentions', function () {
+  const posts = this.slackWeb.__recorder.find('chat.postMessage')
+  const parent = posts.find(p =>
+    p.params.metadata?.event_type === PARENT_EVENT_TYPE)
+  assert.ok(parent, 'expected a parent postMessage')
+  const text = (parent.params.blocks || [])
+    .map(b => b.text?.text || '').join('\n')
+  assert.ok(!text.includes('<@'),
+    `the parent must not mention anyone at creation: ${text}`)
+})
+
+Then('the parent was edited to carry the cc', function () {
+  const updates = this.slackWeb.__recorder.find('chat.update')
+  assert.ok(updates.length > 0, 'expected the parent to be edited')
+  const text = updates[updates.length - 1].params.blocks
+    .map(b => b.text?.text || '').join('\n')
+  assert.ok(text.includes('<@U123>'),
+    `the parent edit must carry the cc mention: ${text}`)
+})
+
+Then('the cc reply was posted after the parent edit', function () {
+  const calls = this.slackWeb.__recorder.calls
+  const updateIdx = calls.findIndex(c => c.method === 'chat.update')
+  const ccIdx = calls.findIndex(c =>
+    c.method === 'chat.postMessage' &&
+    c.params.metadata?.event_payload?.kind === 'cc')
+  assert.ok(updateIdx !== -1, 'expected a parent edit')
+  assert.ok(ccIdx !== -1, 'expected a cc reply')
+  assert.ok(updateIdx < ccIdx,
+    'the cc reply must be posted after the parent edit')
 })
