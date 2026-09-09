@@ -99,8 +99,19 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     changedFiles = await pullRequestChangedFiles({ github, owner: context.repo.owner, name: context.repo.repo, prnumber: context.payload.pull_request.number })
     debugLog('Changed files:', changedFiles)
 
+    // The PR files API lists paths as a diff against the base branch head,
+    // but the runners consume the list against the checked-out merge
+    // commit. Drop paths missing from the working tree (e.g. renamed on
+    // the base branch after the pull request forked) or the scanners
+    // crash opening them. The unfiltered list stays for codeowners and
+    // modelscan, which reason about the PR rather than the working tree.
+    const { default: filterExistingFiles } = await import(`${actionPath}/src/filterExistingFiles.js`)
+    const existingFiles = filterExistingFiles(changedFiles, {
+      onDropped: missing => debugLog('Changed files missing from the checkout:', missing)
+    })
+
     // Write changed files to file
-    fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, changedFiles.join('\0'))
+    fs.writeFileSync(`${actionPath}/assets/all_changed_files.txt`, existingFiles.join('\0'))
     debugLog('Wrote changed files to file')
   }
 
