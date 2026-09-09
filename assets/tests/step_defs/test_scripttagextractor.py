@@ -1,4 +1,8 @@
 """pytest-bdd steps for scripttagextractor.feature"""
+import io
+import subprocess
+import sys
+
 from pytest_bdd import given, when, then, scenarios, parsers
 
 
@@ -82,3 +86,41 @@ def copied_file_contains(tmp_path, context, name, docstring):
 @then(parsers.parse('the extracted file "{name}" does not exist'))
 def extracted_file_absent(tmp_path, name):
     assert not (tmp_path / name).exists()
+
+
+@then(parsers.parse('nothing is written to "{name}"'))
+def nothing_written(tmp_path, name):
+    assert not (tmp_path / name).exists()
+
+
+# ── missing files ────────────────────────────────────────────────────────────
+
+@when(parsers.parse('a missing file "{name}" is processed'))
+def missing_file_processed(scripttagextractor, tmp_path, context, monkeypatch, name):
+    # The module binds `stderr` at import time, so capsys cannot see it;
+    # swap the module attribute instead.
+    buffer = io.StringIO()
+    monkeypatch.setattr(scripttagextractor, "stderr", buffer)
+    scripttagextractor.main(str(tmp_path / name), ".extractedscript.js", None)
+    context["stderr"] = buffer.getvalue()
+
+
+@when(parsers.parse('the extractor runs over "{file_list}"'))
+def extractor_runs(scripttagextractor, tmp_path, context, file_list):
+    proc = subprocess.run(
+        [sys.executable, scripttagextractor.__file__, *file_list.split(","),
+         "--suffix", ".extractedscript.js", "--ignore-no-files"],
+        capture_output=True, text=True, cwd=tmp_path, check=False,
+    )
+    context["returncode"] = proc.returncode
+    context["stderr"] = proc.stderr
+
+
+@then("the extractor exits successfully")
+def extractor_exits_successfully(context):
+    assert context["returncode"] == 0
+
+
+@then(parsers.parse('a warning mentions "{text}"'))
+def warning_mentions(context, text):
+    assert text in context["stderr"]
