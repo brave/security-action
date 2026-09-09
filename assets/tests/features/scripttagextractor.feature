@@ -88,3 +88,21 @@ Feature: script tag extractor
       """
     When the scripts are extracted
     Then the extracted file "page.html.extractedscript.js" does not exist
+
+  Scenario: A missing file is skipped with a warning
+    When a missing file "ghost/PageWidth.svelte" is processed
+    Then nothing is written to "ghost/PageWidth.svelte.extractedscript.js"
+    And a warning mentions "ghost/PageWidth.svelte"
+
+  Scenario: A missing file does not abort the remaining files
+    Given an HTML document
+      """
+      <html><script>a</script></html>
+      """
+    When the extractor runs over "missing.svelte,page.html"
+    Then the extractor exits successfully
+    And the extracted file "page.html.extractedscript.js" contains exactly
+      """
+      ; a
+      """
+    And a warning mentions "missing.svelte"

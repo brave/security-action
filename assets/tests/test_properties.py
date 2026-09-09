@@ -150,3 +150,29 @@ def test_parser_only_reports_script_data(text):
     parser.feed(document)
     joined = "".join(s.data for s in parser.scripts)
     assert joined == text
+
+
+# ── scripttagextractor: stale paths ──────────────────────────────────────────
+
+# Relative paths that cannot escape a temporary workspace
+missing_path = st.text(
+    alphabet=string.ascii_letters + string.digits + "-_/",
+    min_size=1,
+    max_size=30,
+).filter(lambda s: not s.startswith("/") and ".." not in s.split("/"))
+
+
+@settings(max_examples=50)
+@given(paths=st.lists(missing_path, min_size=0, max_size=8, unique=True))
+def test_main_skips_stale_paths_without_raising(paths):
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        source = root / "page.html"
+        source.write_text("<html><script>a</script></html>")
+        for stale in paths:
+            scripttagextractor.main(str(root / stale), ".extractedscript.js", None)
+        # Stale paths never abort the run: the real file still extracts
+        scripttagextractor.main(str(source), ".extractedscript.js", None)
+        assert (root / "page.html.extractedscript.js").read_text() == "; a"

@@ -40,6 +40,13 @@ class MyHTMLParser(HTMLParser):
 
 
 def main(source_file, suffix, add_suffix_to_original, dry_run=False):
+    if not path.exists(source_file):
+        # Stale paths reach all_changed_files.txt when a file was renamed or
+        # deleted on the base branch after the PR forked (the PR files API
+        # diffs against the base branch head, the checkout is the merge
+        # commit). Skip them instead of aborting the scan.
+        print("Skipping missing file:", source_file, file=stderr)
+        return
     parser = MyHTMLParser()
     with open(source_file) as original_file:
         original_file_data = original_file.read()
