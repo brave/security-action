@@ -106,3 +106,24 @@ Feature: script tag extractor
       ; a
       """
     And a warning mentions "missing.svelte"
+
+  Scenario: Files matching an ignore glob are not extracted
+    Given HTML documents "test_data/serp.html" and "app/page.html" each containing a script
+    When the extractor runs with ignore glob "*test_data/*" over "test_data/serp.html,app/page.html"
+    Then the extracted file "test_data/serp.html.extractedscript.js" does not exist
+    And the extracted file "app/page.html.extractedscript.js" contains exactly
+      """
+      ; a
+      """
+
+  Scenario: Multiple ignore globs combine
+    Given HTML documents "testdata/a.html", "fixtures/b.html" and "c.html" each containing a script
+    When the extractor runs with ignore globs "*testdata/*,*fixtures/*" over "testdata/a.html,fixtures/b.html,c.html"
+    Then only "c.html" is extracted
+
+  Scenario: Ignore globs do not affect unmatched files
+    Given HTML documents "app/page.html" and "app/other.html" each containing a script
+    When the extractor runs with ignore glob "*nomatch/*" over "app/page.html,app/other.html"
+    Then the extractor exits successfully
+    And the extracted file "app/page.html.extractedscript.js" exists
+    And the extracted file "app/other.html.extractedscript.js" exists

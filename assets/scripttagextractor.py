@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import fnmatch
 from glob import glob
 from html.parser import HTMLParser
 from os import environ, path
@@ -84,6 +85,7 @@ if __name__ == "__main__":
     parser.add_argument("--add-suffix-to-original", help="Copy original file and add this extension (probably .something.html)")
     parser.add_argument("--all-changed-files-suffix", help="Process files from all_changed_files.txt which have this suffix")
     parser.add_argument("--glob", help="Process files matching glob")
+    parser.add_argument("--ignore-glob", action="append", default=[], help="Skip files matching this fnmatch glob; may be repeated")
     parser.add_argument("--ignore-no-files", action="store_true", help="Don't fail if there are no matching files")
     parser.add_argument("--dry-run", action="store_true", help="Just print what this would output")
     parser.add_argument("--debug", action="store_true", help="Print debug information to stderr")
@@ -113,6 +115,12 @@ if __name__ == "__main__":
         if not f.endswith(args.suffix)
         and not (args.add_suffix_to_original and f.endswith(args.add_suffix_to_original))
     ]
+
+    if args.ignore_glob:
+        files = [
+            f for f in files
+            if not any(fnmatch.fnmatch(f, pattern) for pattern in args.ignore_glob)
+        ]
 
     print("Files to process:", files, file=out)
     if not files and not args.ignore_no_files:
