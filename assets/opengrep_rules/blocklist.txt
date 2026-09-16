@@ -39,3 +39,15 @@ https://semgrep.dev/r/typescript.react.portability.i18next.jsx-not-international
 https://semgrep.dev/r/generic.secrets.gitleaks.hashicorp-tf-password.hashicorp-tf-password
 https://semgrep.dev/r/typescript.react.portability.i18next.i18next-key-format.i18next-key-format
 https://semgrep.dev/r/gitlab.bandit.B311
+# Path globs: exclude findings on test fixture / scraped third-party content.
+# Motivation: a consumer repository added minified scraped HTML fixtures
+# under test_data/ (2.4MB in 114 lines) — sveltegrep/opengrep findings on them are
+# noise, and GitHub 422s review comments on such huge-line diffs anyway
+# ("diff is too large"), which made reviewdog report a false action failure.
+# NOTE: update-ruleset.rb also reads this file but only does exact matches on
+# rule source URLs, so path entries are ignored there. Keep these globs in
+# sync with the --ignore-glob values in reviewdog/reviewdog.yml (sveltegrep).
+test_data/
+testdata/
+fixtures/
+__fixtures__/
