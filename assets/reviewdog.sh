@@ -23,8 +23,7 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     done
 
     for runner in $RUNNERS; do
-        reviewdog -reporter=github-pr-review -efm='%f:%l: %m' < "$runner.log" ||
-            cat "$runner.log" >>reviewdog.fail.log
+        "$SCRIPTPATH/reviewdog/post-findings.sh" "$runner"
         grep -H "" "$runner.log" >>reviewdog.log || true
         echo -n "$runner: "
         echo "${runner//-/_}_count=$(grep -c "^" "$runner.log")" >>"$GITHUB_OUTPUT" || true
