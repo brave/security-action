@@ -16,6 +16,14 @@ const segmentArb = fc.array(fc.constantFrom(...chars), { minLength: 1, maxLength
 const filePathArb = fc.array(segmentArb, { minLength: 1, maxLength: 5 })
   .map(segments => segments.join('/'))
 
+// A generated path may be an implicit directory of another generated path
+// (e.g. 'a' and 'a/a'): creating 'a/a' via mkdirSync(recursive) also creates
+// the directory 'a', so existsSync('a') is true even when 'a' was never a
+// file. Drop such directory prefixes so the fixture tree is unambiguous.
+const dropDirPrefixes = files => files.filter(
+  file => !files.some(other => other.startsWith(`${file}/`))
+)
+
 function makeWorkspace (files) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'secact-prop-'))
   for (const file of files) {
@@ -30,10 +38,11 @@ test('property: kept paths are an order-preserving subset of the input', async (
   await fc.assert(fc.asyncProperty(
     fc.uniqueArray(filePathArb, { minLength: 0, maxLength: 20 }),
     async files => {
-      const root = makeWorkspace(files)
+      const paths = dropDirPrefixes(files)
+      const root = makeWorkspace(paths)
       try {
-        const kept = filterExistingFiles(files, { workspaceRoot: root })
-        assert.deepEqual(kept, files)
+        const kept = filterExistingFiles(paths, { workspaceRoot: root })
+        assert.deepEqual(kept, paths)
       } finally {
         fs.rmSync(root, { recursive: true, force: true })
       }
@@ -46,20 +55,21 @@ test('property: missing paths are exactly the reported drops', async () => {
     fc.uniqueArray(filePathArb, { minLength: 2, maxLength: 20 }),
     fc.subarray([], { minLength: 0, maxLength: 0 }),
     async (files, _unused) => {
+      const paths = dropDirPrefixes(files)
       // Create only every second file; the rest are missing
-      const existing = files.filter((_, i) => i % 2 === 0)
-      const missing = files.filter((_, i) => i % 2 === 1)
+      const existing = paths.filter((_, i) => i % 2 === 0)
+      const missing = paths.filter((_, i) => i % 2 === 1)
       const root = makeWorkspace(existing)
       try {
         let reported = null
-        const kept = filterExistingFiles(files, {
+        const kept = filterExistingFiles(paths, {
           workspaceRoot: root,
           onDropped: drops => { reported = drops }
         })
         assert.deepEqual(kept, existing)
         assert.deepEqual(reported, missing)
         // Partition holds: kept + dropped covers the input exactly
-        assert.equal(kept.length + missing.length, files.length)
+        assert.equal(kept.length + missing.length, paths.length)
       } finally {
         fs.rmSync(root, { recursive: true, force: true })
       }
