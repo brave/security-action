@@ -1,5 +1,6 @@
 """pytest-bdd steps for scripttagextractor.feature"""
 import io
+import re
 import subprocess
 import sys
 
@@ -118,9 +119,54 @@ def extractor_runs(scripttagextractor, tmp_path, context, file_list):
 
 @then("the extractor exits successfully")
 def extractor_exits_successfully(context):
-    assert context["returncode"] == 0
+    assert context["returncode"] == 0, context["stderr"]
 
 
 @then(parsers.parse('a warning mentions "{text}"'))
 def warning_mentions(context, text):
     assert text in context["stderr"]
+
+
+# ── ignore globs ─────────────────────────────────────────────────────────────
+
+@given(parsers.re(r"HTML documents (?P<names>.+) each containing a script"))
+def html_documents(tmp_path, names):
+    for name in re.findall(r'"([^"]+)"', names):
+        target = tmp_path / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("<html><script>a</script></html>")
+
+
+def _run_with_ignore_globs(scripttagextractor, tmp_path, context, file_list, globs):
+    argv = [sys.executable, scripttagextractor.__file__, *file_list.split(","),
+            "--suffix", ".extractedscript.js", "--ignore-no-files"]
+    for pattern in globs:
+        argv += ["--ignore-glob", pattern]
+    proc = subprocess.run(
+        argv, capture_output=True, text=True, cwd=tmp_path, check=False,
+    )
+    context["returncode"] = proc.returncode
+    context["stderr"] = proc.stderr
+
+
+@when(parsers.parse('the extractor runs with ignore glob "{pattern}" over "{file_list}"'))
+def extractor_runs_ignore_glob(scripttagextractor, tmp_path, context, pattern, file_list):
+    _run_with_ignore_globs(scripttagextractor, tmp_path, context, file_list, [pattern])
+
+
+@when(parsers.parse('the extractor runs with ignore globs "{patterns}" over "{file_list}"'))
+def extractor_runs_ignore_globs(scripttagextractor, tmp_path, context, patterns, file_list):
+    _run_with_ignore_globs(scripttagextractor, tmp_path, context, file_list, patterns.split(","))
+
+
+@then(parsers.parse('only "{name}" is extracted'))
+def only_extracted(tmp_path, name):
+    extracted = list(tmp_path.rglob("*.extractedscript.js"))
+    expected = f"{name}.extractedscript.js"
+    assert [str(p.relative_to(tmp_path)) for p in extracted] == [expected]
+    assert (tmp_path / expected).read_text() == "; a"
+
+
+@then(parsers.parse('the extracted file "{name}" exists'))
+def extracted_file_present(tmp_path, name):
+    assert (tmp_path / name).read_text() == "; a"

@@ -20,14 +20,24 @@ runner:
     name: sveltegrep
     cmd: |
       set -e
+      # --ignore-glob: skip test fixture / scraped third-party content entirely.
+      # Keep in sync with the path globs in opengrep_rules/blocklist.txt.
       (python3 $SCRIPTPATH/scripttagextractor.py \
         --suffix .extractedscript.js \
         --ignore-no-files \
+        --ignore-glob '*test_data/*' \
+        --ignore-glob '*testdata/*' \
+        --ignore-glob '*fixtures/*' \
+        --ignore-glob '*__fixtures__/*' \
         --all-changed-files-suffix .html && \
       python3 $SCRIPTPATH/scripttagextractor.py \
         --add-suffix-to-original .extractedscript.html \
         --suffix .extractedscript.ts \
         --ignore-no-files \
+        --ignore-glob '*test_data/*' \
+        --ignore-glob '*testdata/*' \
+        --ignore-glob '*fixtures/*' \
+        --ignore-glob '*__fixtures__/*' \
         --all-changed-files-suffix .svelte && \
       opengrep \
         -c $SCRIPTPATH/opengrep_rules/generated/oss/vulns.yaml \
