@@ -199,3 +199,89 @@ Then('the cap is announced with {string}', function (marker) {
     'expected an "...and more" block'
   )
 })
+
+// --- Long-message overflow into threads ---
+
+const bulletLine = (n) =>
+  `- [Alert ${n} in \`repo\`](https://github.com/repo/alert/${n})`
+const bulletBody = (count) =>
+  Array.from({ length: count }, (_, i) => bulletLine(i + 1)).join('\n')
+
+async function postBullets (world, count, extra = {}) {
+  world.lastBody = bulletBody(count)
+  await world.attempt(() => sendSlackMessage({
+    token: 'xoxb-test',
+    channel: '#alerts',
+    message: world.lastBody,
+    _web: world.web,
+    ...extra
+  }))
+}
+
+When('sending a Slack message with a markdown body of {int} alert bullets', function (count) {
+  return postBullets(this, count)
+})
+
+When('sending a Slack message with a markdown body of {int} alert bullets into thread {string}', function (count, threadTs) {
+  return postBullets(this, count, { threadTs })
+})
+
+Given('a Slack channel {string} which already received the same long message today', function (_channel) {
+  this.web = webWithHistory.call(this, [
+    { ts: '1', metadata: { event_type: sha256(bulletBody(80)) } }
+  ])
+})
+
+const topLevelPost = function () {
+  const params = this.web.__recorder.paramsOf('chat.postMessage')[0]
+  assert.ok(params, 'chat.postMessage called')
+  assert.ok(!params.thread_ts, `expected no thread_ts, got ${params.thread_ts}`)
+}
+
+Then('the first post is a top-level message', topLevelPost)
+Then('the post is a top-level message', topLevelPost)
+
+Then('the first post announces {int} more in thread', function (count) {
+  const params = this.web.__recorder.paramsOf('chat.postMessage')[0]
+  const rendered = JSON.stringify(params.blocks)
+  assert.ok(
+    rendered.includes(`…${count} more in thread`),
+    `missing trailer, tail: ${rendered.slice(-200)}`
+  )
+})
+
+Then("the overflow is posted as a reply in the first post's thread", function () {
+  const posts = this.web.__recorder.paramsOf('chat.postMessage')
+  assert.ok(posts.length >= 2, 'expected a thread reply after the head post')
+  // The mock returns ts '1234.5678' for every post, so the reply must
+  // reference the head post's timestamp — not a nested one.
+  assert.equal(posts[1].thread_ts, '1234.5678')
+})
+
+Then('every posted bullet is intact', function () {
+  const posts = this.web.__recorder.paramsOf('chat.postMessage')
+  assert.ok(posts.length > 0, 'expected at least one post')
+  // mack rewrites "- [label](url)" bullets, so check that both
+  // halves of every bullet entity survive: the label and the link.
+  const rendered = posts.map(p => JSON.stringify(p.blocks)).join('\n')
+  const missing = []
+  for (let n = 1; n <= this.lastBody.split('\n').length; n++) {
+    if (!rendered.includes(`https://github.com/repo/alert/${n}|Alert ${n} in`)) {
+      missing.push(n)
+    }
+  }
+  assert.deepEqual(missing, [], `truncated or missing bullets: ${missing.slice(0, 5).join(', ')}`)
+})
+
+Then('exactly one message is posted', function () {
+  assert.equal(this.web.__recorder.count('chat.postMessage'), 1)
+})
+
+Then('every post after the first stays in thread {string}', function (threadTs) {
+  const posts = this.web.__recorder.paramsOf('chat.postMessage')
+  assert.ok(posts.length >= 2, 'expected a thread reply after the head post')
+  assert.equal(posts[0].thread_ts, threadTs)
+  for (const p of posts.slice(1)) {
+    assert.equal(p.thread_ts, threadTs, 'reply must stay in the same thread')
+  }
+})

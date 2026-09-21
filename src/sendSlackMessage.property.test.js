@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'assert'
 import fc from 'fast-check'
-import { messageToBlocks } from './sendSlackMessage.js'
+import { messageToBlocks, splitMessageForSlack } from './sendSlackMessage.js'
 
 const paragraphArb = fc.array(
   fc.array(fc.constantFrom(...'abcdefghij '.split('')), { minLength: 1, maxLength: 12 })
@@ -40,4 +40,24 @@ test('property: the cap marker appears only when truncation happened', async () 
     // must imply exactly 50 blocks.
     if (hasMarker) assert.equal(blocks.length, 50)
   }), { numRuns: 25 })
+})
+
+test('property: chunks split at line boundaries and rejoin exactly', async () => {
+  const bulletArb = fc.array(
+    fc.array(fc.constantFrom(...'abcdefghijk '.split('')), { minLength: 1, maxLength: 60 })
+      .map(chars => `- ${chars.join('').trimEnd() || 'x'}`),
+    { minLength: 1, maxLength: 300 }
+  )
+  await fc.assert(fc.property(bulletArb, bullets => {
+    const body = bullets.join('\n')
+    const chunks = splitMessageForSlack(body)
+    assert.equal(chunks.join('\n'), body, 'chunks must rejoin to the original')
+    // Chunk boundaries never fall inside a line: every chunk starts
+    // with "- " (or is the whole body when it is a single chunk).
+    for (const chunk of chunks) {
+      if (chunks.length === 1) continue
+      assert.ok(chunk.startsWith('- '), 'chunk starts mid-line')
+      assert.ok(chunk.length <= 2900, `chunk too long: ${chunk.length}`)
+    }
+  }), { numRuns: 100 })
 })
