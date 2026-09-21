@@ -80,3 +80,28 @@ Feature: Sending Slack messages
     Then at most fifty blocks are produced
     And the last original block survives the cap
     And the cap is announced with "...and more"
+
+  Scenario: A long markdown message overflows into a thread
+    Given a Slack channel "alerts"
+    When sending a Slack message with a markdown body of 80 alert bullets
+    Then the first post is a top-level message
+    And the first post announces 40 more in thread
+    And the overflow is posted as a reply in the first post's thread
+    And every posted bullet is intact
+
+  Scenario: A short markdown message posts without a thread
+    Given a Slack channel "alerts"
+    When sending a Slack message with a markdown body of 30 alert bullets
+    Then exactly one message is posted
+    And the post is a top-level message
+
+  Scenario: A repeated long message is debounced by its full body
+    Given a Slack channel "alerts" which already received the same long message today
+    When sending a Slack message with a markdown body of 80 alert bullets
+    Then no new message is posted
+
+  Scenario: Overflow replies do not recurse into deeper threads
+    Given a Slack channel "alerts"
+    When sending a Slack message with a markdown body of 80 alert bullets into thread "1111.2222"
+    Then every post after the first stays in thread "1111.2222"
+    And every posted bullet is intact

@@ -15,6 +15,43 @@ const colorCodes = {
   white: '#FFFFFF'
 }
 
+// Slack truncates mrkdwn section text (~3000 chars) and hard-caps a
+// message at 50 blocks, so long markdown (e.g. a dependabot dismiss
+// digest with dozens of "also in #1234" back-references) gets cut
+// mid-entity. Chunks stay under both ceilings: 2900 chars and 40
+// lines (each bullet renders as roughly one block, leaving room for
+// the "...more in thread" trailer plus margin).
+const SLACK_CHUNK_LIMIT = 2900
+const SLACK_CHUNK_MAX_LINES = 40
+
+// Split markdown into chunks at line boundaries only — never inside a
+// line, so no "[#123](https://...)" entity is ever half-cut by us.
+// Exported for tests. A single line longer than the limit travels
+// whole (Slack may still ellipsize it internally).
+export function splitMessageForSlack (
+  message,
+  limit = SLACK_CHUNK_LIMIT,
+  maxLines = SLACK_CHUNK_MAX_LINES
+) {
+  const lines = message.split('\n')
+  const chunks = []
+  let current = []
+  let size = 0
+  for (const line of lines) {
+    const cost = line.length + (current.length > 0 ? 1 : 0)
+    if (current.length > 0 && (size + cost > limit || current.length >= maxLines)) {
+      chunks.push(current.join('\n'))
+      current = [line]
+      size = line.length
+    } else {
+      current.push(line)
+      size += cost
+    }
+  }
+  if (current.length > 0 || chunks.length === 0) chunks.push(current.join('\n'))
+  return chunks
+}
+
 // Convert a markdown message to Slack blocks. Exported so
 // the nudge refresh path can rebuild a message body for
 // chat.update with the same rendering.
@@ -106,8 +143,24 @@ export default async function sendSlackMessage ({
     })
   }
 
+  // Long markdown overflows into a thread: the head chunk renders in
+  // the top-level post with a "...more in thread" pointer, the rest
+  // follow as replies rooted at that post (or at the caller's thread
+  // when already replying — threads are flat, replies never nest).
+  // The dedup hash above still covers the full original body, so
+  // reruns debounce on the head post alone.
+  let headMessage = message
+  let overflowChunks = []
   if (message !== null) {
-    const mdBlocks = await messageToBlocks(message)
+    const chunks = splitMessageForSlack(filteredMessage)
+    if (chunks.length > 1) {
+      const overflowLines = message.split('\n').length - chunks[0].split('\n').length
+      headMessage = chunks[0] + `\n\n_…${overflowLines} more in thread →_`
+      overflowChunks = chunks.slice(1)
+    } else {
+      headMessage = chunks[0]
+    }
+    const mdBlocks = await messageToBlocks(headMessage)
     if (colored) {
       attachments = [{
         color,
@@ -158,18 +211,30 @@ export default async function sendSlackMessage ({
   const metadata = { event_type: eventType ?? hashHex, event_payload: eventPayload }
 
   // send the message
-  const result = await web.chat.postMessage({
+  const baseParams = {
     username,
     text: text || `${username} alert`,
     channel: targetChannelId,
     link_names: true,
     unfurl_links: true,
     unfurl_media: true,
+    metadata
+  }
+  const result = await web.chat.postMessage({
+    ...baseParams,
     blocks,
     attachments,
-    metadata,
     ...(threadTs ? { thread_ts: threadTs } : {})
   })
+
+  const rootTs = threadTs ?? result?.ts
+  for (const chunk of overflowChunks) {
+    await web.chat.postMessage({
+      ...baseParams,
+      blocks: await messageToBlocks(chunk),
+      thread_ts: rootTs
+    })
+  }
 
   if (debug) { console.log(`result: ${JSON.stringify(result)}`) }
 
