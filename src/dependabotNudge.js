@@ -3,6 +3,7 @@ import {
   DEFAULT_SKIP_HOTWORDS
 } from './dependabotConstants.js'
 import { messageToBlocks } from './sendSlackMessage.js'
+import { parseBlocklist, matchBlocklist } from './blocklistMatcher.js'
 
 function alertSeverity (alert) {
   return Severity[alert.security_advisory?.severity || alert.severity]
@@ -141,6 +142,7 @@ export default async function dependabotNudge ({
   minlevel = Severity.high,
   skipRepositories = ['chromium'],
   skipHotwords = DEFAULT_SKIP_HOTWORDS,
+  dependabotBlocklist = null,
   defaultContact = ['yan'],
   githubToSlack = {},
   singleOutputMessage = false,
@@ -189,6 +191,19 @@ export default async function dependabotNudge ({
     defaultContact = defaultContact.split(',')
   }
 
+  // Manifest paths matching the blocklist (e.g. deliberately
+  // vulnerable test fixtures) are auto-dismissed by the weekly
+  // dismiss action, so they must not be nudged either.
+  let skipPatterns = []
+  if (dependabotBlocklist) {
+    try {
+      const fs = await import('node:fs/promises')
+      skipPatterns = parseBlocklist(await fs.readFile(dependabotBlocklist, 'utf-8')).patterns
+    } catch (e) {
+      if (debug) console.log(`Could not read ${dependabotBlocklist}: ${e}`)
+    }
+  }
+
   // get all repositories in this organization
   const repos = Array.from(await github.paginate(github.rest.repos.listForOrg, {
     org,
@@ -234,6 +249,7 @@ export default async function dependabotNudge ({
         state: 'open',
         severity: Object.keys(Severity).filter(s => Severity[s] >= minlevel)
       })).filter(a => !skipHotwords.some(h => a.security_advisory.summary.toLowerCase().includes(h)))
+        .filter(a => !matchBlocklist(skipPatterns, a.dependency?.manifest_path))
         .filter(a => a.security_vulnerability?.first_patched_version?.identifier)
 
       // Resolve GitHub usernames for alert assignment (before Slack name conversion)

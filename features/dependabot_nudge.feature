@@ -271,3 +271,26 @@ Feature: Dependabot nudge
     And repo "bar" fails to list alerts
     When running the dependabot nudge
     Then the nudge run reports 2 repos scanned, 1 nudged with 2 alerts and 1 error
+
+  Scenario: Alerts on blocklisted manifests are not nudged
+    Given the repository "brave/foo"
+    And repo "foo" has an alert on manifest "t3sts/npmaudit/package-lock.json"
+    And the dependabot nudge uses the blocklist:
+      """
+      t3sts/
+      """
+    When running the dependabot nudge
+    Then the result is an empty message list
+
+  Scenario: Non-blocklisted alerts are still nudged when a blocklist is set
+    Given the repository "brave/foo"
+    And repo "foo" has an alert on manifest "src/package-lock.json"
+    And the dependabot nudge uses the blocklist:
+      """
+      # test fixtures are auto-dismissed weekly
+      t3sts/
+      fixtures/
+      """
+    When running the dependabot nudge
+    Then the result has 1 message
+    And the message for "foo" totals 1 alerts with 0 critical

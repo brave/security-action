@@ -1,0 +1,16 @@
+# Blocklist file for Dependabot alert auto-dismissal.
+#
+# One pattern per line; '#' comments. An alert is auto-dismissed when
+# its dependency manifest path matches any pattern, matched like
+# assets/cleaner.rb blocklists: File.fnmatch("*<pattern>*"), i.e. a
+# substring glob where '*' also spans '/'.
+#
+# Deliberately-vulnerable test fixtures must never raise real alerts:
+t3sts/
+#
+# Test fixture / scraped third-party content path globs, kept in sync
+# with assets/opengrep_rules/blocklist.txt:
+test_data/
+testdata/
+fixtures/
+__fixtures__/

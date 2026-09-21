@@ -35,6 +35,37 @@ Given('a dismiss list file containing {string} and {string}', function (idA, idB
   fs.writeFileSync(this.dismissConfig, `${idA}\n${idB}\n`)
 })
 
+Given('a blocklist file containing {string} and {string}', function (patternA, patternB) {
+  writeBlocklist(this, `${patternA}\n${patternB}\n`)
+})
+
+Given('a blocklist file containing {string}', function (pattern) {
+  writeBlocklist(this, `${pattern}\n`)
+})
+
+function writeBlocklist (world, contents) {
+  world.blocklist = path.join(os.tmpdir(), `blocklist-${Date.now()}-${Math.random().toString(16).slice(2)}.txt`)
+  fs.writeFileSync(world.blocklist, contents)
+}
+
+Given('the org has open dependabot alerts with manifests', function (table) {
+  this.orgAlerts = table.raw().map(row => {
+    const [number, summary, ghsaId, manifestPath, repo] = row
+    return {
+      number: Number(number),
+      html_url: `https://github.com/${this.org}/${repo}/dependabot/alert/${number}`,
+      repository: { name: repo },
+      dependency: { manifest_path: manifestPath },
+      security_advisory: {
+        summary,
+        ghsa_id: ghsaId,
+        cve_id: null
+      }
+    }
+  })
+  this.github = this.makeMockGithub({ orgAlerts: this.orgAlerts })
+})
+
 When('dismissing alerts', async function () {
   this.github = this.github || this.makeMockGithub({ orgAlerts: [] })
   const config = this.dismissConfig || path.join(os.tmpdir(), 'nonexistent-dismiss-list.txt')
@@ -72,6 +103,35 @@ When('dismissing alerts with a missing dismiss list', async function () {
     org: this.org,
     github: this.github,
     dependabotDismissConfig: path.join(os.tmpdir(), 'nonexistent-dismiss-list.txt')
+  }))
+})
+
+When('dismissing alerts with that blocklist', async function () {
+  await dismissWithBlocklist(this)
+})
+
+When('dismissing alerts with that blocklist in debug mode', async function () {
+  await dismissWithBlocklist(this, true)
+})
+
+async function dismissWithBlocklist (world, debug) {
+  world.github = world.github || world.makeMockGithub({ orgAlerts: [] })
+  const config = world.dismissConfig || path.join(os.tmpdir(), 'nonexistent-dismiss-list.txt')
+  await world.attempt(() => dependabotDismiss({
+    org: world.org,
+    github: world.github,
+    dependabotDismissConfig: config,
+    dependabotBlocklist: world.blocklist,
+    debug
+  }))
+}
+
+When('dismissing alerts with a missing blocklist', async function () {
+  await this.attempt(() => dependabotDismiss({
+    org: this.org,
+    github: this.github,
+    dependabotDismissConfig: path.join(os.tmpdir(), 'nonexistent-dismiss-list.txt'),
+    dependabotBlocklist: path.join(os.tmpdir(), 'nonexistent-blocklist.txt')
   }))
 })
 
@@ -117,6 +177,21 @@ Then('the dismissal message is:', function (docstring) {
 
 Then('no repositories are in the dismissed list', function () {
   assert.deepEqual(this.result.dismissedRepos, [])
+})
+
+Then('the dismissed comment for alert {int} mentions the blocklist pattern {string}', function (number, pattern) {
+  const patch = dismissPatches(this.github).find(p => p.alert_number === number)
+  assert.ok(patch, `no dismissal for alert ${number}`)
+  assert.ok(patch.dismissed_comment.includes(`matches the blocklist pattern "${pattern}"`),
+    `${patch.dismissed_comment} lacks blocklist pattern ${pattern}`)
+  assert.ok(!patch.dismissed_comment.includes('manifest "'),
+    `${patch.dismissed_comment} must not leak the manifest path`)
+})
+
+Then('alert {int} is dismissed as {string}', function (number, reason) {
+  const patch = dismissPatches(this.github).find(p => p.alert_number === number)
+  assert.ok(patch, `no dismissal for alert ${number}`)
+  assert.equal(patch.dismissed_reason, reason)
 })
 
 Then('the paginate severity filter is {string}', function (severities) {

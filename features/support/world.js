@@ -117,6 +117,7 @@ export function makeDependabotAlert (n, {
   summary = `Vulnerability ${n}`,
   description = `# Title\n\nBad things in pkg-${n}.\n`,
   pkg = `pkg-${n}`,
+  manifestPath = null,
   cveId = `CVE-2026-000${n}`,
   ghsaId = `GHSA-000${n}`,
   scope = 'runtime'
@@ -125,7 +126,7 @@ export function makeDependabotAlert (n, {
     number: n,
     html_url: `https://github.com/${repo}/security/dependabot/${n}`,
     severity,
-    dependency: { package: { name: pkg }, scope },
+    dependency: { package: { name: pkg }, manifest_path: manifestPath, scope },
     security_advisory: {
       summary,
       description,

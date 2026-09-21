@@ -1,5 +1,8 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { strict as assert } from 'assert'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 import { fileURLToPath } from 'url'
 import dependabotNudge, {
   buildRepoMessage,
@@ -86,6 +89,18 @@ Given('repo {string} has an alert without a patched version', function (name) {
     ...(this.alertsByRepo[key] || []),
     { ...this.makeDependabotAlert(n), security_vulnerability: {} }
   ]
+})
+
+Given('repo {string} has an alert on manifest {string}', function (name, manifestPath) {
+  const key = `${this.org}/${name}`
+  const n = (this.alertsByRepo[key]?.length || 0) + 1
+  this.alertsByRepo[key] = [...(this.alertsByRepo[key] || []),
+    this.makeDependabotAlert(n, { manifestPath })]
+})
+
+Given('the dependabot nudge uses the blocklist:', function (docstring) {
+  this.dependabotBlocklist = path.join(os.tmpdir(), `nudge-blocklist-${Date.now()}-${Math.random().toString(16).slice(2)}.txt`)
+  fs.writeFileSync(this.dependabotBlocklist, `${docstring}\n`)
 })
 
 function dupAdvisoryAlert (world, n, pkg, advisory, severity) {
@@ -201,6 +216,7 @@ When('running the dependabot nudge', async function () {
       githubToSlack: this.githubToSlack,
       singleOutputMessage: this.singleOutputMessage === true,
       assignMaintainers: this.assignMaintainers !== false,
+      dependabotBlocklist: this.dependabotBlocklist,
       actionPath: ACTION_PATH
     })))
   } finally {

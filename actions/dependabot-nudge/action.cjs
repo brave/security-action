@@ -19,7 +19,18 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   const minlevel = nudgeSeverityForWeek(today)
   if (debug) { console.log(`nudge minlevel: ${minlevel}`) }
 
-  const nudges = await dependabotNudge({ debug, org: context.repo.owner, github, minlevel, githubToSlack, actionPath })
+  const nudges = await dependabotNudge({
+    debug,
+    org: context.repo.owner,
+    github,
+    minlevel,
+    githubToSlack,
+    actionPath,
+    // Same manifest-path blocklist the weekly auto-dismiss uses, so
+    // alerts on test-fixture manifests are never nudged either.
+    dependabotBlocklist:
+      `${actionPath}/actions/dependabot-auto-dismiss/blocklist.txt`
+  })
 
   // Nothing to nudge about: skip creating threads entirely.
   if (nudges.length === 0) {
