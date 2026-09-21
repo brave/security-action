@@ -38,6 +38,7 @@ node run.js ./src/dependabotDismiss.js --org=brave --dependabotDismissConfig=./m
 | `--hotwords`               | No       | DoS-related terms        | Comma-separated summary keywords to match |
 | `--actor`                  | No       | `security-action`        | Name used in dismiss comment |
 | `--dependabotDismissConfig`| No       | `dependabot-dismiss.txt` | Path to file with GHSA/CVE IDs to dismiss |
+| `--dependabotBlocklist`    | No       | `dependabot-blocklist.txt` | Path to file with manifest-path globs (cleaner.rb format); matching alerts are dismissed as `not_used` |
 
 ## Output
 
@@ -51,5 +52,5 @@ Returns `{ message, dismissedRepos }` -- a Markdown summary of dismissed alerts 
 
 - The `run.js` entry point automatically loads `.env` credentials
 - Use `--debug=true` first to preview what would be dismissed
-- Alerts are dismissed with a "not_used" reason and a comment identifying the actor
+- Alerts matching ids/hotwords are dismissed with a "tolerable_risk" reason; alerts whose manifest path matches `blocklist.txt` (e.g. the `t3sts/` test fixtures) are dismissed with a "not_used" reason, each with a comment identifying the actor
 - This is a write operation -- alerts will be permanently dismissed

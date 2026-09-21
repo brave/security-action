@@ -32,13 +32,16 @@ module.exports = async ({
   const dismissConfig =
     `${actionPath}/actions/dependabot-auto-dismiss` +
     '/dismiss.txt'
+  const blocklistConfig =
+    `${actionPath}/actions/dependabot-auto-dismiss/blocklist.txt`
 
   const { message } =
     await dependabotDismiss({
       debug,
       org,
       github,
-      dependabotDismissConfig: dismissConfig
+      dependabotDismissConfig: dismissConfig,
+      dependabotBlocklist: blocklistConfig
     })
 
   // Reconciliation, including the repos touched by the

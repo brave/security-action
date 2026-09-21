@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import { Severity } from './dependabotConstants.js'
+import { parseBlocklist, matchBlocklist } from './blocklistMatcher.js'
 
 export default async function dependabotDismiss ({
   org,
@@ -15,7 +16,8 @@ export default async function dependabotDismiss ({
   githubToken = null,
   github = null,
   actor = 'security-action',
-  dependabotDismissConfig = 'dependabot-dismiss.txt'
+  dependabotDismissConfig = 'dependabot-dismiss.txt',
+  dependabotBlocklist = 'dependabot-blocklist.txt'
 }) {
   const watermark = 'The following alerts were dismissed:\n\n'
   const dismissed = []
@@ -27,6 +29,13 @@ export default async function dependabotDismiss ({
     dependabotDismissIds = (await fs.readFile(dependabotDismissConfig, 'utf-8')).split('\n').map(l => l.trim()).filter(Boolean)
   } catch (e) {
     if (debug) console.log(`Could not read ${dependabotDismissConfig}: ${e}`)
+  }
+
+  let blocklistPatterns = []
+  try {
+    blocklistPatterns = parseBlocklist(await fs.readFile(dependabotBlocklist, 'utf-8')).patterns
+  } catch (e) {
+    if (debug) console.log(`Could not read ${dependabotBlocklist}: ${e}`)
   }
 
   if (!github && githubToken) {
@@ -56,16 +65,28 @@ export default async function dependabotDismiss ({
   })).filter(a =>
     hotwords.some(h => a.security_advisory.summary.toLowerCase().includes(h)) ||
             dependabotDismissIds.includes(a.security_advisory.ghsa_id) ||
-            dependabotDismissIds.includes(a.security_advisory.cve_id)
+            dependabotDismissIds.includes(a.security_advisory.cve_id) ||
+            matchBlocklist(blocklistPatterns, a.dependency?.manifest_path)
   )
 
   for (const a of alerts) {
     // get the first hotword that matches the summary
     const hotword = hotwords.find(h => a.security_advisory.summary.toLowerCase().includes(h))
     const matchId = dependabotDismissIds.find(id => a.security_advisory.ghsa_id === id || a.security_advisory.cve_id === id)
+    const matchPattern = matchBlocklist(blocklistPatterns, a.dependency?.manifest_path)
     let dismissComment = `Dismissed by ${actor}`
+    let dismissedReason = 'tolerable_risk'
     if (matchId) {
       dismissComment += ` because the alert matched the id "${matchId}"`
+    } else if (hotword) {
+      dismissComment += ` because the alert summary contains the hotword "${hotword}"`
+    } else if (matchPattern) {
+      // Test-fixture manifests hold deliberately vulnerable
+      // dependencies that are not used in production builds. The
+      // comment is public on open repos, so it names only the
+      // pattern from the public blocklist, not the repo's paths.
+      dismissComment += ` because the alert manifest matches the blocklist pattern "${matchPattern}"`
+      dismissedReason = 'not_used'
     } else {
       dismissComment += ` because the alert summary contains the hotword "${hotword}"`
     }
@@ -90,7 +111,7 @@ export default async function dependabotDismiss ({
       org,
       repo: a.repository.name,
       alert_number: a.number,
-      dismissed_reason: 'tolerable_risk',
+      dismissed_reason: dismissedReason,
       dismissed_comment: dismissComment,
       headers: {
         'X-GitHub-Api-Version': '2022-11-28'

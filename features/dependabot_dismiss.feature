@@ -88,3 +88,45 @@ Feature: Dismissing Dependabot alerts
       - [Alpha leak in transport in `test-org/repo2`](https://github.com/test-org/repo2/dependabot/alert/1)
       - [Zeta overflow in parser in `test-org/repo1`](https://github.com/test-org/repo1/dependabot/alert/2)
       """
+
+  Scenario: Alerts on blocklisted manifest paths are dismissed
+    Given a blocklist file containing "t3sts/" and "fixtures/"
+    And the org has open dependabot alerts with manifests
+      | 1 | DoS in left-pad           | GHSA-aa | t3sts/npmaudit/package-lock.json | repo1 |
+      | 2 | Buffer overflow in parser | GHSA-bb | src/package-lock.json            | repo2 |
+    When dismissing alerts with that blocklist
+    Then 1 alert is dismissed
+    And alert 1 is dismissed as "not_used"
+    And the dismissed comment for alert 1 mentions the blocklist pattern "t3sts/"
+
+  Scenario: The id list takes precedence over the path blocklist in the comment
+    Given a dismiss list file containing "GHSA-aa" and "CVE-1999-1234"
+    And a blocklist file containing "t3sts/"
+    And the org has open dependabot alerts with manifests
+      | 1 | Overflow in parser | GHSA-aa | t3sts/npmaudit/package-lock.json | repo1 |
+    When dismissing alerts with that blocklist
+    Then 1 alert is dismissed
+    And the dismissed comment for alert 1 contains the id "GHSA-aa"
+
+  Scenario: The hotword takes precedence over the path blocklist in the comment
+    Given a blocklist file containing "t3sts/"
+    And the org has open dependabot alerts with manifests
+      | 1 | Regular expression complexity in parser | GHSA-cc | t3sts/npmaudit/package-lock.json | repo1 |
+    When dismissing alerts with that blocklist
+    Then 1 alert is dismissed
+    And alert 1 is dismissed as "tolerable_risk"
+    And the dismissed comment for alert 1 contains the hotword "regular expression complexity"
+
+  Scenario: A missing blocklist file is tolerated
+    Given the org has open dependabot alerts with manifests
+      | 1 | Buffer overflow in parser | GHSA-bb | t3sts/npmaudit/package-lock.json | repo1 |
+    When dismissing alerts with a missing blocklist
+    Then 0 alerts are dismissed
+
+  Scenario: Blocklisted paths are not dismissed in debug mode
+    Given a blocklist file containing "t3sts/"
+    And the org has open dependabot alerts with manifests
+      | 1 | Buffer overflow in parser | GHSA-bb | t3sts/npmaudit/package-lock.json | repo1 |
+    When dismissing alerts with that blocklist in debug mode
+    Then 0 alerts are dismissed
+    And the dismissal message contains "Buffer overflow in parser"
