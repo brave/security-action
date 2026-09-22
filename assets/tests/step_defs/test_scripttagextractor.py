@@ -170,3 +170,23 @@ def only_extracted(tmp_path, name):
 @then(parsers.parse('the extracted file "{name}" exists'))
 def extracted_file_present(tmp_path, name):
     assert (tmp_path / name).read_text() == "; a"
+
+
+@when(parsers.parse('the extractor runs with output directory "{output_dir}" over "{file_list}"'))
+def extractor_runs_output_dir(scripttagextractor, tmp_path, context, output_dir, file_list):
+    argv = [sys.executable, scripttagextractor.__file__, *file_list.split(","),
+            "--suffix", ".extractedscript.js", "--ignore-no-files",
+            "--output-dir", output_dir]
+    proc = subprocess.run(
+        argv, capture_output=True, text=True, cwd=tmp_path, check=False,
+    )
+    context["returncode"] = proc.returncode
+    context["stderr"] = proc.stderr
+
+
+@then("no extracted file is written next to its source")
+def no_file_next_to_source(tmp_path):
+    extracted = list(tmp_path.rglob("*.extractedscript.*"))
+    assert extracted, "extraction produced no files"
+    for p in extracted:
+        assert str(p.relative_to(tmp_path)).startswith("out/"), p

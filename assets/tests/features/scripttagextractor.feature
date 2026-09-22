@@ -127,3 +127,9 @@ Feature: script tag extractor
     Then the extractor exits successfully
     And the extracted file "app/page.html.extractedscript.js" exists
     And the extracted file "app/other.html.extractedscript.js" exists
+
+  Scenario: Extracted scripts land in an output directory
+    Given HTML documents "app/page.html" and "app/other.html" each containing a script
+    When the extractor runs with output directory "out" over "app/page.html,app/other.html"
+    Then the extracted file "out/app/page.html.extractedscript.js" exists
+    And no extracted file is written next to its source

@@ -1,4 +1,6 @@
 import { spawnSync } from 'child_process'
+import { mkdtempSync, rmSync } from 'fs'
+import os from 'os'
 import path from 'path'
 
 /**
@@ -41,47 +43,71 @@ export default async function modelscanPostComments ({
 
   const assetsDir = path.join(actionPath, 'assets')
 
-  // Run Python audit script — emits JSON lines per finding.
-  // SCRIPTPATH tells it where all_changed_files.txt lives (assets dir,
-  // written by action.cjs) — same convention as reviewdog.sh exports.
-  const env = {
-    ...process.env,
-    SCRIPTPATH: assetsDir,
-    MODELSCAN_ENABLED_SCANNERS: enabledScanners || 'all'
-  }
-
   // Run the audit via uv against the action's locked project (uv.lock) —
   // deps are synced by action.cjs before this runs, so --no-sync just execs
   // the project venv python. No cwd: all_changed_files.txt holds
   // repo-relative paths, so the script must run in the workspace
   // (the github-script working dir), not the action checkout.
-  const result = runSpawn('uv', [
-    'run', '--frozen', '--no-sync',
-    '--project', actionPath,
-    'python', path.join(assetsDir, 'modelscan-audit.py')
-  ], {
-    env,
-    encoding: 'utf-8',
-    timeout: 120_000,
-    maxBuffer: 10 * 1024 * 1024
-  })
-
-  if (result.error) {
-    console.error('modelscan spawn failed:', result.error.message)
-  } else if (result.status !== 0) {
-    console.warn(`modelscan exited with status ${result.status} — posting partial findings if any`)
+  //
+  // The spawn runs inside the Landlock sandbox: model files are
+  // attacker-controlled bytes fed to native parsers (h5py/TensorFlow), so
+  // the scanner gets a read-only workspace and zero network egress.
+  const sandboxTmp = mkdtempSync(path.join(os.tmpdir(), 'modelscan-'))
+  const wrapper = path.join(actionPath, 'scripts', 'with-sandbox.sh')
+  const env = {
+    ...process.env,
+    TMPDIR: sandboxTmp,
+    SCRIPTPATH: assetsDir,
+    MODELSCAN_ENABLED_SCANNERS: enabledScanners || 'all'
   }
-  if (result.stderr) {
-    debugLog('modelscan stderr:', result.stderr)
-  }
-
   const findings = []
-  for (const line of (result.stdout || '').split('\n').filter(Boolean)) {
-    try {
-      findings.push(JSON.parse(line))
-    } catch (_) {
-      debugLog('modelscan parse error:', line)
+  try {
+    const result = runSpawn('bash', [
+      wrapper,
+      '--ignore-missing',
+      '--ro', process.cwd(),
+      '--rox', actionPath,
+      '--rwx', sandboxTmp,
+      '--rw', '/dev/null',
+      '--rox', process.env.UV_PYTHON_INSTALL_DIR || path.join(os.homedir(), '.local/share/uv'),
+      // /run: runner resolv.conf symlink — DNS for version checks etc.
+      '--ro', '/run',
+      '--rwx', path.join(os.homedir(), '.cache/uv'),
+      '--rox', path.join(os.homedir(), '.local/bin'),
+      '--rox', '/opt/hostedtoolcache',
+      '--rox', '/usr',
+      '--rox', '/lib',
+      '--rox', '/lib64',
+      '--ro', '/etc',
+      '--',
+      'uv', 'run', '--frozen', '--no-sync',
+      '--project', actionPath,
+      'python', path.join(assetsDir, 'modelscan-audit.py')
+    ], {
+      env,
+      encoding: 'utf-8',
+      timeout: 120_000,
+      maxBuffer: 10 * 1024 * 1024
+    })
+
+    if (result.error) {
+      console.error('modelscan spawn failed:', result.error.message)
+    } else if (result.status !== 0) {
+      console.warn(`modelscan exited with status ${result.status} — posting partial findings if any`)
     }
+    if (result.stderr) {
+      debugLog('modelscan stderr:', result.stderr)
+    }
+
+    for (const line of (result.stdout || '').split('\n').filter(Boolean)) {
+      try {
+        findings.push(JSON.parse(line))
+      } catch (_) {
+        debugLog('modelscan parse error:', line)
+      }
+    }
+  } finally {
+    rmSync(sandboxTmp, { recursive: true, force: true })
   }
 
   if (findings.length === 0) {
