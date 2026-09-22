@@ -346,6 +346,10 @@ export function makeMockFs (files = {}) {
       rec.record('appendFileSync', { path: key(p), content })
       files[key(p)] = (files[key(p)] || '') + content
     },
+    mkdirSync: (p, opts) => {
+      rec.record('mkdirSync', { path: key(p), opts })
+      files[key(p)] = files[key(p)] || ''
+    },
     existsSync: (p) => {
       rec.record('existsSync', { path: key(p) })
       return key(p) in files
