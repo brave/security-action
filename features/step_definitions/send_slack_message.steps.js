@@ -96,6 +96,20 @@ Then('no new message is posted', function () {
   assert.equal(this.web.__recorder.count('chat.postMessage'), 0)
 })
 
+Then('the message is posted with body {string}', function (body) {
+  const params = this.web.__recorder.paramsOf('chat.postMessage')[0]
+  assert.ok(params, 'chat.postMessage called')
+  const rendered = JSON.stringify(params.blocks ?? params.attachments ?? [])
+  assert.ok(rendered.includes(body), `posted body missing "${body}"`)
+})
+
+Then('the posted body does not contain {string}', function (snippet) {
+  const params = this.web.__recorder.paramsOf('chat.postMessage')[0]
+  assert.ok(params, 'chat.postMessage called')
+  const rendered = JSON.stringify(params.blocks ?? params.attachments ?? [])
+  assert.ok(!rendered.includes(snippet), `posted body unexpectedly contains "${snippet}"`)
+})
+
 When('sending a Slack message with text {string} in debug mode', async function (text) {
   await this.attempt(() => sendSlackMessage({
     token: 'xoxb-test',

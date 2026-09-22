@@ -54,6 +54,12 @@ Feature: Sending Slack messages
     When sending a Slack message with text "hello world" and a message body with another findings count
     Then no new message is posted
 
+  Scenario: The posted body keeps the real findings count
+    Given a Slack channel "alerts"
+    When sending a Slack message with text "hello world" and a message body with another findings count
+    Then the message is posted with body "Findings: 99"
+    And the posted body does not contain "n+"
+
   Scenario: Posting into a thread scans thread replies for dedup
     Given a Slack channel "alerts" with thread "1111.2222" already containing the same message
     When sending a Slack message with text "hello world" into thread "1111.2222"

@@ -149,10 +149,14 @@ export default async function sendSlackMessage ({
   // when already replying — threads are flat, replies never nest).
   // The dedup hash above still covers the full original body, so
   // reruns debounce on the head post alone.
+  // Chunk the original message, not the findings-normalized copy:
+  // "Findings: n+" is only a hash-level normalization so reruns with
+  // a different findings count stay debounced — the posted body must
+  // keep the real count.
   let headMessage = message
   let overflowChunks = []
   if (message !== null) {
-    const chunks = splitMessageForSlack(filteredMessage)
+    const chunks = splitMessageForSlack(message)
     if (chunks.length > 1) {
       const overflowLines = message.split('\n').length - chunks[0].split('\n').length
       headMessage = chunks[0] + `\n\n_…${overflowLines} more in thread →_`
