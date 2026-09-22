@@ -107,8 +107,8 @@ Then('the install script is not executed', function () {
 
 Then('the install script is executed with the pinned version', function () {
   const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
-  const pattern = new RegExp(`bash ".*" -v ${OPENGREP_VERSION.replace(/\./g, '\\.')}`)
-  assert.ok(commands.some(c => pattern.test(c)), `expected pinned version execution: ${commands.join(' | ')}`)
+  assert.ok(commands.some(c => c.startsWith('bash "') && c.endsWith(` -v ${OPENGREP_VERSION}`)),
+    `expected pinned version execution: ${commands.join(' | ')}`)
 })
 
 Then('the action fails with no pinned binary digest', function () {
