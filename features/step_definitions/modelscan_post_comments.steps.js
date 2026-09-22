@@ -187,11 +187,16 @@ Then('the audit is spawned via uv', function () {
   const calls = this.spawn.__recorder.paramsOf('spawn')
   assert.equal(calls.length, 1)
   const [cmd, args] = calls[0].args
-  assert.equal(cmd, 'uv')
-  assert.ok(args.includes('run'), 'uv run required')
-  assert.ok(args.includes('--project'), 'uv run --project required')
+  assert.equal(cmd, 'bash')
+  assert.equal(args[0], path.join(ACTION_PATH, 'scripts', 'with-sandbox.sh'))
+  const separator = args.indexOf('--')
+  assert.ok(separator !== -1, 'wrapper command separator required')
+  const uvArgs = args.slice(separator + 1)
+  assert.equal(uvArgs[0], 'uv')
+  assert.ok(uvArgs.includes('run'), 'uv run required')
+  assert.ok(uvArgs.includes('--project'), 'uv run --project required')
   assert.ok(
-    args.some(a => String(a).endsWith('modelscan-audit.py')),
+    uvArgs.some(a => String(a).endsWith('modelscan-audit.py')),
     'audit script must be in args'
   )
 })

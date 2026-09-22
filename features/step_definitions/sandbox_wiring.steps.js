@@ -20,13 +20,24 @@ Then('the pip-audit command wraps python3 with the sandbox wrapper', function ()
 
 Then('the pip-audit sandbox grants write access only to the venv temp directory', function () {
   const cmd = this.runners['pip-audit'].cmd
-  assert.ok(cmd.includes('--ro "$PWD"'), `workspace not read-only in:\n${cmd}`)
+  assert.ok(!cmd.includes('--ro "$PWD"'), `whole workspace read grant in:\n${cmd}`)
   assert.ok(cmd.includes('--rwx "$PIP_TMP"'), `venv temp dir not writable+executable in:\n${cmd}`)
   const writeGrants = [...cmd.matchAll(/--rw(x)?\s+\S+/g)].map(m => m[0])
   for (const grant of writeGrants) {
     // /dev/null is a device node git opens O_RDWR for its pager plumbing.
     assert.ok(grant.includes('$PIP_TMP') || grant.includes('/dev/null'), `unexpected write grant ${grant} in:\n${cmd}`)
   }
+})
+
+Then('the pip-audit sandbox grants only the changed Python manifests, not the workspace', function () {
+  const cmd = this.runners['pip-audit'].cmd
+  assert.ok(!cmd.includes('--ro "$PWD"'), `whole workspace read grant in:\n${cmd}`)
+  // pip-audit diffs changed manifests against the base branch, so git
+  // metadata must stay readable.
+  assert.ok(cmd.includes('--ro "$PWD/.git"'), `git metadata not granted in:\n${cmd}`)
+  assert.ok(cmd.includes("tr '\\0' '\\n' < \"$SCRIPTPATH/all_changed_files.txt\""), `changed-file list not parsed in:\n${cmd}`)
+  assert.ok(cmd.includes('case "${f' + '##*/}" in'), `basename filter missing in:\n${cmd}`)
+  assert.ok(cmd.includes('requirements*.txt|pyproject.toml) set -- "$@" --ro "$PWD/$f"'), `per-file manifest grant missing in:\n${cmd}`)
 })
 
 Then('the pip-audit sandbox allows outbound TCP on port 443 only', function () {

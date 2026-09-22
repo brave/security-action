@@ -2,7 +2,7 @@ from dataclasses import dataclass
 import fnmatch
 from glob import glob
 from html.parser import HTMLParser
-from os import environ, path
+from os import environ, makedirs, path
 from shutil import copyfile
 from sys import stderr
 from typing import List
@@ -40,7 +40,16 @@ class MyHTMLParser(HTMLParser):
         return super().handle_data(data)
 
 
-def main(source_file, suffix, add_suffix_to_original, dry_run=False):
+def _sink_path(source_file, name, output_dir):
+    """Path under output_dir (created), mirroring the source relative path."""
+    if output_dir is None:
+        return f"{source_file}{name}"
+    sink = path.join(output_dir, f"{source_file}{name}")
+    makedirs(path.dirname(sink), exist_ok=True)
+    return sink
+
+
+def main(source_file, suffix, add_suffix_to_original, dry_run=False, output_dir=None):
     if not path.exists(source_file):
         # Stale paths reach all_changed_files.txt when a file was renamed or
         # deleted on the base branch after the PR forked (the PR files API
@@ -62,14 +71,14 @@ def main(source_file, suffix, add_suffix_to_original, dry_run=False):
             script_data += "; " + s.data
             current_line_number += add_lines + s.new_lines()
 
-        output_file = f"{source_file}{suffix}"
+        output_file = _sink_path(source_file, suffix, output_dir)
         print("Extracting", source_file, "to", output_file, file=out)
         if not dry_run:
             with open(output_file, "w") as f:
                 f.write(script_data)
 
     if add_suffix_to_original:
-        destination = f"{source_file}{add_suffix_to_original}"
+        destination = _sink_path(source_file, add_suffix_to_original, output_dir)
         print("Copying", source_file, destination, file=out)
         if not dry_run:
             copyfile(source_file, destination)
@@ -87,6 +96,7 @@ if __name__ == "__main__":
     parser.add_argument("--glob", help="Process files matching glob")
     parser.add_argument("--ignore-glob", action="append", default=[], help="Skip files matching this fnmatch glob; may be repeated")
     parser.add_argument("--ignore-no-files", action="store_true", help="Don't fail if there are no matching files")
+    parser.add_argument("--output-dir", default=None, help="Write extracted files under this directory, mirroring source paths, instead of next to the sources")
     parser.add_argument("--dry-run", action="store_true", help="Just print what this would output")
     parser.add_argument("--debug", action="store_true", help="Print debug information to stderr")
     parser.add_argument("files", nargs="*", help="Files to process")
@@ -129,4 +139,5 @@ if __name__ == "__main__":
         parser.exit(1)
 
     for f in files:
-        main(f, args.suffix, args.add_suffix_to_original, args.dry_run)
+        main(f, args.suffix, args.add_suffix_to_original, args.dry_run,
+             output_dir=args.output_dir)

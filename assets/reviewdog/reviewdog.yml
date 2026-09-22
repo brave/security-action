@@ -3,34 +3,74 @@ runner:
     name: opengrep
     cmd: |
       set -e
-      (opengrep \
-          -c $SCRIPTPATH/opengrep_rules/generated/oss/vulns.yaml \
-          -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
-          -c $SCRIPTPATH/opengrep_rules/generated/oss/audit.yaml \
-          -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/audit.yaml \
-          $(find $SCRIPTPATH/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/opengrep_rules/generated/*" | sed 's/^/-c /g') \
-          --quiet \
-          $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
-          --json \
+      ACTION_ROOT="$(dirname "$SCRIPTPATH")"
+      OG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opengrep-scan.XXXXXX")"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
+      touch "$HOME/.opengrep/semgrep.log"
+      (TMPDIR="$OG_TMP" GIT_OPTIONAL_LOCKS=0 SEMGREP_SEND_METRICS=off \
+      SANDBOX_ENV_EXTRA="SEMGREP_SEND_METRICS" \
+      $SCRIPTPATH/../scripts/with-sandbox.sh \
+        --ignore-missing \
+        --ro "$PWD" --ro "$SCRIPTPATH" \
+        --rwx "$OG_TMP" --rw "$HOME/.semgrep" --rwx "$HOME/.cache/opengrep" --rw "$HOME/.opengrep/semgrep.log" --rw /dev/null \
+        --rox "$ACTION_ROOT/.venv" \
+        --rox "$HOME/.opengrep" --rox "$HOME/.local/bin" \
+        --rox /opt/hostedtoolcache --rox /usr --rox /lib --rox /lib64 \
+        --ro /etc --ro /run \
+        -- opengrep \
+        -c $SCRIPTPATH/opengrep_rules/generated/oss/vulns.yaml \
+        -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
+        -c $SCRIPTPATH/opengrep_rules/generated/oss/audit.yaml \
+        -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/audit.yaml \
+        $(find $SCRIPTPATH/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/opengrep_rules/generated/*" | sed 's/^/-c /g') \
+        --disable-version-check \
+        --quiet \
+        $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
+        --json \
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --opengrep --assignees) 2> reviewdog.opengrep.stderr.log
+      rm -rf "$OG_TMP"
     errorformat:
       - "%t:%f:%l %m"
   sveltegrep:
     name: sveltegrep
     cmd: |
       set -e
+      ACTION_ROOT="$(dirname "$SCRIPTPATH")"
+      SG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sveltegrep-scan.XXXXXX")"
+      trap 'rm -rf "$SG_TMP"' EXIT
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
       # --ignore-glob: skip test fixture / scraped third-party content entirely.
       # Keep in sync with the path globs in opengrep_rules/blocklist.txt.
-      (python3 $SCRIPTPATH/scripttagextractor.py \
+      # Extracted scripts are written to a temp mirror so the workspace
+      # itself can stay read-only inside the sandbox.
+      (TMPDIR="$SG_TMP" \
+      $SCRIPTPATH/../scripts/with-sandbox.sh \
+        --ignore-missing \
+        --ro "$PWD" --ro "$SCRIPTPATH" \
+        --rwx "$SG_TMP" --rw /dev/null \
+        --rox "$ACTION_ROOT/.venv" \
+        --rox /opt/hostedtoolcache --rox /usr --rox /lib --rox /lib64 \
+        --ro /etc --ro /run \
+        -- python3 $SCRIPTPATH/scripttagextractor.py \
+        --output-dir "$SG_TMP" \
         --suffix .extractedscript.js \
         --ignore-no-files \
         --ignore-glob '*test_data/*' \
         --ignore-glob '*testdata/*' \
         --ignore-glob '*fixtures/*' \
         --ignore-glob '*__fixtures__/*' \
-        --all-changed-files-suffix .html && \
-      python3 $SCRIPTPATH/scripttagextractor.py \
+        --all-changed-files-suffix .html) && \
+      (TMPDIR="$SG_TMP" \
+      $SCRIPTPATH/../scripts/with-sandbox.sh \
+        --ignore-missing \
+        --ro "$PWD" --ro "$SCRIPTPATH" \
+        --rwx "$SG_TMP" --rw /dev/null \
+        --rox "$ACTION_ROOT/.venv" \
+        --rox /opt/hostedtoolcache --rox /usr --rox /lib --rox /lib64 \
+        --ro /etc --ro /run \
+        -- python3 $SCRIPTPATH/scripttagextractor.py \
+        --output-dir "$SG_TMP" \
         --add-suffix-to-original .extractedscript.html \
         --suffix .extractedscript.ts \
         --ignore-no-files \
@@ -38,30 +78,45 @@ runner:
         --ignore-glob '*testdata/*' \
         --ignore-glob '*fixtures/*' \
         --ignore-glob '*__fixtures__/*' \
-        --all-changed-files-suffix .svelte && \
-      opengrep \
+        --all-changed-files-suffix .svelte) && \
+      (TMPDIR="$SG_TMP" GIT_OPTIONAL_LOCKS=0 SEMGREP_SEND_METRICS=off \
+      $SCRIPTPATH/../scripts/with-sandbox.sh \
+        --ignore-missing \
+        --ro "$PWD" --ro "$SCRIPTPATH" \
+        --rwx "$SG_TMP" --rw "$HOME/.semgrep" --rwx "$HOME/.cache/opengrep" --rw "$HOME/.opengrep/semgrep.log" --rw /dev/null \
+        --rox "$ACTION_ROOT/.venv" \
+        --rox "$HOME/.opengrep" --rox "$HOME/.local/bin" \
+        --rox /opt/hostedtoolcache --rox /usr --rox /lib --rox /lib64 \
+        --ro /etc --ro /run \
+        -- opengrep \
         -c $SCRIPTPATH/opengrep_rules/generated/oss/vulns.yaml \
         -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
         -c $SCRIPTPATH/opengrep_rules/generated/oss/audit.yaml \
         -c $SCRIPTPATH/opengrep_rules/frozen/nonfree/vulns.yaml \
         $(find $SCRIPTPATH/opengrep_rules -name '*.yml' -or -name '*.yaml' -not -name "*.test.yml" -not -name "*.test.yaml" -not -path "$SCRIPTPATH/opengrep_rules/generated/*" | sed 's/^/-c /g') \
+        --disable-version-check \
         --json \
         --quiet \
         --no-git-ignore \
         '--include=*.extractedscript.ts' \
         '--include=*.extractedscript.js' \
         '--include=*.extractedscript.html' \
-        ./ \
-        | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
-        | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep && \
-      find . -type f -name '*.extractedscript.*' -delete) 2> reviewdog.sveltegrep.stderr.log
+        "$SG_TMP" \
+      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
+      | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep) 2> reviewdog.sveltegrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"
   safesvg:
     name: safesvg
     cmd: |
       set -e
-      (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt $SCRIPTPATH/xmllint.sh \
+      (xargs -0 -n1 -a $SCRIPTPATH/all_changed_files.txt \
+      $SCRIPTPATH/../scripts/with-sandbox.sh \
+        --ignore-missing \
+        --ro "$PWD" --ro "$SCRIPTPATH" \
+        --rox /usr --rox /lib --rox /lib64 \
+        --ro /etc --ro /run \
+        -- bash $SCRIPTPATH/xmllint.sh \
       | $SCRIPTPATH/cleaner.rb --svgo) 2> reviewdog.safesvg.stderr.log
     errorformat:
       - "%f:%l: %m"
@@ -84,8 +139,35 @@ runner:
     name: npm-audit
     cmd: |
       set -e
-      (python3 $SCRIPTPATH/npm-audit.py \
-      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.npm-audit.stderr.log
+      ACTION_ROOT="$(dirname "$SCRIPTPATH")"
+      NA_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/npm-audit.XXXXXX")"
+      LOCKS="$(mktemp "${RUNNER_TEMP:-/tmp}/npm-audit-locks.XXXXXX")"
+      # The audit reads only changed package-lock.json files; grant read
+      # access to exactly those instead of the whole source tree.
+      tr '\0' '\n' < "$SCRIPTPATH/all_changed_files.txt" > "$LOCKS"
+      (
+        set --
+        while IFS= read -r f; do
+          [ -n "$f" ] || continue
+          case "${f##*/}" in
+            package-lock.json) set -- "$@" --ro "$PWD/$f" ;;
+          esac
+        done < "$LOCKS"
+        TMPDIR="$NA_TMP" \
+        $SCRIPTPATH/../scripts/with-sandbox.sh \
+          --ignore-missing \
+          --ro "$SCRIPTPATH" \
+          --rwx "$NA_TMP" --rw /dev/null \
+          --rox "$ACTION_ROOT/.venv" --rox /opt/hostedtoolcache \
+          --rox "${UV_PYTHON_INSTALL_DIR:-$HOME/.local/share/uv}" \
+          --rox /usr --rox /lib --rox /lib64 \
+          --ro /etc --ro /run \
+          --connect-tcp 443 \
+          "$@" \
+          -- python3 $SCRIPTPATH/npm-audit.py \
+        | $SCRIPTPATH/cleaner.rb
+      ) 2> reviewdog.npm-audit.stderr.log
+      rm -rf "$NA_TMP" "$LOCKS"
     errorformat:
       - "%t:%f:%l %m"
   pip-audit:
@@ -94,18 +176,32 @@ runner:
       set -e
       PIP_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pip-audit-venv.XXXXXX")"
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
-      (TMPDIR="$PIP_TMP" PIP_AUDIT_VENV_BASE="$PIP_TMP" GIT_OPTIONAL_LOCKS=0 SANDBOX_CLEAN_ENV=1 \
-      $SCRIPTPATH/../scripts/with-sandbox.sh \
-        --ignore-missing \
-        --ro "$PWD" --ro "$SCRIPTPATH" \
-        --rox "$ACTION_ROOT/.venv" --rox /opt/hostedtoolcache \
-        --rox "${UV_PYTHON_INSTALL_DIR:-$HOME/.local/share/uv}" \
-        --rw "$PIP_TMP" --rwx "$PIP_TMP" --rw /dev/null \
-        --rox /usr --rox /lib --rox /lib64 \
-        --ro /etc --ro /run \
-        --connect-tcp 443 \
-        -- python3 $SCRIPTPATH/pip-audit.py \
-      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.pip-audit.stderr.log
-      rm -rf "$PIP_TMP"
+      MANIFESTS="$(mktemp "${RUNNER_TEMP:-/tmp}/pip-audit-manifests.XXXXXX")"
+      # pip-audit reads changed requirements*.txt / pyproject.toml plus git
+      # metadata; grant exactly those files, never the whole source tree.
+      tr '\0' '\n' < "$SCRIPTPATH/all_changed_files.txt" > "$MANIFESTS"
+      (
+        set --
+        while IFS= read -r f; do
+          [ -n "$f" ] || continue
+          case "${f##*/}" in
+            requirements*.txt|pyproject.toml) set -- "$@" --ro "$PWD/$f" ;;
+          esac
+        done < "$MANIFESTS"
+        TMPDIR="$PIP_TMP" PIP_AUDIT_VENV_BASE="$PIP_TMP" GIT_OPTIONAL_LOCKS=0 SANDBOX_CLEAN_ENV=1 \
+        $SCRIPTPATH/../scripts/with-sandbox.sh \
+          --ignore-missing \
+          --ro "$PWD/.git" --ro "$SCRIPTPATH" \
+          --rox "$ACTION_ROOT/.venv" --rox /opt/hostedtoolcache \
+          --rox "${UV_PYTHON_INSTALL_DIR:-$HOME/.local/share/uv}" \
+          --rw "$PIP_TMP" --rwx "$PIP_TMP" --rw /dev/null \
+          --rox /usr --rox /lib --rox /lib64 \
+          --ro /etc --ro /run \
+          --connect-tcp 443 \
+          "$@" \
+          -- python3 $SCRIPTPATH/pip-audit.py \
+        | $SCRIPTPATH/cleaner.rb
+      ) 2> reviewdog.pip-audit.stderr.log
+      rm -rf "$PIP_TMP" "$MANIFESTS"
     errorformat:
       - "%t:%f:%l %m"

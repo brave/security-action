@@ -38,8 +38,10 @@ def main(_run=subprocess.run, _which=shutil.which, _mkdtemp=tempfile.TemporaryDi
             if f.endswith("package-lock.json")
         ]
     # Create temporary directory just for the package-lock.json file
-    # without a parent directory containing package.json files
-    with _mkdtemp(dir="../") as temp_dir:
+    # without a parent directory containing package.json files. The
+    # system temp space (TMPDIR on CI points at the sandboxed audit dir)
+    # never contains a stray package.json, unlike the workspace parent.
+    with _mkdtemp() as temp_dir:
         temp_file_path = path.join(temp_dir, 'package-lock.json')
         for lock_path in changed_lock_files:
             with open(lock_path) as lock_file:

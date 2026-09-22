@@ -105,6 +105,7 @@ def audit_runs(npm_audit, monkeypatch, tmp_path, context):
 
     @contextlib.contextmanager
     def fake_mkdtemp(dir=None):
+        context.setdefault("mkdtemp_dirs", []).append(dir)
         temp = tmp_path / "temp"
         temp.mkdir(exist_ok=True)
         yield str(temp)
@@ -141,3 +142,9 @@ def stderr_mentions_node(context, capsys, node):
     if err is None:
         err = capsys.readouterr().err
     assert node in err
+
+
+@then("the temp directory is created under the system temp dir")
+def temp_dir_system(context):
+    dirs = context.get("mkdtemp_dirs")
+    assert dirs == [None], dirs

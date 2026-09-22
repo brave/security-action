@@ -88,3 +88,13 @@ Feature: npm audit scanner
     When the audit runs
     Then the audit aborts with StopIteration
     And stderr mentions the node "missing"
+
+  Scenario: The temp directory defaults to the system temp space
+    Given a lock file containing
+      """
+      "lodash": {
+      """
+    And the lock file is among the changed files
+    And a "high" vulnerability in "lodash" titled "Prototype pollution" without a url
+    When the audit runs
+    Then the temp directory is created under the system temp dir
