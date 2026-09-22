@@ -136,7 +136,7 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.opengrep
-        key: opengrep-v1.11.5-${{ runner.os }}
+        key: opengrep-v1.30.0-${{ runner.os }}
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install opengrep
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0

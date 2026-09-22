@@ -1,11 +1,27 @@
 Feature: Opengrep installation
-  Install the opengrep binary via a SHA256-pinned install script.
-  Network, fs and exec are injected fakes.
+  Install the opengrep binary via a SHA256-pinned install script and a
+  SHA256-pinned binary. Network, fs and exec are injected fakes.
 
   Scenario: Matching installation is reused
-    Given opengrep "1.11.5" is already installed
+    Given the pinned opengrep version is already installed
     When installing opengrep
     Then the install script is not executed
+    And no download happens
+    And the installed binary is hash checked
+
+  Scenario: Tampered existing installation fails closed
+    Given the pinned opengrep version is already installed
+    And the installed binary does not match the pinned digest
+    When installing opengrep
+    Then the action fails with "SHA256 hash mismatch! Opengrep binary may have been tampered with."
+    And the install script is not executed
+
+  Scenario: Missing binary digest fails closed
+    Given no opengrep binary is installed
+    And no binary digest is pinned
+    When installing opengrep
+    Then the action fails with no pinned binary digest
+    And the install script is not executed
     And no download happens
 
   Scenario: Outdated installation is replaced
@@ -14,18 +30,21 @@ Feature: Opengrep installation
     When installing opengrep
     Then the install script is executed with the pinned version
     And the temporary script is cleaned up
+    And the installed binary is hash checked
 
   Scenario: Missing binary triggers download
     Given no opengrep binary is installed
     And the install script downloads 100 bytes
     When installing opengrep
     Then the install script is executed with the pinned version
+    And the installed binary is hash checked
 
   Scenario: Broken binary triggers reinstall
     Given the opengrep binary exists but --version fails
     And the install script downloads 100 bytes
     When installing opengrep
     Then the install script is executed with the pinned version
+    And the installed binary is hash checked
 
   Scenario: SHA256 mismatch aborts installation
     Given no opengrep binary is installed

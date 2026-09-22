@@ -5,17 +5,45 @@ import { fileURLToPath } from 'url'
 import updateOpengrepVersion from '../../src/updateOpengrepVersion.js'
 
 const INSTALL_SCRIPT = fileURLToPath(new URL('../../src/installOpengrep.js', import.meta.url))
+const ACTION_YML = fileURLToPath(new URL('../../actions/main/action.yml', import.meta.url))
+const PINNED_DISTS = ['opengrep_manylinux_x86', 'opengrep_osx_arm64']
 
-function installScriptContent (version) {
-  return `const OPENGREP_VERSION = '${version}'\nconst EXPECTED_SHA256 = '${'a'.repeat(64)}'\n`
+function pinsBlock (version) {
+  const entries = PINNED_DISTS.map(d => `    ${d}: '${'b'.repeat(64)}'`).join(',\n')
+  return `// BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)\nconst OPENGREP_BIN_SHA256 = {\n  '${version}': {\n${entries}\n  }\n}\n// END opengrep binary pins\n`
+}
+
+function installScriptContent (version, { withPins = true } = {}) {
+  return `const OPENGREP_VERSION = '${version}'\nconst EXPECTED_SHA256 = '${'a'.repeat(64)}'\n${withPins ? pinsBlock(version) : ''}`
+}
+
+function actionYmlContent (version) {
+  return `name: Cache opengrep\nuses: actions/cache@x\nkey: opengrep-${version}-\${{ runner.os }}\n`
+}
+
+function sha256 (content) {
+  return crypto.createHash('sha256').update(Buffer.from(content)).digest('hex')
 }
 
 Given('the installed version is {string}', function (version) {
-  this.fsx = this.makeMockFs({ [INSTALL_SCRIPT]: installScriptContent(version) })
+  this.fsx = this.makeMockFs({
+    [INSTALL_SCRIPT]: installScriptContent(version),
+    [ACTION_YML]: actionYmlContent(version)
+  })
 })
 
 Given('the installed version cannot be parsed', function () {
-  this.fsx = this.makeMockFs({ [INSTALL_SCRIPT]: '// no version constant here\n' })
+  this.fsx = this.makeMockFs({
+    [INSTALL_SCRIPT]: '// no version constant here\n',
+    [ACTION_YML]: actionYmlContent('v1.11.5')
+  })
+})
+
+Given('the installed version has no binary pins', function () {
+  this.fsx = this.makeMockFs({
+    [INSTALL_SCRIPT]: installScriptContent('v1.11.5', { withPins: false }),
+    [ACTION_YML]: actionYmlContent('v1.11.5')
+  })
 })
 
 Given('the latest release is {string}', function (version) {
@@ -27,22 +55,46 @@ Given('the release fetch fails with {string}', function (message) {
 })
 
 Given('the pinned script downloads {int} bytes', function (bytes) {
-  this.downloadContent = 'x'.repeat(bytes)
+  this.scriptContent = 'x'.repeat(bytes)
 })
 
 Given('the pinned script download fails with {string}', function (message) {
-  this.downloadFailure = message
+  this.scriptFailure = message
+})
+
+Given('the release binaries download for the pinned dists', function () {
+  this.binaries = {
+    opengrep_manylinux_x86: 'LINUXBINARY',
+    opengrep_osx_arm64: 'OSXBINARY'
+  }
+})
+
+Given('the release binary download fails with {string}', function (message) {
+  this.binaryFailure = message
 })
 
 When('updating the opengrep version', async function () {
-  this.fsx = this.fsx || this.makeMockFs({ [INSTALL_SCRIPT]: installScriptContent('v1.11.5') })
+  this.fsx = this.fsx || this.makeMockFs({
+    [INSTALL_SCRIPT]: installScriptContent('v1.11.5'),
+    [ACTION_YML]: actionYmlContent('v1.11.5')
+  })
   this.fetchRelease = async () => {
     if (this.fetchFailure) throw new Error(this.fetchFailure)
     return this.release || { tag_name: 'v1.11.5' }
   }
-  this.download = this.downloadFailure
-    ? this.makeMockDownload('', { fail: this.downloadFailure })
-    : this.makeMockDownload(this.downloadContent || 'NEW_SCRIPT')
+  const routes = [
+    {
+      test: /install\.sh$/,
+      content: this.scriptContent || 'NEW_SCRIPT',
+      fail: this.scriptFailure
+    },
+    ...PINNED_DISTS.map(dist => ({
+      test: new RegExp(`${dist}$`),
+      content: this.binaries?.[dist] ?? `BIN-${dist}`,
+      fail: this.binaryFailure
+    }))
+  ]
+  this.download = this.makeMockDownload('', { routes })
   await this.attempt(() => updateOpengrepVersion({
     _fetchRelease: this.fetchRelease,
     _download: this.download,
@@ -79,6 +131,21 @@ Then('the file pins version {string}', function (version) {
 
 Then('the file pins the downloaded script hash', function () {
   const content = this.fsx.__files[INSTALL_SCRIPT]
-  const sha = crypto.createHash('sha256').update(Buffer.from(this.downloadContent)).digest('hex')
-  assert.ok(content.includes(`const EXPECTED_SHA256 = '${sha}'`), `${content} lacks hash ${sha}`)
+  const expected = sha256(this.scriptContent || 'NEW_SCRIPT')
+  assert.ok(content.includes(`const EXPECTED_SHA256 = '${expected}'`), `${content} lacks hash ${expected}`)
+})
+
+Then('the file pins binary digests for {string}', function (version) {
+  const content = this.fsx.__files[INSTALL_SCRIPT]
+  assert.ok(content.includes('// BEGIN opengrep binary pins'), 'missing pins block')
+  assert.ok(content.includes(`'${version}': {`), `${content} lacks ${version} pins`)
+  for (const dist of PINNED_DISTS) {
+    const expected = sha256(this.binaries[dist])
+    assert.ok(content.includes(`${dist}: '${expected}'`), `${content} lacks ${dist} digest ${expected}`)
+  }
+})
+
+Then('the cache key pins version {string}', function (version) {
+  const content = this.fsx.__files[ACTION_YML]
+  assert.ok(content.includes(`key: opengrep-${version}-`), `${content} lacks cache key ${version}`)
 })
