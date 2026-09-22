@@ -7,5 +7,12 @@
   "ignorePaths": [
     "t3sts/",
     "assets/opengrep_rules/"
+  ],
+  "packageRules": [
+    {
+      "description": "tensorflow (modelscan group) ships no cp314 wheels yet; block python >=3.14 until it does",
+      "matchDatasources": ["python"],
+      "allowedVersions": "<3.14"
+    }
   ]
 }
