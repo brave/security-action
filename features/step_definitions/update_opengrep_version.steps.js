@@ -84,12 +84,12 @@ When('updating the opengrep version', async function () {
   }
   const routes = [
     {
-      test: /install\.sh$/,
+      match: 'install.sh',
       content: this.scriptContent || 'NEW_SCRIPT',
       fail: this.scriptFailure
     },
     ...PINNED_DISTS.map(dist => ({
-      test: new RegExp(`${dist}$`),
+      match: dist,
       content: this.binaries?.[dist] ?? `BIN-${dist}`,
       fail: this.binaryFailure
     }))

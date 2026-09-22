@@ -359,14 +359,14 @@ export function makeMockFs (files = {}) {
 }
 
 /** Fake download seam: async (url) -> Buffer, or throws when fail is set.
- *  Optional routes: array of { test: RegExp, content, fail } matched by URL
- *  before the default content/fail behaviour. */
+ *  Optional routes: array of { match, content, fail } where match is a URL
+ *  suffix string checked with endsWith, before the default behaviour. */
 export function makeMockDownload (content = 'fixture', { fail = null, routes = [] } = {}) {
   const rec = new Recorder()
   const download = async (url) => {
     rec.record('download', { url })
     for (const route of routes) {
-      if (route.test.test(String(url))) {
+      if (String(url).endsWith(route.match)) {
         if (route.fail) throw new Error(route.fail)
         return Buffer.from(route.content ?? content)
       }
