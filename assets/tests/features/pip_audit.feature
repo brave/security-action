@@ -199,6 +199,31 @@ Feature: pip audit scanner
     When the audit runs
     Then the venv is created with install command "django==1.0 --trusted-host host1 --trusted-host host2" and index "https://pypi.example"
 
+  Scenario: The venv is created under RUNNER_TEMP, outside the workspace
+    Given a requirements file with the lines
+      """
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    And RUNNER_TEMP is "/runner-temp"
+    When the audit runs
+    Then the venv is created under "/runner-temp"
+
+  Scenario: PIP_AUDIT_VENV_BASE overrides RUNNER_TEMP
+    Given a requirements file with the lines
+      """
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    And RUNNER_TEMP is "/runner-temp"
+    And PIP_AUDIT_VENV_BASE is "/scratch/pip-venv"
+    When the audit runs
+    Then the venv is created under "/scratch/pip-venv"
+
   Scenario: Only dependency lock files are audited
     Given the changed files
       """

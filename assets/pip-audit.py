@@ -20,8 +20,20 @@ class RequirementSource:
         yield from (ResolvedDependency(*d) for d in self._venv.installed_packages)
 
 
+def venv_base():
+    """Base directory for the throwaway pip venv.
+
+    pip install runs arbitrary setup hooks from PR-controlled requirements, so
+    the venv lives outside the workspace when the runner provides RUNNER_TEMP
+    (the sandbox wrapper keeps the workspace read-only). PIP_AUDIT_VENV_BASE
+    overrides both for tests and local runs.
+    """
+    return environ.get("PIP_AUDIT_VENV_BASE") or environ.get("RUNNER_TEMP") or "."
+
+
 def main():
     auditor = Auditor(PyPIService('.del', 30))
+    venv_dir = path.join(venv_base(), ".venv-deleteme")
     with open(path.join(environ["SCRIPTPATH"], "all_changed_files.txt")) as all_changed_files:
         files = all_changed_files.read()
         changed_lock_files = [
@@ -42,7 +54,7 @@ def main():
         for install_cmd, line_number in install_commands(lock_path):
             venv = VirtualEnv(install_cmd + extra_install_args, index_url=index_url)
             try:
-                venv.create("./.venv-deleteme")
+                venv.create(venv_dir)
             except VirtualEnvError as e:
                 print(e)
                 continue
@@ -63,7 +75,7 @@ def main():
                 print(e)
                 continue
             finally:
-                venv.clear_directory("./.venv-deleteme")
+                venv.clear_directory(venv_dir)
 
 
 def install_commands(lock_path: str) -> Iterator[tuple[list[str], int]]:

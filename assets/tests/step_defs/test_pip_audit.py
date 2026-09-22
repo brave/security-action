@@ -1,5 +1,6 @@
 """pytest-bdd steps for pip_audit.feature"""
 import json
+import os.path
 import re
 import subprocess
 from types import SimpleNamespace
@@ -12,6 +13,14 @@ from pytest_bdd import given, when, then, scenarios, parsers
 def _activate_output_capture(capsys):
     """Start capture before any step runs — steps print via print()."""
     yield
+
+
+@pytest.fixture(autouse=True)
+def _isolate_venv_base(monkeypatch):
+    """CI runners export RUNNER_TEMP; default scenarios expect the legacy
+    workspace venv path. Scenarios that need a base set it explicitly."""
+    monkeypatch.delenv("RUNNER_TEMP", raising=False)
+    monkeypatch.delenv("PIP_AUDIT_VENV_BASE", raising=False)
 
 
 scenarios("../features/pip_audit.feature")
@@ -153,6 +162,16 @@ def pypi_index(context, monkeypatch, index, hosts):
     monkeypatch.setenv("PYPI_INSECURE_HOSTS", hosts)
 
 
+@given(parsers.parse('RUNNER_TEMP is "{value}"'))
+def runner_temp(context, monkeypatch, value):
+    monkeypatch.setenv("RUNNER_TEMP", value)
+
+
+@given(parsers.parse('PIP_AUDIT_VENV_BASE is "{value}"'))
+def pip_audit_venv_base(context, monkeypatch, value):
+    monkeypatch.setenv("PIP_AUDIT_VENV_BASE", value)
+
+
 # ── run main with fakes ──────────────────────────────────────────────────────
 
 @when("the audit runs")
@@ -227,3 +246,10 @@ def venv_created_with(pip_audit, context, command, index):
     assert venv.install_cmd == command.split(" ")
     assert venv.index_url == index
     assert venv.cleared == ["./.venv-deleteme"]
+
+
+@then(parsers.parse('the venv is created under "{base}"'))
+def venv_created_under(context, base):
+    assert len(context["venvs"]) == 1
+    venv = context["venvs"][0]
+    assert venv.cleared == [os.path.join(base, ".venv-deleteme")]
