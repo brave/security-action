@@ -5,8 +5,8 @@ from collections.abc import Iterator
 from os import environ, path
 
 from pip_audit._audit import Auditor
-from pip_audit._cli import VulnerabilityServiceChoice
 from pip_audit._service.interface import ResolvedDependency
+from pip_audit._service.pypi import PyPIService
 from pip_audit._virtual_env import VirtualEnv, VirtualEnvError
 
 from requests.exceptions import ReadTimeout
@@ -21,7 +21,7 @@ class RequirementSource:
 
 
 def main():
-    auditor = Auditor(VulnerabilityServiceChoice.Pypi.to_service(30, '.del'))
+    auditor = Auditor(PyPIService('.del', 30))
     with open(path.join(environ["SCRIPTPATH"], "all_changed_files.txt")) as all_changed_files:
         files = all_changed_files.read()
         changed_lock_files = [

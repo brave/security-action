@@ -190,8 +190,7 @@ def audit_runs(pip_audit, monkeypatch, tmp_path, context):
 
     monkeypatch.setattr(pip_audit, "VirtualEnv", FakeVirtualEnv)
     monkeypatch.setattr(pip_audit, "Auditor", FakeAuditor)
-    monkeypatch.setattr(pip_audit, "VulnerabilityServiceChoice",
-                        SimpleNamespace(Pypi=SimpleNamespace(to_service=lambda t, s: "svc")))
+    monkeypatch.setattr(pip_audit, "PyPIService", lambda cache_dir, timeout: "svc")
 
     try:
         pip_audit.main()
