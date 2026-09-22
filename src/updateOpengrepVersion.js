@@ -2,14 +2,9 @@
  * Update opengrep version in installOpengrep.js
  * This script fetches the latest opengrep release and updates:
  * - OPENGREP_VERSION constant
- * - EXPECTED_SHA256 hash of the pinned install.sh script
  * - OPENGREP_BIN_SHA256 binary digests (per pinned dist), downloaded from the
  *   release so a version bump always ships matching binary pins
  * - the opengrep cache key in actions/main/action.yml
- *
- * install.sh is pinned to a fixed upstream commit (not the tag) because old tags
- * ship an install.sh that rejects versions via the unpaginated GitHub API
- * (opengrep/opengrep#792). New versions install via that pinned script.
  */
 
 import https from 'https'
@@ -27,9 +22,7 @@ const ACTION_YML = path.join(__dirname, '..', 'actions', 'main', 'action.yml')
 // Release assets (dists) we actually run opengrep on: CI (ubuntu-latest,
 // glibc x64) and darwin arm64 dev machines. Must match DIST_BY_PLATFORM in
 // src/installOpengrep.js for those platforms.
-const PINNED_DISTS = ['opengrep_manylinux_x86', 'opengrep_osx_arm64']
-
-const INSTALL_SCRIPT_URL = 'https://raw.githubusercontent.com/opengrep/opengrep/0b445193f95b14b828bc3ede8fea9725feb45e64/install.sh'
+const PINNED_DISTS = ['opengrep_manylinux_x86', 'opengrep_manylinux_aarch64', 'opengrep_osx_arm64']
 
 /**
  * Fetch latest release from GitHub API
@@ -126,9 +119,9 @@ function getCacheKeyVersion (fsx) {
 }
 
 /**
- * Update version, install script hash and binary pins in installOpengrep.js
+ * Update version and binary pins in installOpengrep.js
  */
-function updateInstallScript (version, sha256Hash, binaryDigests, fsx) {
+function updateInstallScript (version, binaryDigests, fsx) {
   let content = fsx.readFileSync(INSTALL_SCRIPT, 'utf-8')
 
   // Update version
@@ -137,30 +130,18 @@ function updateInstallScript (version, sha256Hash, binaryDigests, fsx) {
     `const OPENGREP_VERSION = '${version}'`
   )
 
-  // Update SHA256 hash of the pinned install script
-  content = content.replace(
-    /const EXPECTED_SHA256 = '[a-f0-9]{64}'/,
-    `const EXPECTED_SHA256 = '${sha256Hash}'`
-  )
-
   // Regenerate the binary pins block for the new version
+  if (!/\/\/ BEGIN opengrep binary pins/.test(content)) {
+    throw new Error('src/installOpengrep.js is missing the binary pins markers.')
+  }
   const entries = PINNED_DISTS.map(dist => `    ${dist}: '${binaryDigests[dist]}'`).join(',\n')
   const block = '// BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)\n' +
     `const OPENGREP_BIN_SHA256 = {\n  '${version}': {\n${entries}\n  }\n}\n` +
     '// END opengrep binary pins\n'
-  if (/\/\/ BEGIN opengrep binary pins/.test(content)) {
-    content = content.replace(
-      /\/\/ BEGIN opengrep binary pins[\s\S]*?\/\/ END opengrep binary pins\n/,
-      block
-    )
-  } else {
-    // No pins block yet (pre-digest-pinning installOpengrep.js): insert one
-    // right after the install script hash constant.
-    content = content.replace(
-      /(const EXPECTED_SHA256 = '[a-f0-9]{64}'\n)/,
-      `$1\n${block}`
-    )
-  }
+  content = content.replace(
+    /\/\/ BEGIN opengrep binary pins[\s\S]*?\/\/ END opengrep binary pins\n/,
+    block
+  )
 
   fsx.writeFileSync(INSTALL_SCRIPT, content)
   console.log(`✓ Updated ${path.relative(path.join(__dirname, '..'), INSTALL_SCRIPT)}`)
@@ -241,22 +222,12 @@ export default async function updateOpengrepVersion ({
 
     console.log(`Updating from ${currentVersion} to ${latestVersion}...`)
 
-    // Download the pinned install script and calculate its hash.
-    // The script is pinned to a specific commit instead of the tag; see
-    // src/installOpengrep.js for the rationale.
-    console.log(`Downloading pinned install script from ${INSTALL_SCRIPT_URL}...`)
-
-    const scriptContent = await download(INSTALL_SCRIPT_URL)
-    const sha256Hash = calculateSHA256(scriptContent)
-
-    console.log(`Calculated SHA256: ${sha256Hash}`)
-
     // Pin the binaries for the version we are switching to, so the version
     // bump and its binary digests always land in the same commit.
     const binaryDigests = await fetchBinaryDigests(latestVersion, download)
 
     // Update files
-    updateInstallScript(latestVersion, sha256Hash, binaryDigests, fsx)
+    updateInstallScript(latestVersion, binaryDigests, fsx)
     updateCacheKey(latestVersion, fsx)
 
     console.log('\n✓ Files updated successfully!')

@@ -26,6 +26,12 @@ jobs:
       - name: Fetch base branch
         run: git fetch origin main
 
+      - name: Install landrun
+        # src/opengrepCompare.js runs its git and scan commands under
+        # scripts/with-sandbox.sh, which fails closed in CI when the
+        # landrun binary is missing.
+        run: node run.js ./src/installLandrun.js
+
       - name: Run Opengrep on Brave Core
         id: opengrep-scan
         uses: ./actions/opengrep-compare
