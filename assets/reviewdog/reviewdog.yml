@@ -90,6 +90,22 @@ runner:
       - "%t:%f:%l %m"
   pip-audit:
     name: pip-audit
-    cmd: "set -e\n(python3 $SCRIPTPATH/pip-audit.py \\\n| $SCRIPTPATH/cleaner.rb) 2> /dev/null # reviewdog.pip-audit.stderr.log \n"
+    cmd: |
+      set -e
+      PIP_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pip-audit-venv.XXXXXX")"
+      ACTION_ROOT="$(dirname "$SCRIPTPATH")"
+      (TMPDIR="$PIP_TMP" PIP_AUDIT_VENV_BASE="$PIP_TMP" GIT_OPTIONAL_LOCKS=0 SANDBOX_CLEAN_ENV=1 \
+      $SCRIPTPATH/../scripts/with-sandbox.sh \
+        --ignore-missing \
+        --ro "$PWD" --ro "$SCRIPTPATH" \
+        --rox "$ACTION_ROOT/.venv" --rox /opt/hostedtoolcache \
+        --rox "${UV_PYTHON_INSTALL_DIR:-$HOME/.local/share/uv}" \
+        --rw "$PIP_TMP" --rwx "$PIP_TMP" --rw /dev/null \
+        --rox /usr --rox /lib --rox /lib64 \
+        --ro /etc --ro /run \
+        --connect-tcp 443 \
+        -- python3 $SCRIPTPATH/pip-audit.py \
+      | $SCRIPTPATH/cleaner.rb) 2> reviewdog.pip-audit.stderr.log
+      rm -rf "$PIP_TMP"
     errorformat:
       - "%t:%f:%l %m"

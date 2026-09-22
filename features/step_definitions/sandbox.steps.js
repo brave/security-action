@@ -15,14 +15,28 @@ const WRAPPER = path.resolve('scripts/with-sandbox.sh')
  */
 
 function stubLandrun (dir) {
-  // dir is a per-scenario test tempdir, never user input — no traversal risk.
-  const bin = path.join(dir, 'landrun-stub') // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
-  const log = path.join(dir, 'landrun-args.log') // nosemgrep: javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal
+  const bin = path.join(dir, 'landrun-stub')
+  const log = path.join(dir, 'landrun-args.log')
+  // The log path is baked into the stub (SANDBOX_CLEAN_ENV paths must not
+  // depend on inherited env). The stub models landrun v0.1.17 faithfully:
+  // it records its argv, then logs the child environment it would exec with
+  // — everything stripped except --env KEY / --env KEY=VALUE pairs.
   fs.writeFileSync(bin, [
     '#!/usr/bin/env bash',
-    'printf \'%s\\n\' "$@" >> "$LANDRUN_STUB_LOG"',
-    'while [ $# -gt 0 ] && [ "$1" != "--" ]; do shift; done',
-    'shift',
+    `printf '%s\\n' "$@" >> '${log}'`,
+    'envs=()',
+    'while [ $# -gt 0 ]; do',
+    '  if [ "$1" = "--env" ]; then shift',
+    '    case "$1" in',
+    '      *=*) envs+=("$1") ;;',
+    '      *) val="$' + '{!1:-}"; [ -n "$val" ] && envs+=("$1=$val") ;;',
+    '    esac',
+    '  elif [ "$1" = "--" ]; then shift; break;',
+    '  else shift; fi',
+    'done',
+    `echo __ENV__ >> '${log}'`,
+    // eslint-disable-next-line no-template-curly-in-string
+    `env -i "PWD=$PWD" ${'${envs[@]+"${envs[@]}"}'} env | LC_ALL=C sort >> '${log}'`,
     'exec "$@"'
   ].join('\n'), { mode: 0o755 })
   return { bin, log }
@@ -34,8 +48,10 @@ function runWrapper (world, args) {
     LANDRUN_BIN: world.landrunBin,
     SANDBOX_LSM_PATH: world.lsmPath,
     LANDRUN_STUB_LOG: world.stubLog,
-    CI: world.ci ? 'true' : ''
+    CI: world.ci ? 'true' : '',
+    ...world.extraEnv
   }
+  if (world.cleanEnv) env.SANDBOX_CLEAN_ENV = '1'
   const res = spawnSync(WRAPPER, args, { env, encoding: 'utf-8' })
   world.rc = res.status
   world.stdout = res.stdout || ''
@@ -46,6 +62,12 @@ function splitArgs (str) {
   return str.split(' ').filter(Boolean)
 }
 
+function stubEnvLines (world) {
+  const raw = fs.readFileSync(world.stubLog, 'utf-8').split('\n')
+  const start = raw.indexOf('__ENV__')
+  return raw.slice(start + 1).filter(Boolean)
+}
+
 Given('a sandbox test area', function () {
   this.area = fs.mkdtempSync(path.join(os.tmpdir(), 'sandbox-feature-'))
   this.tmpdir = fs.mkdtempSync(path.join(this.area, 'rw-'))
@@ -54,6 +76,8 @@ Given('a sandbox test area', function () {
   this.cmdScript = null
   this.landrunBin = null
   this.stubLog = null
+  this.extraEnv = {}
+  this.cleanEnv = false
 })
 
 Given('the landrun stub is available', function () {
@@ -129,4 +153,23 @@ Then('landrun received the wrapper args and the command', function () {
   const dd = lines.indexOf('--')
   assert.ok(dd > 0, `expected "--" in landrun args: ${lines.join(' ')}`)
   assert.ok(lines[dd + 1].length > 0, 'expected a command after --')
+})
+
+Given(/the sandboxed environment is scrubbed/, function () {
+  this.cleanEnv = true
+})
+
+Given(/the environment variable "([^"]*)" is "([^"]*)"/, function (name, value) {
+  this.extraEnv = this.extraEnv || {}
+  this.extraEnv[name] = value
+})
+
+Then(/the sandboxed environment does not include "([^"]*)"/, function (name) {
+  const present = stubEnvLines(this).some(line => line.startsWith(`${name}=`))
+  assert.ok(!present, `expected ${name} to be scrubbed, got: ${stubEnvLines(this).join(' ')}`)
+})
+
+Then(/the sandboxed environment includes "([^"]*)" with value "([^"]*)"/, function (name, value) {
+  const lines = stubEnvLines(this)
+  assert.ok(lines.includes(`${name}=${value}`), `expected ${name}=${value} in: ${lines.join(' | ')}`)
 })
