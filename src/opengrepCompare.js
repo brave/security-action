@@ -1,5 +1,7 @@
 import { execSync } from 'child_process'
+import os from 'os'
 import path from 'path'
+import buildSandboxedCmd from './sandboxedCmd.js'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -26,7 +28,10 @@ function getChangedRuleFiles (actionPath, baseRef, exec = execCommand) {
 
   // Get modified, added, renamed rule files (paths relative to repo root)
   const diffOutput = exec(
-    `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/opengrep_rules/`,
+    buildSandboxedCmd({
+      actionPath,
+      cmd: `git diff --name-only --diff-filter=AMR origin/${baseRef}...HEAD -- assets/opengrep_rules/`
+    }),
     { cwd: actionPath }
   )
 
@@ -43,7 +48,7 @@ function getChangedRuleFiles (actionPath, baseRef, exec = execCommand) {
   return changedFiles
 }
 
-async function runOpengrep (rulesPath, targetPath = '.', specificRules = null, exec = execCommand) {
+async function runOpengrep (rulesPath, targetPath = '.', specificRules = null, exec = execCommand, actionPath = null, cwd = null) {
   console.log(`Looking for rules in: ${rulesPath}`)
 
   let ruleFiles
@@ -80,8 +85,20 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null, e
   }
 
   console.log(`Running opengrep on: ${targetPath}`)
-  // Change working directory to rulesPath so relative paths work correctly
-  const command = `cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`
+  // Change working directory to rulesPath so relative paths work correctly.
+  // The scan runs sandboxed: read-only rules + scan target, writes confined
+  // to the opengrep cache/log + a private temp dir, zero network.
+  const scanTmp = path.join(os.tmpdir(), `opengrep-compare-${Date.now()}`)
+  const command = buildSandboxedCmd({
+    actionPath,
+    cmd: `export TMPDIR="${scanTmp}"; cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`,
+    readDirs: [targetPath === '.' ? cwd : targetPath],
+    writeDirs: [
+      path.join(os.homedir(), '.cache', 'opengrep'),
+      path.join(os.homedir(), '.opengrep', 'semgrep.log'),
+      scanTmp
+    ]
+  })
 
   const output = exec(command, { maxBuffer: 50 * 1024 * 1024 })
 
@@ -219,15 +236,24 @@ export default async function opengrepCompare (options = {}) {
   } else if (targetRepo) {
     console.log(`Target repository: ${targetRepo}`)
     tempDir = path.join('/tmp', `opengrep-scan-${Date.now()}`)
-    exec(`mkdir -p ${tempDir}`)
+    exec(buildSandboxedCmd({ actionPath, cmd: `mkdir -p ${tempDir}`, writeDirs: [tempDir] }))
     console.log(`Cloning ${targetRepo} (shallow clone)...`)
-    exec(`git clone --depth 1 https://github.com/${targetRepo}.git ${tempDir}`)
+    exec(buildSandboxedCmd({
+      actionPath,
+      cmd: `git clone --depth 1 https://github.com/${targetRepo}.git ${tempDir}`,
+      writeDirs: [tempDir],
+      egress: true
+    }), { cwd: actionPath })
     scanPath = targetPath ? path.join(tempDir, targetPath) : tempDir
     shouldCleanup = true
 
     // Detect the default branch of the target repo
     try {
-      targetRepoDefaultBranch = exec(`git -C ${tempDir} rev-parse --abbrev-ref HEAD`)
+      targetRepoDefaultBranch = exec(buildSandboxedCmd({
+        actionPath,
+        cmd: `git -C ${tempDir} rev-parse --abbrev-ref HEAD`,
+        readDirs: [tempDir]
+      }))
       console.log(`Target repo default branch: ${targetRepoDefaultBranch}`)
     } catch (e) {
       console.warn('Failed to detect target repo default branch, defaulting to "main"')
@@ -247,8 +273,15 @@ export default async function opengrepCompare (options = {}) {
 
   // Create worktree for current branch (to avoid uncommitted changes)
   currentWorktree = path.join('/tmp', `opengrep-rules-current-${Date.now()}`)
+  // Landlock grants bind to paths that exist at ruleset build time — create
+  // the worktree dirs before the sandboxed git commands run.
+  exec(`mkdir -p ${currentWorktree}`)
   try {
-    exec(`git worktree add ${currentWorktree} HEAD`, { cwd: actionPath })
+    exec(buildSandboxedCmd({
+      actionPath,
+      cmd: `git worktree add ${currentWorktree} HEAD`,
+      writeDirs: [currentWorktree]
+    }), { cwd: actionPath })
   } catch (e) {
     console.error('\n❌ Failed to create current worktree')
     console.error('Error:', e.message)
@@ -276,14 +309,26 @@ export default async function opengrepCompare (options = {}) {
 
     // Create worktree for base branch rules
     baseWorktree = path.join('/tmp', `opengrep-rules-base-${Date.now()}`)
+    exec(`mkdir -p ${baseWorktree}`)
     try {
-      exec(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
+      exec(buildSandboxedCmd({
+        actionPath,
+        cmd: `git worktree add ${baseWorktree} origin/${baseRef}`,
+        writeDirs: [baseWorktree]
+      }), { cwd: actionPath })
     } catch (e) {
-      // Try fetching first if worktree fails
       console.log(`Fetching ${baseRef}...`)
       try {
-        exec(`git fetch origin ${baseRef}`, { cwd: actionPath })
-        exec(`git worktree add ${baseWorktree} origin/${baseRef}`, { cwd: actionPath })
+        exec(buildSandboxedCmd({
+          actionPath,
+          cmd: `git fetch origin ${baseRef}`,
+          egress: true
+        }), { cwd: actionPath })
+        exec(buildSandboxedCmd({
+          actionPath,
+          cmd: `git worktree add ${baseWorktree} origin/${baseRef}`,
+          writeDirs: [baseWorktree]
+        }), { cwd: actionPath })
       } catch (fetchError) {
         console.error('\n❌ Failed to create base branch worktree')
         console.error('This usually means the base branch is not available.')
@@ -321,7 +366,7 @@ export default async function opengrepCompare (options = {}) {
       baseResults = { results: [], errors: [] }
       baseGrouped = {}
     } else {
-      baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles, exec)
+      baseResults = await runOpengrep(baseRulesPath, scanPath, baseRuleFiles, exec, actionPath, process.cwd())
       baseGrouped = groupFindingsByRule(baseResults.results, tempDir)
     }
 
@@ -333,7 +378,7 @@ export default async function opengrepCompare (options = {}) {
   console.log('Scanning with CURRENT branch rules (HEAD)')
   console.log('='.repeat(60))
 
-  const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles, exec)
+  const currentResults = await runOpengrep(currentRulesPath, scanPath, currentRuleFiles, exec, actionPath, process.cwd())
   const currentGrouped = groupFindingsByRule(currentResults.results, tempDir)
 
   console.log(`Current branch findings: ${currentResults.results.length}`)
@@ -416,17 +461,27 @@ export default async function opengrepCompare (options = {}) {
   // Cleanup
   if (currentWorktree) {
     console.log('\nCleaning up current branch worktree...')
-    exec(`git worktree remove ${currentWorktree}`, { cwd: actionPath })
+    exec(buildSandboxedCmd({
+      actionPath,
+      cmd: `git worktree remove ${currentWorktree}`,
+      writeDirs: [currentWorktree],
+      git: true
+    }), { cwd: actionPath })
   }
 
   if (baseWorktree) {
     console.log('Cleaning up base branch worktree...')
-    exec(`git worktree remove ${baseWorktree}`, { cwd: actionPath })
+    exec(buildSandboxedCmd({
+      actionPath,
+      cmd: `git worktree remove ${baseWorktree}`,
+      writeDirs: [baseWorktree],
+      git: true
+    }), { cwd: actionPath })
   }
 
   if (shouldCleanup && tempDir) {
     console.log('Cleaning up target repository...')
-    exec(`rm -rf ${tempDir}`)
+    exec(buildSandboxedCmd({ actionPath, cmd: `rm -rf ${tempDir}`, writeDirs: [tempDir] }))
   }
 
   console.log('\n' + '='.repeat(60))

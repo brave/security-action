@@ -78,7 +78,7 @@ Given('the target repository {string} is cloned', function (repo) {
   delete this.options['local-target']
   this.options['target-repo'] = repo
   this.execRoutes.push({
-    test: /mkdir -p (.+)$/,
+    test: /mkdir -p /,
     out: ''
   })
   this.execRoutes.push({ test: /git clone --depth 1/, out: '' })
@@ -106,7 +106,10 @@ When('comparing rules', async function () {
   // Capture the clone directory from the mkdir command for path stripping
   const rawExec = exec
   const wrapped = (command, options) => {
-    if (/^mkdir -p /.test(command)) this.clonedDir = command.replace('mkdir -p ', '')
+    if (/mkdir -p /.test(command)) {
+      const m = command.match(/mkdir -p ([^']*)'/)
+      if (m) this.clonedDir = m[1]
+    }
     return rawExec(command, options)
   }
   wrapped.__recorder = exec.__recorder
@@ -184,7 +187,7 @@ Then('the base total is unknown', function () {
 
 Then('the base branch is fetched', function () {
   const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
-  assert.ok(commands.includes('git fetch origin main'), `expected a fetch, got: ${commands.join(' | ')}`)
+  assert.ok(commands.some(c => c.includes('git fetch origin main')), `expected a fetch, got: ${commands.join(' | ')}`)
 })
 
 Then('git diff is never called', function () {
@@ -204,7 +207,7 @@ Then('the worktrees are cleaned up', function () {
 
 Then('the target repository clone is removed', function () {
   const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
-  assert.ok(commands.some(c => c.startsWith('rm -rf ')), 'expected the clone directory to be removed')
+  assert.ok(commands.some(c => c.includes(`rm -rf ${this.clonedDir || ''}`)) || commands.some(c => c.includes('rm -rf /tmp/opengrep-scan-')), 'expected the clone directory to be removed')
 })
 
 Then('the finding path for rule {string} is {string}', function (ruleId, expectedPath) {
