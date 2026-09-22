@@ -1,4 +1,5 @@
 const fs = require('fs')
+const os = require('os')
 const { spawn } = require('child_process')
 
 const CONSOLE_BLUE = '\x1B[0;34m'
@@ -128,7 +129,19 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   })
   const groupArgs = depGroups.map(g => ` --group ${g}`).join('')
   debugLog(`modelscan dependency groups: ${depGroups.join(', ') || 'none'}`)
-  await runCommand(`uv sync --frozen${groupArgs} --project ${actionPath}`, { shell: true })
+  // uv sync installs PR-controlled lockfiles (and runs build hooks for
+  // sdists) — sandbox it: read-only workspace, writable venv + uv caches,
+  // TLS-only egress (see scripts/with-sandbox.sh / README threat model).
+  const { default: buildUvSyncCmd } = await import(`${actionPath}/src/uvSyncSandbox.js`)
+  await runCommand(buildUvSyncCmd({
+    actionPath,
+    cwd: process.cwd(),
+    home: os.homedir(),
+    groupArgs,
+    // setup-uv exports these on runners; honor the overrides.
+    uvCacheDir: process.env.UV_CACHE_DIR || `${os.homedir()}/.cache/uv`,
+    uvPythonDir: process.env.UV_PYTHON_INSTALL_DIR || `${os.homedir()}/.local/share/uv`
+  }), { shell: true })
   debugLog('Synced python dependencies (uv)')
   // Disable man-db auto-update to speed up apt-get operations
   await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })

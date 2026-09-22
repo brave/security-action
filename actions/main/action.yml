@@ -121,19 +121,45 @@ runs:
       with:
         reviewdog_version: v0.17.5 # Optional. [latest,nightly,v.X.Y.Z]
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      name: Setup Ruby
-      id: ruby
-      uses: ruby/setup-ruby@e8944e80fb94b20106697132f8c20c665fab29e9 # v1.325.0
-      env:
-        BUNDLE_GEMFILE: ${{ github.action_path }}/../../Gemfile
-      with:
-        ruby-version: '4.0'
-        bundler-cache: true
-    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       id: npm
       env:
         COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
-      run: cd ${{ github.action_path }}/../.. && corepack pnpm install --frozen-lockfile
+      # pnpm install runs PR-controlled lockfiles/manifests; confine it with
+      # Landlock: read-only checkout, writable node_modules + pnpm caches +
+      # private temp dir, TLS-only egress.
+      run: |-
+        ACTION_ROOT="${{ github.action_path }}/../.."
+        PN_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pnpm-install.XXXXXX")"
+        # pre-create grant paths: landlock binds rules to existing paths only
+        mkdir -p "$ACTION_ROOT/node_modules" "$HOME/.local/share/pnpm" "$HOME/.cache/node/corepack" "$HOME/.cache/pnpm/store"
+        # Run from the private temp dir: corepack stages the package manager
+        # via a _tmp_<hash> file in the CWD, which is denied in a read-only
+        # workspace. pnpm -C targets the action checkout instead. corepack
+        # resolves the pinned pnpm version from the CWD's package.json, so
+        # copy it here (unsandboxed, from the trusted action checkout).
+        cp "$ACTION_ROOT/package.json" "$PN_TMP/package.json"
+        cd "$PN_TMP"
+        # pnpm's self-manager stages its own re-install via a _tmp_<hash>
+        # file in the project root — the version already matches
+        # packageManager, so switch the behavior off entirely.
+        TMPDIR="$PN_TMP" npm_config_manage_package_manager_versions=false SANDBOX_ENV_EXTRA="npm_config_manage_package_manager_versions" \
+        bash "$ACTION_ROOT/scripts/with-sandbox.sh" \
+          --ignore-missing \
+          --ro "$ACTION_ROOT" \
+          --rw "$ACTION_ROOT/node_modules" \
+          --rw "$PN_TMP" \
+          --rw "$HOME/.local/share/pnpm" \
+          --rw "$HOME/.cache/node/corepack" --rox "$HOME/.cache/node/corepack" \
+          --rw "$HOME/.cache/pnpm" \
+          --rw /dev/null \
+          --rox /opt/hostedtoolcache \
+          --rox /usr \
+          --rox /lib \
+          --rox /lib64 \
+          --ro /etc --ro /run \
+          --connect-tcp 443 \
+          -- corepack pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$HOME/.cache/pnpm/store"
+        rc=$?; cd "$ACTION_ROOT"; rm -rf "$PN_TMP"; exit $rc
       shell: bash
     # - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
     #   name: Install tfsec
