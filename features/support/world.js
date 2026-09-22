@@ -357,11 +357,19 @@ export function makeMockFs (files = {}) {
   return fsx
 }
 
-/** Fake download seam: async () -> Buffer, or throws when fail is set. */
-export function makeMockDownload (content = 'fixture', { fail = null } = {}) {
+/** Fake download seam: async (url) -> Buffer, or throws when fail is set.
+ *  Optional routes: array of { test: RegExp, content, fail } matched by URL
+ *  before the default content/fail behaviour. */
+export function makeMockDownload (content = 'fixture', { fail = null, routes = [] } = {}) {
   const rec = new Recorder()
   const download = async (url) => {
     rec.record('download', { url })
+    for (const route of routes) {
+      if (route.test.test(String(url))) {
+        if (route.fail) throw new Error(route.fail)
+        return Buffer.from(route.content ?? content)
+      }
+    }
     if (fail) throw new Error(fail)
     return Buffer.from(content)
   }
