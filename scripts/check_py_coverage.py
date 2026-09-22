@@ -3,8 +3,12 @@
 Reads the coverage.json produced by `coverage json` and exits non-zero
 when either metric falls below the gate. Mirrors the JS c8 gate
 (--lines 80 --branches 80) in package.json.
+
+COVERAGE_JSON overrides the report path (sandboxed CI runs redirect it
+into the private temp dir; see .github/workflows/lint.yml).
 """
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -12,7 +16,7 @@ GATE = 80.0
 
 
 def main():
-    data = json.loads(Path('coverage.json').read_text())
+    data = json.loads(Path(os.environ.get('COVERAGE_JSON', 'coverage.json')).read_text())
     totals = data['totals']
 
     lines = (

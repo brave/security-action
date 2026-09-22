@@ -15,7 +15,7 @@
     "test": "pnpm run test:unit && pnpm run test:bdd",
     "coverage:unit": "c8 --no-clean --include 'src/**/*.js' --exclude 'src/**/*.test.js' node --test 'src/**/*.test.js'",
     "coverage:bdd": "c8 --no-clean --include 'src/**/*.js' --exclude 'src/**/*.test.js' cucumber-js",
-    "coverage:py": "uv run --group test pytest --cov && uv run --group test coverage json && uv run --group test python scripts/check_py_coverage.py",
+    "coverage:py": "uv run --group test pytest --cov && uv run --group test coverage json -o \"${COVERAGE_JSON:-coverage.json}\" && uv run --group test python scripts/check_py_coverage.py",
     "coverage": "rm -rf coverage && pnpm run coverage:unit && pnpm run coverage:bdd && c8 report --check-coverage --lines 80 --branches 80"
   },
   "dependencies": {

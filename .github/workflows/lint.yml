@@ -25,12 +25,103 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+      - name: Install landrun
+        # Sandbox tool for scripts/with-sandbox.sh (pinned, sha256-checked).
+        # Must run before the dependency-install steps below, which execute
+        # PR-controlled manifests.
+        run: node run.js ./src/installLandrun.js
+      - name: Install dependencies (sandboxed)
+        run: |
+          ACTION_ROOT="$PWD"
+          PN_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pnpm-install.XXXXXX")"
+          # pre-create grant paths: landlock binds rules to existing paths only
+          mkdir -p "$ACTION_ROOT/node_modules" "$HOME/.local/share/pnpm" "$HOME/.cache/node/corepack" "$HOME/.cache/pnpm/store" "$PN_TMP"
+          # pnpm self-manages its version (package.json pins a newer one) and
+          # stages the upgrade via a _tmp_<hash> file in the CWD — denied in a
+          # read-only workspace. Run from the private temp dir; pnpm -C
+          # targets the checkout instead.
+          cd "$PN_TMP"
+          # pnpm's self-manager stages a re-install via _tmp_<hash> in the
+          # project root; the version already matches packageManager, so the
+          # behavior is switched off entirely.
+          TMPDIR="$PN_TMP" npm_config_manage_package_manager_versions=false SANDBOX_ENV_EXTRA="npm_config_manage_package_manager_versions" \
+          bash "$ACTION_ROOT/scripts/with-sandbox.sh" \
+            --ignore-missing \
+            --ro "$ACTION_ROOT" \
+            --rw "$ACTION_ROOT/node_modules" \
+            --rw "$PN_TMP" \
+            --rw "$HOME/.local/share/pnpm" \
+            --rw "$HOME/.cache/node/corepack" \
+            --rw "$HOME/.cache/pnpm" \
+            --rw /dev/null \
+            --rox "$(dirname "${PNPM_HOME:-$HOME/.local/share/pnpm}")" --rw "$(dirname "${PNPM_HOME:-$HOME/.local/share/pnpm}")" \
+            --rox /opt/hostedtoolcache \
+            --rox /usr \
+            --rox /lib \
+            --rox /lib64 \
+            --ro /etc --ro /run \
+            --connect-tcp 443 \
+            -- pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$HOME/.cache/pnpm/store"
+          rc=$?; cd "$ACTION_ROOT"; rm -rf "$PN_TMP"; exit $rc
       - run: pnpm run lint
       - run: pnpm run lint-rules
       - run: pnpm run shellcheck
       - run: pnpm run coverage
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-      - run: pnpm run coverage:py
+      - name: Python coverage (sandboxed)
+        # uv run installs the PR-controlled test deps from uv.lock — sandbox
+        # it: read-only checkout, writable venv/uv caches/coverage outputs,
+        # TLS-only egress.
+        run: |
+          PY_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pytest-cov.XXXXXX")"
+          # pre-create grant paths: landlock binds rules to existing paths only.
+          # uv-managed pythons + build-isolation envs exec from the uv dirs,
+          # so they need rwx; coverage outputs go to the private temp dir
+          # (COVERAGE_FILE/COVERAGE_JSON) since the checkout is read-only.
+          # setup-uv overrides both uv locations into the runner temp dir;
+          # grant whatever is actually configured.
+          UV_DIR_CACHE="${UV_CACHE_DIR:-$HOME/.cache/uv}"
+          UV_DIR_PYTHON="${UV_PYTHON_INSTALL_DIR:-$HOME/.local/share/uv}"
+          mkdir -p .venv "$UV_DIR_CACHE" "$UV_DIR_PYTHON" "$HOME/.local/share/pnpm" "$HOME/.cache/pnpm"
+          TMPDIR="$PY_TMP" COVERAGE_FILE="$PY_TMP/.coverage" COVERAGE_JSON="$PY_TMP/coverage.json" \
+          UV_CACHE_DIR="$UV_DIR_CACHE" UV_PYTHON_INSTALL_DIR="$UV_DIR_PYTHON" \
+          bash scripts/with-sandbox.sh \
+            --ignore-missing \
+            --ro "$PWD" \
+            --rwx .venv \
+            --rwx "$PY_TMP" \
+            --rwx "$UV_DIR_CACHE" \
+            --rwx "$UV_DIR_PYTHON" \
+            --rw "$HOME/.local/share/pnpm" \
+            --rw "$HOME/.cache/pnpm" \
+            --rw /dev/null \
+            --rox "$HOME/.local/bin" \
+            --rox "$(dirname "${PNPM_HOME:-$HOME/.local/share/pnpm}")" --rw "$(dirname "${PNPM_HOME:-$HOME/.local/share/pnpm}")" \
+            --rox /opt/hostedtoolcache \
+            --rox /usr \
+            --rox /lib \
+            --rox /lib64 \
+            --ro /etc --ro /run \
+            --connect-tcp 443 \
+            -- pnpm run coverage:py
+          rc=$?; rm -rf "$PY_TMP"; exit $rc
       - if: ${{ github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]' }}
-        run: pnpm audit
+        name: Audit dependencies (sandboxed)
+        # pnpm audit POSTs the lockfile to the registry — confine writes to a
+        # private temp dir and egress to TLS.
+        run: |
+          AU_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pnpm-audit.XXXXXX")"
+          TMPDIR="$AU_TMP" bash scripts/with-sandbox.sh \
+            --ignore-missing \
+            --ro "$PWD" \
+            --rw "$AU_TMP" \
+            --rw /dev/null \
+            --rox "$(dirname "${PNPM_HOME:-$HOME/.local/share/pnpm}")" --rw "$(dirname "${PNPM_HOME:-$HOME/.local/share/pnpm}")" \
+            --rox /opt/hostedtoolcache \
+            --rox /usr \
+            --rox /lib \
+            --rox /lib64 \
+            --ro /etc --ro /run \
+            --connect-tcp 443 \
+            -- pnpm audit
+          rc=$?; rm -rf "$AU_TMP"; exit $rc

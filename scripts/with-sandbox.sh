@@ -12,9 +12,11 @@
 #   LANDRUN_BIN       landrun binary (default: ~/.landrun/bin/landrun, then PATH)
 #   SANDBOX_LSM_PATH  kernel LSM list (default: /sys/kernel/security/lsm)
 #   CI                GitHub Actions sets CI=true; fail-closed trigger
-#   SANDBOX_CLEAN_ENV when "1", the sandboxed command runs with a scrubbed
-#                     environment: only SANDBOX_ENV_ALLOWLIST variables below
-#                     survive, so install scripts cannot read action secrets
+#   SANDBOX_CLEAN_ENV accepted for backwards compatibility (no-op: scrubbing
+#                     is now always on)
+#   SANDBOX_ENV_EXTRA space-separated extra variable NAMES to pass through
+#                     (never pass secrets: install scripts can read every
+#                     forwarded variable)
 #
 # The wrapper always injects --best-effort so the sandbox degrades to the
 # best Landlock ABI the kernel supports instead of refusing older kernels.
@@ -24,8 +26,13 @@ set -u
 warn () { echo "with-sandbox: $*" >&2; }
 fail () { echo "with-sandbox: Landlock sandbox unavailable: $*" >&2; exit 1; }
 
-LANDRUN_BIN="${LANDRUN_BIN:-$HOME/.landrun/bin/landrun}"
-if [ ! -x "$LANDRUN_BIN" ]; then
+# Explicit LANDRUN_BIN wins verbatim (tests point at stubs or missing
+# paths); otherwise resolve the default install location, then PATH.
+if [ -n "${LANDRUN_BIN:-}" ]; then
+  :
+elif [ -x "$HOME/.landrun/bin/landrun" ]; then
+  LANDRUN_BIN="$HOME/.landrun/bin/landrun"
+else
   LANDRUN_BIN="$(command -v landrun 2>/dev/null || true)"
 fi
 SANDBOX_LSM_PATH="${SANDBOX_LSM_PATH:-/sys/kernel/security/lsm}"
@@ -62,20 +69,19 @@ if [ ! -r "$SANDBOX_LSM_PATH" ] || ! grep -qw landlock "$SANDBOX_LSM_PATH"; then
 fi
 
 # Environment scrubbing: landrun v0.1.17 passes NO environment variables to
-# the sandboxed command unless --env is given. SANDBOX_CLEAN_ENV=1 forwards
-# exactly the SANDBOX_ENV_ALLOWLIST variables via --env, so untrusted install
-# scripts can never read exported secrets (REVIEWDOG_GITHUB_API_TOKEN,
-# GITHUB_TOKEN, ...), even on landrun builds that inherit the environment.
-SANDBOX_ENV_ALLOWLIST="PATH HOME LANG LC_ALL TMPDIR TMP TEMP SCRIPTPATH RUNNER_TEMP PIP_AUDIT_VENV_BASE PYPI_INDEX_URL PYPI_INSECURE_HOSTS GIT_OPTIONAL_LOCKS GITHUB_BASE_REF"
-if [ "${SANDBOX_CLEAN_ENV:-}" = "1" ]; then
-  for var in $SANDBOX_ENV_ALLOWLIST; do
-    if [ -n "${!var:-}" ]; then
-      LR_ARGS+=("--env" "$var")
-    fi
-  done
-  if [ -z "${PATH:-}" ]; then
-    LR_ARGS+=(--env "PATH=/usr/bin:/bin")
+# the sandboxed command unless --env is given. The wrapper always forwards
+# exactly the SANDBOX_ENV_ALLOWLIST variables via --env (plus
+# SANDBOX_ENV_EXTRA names), so untrusted install scripts can never read
+# exported secrets (REVIEWDOG_GITHUB_API_TOKEN, GITHUB_TOKEN, ...) — and the
+# command still gets PATH/HOME/toolchain variables it needs to run.
+SANDBOX_ENV_ALLOWLIST="PATH HOME LANG LC_ALL TMPDIR TMP TEMP CI GITHUB_ACTIONS GITHUB_BASE_REF GITHUB_WORKSPACE RUNNER_TEMP SCRIPTPATH PIP_AUDIT_VENV_BASE PYPI_INDEX_URL PYPI_INSECURE_HOSTS GIT_OPTIONAL_LOCKS UV_CACHE_DIR UV_PYTHON UV_PYTHON_INSTALL_DIR PNPM_HOME COREPACK_ENABLE_DOWNLOAD_PROMPT NODE_ENV COVERAGE_FILE COVERAGE_JSON"
+for var in $SANDBOX_ENV_ALLOWLIST ${SANDBOX_ENV_EXTRA:-}; do
+  if [ -n "${!var:-}" ]; then
+    LR_ARGS+=("--env" "$var")
   fi
+done
+if [ -z "${PATH:-}" ]; then
+  LR_ARGS+=(--env "PATH=/usr/bin:/bin")
 fi
 
 # Resolve the command to an absolute path: landrun v0.1.17 misparses

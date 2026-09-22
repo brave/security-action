@@ -98,12 +98,27 @@ Feature: Landlock sandbox wrapper
     And the sandboxed environment includes "PIP_AUDIT_VENV_BASE" with value "/scratch/pip-venv"
     And the sandboxed environment includes "PYPI_INDEX_URL" with value "https://pypi.example/simple"
 
-  Scenario: landrun strips the environment when scrubbing is off
+  Scenario: Environment is scrubbed by default, without SANDBOX_CLEAN_ENV
     Given the landrun stub is available
     And the kernel LSM list includes landlock
     And the wrapper runs locally
     And the environment variable "SANDBOX_FEATURE_CANARY" is "stripped"
+    And the environment variable "RUNNER_TEMP" is "/home/runner/work/_temp"
     And a command script exiting with 0
     When running the wrapper with landrun args "--rox /usr"
     Then the exit code is 0
+    And the sandboxed environment does not include "SANDBOX_FEATURE_CANARY"
+    And the sandboxed environment includes "RUNNER_TEMP" with value "/home/runner/work/_temp"
+
+  Scenario: SANDBOX_ENV_EXTRA passes additional variable names through
+    Given the landrun stub is available
+    And the kernel LSM list includes landlock
+    And the wrapper runs locally
+    And the environment variable "MY_TOOL_REGISTRY" is "https://reg.example"
+    And the environment variable "SANDBOX_ENV_EXTRA" is "MY_TOOL_REGISTRY"
+    And the environment variable "SANDBOX_FEATURE_CANARY" is "hidden"
+    And a command script exiting with 0
+    When running the wrapper with landrun args "--rox /usr"
+    Then the exit code is 0
+    And the sandboxed environment includes "MY_TOOL_REGISTRY" with value "https://reg.example"
     And the sandboxed environment does not include "SANDBOX_FEATURE_CANARY"
