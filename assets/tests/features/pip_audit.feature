@@ -199,6 +199,83 @@ Feature: pip audit scanner
     When the audit runs
     Then the venv is created with install command "django==1.0 --trusted-host host1 --trusted-host host2" and index "https://pypi.example"
 
+  Scenario: A global extra index is passed to the venv
+    Given a requirements file with the lines
+      """
+      --extra-index-url https://download.pytorch.org/whl/cu124
+      # --extra-index-url https://ignored.example/simple
+      torch==2.6.0+cu124
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "torch==2.6.0+cu124" and index "none" and extra indexes "https://download.pytorch.org/whl/cu124"
+
+  Scenario: An inline extra index is passed to the venv
+    Given a requirements file with the lines
+      """
+      torch==2.6.0+cu124 --extra-index-url https://download.pytorch.org/whl/cu124
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "torch==2.6.0+cu124" and index "none" and extra indexes "https://download.pytorch.org/whl/cu124"
+
+  Scenario: Index options in opt=value form are supported
+    Given a requirements file with the lines
+      """
+      --index-url=https://file.example/simple
+      --extra-index-url=https://extra.example/simple
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "django==1.0" and index "https://file.example/simple" and extra indexes "https://extra.example/simple"
+
+  Scenario: Duplicate extra indexes are deduplicated in order
+    Given a requirements file with the lines
+      """
+      --extra-index-url https://a.example/simple
+      --extra-index-url https://b.example/simple
+      --extra-index-url https://a.example/simple
+      torch==2.6.0+cu124
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "torch==2.6.0+cu124" and index "none" and extra indexes "https://a.example/simple,https://b.example/simple"
+
+  Scenario: The file index is used when no env index is set
+    Given a requirements file with the lines
+      """
+      -i https://file.example/simple
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "django==1.0" and index "https://file.example/simple" and extra indexes "none"
+
+  Scenario: The env index overrides the file index
+    Given a requirements file with the lines
+      """
+      --index-url https://file.example/simple
+      --extra-index-url https://extra.example/simple
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    And PYPI_INDEX_URL is "https://env.example/simple"
+    When the audit runs
+    Then the venv is created with install command "django==1.0" and index "https://env.example/simple" and extra indexes "https://extra.example/simple"
+
   Scenario: The venv is created under RUNNER_TEMP, outside the workspace
     Given a requirements file with the lines
       """
