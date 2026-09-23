@@ -21,18 +21,20 @@ class RequirementSource:
 
 
 def venv_base():
-    """Base directory for the throwaway pip venv.
+    """Base directory for the throwaway pip venv and PyPI HTTP cache.
 
     pip install runs arbitrary setup hooks from PR-controlled requirements, so
     the venv lives outside the workspace when the runner provides RUNNER_TEMP
     (the sandbox wrapper keeps the workspace read-only). PIP_AUDIT_VENV_BASE
-    overrides both for tests and local runs.
+    overrides both for tests and local runs. The HTTP cache lives here too:
+    pip_audit fails the scan with cache-write warnings when its cache dir
+    points into the read-only workspace.
     """
     return environ.get("PIP_AUDIT_VENV_BASE") or environ.get("RUNNER_TEMP") or "."
 
 
 def main():
-    auditor = Auditor(PyPIService('.del', 30))
+    auditor = Auditor(PyPIService(path.join(venv_base(), ".pip-audit-cache"), 30))
     venv_dir = path.join(venv_base(), ".venv-deleteme")
     with open(path.join(environ["SCRIPTPATH"], "all_changed_files.txt")) as all_changed_files:
         files = all_changed_files.read()

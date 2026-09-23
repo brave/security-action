@@ -218,7 +218,12 @@ def audit_runs(pip_audit, monkeypatch, tmp_path, context):
 
     monkeypatch.setattr(pip_audit, "VirtualEnv", FakeVirtualEnv)
     monkeypatch.setattr(pip_audit, "Auditor", FakeAuditor)
-    monkeypatch.setattr(pip_audit, "PyPIService", lambda cache_dir, timeout: "svc")
+
+    def fake_pypi_service(cache_dir, timeout):
+        context["pypi_cache_dir"] = cache_dir
+        return "svc"
+
+    monkeypatch.setattr(pip_audit, "PyPIService", fake_pypi_service)
 
     try:
         pip_audit.main()
@@ -272,3 +277,8 @@ def venv_created_under(context, base):
     assert len(context["venvs"]) == 1
     venv = context["venvs"][0]
     assert venv.cleared == [os.path.join(base, ".venv-deleteme")]
+
+
+@then(parsers.parse('the PyPI cache directory is "{value}"'))
+def pypi_cache_directory(context, value):
+    assert context["pypi_cache_dir"] == value
