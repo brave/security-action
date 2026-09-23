@@ -301,6 +301,31 @@ Feature: pip audit scanner
     When the audit runs
     Then the venv is created under "/scratch/pip-venv"
 
+  Scenario: The PyPI HTTP cache lives outside the read-only workspace
+    Given a requirements file with the lines
+      """
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    And RUNNER_TEMP is "/runner-temp"
+    When the audit runs
+    Then the PyPI cache directory is "/runner-temp/.pip-audit-cache"
+
+  Scenario: PIP_AUDIT_VENV_BASE moves the PyPI HTTP cache too
+    Given a requirements file with the lines
+      """
+      django==1.0
+      """
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    And RUNNER_TEMP is "/runner-temp"
+    And PIP_AUDIT_VENV_BASE is "/scratch/pip-venv"
+    When the audit runs
+    Then the PyPI cache directory is "/scratch/pip-venv/.pip-audit-cache"
+
   Scenario: Only dependency lock files are audited
     Given the changed files
       """
