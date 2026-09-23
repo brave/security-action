@@ -26,6 +26,7 @@ Feature: Sandbox reviewdog scanners
     Then the npm-audit command wraps python3 with the sandbox wrapper
     And the npm-audit sandbox allows outbound TCP on port 443 only
     And the npm-audit sandbox grants only the changed package-lock.json files, not the workspace
+    And the npm-audit grant loop tolerates a missing trailing newline
 
   Scenario: modelscan runs without network or workspace writes
     When the modelscan post comments script is loaded

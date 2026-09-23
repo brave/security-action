@@ -40,6 +40,14 @@ Then('the pip-audit sandbox grants only the changed Python manifests, not the wo
   assert.ok(cmd.includes('requirements*.txt|pyproject.toml) set -- "$@" --ro "$PWD/$f"'), `per-file manifest grant missing in:\n${cmd}`)
 })
 
+Then('the pip-audit grant loop tolerates a missing trailing newline', function () {
+  const cmd = this.runners['pip-audit'].cmd
+  // all_changed_files.txt is NUL-separated with no trailing NUL in PR
+  // mode; `read` fails on the unterminated last line unless the loop
+  // guards it, silently dropping that file's grant.
+  assert.ok(cmd.includes('read -r f || [ -n "$f" ]'), `unterminated last line drops its grant in pip-audit:\n${cmd}`)
+})
+
 Then('the pip-audit sandbox allows outbound TCP on port 443 only', function () {
   const cmd = this.runners['pip-audit'].cmd
   assert.ok(cmd.includes('--connect-tcp 443'), `no 443 egress in:\n${cmd}`)
