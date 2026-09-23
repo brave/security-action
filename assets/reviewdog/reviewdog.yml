@@ -147,7 +147,10 @@ runner:
       tr '\0' '\n' < "$SCRIPTPATH/all_changed_files.txt" > "$LOCKS"
       (
         set --
-        while IFS= read -r f; do
+        # `|| [ -n "$f" ]`: PR-mode all_changed_files.txt has no trailing
+        # NUL; plain `read` exits 1 on the unterminated last line and
+        # would silently drop that file's grant.
+        while IFS= read -r f || [ -n "$f" ]; do
           [ -n "$f" ] || continue
           case "${f##*/}" in
             package-lock.json) set -- "$@" --ro "$PWD/$f" ;;
@@ -182,7 +185,10 @@ runner:
       tr '\0' '\n' < "$SCRIPTPATH/all_changed_files.txt" > "$MANIFESTS"
       (
         set --
-        while IFS= read -r f; do
+        # `|| [ -n "$f" ]`: PR-mode all_changed_files.txt has no trailing
+        # NUL; plain `read` exits 1 on the unterminated last line and
+        # would silently drop that file's grant.
+        while IFS= read -r f || [ -n "$f" ]; do
           [ -n "$f" ] || continue
           case "${f##*/}" in
             requirements*.txt|pyproject.toml) set -- "$@" --ro "$PWD/$f" ;;

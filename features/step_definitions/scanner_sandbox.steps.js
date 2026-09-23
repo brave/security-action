@@ -75,6 +75,14 @@ Then('the npm-audit sandbox grants only the changed package-lock.json files, not
   assert.ok(cmd.includes('--ro "$SCRIPTPATH"'), `changed-file list not readable in:\n${cmd}`)
 })
 
+Then('the npm-audit grant loop tolerates a missing trailing newline', function () {
+  const cmd = this.runners['npm-audit'].cmd
+  // all_changed_files.txt is NUL-separated with no trailing NUL in PR
+  // mode; `read` fails on the unterminated last line unless the loop
+  // guards it, silently dropping that file's grant.
+  assert.ok(cmd.includes('read -r f || [ -n "$f" ]'), `unterminated last line drops its grant in npm-audit:\n${cmd}`)
+})
+
 Then('the npm-audit sandbox allows outbound TCP on port 443 only', function () {
   const cmd = this.runners['npm-audit'].cmd
   assert.ok(cmd.includes('--connect-tcp 443'), `no 443 egress in:\n${cmd}`)
