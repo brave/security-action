@@ -18,9 +18,12 @@ def _activate_output_capture(capsys):
 @pytest.fixture(autouse=True)
 def _isolate_venv_base(monkeypatch):
     """CI runners export RUNNER_TEMP; default scenarios expect the legacy
-    workspace venv path. Scenarios that need a base set it explicitly."""
+    workspace venv path. Scenarios that need a base set it explicitly.
+    Index env vars are cleared too so scenarios control precedence."""
     monkeypatch.delenv("RUNNER_TEMP", raising=False)
     monkeypatch.delenv("PIP_AUDIT_VENV_BASE", raising=False)
+    monkeypatch.delenv("PYPI_INDEX_URL", raising=False)
+    monkeypatch.delenv("PYPI_INSECURE_HOSTS", raising=False)
 
 
 scenarios("../features/pip_audit.feature")
@@ -162,6 +165,11 @@ def pypi_index(context, monkeypatch, index, hosts):
     monkeypatch.setenv("PYPI_INSECURE_HOSTS", hosts)
 
 
+@given(parsers.parse('PYPI_INDEX_URL is "{value}"'))
+def pypi_index_url_only(context, monkeypatch, value):
+    monkeypatch.setenv("PYPI_INDEX_URL", value)
+
+
 @given(parsers.parse('RUNNER_TEMP is "{value}"'))
 def runner_temp(context, monkeypatch, value):
     monkeypatch.setenv("RUNNER_TEMP", value)
@@ -185,9 +193,10 @@ def audit_runs(pip_audit, monkeypatch, tmp_path, context):
     venvs = []
 
     class FakeVirtualEnv:
-        def __init__(self, install_cmd, index_url=None):
+        def __init__(self, install_cmd, index_url=None, extra_index_urls=None):
             self.install_cmd = install_cmd
             self.index_url = index_url
+            self.extra_index_urls = extra_index_urls
             self.cleared = []
             venvs.append(self)
 
@@ -245,6 +254,16 @@ def venv_created_with(pip_audit, context, command, index):
     venv = context["venvs"][0]
     assert venv.install_cmd == command.split(" ")
     assert venv.index_url == index
+    assert venv.cleared == ["./.venv-deleteme"]
+
+
+@then(parsers.parse('the venv is created with install command "{command}" and index "{index}" and extra indexes "{extras}"'))
+def venv_created_with_extras(pip_audit, context, command, index, extras):
+    assert len(context["venvs"]) == 1
+    venv = context["venvs"][0]
+    assert venv.install_cmd == command.split(" ")
+    assert venv.index_url == (None if index == "none" else index)
+    assert venv.extra_index_urls == ([] if extras == "none" else extras.split(","))
     assert venv.cleared == ["./.venv-deleteme"]
 
 

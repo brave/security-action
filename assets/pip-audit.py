@@ -51,8 +51,16 @@ def main():
             extra_install_args.extend(["--trusted-host", host])
 
     for lock_path in changed_lock_files:
+        file_index_url = None
+        extra_index_urls = []
+        if path.basename(lock_path) != "pyproject.toml":
+            with open(lock_path) as lock_file:
+                file_index_url, extra_index_urls = index_options_from_requirements(lock_file.readlines())
+        # The env index wins; the file --index-url is a fallback for repos
+        # hosting wheels on a private index (e.g. cu* torch builds).
+        venv_index_url = index_url or file_index_url
         for install_cmd, line_number in install_commands(lock_path):
-            venv = VirtualEnv(install_cmd + extra_install_args, index_url=index_url)
+            venv = VirtualEnv(install_cmd + extra_install_args, index_url=venv_index_url, extra_index_urls=extra_index_urls)
             try:
                 venv.create(venv_dir)
             except VirtualEnvError as e:
@@ -98,11 +106,64 @@ def install_commands(lock_path: str) -> Iterator[tuple[list[str], int]]:
         yield from install_commands_for_requirements_txt(lock_file_lines, diff_lines)
 
 
+INDEX_URL_OPTIONS = {"--index-url", "-i"}
+EXTRA_INDEX_URL_OPTIONS = {"--extra-index-url"}
+
+
+def index_options_from_requirements(lock_file_lines: list[str]) -> tuple[str | None, list[str]]:
+    """Harvest pip index options from requirements lines.
+
+    Requirements files may carry `--index-url`/`-i` and
+    `--extra-index-url` either as global option lines or inline after a
+    requirement spec, in both `opt value` and `opt=value` forms. Pinned
+    requirements with local version suffixes (e.g. torch==2.6.0+cu124)
+    only resolve on those indexes, so the venv must inherit them.
+
+    Returns (index_url, extra_index_urls): the last --index-url seen
+    (None when absent) and every --extra-index-url deduplicated with
+    first-seen order preserved.
+    """
+    index_url = None
+    extra_index_urls = []
+    for line in lock_file_lines:
+        tokens = line.strip().split()
+        i = 0
+        while i < len(tokens):
+            token = tokens[i]
+            if token.startswith("#"):
+                break  # rest of the line is a comment
+            option, has_value, value = token.partition("=")
+            if option in INDEX_URL_OPTIONS:
+                if has_value:
+                    index_url = value
+                    i += 1
+                elif i + 1 < len(tokens):
+                    index_url = tokens[i + 1]
+                    i += 2
+                else:
+                    i += 1
+            elif option in EXTRA_INDEX_URL_OPTIONS:
+                if has_value:
+                    candidate, i = value, i + 1
+                elif i + 1 < len(tokens):
+                    candidate, i = tokens[i + 1], i + 2
+                else:
+                    i += 1
+                    continue
+                if candidate not in extra_index_urls:
+                    extra_index_urls.append(candidate)
+            else:
+                i += 1
+    return index_url, extra_index_urls
+
+
 def install_commands_for_requirements_txt(lock_file_lines: list[str], diff_lines: list[str]) -> Iterator[tuple[list[str], int]]:
     zero_indexed_lineno = 0
     while zero_indexed_lineno < len(lock_file_lines):
         line = lock_file_lines[zero_indexed_lineno]
-        if line and line in diff_lines and not line.startswith(("#", "--", "-e ")):
+        # No PEP 508 requirement starts with "-", so this skips every
+        # requirements-file option line (global or short form) too.
+        if line and line in diff_lines and not line.startswith(("#", "-")):
             while line.endswith("\\"):
                 zero_indexed_lineno += 1
                 line = line[:-1].strip() + " " + lock_file_lines[zero_indexed_lineno]

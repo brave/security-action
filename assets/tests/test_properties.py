@@ -111,6 +111,28 @@ def test_requirements_scan_respects_the_diff(lines, changed):
     assert result == expected
 
 
+# ── pip-audit: requirements index options ───────────────────────────────────
+
+index_option_name = st.sampled_from(["--index-url", "-i", "--extra-index-url"])
+index_option_url = st.sampled_from(["https://a.example/simple", "https://b.example/simple"])
+
+
+@settings(max_examples=50)
+@given(options=st.lists(st.tuples(index_option_name, index_option_url), max_size=12))
+def test_index_options_last_index_wins_and_extras_dedupe(options):
+    lines = [f"{opt} {url}" for opt, url in options]
+    result_index, result_extras = pip_audit.index_options_from_requirements(lines)
+    expected_index = next(
+        (url for opt, url in reversed(options) if opt != "--extra-index-url"), None
+    )
+    expected_extras = []
+    for opt, url in options:
+        if opt == "--extra-index-url" and url not in expected_extras:
+            expected_extras.append(url)
+    assert result_index == expected_index
+    assert result_extras == expected_extras
+
+
 # ── pip-audit: pyproject install commands ────────────────────────────────────
 
 dependency = st.text(
