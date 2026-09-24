@@ -1,9 +1,11 @@
+import re
 import subprocess
 import tomllib
 
 from collections.abc import Iterator
 from os import environ, path
 
+from packaging.utils import canonicalize_name
 from pip_audit._audit import Auditor
 from pip_audit._service.interface import ResolvedDependency
 from pip_audit._service.pypi import PyPIService
@@ -55,14 +57,27 @@ def main():
     for lock_path in changed_lock_files:
         file_index_url = None
         extra_index_urls = []
+        uv_default_index = None
+        uv_pkg_indexes = {}
         if path.basename(lock_path) != "pyproject.toml":
             with open(lock_path) as lock_file:
                 file_index_url, extra_index_urls = index_options_from_requirements(lock_file.readlines())
-        # The env index wins; the file --index-url is a fallback for repos
-        # hosting wheels on a private index (e.g. cu* torch builds).
-        venv_index_url = index_url or file_index_url
+        else:
+            with open(lock_path, "rb") as lock_file:
+                uv_default_index, uv_pkg_indexes = uv_index_options_from_pyproject(tomllib.load(lock_file))
         for install_cmd, line_number in install_commands(lock_path):
-            venv = VirtualEnv(install_cmd + extra_install_args, index_url=venv_index_url, extra_index_urls=extra_index_urls)
+            # Private packages mapped by [tool.uv.sources] resolve from
+            # their own index; everything else falls back to the env
+            # index, then the file's indexes.
+            pkg_index = uv_pkg_indexes.get(requirement_name(install_cmd[0]))
+            venv_index_url = index_url or pkg_index or uv_default_index or file_index_url
+            # The env index wins; file/uv indexes are kept as extras so
+            # packages hosted there (e.g. private wheels) still resolve.
+            venv_extra_urls = list(extra_index_urls)
+            for candidate in (file_index_url, uv_default_index, pkg_index):
+                if candidate and candidate != venv_index_url and candidate not in venv_extra_urls:
+                    venv_extra_urls.append(candidate)
+            venv = VirtualEnv(install_cmd + extra_install_args, index_url=venv_index_url, extra_index_urls=venv_extra_urls)
             try:
                 venv.create(venv_dir)
             except VirtualEnvError as e:
@@ -86,6 +101,41 @@ def main():
                 continue
             finally:
                 venv.clear_directory(venv_dir)
+
+
+def uv_index_options_from_pyproject(data) -> tuple[str | None, dict[str, str]]:
+    """Extract pip index options from a parsed pyproject.toml.
+
+    uv resolves packages through named indexes declared in
+    ``[[tool.uv.index]]`` and mapped per package in ``[tool.uv.sources]``
+    (typically private packages that public PyPI does not host). pip
+    understands neither, so translate them here.
+
+    Returns (default_index_url, {canonicalized package name: index url}).
+    Indexes without a name, and sources that do not reference a named
+    index (path/git/registry sources), are ignored.
+    """
+    uv = data.get("tool", {}).get("uv", {})
+    urls_by_name = {}
+    default_url = None
+    for index in uv.get("index", []):
+        url = index.get("url")
+        if not url:
+            continue
+        if index.get("default"):
+            default_url = url
+        if (name := index.get("name")):
+            urls_by_name[name] = url
+    pkg_indexes = {}
+    for pkg, source in uv.get("sources", {}).items():
+        if isinstance(source, dict) and (name := source.get("index")) in urls_by_name:
+            pkg_indexes[canonicalize_name(pkg)] = urls_by_name[name]
+    return default_url, pkg_indexes
+
+
+def requirement_name(requirement: str) -> str:
+    """Canonical project name from a PEP 508 requirement string."""
+    return canonicalize_name(re.match(r"[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?", requirement).group(0))
 
 
 def install_commands(lock_path: str) -> Iterator[tuple[list[str], int]]:

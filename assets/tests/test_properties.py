@@ -2,6 +2,7 @@
 import contextlib
 import importlib.util
 import os
+import re
 import string
 from pathlib import Path
 
@@ -133,7 +134,67 @@ def test_index_options_last_index_wins_and_extras_dedupe(options):
     assert result_extras == expected_extras
 
 
-# ── pip-audit: pyproject install commands ────────────────────────────────────
+# ── pip-audit: pyproject uv index options ────────────────────────────────────
+
+uv_index_name = st.from_regex(r"[a-z][a-z0-9-]{0,10}", fullmatch=True)
+uv_index_url = st.sampled_from(["https://a.example/simple", "https://b.example/simple"])
+uv_package = st.from_regex(r"[a-zA-Z][a-zA-Z0-9_-]{0,10}", fullmatch=True)
+
+
+@st.composite
+def uv_pyproject_data(draw):
+    names = draw(st.lists(uv_index_name, min_size=0, max_size=4, unique=True))
+    urls = [f"https://{name}.example/simple" for name in names]
+    indexes = [
+        {"name": name, "url": url, "explicit": True}
+        for name, url in zip(names, urls)
+    ]
+    default_pos = st.integers(min_value=0, max_value=max(len(names) - 1, 0)) if names else st.none()
+    if (pos := draw(default_pos)) is not None:
+        indexes[pos]["default"] = True
+    known = {name: i for i, name in enumerate(names)}
+    # Sources either reference a known index or a bogus one
+    source_names = [draw(st.sampled_from(names + ["bogus-index"])) for _ in range(2)]
+    sources = {
+        f"pkg-{i}": {"index": name} for i, name in enumerate(source_names)
+    }
+    return {
+        "tool": {"uv": {"index": indexes, "sources": sources}},
+        "urls": dict(zip(names, urls)),
+        "default": urls[pos] if names and pos is not None and pos < len(names) else None,
+        "source_names": source_names,
+    }
+
+
+@settings(max_examples=50)
+@given(bundle=uv_pyproject_data())
+def test_uv_indexes_resolve_only_named_sources(bundle):
+    default_url, pkg_indexes = pip_audit.uv_index_options_from_pyproject(bundle)
+    assert default_url == bundle["default"]
+    # Sources pointing at unknown indexes never leak a URL, and every
+    # resolved package is keyed by its canonical name
+    for pkg, index_url_value in pkg_indexes.items():
+        assert index_url_value in bundle["urls"].values()
+        assert pkg == pip_audit.canonicalize_name(pkg)
+    for source_name in bundle["source_names"]:
+        if source_name not in bundle["urls"]:
+            for pkg, name in bundle["tool"]["uv"]["sources"].items():
+                if name == source_name:
+                    assert pip_audit.canonicalize_name(pkg) not in pkg_indexes
+
+
+@settings(max_examples=50)
+@given(
+    name=st.from_regex(r"[A-Za-z](?:[A-Za-z0-9._-]{0,10}[A-Za-z0-9])?", fullmatch=True),
+    spec=st.from_regex(r"(?:(?:[<>=!~;,*]|\[)[<>=!~;,\[\]a-zA-Z0-9. -*]{0,14})?", fullmatch=True),
+)
+def test_requirement_name_canonicalizes_the_project_name(name, spec):
+    requirement = name + spec
+    expected = re.sub(r"[-_.]+", "-", name).lower()
+    assert pip_audit.requirement_name(requirement) == expected
+
+
+# ── scripttagextractor ───────────────────────────────────────────────────────
 
 dependency = st.text(
     alphabet=string.ascii_letters + string.digits + "-_.>=<",
@@ -149,6 +210,43 @@ def test_pyproject_full_scan_yields_each_dependency_once(deps):
     result = list(pip_audit.install_commands_for_pyproject_toml(lines, set(lines)))
     assert sorted(cmd[0] for cmd, _ in result) == sorted(deps)
     assert len(result) == len(deps)
+
+
+# ── pip-audit: pyproject uv index options ────────────────────────────────────
+
+index_name = st.from_regex(r"[a-z][a-z0-9-]{0,10}", fullmatch=True)
+index_url = st.sampled_from(["https://a.example/simple", "https://b.example/simple"])
+
+
+@settings(max_examples=50)
+@given(
+    names=st.lists(index_name, min_size=0, max_size=4, unique=True),
+    default_pos=st.one_of(st.none(), st.integers(min_value=0, max_value=3)),
+    url_for=st.booleans(),
+)
+def test_uv_indexes_default_and_named_urls_are_collected(names, default_pos, url_for):
+    indexes = []
+    default_url = None
+    for pos, name in enumerate(names):
+        url = index_url.example if False else "https://x.example/simple"
+        if url_for:
+            url = f"https://{name}.example/simple"
+        if default_pos is not None and pos == default_pos if (pos := len(indexes)) else False:
+            pass
+        indexes.append({"name": name, "url": f"https://{name}.example/simple"})
+    if default_pos is not None and default_pos < len(names):
+        indexes[default_pos]["default"] = True
+    data = {"tool": {"uv": {"index": indexes}}}
+    result_default, pkg_indexes = pip_audit.uv_index_options_from_pyproject({"tool": {"uv": {}}})
+    result_default, pkg_indexes = pip_audit.uv_index_options_from_pyproject(
+        {"tool": {"uv": {"index": indexes, "sources": {}}}}
+    )
+    expected_default = indexes[default_pos]["url"] if default_pos is not None and default_pos < len(names) else None
+    assert result_default == expected_default if False else result_default == expected_default
+
+
+def _uv_index_options_from_pyproject(data):
+    return pip_audit.uv_index_options_from_pyproject(data)
 
 
 # ── scripttagextractor ───────────────────────────────────────────────────────
