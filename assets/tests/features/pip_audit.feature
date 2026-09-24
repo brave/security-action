@@ -262,7 +262,7 @@ Feature: pip audit scanner
     When the audit runs
     Then the venv is created with install command "django==1.0" and index "https://file.example/simple" and extra indexes "none"
 
-  Scenario: The env index overrides the file index
+  Scenario: The env index is primary and the file index is kept as an extra
     Given a requirements file with the lines
       """
       --index-url https://file.example/simple
@@ -274,7 +274,120 @@ Feature: pip audit scanner
     And the audit reports no vulnerabilities
     And PYPI_INDEX_URL is "https://env.example/simple"
     When the audit runs
-    Then the venv is created with install command "django==1.0" and index "https://env.example/simple" and extra indexes "https://extra.example/simple"
+    Then the venv is created with install command "django==1.0" and index "https://env.example/simple" and extra indexes "https://extra.example/simple,https://file.example/simple"
+
+  Scenario: A uv source index resolves a private dependency
+    Given a pyproject file with the lines
+      """
+      [project]
+      dependencies = [
+        "load-balancing==0.1.108",
+      ]
+
+      [tool.uv.sources]
+      load-balancing = { index = "private" }
+
+      [[tool.uv.index]]
+      name = "private"
+      url = "https://private.example/simple"
+      explicit = true
+      """
+    And every line changed
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "load-balancing==0.1.108" and index "https://private.example/simple" and extra indexes "none"
+
+  Scenario: The env index stays primary and the uv source index is kept as an extra
+    Given a pyproject file with the lines
+      """
+      [project]
+      dependencies = [
+        "load-balancing==0.1.108",
+      ]
+
+      [tool.uv.sources]
+      load-balancing = { index = "private" }
+
+      [[tool.uv.index]]
+      name = "private"
+      url = "https://private.example/simple"
+      explicit = true
+      """
+    And every line changed
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    And PYPI_INDEX_URL is "https://env.example/simple"
+    When the audit runs
+    Then the venv is created with install command "load-balancing==0.1.108" and index "https://env.example/simple" and extra indexes "https://private.example/simple"
+
+  Scenario: A uv default index is used when no env index is set
+    Given a pyproject file with the lines
+      """
+      [project]
+      dependencies = [
+        "requests>=2.0",
+      ]
+
+      [[tool.uv.index]]
+      name = "private"
+      url = "https://private.example/simple"
+      explicit = true
+
+      [[tool.uv.index]]
+      name = "public"
+      url = "https://public.example/simple"
+      default = true
+      """
+    And every line changed
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "requests>=2.0" and index "https://public.example/simple" and extra indexes "none"
+
+  Scenario: An explicit uv index is not used for unmapped packages
+    Given a pyproject file with the lines
+      """
+      [project]
+      dependencies = [
+        "requests>=2.0",
+      ]
+
+      [tool.uv.sources]
+      load-balancing = { index = "private" }
+
+      [[tool.uv.index]]
+      name = "private"
+      url = "https://private.example/simple"
+      explicit = true
+      """
+    And every line changed
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "requests>=2.0" and index "none" and extra indexes "none"
+
+  Scenario: Uv sources without a matching index are ignored
+    Given a pyproject file with the lines
+      """
+      [project]
+      dependencies = [
+        "load-balancing==0.1.108",
+      ]
+
+      [tool.uv.sources]
+      load-balancing = { path = "../local" }
+      """
+    And every line changed
+    And the file is written to disk without a base ref
+    And the file is among the changed files
+    And the audit reports no vulnerabilities
+    When the audit runs
+    Then the venv is created with install command "load-balancing==0.1.108" and index "none" and extra indexes "none"
 
   Scenario: The venv is created under RUNNER_TEMP, outside the workspace
     Given a requirements file with the lines
