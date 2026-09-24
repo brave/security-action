@@ -35,5 +35,5 @@
     "fast-check": "4.9.0",
     "standard": "17.1.2"
   },
-  "packageManager": "pnpm@11.24.0"
+  "packageManager": "pnpm@11.27.0"
 }
