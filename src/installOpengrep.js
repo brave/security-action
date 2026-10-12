@@ -13,13 +13,13 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 
-export const OPENGREP_VERSION = 'v1.30.0'
+export const OPENGREP_VERSION = 'v1.30.2'
 // BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)
-export const OPENGREP_BIN_SHA256 = {
-  'v1.30.0': {
-    opengrep_manylinux_x86: '35779bdd72e92129c8df2a77f0c55e8c08356801ea92591ef32108d6b28d564c',
-    opengrep_manylinux_aarch64: 'a5d5a4a58ba5d46ff51e921663da1c2bba38f4b03987f4aeec87f16c6ad3ecae',
-    opengrep_osx_arm64: '0f5bc3dec09d995c61331a4017b856ede508f90d95b018d95f1dc6166be89fdd'
+const OPENGREP_BIN_SHA256 = {
+  'v1.30.2': {
+    opengrep_manylinux_x86: 'a66aa3278457f02b287b985a45b6762aebcaba5000f2689245fd1ed86d1456c7',
+    opengrep_manylinux_aarch64: '90acea5df4b733083f388d4feeb250ca802f671b33d1f222653d1e571dd2b0d8',
+    opengrep_osx_arm64: 'f1aaa30b88959cb82522c4e1475816278a1f161f994509a518453c0455f9d24b'
   }
 }
 // END opengrep binary pins
