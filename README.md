@@ -71,7 +71,7 @@ jobs:
         with: { monitor: my-workflow-name, status: error }
 ```
 
-The first `in_progress` check-in creates or updates the monitor in Sentry (schedule, grace margin), so no monitor needs to be created in the Sentry UI. The ingest URL embeds a public-key credential: the script discards all curl output and tolerates failures, so the credential never reaches logs and a check-in can never fail the workflow.
+The first `in_progress` check-in creates or updates the monitor in Sentry (schedule, grace margin), so no monitor needs to be created in the Sentry UI. The ingest URL embeds a public-key credential: the check-in (JavaScript, `src/sentryCheckin.js`, needs only Node's built-in fetch — no install step) discards all output and tolerates failures, so the credential never reaches logs and a check-in can never fail the workflow.
 
 ## Sandbox Threat Model
 

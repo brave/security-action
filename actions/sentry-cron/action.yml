@@ -1,7 +1,7 @@
 name: 'Sentry Cron Check-in'
 description: >-
   Deadman-switch check-in for scheduled workflows to Sentry Crons.
-  Requires curl and jq on the runner (preinstalled on ubuntu-latest).
+  Needs only Node.js (built-in fetch) on the runner — no install step.
   Reads the semi-secret ingest URL from the SENTRY_CRON_URL environment
   variable and silently no-ops when it is unset, so wiring can ship
   before the secret exists. Never fails the workflow.
@@ -31,5 +31,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - shell: bash
-      run: bash '${{ github.action_path }}/checkin.sh'
+    - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      with:
+        script: |
+          const actionPath = '${{ github.action_path }}/../../'
+          const inputs = ${{ toJson(inputs) }}
+
+          const script = require('${{ github.action_path }}/action.cjs')
+          await script({inputs, actionPath})

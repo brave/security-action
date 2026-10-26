@@ -1,26 +1,21 @@
 import { Given, When, Then, After } from '@cucumber/cucumber'
 import assert from 'assert'
 import http from 'http'
-import { execFile } from 'child_process'
-import { promisify } from 'util'
-import { fileURLToPath } from 'url'
-import path from 'path'
+import { checkIn } from '../../src/sentryCheckin.js'
 
-const runFile = promisify(execFile)
-
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..')
-const SCRIPT = path.join(ROOT, 'actions', 'sentry-cron', 'checkin.sh')
 const HOST = '127.0.0.1'
 
 /** Capture server mirroring the verified Sentry ingest: POST body upserts,
- *  GET ?status=<s> closes, both answer 202 empty. Requests recorded. */
+ *  GET ?status=<s> closes, both answer 202 empty. Requests recorded.
+ *  connection: close so the test process' undici pool never keeps
+ *  sockets open past the scenario. */
 function makeCaptureServer () {
   const server = http.createServer((req, res) => {
     let body = ''
     req.on('data', (chunk) => { body += chunk })
     req.on('end', () => {
       server.__requests.push({ method: req.method, url: req.url, body })
-      res.writeHead(202)
+      res.writeHead(202, { connection: 'close' })
       res.end()
     })
   })
@@ -33,6 +28,11 @@ function listen (server) {
 }
 
 After(function () {
+  if (this.savedCronUrl !== undefined) {
+    if (this.savedCronUrl === null) delete process.env.SENTRY_CRON_URL
+    else process.env.SENTRY_CRON_URL = this.savedCronUrl
+    this.savedCronUrl = undefined
+  }
   if (this.server) {
     this.server.closeAllConnections()
     this.server.close()
@@ -41,7 +41,8 @@ After(function () {
 })
 
 Given('no SENTRY_CRON_URL is configured', function () {
-  this.url = ''
+  this.savedCronUrl = process.env.SENTRY_CRON_URL ?? null
+  delete process.env.SENTRY_CRON_URL
 })
 
 Given('a local capture server standing in for the Sentry ingest', async function () {
@@ -50,36 +51,34 @@ Given('a local capture server standing in for the Sentry ingest', async function
 })
 
 Given('SENTRY_CRON_URL points at the capture server', function () {
-  this.url = `http://${HOST}:${this.port}/api/4512324234051584/cron/workflows-selftest/dc6b9c9041a59f9458a4ad4c0b870802/`
+  this.savedCronUrl = process.env.SENTRY_CRON_URL ?? null
+  process.env.SENTRY_CRON_URL = `http://${HOST}:${this.port}/api/4512324234051584/cron/workflows-selftest/dc6b9c9041a59f9458a4ad4c0b870802/`
 })
 
 Given('SENTRY_CRON_URL points at a closed port', function () {
-  this.url = `http://${HOST}:1/api/4512324234051584/cron/workflows-selftest/dc6b9c9041a59f9458a4ad4c0b870802/`
+  this.savedCronUrl = process.env.SENTRY_CRON_URL ?? null
+  process.env.SENTRY_CRON_URL = `http://${HOST}:1/api/4512324234051584/cron/workflows-selftest/dc6b9c9041a59f9458a4ad4c0b870802/`
 })
 
 When('checking in {string} for monitor {string} with schedule {string} and margin {string}', async function (status, monitor, schedule, margin) {
-  const env = { ...process.env }
-  delete env.SENTRY_CRON_URL
-  env.INPUT_MONITOR = monitor
-  env.INPUT_STATUS = status
-  env.INPUT_SCHEDULE = schedule
-  env.INPUT_TIMEZONE = 'UTC'
-  env.INPUT_CHECKIN_MARGIN = margin
-  if (this.url) env.SENTRY_CRON_URL = this.url
-  // Async, not spawnSync: a blocking spawn would freeze this process'
-  // event loop and starve the capture server it must also serve.
+  this.logs = []
+  const origLog = console.log
+  const origErr = console.error
+  console.log = (...parts) => this.logs.push(parts.join(' '))
+  console.error = (...parts) => this.logs.push(parts.join(' '))
   try {
-    const run = await runFile('bash', [SCRIPT], { env, timeout: 60000 })
-    this.exitCode = 0
-    this.output = `${run.stdout ?? ''}${run.stderr ?? ''}`
+    await checkIn({ monitor, status, schedule, timezone: 'UTC', checkin_margin: margin })
+    this.threw = null
   } catch (err) {
-    this.exitCode = err.code ?? 1
-    this.output = `${err.stdout ?? ''}${err.stderr ?? ''}`
+    this.threw = err
+  } finally {
+    console.log = origLog
+    console.error = origErr
   }
 })
 
-Then('the script exits successfully', function () {
-  assert.equal(this.exitCode, 0, `expected exit 0, got ${this.exitCode}; output: ${this.output}`)
+Then('the check-in completes without error', function () {
+  assert.ok(!this.threw, `expected the check-in to complete, got: ${this.threw?.message}`)
 })
 
 Then('no HTTP request is made', function () {
@@ -102,6 +101,7 @@ Then('the ingest receives a GET for status {string}', function (status) {
   assert.equal(gets.length, 1, `expected GET ?status=${status}, got: ${JSON.stringify(this.server.__requests)}`)
 })
 
-Then('the script output does not contain the check-in URL', function () {
-  assert.ok(!this.output.includes(this.url), `URL leaked into output: ${this.output}`)
+Then('the check-in output does not contain the check-in URL', function () {
+  const output = this.logs.join('\n')
+  assert.ok(!output.includes(process.env.SENTRY_CRON_URL || ''), `URL leaked into output: ${output}`)
 })
