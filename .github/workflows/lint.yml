@@ -61,7 +61,10 @@ jobs:
             --rox /lib64 \
             --ro /etc --ro /run \
             --connect-tcp 443 \
-            -- pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$HOME/.cache/pnpm/store"
+            -- pnpm install --frozen-lockfile -C "$ACTION_ROOT"
+            # store stays at pnpm's default (~/.local/share/pnpm/store, granted
+            # rw above) so setup-node's `cache: pnpm` — which resolves that same
+            # default via `pnpm store path` — finds and saves the populated path.
           rc=$?; cd "$ACTION_ROOT"; rm -rf "$PN_TMP"; exit $rc
       - run: pnpm run lint
       - run: pnpm run lint-rules
