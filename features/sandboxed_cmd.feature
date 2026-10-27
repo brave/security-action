@@ -26,3 +26,19 @@ Feature: Sandboxed command builder
     And the read dirs ["/rules", "/scan-target"]
     Then the cache paths are writable and the read dirs are read-only
     And no egress is granted
+
+  Scenario: Runner temp dir is granted read-only for git credential includes
+    actions/checkout stores its git credential config in $RUNNER_TEMP and
+    links it from .git/config; a sandboxed git op on the checkout dies with
+    "fatal: bad config line" when the include is unreadable.
+    Given the runner temp dir is "/home/runner/work/_temp"
+    And a sandboxed command for action path "/act" cmd "git diff --name-only origin/main...HEAD" with write dirs [] and egress off
+    Then the command runs inside the sandbox wrapper
+    And the runner temp dir is read-only
+    And no egress is granted
+
+  Scenario: No runner temp grant when RUNNER_TEMP is unset
+    Given the runner temp dir is unset
+    And a sandboxed command for action path "/act" cmd "git diff --name-only origin/main...HEAD" with write dirs [] and egress off
+    Then the runner temp dir is not granted
+    And no egress is granted

@@ -1,6 +1,24 @@
-import { Given, Then } from '@cucumber/cucumber'
+import { Given, Then, After } from '@cucumber/cucumber'
 import assert from 'assert'
 import buildSandboxedCmd from '../../src/sandboxedCmd.js'
+
+After(function () {
+  if ('prevRunnerTemp' in this) {
+    if (this.prevRunnerTemp === null) delete process.env.RUNNER_TEMP
+    else process.env.RUNNER_TEMP = this.prevRunnerTemp
+    delete this.prevRunnerTemp
+  }
+})
+
+Given('the runner temp dir is {string}', function (value) {
+  this.prevRunnerTemp = process.env.RUNNER_TEMP ?? null
+  process.env.RUNNER_TEMP = value
+})
+
+Given('the runner temp dir is unset', function () {
+  this.prevRunnerTemp = process.env.RUNNER_TEMP ?? null
+  delete process.env.RUNNER_TEMP
+})
 
 Given('a sandboxed command for action path {string} cmd {string} with write dirs [{string}] and egress {word}', function (actionPath, cmd, writeDirs, egress) {
   this.sandboxedCmd = buildSandboxedCmd({
@@ -82,4 +100,14 @@ Then('the cache paths are writable and the read dirs are read-only', function ()
   assert.ok(cmd.includes('--rwx "/home/u/.opengrep/semgrep.log"'), `log not writable in:\n${cmd}`)
   assert.ok(cmd.includes('--ro "/rules"'), `rules not read-only in:\n${cmd}`)
   assert.ok(cmd.includes('--ro "/scan-target"'), `scan target not read-only in:\n${cmd}`)
+})
+
+Then('the runner temp dir is read-only', function () {
+  const temp = process.env.RUNNER_TEMP ?? '/home/runner/work/_temp'
+  assert.ok(this.sandboxedCmd.includes(`--ro "${temp}"`), `runner temp not read-only in:\n${this.sandboxedCmd}`)
+})
+
+Then('the runner temp dir is not granted', function () {
+  const temp = process.env.RUNNER_TEMP ?? '/home/runner/work/_temp'
+  assert.ok(!this.sandboxedCmd.includes(`--ro "${temp}"`), `unexpected runner temp grant in:\n${this.sandboxedCmd}`)
 })

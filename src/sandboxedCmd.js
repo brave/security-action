@@ -21,6 +21,10 @@ export default function buildSandboxedCmd ({
   ]
   for (const dir of readDirs) grants.push(`--ro "${dir}"`)
   for (const dir of writeDirs) grants.push(`--rwx "${dir}"`)
+  // actions/checkout writes a git credential include into $RUNNER_TEMP and
+  // links it from .git/config; sandboxed git ops on the checkout die with
+  // "fatal: bad config line" when the include is unreadable.
+  if (process.env.RUNNER_TEMP) grants.push(`--ro "${process.env.RUNNER_TEMP}"`)
   grants.push(
     // git opens /dev/null O_RDWR for its pager plumbing.
     '--rw /dev/null',
