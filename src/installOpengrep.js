@@ -15,7 +15,7 @@ import path from 'path'
 
 export const OPENGREP_VERSION = 'v1.32.0'
 // BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)
-const OPENGREP_BIN_SHA256 = {
+export const OPENGREP_BIN_SHA256 = {
   'v1.32.0': {
     opengrep_manylinux_x86: '7360d60174880bd9214f2dfbe439b7bce82b7a3d44cfe945ba833c85cc8bda75',
     opengrep_manylinux_aarch64: 'dc6229319c0d68948733053786a5614873947e5ec1d4669cc0e94ae9038cb99d',
