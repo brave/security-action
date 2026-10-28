@@ -42,6 +42,37 @@ jobs:
 - feature/*, feature branches including new security checkers
 - bugfix/*, fixes for specific bugs in the action
 
+## Sentry Cron Check-ins (Deadman Switch)
+
+Scheduled workflows report to [Sentry Crons](https://docs.sentry.io/product/monitors-and-alerts/monitors/crons/getting-started/http/) so a silently stalled job (disabled workflow, dead runner, skipped schedule) pages instead of passing unnoticed. [`actions/sentry-cron`](actions/sentry-cron/action.yml) sends the check-ins; alerts and Slack routing live entirely in Sentry.
+
+Each monitored workflow gets its own org secret holding the ingest URL of its monitor (`SENTRY_CRON_<MONITOR>`), passed as the `SENTRY_CRON_URL` environment variable. When the secret is absent the action no-ops, so wiring can ship before the secret exists:
+
+```yml
+env:
+  SENTRY_CRON_URL: ${{ secrets.SENTRY_CRON_MY_WORKFLOW }} # semi-secret ingest URL
+jobs:
+  my-job:
+    steps:
+      # first step: opens the check-in and upserts the monitor schedule
+      - uses: brave/security-action/actions/sentry-cron@main
+        with:
+          monitor: my-workflow-name
+          status: in_progress
+          schedule: '0 17 * * 1' # GitHub Actions crons run in UTC
+          checkin_margin: '120'  # grace minutes; runner jitter is real
+      # ...existing steps...
+      # last steps: close the check-in
+      - uses: brave/security-action/actions/sentry-cron@main
+        if: success()
+        with: { monitor: my-workflow-name, status: ok }
+      - uses: brave/security-action/actions/sentry-cron@main
+        if: failure()
+        with: { monitor: my-workflow-name, status: error }
+```
+
+The first `in_progress` check-in creates or updates the monitor in Sentry (schedule, grace margin), so no monitor needs to be created in the Sentry UI. The ingest URL embeds a public-key credential: the check-in (JavaScript, `src/sentryCheckin.js`, needs only Node's built-in fetch — no install step) discards all output and tolerates failures, so the credential never reaches logs and a check-in can never fail the workflow.
+
 ## Sandbox Threat Model
 
 PR-controlled dependency manifests (`requirements*.txt`, `pyproject.toml`/`uv.lock`, `package.json`/`pnpm-lock.yaml`) make this action execute **attacker-chosen install scripts** (pip sdist build hooks, PEP 517 backends, pnpm/git lifecycle hooks). To limit the blast radius, every installer and scanner runs inside a [Landlock](https://docs.kernel.org/userspace-api/landlock.html) sandbox via [landrun](https://github.com/Zouuup/landrun) (pinned binary, SHA256-verified, installed by `src/installLandrun.js`, wrapped by `scripts/with-sandbox.sh`).
