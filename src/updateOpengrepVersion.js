@@ -136,7 +136,7 @@ function updateInstallScript (version, binaryDigests, fsx) {
   }
   const entries = PINNED_DISTS.map(dist => `    ${dist}: '${binaryDigests[dist]}'`).join(',\n')
   const block = '// BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)\n' +
-    `const OPENGREP_BIN_SHA256 = {\n  '${version}': {\n${entries}\n  }\n}\n` +
+    `export const OPENGREP_BIN_SHA256 = {\n  '${version}': {\n${entries}\n  }\n}\n` +
     '// END opengrep binary pins\n'
   content = content.replace(
     /\/\/ BEGIN opengrep binary pins[\s\S]*?\/\/ END opengrep binary pins\n/,

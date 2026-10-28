@@ -10,7 +10,7 @@ const PINNED_DISTS = ['opengrep_manylinux_x86', 'opengrep_manylinux_aarch64', 'o
 
 function pinsBlock (version) {
   const entries = PINNED_DISTS.map(d => `    ${d}: '${'b'.repeat(64)}'`).join(',\n')
-  return `// BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)\nconst OPENGREP_BIN_SHA256 = {\n  '${version}': {\n${entries}\n  }\n}\n// END opengrep binary pins\n`
+  return `// BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)\nexport const OPENGREP_BIN_SHA256 = {\n  '${version}': {\n${entries}\n  }\n}\n// END opengrep binary pins\n`
 }
 
 function installScriptContent (version, { withPins = true } = {}) {
@@ -130,4 +130,9 @@ Then('the file pins binary digests for {string}', function (version) {
 Then('the cache key pins version {string}', function (version) {
   const content = this.fsx.__files[ACTION_YML]
   assert.ok(content.includes(`key: opengrep-${version}-`), `${content} lacks cache key ${version}`)
+})
+
+Then('the pins block keeps the export keyword', function () {
+  const content = this.fsx.__files[INSTALL_SCRIPT]
+  assert.ok(content.includes('export const OPENGREP_BIN_SHA256 = {'), `${content} lost the export on OPENGREP_BIN_SHA256`)
 })

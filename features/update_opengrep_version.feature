@@ -17,6 +17,7 @@ Feature: Opengrep version update
     Then the result reports an update from "v1.11.5" to "v1.12.0"
     And the file pins version "v1.12.0"
     And the file pins binary digests for "v1.12.0"
+    And the pins block keeps the export keyword
     And the cache key pins version "v1.12.0"
 
   Scenario: Unparseable current version still updates
