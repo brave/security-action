@@ -20,7 +20,7 @@ rules:
       MAC / signature before deserialization and fail closed to bundled data.
     paths:
       include:
-        - "**/brave_shields/browser/ad_block*.cc"
+        - "**/brave_shields/**/ad_block*.cc"
         - "adblock-cache-read-no-integrity.cpp"
     patterns:
       - pattern-either:
