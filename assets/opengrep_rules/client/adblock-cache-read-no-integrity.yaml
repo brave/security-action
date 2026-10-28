@@ -1,0 +1,28 @@
+rules:
+  - id: adblock-cache-read-no-integrity
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/adblock-cache-read-no-integrity.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+    severity: INFO
+    message: |
+      Cached filter data is read back from the profile directory and deserialized in the
+      browser process without an integrity check (audit finding B1, bug 1917). Any
+      user-privilege file-write primitive (or the A2 ads write escape) can plant the
+      cache and replace the filter set or attack the deserializer. Verify an integrity
+      MAC / signature before deserialization and fail closed to bundled data.
+    paths:
+      include:
+        - "**/brave_shields/browser/ad_block*.cc"
+        - "adblock-cache-read-no-integrity.cpp"
+    patterns:
+      - pattern-either:
+          - pattern: base::ReadFileToBytes(...)
+          - pattern: $X.MaybeReadCachedDATFiles(...)
