@@ -85,6 +85,14 @@ Given('the target repository {string} is cloned', function (repo) {
   this.execRoutes.push({ test: /rev-parse --abbrev-ref HEAD/, out: 'main' })
 })
 
+Given('the base opengrep scan reports no findings', function () {
+  this.execRoutes.push({ test: /cd .*opengrep-rules-base.*opengrep/, out: '{"results":[],"errors":[]}' })
+})
+
+Given('the current opengrep scan reports no findings', function () {
+  this.execRoutes.push({ test: /cd .*opengrep-rules-current.*opengrep/, out: '{"results":[],"errors":[]}' })
+})
+
 Given('the base opengrep scan reports findings under the clone', function (json) {
   const world = this
   this.execRoutes.push({
@@ -106,8 +114,8 @@ When('comparing rules', async function () {
   // Capture the clone directory from the mkdir command for path stripping
   const rawExec = exec
   const wrapped = (command, options) => {
-    if (/mkdir -p /.test(command)) {
-      const m = command.match(/mkdir -p ([^']*)'/)
+    if (/mkdir -p \/tmp\/opengrep-scan-/.test(command)) {
+      const m = command.match(/mkdir -p (\/tmp\/opengrep-scan-\d+)/)
       if (m) this.clonedDir = m[1]
     }
     return rawExec(command, options)
@@ -214,4 +222,21 @@ Then('the finding path for rule {string} is {string}', function (ruleId, expecte
   const findings = this.result.findings[ruleId]
   assert.ok(findings, `no findings for rule ${ruleId}`)
   assert.equal(findings[0].path, expectedPath)
+})
+
+Then('the clone directory is created with an unsandboxed mkdir', function () {
+  const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
+  assert.ok(
+    commands.some(c => c.startsWith('mkdir -p /tmp/opengrep-scan-')),
+    `expected plain mkdir for the clone dir, got:\n${commands.join('\n')}`
+  )
+})
+
+Then('the scan temp directory is created with an unsandboxed mkdir', function () {
+  const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
+  const mkdirs = commands.filter(c => /mkdir -p .*opengrep-compare-/.test(c))
+  assert.ok(mkdirs.length > 0, `expected plain mkdir for the scan temp dir, got:\n${commands.join('\n')}`)
+  for (const c of mkdirs) {
+    assert.ok(c.startsWith('mkdir -p '), `scan temp mkdir must not be sandbox-wrapped: ${c}`)
+  }
 })

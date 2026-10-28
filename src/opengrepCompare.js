@@ -89,6 +89,9 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null, e
   // The scan runs sandboxed: read-only rules + scan target, writes confined
   // to the opengrep cache/log + a private temp dir, zero network.
   const scanTmp = path.join(os.tmpdir(), `opengrep-compare-${Date.now()}`)
+  // Same Landlock constraint as the clone dir: create the private temp dir
+  // unsandboxed so its --rwx grant actually binds.
+  exec(`mkdir -p ${scanTmp}`)
   const command = buildSandboxedCmd({
     actionPath,
     cmd: `export TMPDIR="${scanTmp}"; cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`,
@@ -236,7 +239,10 @@ export default async function opengrepCompare (options = {}) {
   } else if (targetRepo) {
     console.log(`Target repository: ${targetRepo}`)
     tempDir = path.join('/tmp', `opengrep-scan-${Date.now()}`)
-    exec(buildSandboxedCmd({ actionPath, cmd: `mkdir -p ${tempDir}`, writeDirs: [tempDir] }))
+    // Landlock binds rules to paths that exist at ruleset build time; with
+    // --ignore-missing a grant on a not-yet-existing path is silently
+    // dropped, so the clone dir must be created unsandboxed first.
+    exec(`mkdir -p ${tempDir}`)
     console.log(`Cloning ${targetRepo} (shallow clone)...`)
     exec(buildSandboxedCmd({
       actionPath,
