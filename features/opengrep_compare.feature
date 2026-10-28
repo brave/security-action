@@ -154,3 +154,13 @@ Feature: Opengrep rule comparison
       """
     When comparing rules
     Then the finding path for rule "a.old" is "src/x.js"
+
+  Scenario: Temp dirs for clone and scan are pre-created unsandboxed
+    Given the target repository "brave/brave-browser" is cloned
+    And git reports one changed rule file that exists in the base branch
+    And rule discovery finds rule files on both branches
+    And the base opengrep scan reports no findings
+    And the current opengrep scan reports no findings
+    When comparing rules
+    Then the clone directory is created with an unsandboxed mkdir
+    And the scan temp directory is created with an unsandboxed mkdir
