@@ -41,19 +41,20 @@ Given('a reviewdog log for runner {string}', function (runner) {
   fs.writeFileSync(this.params.logPath, `${this.params.inputLog.join('\n')}\n`)
 })
 
-Given('raw findings matching the log line for {string} line {int}', function (file, lineNo) {
+Given('slim findings matching the log line for {string} line {int}', function (file, lineNo) {
   const dir = workspace(this)
-  const raw = {
-    results: [{
-      check_id: 'javascript/xss/render',
-      path: file,
-      start: { line: lineNo },
-      end: { line: lineNo },
-      extra: { severity: 'ERROR', message: 'Unescaped value rendered into HTML', metadata: { cwe: 'CWE-79: Cross-site Scripting', source: 'brave/security-action' } }
-    }],
-    errors: []
+  const record = {
+    check_id: 'javascript/xss/render',
+    path: file,
+    line: lineNo,
+    severity: 'ERROR',
+    message: 'Unescaped value rendered into HTML',
+    cwe: 'CWE-79: Cross-site Scripting',
+    source: 'brave/security-action',
+    category: 'security',
+    assignees: 'null'
   }
-  fs.writeFileSync(path.join(dir, 'security-action', 'opengrep-raw.json'), JSON.stringify(raw))
+  fs.writeFileSync(path.join(dir, 'security-action', 'opengrep-slim.jsonl'), `${JSON.stringify(record)}\n`)
 })
 
 Given('the mock model answers verdict {string} confidence {string} reason {string}', function (label, confidence, reason) {
@@ -73,7 +74,7 @@ When('the triage filter runs for runner {string}', function (runner) {
     '--runner', runner,
     '--log', this.params.logPath,
     '--config', path.join(dir, 'security-action', 'triage-config.json'),
-    '--raw', path.join(dir, 'security-action', `${runner}-raw.json`),
+    '--raw', path.join(dir, 'security-action', `${runner}-slim.jsonl`),
     '--workspace', dir
   ]
   if (fs.existsSync(path.join(dir, 'mock-chat.json'))) args.push('--mock-chat', path.join(dir, 'mock-chat.json'))

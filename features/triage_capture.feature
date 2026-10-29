@@ -1,16 +1,20 @@
 Feature: Triage capture wiring
   As the security action maintainer
-  I want the scan runners to tee their raw JSON before the jq stage discards it
-  So the post-scan triage stage can re-analyze full findings
+  I want the scan runners to capture slim finding records instead of the full scanner JSON
+  So the post-scan triage stage gets the fields it needs without re-reading raw output
 
-  Scenario: The opengrep runner tees raw JSON to a stable path
+  Scenario: The opengrep runner captures slim finding records
     When the reviewdog configuration is loaded
-    Then the opengrep cmd tees raw json to "security-action/opengrep-raw.json"
+    Then the opengrep cmd tees slim findings to "security-action/opengrep-slim.jsonl"
+    And the opengrep slim template carries "check_id"
+    And the opengrep slim template carries "cwe"
+    And the opengrep cmd rebuilds the line format from the slim records
     And the opengrep cmd ensures the capture directory exists
 
-  Scenario: The sveltegrep runner tees raw JSON to a stable path
+  Scenario: The sveltegrep runner captures slim finding records
     When the reviewdog configuration is loaded
-    Then the sveltegrep cmd tees raw json to "security-action/sveltegrep-raw.json"
+    Then the sveltegrep cmd tees slim findings to "security-action/sveltegrep-slim.jsonl"
+    And the sveltegrep cmd rebuilds the line format from the slim records
     And the sveltegrep cmd ensures the capture directory exists
 
   Scenario: The capture path is overridable

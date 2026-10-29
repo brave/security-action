@@ -3,7 +3,7 @@
  * Triage filter: applies agentic FP-triage verdicts to a reviewdog log
  * before the findings are posted to the PR.
  *
- * Fail-open by design: any error (missing raw JSON, disabled config, model
+ * Fail-open by design: any error (missing slim capture, disabled config, model
  * failure, budget exhaustion) leaves the log untouched and exits 0 so the
  * scan pipeline is never broken by the triage stage.
  *
@@ -11,7 +11,7 @@
  *   node scripts/triage-filter.mjs --runner opengrep \
  *     --log opengrep.log \
  *     --config "$RUNNER_TEMP/security-action/triage-config.json" \
- *     --raw "$RUNNER_TEMP/security-action/opengrep-raw.json" \
+ *     --raw "$RUNNER_TEMP/security-action/opengrep-slim.jsonl" \
  *     [--workspace /tmp/ws] [--mock-chat /tmp/ws/mock-chat.json] [--out opengrep.log]
  *
  * Config: { enabled, model, budgetUsd, maxFindings, allowCwes? }

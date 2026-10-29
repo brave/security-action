@@ -1,10 +1,10 @@
 Feature: Triage findings adapter
   As the security action maintainer
-  I want raw opengrep JSON findings converted into triage queue items
+  I want slim opengrep findings converted into triage queue items
   So the agentic harness can triage production findings after the scan
 
   Background:
-    Given a raw opengrep JSON with 2 findings and no errors
+    Given a slim opengrep capture with 2 findings
 
   Scenario: Findings become unlabeled queue items
     When the findings are converted to a triage queue
@@ -21,21 +21,27 @@ Feature: Triage findings adapter
     Then item 1 raw output has 1 opengrep result
     And item 1 file is "app/render.js"
 
-  Scenario: Cwe number is extracted from metadata
+  Scenario: Cwe number is extracted from the capture
     When the findings are converted to a triage queue
     Then item 1 cwe is "79"
     And item 2 cwe is "null"
 
-  Scenario: Results with missing path are skipped
-    Given a raw opengrep JSON with a finding missing its path
+  Scenario: Records with missing path are skipped
+    Given a slim opengrep capture with a finding missing its path
     When the findings are converted to a triage queue
     Then the findings queue has 1 items
     And the skipped count is 1
 
-  Scenario: Errors-only payload yields an empty queue
-    Given a raw opengrep JSON with only errors
+  Scenario: Empty capture yields an empty queue
+    Given a slim opengrep capture that is empty
     When the findings are converted to a triage queue
     Then the findings queue has 0 items
+
+  Scenario: Malformed records are skipped
+    Given a slim opengrep capture with a malformed record
+    When the findings are converted to a triage queue
+    Then the findings queue has 1 items
+    And the skipped count is 1
 
   Scenario: Policy suppresses only high-confidence injection false positives
     Given a verdict of label "FP" confidence "high" for cwe "89"

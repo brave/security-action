@@ -1,24 +1,34 @@
 import { stableCaseId } from './verdict.js'
 
 /**
- * Convert a raw opengrep --json payload into triage queue items.
+ * Convert the slim opengrep findings JSONL (one jq -c record per finding,
+ * captured by the reviewdog runner between --json and the line-format
+ * stage) into triage queue items.
  *
  * Production findings carry no ground truth, so every item is unlabeled;
  * the agentic verdict alone drives annotation or suppression downstream.
  * The generated caseJson mirrors the paper-artifact case shape so
  * formatTask renders an identical task prompt.
  */
-export function opengrepFindingsToQueue (rawJson, { repoRoot, scanRoot = '.' } = {}) {
-  const parsed = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson
-  const results = Array.isArray(parsed?.results) ? parsed.results : []
+export function opengrepFindingsToQueue (slimJsonl, { repoRoot, scanRoot = '.' } = {}) {
+  const records = Array.isArray(slimJsonl)
+    ? slimJsonl
+    : String(slimJsonl).split('\n').filter((l) => l.trim() !== '')
   const items = []
   const skipped = []
-  for (const result of results) {
+  for (const record of records) {
+    let result
+    try {
+      result = typeof record === 'string' ? JSON.parse(record) : record
+    } catch {
+      skipped.push({ reason: 'malformed record', result: record })
+      continue
+    }
     if (!result || typeof result.path !== 'string' || result.path === '') {
       skipped.push({ reason: 'missing path', result })
       continue
     }
-    const line = result?.end?.line ?? result?.start?.line ?? 0
+    const line = Number.isFinite(result.line) ? result.line : 0
     const checkId = typeof result.check_id === 'string' && result.check_id !== '' ? result.check_id : 'unknown-rule'
     const caseJson = {
       case_id: `${checkId}:${result.path}:${line}`,
@@ -32,7 +42,7 @@ export function opengrepFindingsToQueue (rawJson, { repoRoot, scanRoot = '.' } =
       caseId: stableCaseId(caseJson),
       dataset: 'opengrep',
       label: null,
-      cwe: extractCwe(result?.extra?.metadata?.cwe),
+      cwe: extractCwe(result.cwe),
       file: result.path,
       line,
       caseJson,

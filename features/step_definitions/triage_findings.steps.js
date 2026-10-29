@@ -3,34 +3,40 @@ import assert from 'node:assert/strict'
 import { opengrepFindingsToQueue } from '../../src/triage/findingsQueue.js'
 import { policyDecision } from '../../src/triage/policy.js'
 
-const RESULT = (over = {}) => ({
+const SLIM = (over = {}) => ({
   check_id: 'javascript/xss/render',
   path: 'app/render.js',
-  start: { line: 42, col: 3 },
-  end: { line: 42, col: 30 },
-  extra: {
-    severity: 'ERROR',
-    message: 'Unescaped value rendered into HTML',
-    metadata: { cwe: 'CWE-79: Cross-site Scripting', source: 'brave/security-action', category: 'security' },
-    lines: 'let el = `<div>$' + '{value}</div>`'
-  },
+  line: 42,
+  severity: 'ERROR',
+  message: 'Unescaped value rendered into HTML',
+  cwe: 'CWE-79: Cross-site Scripting',
+  source: 'brave/security-action',
+  category: 'security',
+  assignees: 'null',
   ...over
 })
 
-function makeRawJson (results, errors = []) {
-  return JSON.stringify({ results, errors })
+function makeSlimCapture (records) {
+  return records.map((r) => JSON.stringify(r)).join('\n')
 }
 
-Given('a raw opengrep JSON with 2 findings and no errors', function () {
-  this.params.rawJson = makeRawJson([RESULT(), RESULT({ check_id: 'javascript/sqli/query', path: 'app/db.js', start: { line: 7 }, end: { line: 7 }, extra: { ...RESULT().extra, metadata: { source: 'x' } } })])
+Given('a slim opengrep capture with 2 findings', function () {
+  this.params.rawJson = makeSlimCapture([
+    SLIM(),
+    SLIM({ check_id: 'javascript/sqli/query', path: 'app/db.js', line: 7, cwe: '' })
+  ])
 })
 
-Given('a raw opengrep JSON with a finding missing its path', function () {
-  this.params.rawJson = makeRawJson([RESULT({ path: undefined }), RESULT({ path: 'app/ok.js' })])
+Given('a slim opengrep capture with a finding missing its path', function () {
+  this.params.rawJson = makeSlimCapture([SLIM({ path: undefined }), SLIM({ path: 'app/ok.js' })])
 })
 
-Given('a raw opengrep JSON with only errors', function () {
-  this.params.rawJson = makeRawJson([], [{ type: 'semgrep-error', message: 'boom' }])
+Given('a slim opengrep capture that is empty', function () {
+  this.params.rawJson = ''
+})
+
+Given('a slim opengrep capture with a malformed record', function () {
+  this.params.rawJson = '{oops\n' + JSON.stringify(SLIM())
 })
 
 When('the findings are converted to a triage queue', function () {

@@ -5,19 +5,51 @@ import fs from 'node:fs'
 // ${RUNNER_TEMP:-/tmp} literal, assembled to appease no-template-curly-in-string
 const RT = '$' + '{RUNNER_TEMP:-/tmp}'
 
-Then('the opengrep cmd tees raw json to {string}', function (relPath) {
+Then('the opengrep cmd tees slim findings to {string}', function (relPath) {
   const cmd = this.runners.opengrep.cmd
   assert.ok(
     cmd.includes(`| tee "${RT}/${relPath}"`),
-    `opengrep cmd should tee raw json to ${relPath}`
+    `opengrep cmd should tee slim findings to ${relPath}`
   )
 })
 
-Then('the sveltegrep cmd tees raw json to {string}', function (relPath) {
+Then('the sveltegrep cmd tees slim findings to {string}', function (relPath) {
   const cmd = this.runners.sveltegrep.cmd
   assert.ok(
     cmd.includes(`| tee "${RT}/${relPath}"`),
-    `sveltegrep cmd should tee raw json to ${relPath}`
+    `sveltegrep cmd should tee slim findings to ${relPath}`
+  )
+})
+
+Then('the opengrep slim template carries {string}', function (field) {
+  const cmd = this.runners.opengrep.cmd
+  assert.ok(
+    cmd.includes(`${field}:`),
+    `opengrep slim template should carry ${field}`
+  )
+})
+
+Then('the opengrep cmd rebuilds the line format from the slim records', function () {
+  const cmd = this.runners.opengrep.cmd
+  assert.ok(
+    /jq -c '\.results\[\] \| \{check_id/.test(cmd),
+    'opengrep cmd should project one slim record per .results[] entry'
+  )
+  assert.ok(
+    /tee "[^"]+slim\.jsonl"[\s\\]*\|\s*jq -r/.test(cmd),
+    'opengrep cmd should rebuild the line format from the slim JSONL stream'
+  )
+})
+
+Then('the sveltegrep cmd rebuilds the line format from the slim records', function () {
+  const cmd = this.runners.sveltegrep.cmd
+  assert.ok(
+    /jq -c '\.results\[\] \| \{check_id/.test(cmd),
+    'sveltegrep cmd should project one slim record per .results[] entry'
+  )
+  assert.ok(
+    /tee "[^"]+slim\.jsonl"[\s\\]*\|\s*jq -r/.test(cmd),
+    'sveltegrep cmd should rebuild the line format from the slim JSONL stream'
   )
 })
 

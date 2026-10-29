@@ -21,7 +21,7 @@ node "$SCRIPTPATH/../../scripts/triage-filter.mjs" \
     --runner "$RUNNER" \
     --log "$LOG" \
     --config "$CAPTURE_DIR/triage-config.json" \
-    --raw "$CAPTURE_DIR/${RUNNER}-raw.json" \
+    --raw "$CAPTURE_DIR/${RUNNER}-slim.jsonl" \
     --out "$LOG" \
     >"$CAPTURE_DIR/${RUNNER}-triage-summary.json" \
     2>"$CAPTURE_DIR/${RUNNER}-triage.stderr.log" || true
