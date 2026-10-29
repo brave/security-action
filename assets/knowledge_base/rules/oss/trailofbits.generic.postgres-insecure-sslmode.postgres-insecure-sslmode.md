@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.postgres-insecure-sslmode.postgres-insecure-sslmod
 rubric: safety
 severity: should_fix
 languages: [regex]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found PostgreSQL connection string disabling SSL verification

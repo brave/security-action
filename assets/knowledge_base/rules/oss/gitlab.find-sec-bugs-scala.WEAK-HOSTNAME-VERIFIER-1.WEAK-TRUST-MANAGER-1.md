@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.WEAK-HOSTNAME-VERIFIER-1.WEAK-TRUST-MANAGER
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-295]
 ---
 
 **Rule.** A HostnameVerifier that accept any host are often use because of certificate reuse on many hosts. As a consequence, this is vulnerable to Man-in-the-middle attacks since the client will trust any certificate.

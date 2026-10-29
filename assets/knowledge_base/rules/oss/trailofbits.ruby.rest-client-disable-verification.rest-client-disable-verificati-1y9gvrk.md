@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.rest-client-disable-verification.rest-client-disable-
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found RestClient HTTP request disabling SSL/TLS verification.

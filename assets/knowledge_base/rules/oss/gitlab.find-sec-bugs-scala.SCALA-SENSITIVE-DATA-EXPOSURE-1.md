@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.SCALA-SENSITIVE-DATA-EXPOSURE-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-200]
 ---
 
 **Rule.** Applications can unintentionally leak information about their configuration, internal workings, or violate privacy through a variety of application problems. Pages that provide different responses based on the validity of the data can lead to Information Leakage; specifically when data deemed confidential is being revealed as a result of the web application's design.

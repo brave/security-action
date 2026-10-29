@@ -3,6 +3,7 @@ name: oss/gitlab.security-code-scan.SCS0007-1
 rubric: safety
 severity: should_fix
 languages: [csharp]
+cwe: [CWE-611]
 ---
 
 **Rule.** External XML entities are a feature of XML parsers that allow documents to contain references to other documents or data. This feature can be abused to read files, communicate with external hosts, exfiltrate data, or cause a Denial of Service (DoS). XML parsers and document loaders must be configured to not resolve entities. This can be done by: - Ensuring you are running a version of .NET Framework greater than 4.5.2 (released in 2014). - Using `XDocument` which disables entity resolution and is generally safe from DoS. - Setting `XmlDocument`'s `XmlResolver` to null. - Setting `XmlTextReader`'s `ProhibitDtd` to `true` - Setting `XmlReaderSettings` `DtdProcessing` to `DtdProcessing.Prohibit` Example of safely loading an XML file using `XmlDocument`: ``` XmlDocument document = new XmlDocument(); document.XmlResolver = null; document.Load("users.xml"); ``` For more information on XML security, see OWASP's guide: https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html#net

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.DANGEROUS-PERMISSION-COMBINATION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-269]
 ---
 
 **Rule.** Do not grant dangerous combinations of permissions.

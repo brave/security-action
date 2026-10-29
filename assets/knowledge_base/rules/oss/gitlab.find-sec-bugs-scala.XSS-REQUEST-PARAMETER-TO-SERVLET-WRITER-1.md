@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.XSS-REQUEST-PARAMETER-TO-SERVLET-WRITER-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-79]
 ---
 
 **Rule.** Servlet reflected cross site scripting vulnerability

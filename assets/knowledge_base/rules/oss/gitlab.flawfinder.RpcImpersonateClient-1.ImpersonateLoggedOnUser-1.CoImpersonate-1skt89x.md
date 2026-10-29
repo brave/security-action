@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.RpcImpersonateClient-1.ImpersonateLoggedOnUser-1.CoI
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-250]
 ---
 
 **Rule.** These functions may be used to either drop or change account privileges. If the calls fail, the process will continue to run with the privileges assigned to it on start. Depending on the logic of the application, this may allow attackers to abuse the system due to privileges never being changed to a different access level. Always ensure return values of this function are checked to determine if the application should continue to operate.

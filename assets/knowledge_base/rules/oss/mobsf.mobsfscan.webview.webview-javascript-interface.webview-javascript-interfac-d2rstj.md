@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.webview.webview-javascript-interface.webview-javascrip
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-749]
 ---
 
 **Rule.** Ensure that javascript interface is implemented securely. Execution of user controlled code in WebView is a critical Security issue.

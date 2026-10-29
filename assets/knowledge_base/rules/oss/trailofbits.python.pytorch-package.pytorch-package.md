@@ -3,6 +3,7 @@ name: oss/trailofbits.python.pytorch-package.pytorch-package
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** Avoid importing torch.package - it can result in arbitrary code execution via pickle

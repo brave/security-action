@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.JAXRS-ENDPOINT-1
 rubric: safety
 severity: nit
 languages: [scala]
+cwe: [CWE-20]
 ---
 
 **Rule.** This method is part of a REST Web Service (JSR311). The security of this web service should be analyzed. For example: - Authentication, if enforced, should be tested. - Access control, if enforced, should be tested. - The inputs should be tracked for potential vulnerabilities. - The communication should ideally be over SSL. - If the service supports writes (e.g., via POST), its vulnerability to CSRF should be investigated.

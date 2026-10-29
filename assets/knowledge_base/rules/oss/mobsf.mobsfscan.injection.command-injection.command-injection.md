@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.injection.command-injection.command-injection
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-78]
 ---
 
 **Rule.** User controlled strings in exec() will result in command execution.

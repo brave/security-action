@@ -3,6 +3,7 @@ name: oss/trailofbits.go.missing-unlock-before-return.missing-unlock-before-retu
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-667]
 ---
 
 **Rule.** Missing mutex unlock (`$T` variable) before returning from a function. This could result in panics resulting from double lock operations

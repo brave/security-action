@@ -3,6 +3,7 @@ name: oss/trailofbits.go.racy-append-to-slice.racy-append-to-slice
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-362]
 ---
 
 **Rule.** Appending `$SLICE` from multiple goroutines is not concurrency safe

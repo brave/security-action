@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.insecure-random.java-insecure-random
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-330]
 ---
 
 **Rule.** The App uses an insecure Random Number Generator.

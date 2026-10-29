@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.best-practices.tls-certificate-transparency.android-ce
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-295]
 ---
 
 **Rule.** This app does not enforce TLS Certificate Transparency that helps to detect SSL certificates that have been mistakenly issued by a certificate authority or maliciously acquired from an otherwise unimpeachable certificate authority.

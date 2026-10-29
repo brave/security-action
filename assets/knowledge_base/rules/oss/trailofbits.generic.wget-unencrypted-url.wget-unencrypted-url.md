@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.wget-unencrypted-url.wget-unencrypted-url
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found `wget` command with unencrypted URL (e.g. HTTP, FTP, etc.)

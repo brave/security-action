@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.DES-USAGE-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-326]
 ---
 
 **Rule.** DES is considered strong ciphers for modern applications. Currently, NIST recommends the usage of AES block ciphers instead of DES.

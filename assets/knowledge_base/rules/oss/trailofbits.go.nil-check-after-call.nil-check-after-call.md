@@ -3,6 +3,7 @@ name: oss/trailofbits.go.nil-check-after-call.nil-check-after-call
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-253]
 ---
 
 **Rule.** Potential `$FOO` nil dereference when `$BAR` is called

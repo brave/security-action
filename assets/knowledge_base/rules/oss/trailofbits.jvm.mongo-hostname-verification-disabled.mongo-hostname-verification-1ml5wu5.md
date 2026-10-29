@@ -3,6 +3,7 @@ name: oss/trailofbits.jvm.mongo-hostname-verification-disabled.mongo-hostname-ve
 rubric: safety
 severity: should_fix
 languages: [java, kotlin]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found MongoDB client with SSL hostname verification disabled

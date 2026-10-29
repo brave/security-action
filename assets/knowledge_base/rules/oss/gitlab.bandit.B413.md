@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B413
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-1104]
 ---
 
 **Rule.** The application was detected importing `pycrypto`. This package has been deprecated as it contains security vulnerabilities. To remediate this issue, consider using the [cryptography](https://cryptography.io/) package instead.

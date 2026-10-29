@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.STRUTS-FORM-VALIDATION-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-20]
 ---
 
 **Rule.** Form inputs should have minimal input validation. Preventive validation helps provide defense in depth against a variety of risks.

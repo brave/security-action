@@ -3,6 +3,7 @@ name: oss/trailofbits.javascript.apollo-graphql.v3-cors-audit.v3-potentially-bad
 rubric: safety
 severity: should_fix
 languages: [js, ts]
+cwe: [CWE-942]
 ---
 
 **Rule.** The Apollo GraphQL server is setup with a CORS policy that does not deny all origins. Carefully review the origins to see if any of them are incorrectly setup (third-party websites, bad regexes, functions that reflect every origin, etc.).

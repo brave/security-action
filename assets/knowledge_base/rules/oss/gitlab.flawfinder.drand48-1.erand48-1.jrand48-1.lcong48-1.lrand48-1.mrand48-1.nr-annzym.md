@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.drand48-1.erand48-1.jrand48-1.lcong48-1.lrand48-1.mr
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-327]
 ---
 
 **Rule.** The detected function is not sufficient at generating security-related random numbers, such as those used in key and nonce creation. Consider using the libsodium library's `randombytes_random` function instead. More information on libsodium's random number generators can be found here: https://libsodium.gitbook.io/doc/generating_random_data. If FIPS validation is required, consider using OpenSSLs `RAND_bytes` family of functions after enabling the `FIPS_mode_set`. For more information on OpenSSL random numbers please see: https://wiki.openssl.org/index.php/Random_Numbers

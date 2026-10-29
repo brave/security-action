@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.android.secrets.hardcoded-api-key
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-798]
 ---
 
 **Rule.** A hardcoded Key is identified.

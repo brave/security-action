@@ -3,6 +3,7 @@ name: oss/gitlab.eslint.detect-buffer-noassert
 rubric: safety
 severity: should_fix
 languages: [javascript, typescript]
+cwe: [CWE-119]
 ---
 
 **Rule.** The application was found using `noAssert` when calling the Buffer API. The `noAssert` argument has been deprecated since Node 10. Calling the Buffer API with this argument allows the offset specified to be beyond the end of the buffer. This could result in writing or reading beyond the end of the buffer and cause a segmentation fault, leading to the application crashing. To remediate this issue, remove the `true` argument when calling any of the Buffer read or write methods. The application should still handle `RangeError` exception cases where the offset is beyond the end of the buffer. Example reading from a Buffer without the `noAssert` argument and gracefully handling errors: ``` // Create a new buffer const buf = Buffer.from([1, 2, 3, 4]); try { // Read a single byte from it, starting at offset 1 const b = buf.readInt8(1); // Work with b } catch (e) { if (e instanceof RangeError) { console.log('Invalid offset: %s', e.message); } // handle other errors } ```

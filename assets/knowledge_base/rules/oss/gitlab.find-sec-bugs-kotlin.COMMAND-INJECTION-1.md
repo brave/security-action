@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.COMMAND-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-78]
 ---
 
 **Rule.** The highlighted API is used to execute a system command. If unfiltered input is passed to this API, it can lead to arbitrary command execution.

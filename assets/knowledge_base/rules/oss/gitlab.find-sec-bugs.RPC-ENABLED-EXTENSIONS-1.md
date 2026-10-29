@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.RPC-ENABLED-EXTENSIONS-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-502]
 ---
 
 **Rule.** Enabling extensions in Apache XML RPC server or client can lead to deserialization vulnerability which would allow an attacker to execute arbitrary code.

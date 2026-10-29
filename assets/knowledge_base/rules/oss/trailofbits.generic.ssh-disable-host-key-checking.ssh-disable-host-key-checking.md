@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.ssh-disable-host-key-checking.ssh-disable-host-key
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found `ssh` command disabling host key checking

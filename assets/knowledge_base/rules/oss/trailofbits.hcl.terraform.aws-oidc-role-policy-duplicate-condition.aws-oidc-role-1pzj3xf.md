@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.terraform.aws-oidc-role-policy-duplicate-condition.aws
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-284]
 ---
 
 **Rule.** Found AWS role policy for GitHub Actions with duplicate condition. This overrides previous conditions, and the last condition with the duplicated key "wins." This likely breaks access controls and allows unauthorized access.

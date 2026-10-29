@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.snprintf-1.vsnprintf-1.-snprintf-1.-sntprintf-1.-vsn
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-134]
 ---
 
 **Rule.** Format string vulnerabilities allow an attacker to read or in some cases, potentially write data to and from locations in the processes' memory. To prevent against format string attacks, do not allow users or un-validated input to provide the format specification. Consider using a constant for the format specification, or strip all format specifiers from the input prior to calling the `snprintf` family of functions. Note that some variations of this function do not always null terminate the strings. For more information on using snprintf please see: https://linux.die.net/man/3/snprintf For more information on format string attacks please see OWASP's attack guide: https://owasp.org/www-community/attacks/Format_string_attack

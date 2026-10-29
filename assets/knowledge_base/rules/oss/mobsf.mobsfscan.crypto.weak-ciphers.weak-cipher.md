@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.weak-ciphers.weak-cipher
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-327]
 ---
 
 **Rule.** Weak encryption algorithm identified. This algorithm is vulnerable to cryptographic attacks.

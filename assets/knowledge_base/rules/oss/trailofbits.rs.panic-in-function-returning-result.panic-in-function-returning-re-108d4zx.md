@@ -3,6 +3,7 @@ name: oss/trailofbits.rs.panic-in-function-returning-result.panic-in-function-re
 rubric: safety
 severity: should_fix
 languages: [rust]
+cwe: [CWE-755]
 ---
 
 **Rule.** `expect` or `unwrap` called in function returning a `Result`

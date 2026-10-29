@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.openssl-insecure-flags.openssl-insecure-flags
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found `openssl` command using insecure flags

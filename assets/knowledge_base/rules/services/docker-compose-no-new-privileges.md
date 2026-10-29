@@ -3,6 +3,7 @@ name: services/docker-compose-no-new-privileges
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-732]
 ---
 
 **Rule.** Service '$SERVICE' allows for privilege escalation via setuid or setgid binaries. Add 'no-new-privileges=true' in 'security_opt' to prevent this.

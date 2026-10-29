@@ -3,6 +3,7 @@ name: oss/trailofbits.python.waiting-with-pytorch-distributed.waiting-with-pytor
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-758]
 ---
 
 **Rule.** Not waiting for requests is a source of undefined behavior

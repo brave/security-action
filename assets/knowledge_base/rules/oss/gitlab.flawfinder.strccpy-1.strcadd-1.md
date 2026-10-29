@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.strccpy-1.strcadd-1
 rubric: safety
 severity: nit
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** The `strccpy` and `strcadd` functions do not allow the caller to check that the destination size of the buffer will fit the input buffer prior to copying. For more information please see: https://docs.oracle.com/cd/E18752_01/html/816-5172/streadd-3gen.html

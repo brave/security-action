@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.rpm-key-validate-certs-disabled.rpm-key-valid
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found RPM key with SSL verification disabled

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.FORMAT-STRING-MANIPULATION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-134]
 ---
 
 **Rule.** Allowing user input to control format parameters could enable an attacker to cause exceptions to be thrown or leak information.Attackers may be able to modify the format string argument, such that an exception is thrown. If this exception is left uncaught, it may crash the application. Alternatively, if sensitive information is used within the unused arguments, attackers may change the format string to reveal this information.

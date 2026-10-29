@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.apt-key-validate-certs-disabled.apt-key-valid
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found apt key with SSL verification disabled

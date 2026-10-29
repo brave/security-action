@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.xxe.xmldecoder-xxe.xml-decoder-xxe
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-611]
 ---
 
 **Rule.** XMLDecoder should not be used to parse untrusted data. Deserializing user input can lead to arbitrary code execution. Use an alternative and explicitly disable external entities.

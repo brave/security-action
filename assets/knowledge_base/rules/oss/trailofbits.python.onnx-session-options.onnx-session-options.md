@@ -3,6 +3,7 @@ name: oss/trailofbits.python.onnx-session-options.onnx-session-options
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-676]
 ---
 
 **Rule.** Loading custom operator libraries can result in arbitrary code execution

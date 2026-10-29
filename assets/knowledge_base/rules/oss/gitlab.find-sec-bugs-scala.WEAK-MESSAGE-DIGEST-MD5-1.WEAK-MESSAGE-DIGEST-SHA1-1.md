@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.WEAK-MESSAGE-DIGEST-MD5-1.WEAK-MESSAGE-DIGE
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-326]
 ---
 
 **Rule.** DES is considered strong ciphers for modern applications. Currently, NIST recommends the usage of AES block ciphers instead of DES.

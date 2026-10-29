@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.yum-validate-certs-disabled.yum-validate-cert
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found yum with SSL verification disabled

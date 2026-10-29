@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.usleep-1
 rubric: safety
 severity: nit
 languages: [c, cpp]
+cwe: [CWE-676]
 ---
 
 **Rule.** The `usleep` function has been deprecated, use `nanosleep` or `setitimer` instead. For more information please see: https://linux.die.net/man/3/setitimer

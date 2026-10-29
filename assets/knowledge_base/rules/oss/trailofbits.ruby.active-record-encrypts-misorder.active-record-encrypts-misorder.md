@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.active-record-encrypts-misorder.active-record-encrypt
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-311]
 ---
 
 **Rule.** Found an ActiveRecord value with encryption before serialization. The declaration of the serialized attribute should go before the encryption declaration.

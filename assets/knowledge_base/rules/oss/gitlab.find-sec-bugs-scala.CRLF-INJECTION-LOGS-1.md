@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.CRLF-INJECTION-LOGS-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-93]
 ---
 
 **Rule.** When data from an untrusted source is put into a logger and not neutralized correctly, an attacker could forge log entries or include malicious content. Inserted false entries could be used to skew statistics, distract the administrator or even to implicate another party in the commission of a malicious act. If the log file is processed automatically, the attacker can render the file unusable by corrupting the format of the file or injecting unexpected characters. An attacker may also inject code or other commands into the log file and take advantage of a vulnerability in the log processing utility (e.g. command injection or XSS).

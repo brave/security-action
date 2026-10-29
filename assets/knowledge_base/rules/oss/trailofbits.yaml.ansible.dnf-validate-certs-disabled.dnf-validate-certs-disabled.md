@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.dnf-validate-certs-disabled.dnf-validate-cert
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found dnf with SSL verification disabled

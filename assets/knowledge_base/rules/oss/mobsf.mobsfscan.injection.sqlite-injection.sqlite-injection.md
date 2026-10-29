@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.injection.sqlite-injection.sqlite-injection
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-78]
 ---
 
 **Rule.** App uses SQLite Database and execute raw SQL query. Untrusted user input in raw SQL queries can cause SQL Injection. Also sensitive information should be encrypted and written to the database.

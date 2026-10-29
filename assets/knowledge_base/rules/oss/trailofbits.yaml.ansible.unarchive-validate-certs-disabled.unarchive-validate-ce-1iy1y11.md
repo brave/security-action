@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.unarchive-validate-certs-disabled.unarchive-v
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found unarchive download with SSL verification disabled

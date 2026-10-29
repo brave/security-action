@@ -3,6 +3,7 @@ name: services/var-in-href
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-79]
 ---
 
 **Rule.** Detected a template variable used in an anchor tag with the 'href' attribute. This allows a malicious actor to input the 'javascript:' URI and is subject to cross- site scripting (XSS) attacks. If using Flask, use 'url_for()' to safely generate a URL. If using Django, use the 'url' filter to safely generate a URL. If using Mustache, use a URL encoding library, or prepend 'https://' to the variable for relative links (`href="https://{{link}}"`). You may also consider setting the Content Security Policy (CSP) header.

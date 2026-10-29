@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.best-practices.android-safetynetapi.android-safetynet-
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-353]
 ---
 
 **Rule.** This app does not uses SafetyNet Attestation API that provides cryptographically-signed attestation, assessing the device's integrity. This check helps to ensure that the servers are interacting with the genuine app running on a genuine Android device.

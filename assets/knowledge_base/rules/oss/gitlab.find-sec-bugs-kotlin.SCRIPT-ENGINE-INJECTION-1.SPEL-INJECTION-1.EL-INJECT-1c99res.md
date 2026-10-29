@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.SCRIPT-ENGINE-INJECTION-1.SPEL-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-94]
 ---
 
 **Rule.** The software constructs all or part of a code segment using externally-influenced input from an upstream component, but it does not neutralize or incorrectly neutralizes special elements that could modify the syntax or behavior of the intended code segment.

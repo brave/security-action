@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B313.B314.B315.B316.B318.B319.B320.B405.B406.B407.B408.B
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-611]
 ---
 
 **Rule.** Found use of the native Python XML libraries, which is vulnerable to XML external entity (XXE) attacks. The Python documentation recommends the 'defusedxml' library instead. Use 'defusedxml'. See https://github.com/tiran/defusedxml for more information.

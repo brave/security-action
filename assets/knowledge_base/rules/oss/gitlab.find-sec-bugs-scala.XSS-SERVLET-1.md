@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.XSS-SERVLET-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-79]
 ---
 
 **Rule.** A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser.

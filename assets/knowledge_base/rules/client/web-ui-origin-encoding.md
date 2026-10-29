@@ -3,6 +3,7 @@ name: client/web-ui-origin-encoding
 rubric: safety
 severity: should_fix
 languages: [typescript]
+cwe: [CWE-116]
 ---
 
 **Rule.** URI components should be encoded using encodeURIComponent. This prevents passed URLs and other encoded data from causing the WebUI URL from being malformed or parsed incorrectly.

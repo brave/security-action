@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.INSECURE-SMTP-SSL-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-297]
 ---
 
 **Rule.** Server identity verification is disabled when making SSL connections.

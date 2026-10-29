@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.PT-RELATIVE-PATH-TRAVERSAL-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-22]
 ---
 
 **Rule.** "The software uses an HTTP request parameter to construct a pathname that should be within a restricted directory, but it does not properly neutralize sequences such as ".." that can resolve to a location that is outside of that directory. See http://cwe.mitre.org/data/definitions/23.html for more information."

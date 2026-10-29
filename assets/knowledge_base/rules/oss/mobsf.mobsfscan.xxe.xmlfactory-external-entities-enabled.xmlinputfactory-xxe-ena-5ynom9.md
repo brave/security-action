@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.xxe.xmlfactory-external-entities-enabled.xmlinputfacto
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-611]
 ---
 
 **Rule.** XML external entities are enabled for this XMLInputFactory. This is vulnerable to XML external entity attacks. Disable external entities by setting "javax.xml.stream.isSupportingExternalEntities" to false.

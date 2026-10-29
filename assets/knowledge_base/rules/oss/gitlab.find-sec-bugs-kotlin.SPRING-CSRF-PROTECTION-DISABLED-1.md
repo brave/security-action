@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.SPRING-CSRF-PROTECTION-DISABLED-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-352]
 ---
 
 **Rule.** The application fails to protect against Cross-Site Request Forgery (CSRF) due to disabling Spring's CSRF protection features.

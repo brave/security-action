@@ -3,6 +3,7 @@ name: oss/trailofbits.python.pickles-in-pytorch-distributed.pickles-in-pytorch-d
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** Functions reliant on pickle can result in arbitrary code execution

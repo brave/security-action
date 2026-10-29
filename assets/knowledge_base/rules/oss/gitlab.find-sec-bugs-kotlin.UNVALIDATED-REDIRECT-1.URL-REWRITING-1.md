@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.UNVALIDATED-REDIRECT-1.URL-REWRITING-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-601]
 ---
 
 **Rule.** Unvalidated redirects occur when an application redirects a user to a destination URL specified by a user supplied parameter that is not validated. Such vulnerabilities can be used to facilitate phishing attacks.

@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.installer-allow-untrusted.installer-allow-untruste
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-494]
 ---
 
 **Rule.** Found `installer` command allowing untrusted installations

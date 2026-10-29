@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.StrCat-1.StrCatA-1.StrcatW-1.lstrcatA-1.lstrcatW-1.s
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** The `StrCat` family of functions do not guarantee the final string to be null terminated. Consider using one of the following alternatives: `StringCbCat`, `StringCbCatEx`, `StringCbCatN`, `StringCbCatNEx`, `StringCchCat`, `StringCchCatEx`, `StringCchCatN`, or `StringCchCatNEx`. For more information please see: https://learn.microsoft.com/en-us/windows/win32/api/strsafe/

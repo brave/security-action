@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.rails-cache-store-marshal.rails-cache-store-marshal
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-502]
 ---
 
 **Rule.** Found Rails cache store configured to allow Marshaling. As of Rails 7.1 the default serializer is `:marshal_7_1`. If an attacker can inject data into the cache store (SSRF, etc.), then they can achieve code execution when the object is later deserialized. Consider using a custom serializer like JSON or MessagePack that does not fallback on Marshal.

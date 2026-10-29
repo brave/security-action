@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.CUSTOM-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-89]
 ---
 
 **Rule.** The method identified is susceptible to injection. The input should be validated and properly escaped.

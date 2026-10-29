@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B108-1
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-377]
 ---
 
 **Rule.** Detected hardcoded temp directory. Consider using 'tempfile.TemporaryFile' instead.

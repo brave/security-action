@@ -3,6 +3,7 @@ name: oss/trailofbits.go.string-to-int-signedness-cast.string-to-int-signedness-
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-681]
 ---
 
 **Rule.** Downcasting or changing sign of an integer with `$CAST_METHOD` method

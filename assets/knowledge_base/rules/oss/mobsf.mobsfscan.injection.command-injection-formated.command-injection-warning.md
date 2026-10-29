@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.injection.command-injection-formated.command-injection
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-78]
 ---
 
 **Rule.** A formatted or concatenated string was detected as input to a java.lang.Runtime call. This is dangerous if a variable is controlled by user input and could result in a command injection. Ensure your variables are not controlled by users or sufficiently sanitized.

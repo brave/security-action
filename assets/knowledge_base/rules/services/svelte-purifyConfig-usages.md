@@ -3,6 +3,7 @@ name: services/svelte-purifyConfig-usages
 rubric: safety
 severity: nit
 languages: [generic]
+cwe: [CWE-79]
 ---
 
 **Rule.** The code contains new security hotspots (`purifyConfig`) which should be checked manually by a security team member!

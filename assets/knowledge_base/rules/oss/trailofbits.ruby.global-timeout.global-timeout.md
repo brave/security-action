@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.global-timeout.global-timeout
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-460]
 ---
 
 **Rule.** Found `Timeout::timeout` (or `timeout`) use. Setting a global timeout can cause an exception to be raised anywhere in the passed block of code. This precludes any possible clean up action typically associated with rescuing from exceptions. This can lead to denial-of-service, data integrity failure, and general availability concerns. Instead prefer to use the library's built in timeout functionality, if it has any, to ensure processing happens as expected. If it does not have built in timeout functionality, then consider implementing it.

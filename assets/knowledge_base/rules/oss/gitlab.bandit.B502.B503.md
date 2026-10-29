@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B502.B503
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-326]
 ---
 
 **Rule.** An insecure SSL version was detected. TLS versions 1.0, 1.1, and all SSL versions are considered weak encryption and are deprecated. Use 'ssl.PROTOCOL_TLSv1_2' or higher.

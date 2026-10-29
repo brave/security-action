@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.curl-insecure.curl-insecure
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found `curl` command disabling SSL verification

@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.insecure-ssl-v3.insecure-sslv3
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-327]
 ---
 
 **Rule.** SSLv3 is insecure and has multiple known vulnerabilities.

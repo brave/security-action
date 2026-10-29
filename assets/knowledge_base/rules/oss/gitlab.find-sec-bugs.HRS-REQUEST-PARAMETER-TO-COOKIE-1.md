@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.HRS-REQUEST-PARAMETER-TO-COOKIE-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-113]
 ---
 
 **Rule.** This code constructs an HTTP Cookie using an untrusted HTTP parameter. If this cookie is added to an HTTP response, it will allow a HTTP response splitting vulnerability. See http://en.wikipedia.org/wiki/HTTP_response_splitting for more information.

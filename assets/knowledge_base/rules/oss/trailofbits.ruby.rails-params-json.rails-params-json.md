@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.rails-params-json.rails-params-json
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-843]
 ---
 
 **Rule.** Found Rails parameters (`params`) using the `_json` parameter. This parameter is subject to parser juggling. This may allow an attacker to exploit differences in parameter processing at different points in the request processing lifecycle. For example, object ID processing during the authentication/authorization phase and action execution phase.

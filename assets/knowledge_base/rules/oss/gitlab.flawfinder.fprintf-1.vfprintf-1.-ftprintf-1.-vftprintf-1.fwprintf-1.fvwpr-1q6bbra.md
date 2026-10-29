@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.fprintf-1.vfprintf-1.-ftprintf-1.-vftprintf-1.fwprin
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-134]
 ---
 
 **Rule.** Format string vulnerabilities allow an attacker to read or in some cases, potentially write data to and from locations in the processes' memory. To prevent against format string attacks, do not allow users or un-validated input to provide the format specification. Consider using a constant for the format specification, or only allow specific characters to be provided to the format argument for the `fprintf` family of functions. For more information please see: https://linux.die.net/man/3/fprintf For more information on format string attacks please see OWASP's attack guide: https://owasp.org/www-community/attacks/Format_string_attack

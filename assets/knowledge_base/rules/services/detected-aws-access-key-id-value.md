@@ -3,6 +3,7 @@ name: services/detected-aws-access-key-id-value
 rubric: safety
 severity: should_fix
 languages: [regex]
+cwe: [CWE-798]
 ---
 
 **Rule.** AWS Access Key ID Value detected. This is a sensitive credential and should not be hardcoded here. Instead, read this value from an environment variable or keep it in a separate, private file.

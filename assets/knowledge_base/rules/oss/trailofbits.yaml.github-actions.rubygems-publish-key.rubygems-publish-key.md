@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.github-actions.rubygems-publish-key.rubygems-publish-
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found long-term access key. Instead prefer RubyGems trusted publishing and temporary OIDC security credentials.

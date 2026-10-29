@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.action-mailer-insecure-tls.action-mailer-insecure-tls
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found ActionMailer SMTP configuration with insecure TLS setting. These settings do not require a successful, encrypted, verified TLS connection is made. Set `enable_starttls: true` and `openssl_verify_mode` to verify peer

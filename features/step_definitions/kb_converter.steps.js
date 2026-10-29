@@ -63,6 +63,11 @@ When('the ruleset is converted to a knowledge-base tree', function () {
   this.params.files = convertTree({ docs, out: this.params.out })
 })
 
+Then('the markdown frontmatter has cwe {string}', function (cwe) {
+  const fm = frontmatter(this.result)
+  assert.ok((fm.cwe ?? '').split(',').includes(cwe), `frontmatter cwe missing ${cwe}: ${fm.cwe}`)
+})
+
 Then('the markdown frontmatter has name {string} rubric {string} severity {string} and languages {string}', function (name, rubric, severity, languages) {
   const fm = frontmatter(this.result)
   assert.equal(fm.name, name)

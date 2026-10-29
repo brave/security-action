@@ -3,6 +3,7 @@ name: oss/trailofbits.go.waitgroup-wait-inside-loop.waitgroup-wait-inside-loop
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-667]
 ---
 
 **Rule.** Calling `$WG.Wait()` inside a loop blocks the call to `$WG.Done()`

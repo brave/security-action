@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.tar-insecure-flags.tar-insecure-flags
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-73]
 ---
 
 **Rule.** Found `tar` command using insecure flags

@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.active-record-hardcoded-encryption-key.active-record-
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found hardcoded ActiveRecord encryption key

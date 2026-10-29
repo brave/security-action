@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.INSECURE-COOKIE-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-539]
 ---
 
 **Rule.** "A new cookie is created without the Secure flag set. The Secure flag is a directive to the browser to make sure that the cookie is not sent for insecure communication (http://)"

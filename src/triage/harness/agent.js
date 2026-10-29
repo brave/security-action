@@ -52,7 +52,8 @@ export async function runAgent ({
   agent = 'triage-agent',
   tools,
   systemPrompt = DEFAULT_SYSTEM_PROMPT,
-  maxTurns = 16
+  maxTurns = 16,
+  parseFinal = null
 }) {
   const messages = [
     { role: 'system', content: systemPrompt },
@@ -100,13 +101,15 @@ export async function runAgent ({
     pushAssistant(messages, res, calls)
 
     if (calls.length === 0) {
-      // No tool call: try to interpret the content itself as the verdict.
-      const parsed = parseVerdict(res?.content, { caseId, agent })
+      // No tool call: try to interpret the content itself as the final result.
+      const parsed = parseFinal
+        ? parseFinal(res?.content, { caseId, agent })
+        : parseVerdict(res?.content, { caseId, agent })
       if (parsed.ok) {
         stopped = 'done'
-        return finish('done', parsed.verdict)
+        return finish('done', parsed.value ?? parsed.verdict)
       }
-      messages.push({ role: 'user', content: 'Return your final verdict through the done tool as valid JSON.' })
+      messages.push({ role: 'user', content: 'Return your final result through the done tool as valid JSON.' })
       continue
     }
 
@@ -118,12 +121,14 @@ export async function runAgent ({
         } catch {
           args = call.arguments
         }
-        const parsed = parseVerdict(args, { caseId, agent })
+        const parsed = parseFinal
+          ? parseFinal(args, { caseId, agent })
+          : parseVerdict(args, { caseId, agent })
         if (parsed.ok) {
           stopped = 'done'
-          return finish('done', parsed.verdict)
+          return finish('done', parsed.value ?? parsed.verdict)
         }
-        messages.push({ role: 'tool', tool_call_id: call.id, name: 'done', content: `Invalid verdict: ${parsed.error}` })
+        messages.push({ role: 'tool', tool_call_id: call.id, name: 'done', content: `Invalid result: ${parsed.error}` })
         continue
       }
 

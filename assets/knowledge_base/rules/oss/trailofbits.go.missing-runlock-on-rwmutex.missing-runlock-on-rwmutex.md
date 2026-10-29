@@ -3,6 +3,7 @@ name: oss/trailofbits.go.missing-runlock-on-rwmutex.missing-runlock-on-rwmutex
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-667]
 ---
 
 **Rule.** Missing `RUnlock` on an `RWMutex` (`$T` variable) lock before returning from a function

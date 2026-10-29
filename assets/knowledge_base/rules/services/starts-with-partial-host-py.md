@@ -3,6 +3,7 @@ name: services/starts-with-partial-host-py
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-346]
 ---
 
 **Rule.** Add a forward-slash at the end to prevent matching `$PREFIX.e.vil` or `$PREFIX@e.vil`. Even better, properly parse the URL and match a list of origins/hosts.

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.COOKIE-USAGE-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-614]
 ---
 
 **Rule.** The information stored in a custom cookie should not be sensitive or related to the session. In most cases, sensitive data should only be stored in session and referenced by the user's session cookie.

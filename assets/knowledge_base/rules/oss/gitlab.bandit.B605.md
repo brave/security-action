@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B605
 rubric: safety
 severity: nit
 languages: [python]
+cwe: [CWE-78]
 ---
 
 **Rule.** Starting a process with a shell; seems safe, but may be changed in the future, consider rewriting without shell

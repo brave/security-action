@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B601
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-78]
 ---
 
 **Rule.** Unverified SSL context detected. This will permit insecure connections without `verifyingSSL` certificates. Use `ssl.create_default_context()` instead.

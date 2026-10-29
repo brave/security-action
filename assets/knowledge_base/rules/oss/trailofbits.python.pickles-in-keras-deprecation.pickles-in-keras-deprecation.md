@@ -3,6 +3,7 @@ name: oss/trailofbits.python.pickles-in-keras-deprecation.pickles-in-keras-depre
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** The usage of pickle and hdf5 formats for model files are deprecated in Keras. The keras.models.load_model function is deprecated as well. Keras is now embedded in Tensorflow 2 under tensorflow.keras.

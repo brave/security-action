@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.FORMAT-STRING-MANIPULATION-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-134]
 ---
 
 **Rule.** The application allows user input to control format string parameters. By passing invalid format string specifiers an adversary could cause the application to throw exceptions or possibly leak internal information depending on application logic. Never allow user-supplied input to be used to create a format string. Replace all format string arguments with hardcoded format strings containing the necessary specifiers. Example of using `String.format` safely: ``` // Get untrusted user input String userInput = request.getParameter("someInput"); // Ensure that user input is not included in the first argument to String.format String.format("Hardcoded string expecting a string: %s", userInput); // ... ```

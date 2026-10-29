@@ -3,6 +3,7 @@ name: services/react-href-var
 rubric: safety
 severity: should_fix
 languages: [typescript, javascript]
+cwe: [CWE-79]
 ---
 
 **Rule.** Detected a variable used in an anchor tag with the 'href' attribute. A malicious actor may be able to input the 'javascript:' URI, which could cause cross-site scripting (XSS). It is recommended to disallow 'javascript:' URIs within your application.

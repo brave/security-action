@@ -3,6 +3,7 @@ name: oss/trailofbits.python.pandas-eval.pandas-eval
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-95]
 ---
 
 **Rule.** Pandas eval() and query() may be dangerous if used to evaluate dynamic content. If this content can be input from outside the program, this may be a code injection vulnerability. Ensure evaluated content is not definable by external sources.

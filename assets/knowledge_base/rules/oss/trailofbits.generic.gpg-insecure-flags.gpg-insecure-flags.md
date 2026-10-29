@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.gpg-insecure-flags.gpg-insecure-flags
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found `gpg` command using insecure flags

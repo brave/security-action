@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.SetSecurityDescriptorDacl-1
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-732]
 ---
 
 **Rule.** When `SetSecurityDescriptorDacl` is called with a null `pDacl` parameter and the `bDaclPresent` flag is `TRUE`, all access to the object is allowed. An attacker could set the object to Deny all, which would include even the Administrator user(s). Either call `SetSecurityDescriptorDacl` with bDaclPresent as `FALSE`, or supply a valid non-null `pDacl` parameter value. For more information please see: https://learn.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-setsecuritydescriptordacl#remarks

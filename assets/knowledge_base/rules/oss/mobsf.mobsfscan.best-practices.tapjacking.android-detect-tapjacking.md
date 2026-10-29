@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.best-practices.tapjacking.android-detect-tapjacking
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-200]
 ---
 
 **Rule.** This app does not have capabilities to prevent tapjacking attacks. An attacker can hijack the user's taps and tricks him into performing some critical operations that he did not intend to.

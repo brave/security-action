@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.INFORMATION-EXPOSURE-THROUGH-AN-ERROR-MESSAGE-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-209]
 ---
 
 **Rule.** The application was found printing stack information to the default system output. As stack trace data may contain sensitive information, it is recommended that the output be logged using a secure logging framework. Log files should also be protected with proper operating system permission levels.

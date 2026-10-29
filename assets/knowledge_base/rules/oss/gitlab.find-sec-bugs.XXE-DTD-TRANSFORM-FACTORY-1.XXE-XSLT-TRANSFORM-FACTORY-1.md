@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.XXE-DTD-TRANSFORM-FACTORY-1.XXE-XSLT-TRANSFORM-FA
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-611]
 ---
 
 **Rule.** XML External Entity (XXE) attacks can occur when an XML parser supports XML entities while processing XML received from an untrusted source.

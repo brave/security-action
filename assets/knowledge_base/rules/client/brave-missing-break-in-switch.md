@@ -3,6 +3,7 @@ name: client/brave-missing-break-in-switch
 rubric: safety
 severity: nit
 languages: [c, cpp]
+cwe: [CWE-484]
 ---
 
 **Rule.** The software omits a break statement within a switch or similar construct, causing code associated with multiple conditions to execute. This can cause problems when the programmer only intended to execute code associated with one condition.

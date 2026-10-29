@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.CIPHER-INTEGRITY-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-327]
 ---
 
 **Rule.** The ciphertext produced is susceptible to alteration by an adversary. This mean that the cipher provides no way to detect that the data has been tampered with. If the ciphertext can be controlled by an attacker, it could be altered without detection.

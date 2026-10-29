@@ -3,6 +3,7 @@ name: client/android-resolve-intent
 rubric: safety
 severity: should_fix
 languages: [java, kotlin]
+cwe: [CWE-927]
 ---
 
 **Rule.** Implicit intents in resolveComponent and queryComponent methods for component launch may pose security risks, as other installed apps can register similar components with higher priority. Instead, it is recommended to use hardcoded package names for third-party components launch or getApplicationContext().getPackageName() for local component launch.

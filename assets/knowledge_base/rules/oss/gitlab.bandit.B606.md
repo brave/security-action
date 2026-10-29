@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B606
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-78]
 ---
 
 **Rule.** Found dynamic content when spawning a process. This is dangerous if externaldata can reach this function call because it allows a malicious actor toexecute commands. Ensure no external data reaches here.

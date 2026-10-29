@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.LDAP-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-90]
 ---
 
 **Rule.** Just like SQL, all inputs passed to an LDAP query need to be passed in safely. Unfortunately, LDAP doesn't have prepared statement interfaces like SQL. Therefore, the primary defense against LDAP injection is strong input validation of any untrusted data before including it in an LDAP query.

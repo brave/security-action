@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.zypper-unencrypted-url.zypper-unencrypted-url
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found Zypper package with unencrypted URL (e.g. HTTP, FTP, etc.)

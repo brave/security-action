@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.insecure-rails-cookie-session-store.insecure-rails-co
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-345]
 ---
 
 **Rule.** Found Rails session cookie missing SameSite=Secure. As of Rails 7.2, session cookies default to SameSite=Lax.

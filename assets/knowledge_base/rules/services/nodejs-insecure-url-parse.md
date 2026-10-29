@@ -3,6 +3,7 @@ name: services/nodejs-insecure-url-parse
 rubric: safety
 severity: should_fix
 languages: [javascript]
+cwe: [CWE-20]
 ---
 
 **Rule.** Avoid using url.parse() as it is prone to security issues such as hostname spoofing. Use the URL class instead.

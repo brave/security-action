@@ -3,6 +3,7 @@ name: oss/trailofbits.go.sync-mutex-value-copied.sync-mutex-value-copied
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-688]
 ---
 
 **Rule.** A `sync.Mutex` is copied in function `$FUNC` given that `$T` is value receiver. As a result, the struct `$T` may not be locked as intended

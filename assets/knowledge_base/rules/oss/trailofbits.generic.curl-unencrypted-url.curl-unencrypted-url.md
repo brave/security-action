@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.curl-unencrypted-url.curl-unencrypted-url
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found `curl` command with unencrypted URL (e.g. HTTP, FTP, etc.)

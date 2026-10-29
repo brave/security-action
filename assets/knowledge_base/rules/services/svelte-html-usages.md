@@ -3,6 +3,7 @@ name: services/svelte-html-usages
 rubric: safety
 severity: nit
 languages: [generic]
+cwe: [CWE-79]
 ---
 
 **Rule.** The code contains new security hotspots (`{@html expression}`) which should be checked manually by a security team member!

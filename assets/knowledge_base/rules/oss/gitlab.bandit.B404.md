@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B404
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-78]
 ---
 
 **Rule.** Consider possible security implications associated with subprocess module.

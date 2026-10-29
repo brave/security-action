@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.AWS-QUERY-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-943]
 ---
 
 **Rule.** Constructing SimpleDB queries containing user input can allow an attacker to view unauthorized records.

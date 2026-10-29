@@ -3,6 +3,7 @@ name: services/not-using-hasownproperty-proto-access
 rubric: safety
 severity: should_fix
 languages: [js, ts]
+cwe: [CWE-1321]
 ---
 
 **Rule.** This allows $X to be `__proto__` or `toString`. To prevent prototype access use Object.prototype.hasOwnProperty.call($OBJ, $X) or use a Map.

@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.redis-unencrypted-transport.redis-unencrypted-tran
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found unencrypted Redis connection, prefer TLS encrypted `rediss://` transport

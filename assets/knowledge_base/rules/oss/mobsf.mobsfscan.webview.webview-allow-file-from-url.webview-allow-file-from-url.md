@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.webview.webview-allow-file-from-url.webview-allow-file
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-200]
 ---
 
 **Rule.** Ensure that user controlled URLs never reaches the Webview. Enabling file access from URLs in WebView can leak sensitive information from the file system.

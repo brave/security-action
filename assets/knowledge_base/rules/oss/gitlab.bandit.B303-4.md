@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B303-4
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-327]
 ---
 
 **Rule.** Detected MD4 hash algorithm which is considered insecure. This algorithm has many known vulnerabilities and has been deprecated. Use SHA256 or SHA3 instead.

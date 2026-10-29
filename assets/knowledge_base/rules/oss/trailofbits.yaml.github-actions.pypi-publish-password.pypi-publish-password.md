@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.github-actions.pypi-publish-password.pypi-publish-pas
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found long-term access key. Instead prefer PyPI trusted publishing and temporary OIDC security credentials.

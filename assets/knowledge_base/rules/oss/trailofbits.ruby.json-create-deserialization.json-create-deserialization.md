@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.json-create-deserialization.json-create-deserializati
 rubric: safety
 severity: nit
 languages: [ruby]
+cwe: [CWE-502]
 ---
 
 **Rule.** Found `json_create` class method. This implies custom JSON deserialization is occuring. This can lead to RCE and other deserialization-type bugs. Usage should be audited and, at least, fuzzed.

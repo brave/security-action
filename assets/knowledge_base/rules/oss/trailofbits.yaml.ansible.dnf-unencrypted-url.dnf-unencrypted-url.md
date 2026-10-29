@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.dnf-unencrypted-url.dnf-unencrypted-url
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found dnf download with unencrypted URL (e.g. HTTP, FTP, etc.)

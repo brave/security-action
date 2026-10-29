@@ -3,6 +3,7 @@ name: oss/trailofbits.go.servercodec-readrequestbody-unhandled-nil.servercodec-r
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-476]
 ---
 
 **Rule.** The `func ($O *$CODEC) ReadRequestBody($ARG $TYPE) error` function does not handle `nil` argument, as the `ServerCodec` interface requires. An incorrect implementation could lead to denial of service

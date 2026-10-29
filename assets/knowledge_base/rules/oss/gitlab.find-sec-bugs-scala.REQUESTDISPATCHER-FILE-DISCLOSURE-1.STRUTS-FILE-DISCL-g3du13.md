@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.REQUESTDISPATCHER-FILE-DISCLOSURE-1.STRUTS-
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-552]
 ---
 
 **Rule.** Constructing a server-side redirect path with user input could allow an attacker to download application binaries (including application classes or jar files) or view arbitrary files within protected directories.

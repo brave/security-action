@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.yum-unencrypted-url.yum-unencrypted-url
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found yum download with unencrypted URL (e.g. HTTP, FTP, etc.)

@@ -3,6 +3,7 @@ name: oss/trailofbits.javascript.apollo-graphql.schema-directives.schema-directi
 rubric: safety
 severity: should_fix
 languages: [js, ts]
+cwe: [CWE-686]
 ---
 
 **Rule.** The Apollo GraphQL uses the 'schemaDirectives' option. This works in ApolloServer v2, but does nothing in version >=3. Depending on what the directives are used for, this can expose authenticated endpoints, disable rate limiting, and more. See the references on how to create custom directives in v3 and v4.

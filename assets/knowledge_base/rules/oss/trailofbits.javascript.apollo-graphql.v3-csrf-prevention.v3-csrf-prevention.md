@@ -3,6 +3,7 @@ name: oss/trailofbits.javascript.apollo-graphql.v3-csrf-prevention.v3-csrf-preve
 rubric: safety
 severity: should_fix
 languages: [js, ts]
+cwe: [CWE-352]
 ---
 
 **Rule.** The Apollo GraphQL server lacks the 'csrfPrevention' option. This option is 'false' by the default in v3 of the Apollo GraphQL v3, which can enable CSRF attacks.

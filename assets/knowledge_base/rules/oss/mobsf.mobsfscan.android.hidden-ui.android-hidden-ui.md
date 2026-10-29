@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.android.hidden-ui.android-hidden-ui
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-919]
 ---
 
 **Rule.** Hidden elements in view can be used to hide data from user. But this data can be leaked. If the view contains sensitive data, it might still be accessible through memory inspection. A good practice is to clear sensitive data before hiding it.

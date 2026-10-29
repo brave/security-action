@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.aes-ecb.aes-ecb-mode
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-327]
 ---
 
 **Rule.** The App uses ECB mode in Cryptographic encryption algorithm. ECB mode is known to be weak as it results in the same ciphertext for identical blocks of plaintext.

@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.aes-ecb.aes-ecb-mode-default
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-327]
 ---
 
 **Rule.** Calling Cipher.getInstance("AES") will return AES ECB mode by default. ECB mode is known to be weak as it results in the same ciphertext for identical blocks of plaintext.

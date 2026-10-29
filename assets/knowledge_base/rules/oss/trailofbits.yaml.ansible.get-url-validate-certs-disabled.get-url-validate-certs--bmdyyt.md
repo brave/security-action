@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.get-url-validate-certs-disabled.get-url-valid
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found file download with SSL verification disabled

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.WEAK-FILENAMEUTILS-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-22]
 ---
 
 **Rule.** A file is opened to read its content. The filename comes from an input parameter. If an unfiltered parameter is passed to this file API, files from an arbitrary filesystem location could be read.

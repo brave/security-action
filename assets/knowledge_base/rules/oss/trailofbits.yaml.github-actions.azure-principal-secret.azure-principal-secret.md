@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.github-actions.azure-principal-secret.azure-principal
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found long-term access key. Instead prefer Azure subscription ID and temporary OIDC security credentials.

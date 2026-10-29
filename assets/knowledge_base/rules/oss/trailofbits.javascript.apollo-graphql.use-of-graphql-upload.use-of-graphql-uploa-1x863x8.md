@@ -3,6 +3,7 @@ name: oss/trailofbits.javascript.apollo-graphql.use-of-graphql-upload.use-of-gra
 rubric: safety
 severity: should_fix
 languages: [js, ts]
+cwe: [CWE-352]
 ---
 
 **Rule.** The Apollo GraphQL server is using the graphql-upload library. This library allows file uploads using POSTs with content-type: multipart/form-data, which can enable to CSRF attacks. Ensure that you are enabling CSRF protection if you really need to use graphql-upload .

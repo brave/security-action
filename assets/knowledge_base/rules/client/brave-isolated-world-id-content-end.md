@@ -3,6 +3,7 @@ name: client/brave-isolated-world-id-content-end
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-94]
 ---
 
 **Rule.** Security hotspot found (`ISOLATED_WORLD`). A security-team member should analyze the code security for possible vulnerabilities.

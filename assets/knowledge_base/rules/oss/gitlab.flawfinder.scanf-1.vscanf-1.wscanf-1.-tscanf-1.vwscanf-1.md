@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.scanf-1.vscanf-1.wscanf-1.-tscanf-1.vwscanf-1
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** Format specifiers can take optional field widths, which should be used to limit how many characters are copied into the target buffer. For more information please see: https://linux.die.net/man/3/scanf Example: ``` char buf[11] = {0}; scanf("%10s", &buf); // buf = AAAAAAAAAA\0 ``` If developing for C Runtime Library (CRT), more secure versions of these functions should be used, see: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/scanf-s-scanf-s-l-wscanf-s-wscanf-s-l?view=msvc-170

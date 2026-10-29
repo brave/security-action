@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.OGNL-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-917]
 ---
 
 **Rule.** The Object Graph Navigation Language (OGNL) is an expression language that allows access to Java objects and properties stored in an ActionContext. Usage of these low-level functions is discouraged because they can effectively execute strings as code, leading to remote code execution vulnerabilities. Consider using struts tags when processing user-supplied input and templates. Much like the Struts security guide recommending to not use raw `${}` EL expressions, do not call or use the following OGNL packages with user-supplied input: - `com.opensymphony.xwork2.ognl` - `com.opensymphony.xwork2.util` - `com.opensymphony.xwork2.util.reflection` - `org.apache.struts2.util.StrutsUtil` For more information on Struts2 security see: https://struts.apache.org/security/#do-not-use-incoming-untrusted-user-input-in-forced-expression-evaluation

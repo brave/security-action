@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.SERVLET-PARAMETER-1.SERVLET-CONTENT-TYPE-1.SERVLE
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-20]
 ---
 
 **Rule.** The Servlet can read GET and POST parameters from various methods. The value obtained should be considered unsafe."

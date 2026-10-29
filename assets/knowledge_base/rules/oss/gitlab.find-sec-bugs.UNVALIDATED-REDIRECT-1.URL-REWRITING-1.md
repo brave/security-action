@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.UNVALIDATED-REDIRECT-1.URL-REWRITING-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-601]
 ---
 
 **Rule.** Unvalidated redirects occur when an application redirects a user to a destination URL specified by a user supplied parameter that is not validated. Such vulnerabilities can be used to facilitate phishing attacks. To avoid open redirect vulnerabilities in Java, one effective strategy is to only allow redirection to URLs that are pre-defined in a safe list. This safe list can be implemented using a collection like a Map, List, or Dictionary, where you store all the valid URLs or URL patterns. When a redirect request is made, you can check if the requested URL is in this safe list before proceeding with the redirection. For example: ``` protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { private List<String> safeUrls = new ArrayList<>(); safeUrls.add("/home"); safeUrls.add("/user/profile"); safeUrls.add("/dashboard"); String redirectUrl = request.getParameter("url"); if (safeUrls.contains(redirectUrl)) { response.sendRedirect(redirectUrl); } else { response.sendRedirect("/errorPage"); } }" ```

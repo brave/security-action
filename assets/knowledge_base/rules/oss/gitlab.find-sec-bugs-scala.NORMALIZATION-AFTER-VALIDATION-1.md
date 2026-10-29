@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.NORMALIZATION-AFTER-VALIDATION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-182]
 ---
 
 **Rule.** IDS01-J. Normalize strings before validating them

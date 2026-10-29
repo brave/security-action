@@ -177,7 +177,7 @@ Then('the messages sent to the model include a tool result containing {string}',
 
 Then('the messages sent to the model include a user nudge', function () {
   const found = this.params.requests.some(req =>
-    req.messages.some(m => m.role === 'user' && m.content.includes('Return your final verdict through the done tool'))
+    req.messages.some(m => m.role === 'user' && m.content.includes('Return your final result through the done tool'))
   )
   assert.ok(found, 'no user nudge message found')
 })

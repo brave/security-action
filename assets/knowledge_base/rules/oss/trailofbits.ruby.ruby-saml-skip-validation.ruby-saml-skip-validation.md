@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.ruby-saml-skip-validation.ruby-saml-skip-validation
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-345]
 ---
 
 **Rule.** SAML response validation disabled for $KEY.

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.PT-ABSOLUTE-PATH-TRAVERSAL-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-22]
 ---
 
 **Rule.** The software uses an HTTP request parameter to construct a pathname that should be within a restricted directory, but it does not properly neutralize absolute path sequences such as "/abs/path" that can resolve to a location that is outside of that directory. See http://cwe.mitre.org/data/definitions/36.html for more information.

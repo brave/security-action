@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.cbc-padding-oracle.cbc-padding-oracle
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-649]
 ---
 
 **Rule.** The App uses the encryption mode CBC with PKCS5/PKCS7 padding. This configuration is vulnerable to padding oracle attacks.

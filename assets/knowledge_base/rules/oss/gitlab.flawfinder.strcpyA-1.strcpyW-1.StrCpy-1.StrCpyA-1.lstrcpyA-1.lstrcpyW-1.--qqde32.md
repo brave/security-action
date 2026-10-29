@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.strcpyA-1.strcpyW-1.StrCpy-1.StrCpyA-1.lstrcpyA-1.ls
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** The `StrCpy` family of functions do not guarantee the final string to be null terminated. Consider using one of the following alternatives `StringCbCopy`, `StringCbCopyEx`, `StringCbCopyN`, `StringCbCopyNEx`, `StringCchCopy`, `StringCchCopyEx`, `StringCchCopyN`, or `StringCchCopyNEx`. If developing for C Runtime Library (CRT), more secure versions of these functions should be used, see: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strncpy-s-strncpy-s-l-wcsncpy-s-wcsncpy-s-l-mbsncpy-s-mbsncpy-s-l?view=msvc-170

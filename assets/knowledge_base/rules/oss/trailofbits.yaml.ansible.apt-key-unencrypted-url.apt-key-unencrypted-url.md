@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.apt-key-unencrypted-url.apt-key-unencrypted-u
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found apt key download with unencrypted URL (e.g. HTTP, FTP, etc.)

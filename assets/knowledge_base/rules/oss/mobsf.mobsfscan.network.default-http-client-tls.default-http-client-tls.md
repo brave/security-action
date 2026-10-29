@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.network.default-http-client-tls.default-http-client-tl
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-757]
 ---
 
 **Rule.** DefaultHTTPClient() with default constructor is not compatible with TLS 1.2.

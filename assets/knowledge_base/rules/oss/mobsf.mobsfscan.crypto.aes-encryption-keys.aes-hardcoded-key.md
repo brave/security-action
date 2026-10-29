@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.aes-encryption-keys.aes-hardcoded-key
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-321]
 ---
 
 **Rule.** Hardcoded encryption key makes AES symmetric encryption useless. An attacker can easily reverse engineer the application and recover the keys.

@@ -3,6 +3,7 @@ name: services/go-insecure-templates
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-79]
 ---
 
 **Rule.** usage of insecure template types. They are documented as a security risk. See https://golang.org/pkg/html/template/#HTML.

@@ -3,6 +3,7 @@ name: oss/trailofbits.go.unsafe-dll-loading.unsafe-dll-loading
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-427]
 ---
 
 **Rule.** The function is vulnerable to DLL hijacking attacks. Use `windows.NewLazySystemDLL()` function to limit DLL search to the Windows directory

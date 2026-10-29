@@ -3,6 +3,7 @@ name: oss/trailofbits.python.msgpack-numpy.msgpack-numpy
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** Found usage of msgpack-numpy unpacking, which relies on pickle to deserialize numpy arrays containing objects. Functions reliant on pickle can result in arbitrary code execution. Consider switching to a safer serialization method.

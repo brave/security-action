@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.OGNL-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-917]
 ---
 
 **Rule.** "A expression is built with a dynamic value. The source of the value(s) should be verified to avoid that unfiltered values fall into this risky code evaluation."

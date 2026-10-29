@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.UNENCRYPTED-SOCKET-1.UNENCRYPTED-SERVER-SOCKET-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-319]
 ---
 
 **Rule.** Beyond using an SSL socket, you need to make sure your use of SSLSocketFactory does all the appropriate certificate validation checks to make sure you are not subject to man-in-the-middle attacks. Please read the OWASP Transport Layer Protection Cheat Sheet for details on how to do this correctly.

@@ -3,6 +3,7 @@ name: services/missing-integrity
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-353]
 ---
 
 **Rule.** This tag is missing an 'integrity' subresource integrity attribute. The 'integrity' attribute allows for the browser to verify that externally hosted files (for example from a CDN) are delivered without unexpected manipulation. Without this attribute, if an attacker can modify the externally hosted resource, this could lead to XSS and other types of attacks. To prevent this, include the base64-encoded cryptographic hash of the resource (file) you’re telling the browser to fetch in the 'integrity' attribute for all externally hosted files.

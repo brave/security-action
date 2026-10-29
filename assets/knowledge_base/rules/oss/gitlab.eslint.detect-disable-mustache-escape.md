@@ -3,6 +3,7 @@ name: oss/gitlab.eslint.detect-disable-mustache-escape
 rubric: safety
 severity: should_fix
 languages: [javascript, typescript]
+cwe: [CWE-79]
 ---
 
 **Rule.** Markup escaping disabled. This can be used with some template engines to escape disabling of HTML entities, which can lead to XSS attacks.

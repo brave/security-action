@@ -23,6 +23,7 @@ Feature: Opengrep to chromium knowledge-base converter
       """
     When the rule is converted
     Then the markdown frontmatter has name "services/test-ssti" rubric "safety" severity "should_fix" and languages "go"
+    And the markdown frontmatter has cwe "CWE-1336"
     And the Rule section quotes the message "Server-side template injection allows remote code execution."
     And the Why section mentions "CWE-1336"
     And the Examples section has a Bad block with "template.New($X).Parse($USER)"

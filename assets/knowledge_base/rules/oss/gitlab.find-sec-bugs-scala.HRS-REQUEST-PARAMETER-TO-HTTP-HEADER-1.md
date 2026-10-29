@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.HRS-REQUEST-PARAMETER-TO-HTTP-HEADER-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-113]
 ---
 
 **Rule.** This code directly writes an HTTP parameter to an HTTP header, which allows for a HTTP response splitting vulnerability. See http://en.wikipedia.org/wiki/HTTP_response_splitting for more information.

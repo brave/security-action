@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.cbc-static-iv.cbc-static-iv
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-329]
 ---
 
 **Rule.** The IV for AES CBC mode should be random. A static IV makes the ciphertext vulnerable to Chosen Plaintext Attack.

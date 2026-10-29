@@ -3,6 +3,7 @@ name: oss/trailofbits.python.scikit-joblib-load.scikit-joblib-load
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** Scikit `joblib` uses pickle under the hood. Functions reliant on pickle can result in arbitrary code execution. Consider using `skops` instead.

@@ -3,6 +3,7 @@ name: services/var-in-script-tag
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-79]
 ---
 
 **Rule.** Detected a template variable used in a script tag. Although template variables are HTML escaped, HTML escaping does not always prevent cross-site scripting (XSS) attacks when used directly in JavaScript. If you need this data on the rendered page, consider placing it in the HTML portion (outside of a script tag). Alternatively, use a JavaScript-specific encoder, such as the one available in OWASP ESAPI. For Django, you may also consider using the 'json_script' template tag and retrieving the data in your script by using the element ID (e.g., `document.getElementById`). Use the `tojson` filter for JSON.

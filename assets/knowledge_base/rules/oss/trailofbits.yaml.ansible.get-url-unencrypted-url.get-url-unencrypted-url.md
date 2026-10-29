@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.get-url-unencrypted-url.get-url-unencrypted-u
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found file download with unencrypted URL (e.g. HTTP, FTP, etc.)

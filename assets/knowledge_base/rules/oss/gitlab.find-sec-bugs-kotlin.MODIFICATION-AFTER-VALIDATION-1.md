@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.MODIFICATION-AFTER-VALIDATION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-182]
 ---
 
 **Rule.** CERT: IDS11-J. Perform any string modifications before validation

@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B604
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-78]
 ---
 
 **Rule.** subprocess call - check for execution of untrusted input

@@ -3,6 +3,7 @@ name: oss/trailofbits.go.waitgroup-add-called-inside-goroutine.waitgroup-add-cal
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-667]
 ---
 
 **Rule.** Calling `$WG.Add` inside of an anonymous goroutine may result in `$WG.Wait` waiting for more or less calls to `$WG.Done()` than expected

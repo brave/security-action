@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.terraform.vault-hardcoded-token.vault-hardcoded-token
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found Terraform Vault instance with hardcoded token

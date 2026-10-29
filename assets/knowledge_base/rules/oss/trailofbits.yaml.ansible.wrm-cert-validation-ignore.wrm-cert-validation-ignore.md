@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.ansible.wrm-cert-validation-ignore.wrm-cert-validatio
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found Windows Remote Management connection with certificate validation disabled

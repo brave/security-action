@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.EVP-des-ecb-1.EVP-des-cbc-1.EVP-des-cfb-1.EVP-des-of
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-327]
 ---
 
 **Rule.** The DES algorithm has not been recommended for over 15 years and was withdrawn from NIST (FIPS 46-3) in 2005. Consider using libsodium's `crypto_secretbox_easy` authenticated encryption functions instead. For more information please see: https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox. If you must be FIPS compliant, consider using OpenSSLs AES or 3DES ciphers.

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.BLOWFISH-KEY-SIZE-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-326]
 ---
 
 **Rule.** A small key size makes the ciphertext vulnerable to brute force attacks. At least 128 bits of entropy should be used when generating the key if use of Blowfish is required.

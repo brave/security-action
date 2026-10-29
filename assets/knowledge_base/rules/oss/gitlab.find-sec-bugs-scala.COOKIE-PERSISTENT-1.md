@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.COOKIE-PERSISTENT-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-614]
 ---
 
 **Rule.** "Storing sensitive data in a persistent cookie for an extended period can lead to a breach of confidentiality or account compromise."

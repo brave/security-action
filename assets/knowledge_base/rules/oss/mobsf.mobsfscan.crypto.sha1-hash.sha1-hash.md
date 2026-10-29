@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.sha1-hash.sha1-hash
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-327]
 ---
 
 **Rule.** SHA1 Hash algorithm used. The SHA1 hash is known to have hash collisions.

@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.container-privileged.container-privileged
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-250]
 ---
 
 **Rule.** Found container command (docker, podman) with extended privileges

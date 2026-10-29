@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.network.accept-self-signed.accept-self-signed-certific
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-295]
 ---
 
 **Rule.** Insecure Implementation of SSL. Trusting all the certificates or accepting self signed certificates is a critical Security Hole. This application is vulnerable to MITM attacks.

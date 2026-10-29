@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.nomad.docker-privileged-mode.docker-privileged-mode
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-250]
 ---
 
 **Rule.** Found Nomad task using Docker containers in privileged mode

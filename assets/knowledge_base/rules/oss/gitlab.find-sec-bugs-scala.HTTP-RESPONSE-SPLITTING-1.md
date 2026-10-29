@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.HTTP-RESPONSE-SPLITTING-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-113]
 ---
 
 **Rule.** When an HTTP request contains unexpected CR and LF characters, the server may respond with an output stream that is interpreted as two different HTTP responses (instead of one). An attacker can control the second response and mount attacks such as cross-site scripting and cache poisoning attacks.

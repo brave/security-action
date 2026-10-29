@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.yaml-unsafe-load.yaml-unsafe-load
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-502]
 ---
 
 **Rule.** Found YAML call to `unsafe_load`. This can lead to deserialization bugs and RCE.

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.INSECURE-COOKIE-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-614]
 ---
 
 **Rule.** The `Secure` attribute when set to `true` protects the cookie value from being being transmitted over clear text communication paths such as HTTP. By enabling this protection, the cookie will only be sent over HTTPS. Example of protecting a `Cookie`: ``` // Create an Secure cookie. Cookie someCookie = new Cookie("SomeCookieName", "SomeValue"); // Set Secure flag to true someCookie.setSecure(true); ``` For more information see: https://jakarta.ee/specifications/servlet/4.0/apidocs/javax/servlet/http/cookie#setSecure-boolean- Session cookies should be configured with the following security directives: - [HTTPOnly](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies) - [SameSite](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite) - [Secure](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies)

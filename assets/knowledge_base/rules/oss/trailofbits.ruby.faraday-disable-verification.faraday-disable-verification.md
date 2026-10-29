@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.faraday-disable-verification.faraday-disable-verifica
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found Faraday HTTP request disabling SSL/TLS verification.

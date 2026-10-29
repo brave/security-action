@@ -3,6 +3,7 @@ name: client/dangling-pointer-trait
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-416]
 ---
 
 **Rule.** Detected use of a trait that disables dangling pointer checks. This requires security team approval.

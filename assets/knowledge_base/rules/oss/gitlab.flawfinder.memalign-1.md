@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.memalign-1
 rubric: safety
 severity: nit
 languages: [c, cpp]
+cwe: [CWE-676]
 ---
 
 **Rule.** The `memalign` function may not check that the alignment argument is correct. Calling free (on non Linux-based systems) may fail and in certain circumstances this failure may be exploitable. This function has been deprecated in favor of `posix_memalign`. For more information please see: https://linux.die.net/man/3/memalign

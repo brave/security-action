@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.JAXRS-ENDPOINT-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-20]
 ---
 
 **Rule.** This method is part of a REST Web Service (JSR311). The security of this web service should be analyzed; Authentication, if enforced, should be tested. Access control, if enforced, should be tested. The inputs should be tracked for potential vulnerabilities. The communication should ideally be over SSL.

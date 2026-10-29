@@ -3,6 +3,7 @@ name: client/chromium-bind-uaf
 rubric: safety
 severity: should_fix
 languages: [cpp, c]
+cwe: [CWE-416]
 ---
 
 **Rule.** BindOnce/BindRepeating may allow callers to access objects which may already be freed in the C++ lifecycle.<br/>Verify the occurrences manually.

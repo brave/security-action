@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.node-disable-certificate-validation.node-disable-c
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-295]
 ---
 
 **Rule.** Setting this environment variable disables TLS certificate validation. This makes TLS, and HTTPS by extension, insecure. The use of this environment variable is strongly discouraged.

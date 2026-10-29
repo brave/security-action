@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.OVERLY-PERMISSIVE-FILE-PERMISSION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-732]
 ---
 
 **Rule.** Overly permissive file permission

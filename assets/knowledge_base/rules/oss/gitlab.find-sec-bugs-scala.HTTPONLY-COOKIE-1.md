@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.HTTPONLY-COOKIE-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-1004]
 ---
 
 **Rule.** A new cookie is created without the HttpOnly flag set. The HttpOnly flag is a directive to the browser to make sure that the cookie can not be red by malicious script. When a user is the target of a "Cross-Site Scripting", the attacker would benefit greatly from getting the session id for example.

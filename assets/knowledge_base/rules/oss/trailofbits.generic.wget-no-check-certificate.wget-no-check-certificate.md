@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.wget-no-check-certificate.wget-no-check-certificat
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found `wget` command disabling SSL verification

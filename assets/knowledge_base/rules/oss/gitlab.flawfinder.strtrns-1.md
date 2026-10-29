@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.strtrns-1
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** This function is easy to misuse by not accounting for the space necessary when transforming strings. Ensure that the destination buffer is large enough to fit the transformed output. For more information please see: https://docs.oracle.com/cd/E36784_01/html/E36877/strtrns-3gen.html

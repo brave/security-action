@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.SMTP-HEADER-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-77]
 ---
 
 **Rule.** Simple Mail Transfer Protocol (SMTP) is a the text based protocol used for email delivery. Like with HTTP, headers are separate by new line separator. If kuser input is place in a header line, the application should remove or replace new line characters (CR / LF). You should use a safe wrapper such as Apache Common Email and Simple Java Mail which filter special characters that can lead to header injection.

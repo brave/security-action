@@ -3,6 +3,7 @@ name: oss/trailofbits.python.numpy-f2py-compile.numpy-f2py-compile
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-676]
 ---
 
 **Rule.** Compiling arbitrary code can result in code execution. Ensure the source code is from a trusted location

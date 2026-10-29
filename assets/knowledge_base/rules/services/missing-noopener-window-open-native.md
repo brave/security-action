@@ -3,6 +3,7 @@ name: services/missing-noopener-window-open-native
 rubric: safety
 severity: nit
 languages: [typescript, javascript]
+cwe: [CWE-200]
 ---
 
 **Rule.** window.open should enforce `noopener` to avoid tab-nabbing vulnerabilities.

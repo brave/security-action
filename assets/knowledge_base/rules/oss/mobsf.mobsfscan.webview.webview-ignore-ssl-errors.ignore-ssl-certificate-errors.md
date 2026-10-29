@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.webview.webview-ignore-ssl-errors.ignore-ssl-certifica
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-295]
 ---
 
 **Rule.** Insecure WebView Implementation. WebView ignores SSL Certificate errors and accept any SSL Certificate. This application is vulnerable to MITM attacks.

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.JAXWS-ENDPOINT-1
 rubric: safety
 severity: nit
 languages: [java]
+cwe: [CWE-20]
 ---
 
 **Rule.** This method is part of a SOAP Web Service (JSR224). The security of this web service should be analyzed; Authentication, if enforced, should be tested. Access control, if enforced, should be tested. The inputs should be tracked for potential vulnerabilities. The communication should ideally be over SSL.

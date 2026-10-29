@@ -3,6 +3,7 @@ name: oss/trailofbits.go.racy-write-to-map.racy-write-to-map
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-362]
 ---
 
 **Rule.** Writing `$MAP` from multiple goroutines is not concurrency safe

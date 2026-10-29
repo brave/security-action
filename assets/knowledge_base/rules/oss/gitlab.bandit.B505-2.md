@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B505-2
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-326]
 ---
 
 **Rule.** The application was found using an insufficient curve size for the Elliptical Cryptography (EC) asymmetric algorithm. NIST recommends using a key size of 224 or greater. To remediate this issue, replace the current key size with `ec.SECP384R1`, Example using `ec.SECP384R1`: ``` from cryptography.hazmat.primitives.asymmetric import ec # Generate an EC private key using SECP384R1 private_key = ec.generate_private_key( ec.SECP384R1() ) # Work with/sign data using the key # ... ``` For more information on the cryptography module's EC section see: - https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ec/

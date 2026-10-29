@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.weak-key-size.weak-key-size
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-326]
 ---
 
 **Rule.** Cryptographic implementations with insufficient key length is susceptible to bruteforce attacks.

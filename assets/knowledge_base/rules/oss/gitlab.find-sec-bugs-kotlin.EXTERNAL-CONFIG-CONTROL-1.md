@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.EXTERNAL-CONFIG-CONTROL-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-15]
 ---
 
 **Rule.** Allowing external control of system settings can disrupt service or cause an application to behave in unexpected, and potentially malicious ways. An attacker could cause an error by providing a nonexistent catalog name or connect to an unauthorized portion of the database.

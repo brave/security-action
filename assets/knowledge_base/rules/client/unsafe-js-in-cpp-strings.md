@@ -3,6 +3,7 @@ name: client/unsafe-js-in-cpp-strings
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-94]
 ---
 
 **Rule.** Unsafe JS in CPP strings

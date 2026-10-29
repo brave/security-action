@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.amqp-unencrypted-transport.amqp-unencrypted-transp
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-319]
 ---
 
 **Rule.** Found unencrypted AMQP connection, prefer TLS encrypted `amqps://` transport

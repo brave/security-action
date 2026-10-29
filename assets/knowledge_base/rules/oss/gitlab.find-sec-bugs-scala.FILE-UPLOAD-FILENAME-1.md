@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.FILE-UPLOAD-FILENAME-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-22]
 ---
 
 **Rule.** The filename provided by the FileUpload API can be tampered with by the client to reference unauthorized files. The provided filename should be properly validated to ensure it's properly structured, contains no unauthorized path characters (e.g., / \), and refers to an authorized file.

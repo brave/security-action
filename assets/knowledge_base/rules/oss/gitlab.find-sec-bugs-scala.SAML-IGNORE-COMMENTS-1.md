@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.SAML-IGNORE-COMMENTS-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-287]
 ---
 
 **Rule.** Ignoring XML comments in SAML may lead to authentication bypass

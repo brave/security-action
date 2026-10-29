@@ -3,6 +3,7 @@ name: oss/gitlab.eslint.detect-possible-timing-attacks
 rubric: safety
 severity: should_fix
 languages: [javascript]
+cwe: [CWE-208]
 ---
 
 **Rule.** The application was found executing string comparisons using one of `===`, `!==`, `==` or `!=` against security sensitive values. String comparisons like this are not constant time, meaning the first character found not to match in the two strings will immediately exit the conditional statement. This allows an adversary to calculate or observe small timing differences depending on the strings passed to this comparison. This potentially allows an adversary the ability to brute force a string that will match the expected value by monitoring different character values. To remediate this issue, use the `crypto.timingSafeEqual` method when comparing strings. Example using `crypto.timingSafeEqual` to safely compare strings: ``` function constantTimeIsPasswordEqual(userInput) { // Retrieve the password from a secure data store such as a KMS or Hashicorp's vault. const password = getPasswordFromSecureDataStore(); // Use crypto timingSafeEqual to ensure the comparison is done in constant time. return crypto.timingSafeEqual(Buffer.from(userInput, 'utf-8'), Buffer.from(password, 'utf-8')); } ``` For more information on constant time comparison see: - https://nodejs.org/api/crypto.html#crypto_crypto_timingsafeequal_a_b

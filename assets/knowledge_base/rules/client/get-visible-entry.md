@@ -3,6 +3,7 @@ name: client/get-visible-entry
 rubric: safety
 severity: nit
 languages: [cpp]
+cwe: [CWE-346]
 ---
 
 **Rule.** $FUNC usages should be vet by the security-team. Most of the time you want the last committed entry/url

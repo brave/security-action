@@ -3,6 +3,7 @@ name: oss/trailofbits.python.tensorflow-load-library.tensorflow-load-library
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-676]
 ---
 
 **Rule.** Loading custom operator libraries can result in arbitrary code execution

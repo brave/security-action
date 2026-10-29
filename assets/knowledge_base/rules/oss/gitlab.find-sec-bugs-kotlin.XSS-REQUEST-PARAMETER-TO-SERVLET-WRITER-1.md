@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.XSS-REQUEST-PARAMETER-TO-SERVLET-WRITER-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-79]
 ---
 
 **Rule.** Servlet reflected cross site scripting vulnerability

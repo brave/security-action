@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B308.B703
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-79]
 ---
 
 **Rule.** 'mark_safe()' is used to mark a string as "safe" for HTML output. This disables escaping and could therefore subject the content to XSS attacks. Use 'django.utils.html.format_html()' to build HTML for rendering instead.

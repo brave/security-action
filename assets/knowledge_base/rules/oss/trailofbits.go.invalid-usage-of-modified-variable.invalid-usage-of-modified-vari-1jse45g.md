@@ -3,6 +3,7 @@ name: oss/trailofbits.go.invalid-usage-of-modified-variable.invalid-usage-of-mod
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-665]
 ---
 
 **Rule.** Variable `$X` is likely modified and later used on error. In some cases this could result in panics due to a nil dereference

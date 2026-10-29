@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.RSA-NO-PADDING-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-780]
 ---
 
 **Rule.** The software uses the RSA algorithm but does not incorporate Optimal Asymmetric Encryption Padding (OAEP), which might weaken the encryption.

@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.mkstemp-1
 rubric: safety
 severity: nit
 languages: [c, cpp]
+cwe: [CWE-377]
 ---
 
 **Rule.** Some older Unix-like systems, `mkstemp` would create temp files with 0666 permissions, meaning the file created would be read/write access for all users. Ensure the process has called the `umask` function with restricted permissions prior to calling `mkstemp` and validate the permissions prior to using the file descriptor. For more information on temporary files please see: https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=87152425

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.URLCONNECTION-SSRF-FD-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-918]
 ---
 
 **Rule.** Server-Side Request Forgery occur when a web server executes a request to a user supplied destination parameter that is not validated. Such vulnerabilities could allow an attacker to access internal services or to launch attacks from your web server.

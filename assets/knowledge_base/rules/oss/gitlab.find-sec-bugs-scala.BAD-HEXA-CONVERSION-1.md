@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.BAD-HEXA-CONVERSION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-704]
 ---
 
 **Rule.** When converting a byte array containing a hash signature to a human readable string, a conversion mistake can be made if the array is read byte by byte.

@@ -3,6 +3,7 @@ name: oss/trailofbits.python.pickles-in-tensorflow.pickles-in-tensorflow
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** Tensorflow's low-level load function may result in arbitrary code execution.

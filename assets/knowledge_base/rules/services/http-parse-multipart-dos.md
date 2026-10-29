@@ -3,6 +3,7 @@ name: services/http-parse-multipart-dos
 rubric: safety
 severity: nit
 languages: [go]
+cwe: [CWE-400]
 ---
 
 **Rule.** ParseMultipartForm is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body. The specified limit of $MAXSIZE is the maximum amount stored in memory. The remainder is still parsed and stored on disk in temporary files. Wrapping $R.Body with http.MaxBytesReader prevents this wasting of server resources.

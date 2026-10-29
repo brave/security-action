@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.container-user-root.container-user-root
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-250]
 ---
 
 **Rule.** Found container command running as root

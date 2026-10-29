@@ -3,6 +3,7 @@ name: oss/trailofbits.go.hanging-goroutine.hanging-goroutine
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-833]
 ---
 
 **Rule.** Potential goroutine leak due to unbuffered channel send inside loop or unbuffered channel receive in select block

@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.nomad.tls-hostname-verification-disabled.tls-hostname-
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found Nomad `tls` block with server hostname verification disabled

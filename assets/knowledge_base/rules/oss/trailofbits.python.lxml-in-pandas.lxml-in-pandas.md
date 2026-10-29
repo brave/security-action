@@ -3,6 +3,7 @@ name: oss/trailofbits.python.lxml-in-pandas.lxml-in-pandas
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-611]
 ---
 
 **Rule.** Found usage of the `$FLAVOR` library, which is vulnerable to attacks such as XML external entity (XXE) attacks

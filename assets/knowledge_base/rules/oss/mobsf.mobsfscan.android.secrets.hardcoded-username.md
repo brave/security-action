@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.android.secrets.hardcoded-username
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-798]
 ---
 
 **Rule.** A hardcoded username in plain text is identified.

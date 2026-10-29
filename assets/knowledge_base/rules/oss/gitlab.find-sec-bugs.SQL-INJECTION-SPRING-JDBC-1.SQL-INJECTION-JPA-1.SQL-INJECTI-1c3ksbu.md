@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.SQL-INJECTION-SPRING-JDBC-1.SQL-INJECTION-JPA-1.S
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-89]
 ---
 
 **Rule.** The input values included in SQL queries need to be passed in safely. Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.

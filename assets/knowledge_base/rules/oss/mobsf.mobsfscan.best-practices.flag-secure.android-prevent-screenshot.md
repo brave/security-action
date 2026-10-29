@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.best-practices.flag-secure.android-prevent-screenshot
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-200]
 ---
 
 **Rule.** This app does not have capabilities to prevent against Screenshots from Recent Task History/ Now On Tap etc.

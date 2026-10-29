@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.SCALA-XSS-MVC-API-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-79]
 ---
 
 **Rule.** Disabling HTML escaping put the application at risk for Cross-Site Scripting (XSS).

@@ -3,6 +3,7 @@ name: oss/trailofbits.python.pickles-in-pytorch.pickles-in-pytorch
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-502]
 ---
 
 **Rule.** Functions reliant on pickle can result in arbitrary code execution. Consider loading from `state_dict`, using fickling, or switching to a safer serialization method like ONNX

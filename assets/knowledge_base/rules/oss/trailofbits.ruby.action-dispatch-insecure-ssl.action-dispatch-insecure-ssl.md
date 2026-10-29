@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.action-dispatch-insecure-ssl.action-dispatch-insecure
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found Rails application with insecure SSL setting.

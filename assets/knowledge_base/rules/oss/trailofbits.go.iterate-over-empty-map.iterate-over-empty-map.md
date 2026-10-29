@@ -3,6 +3,7 @@ name: oss/trailofbits.go.iterate-over-empty-map.iterate-over-empty-map
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-665]
 ---
 
 **Rule.** Iteration over a possibly empty map `$C`. This is likely a bug or redundant code

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.TEMPLATE-INJECTION-PEBBLE-1.TEMPLATE-INJEC
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-94]
 ---
 
 **Rule.** A malicious user in control of a template can run malicious code on the server-side. Velocity templates should be seen as scripts.

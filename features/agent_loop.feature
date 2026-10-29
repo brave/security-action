@@ -39,7 +39,7 @@ Feature: Agentic triage loop
     Then the run stops with reason "done"
     And the messages sent to the model include a tool result containing "Unknown tool"
 
-  Scenario: Invalid verdict in done is fed back for retry
+  Scenario: Invalid result in done is fed back for retry
     Given the model script:
       | call | tool | arguments                       |
       | 1    | done | {"label":"MAYBE","reason":"x"}  |
@@ -47,7 +47,7 @@ Feature: Agentic triage loop
     When the agent runs
     Then the run stops with reason "done"
     And the loop took 2 turns
-    And the messages sent to the model include a tool result containing "Invalid verdict"
+    And the messages sent to the model include a tool result containing "Invalid result"
 
   Scenario: Tool failure is fed back as an error result
     And the model script:
@@ -120,7 +120,7 @@ Feature: Agentic triage loop
     Given the model script returns done with malformed json "{oops" then plain verdict '{"label":"FP","confidence":"high","confidence_score":0.9,"reason":"ok","evidence":[{"file":"src/App.java","lines":"L1","note":"n"}]}'
     When the agent runs
     Then the run stops with reason "done"
-    And the messages sent to the model include a tool result containing "Invalid verdict"
+    And the messages sent to the model include a tool result containing "Invalid result"
 
   Scenario: Malformed tool arguments degrade to empty arguments
     Given the model script calls view with malformed json "{oops" then plain verdict '{"label":"UNKNOWN","confidence":"low","confidence_score":0.1,"reason":"cannot inspect","evidence":[]}'

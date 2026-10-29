@@ -3,6 +3,7 @@ name: oss/gitlab.eslint.detect-object-injection
 rubric: correctness
 severity: should_fix
 languages: [javascript, typescript]
+cwe: [CWE-94]
 ---
 
 **Rule.** Bracket object notation with user input is present, this might allow an attacker to access all properties of the object and even it's prototype, leading to possible code execution.

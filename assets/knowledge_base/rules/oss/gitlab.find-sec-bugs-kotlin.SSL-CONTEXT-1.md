@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.SSL-CONTEXT-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-295]
 ---
 
 **Rule.** A HostnameVerifier that accept any host are often use because of certificate reuse on many hosts. As a consequence, this is vulnerable to Man-in-the-middleattacks attacks since the client will trust any certificate.

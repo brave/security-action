@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.XML-DECODER-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-502]
 ---
 
 **Rule.** Avoid using XMLDecoder to parse content from an untrusted source.

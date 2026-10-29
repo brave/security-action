@@ -3,6 +3,7 @@ name: oss/trailofbits.javascript.apollo-graphql.v3-cors-express.v3-express-no-co
 rubric: safety
 severity: should_fix
 languages: [js, ts]
+cwe: [CWE-942]
 ---
 
 **Rule.** The Apollo GraphQL server lacks a CORS policy. By default, the server uses the Access-Control-Allow-Origin HTTP header with the wildcard value (*).

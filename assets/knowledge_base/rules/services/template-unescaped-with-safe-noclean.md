@@ -3,6 +3,7 @@ name: services/template-unescaped-with-safe-noclean
 rubric: safety
 severity: should_fix
 languages: [regex]
+cwe: [CWE-79]
 ---
 
 **Rule.** Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.

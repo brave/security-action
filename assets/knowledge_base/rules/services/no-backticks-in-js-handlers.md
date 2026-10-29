@@ -3,6 +3,7 @@ name: services/no-backticks-in-js-handlers
 rubric: safety
 severity: should_fix
 languages: [generic]
+cwe: [CWE-79]
 ---
 
 **Rule.** Backtick in JS handler may cause XSS since they are typically not auto-escaped in variables. Consider using single or double quotes instead of backticks.

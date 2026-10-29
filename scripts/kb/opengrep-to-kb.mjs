@@ -146,6 +146,7 @@ export function convertRule (rule, sourceRel, stem = kebab(rule.id)) {
     `rubric: ${rubricOf(rule)}`,
     `severity: ${severityOf(rule)}`,
     `languages: [${(rule.languages ?? []).join(', ')}]`,
+    ...(cwes.length ? [`cwe: [${cwes.map((c) => c.split(':')[0].trim()).join(', ')}]`] : []),
     '---',
     '',
     `**Rule.** ${oneLine(rule.message)}`,

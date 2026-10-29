@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.XSS-SERVLET-2.XSS-SERVLET-PARAMETER-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-20]
 ---
 
 **Rule.** The Servlet can read GET and POST parameters from various methods. The value obtained should be considered unsafe. You may need to validate or sanitize those values before passing them to sensitive APIs

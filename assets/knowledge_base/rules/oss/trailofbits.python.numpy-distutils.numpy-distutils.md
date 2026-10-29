@@ -3,6 +3,7 @@ name: oss/trailofbits.python.numpy-distutils.numpy-distutils
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-676]
 ---
 
 **Rule.** NumPy distutils is deprecated, and will be removed in the future

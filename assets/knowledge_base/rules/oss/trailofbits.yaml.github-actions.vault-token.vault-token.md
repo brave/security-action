@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.github-actions.vault-token.vault-token
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found long-term access key. Instead prefer Vault role assumption and temporary OIDC security credentials.

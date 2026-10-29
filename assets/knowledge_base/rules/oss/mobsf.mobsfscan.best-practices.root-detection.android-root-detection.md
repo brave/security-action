@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.best-practices.root-detection.android-root-detection
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-919]
 ---
 
 **Rule.** This app does not have root detection capabilities. Running a sensitive application on a rooted device questions the device integrity and affects users data.

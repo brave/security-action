@@ -3,6 +3,7 @@ name: oss/trailofbits.python.tarfile-extractall-traversal.tarfile-extractall-tra
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-22]
 ---
 
 **Rule.** Possible path traversal through `tarfile.open($PATH).extractall()` if the source tar is controlled by an attacker

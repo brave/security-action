@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.terraform.vault-skip-tls-verify.vault-skip-tls-verify
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found Terraform Vault instance with TLS verification disabled

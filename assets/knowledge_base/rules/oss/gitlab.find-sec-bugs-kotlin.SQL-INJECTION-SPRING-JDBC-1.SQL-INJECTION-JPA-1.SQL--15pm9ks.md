@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.SQL-INJECTION-SPRING-JDBC-1.SQL-INJECTION-
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-89]
 ---
 
 **Rule.** The input values included in SQL queries need to be passed in safely. Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.

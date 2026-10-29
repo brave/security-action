@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.OVERLY-PERMISSIVE-FILE-PERMISSION-2
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-732]
 ---
 
 **Rule.** Overly permissive file permission

@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.IMPROPER-UNICODE-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-176]
 ---
 
 **Rule.** Improper Handling of Unicode Encoding

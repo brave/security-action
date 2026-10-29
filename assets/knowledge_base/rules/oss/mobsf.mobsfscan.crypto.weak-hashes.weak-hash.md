@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.weak-hashes.weak-hash
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-327]
 ---
 
 **Rule.** Weak Hash algorithm used. The hash algorithm is known to have hash collisions.

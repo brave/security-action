@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.webview.webview-debugging.webview-debugging
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-489]
 ---
 
 **Rule.** Remote WebView debugging is enabled. This allows an attacker with debugging access to interact with the webview and steal or corrupt data.

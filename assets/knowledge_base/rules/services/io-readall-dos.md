@@ -3,6 +3,7 @@ name: services/io-readall-dos
 rubric: safety
 severity: nit
 languages: [go]
+cwe: [CWE-400]
 ---
 
 **Rule.** io.ReadAll is vulnerable to Denial of Service (DoS) by clients sending a large HTTP request body. Wrapping $R.Body with http.MaxBytesReader (or io.LimitReader) prevents this wasting of server resources.

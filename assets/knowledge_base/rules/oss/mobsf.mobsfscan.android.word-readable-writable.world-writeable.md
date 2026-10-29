@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.android.word-readable-writable.world-writeable
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-276]
 ---
 
 **Rule.** The file is World Readable and Writable. Any App can read/write to the file.

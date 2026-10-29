@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.mongodb-insecure-transport.mongodb-insecure-transp
 rubric: safety
 severity: should_fix
 languages: [regex]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found insecure MongoDB connection, prefer TLS encrypted transport by setting the `tls=true` connection option and ensuring proper verification

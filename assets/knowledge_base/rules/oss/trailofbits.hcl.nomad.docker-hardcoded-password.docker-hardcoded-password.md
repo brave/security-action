@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.nomad.docker-hardcoded-password.docker-hardcoded-passw
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found Nomad task using Docker auth with hardcoded password

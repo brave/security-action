@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs.XSS-REQUEST-WRAPPER-1
 rubric: safety
 severity: nit
 languages: [java]
+cwe: [CWE-79]
 ---
 
 **Rule.** Avoid using custom XSS filtering. Please use standard sanitization functions.

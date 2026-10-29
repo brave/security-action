@@ -3,6 +3,7 @@ name: oss/trailofbits.python.automatic-memory-pinning.automatic-memory-pinning
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-676]
 ---
 
 **Rule.** If possible, it is better to rely on automatic pinning in PyTorch to avoid undefined behavior and for efficiency

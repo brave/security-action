@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.nomad.root-user.root-user
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-250]
 ---
 
 **Rule.** Found Nomad task using root user

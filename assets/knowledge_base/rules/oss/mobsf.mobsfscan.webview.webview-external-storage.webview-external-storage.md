@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.webview.webview-external-storage.webview-external-stor
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-749]
 ---
 
 **Rule.** WebView load files from external storage. Files in external storage can be modified by any application.

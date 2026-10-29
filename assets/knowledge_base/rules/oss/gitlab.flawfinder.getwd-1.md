@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.getwd-1
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** `getwd` does not contain a parameter to limit how many characters can be copied into the destination buffer. For portability and security reasons `getwd` has been deprecated in favor of `getcwd`. For more information please see: https://linux.die.net/man/3/getcwd

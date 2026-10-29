@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.best-practices.tls-pinning.android-certificate-pinning
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-295]
 ---
 
 **Rule.** This app does not use a TLS/SSL certificate or public key pinning in code to detect or prevent MITM attacks in secure communication channel. Please verify if pinning is enabled in `network_security_config.xml`.

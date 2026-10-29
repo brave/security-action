@@ -3,6 +3,7 @@ name: oss/trailofbits.generic.mysql-insecure-sslmode.mysql-insecure-sslmode
 rubric: safety
 severity: should_fix
 languages: [regex]
+cwe: [CWE-295]
 ---
 
 **Rule.** Found MySQL connection string disabling SSL verification

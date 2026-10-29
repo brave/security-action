@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.android.logging.android-logging
 rubric: correctness
 severity: nit
 languages: [java]
+cwe: [cwe-532]
 ---
 
 **Rule.** The App logs information. Please ensure that sensitive information is never logged.

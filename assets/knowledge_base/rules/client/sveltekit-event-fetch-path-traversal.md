@@ -3,6 +3,7 @@ name: client/sveltekit-event-fetch-path-traversal
 rubric: safety
 severity: should_fix
 languages: [ts, js]
+cwe: [CWE-22]
 ---
 
 **Rule.** User-supplied parameter is interpolated into an `event.fetch()` URL without sanitization. An attacker can inject `../` sequences to reach arbitrary internal API endpoints. Wrap the value with `validateURLParam()` or `encodeURIComponent()` before interpolation.

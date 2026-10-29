@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.streadd-1.strecpy-1
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-120]
 ---
 
 **Rule.** The `strecpy` and `streadd` functions require that the destination buffer size be at least four times the size of the source due to each character potentially becoming a `\` and 3 digits. For more information please see: https://docs.oracle.com/cd/E18752_01/html/816-5172/streadd-3gen.html

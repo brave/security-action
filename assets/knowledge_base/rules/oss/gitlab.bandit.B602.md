@@ -3,6 +3,7 @@ name: oss/gitlab.bandit.B602
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-78]
 ---
 
 **Rule.** Found `subprocess` function `$FUNC` with `shell=True`. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use `shell=False` instead.

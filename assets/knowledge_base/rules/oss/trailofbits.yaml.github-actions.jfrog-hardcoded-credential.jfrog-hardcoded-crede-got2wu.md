@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.github-actions.jfrog-hardcoded-credential.jfrog-hardc
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found long-term access key. Instead prefer JFrog temporary OIDC security credentials

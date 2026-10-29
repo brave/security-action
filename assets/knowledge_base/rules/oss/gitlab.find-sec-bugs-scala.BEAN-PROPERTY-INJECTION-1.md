@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.BEAN-PROPERTY-INJECTION-1
 rubric: safety
 severity: should_fix
 languages: [scala]
+cwe: [CWE-15]
 ---
 
 **Rule.** An attacker can set arbitrary bean properties that can compromise system integrity. An attacker can leverage this functionality to access special bean properties like class.classLoader that will allow them to override system properties and potentially execute arbitrary code.

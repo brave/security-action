@@ -3,6 +3,7 @@ name: client/raptor-typos
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-480]
 ---
 
 **Rule.** The programmer accidentally uses the wrong operator, which changes the application logic in security-relevant ways. These types of errors are generally the result of a typo. This rule also covers some other common typo patterns. (see $EXPR1)

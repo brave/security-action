@@ -3,6 +3,7 @@ name: oss/trailofbits.ruby.rails-cookie-attributes.rails-cookie-attributes
 rubric: safety
 severity: should_fix
 languages: [ruby]
+cwe: [CWE-345]
 ---
 
 **Rule.** Found Rails cookie set with insecure attribute.

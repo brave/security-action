@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.DANGEROUS-PERMISSION-COMBINATION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-269]
 ---
 
 **Rule.** Do not grant dangerous combinations of permissions.

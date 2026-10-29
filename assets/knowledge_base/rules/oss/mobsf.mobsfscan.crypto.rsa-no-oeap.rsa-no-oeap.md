@@ -3,6 +3,7 @@ name: oss/mobsf.mobsfscan.crypto.rsa-no-oeap.rsa-no-oeap
 rubric: correctness
 severity: should_fix
 languages: [java]
+cwe: [cwe-780]
 ---
 
 **Rule.** This App uses RSA Crypto without OAEP padding. The purpose of the padding scheme is to prevent a number of attacks on RSA that only work when the encryption is performed without padding.

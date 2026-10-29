@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-kotlin.OVERLY-PERMISSIVE-FILE-PERMISSION-1
 rubric: safety
 severity: should_fix
 languages: [kotlin]
+cwe: [CWE-732]
 ---
 
 **Rule.** Overly permissive file permission

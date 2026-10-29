@@ -3,6 +3,7 @@ name: oss/gitlab.flawfinder.crypt-1.crypt-r-1
 rubric: safety
 severity: should_fix
 languages: [c, cpp]
+cwe: [CWE-327]
 ---
 
 **Rule.** The crypt functions are not recommended due to the significantly small key space. Modern hardware can crack crypt produced passwords relatively quickly. Consider using the Argon2id password hashing algorithm provided by libsodium. For more information please see: https://libsodium.gitbook.io/doc/password_hashing.

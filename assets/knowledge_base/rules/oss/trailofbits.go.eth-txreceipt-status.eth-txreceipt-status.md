@@ -3,6 +3,7 @@ name: oss/trailofbits.go.eth-txreceipt-status.eth-txreceipt-status
 rubric: safety
 severity: should_fix
 languages: [go]
+cwe: [CWE-437]
 ---
 
 **Rule.** A transaction receipt's status is inspected using `$RECEIVER.Status()`. For bridges and exchanges, this is a high-risk pattern because even though the transaction was successful, calls within the transaction may have failed. Review the related code to ensure the following properties: 1. The receipt's success is not being used as a verification measure. 2. The transaction being inspected is from a finalized block.

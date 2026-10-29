@@ -3,6 +3,7 @@ name: services/url-constructor-base
 rubric: safety
 severity: nit
 languages: [ts, js]
+cwe: [CWE-346]
 ---
 
 **Rule.** Are you using the `URL(url, base)` constructor as a security control to limit the origin with base `$BASE`? The base is ignored whenever url looks like an absolute URL, e.g. when it begins `protocol://`. `\\\\` or `//x.y`. Verify that the URL's origin is as expected rather than relying on the URL constructor.

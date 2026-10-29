@@ -3,6 +3,7 @@ name: oss/trailofbits.yaml.github-actions.gcp-credentials-json.gcp-credentials-j
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-798]
 ---
 
 **Rule.** Found long-term access key. Instead prefer GCP workload identity federation and temporary OIDC security credentials.

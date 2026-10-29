@@ -3,6 +3,7 @@ name: oss/trailofbits.hcl.terraform.aws-oidc-role-policy-missing-sub.aws-oidc-ro
 rubric: safety
 severity: should_fix
 languages: [hcl]
+cwe: [CWE-284]
 ---
 
 **Rule.** Found AWS role policy for GitHub Actions missing OIDC subject. This means any GitHub repository can assume this role in CI.

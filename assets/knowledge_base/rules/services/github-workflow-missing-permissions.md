@@ -3,6 +3,7 @@ name: services/github-workflow-missing-permissions
 rubric: safety
 severity: should_fix
 languages: [yaml]
+cwe: [CWE-250, CWE-732]
 ---
 
 **Rule.** GitHub Actions workflow is missing permissions declaration at the top-level or job-level. Without explicit permissions, workflows may have excessive default permissions, violating the principle of least privilege. According to GitHub's security best practices, you should explicitly define permissions to limit the scope of access tokens. Valid permission scopes include: actions, attestations, checks, contents, deployments, discussions, id-token, issues, models, packages, pages, pull-requests, security-events, statuses 👍 Good examples: Top-level: `permissions: { contents: read, pull-requests: write }` Job-level: `jobs: build: permissions: { contents: read }` Restrict all: `permissions: {}` 👎 Bad: No permissions defined in the workflow [GitHub Security Hardening Guide](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token)

@@ -3,6 +3,7 @@ name: services/path-travesal-by-string-interpolation
 rubric: safety
 severity: nit
 languages: [ts, js]
+cwe: [CWE-22]
 ---
 
 **Rule.** The code contains new security hotspots which should be checked manually by a security team member! Could a user perform path traversal by setting a variable to include `../`?

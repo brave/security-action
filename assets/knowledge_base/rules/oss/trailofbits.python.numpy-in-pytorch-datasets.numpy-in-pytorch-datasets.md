@@ -3,6 +3,7 @@ name: oss/trailofbits.python.numpy-in-pytorch-datasets.numpy-in-pytorch-datasets
 rubric: safety
 severity: should_fix
 languages: [python]
+cwe: [CWE-330]
 ---
 
 **Rule.** Using the NumPy RNG inside of a PyTorch dataset can lead to a number of issues with loading data, including identical augmentations. Instead, use the random number generators built into Python and PyTorch

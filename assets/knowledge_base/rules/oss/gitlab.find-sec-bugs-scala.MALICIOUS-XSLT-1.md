@@ -3,6 +3,7 @@ name: oss/gitlab.find-sec-bugs-scala.MALICIOUS-XSLT-1
 rubric: safety
 severity: should_fix
 languages: [java]
+cwe: [CWE-74]
 ---
 
 **Rule.** It is possible to attach malicious behavior to those style sheets. Therefore, if an attacker can control the content or the source of the style sheet, he might be able to trigger remote code execution.
