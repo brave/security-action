@@ -57,6 +57,22 @@ Given('slim findings matching the log line for {string} line {int}', function (f
   fs.writeFileSync(path.join(dir, 'security-action', 'opengrep-slim.jsonl'), `${JSON.stringify(record)}\n`)
 })
 
+Given('slim findings without cwe matching the log line for {string} line {int}', function (file, lineNo) {
+  const dir = workspace(this)
+  const record = {
+    check_id: 'test/licensing-check',
+    path: file,
+    line: lineNo,
+    severity: 'WARN',
+    message: 'Licensing check tripped',
+    cwe: '',
+    source: 'brave/security-action',
+    category: 'security',
+    assignees: 'null'
+  }
+  fs.writeFileSync(path.join(dir, 'security-action', 'opengrep-slim.jsonl'), `${JSON.stringify(record)}\n`)
+})
+
 Given('the mock model answers verdict {string} confidence {string} reason {string}', function (label, confidence, reason) {
   const dir = workspace(this)
   const verdict = { label, confidence, confidence_score: confidence === 'high' ? 0.9 : 0.5, reason, evidence: [{ file: 'app/x.js', lines: '1', note: 'n' }] }

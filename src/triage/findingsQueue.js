@@ -9,7 +9,8 @@ import { stableCaseId } from './verdict.js'
  * the agentic verdict alone drives annotation or suppression downstream.
  * The generated caseJson mirrors the paper-artifact case shape so
  * formatTask renders an identical task prompt. Findings whose rule has
- * no CWE metadata are skipped: the policy gate can never suppress them.
+ * no CWE metadata stay in the queue with cwe: null; policyDecision
+ * treats null like an allowlisted CWE.
  */
 export function opengrepFindingsToQueue (slimJsonl, { repoRoot, scanRoot = '.' } = {}) {
   const records = Array.isArray(slimJsonl)
@@ -32,13 +33,6 @@ export function opengrepFindingsToQueue (slimJsonl, { repoRoot, scanRoot = '.' }
     const line = Number.isFinite(result.line) ? result.line : 0
     const checkId = typeof result.check_id === 'string' && result.check_id !== '' ? result.check_id : 'unknown-rule'
     const cwe = extractCwe(result.cwe)
-    // Rules without CWE metadata can never satisfy the suppression policy
-    // (annotate-only at best), so they are dropped from the triage queue
-    // rather than spending LLM budget on un-gateable findings.
-    if (cwe === null) {
-      skipped.push({ reason: 'no cwe metadata', result })
-      continue
-    }
     const caseJson = {
       case_id: `${checkId}:${result.path}:${line}`,
       folder_root: repoRoot,

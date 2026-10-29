@@ -38,6 +38,16 @@ Feature: Triage filter CLI
     Then the filter exit code is 0
     And the filtered log contains "app/db.js:7"
     And the filtered log contains "🤖 triage"
+
+  Scenario: Finding without cwe metadata is triaged and suppressible like allowlisted rules
+    Given a triage filter workspace with an enabled config
+    And a reviewdog log for runner "opengrep"
+    And slim findings without cwe matching the log line for "app/render.js" line 42
+    And the mock model answers verdict "FP" confidence "high" reason "output is escaped"
+    When the triage filter runs for runner "opengrep"
+    Then the filter exit code is 0
+    And the filtered log does not contain "app/render.js:42"
+    And the filter summary reports 1 suppressed
     And the filter summary reports 1 triaged
 
   Scenario: Findings dropped by the cleaner are not triaged

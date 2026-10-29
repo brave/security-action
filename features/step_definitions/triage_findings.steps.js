@@ -53,12 +53,12 @@ When('the findings are converted to a triage queue', function () {
 
 Given('a verdict of label {string} confidence {string} for cwe {string}', function (label, confidence, cwe) {
   this.params.verdict = { label, confidence, confidence_score: confidence === 'high' ? 0.9 : 0.5, reason: 'r', evidence: [{ file: 'app/render.js', lines: '42', note: 'n' }] }
-  this.params.cwe = cwe
+  this.params.cwe = cwe === 'null' ? null : cwe
 })
 
 Given('a verdict of label {string} confidence {string} with empty evidence for cwe {string}', function (label, confidence, cwe) {
   this.params.verdict = { label, confidence, confidence_score: 0.9, reason: 'r', evidence: [] }
-  this.params.cwe = cwe
+  this.params.cwe = cwe === 'null' ? null : cwe
 })
 
 Given('a policy allowlist of {string}', function (csv) {

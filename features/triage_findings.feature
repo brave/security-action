@@ -31,12 +31,12 @@ Feature: Triage findings adapter
     When the findings are converted to a triage queue
     Then item 1 cwe is "79"
 
-  Scenario: Findings without cwe metadata are skipped
+  Scenario: Findings without cwe metadata stay in the queue
     Given a slim opengrep capture with a finding without cwe metadata
     When the findings are converted to a triage queue
-    Then the findings queue has 1 items
-    And the skipped count is 1
-    And the skipped reason is "no cwe metadata"
+    Then the findings queue has 2 items
+    And the skipped count is 0
+    And item 1 cwe is "null"
 
   Scenario: Records with missing path are skipped
     Given a slim opengrep capture with a finding missing its path
@@ -62,6 +62,12 @@ Feature: Triage findings adapter
     And a verdict of label "FP" confidence "high" for cwe "502" has decision "annotate"
     And a verdict of label "TP" confidence "high" for cwe "89" has decision "keep"
     And a verdict of label "UNKNOWN" confidence "low" for cwe "89" has decision "annotate"
+
+  Scenario: Findings without cwe metadata are suppressible like allowlisted rules
+    Given a verdict of label "FP" confidence "high" for cwe "null"
+    Then the policy decision is "suppress"
+    And a verdict of label "FP" confidence "medium" for cwe "null" has decision "annotate"
+    And a verdict of label "TP" confidence "high" for cwe "null" has decision "keep"
 
   Scenario: Policy allowlist is configurable
     Given a policy allowlist of "22,78"
