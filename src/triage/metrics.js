@@ -40,17 +40,19 @@ export function computeMetrics (results) {
   const byCwe = {}
   for (const r of rows) {
     const cwe = String(r.cwe ?? 'unknown')
-    byCwe[cwe] = byCwe[cwe] ?? { n: 0, fp: 0, tp: 0, predictedFp: 0, keptTp: 0 }
+    byCwe[cwe] = byCwe[cwe] ?? { n: 0, fp: 0, tp: 0, correctFp: 0, predictedFp: 0, keptTp: 0 }
     const b = byCwe[cwe]
     b.n++
     if (r.label === 'FP') b.fp++
     if (r.label === 'TP') b.tp++
+    if (r.label === 'FP' && verdictLabel(r) === 'FP') b.correctFp++
     if (verdictLabel(r) === 'FP') b.predictedFp++
     if (r.label === 'TP' && verdictLabel(r) === 'TP') b.keptTp++
   }
   for (const cwe of Object.keys(byCwe)) {
     const b = byCwe[cwe]
-    b.fpRecall = safeDiv(b.predictedFp, b.fp)
+    b.fpRecall = safeDiv(b.correctFp, b.fp)
+    b.fpPrecision = safeDiv(b.correctFp, b.predictedFp)
     b.tpRetention = safeDiv(b.keptTp, b.tp)
   }
 

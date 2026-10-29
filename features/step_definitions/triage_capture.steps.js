@@ -1,5 +1,6 @@
 import { Then } from '@cucumber/cucumber'
 import assert from 'node:assert/strict'
+import fs from 'node:fs'
 
 // ${RUNNER_TEMP:-/tmp} literal, assembled to appease no-template-curly-in-string
 const RT = '$' + '{RUNNER_TEMP:-/tmp}'
@@ -32,4 +33,22 @@ Then('both runner cmds derive the capture path from RUNNER_TEMP with a tmp fallb
   for (const name of ['opengrep', 'sveltegrep']) {
     assert.ok(this.runners[name].cmd.includes(RT), `${name} cmd should use RUNNER_TEMP with tmp fallback`)
   }
+})
+
+Then('the reviewdog script calls the triage filter for {string} before post-findings', function (runner) {
+  const script = fs.readFileSync('assets/reviewdog.sh', 'utf8')
+  const needle = 'triage-filter.sh" "$' + 'runner"'
+  const filterIdx = script.indexOf(needle)
+  const postIdx = script.indexOf('post-findings.sh')
+  assert.ok(filterIdx >= 0, `reviewdog.sh should call triage-filter.sh for ${runner}`)
+  assert.ok(postIdx > filterIdx, 'triage filter must run before post-findings')
+})
+
+Then('the triage filter call is fail-open', function () {
+  const script = fs.readFileSync('assets/reviewdog.sh', 'utf8')
+  assert.ok(script.includes('triage-filter.sh" "$runner" "$SCRIPTPATH/$runner.log" || true'), 'triage filter call must be fail-open')
+})
+Then('the triage filter wrapper has the executable bit set', function () {
+  const mode = fs.statSync('assets/reviewdog/triage-filter.sh').mode
+  assert.ok(mode & 0o111, 'triage-filter.sh should be executable')
 })

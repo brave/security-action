@@ -60,9 +60,12 @@ Feature: Benchmark metrics
       | b    | FP    | TP      | 78  | 0.002 |
       | c    | TP    | FP      | 327 | 0.003 |
       | d    | TP    | TP      | 327 | 0.004 |
+      | e    | FP    | FP      | 327 | 0.005 |
     When the metrics are computed
-    Then the total cost is 0.01
+    Then the total cost is 0.015
     And cwe "78" has FP recall 0.5
+    And cwe "327" has FP recall 1
+    And cwe "327" has FP precision 0.5
     And cwe "327" has TP retention 0.5
 
   Scenario: Runner-shaped rows (verdict object, cost nested in usage)

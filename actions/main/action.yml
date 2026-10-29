@@ -60,6 +60,25 @@ inputs:
       SEC_ACTION_MODELSCAN_HEAVY env var on the job to always install both
       groups (for repos that include model files).
     required: false
+  triage_enabled:
+    description: |
+      Enable agentic LLM false-positive triage between the opengrep scan
+      and PR comment posting. High-confidence FP verdicts on injection-family
+      CWEs (78/79/89) suppress the reviewdog comment; other findings get a
+      triage annotation. Requires openrouter_api_key. Default false.
+    required: false
+  openrouter_api_key:
+    description: OpenRouter API key used by the triage stage
+    required: false
+  triage_model:
+    description: OpenRouter model for FP triage (default z-ai/glm-5.3-flash)
+    required: false
+  triage_budget_usd:
+    description: Max USD spend per triage run (default 1.00)
+    required: false
+  triage_max_findings:
+    description: Max findings triaged per run (default 50)
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings
@@ -187,6 +206,7 @@ runs:
       id: script
       env:
         DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
+        OPENROUTER_API_KEY: ${{ inputs.openrouter_api_key }}
       with:
         script: |-
           const actionPath = '${{ github.action_path }}/../../'

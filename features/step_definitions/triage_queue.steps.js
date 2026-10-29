@@ -219,6 +219,9 @@ Then('the total cost is {float}', function (v) {
 Then('cwe {string} has FP recall {float}', function (cwe, v) {
   assert.equal(this.params.metrics.byCwe[cwe].fpRecall, v)
 })
+Then('cwe {string} has FP precision {float}', function (cwe, v) {
+  assert.equal(this.params.metrics.byCwe[cwe].fpPrecision, v)
+})
 Then('cwe {string} has TP retention {float}', function (cwe, v) {
   assert.equal(this.params.metrics.byCwe[cwe].tpRetention, v)
 })

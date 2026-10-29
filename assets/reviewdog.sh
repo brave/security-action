@@ -23,6 +23,10 @@ if [ -n "${GITHUB_BASE_REF+set}" ]; then
     done
 
     for runner in $RUNNERS; do
+        if [[ "$runner" == "opengrep" || "$runner" == "sveltegrep" ]]; then
+            # agentic FP triage: drop suppressed findings, annotate others (fail-open)
+            "$SCRIPTPATH/reviewdog/triage-filter.sh" "$runner" "$SCRIPTPATH/$runner.log" || true
+        fi
         "$SCRIPTPATH/reviewdog/post-findings.sh" "$runner"
         grep -H "" "$runner.log" >>reviewdog.log || true
         echo -n "$runner: "

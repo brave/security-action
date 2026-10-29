@@ -33,6 +33,8 @@ export function opengrepFindingsToQueue (rawJson, { repoRoot, scanRoot = '.' } =
       dataset: 'opengrep',
       label: null,
       cwe: extractCwe(result?.extra?.metadata?.cwe),
+      file: result.path,
+      line,
       caseJson,
       repoRoot
     })
