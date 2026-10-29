@@ -32,6 +32,11 @@ Feature: OpenRouter client
     When the client completes a chat request for model "z-ai/glm-5.3-flash" with reasoning effort "low"
     Then the request body contains reasoning '{"effort":"low"}'
 
+  Scenario: Tool schemas are forwarded in the request body
+    When the client completes a chat request with tools
+    Then the request body contains tools '[{"type":"function","function":{"name":"view"}}]'
+    And the request body contains tool choice "auto"
+
   Scenario: Rate limit 429 is retried and then succeeds
     When the transport answers 429 once and then a successful completion
     Then the transport received exactly 2 requests

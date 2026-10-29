@@ -169,9 +169,32 @@ When('the client completes a chat request for model {string} with reasoning effo
   }
 })
 
+When('the client completes a chat request with tools', async function () {
+  try {
+    this.lastResult = await this.client.chat({
+      model: 'z-ai/glm-5.3-flash',
+      messages: [{ role: 'user', content: 'hi' }],
+      maxTokens: 2000,
+      tools: [{ type: 'function', function: { name: 'view' } }]
+    })
+  } catch (err) {
+    this.lastError = err
+  }
+})
+
 Then('the request body contains reasoning {string}', function (expected) {
   const body = JSON.parse(this.transport.__requests[0].init.body)
   assert.deepEqual(body.reasoning, JSON.parse(expected))
+})
+
+Then('the request body contains tools {string}', function (expected) {
+  const body = JSON.parse(this.transport.__requests[0].init.body)
+  assert.deepEqual(body.tools, JSON.parse(expected))
+})
+
+Then('the request body contains tool choice {string}', function (expected) {
+  const body = JSON.parse(this.transport.__requests[0].init.body)
+  assert.equal(body.tool_choice, expected)
 })
 
 When('the client receives a completion with null content and finish reason {string}', async function (_reason) {

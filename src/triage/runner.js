@@ -26,6 +26,7 @@ export async function runBenchmark ({
   makeFsi = null,
   makeReach = null,
   makeExec = null,
+  websearch = null,
   agent = 'swe-agent',
   outPath = null,
   onResult = null
@@ -50,7 +51,7 @@ export async function runBenchmark ({
     } else {
       const reach = makeReach ? makeReach(item) : null
       const exec = makeExec ? makeExec(item) : null
-      const tools = createToolRegistry({ root: item.repoRoot, fsi, reach, exec })
+      const tools = createToolRegistry({ root: item.repoRoot, fsi, reach, exec, search: websearch })
       const task = formatTask({
         caseJson: item.caseJson,
         repoRoot: item.repoRoot,

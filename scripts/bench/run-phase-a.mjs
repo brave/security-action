@@ -98,9 +98,10 @@ async function main () {
   const reasoning = !reasoningEffort
     ? undefined
     : (reasoningEffort === 'off' ? { enabled: false } : { effort: reasoningEffort })
-  const chat = ({ model, messages }) => client.chat({
+  const chat = ({ model, messages, tools }) => client.chat({
     model,
     messages,
+    tools,
     maxTokens,
     temperature,
     // provider-side hangs happen (one call stalled 100+ min without a cap);
@@ -140,6 +141,15 @@ async function main () {
     console.log('exec tool on (landrun sandbox, no network)')
   }
 
+  let websearch = null
+  if (args.websearch !== undefined) {
+    const braveKey = process.env.BRAVE_API_KEY
+    if (!braveKey) { console.error('BRAVE_API_KEY missing (env or .env)'); process.exit(1) }
+    const { createBraveSearch } = await import(path.join(ROOT, 'src/triage/harness/braveSearch.js'))
+    websearch = createBraveSearch({ apiKey: braveKey }).search
+    console.log('websearch tool on (Brave API)')
+  }
+
   fs.mkdirSync(outDir, { recursive: true })
   const queue = buildQueue({
     ...queueArgs,
@@ -154,7 +164,7 @@ async function main () {
 
   for (const model of models) {
     for (const mode of modes) {
-      const suffix = `${makeReach ? '-reach' : ''}${makeExec ? '-exec' : ''}`
+      const suffix = `${makeReach ? '-reach' : ''}${makeExec ? '-exec' : ''}${websearch ? '-websearch' : ''}`
       const outFile = path.join(outDir, `${model.replace(/\//g, '__')}-${mode}${suffix}.jsonl`)
       let pending = items
       let priorRows = []
@@ -182,6 +192,7 @@ async function main () {
         makeFsi,
         makeReach: mode === 'agentic' ? makeReach : null,
         makeExec: mode === 'agentic' ? makeExec : null,
+        websearch: mode === 'agentic' ? websearch : null,
         agent: mode === 'agentic' ? 'swe-agent' : 'llm',
         outPath: outFile
       })

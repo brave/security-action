@@ -86,7 +86,7 @@ async function main () {
     const apiKey = config.apiKey ?? process.env.OPENROUTER_API_KEY
     if (!apiKey) return passthrough({ logPath, outPath, reason: 'no api key' })
     const client = createOpenRouterClient({ apiKey, budgetUsd: config.budgetUsd ?? 1 })
-    chat = ({ model, messages }) => client.chat({ model, messages, maxTokens: 8192, reasoning: { effort: 'low' } })
+    chat = ({ model, messages, tools }) => client.chat({ model, messages, tools, maxTokens: 8192, reasoning: { effort: 'low' } })
   }
 
   const makeFsi = (repoRoot) => ({

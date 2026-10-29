@@ -39,7 +39,9 @@ function pushAssistant (messages, res, calls) {
 /**
  * Multi-turn tool-calling triage loop for a single SAST finding.
  * chat: async fn({model, messages}) -> {content, finishReason, usage, raw?}
- * tools: registry from createToolRegistry (run(name, args), names()).
+ * tools: registry from createToolRegistry (run(name, args), names(), schema()).
+ * When a registry is present its function schemas are forwarded on every
+ * chat request so the model can discover the tools.
  * Returns {verdict, stopped: done|max_turns|error|budget, turns, toolCalls, usage, messages}.
  */
 export async function runAgent ({
@@ -80,7 +82,7 @@ export async function runAgent ({
 
     let res
     try {
-      res = await chat({ model, messages })
+      res = await chat({ model, messages, tools: tools ? tools.schema() : undefined })
     } catch (err) {
       if (err instanceof BudgetExceededError) {
         stopped = 'budget'

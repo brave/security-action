@@ -39,7 +39,7 @@ export function globToRegExp (pattern) {
  * fsi: { readFileSync(path), readdirSync(dir) } — paths are repo-relative
  * or absolute under root; readdirSync returns entry names.
  */
-export function createToolRegistry ({ root, fsi, exec = null, reach = null, maxOutputChars = 20000 } = {}) {
+export function createToolRegistry ({ root, fsi, exec = null, search = null, reach = null, maxOutputChars = 20000 } = {}) {
   const join = (p) => `${root.replace(/\/$/, '')}/${String(p).replace(/^\//, '')}`
 
   const listFiles = (dir) => {
@@ -137,6 +137,7 @@ export function createToolRegistry ({ root, fsi, exec = null, reach = null, maxO
     root,
     names () {
       return Object.keys(tools).concat([
+        ...(search ? ['websearch'] : []),
         ...(reach ? ['reach'] : []),
         ...(exec ? ['exec'] : [])
       ])
@@ -207,6 +208,17 @@ export function createToolRegistry ({ root, fsi, exec = null, reach = null, maxO
             required: ['command']
           }
         },
+        websearch: {
+          description: 'Web search (Brave) for external facts: library versions, CVE context, framework behavior.',
+          parameters: {
+            type: 'object',
+            properties: {
+              query: { type: 'string' },
+              count: { type: 'integer', description: 'max results, default 5' }
+            },
+            required: ['query']
+          }
+        },
         reach: {
           description: 'Reachability evidence: scanner taint status for the rule, enclosing function, cross-file callers, and whether the sink is reachable from an entry point.',
           parameters: {
@@ -228,6 +240,15 @@ export function createToolRegistry ({ root, fsi, exec = null, reach = null, maxO
         if (!exec) return { ok: false, error: 'exec tool not configured' }
         try {
           return { ok: true, output: String(await exec(args.command ?? '')) }
+        } catch (err) {
+          return { ok: false, error: err.message }
+        }
+      }
+      if (name === 'websearch') {
+        if (!search) return { ok: false, error: 'search tool not configured' }
+        try {
+          const out = await search({ query: args?.query ?? '', count: args?.count })
+          return { ok: true, output: String(out).slice(0, maxOutputChars) }
         } catch (err) {
           return { ok: false, error: err.message }
         }

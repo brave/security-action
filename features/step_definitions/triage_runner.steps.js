@@ -230,6 +230,42 @@ Given('an agentic runner with max turns {int} and exec', function (maxTurns) {
   }
 })
 
+Given('a scripted model that calls websearch then done', function () {
+  this.params.chatCalls = []
+  this.chat = async ({ messages }) => {
+    this.params.chatCalls.push(JSON.stringify(messages))
+    if (this.params.chatCalls.length === 1) {
+      return {
+        content: null,
+        finishReason: 'tool_calls',
+        usage: { prompt_tokens: 100, completion_tokens: 10, cost: 0.0005 },
+        toolCalls: [{ id: 'w1', name: 'websearch', arguments: JSON.stringify({ query: 'spring ParserConfig defaultTyping' }) }]
+      }
+    }
+    return {
+      content: null,
+      finishReason: 'tool_calls',
+      usage: { prompt_tokens: 100, completion_tokens: 20, cost: 0.0005 },
+      toolCalls: [{ id: 'd1', name: 'done', arguments: GOOD_VERDICT }]
+    }
+  }
+  this.params.fsFiles = { '/repo/src/case_0.java': 'class A {}' }
+})
+
+Given('an agentic runner with max turns {int} and websearch', function (maxTurns) {
+  this.params.maxTurns = maxTurns
+  this.params.mode = 'agentic'
+  this.params.websearchQueries = []
+  this.params.websearch = async ({ query }) => {
+    this.params.websearchQueries.push(query)
+    return '1. Fake Result\n   https://example/x\n   snippet'
+  }
+})
+
+Then('the brave search fake was queried with {string}', function (query) {
+  assert.deepEqual(this.params.websearchQueries, [query])
+})
+
 Then('the exec fake was called with command {string}', function (command) {
   assert.equal(this.params.execCalls[0], command)
 })
@@ -276,6 +312,7 @@ When('the runner executes the queue', async function () {
     makeFsi,
     makeReach: this.params.makeReach ?? null,
     makeExec: this.params.makeExec ?? null,
+    websearch: this.params.websearch ?? null,
     agent: 'swe-agent',
     outPath: this.params.outPath
   })

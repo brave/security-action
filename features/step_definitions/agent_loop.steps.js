@@ -7,8 +7,8 @@ import { ProviderError, BudgetExceededError } from '../../src/openrouterClient.j
 Given('a fake model client', function () {
   this.params.script = []
   this.params.requests = []
-  this.chat = async ({ model, messages }) => {
-    this.params.requests.push({ model, messages: messages.map(m => ({ ...m })) })
+  this.chat = async ({ model, messages, tools }) => {
+    this.params.requests.push({ model, messages: messages.map(m => ({ ...m })), tools })
     const step = this.params.script.shift()
     if (!step) throw new Error('fake model client: script exhausted')
     if (step.throwProvider) throw new ProviderError(step.throwProvider, { status: 500, code: 'server_error' })
@@ -96,6 +96,10 @@ Given('the model script returns camelCase-usage verdict {string} using {int} pro
   this.params.script = [{ content: json, camelUsage: { promptTokens: prompt, completionTokens: completion, costUsd: cost } }]
 })
 
+Given('the model script returns a plain verdict {string}', function (json) {
+  this.params.script = [{ content: json }]
+})
+
 Given('a view tool bound to the repo root', function () {
   this.registry = createToolRegistry({
     root: this.params.repoRoot,
@@ -176,6 +180,16 @@ Then('the messages sent to the model include a user nudge', function () {
     req.messages.some(m => m.role === 'user' && m.content.includes('Return your final verdict through the done tool'))
   )
   assert.ok(found, 'no user nudge message found')
+})
+
+Then('every chat request carried the tool schemas view, grep, find, done', function () {
+  const expected = ['view', 'grep', 'find', 'done']
+  assert.ok(this.params.requests.length > 0, 'expected at least one chat request')
+  for (const req of this.params.requests) {
+    assert.ok(Array.isArray(req.tools), 'each request should carry a tools array')
+    const got = req.tools.map(t => t.function?.name ?? t.name)
+    for (const name of expected) assert.ok(got.includes(name), `tools missing ${name}: got ${got}`)
+  }
 })
 
 Then('the run usage is {int} prompt tokens and {int} completion tokens', function (promptTokens, completionTokens) {

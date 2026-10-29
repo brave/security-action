@@ -111,6 +111,8 @@ export function createOpenRouterClient ({
       temperature = 0,
       signal,
       reasoning,
+      tools,
+      toolChoice = 'auto',
       retryLimit = maxRetries
     }) {
       assert.ok(model, 'model is required')
@@ -124,6 +126,10 @@ export function createOpenRouterClient ({
 
       const payload = { model, messages, max_tokens: maxTokens, temperature }
       if (reasoning) payload.reasoning = reasoning
+      if (Array.isArray(tools)) {
+        payload.tools = tools
+        payload.tool_choice = toolChoice
+      }
 
       let lastError = null
       for (let attemptNo = 0; attemptNo <= retryLimit; attemptNo++) {

@@ -56,6 +56,15 @@ Feature: Harness tool registry
     When the exec tool runs with command "cat src/App.java"
     Then the tool fails with error "sandbox denied"
 
+  Scenario: Websearch is fail-closed when not configured
+    When the websearch tool runs with query "fastify defaultTyping"
+    Then the tool fails with error "search tool not configured"
+
+  Scenario: Websearch passes through to the injected search
+    Given a search tool that returns "1. Fastify CVE\n   https://example.com"
+    When the websearch tool runs with query "fastify defaultTyping"
+    Then the tool output contains "https://example.com"
+
   Scenario: The done tool echoes its arguments
     When the done tool runs with verdict arguments
     Then the done tool echoes its arguments

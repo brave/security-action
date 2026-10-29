@@ -39,6 +39,22 @@ Given('an exec runner that throws {string}', function (message) {
   })
 })
 
+Given('a search tool that returns {string}', function (output) {
+  this.searchQuery = null
+  this.registry = createToolRegistry({
+    root: this.params.root,
+    fsi: this.fsi,
+    search: async ({ query }) => {
+      this.searchQuery = query
+      return output
+    }
+  })
+})
+
+When('the websearch tool runs with query {string}', async function (query) {
+  this.params.toolResult = await this.registry.run('websearch', { query })
+})
+
 When('the done tool runs with verdict arguments', async function () {
   this.doneArgs = {
     label: 'TP',

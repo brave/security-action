@@ -145,3 +145,9 @@ Feature: Agentic triage loop
     Then the run stops with reason "done"
     And the run usage is 150 prompt tokens and 40 completion tokens
     And the run cost is 0.005 usd
+
+  Scenario: Tool schemas are forwarded on every chat request
+    Given the model script returns a plain verdict '{"label":"FP","confidence":"high","confidence_score":0.9,"reason":"ok","evidence":[{"file":"src/App.java","lines":"L1","note":"n"}]}'
+    When the agent runs
+    Then the run stops with reason "done"
+    And every chat request carried the tool schemas view, grep, find, done
