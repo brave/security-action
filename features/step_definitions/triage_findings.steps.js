@@ -23,8 +23,12 @@ function makeSlimCapture (records) {
 Given('a slim opengrep capture with 2 findings', function () {
   this.params.rawJson = makeSlimCapture([
     SLIM({ cwe: ['CWE-79: Cross-site Scripting'] }),
-    SLIM({ check_id: 'javascript/sqli/query', path: 'app/db.js', line: 7, cwe: '' })
+    SLIM({ check_id: 'javascript/sqli/query', path: 'app/db.js', line: 7, cwe: 'CWE-89: SQL Injection' })
   ])
+})
+
+Given('a slim opengrep capture with a finding without cwe metadata', function () {
+  this.params.rawJson = makeSlimCapture([SLIM({ cwe: '' }), SLIM()])
 })
 
 Given('a slim opengrep capture with a string-cwe finding', function () {
@@ -103,4 +107,8 @@ Then('item {int} cwe is {string}', function (n, cwe) {
 
 Then('the skipped count is {int}', function (n) {
   assert.equal(this.params.queue.skipped.length, n)
+})
+
+Then('the skipped reason is {string}', function (reason) {
+  for (const s of this.params.queue.skipped) assert.equal(s.reason, reason)
 })

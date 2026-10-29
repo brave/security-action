@@ -24,12 +24,19 @@ Feature: Triage findings adapter
   Scenario: Cwe number is extracted from the capture
     When the findings are converted to a triage queue
     Then item 1 cwe is "79"
-    And item 2 cwe is "null"
+    And item 2 cwe is "89"
 
   Scenario: Cwe metadata as plain string is extracted
     Given a slim opengrep capture with a string-cwe finding
     When the findings are converted to a triage queue
     Then item 1 cwe is "79"
+
+  Scenario: Findings without cwe metadata are skipped
+    Given a slim opengrep capture with a finding without cwe metadata
+    When the findings are converted to a triage queue
+    Then the findings queue has 1 items
+    And the skipped count is 1
+    And the skipped reason is "no cwe metadata"
 
   Scenario: Records with missing path are skipped
     Given a slim opengrep capture with a finding missing its path
