@@ -1,6 +1,8 @@
 rules:
   - id: nodejs-insecure-url-parse
     metadata:
+      cwe:
+        - 'CWE-20: Improper Input Validation'
       author: Andrea Brancaleoni <abc@pompel.me>
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/nodejs-insecure-url-parse.yaml
       assignees: |

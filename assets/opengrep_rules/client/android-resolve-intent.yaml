@@ -13,6 +13,8 @@ rules:
           - pattern: '....queryIntentServices(...,...)'
           - pattern: '....queryIntentContentProviders(...,...)'
     metadata:
+      cwe:
+        - 'CWE-927: Use of Implicit Intent for Sensitive Communication'
       author: Artem Chaikin
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/android-resolve-intent.yaml
       assignees: stoletheminerals

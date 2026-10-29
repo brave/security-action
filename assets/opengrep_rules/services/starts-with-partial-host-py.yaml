@@ -1,6 +1,8 @@
 rules:
   - id: starts-with-partial-host-py
     metadata:
+      cwe:
+        - 'CWE-346: Origin Validation Error'
       author: Ben Caller
       confidence: LOW
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/starts-with-partial-host-py.yaml

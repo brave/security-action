@@ -1,6 +1,8 @@
 rules:
   - id: cast-signed-to-unsigned
     metadata:
+      cwe:
+        - 'CWE-195: Signed to Unsigned Conversion Error'
       author: Andrea Brancaleoni
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/cast-signed-to-unsigned.yaml
       assignees: |

@@ -1,6 +1,8 @@
 rules:
   - id: chromium-insecure-gurl
     metadata:
+      cwe:
+        - 'CWE-346: Origin Validation Error'
       author: Andrea Brancaleoni <abc@pompel.me>
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/chromium-insecure-gurl.yaml
       assignees: |

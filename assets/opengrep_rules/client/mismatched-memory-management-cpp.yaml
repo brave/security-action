@@ -1,6 +1,8 @@
 rules:
   - id: raptor-mismatched-memory-management-cpp
     metadata:
+      cwe:
+        - 'CWE-762: Mismatched Memory Management Routines'
       author: Marco Ivaldi <raptor@0xdeadbeef.info>
       references:
         - https://cwe.mitre.org/data/definitions/762

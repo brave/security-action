@@ -1,6 +1,8 @@
 rules:
   - id: get-visible-entry
     metadata:
+      cwe:
+        - 'CWE-346: Origin Validation Error'
       author: Brian Johnson <bjohnson@brave.com>
       references:
         - https://github.com/brave/brave-browser/wiki/Security-reviews

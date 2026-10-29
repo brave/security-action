@@ -1,6 +1,8 @@
 rules:
   - id: path-travesal-by-string-interpolation
     metadata:
+      cwe:
+        - 'CWE-22: Improper Limitation of a Pathname to a Restricted Directory (''Path Traversal'')'
       author: Ben Caller
       confidence: MEDIUM
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/path-travesal-by-string-interpolation.yaml
