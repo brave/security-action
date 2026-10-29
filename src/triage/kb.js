@@ -13,13 +13,25 @@ import path from 'node:path'
 
 const LANGUAGE_EXTS = {
   go: ['.go'],
+  c: ['.c', '.h'],
   cpp: ['.c', '.cc', '.cpp', '.cxx', '.h', '.hh', '.hpp', '.hxx', '.ino', '.mm'],
   javascript: ['.js', '.jsx', '.mjs', '.cjs'],
+  js: ['.js', '.jsx', '.mjs', '.cjs'],
   typescript: ['.ts', '.tsx'],
+  ts: ['.ts', '.tsx'],
   java: ['.java'],
+  kotlin: ['.kt', '.kts'],
+  swift: ['.swift'],
+  scala: ['.scala', '.sc'],
   python: ['.py'],
+  csharp: ['.cs'],
   rust: ['.rs'],
-  text: null
+  ruby: ['.rb'],
+  hcl: ['.tf', '.tfvars'],
+  yaml: ['.yml', '.yaml'],
+  text: null,
+  generic: null,
+  regex: null
 }
 
 export function extsForLanguages (languages) {

@@ -102,7 +102,7 @@ Feature: LLM findings generation from the knowledge-base
     And a fake model client with script:
       | call | tool | arguments                                                                    |
       | 1    | view | {"path":"src/a.go"}                                                          |
-      | 2    | done | {"findings":[{"file":"src/a.go","line":7,"message":"sql concat is dangerous"}]} |
+      | 2    | done | {"findings":[{"file":"src/a.go","line":7,"message":"sql concat is dangerous","rule":"services/go-rule"}]} |
     When the generation agent runs for the scoped rules
     Then the run produces the log line "F:src/a.go:7 sql concat is dangerous <!-- Category: safety, CWE: CWE-89, Rule: services/go-rule -->"
     And the log line parses into a queue item with cwe 89 and rule "services/go-rule"
