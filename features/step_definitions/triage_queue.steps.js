@@ -195,9 +195,9 @@ Then('the queue reports skipped ids {string}', function (ids) {
 Given('triage results:', function (table) {
   this.params.results = table.hashes().map(r => ({
     label: r.label,
-    verdict: r.verdict,
+    verdict: r.verdict.startsWith('{') ? JSON.parse(r.verdict) : r.verdict,
     cwe: r.cwe ? Number(r.cwe) : null,
-    cost: r.cost ? Number(r.cost) : 0
+    cost: r.usage ? JSON.parse(r.usage).cost : (r.cost ? Number(r.cost) : 0)
   }))
 })
 
@@ -210,6 +210,9 @@ Then('the FP precision is {float}', function (v) { assert.equal(this.params.metr
 Then('the F1 is {float}', function (v) { assert.equal(this.params.metrics.f1, v) })
 Then('the TP retention is {float}', function (v) { assert.equal(this.params.metrics.tpRetention, v) })
 Then('the unknown rate is {float}', function (v) { assert.equal(this.params.metrics.unknownRate, v) })
+Then('the unknown rate is about {float}', function (v) {
+  assert.ok(Math.abs(this.params.metrics.unknownRate - v) < 0.001)
+})
 Then('the total cost is {float}', function (v) {
   assert.ok(Math.abs(this.params.metrics.totalCost - v) < 1e-9)
 })

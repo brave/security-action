@@ -64,3 +64,15 @@ Feature: Benchmark metrics
     Then the total cost is 0.01
     And cwe "78" has FP recall 0.5
     And cwe "327" has TP retention 0.5
+
+  Scenario: Runner-shaped rows (verdict object, cost nested in usage)
+    Given triage results:
+      | case | label | verdict                                        | usage              |
+      | a    | FP    | {"label":"FP","confidence":"high"}             | {"cost":0.001}     |
+      | b    | TP    | {"label":"TP","confidence":"high"}             | {"cost":0.002}     |
+      | c    | FP    | {"label":"UNKNOWN","confidence":"low"}         | {"cost":0.0004}    |
+    When the metrics are computed
+    Then the FP recall is 0.5
+    And the TP retention is 1
+    And the unknown rate is about 0.333
+    And the total cost is 0.0034

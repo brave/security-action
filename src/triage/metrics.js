@@ -12,20 +12,30 @@ function safeDiv (num, den) {
   return den === 0 ? 0 : num / den
 }
 
+// Runner rows may carry a full verdict object and cost nested in usage;
+// accept both shapes so artifact rows and hand-built rows behave alike.
+function verdictLabel (r) {
+  return typeof r.verdict === 'string' ? r.verdict : r.verdict?.label
+}
+
+function rowCost (r) {
+  return r.cost ?? r.usage?.cost ?? 0
+}
+
 export function computeMetrics (results) {
   const rows = results ?? []
   const total = rows.length
   const fpPool = rows.filter(r => r.label === 'FP')
   const tpPool = rows.filter(r => r.label === 'TP')
-  const predictedFp = rows.filter(r => r.verdict === 'FP')
-  const tpKept = tpPool.filter(r => r.verdict === 'TP')
+  const predictedFp = rows.filter(r => verdictLabel(r) === 'FP')
+  const tpKept = tpPool.filter(r => verdictLabel(r) === 'TP')
 
-  const fpRecall = safeDiv(fpPool.filter(r => r.verdict === 'FP').length, fpPool.length)
+  const fpRecall = safeDiv(fpPool.filter(r => verdictLabel(r) === 'FP').length, fpPool.length)
   const fpPrecision = safeDiv(predictedFp.filter(r => r.label === 'FP').length, predictedFp.length)
   const f1 = fpRecall + fpPrecision === 0 ? 0 : 2 * fpRecall * fpPrecision / (fpRecall + fpPrecision)
   const tpRetention = safeDiv(tpKept.length, tpPool.length)
-  const unknownRate = safeDiv(rows.filter(r => r.verdict === 'UNKNOWN').length, total)
-  const totalCost = rows.reduce((sum, r) => sum + (r.cost ?? 0), 0)
+  const unknownRate = safeDiv(rows.filter(r => verdictLabel(r) === 'UNKNOWN').length, total)
+  const totalCost = rows.reduce((sum, r) => sum + rowCost(r), 0)
 
   const byCwe = {}
   for (const r of rows) {
@@ -35,8 +45,8 @@ export function computeMetrics (results) {
     b.n++
     if (r.label === 'FP') b.fp++
     if (r.label === 'TP') b.tp++
-    if (r.verdict === 'FP') b.predictedFp++
-    if (r.label === 'TP' && r.verdict === 'TP') b.keptTp++
+    if (verdictLabel(r) === 'FP') b.predictedFp++
+    if (r.label === 'TP' && verdictLabel(r) === 'TP') b.keptTp++
   }
   for (const cwe of Object.keys(byCwe)) {
     const b = byCwe[cwe]
