@@ -63,14 +63,37 @@ async function main () {
   }
 
   const { items } = opengrepFindingsToQueue(rawJson, { repoRoot: workspace })
-  const capped = items.slice(0, config.maxFindings ?? 50)
+  // Only triage findings that survive into the runner log (cleaner.rb may
+  // have dropped or rewritten some) — otherwise we spend LLM budget on
+  // findings that would never be posted.
+  const loggedLocations = new Set(
+    fs.readFileSync(logPath, 'utf8')
+      .split('\n')
+      .map((l) => /^([A-Z]):(.+?):(\d+) /.exec(l))
+      .filter(Boolean)
+      .map((m) => `${m[2]}:${Number(m[3])}`)
+  )
+  const inLog = items.filter((i) => loggedLocations.has(`${i.file}:${i.line}`))
+  const capped = inLog.slice(0, config.maxFindings ?? 50)
   if (capped.length === 0) return passthrough({ logPath, outPath, reason: 'no findings' })
 
   let chat
   if (args['mock-chat']) {
     const responses = JSON.parse(fs.readFileSync(args['mock-chat'], 'utf8'))
     let i = 0
-    chat = async () => responses[i++ % responses.length]
+    chat = async () => {
+      const res = responses[i++ % responses.length]
+      if (res.label) {
+        // bare verdict fixture: wrap as a done tool call the agent loop accepts
+        return {
+          content: null,
+          finishReason: 'tool_calls',
+          usage: { prompt_tokens: 10, completion_tokens: 10, cost: 0 },
+          toolCalls: [{ id: `mock${i}`, name: 'done', arguments: JSON.stringify(res) }]
+        }
+      }
+      return res
+    }
   } else {
     const { createOpenRouterClient } = await import('../src/openrouterClient.js')
     const apiKey = config.apiKey ?? process.env.OPENROUTER_API_KEY

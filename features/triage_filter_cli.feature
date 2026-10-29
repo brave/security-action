@@ -39,3 +39,13 @@ Feature: Triage filter CLI
     And the filtered log contains "app/db.js:7"
     And the filtered log contains "🤖 triage"
     And the filter summary reports 1 triaged
+
+  Scenario: Findings dropped by the cleaner are not triaged
+    Given a triage filter workspace with an enabled config
+    And a reviewdog log for runner "opengrep"
+    And raw findings matching the log line for "app/dropped.js" line 9
+    And the mock model answers verdict "FP" confidence "high" reason "constant folded safe"
+    When the triage filter runs for runner "opengrep"
+    Then the filter exit code is 0
+    And the filter summary reports 0 triaged
+    And the filtered log equals the input log
