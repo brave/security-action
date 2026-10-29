@@ -94,12 +94,15 @@ async function main () {
 
   const client = createOpenRouterClient({ apiKey, budgetUsd, sleep: (ms) => new Promise((_resolve) => setTimeout(_resolve, ms)) })
   const reasoningEffort = args['reasoning-effort']
+  const reasoning = !reasoningEffort
+    ? undefined
+    : (reasoningEffort === 'off' ? { enabled: false } : { effort: reasoningEffort })
   const chat = ({ model, messages }) => client.chat({
     model,
     messages,
     maxTokens,
     temperature,
-    ...(reasoningEffort ? { reasoning: { effort: reasoningEffort } } : {})
+    ...(reasoning ? { reasoning } : {})
   })
   const makeFsi = (repoRoot) => ({
     readFileSync: (p) => fs.readFileSync(p, 'utf8'),
