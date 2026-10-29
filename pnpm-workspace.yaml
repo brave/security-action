@@ -1,3 +1,5 @@
 overrides:
   flatted: '>=3.4.2'
   fast-xml-parser: '>=5.5.7'
+  brace-expansion@<5: 1.1.21
+  brace-expansion@>=5: '>=5.0.12'
