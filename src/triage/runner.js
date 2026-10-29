@@ -12,6 +12,8 @@ import { parseVerdict, unknownVerdict } from './verdict.js'
  *
  * makeFsi(repoRoot) -> { readFileSync, readdirSync } for the tool registry.
  * In production this wraps node:fs; tests inject fakes.
+ * makeReach(item) -> reach tool run fn, bound per queue item (repo roots
+ * differ per case); when omitted the reach tool is fail-closed.
  */
 export async function runBenchmark ({
   queue,
@@ -22,6 +24,7 @@ export async function runBenchmark ({
   budgetUsd = Infinity,
   initialSpendUsd = 0,
   makeFsi = null,
+  makeReach = null,
   agent = 'swe-agent',
   outPath = null,
   onResult = null
@@ -44,7 +47,8 @@ export async function runBenchmark ({
     } else if (mode === 'vanilla') {
       outcome = await runVanilla({ chat, model, item, agent, caseId: item.caseId, fsi })
     } else {
-      const tools = createToolRegistry({ root: item.repoRoot, fsi })
+      const reach = makeReach ? makeReach(item) : null
+      const tools = createToolRegistry({ root: item.repoRoot, fsi, reach })
       const task = formatTask({
         caseJson: item.caseJson,
         repoRoot: item.repoRoot,

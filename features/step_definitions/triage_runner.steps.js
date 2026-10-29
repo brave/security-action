@@ -152,6 +152,54 @@ Given('an agentic runner with max turns {int}', function (maxTurns) {
   this.params.mode = 'agentic'
 })
 
+Given('a scripted model that calls reach then done', function () {
+  this.params.chatCalls = []
+  this.chat = async ({ messages }) => {
+    this.params.chatCalls.push(JSON.stringify(messages))
+    if (this.params.chatCalls.length === 1) {
+      return {
+        content: null,
+        finishReason: 'tool_calls',
+        usage: { prompt_tokens: 100, completion_tokens: 10, cost: 0.0005 },
+        toolCalls: [{ id: 'r1', name: 'reach', arguments: JSON.stringify({ file: 'src/A.java', line: 5, ruleId: 'java/xss' }) }]
+      }
+    }
+    return {
+      content: null,
+      finishReason: 'tool_calls',
+      usage: { prompt_tokens: 100, completion_tokens: 20, cost: 0.0005 },
+      toolCalls: [{ id: 'd1', name: 'done', arguments: GOOD_VERDICT }]
+    }
+  }
+  this.params.fsFiles = { '/repo/src/case_0.java': 'class A {}' }
+})
+
+Given('an agentic runner with max turns {int} and reach', function (maxTurns) {
+  this.params.maxTurns = maxTurns
+  this.params.mode = 'agentic'
+  this.params.reachCalls = []
+  this.params.makeReach = (item) => {
+    this.params.reachItem = item
+    return async (args) => {
+      this.params.reachCalls.push(args)
+      return { ok: true, output: 'enclosing function doPost (/repo/src/case_0.java:39)\ncallers (0)\nreachable from entry doPost: yes (doPost)' }
+    }
+  }
+})
+
+Then('the reach fake was called with rule {string}', function (ruleId) {
+  assert.equal(this.params.reachCalls[0]?.ruleId, ruleId)
+})
+
+Then('the reach tool bound to the queue item', function () {
+  assert.equal(this.params.reachItem?.caseId, 'case_0')
+})
+
+Then('the later request bodies contain {string}', function (needle) {
+  const later = this.params.chatCalls.slice(1).join('\n')
+  assert.ok(later.includes(needle), `later requests should include ${needle}`)
+})
+
 Given('a vanilla runner', function () {
   this.params.mode = 'vanilla'
 })
@@ -183,6 +231,7 @@ When('the runner executes the queue', async function () {
     initialSpendUsd: this.params.spent ?? 0,
     budgetUsd: this.params.budgetUsd,
     makeFsi,
+    makeReach: this.params.makeReach ?? null,
     agent: 'swe-agent',
     outPath: this.params.outPath
   })

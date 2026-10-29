@@ -39,7 +39,7 @@ export function globToRegExp (pattern) {
  * fsi: { readFileSync(path), readdirSync(dir) } — paths are repo-relative
  * or absolute under root; readdirSync returns entry names.
  */
-export function createToolRegistry ({ root, fsi, exec = null, maxOutputChars = 20000 } = {}) {
+export function createToolRegistry ({ root, fsi, exec = null, reach = null, maxOutputChars = 20000 } = {}) {
   const join = (p) => `${root.replace(/\/$/, '')}/${String(p).replace(/^\//, '')}`
 
   const listFiles = (dir) => {
@@ -136,7 +136,10 @@ export function createToolRegistry ({ root, fsi, exec = null, maxOutputChars = 2
   const registry = {
     root,
     names () {
-      return Object.keys(tools).concat(exec ? ['exec'] : [])
+      return Object.keys(tools).concat([
+        ...(reach ? ['reach'] : []),
+        ...(exec ? ['exec'] : [])
+      ])
     },
 
     schema () {
@@ -203,6 +206,18 @@ export function createToolRegistry ({ root, fsi, exec = null, maxOutputChars = 2
             properties: { command: { type: 'string' } },
             required: ['command']
           }
+        },
+        reach: {
+          description: 'Reachability evidence: scanner taint status for the rule, enclosing function, cross-file callers, and whether the sink is reachable from an entry point.',
+          parameters: {
+            type: 'object',
+            properties: {
+              file: { type: 'string', description: 'path of the alerted file' },
+              line: { type: 'integer', description: '1-based alerted line' },
+              ruleId: { type: 'string', description: 'SAST rule id, if known' }
+            },
+            required: ['file', 'line']
+          }
         }
       }
       return registry.names().map(name => ({ type: 'function', function: { name, ...schemas[name] } }))
@@ -213,6 +228,15 @@ export function createToolRegistry ({ root, fsi, exec = null, maxOutputChars = 2
         if (!exec) return { ok: false, error: 'exec tool not configured' }
         try {
           return { ok: true, output: String(await exec(args.command ?? '')) }
+        } catch (err) {
+          return { ok: false, error: err.message }
+        }
+      }
+      if (name === 'reach') {
+        if (!reach) return { ok: false, error: 'reach tool not configured' }
+        try {
+          const out = await reach(args ?? {})
+          return { ok: true, output: String(out?.output ?? out).slice(0, maxOutputChars) }
         } catch (err) {
           return { ok: false, error: err.message }
         }

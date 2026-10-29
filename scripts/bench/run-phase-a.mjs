@@ -103,12 +103,29 @@ async function main () {
     messages,
     maxTokens,
     temperature,
+    // provider-side hangs happen (one call stalled 100+ min without a cap);
+    // cap each request and let the runner degrade the item to UNKNOWN
+    signal: AbortSignal.timeout(15 * 60 * 1000),
     ...(reasoning ? { reasoning } : {})
   })
   const makeFsi = (repoRoot) => ({
     readFileSync: (p) => fs.readFileSync(p, 'utf8'),
     readdirSync: (dir) => fs.readdirSync(dir)
   })
+  let makeReach = null
+  if (args.reach !== undefined) {
+    const { loadOgRuleModes, createReachTool } = await import(path.join(ROOT, 'src/triage/reachability.js'))
+    const ogRules = await loadOgRuleModes({
+      fsi: { readFileSync: (p) => fs.readFileSync(p, 'utf8'), readdirSync: (d) => fs.readdirSync(d) },
+      root: path.join(ROOT, 'assets/opengrep_rules')
+    })
+    makeReach = (item) => createReachTool({
+      ogRules,
+      fsi: { readFileSync: (p) => fs.readFileSync(p, 'utf8'), readdirSync: (d) => fs.readdirSync(d) },
+      root: item.repoRoot
+    }).run
+    console.log(`reach tool on: ${Object.keys(ogRules).length} opengrep rules`)
+  }
 
   fs.mkdirSync(outDir, { recursive: true })
   const queue = buildQueue({
@@ -124,7 +141,8 @@ async function main () {
 
   for (const model of models) {
     for (const mode of modes) {
-      const outFile = path.join(outDir, `${model.replace(/\//g, '__')}-${mode}.jsonl`)
+      const suffix = makeReach ? '-reach' : ''
+      const outFile = path.join(outDir, `${model.replace(/\//g, '__')}-${mode}${suffix}.jsonl`)
       let pending = items
       let priorRows = []
       if (fs.existsSync(outFile)) {
@@ -149,6 +167,7 @@ async function main () {
         budgetUsd,
         initialSpendUsd: client.totalSpendUsd,
         makeFsi,
+        makeReach: mode === 'agentic' ? makeReach : null,
         agent: mode === 'agentic' ? 'swe-agent' : 'llm',
         outPath: outFile
       })
