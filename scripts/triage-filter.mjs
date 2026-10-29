@@ -3,22 +3,26 @@
  * Triage filter: applies agentic FP-triage verdicts to a reviewdog log
  * before the findings are posted to the PR.
  *
- * Fail-open by design: any error (missing slim capture, disabled config, model
- * failure, budget exhaustion) leaves the log untouched and exits 0 so the
- * scan pipeline is never broken by the triage stage.
+ * Findings are parsed straight from the log lines (each finding carries
+ * its CWE and rule id inside the Category comment the runner template
+ * embeds), so no side-channel capture file is needed and every runner
+ * flows through the same pipeline.
+ *
+ * Fail-open by design: any error (disabled config, model failure, budget
+ * exhaustion) leaves the log untouched and exits 0 so the scan pipeline
+ * is never broken by the triage stage.
  *
  * Usage:
  *   node scripts/triage-filter.mjs --runner opengrep \
  *     --log opengrep.log \
  *     --config "$RUNNER_TEMP/security-action/triage-config.json" \
- *     --raw "$RUNNER_TEMP/security-action/opengrep-slim.jsonl" \
  *     [--workspace /tmp/ws] [--mock-chat /tmp/ws/mock-chat.json] [--out opengrep.log]
  *
  * Config: { enabled, model, budgetUsd, maxFindings, allowCwes? }
  * Summary JSON on stdout: { triaged, suppressed, annotated, cost, model }
  */
 import fs from 'node:fs'
-import { opengrepFindingsToQueue } from '../src/triage/findingsQueue.js'
+import { logLinesToQueue } from '../src/triage/findingsQueue.js'
 import { policyDecision, DEFAULT_SUPPRESS_CWES } from '../src/triage/policy.js'
 import { applyTriageToLog } from '../src/triage/logFilter.js'
 import { runBenchmark } from '../src/triage/runner.js'
@@ -55,26 +59,9 @@ async function main () {
   }
   if (!config?.enabled) return passthrough({ logPath, outPath, reason: 'disabled' })
 
-  let rawJson
-  try {
-    rawJson = fs.readFileSync(args.raw, 'utf8')
-  } catch {
-    return passthrough({ logPath, outPath, reason: 'no raw findings' })
-  }
-
-  const { items } = opengrepFindingsToQueue(rawJson, { repoRoot: workspace })
-  // Only triage findings that survive into the runner log (cleaner.rb may
-  // have dropped or rewritten some) — otherwise we spend LLM budget on
-  // findings that would never be posted.
-  const loggedLocations = new Set(
-    fs.readFileSync(logPath, 'utf8')
-      .split('\n')
-      .map((l) => /^([A-Z]):(.+?):(\d+) /.exec(l))
-      .filter(Boolean)
-      .map((m) => `${m[2]}:${Number(m[3])}`)
-  )
-  const inLog = items.filter((i) => loggedLocations.has(`${i.file}:${i.line}`))
-  const capped = inLog.slice(0, config.maxFindings ?? 300)
+  const logLines = fs.readFileSync(logPath, 'utf8').split('\n').filter((l) => l !== '')
+  const { items } = logLinesToQueue(logLines, { repoRoot: workspace, runner: args.runner ?? 'opengrep' })
+  const capped = items.slice(0, config.maxFindings ?? 300)
   if (capped.length === 0) return passthrough({ logPath, outPath, reason: 'no findings' })
 
   let chat

@@ -1,29 +1,26 @@
 Feature: Triage capture wiring
   As the security action maintainer
-  I want the scan runners to capture slim finding records instead of the full scanner JSON
-  So the post-scan triage stage gets the fields it needs without re-reading raw output
+  I want scan findings to carry their CWE and rule id inside the reviewdog line itself
+  So the post-scan triage stage reads one log format and no side-channel JSON files exist
 
-  Scenario: The opengrep runner captures slim finding records
+  Scenario: The opengrep runner embeds CWE and rule in the line
     When the reviewdog configuration is loaded
-    Then the opengrep cmd tees slim findings to "security-action/opengrep-slim.jsonl"
-    And the opengrep slim template carries "check_id"
-    And the opengrep slim template carries "cwe"
-    And the opengrep cmd rebuilds the line format from the slim records
-    And the opengrep cmd ensures the capture directory exists
+    Then the opengrep cmd embeds a category comment with "CWE:"
+    And the opengrep cmd embeds a category comment with "Rule:"
+    And the opengrep cmd does not tee a slim jsonl side channel
 
-  Scenario: The sveltegrep runner captures slim finding records
+  Scenario: The sveltegrep runner embeds CWE and rule in the line
     When the reviewdog configuration is loaded
-    Then the sveltegrep cmd tees slim findings to "security-action/sveltegrep-slim.jsonl"
-    And the sveltegrep cmd rebuilds the line format from the slim records
-    And the sveltegrep cmd ensures the capture directory exists
+    Then the sveltegrep cmd embeds a category comment with "CWE:"
+    And the sveltegrep cmd embeds a category comment with "Rule:"
+    And the sveltegrep cmd does not tee a slim jsonl side channel
 
-  Scenario: The capture path is overridable
-    When the reviewdog configuration is loaded
-    Then both runner cmds derive the capture path from RUNNER_TEMP with a tmp fallback
-
-  Scenario: The PR posting path applies the triage filter before posting
-    Then the reviewdog script calls the triage filter for "opengrep" before post-findings
+  Scenario: The PR posting path applies the triage filter to every runner
+    Then the reviewdog script calls the triage filter for "safesvg" before post-findings
+    And the reviewdog script calls the triage filter for "opengrep" before post-findings
     And the reviewdog script calls the triage filter for "sveltegrep" before post-findings
+    And the reviewdog script calls the triage filter for "npm-audit" before post-findings
+    And the reviewdog script calls the triage filter for "pip-audit" before post-findings
     And the triage filter call is fail-open
 
   Scenario: The triage filter wrapper is executable

@@ -5,7 +5,7 @@ runner:
       set -e
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
       OG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opengrep-scan.XXXXXX")"
-      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "${RUNNER_TEMP:-/tmp}/security-action"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
       touch "$HOME/.opengrep/semgrep.log"
       (TMPDIR="$OG_TMP" GIT_OPTIONAL_LOCKS=0 SEMGREP_SEND_METRICS=off \
       SANDBOX_ENV_EXTRA="SEMGREP_SEND_METRICS" \
@@ -27,9 +27,7 @@ runner:
         --quiet \
         $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
         --json \
-      | jq -c '.results[] | {check_id: .check_id, path: .path, line: (.end.line // .start.line // 0), severity: (.extra.severity // ""), message: (.extra.message // ""), cwe: ((.extra.metadata.cwe // []) | if type == "array" then (.[0] // "") else . end), source: (.extra.metadata.source // ""), category: (.extra.metadata.category // "correctness"), assignees: (.extra.metadata.assignees // "null")}' \
-      | tee "${RUNNER_TEMP:-/tmp}/security-action/opengrep-slim.jsonl" \
-      | jq -r '. as $r | "\($r.severity[0:1]):\($r.path):\($r.line) \($r.message | sub("\n";"<br/>";"g"))<br><br>Source: \($r.source)<br><br><!-- Category: \($r.category) -->,\($r.assignees | sub("\n";" ";"g"))"' \
+      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\((.end.line // .start.line // 0)) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness"), CWE: \((.extra.metadata.cwe // []) | if type == "array" then (.[0] // "") else . end), Rule: \(.check_id) -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --opengrep --assignees) 2> reviewdog.opengrep.stderr.log
       rm -rf "$OG_TMP"
     errorformat:
@@ -41,7 +39,7 @@ runner:
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
       SG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sveltegrep-scan.XXXXXX")"
       trap 'rm -rf "$SG_TMP"' EXIT
-      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "${RUNNER_TEMP:-/tmp}/security-action"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
       # --ignore-glob: skip test fixture / scraped third-party content entirely.
       # Keep in sync with the path globs in opengrep_rules/blocklist.txt.
       # Extracted scripts are written to a temp mirror so the workspace
@@ -104,9 +102,7 @@ runner:
         '--include=*.extractedscript.js' \
         '--include=*.extractedscript.html' \
         "$SG_TMP" \
-      | jq -c '.results[] | {check_id: .check_id, path: .path, line: (.end.line // .start.line // 0), severity: (.extra.severity // ""), message: (.extra.message // ""), cwe: ((.extra.metadata.cwe // []) | if type == "array" then (.[0] // "") else . end), source: (.extra.metadata.source // ""), category: (.extra.metadata.category // "correctness"), assignees: (.extra.metadata.assignees // "null")}' \
-      | tee "${RUNNER_TEMP:-/tmp}/security-action/sveltegrep-slim.jsonl" \
-      | jq -r '. as $r | "\($r.severity[0:1]):\($r.path):\($r.line) \($r.message | sub("\n";"<br/>";"g"))<br><br>Source: \($r.source)<br><br><!-- Category: \($r.category) -->,\($r.assignees | sub("\n";" ";"g"))"' \
+      | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\((.end.line // .start.line // 0)) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness"), CWE: \((.extra.metadata.cwe // []) | if type == "array" then (.[0] // "") else . end), Rule: \(.check_id) -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep) 2> reviewdog.sveltegrep.stderr.log
     errorformat:
       - "%t:%f:%l %m"

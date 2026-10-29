@@ -1,59 +1,53 @@
 Feature: Triage findings adapter
   As the security action maintainer
-  I want slim opengrep findings converted into triage queue items
-  So the agentic harness can triage production findings after the scan
+  I want reviewdog log lines converted into triage queue items
+  So the agentic harness can triage production findings from the same log that reviewdog posts from
 
   Background:
-    Given a slim opengrep capture with 2 findings
+    Given an enriched reviewdog log with 2 findings
 
   Scenario: Findings become unlabeled queue items
-    When the findings are converted to a triage queue
+    When the log lines are converted to a triage queue
     Then the findings queue has 2 items
     And every item has no ground truth label
     And every item has a repo root of "/repo"
 
   Scenario: Case id encodes rule path and line
-    When the findings are converted to a triage queue
+    When the log lines are converted to a triage queue
     Then item 1 has case id "javascript/xss/render:app/render.js:42"
 
-  Scenario: Case json carries the opengrep result for the task formatter
-    When the findings are converted to a triage queue
-    Then item 1 raw output has 1 opengrep result
+  Scenario: Case json carries the finding for the task formatter
+    When the log lines are converted to a triage queue
+    Then item 1 raw output has 1 result
     And item 1 file is "app/render.js"
+    And item 1 line is 42
 
-  Scenario: Cwe number is extracted from the capture
-    When the findings are converted to a triage queue
+  Scenario: Cwe number is extracted from the line comment
+    When the log lines are converted to a triage queue
     Then item 1 cwe is "79"
     And item 2 cwe is "89"
 
-  Scenario: Cwe metadata as plain string is extracted
-    Given a slim opengrep capture with a string-cwe finding
-    When the findings are converted to a triage queue
-    Then item 1 cwe is "79"
-
-  Scenario: Findings without cwe metadata stay in the queue
-    Given a slim opengrep capture with a finding without cwe metadata
-    When the findings are converted to a triage queue
-    Then the findings queue has 2 items
-    And the skipped count is 0
+  Scenario: Lines without a metadata comment fall back to the runner name
+    Given an enriched reviewdog log with a line without metadata
+    When the log lines are converted to a triage queue
+    Then the findings queue has 1 items
     And item 1 cwe is "null"
+    And item 1 has case id "npm-audit:package-lock.json:5"
 
-  Scenario: Records with missing path are skipped
-    Given a slim opengrep capture with a finding missing its path
-    When the findings are converted to a triage queue
+  Scenario: Non-finding lines are skipped
+    Given an enriched reviewdog log with a non-finding line
+    When the log lines are converted to a triage queue
     Then the findings queue has 1 items
     And the skipped count is 1
 
-  Scenario: Empty capture yields an empty queue
-    Given a slim opengrep capture that is empty
-    When the findings are converted to a triage queue
+  Scenario: Empty log yields an empty queue
+    Given an empty reviewdog log
+    When the log lines are converted to a triage queue
     Then the findings queue has 0 items
 
-  Scenario: Malformed records are skipped
-    Given a slim opengrep capture with a malformed record
-    When the findings are converted to a triage queue
-    Then the findings queue has 1 items
-    And the skipped count is 1
+  Scenario: The finding message excludes log markup
+    When the log lines are converted to a triage queue
+    Then item 1 message is "Unescaped value rendered into HTML"
 
   Scenario: Policy suppresses only high-confidence injection false positives
     Given a verdict of label "FP" confidence "high" for cwe "89"

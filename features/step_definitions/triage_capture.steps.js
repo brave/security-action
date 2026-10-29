@@ -2,69 +2,17 @@ import { Then } from '@cucumber/cucumber'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 
-// ${RUNNER_TEMP:-/tmp} literal, assembled to appease no-template-curly-in-string
-const RT = '$' + '{RUNNER_TEMP:-/tmp}'
-
-Then('the opengrep cmd tees slim findings to {string}', function (relPath) {
-  const cmd = this.runners.opengrep.cmd
-  assert.ok(
-    cmd.includes(`| tee "${RT}/${relPath}"`),
-    `opengrep cmd should tee slim findings to ${relPath}`
-  )
+Then('the {word} cmd embeds a category comment with {string}', function (runner, fragment) {
+  const cmd = this.runners[runner].cmd
+  const comment = /<!-- Category:[^>]*-->/.exec(cmd)?.[0]
+  assert.ok(comment, `${runner} cmd should carry a Category comment`)
+  assert.ok(comment.includes(fragment), `Category comment should embed ${fragment}`)
 })
 
-Then('the sveltegrep cmd tees slim findings to {string}', function (relPath) {
-  const cmd = this.runners.sveltegrep.cmd
-  assert.ok(
-    cmd.includes(`| tee "${RT}/${relPath}"`),
-    `sveltegrep cmd should tee slim findings to ${relPath}`
-  )
-})
-
-Then('the opengrep slim template carries {string}', function (field) {
-  const cmd = this.runners.opengrep.cmd
-  assert.ok(
-    cmd.includes(`${field}:`),
-    `opengrep slim template should carry ${field}`
-  )
-})
-
-Then('the opengrep cmd rebuilds the line format from the slim records', function () {
-  const cmd = this.runners.opengrep.cmd
-  assert.ok(
-    /jq -c '\.results\[\] \| \{check_id/.test(cmd),
-    'opengrep cmd should project one slim record per .results[] entry'
-  )
-  assert.ok(
-    /tee "[^"]+slim\.jsonl"[\s\\]*\|\s*jq -r/.test(cmd),
-    'opengrep cmd should rebuild the line format from the slim JSONL stream'
-  )
-})
-
-Then('the sveltegrep cmd rebuilds the line format from the slim records', function () {
-  const cmd = this.runners.sveltegrep.cmd
-  assert.ok(
-    /jq -c '\.results\[\] \| \{check_id/.test(cmd),
-    'sveltegrep cmd should project one slim record per .results[] entry'
-  )
-  assert.ok(
-    /tee "[^"]+slim\.jsonl"[\s\\]*\|\s*jq -r/.test(cmd),
-    'sveltegrep cmd should rebuild the line format from the slim JSONL stream'
-  )
-})
-
-Then('the opengrep cmd ensures the capture directory exists', function () {
-  assert.ok(this.runners.opengrep.cmd.includes(`mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "${RT}/security-action"`), 'opengrep cmd should mkdir the capture dir')
-})
-
-Then('the sveltegrep cmd ensures the capture directory exists', function () {
-  assert.ok(this.runners.sveltegrep.cmd.includes(`mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "${RT}/security-action"`), 'sveltegrep cmd should mkdir the capture dir')
-})
-
-Then('both runner cmds derive the capture path from RUNNER_TEMP with a tmp fallback', function () {
-  for (const name of ['opengrep', 'sveltegrep']) {
-    assert.ok(this.runners[name].cmd.includes(RT), `${name} cmd should use RUNNER_TEMP with tmp fallback`)
-  }
+Then('the {word} cmd does not tee a slim jsonl side channel', function (runner) {
+  const cmd = this.runners[runner].cmd
+  assert.ok(!cmd.includes('slim.jsonl'), `${runner} cmd should not write a slim jsonl side channel`)
+  assert.ok(!cmd.includes('| tee'), `${runner} cmd should not tee any side channel`)
 })
 
 Then('the reviewdog script calls the triage filter for {string} before post-findings', function (runner) {
@@ -80,6 +28,7 @@ Then('the triage filter call is fail-open', function () {
   const script = fs.readFileSync('assets/reviewdog.sh', 'utf8')
   assert.ok(script.includes('triage-filter.sh" "$runner" "$SCRIPTPATH/$runner.log" || true'), 'triage filter call must be fail-open')
 })
+
 Then('the triage filter wrapper has the executable bit set', function () {
   const mode = fs.statSync('assets/reviewdog/triage-filter.sh').mode
   assert.ok(mode & 0o111, 'triage-filter.sh should be executable')

@@ -7,12 +7,13 @@ import { execFileSync } from 'node:child_process'
 
 const SCRIPT = path.resolve('scripts/triage-filter.mjs')
 
+const META = (cwe, rule) => `<!-- Category: security, CWE: ${cwe}, Rule: ${rule} -->`
+
 function workspace (world) {
   if (!world.params.wsDir) {
     world.params.wsDir = fs.mkdtempSync(path.join(os.tmpdir(), 'triage-filter-'))
     world.params.securityDir = path.join(world.params.wsDir, 'security-action')
     fs.mkdirSync(world.params.securityDir, { recursive: true })
-    world.params.logPath = path.join(world.params.wsDir, 'opengrep.log')
   }
   return world.params.wsDir
 }
@@ -24,53 +25,45 @@ function writeConfig (world, config) {
 }
 
 Given('a triage filter workspace with a disabled config', function () {
-  writeConfig(this, { enabled: false, model: 'z-ai/glm-5.3-flash', budgetUsd: 1, maxFindings: 50 })
+  writeConfig(this, { enabled: false, model: 'z-ai/glm-5.3-flash', budgetUsd: 1, maxFindings: 300 })
 })
 
 Given('a triage filter workspace with an enabled config', function () {
-  writeConfig(this, { enabled: true, model: 'z-ai/glm-5.3-flash', budgetUsd: 1, maxFindings: 50 })
+  writeConfig(this, { enabled: true, model: 'z-ai/glm-5.3-flash', budgetUsd: 1, maxFindings: 300 })
 })
 
 Given('a reviewdog log for runner {string}', function (runner) {
   const dir = workspace(this)
   this.params.logPath = path.join(dir, `${runner}.log`)
   this.params.inputLog = [
-    'E:app/render.js:42 Unescaped value rendered into HTML<br>Source: brave/security-action',
-    'E:app/db.js:7 SQL query built from string concatenation<br>Source: brave/security-action'
+    `E:app/render.js:42 Unescaped value rendered into HTML<br><br>Source: brave/security-action<br><br>${META('CWE-79: Cross-site Scripting', 'javascript/xss/render')},null`,
+    `E:app/db.js:7 SQL query built from string concatenation<br><br>Source: brave/security-action<br><br>${META('CWE-89: SQL Injection', 'javascript/sqli/query')},null`
   ]
   fs.writeFileSync(this.params.logPath, `${this.params.inputLog.join('\n')}\n`)
 })
 
-Given('slim findings matching the log line for {string} line {int}', function (file, lineNo) {
+Given('a reviewdog log line for {string} line {int} with cwe {string} and rule {string}', function (file, lineNo, cwe, rule) {
   const dir = workspace(this)
-  const record = {
-    check_id: 'javascript/xss/render',
-    path: file,
-    line: lineNo,
-    severity: 'ERROR',
-    message: 'Unescaped value rendered into HTML',
-    cwe: 'CWE-79: Cross-site Scripting',
-    source: 'brave/security-action',
-    category: 'security',
-    assignees: 'null'
-  }
-  fs.writeFileSync(path.join(dir, 'security-action', 'opengrep-slim.jsonl'), `${JSON.stringify(record)}\n`)
+  this.params.logPath = path.join(dir, 'opengrep.log')
+  this.params.inputLog = [`E:${file}:${lineNo} Unescaped value rendered into HTML<br><br>Source: brave/security-action<br><br>${META(`CWE-${cwe}: Thing`, rule)},null`]
+  fs.writeFileSync(this.params.logPath, `${this.params.inputLog.join('\n')}\n`)
 })
 
-Given('slim findings without cwe matching the log line for {string} line {int}', function (file, lineNo) {
+Given('a reviewdog log line without metadata for {string} line {int}', function (file, lineNo) {
   const dir = workspace(this)
-  const record = {
-    check_id: 'test/licensing-check',
-    path: file,
-    line: lineNo,
-    severity: 'WARN',
-    message: 'Licensing check tripped',
-    cwe: '',
-    source: 'brave/security-action',
-    category: 'security',
-    assignees: 'null'
-  }
-  fs.writeFileSync(path.join(dir, 'security-action', 'opengrep-slim.jsonl'), `${JSON.stringify(record)}\n`)
+  this.params.logPath = path.join(dir, 'npm-audit.log')
+  this.params.inputLog = [`E:${file}:${lineNo} lodash 4.17.15 prototype pollution via crafted payload`]
+  fs.writeFileSync(this.params.logPath, `${this.params.inputLog.join('\n')}\n`)
+})
+
+Given('a reviewdog log with a finding line and a non-finding line', function () {
+  const dir = workspace(this)
+  this.params.logPath = path.join(dir, 'opengrep.log')
+  this.params.inputLog = [
+    `E:app/render.js:42 Unescaped value rendered into HTML<br><br>Source: brave/security-action<br><br>${META('CWE-79: Cross-site Scripting', 'javascript/xss/render')},null`,
+    'reviewdog: 1 findings found'
+  ]
+  fs.writeFileSync(this.params.logPath, `${this.params.inputLog.join('\n')}\n`)
 })
 
 Given('the mock model answers verdict {string} confidence {string} reason {string}', function (label, confidence, reason) {
@@ -90,7 +83,6 @@ When('the triage filter runs for runner {string}', function (runner) {
     '--runner', runner,
     '--log', this.params.logPath,
     '--config', path.join(dir, 'security-action', 'triage-config.json'),
-    '--raw', path.join(dir, 'security-action', `${runner}-slim.jsonl`),
     '--workspace', dir
   ]
   if (fs.existsSync(path.join(dir, 'mock-chat.json'))) args.push('--mock-chat', path.join(dir, 'mock-chat.json'))

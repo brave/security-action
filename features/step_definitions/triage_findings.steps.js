@@ -1,54 +1,37 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import assert from 'node:assert/strict'
-import { opengrepFindingsToQueue } from '../../src/triage/findingsQueue.js'
+import { logLinesToQueue } from '../../src/triage/findingsQueue.js'
 import { policyDecision } from '../../src/triage/policy.js'
 
-const SLIM = (over = {}) => ({
-  check_id: 'javascript/xss/render',
-  path: 'app/render.js',
-  line: 42,
-  severity: 'ERROR',
-  message: 'Unescaped value rendered into HTML',
-  cwe: 'CWE-79: Cross-site Scripting',
-  source: 'brave/security-action',
-  category: 'security',
-  assignees: 'null',
-  ...over
+const line = (path, num, message, meta) =>
+  `E:${path}:${num} ${message}<br><br>Source: brave/security-action<br><br>${meta},null`
+
+const META = (cwe, rule) => `<!-- Category: security, CWE: ${cwe}, Rule: ${rule} -->`
+
+Given('an enriched reviewdog log with 2 findings', function () {
+  this.params.logLines = [
+    line('app/render.js', 42, 'Unescaped value rendered into HTML', META('CWE-79: Cross-site Scripting', 'javascript/xss/render')),
+    line('app/db.js', 7, 'SQL built by string concatenation', META('CWE-89: SQL Injection', 'javascript/sqli/query'))
+  ]
 })
 
-function makeSlimCapture (records) {
-  return records.map((r) => JSON.stringify(r)).join('\n')
-}
-
-Given('a slim opengrep capture with 2 findings', function () {
-  this.params.rawJson = makeSlimCapture([
-    SLIM({ cwe: ['CWE-79: Cross-site Scripting'] }),
-    SLIM({ check_id: 'javascript/sqli/query', path: 'app/db.js', line: 7, cwe: 'CWE-89: SQL Injection' })
-  ])
+Given('an enriched reviewdog log with a line without metadata', function () {
+  this.params.logLines = ['E:package-lock.json:5 Dependency lodash pinned to 4.17.15']
 })
 
-Given('a slim opengrep capture with a finding without cwe metadata', function () {
-  this.params.rawJson = makeSlimCapture([SLIM({ cwe: '' }), SLIM()])
+Given('an enriched reviewdog log with a non-finding line', function () {
+  this.params.logLines = [
+    line('app/render.js', 42, 'Unescaped value rendered into HTML', META('CWE-79: Cross-site Scripting', 'javascript/xss/render')),
+    'reviewdog: 1 findings found'
+  ]
 })
 
-Given('a slim opengrep capture with a string-cwe finding', function () {
-  this.params.rawJson = makeSlimCapture([SLIM()])
+Given('an empty reviewdog log', function () {
+  this.params.logLines = []
 })
 
-Given('a slim opengrep capture with a finding missing its path', function () {
-  this.params.rawJson = makeSlimCapture([SLIM({ path: undefined }), SLIM({ path: 'app/ok.js' })])
-})
-
-Given('a slim opengrep capture that is empty', function () {
-  this.params.rawJson = ''
-})
-
-Given('a slim opengrep capture with a malformed record', function () {
-  this.params.rawJson = '{oops\n' + JSON.stringify(SLIM())
-})
-
-When('the findings are converted to a triage queue', function () {
-  this.params.queue = opengrepFindingsToQueue(this.params.rawJson, { repoRoot: '/repo' })
+When('the log lines are converted to a triage queue', function () {
+  this.params.queue = logLinesToQueue(this.params.logLines, { repoRoot: '/repo', runner: 'npm-audit' })
 })
 
 Given('a verdict of label {string} confidence {string} for cwe {string}', function (label, confidence, cwe) {
@@ -90,13 +73,21 @@ Then('item {int} has case id {string}', function (n, caseId) {
   assert.equal(this.params.queue.items[n - 1].caseId, caseId)
 })
 
-Then('item {int} raw output has {int} opengrep result(s)', function (n, count) {
+Then('item {int} raw output has {int} result(s)', function (n, count) {
   const raw = this.params.queue.items[n - 1].caseJson.raw_output
-  assert.equal(raw.Opengrep.length, count)
+  assert.equal(Object.values(raw)[0].length, count)
 })
 
 Then('item {int} file is {string}', function (n, file) {
   assert.equal(this.params.queue.items[n - 1].caseJson.file, file)
+})
+
+Then('item {int} line is {int}', function (n, num) {
+  assert.equal(this.params.queue.items[n - 1].line, num)
+})
+
+Then('item {int} message is {string}', function (n, message) {
+  assert.equal(Object.values(this.params.queue.items[n - 1].caseJson.raw_output)[0][0].message, message)
 })
 
 Then('item {int} cwe is {string}', function (n, cwe) {
