@@ -1,5 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import path from 'node:path'
 import {
   enclosingFunction,
   findCallers,
@@ -143,6 +145,27 @@ When('the opengrep rule modes are loaded', async function () {
 
 Then('rule {string} has scanner mode {string}', function (ruleId, mode) {
   assert.equal(this.ogRules[ruleId], mode)
+})
+
+Given("the repository's opengrep rules are loaded", async function () {
+  this.ogRules = await loadOgRuleModes({
+    fsi: { readFileSync: (p) => fs.readFileSync(p, 'utf8'), readdirSync: (d) => fs.readdirSync(d) },
+    root: path.join(process.cwd(), 'assets/opengrep_rules')
+  })
+  this.realOgRules = this.ogRules
+})
+
+Then('at least {int} taint rules are loaded', function (n) {
+  const taints = Object.values(this.realOgRules).filter((m) => m === 'taint').length
+  assert.ok(taints >= n, `expected >= ${n} taint rules, got ${taints}`)
+})
+
+Given('the reach tool is configured with the loaded scanner modes', function () {
+  this.reachTool = createReachTool({
+    ogRules: this.realOgRules,
+    fsi: this.fsi,
+    root: this.params.root
+  })
 })
 
 Given('a tool registry with reach enabled', function () {

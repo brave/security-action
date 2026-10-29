@@ -62,6 +62,20 @@ Feature: Reachability evidence for triage agents
     Then rule "x-ssti" has scanner mode "taint"
     And rule "x-noop" has scanner mode "search"
 
+  Scenario: Real opengrep rules from this repository load with taint modes
+    Given the repository's opengrep rules are loaded
+    Then rule "go-ssti" has scanner mode "taint"
+    And rule "sveltekit-event-fetch-path-traversal" has scanner mode "taint"
+    And at least 60 taint rules are loaded
+
+  Scenario: Reach tool reports scanner taint for a real opengrep rule
+    Given the repository's opengrep rules are loaded
+    And the reach tool is configured with the loaded scanner modes
+    When the reach tool runs with file "repo/src/A.java" line 4 and rule "go-ssti"
+    Then the tool output contains "rule go-ssti: scanner taint (source->sink confirmed by scanner)"
+    And the tool output contains "enclosing function helper (repo/src/A.java:3)"
+    And the tool output contains "reachable from entry doGet: yes (doGet <- helper)"
+
   Scenario: Registry exposes the reach tool when configured
     Given a tool registry with reach enabled
     Then the registry exposes the tools "view, grep, find, done, reach"
