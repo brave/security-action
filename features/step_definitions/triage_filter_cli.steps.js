@@ -72,6 +72,29 @@ Given('the mock model answers verdict {string} confidence {string} reason {strin
   worldMock(dir, [{ content: null, finishReason: 'tool_calls', usage: { cost: 0.0001 }, toolCalls: [{ id: 'd1', name: 'done', arguments: JSON.stringify(verdict) }] }])
 })
 
+Given('a triage filter workspace with a config whose vanilla cwe list is {string}', function (cwes) {
+  writeConfig(this, { enabled: true, model: 'z-ai/glm-5.3-flash', budgetUsd: 1, maxFindings: 300, vanillaCwes: cwes.split(',').map((c) => c.trim()) })
+})
+
+Given('a reviewdog log with a CWE-79 finding on {string} line {int} and a CWE-22 finding on {string} line {int}', function (fileA, lineA, fileB, lineB) {
+  const dir = workspace(this)
+  this.params.logPath = path.join(dir, 'opengrep.log')
+  this.params.inputLog = [
+    `E:${fileA}:${lineA} Unescaped value rendered into HTML<br><br>Source: brave/security-action<br><br>${META('CWE-79: Cross-site Scripting', 'javascript/xss/render')},null`,
+    `E:${fileB}:${lineB} Path built from request input<br><br>Source: brave/security-action<br><br>${META('CWE-22: Path Traversal', 'javascript/path/traversal')},null`
+  ]
+  fs.writeFileSync(this.params.logPath, `${this.params.inputLog.join('\n')}\n`)
+})
+
+Given('a mock model whose first response is a done tool call verdict {string} confidence {string} reason {string} and second response is a plain verdict {string} confidence {string} reason {string}', function (labelA, confA, reasonA, labelB, confB, reasonB) {
+  const dir = workspace(this)
+  const verdict = (label, confidence, reason) => ({ label, confidence, confidence_score: confidence === 'high' ? 0.9 : 0.5, reason, evidence: [{ file: 'app/x.js', lines: '1', note: 'n' }] })
+  worldMock(dir, [
+    { content: null, finishReason: 'tool_calls', usage: { cost: 0.0001 }, toolCalls: [{ id: 'd1', name: 'done', arguments: JSON.stringify(verdict(labelA, confA, reasonA)) }] },
+    { content: JSON.stringify(verdict(labelB, confB, reasonB)), finishReason: 'stop', usage: { cost: 0.0001 } }
+  ])
+})
+
 function worldMock (dir, responses) {
   fs.writeFileSync(path.join(dir, 'mock-chat.json'), JSON.stringify(responses))
 }

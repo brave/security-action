@@ -25,6 +25,13 @@ Given('action options with triage enabled model {string} budget {string} max fin
   }
 })
 
+Given('action options with triage enabled and vanilla cwe list {string}', function (cwes) {
+  this.params.options = {
+    triage_enabled: true,
+    triage_vanilla_cwes: cwes
+  }
+})
+
 Given('a capture dir with triage summaries for opengrep and sveltegrep', function () {
   const dir = captureDir(this)
   fs.writeFileSync(path.join(dir, 'opengrep-triage-summary.json'), JSON.stringify({ triaged: 2, suppressed: 1, annotated: 1, cost: 0.0003, model: 'm' }))
@@ -45,6 +52,14 @@ When('the triage summaries are read', function () {
 
 Then('the triage config is disabled', function () {
   assert.equal(this.params.config.enabled, false)
+})
+
+Then('the triage config has no tool cwe list', function () {
+  assert.deepEqual(this.params.config.vanillaCwes, [])
+})
+
+Then('the triage config vanilla cwe list is {string}', function (cwes) {
+  assert.deepEqual(this.params.config.vanillaCwes, cwes.split(',').map((c) => c.trim()))
 })
 
 Then('the triage config is enabled', function () {

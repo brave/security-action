@@ -38,6 +38,16 @@ Feature: Triage filter CLI
     And the filtered log does not contain "app/render.js:42"
     And the filter summary reports 1 suppressed
 
+  Scenario: Findings on vanilla-cwe list run vanilla, others use tools
+    Given a triage filter workspace with a config whose vanilla cwe list is "22"
+    And a reviewdog log with a CWE-79 finding on "app/render.js" line 42 and a CWE-22 finding on "app/legacy.js" line 7
+    And a mock model whose first response is a done tool call verdict "FP" confidence "high" reason "escaped" and second response is a plain verdict "TP" confidence "high" reason "reachable sink"
+    When the triage filter runs for runner "opengrep"
+    Then the filter exit code is 0
+    And the filter summary reports 2 triaged
+    And the filtered log does not contain "app/render.js:42"
+    And the filtered log contains "app/legacy.js:7"
+
   Scenario: Non-finding lines are never triaged
     Given a triage filter workspace with an enabled config
     And a reviewdog log with a finding line and a non-finding line

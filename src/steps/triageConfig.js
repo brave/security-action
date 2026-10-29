@@ -14,6 +14,9 @@ export function writeTriageConfig ({ captureDir, options }) {
     model: options.triage_model || 'z-ai/glm-5.3-flash',
     budgetUsd: Number(options.triage_budget_usd) || 1,
     maxFindings: Number(options.triage_max_findings) || 300,
+    vanillaCwes: options.triage_vanilla_cwes
+      ? String(options.triage_vanilla_cwes).split(',').map((c) => c.trim()).filter(Boolean)
+      : [],
     apiKey: process.env.OPENROUTER_API_KEY || undefined
   }
   fs.writeFileSync(`${captureDir}/triage-config.json`, JSON.stringify(config))

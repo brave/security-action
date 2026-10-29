@@ -18,7 +18,9 @@
  *     --config "$RUNNER_TEMP/security-action/triage-config.json" \
  *     [--workspace /tmp/ws] [--mock-chat /tmp/ws/mock-chat.json] [--out opengrep.log]
  *
- * Config: { enabled, model, budgetUsd, maxFindings, allowCwes? }
+ * Config: { enabled, model, budgetUsd, maxFindings, allowCwes?, vanillaCwes? }
+ *     vanillaCwes: findings whose CWE is listed run vanilla (single call);
+ *     everything else runs agentic with tools. Absent/empty = all agentic.
  * Summary JSON on stdout: { triaged, suppressed, annotated, cost, model }
  */
 import fs from 'node:fs'
@@ -113,8 +115,14 @@ async function main () {
     })
   }
 
+  const vanillaCwes = new Set((config.vanillaCwes ?? []).map(String))
+  const withTools = vanillaCwes.size === 0
+    ? capped
+    : capped.filter((it) => !(it.cwe !== null && vanillaCwes.has(String(it.cwe))))
+  const withoutTools = vanillaCwes.size === 0 ? [] : capped.filter((it) => !withTools.includes(it))
+
   const { results, totalSpendUsd } = await runBenchmark({
-    queue: { items: capped },
+    queue: { items: withTools },
     chat,
     model: config.model,
     mode: 'agentic',
@@ -124,6 +132,19 @@ async function main () {
     exec,
     agent: 'swe-agent'
   })
+  if (withoutTools.length > 0) {
+    const plain = await runBenchmark({
+      queue: { items: withoutTools },
+      chat,
+      model: config.model,
+      mode: 'vanilla',
+      budgetUsd: config.budgetUsd ?? 1,
+      initialSpendUsd: totalSpendUsd,
+      makeFsi,
+      agent: 'llm'
+    })
+    results.push(...plain.results)
+  }
 
   const byId = new Map(capped.map((i) => [i.caseId, i]))
   const rows = results.map((r) => {

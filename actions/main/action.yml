@@ -79,6 +79,9 @@ inputs:
   triage_max_findings:
     description: Max findings triaged per run (default 300)
     required: false
+  triage_vanilla_cwes:
+    description: 'Comma-separated CWE numbers triaged without tools (vanilla-only); default is tools for everything, e.g. "22,327"'
+    required: false
 outputs:
   reviewdog-findings:
     description: number of reviewdog findings

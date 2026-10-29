@@ -19,6 +19,12 @@ Feature: Triage action config plumbing
     And the triage budget is 2.5 usd
     And the triage max findings is 20
     And the triage config carries the OPENROUTER_API_KEY env
+    And the triage config has no tool cwe list
+
+  Scenario: Vanilla cwe list flows into the config
+    Given action options with triage enabled and vanilla cwe list "22, 327"
+    When the triage config is written to a capture dir
+    Then the triage config vanilla cwe list is "22,327"
 
   Scenario: Summaries aggregate into a Slack line
     Given a capture dir with triage summaries for opengrep and sveltegrep
