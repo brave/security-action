@@ -25,6 +25,7 @@ function parseArgs (argv) {
     if (a.startsWith('--')) {
       const key = a.slice(2)
       if (a.includes('=')) args[key] = a.slice(a.indexOf('=') + 1)
+      else if (i + 1 >= argv.length || argv[i + 1].startsWith('--')) args[key] = true
       else { args[key] = argv[i + 1]; i++ }
     } else args._.push(a)
   }
