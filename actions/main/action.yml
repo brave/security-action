@@ -80,7 +80,8 @@ inputs:
     description: Max findings triaged per run (default 300)
     required: false
   triage_vanilla_cwes:
-    description: 'Comma-separated CWE numbers triaged without tools (vanilla-only); default is tools for everything, e.g. "22,327"'
+    description: 'Comma-separated CWE numbers triaged without tools (vanilla-only); default 328,501 from benchmark regressions, e.g. "22,327"'
+    default: '328,501'
     required: false
 outputs:
   reviewdog-findings:

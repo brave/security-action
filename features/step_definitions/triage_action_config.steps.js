@@ -25,6 +25,17 @@ Given('action options with triage enabled model {string} budget {string} max fin
   }
 })
 
+Given('the triage defaults from the action definition', function () {
+  const src = fs.readFileSync('actions/main/action.cjs', 'utf8')
+  const m = src.match(/triage_vanilla_cwes:\s*'([^']*)'/)
+  assert.ok(m, 'triage_vanilla_cwes default missing from action.cjs')
+  const yml = fs.readFileSync('actions/main/action.yml', 'utf8')
+  const ymlBlock = yml.match(/triage_vanilla_cwes:\n(?: {4}.*\n)*? {4}default: '([^']*)'/)
+  assert.ok(ymlBlock, 'triage_vanilla_cwes default missing from action.yml')
+  assert.strictEqual(ymlBlock[1], m[1], 'action.yml and action.cjs vanilla cwe defaults disagree')
+  this.params.options = { triage_enabled: true, triage_vanilla_cwes: m[1] }
+})
+
 Given('action options with triage enabled and vanilla cwe list {string}', function (cwes) {
   this.params.options = {
     triage_enabled: true,

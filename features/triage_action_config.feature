@@ -21,6 +21,11 @@ Feature: Triage action config plumbing
     And the triage config carries the OPENROUTER_API_KEY env
     And the triage config has no tool cwe list
 
+  Scenario: Action defaults carry the benchmark-derived vanilla cwe list
+    Given the triage defaults from the action definition
+    When the triage config is written to a capture dir
+    Then the triage config vanilla cwe list is "328,501"
+
   Scenario: Vanilla cwe list flows into the config
     Given action options with triage enabled and vanilla cwe list "22, 327"
     When the triage config is written to a capture dir

@@ -71,7 +71,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     triage_model: 'z-ai/glm-5.3-flash',
     triage_budget_usd: '1.00',
     triage_max_findings: '300',
-    triage_vanilla_cwes: ''
+    triage_vanilla_cwes: '328,501'
   }, config, properties, inputs)
 
   options.enabled = options.enabled === 'true'
