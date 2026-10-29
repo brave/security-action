@@ -121,15 +121,23 @@ async function main () {
   for (const model of models) {
     for (const mode of modes) {
       const outFile = path.join(outDir, `${model.replace(/\//g, '__')}-${mode}.jsonl`)
+      let pending = items
+      let priorRows = []
       if (fs.existsSync(outFile)) {
-        console.warn(`skip ${model} ${mode}: ${outFile} exists (delete to rerun)`)
-        continue
+        priorRows = fs.readFileSync(outFile, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l))
+        const completed = new Set(priorRows.filter(r => r.stopped === 'done' && r.verdict.label !== 'UNKNOWN').map(r => r.caseId))
+        pending = items.filter(i => !completed.has(i.caseId))
+        console.warn(`resume ${model} ${mode}: ${completed.size} done rows cached, ${pending.length} pending`)
+        if (pending.length === 0) {
+          console.warn(`skip ${model} ${mode}: nothing pending`)
+          continue
+        }
       }
       console.log(`\n=== ${model} [${mode}] → ${path.relative(ROOT, outFile)}`)
       const before = client.totalSpendUsd
       const t0 = Date.now()
       const { results, totalSpendUsd } = await runBenchmark({
-        queue: { items },
+        queue: { items: pending },
         chat,
         model,
         mode,
@@ -140,9 +148,12 @@ async function main () {
         agent: mode === 'agentic' ? 'swe-agent' : 'llm',
         outPath: outFile
       })
-      const m = computeMetrics(results)
+      const byCase = new Map(priorRows.map(r => [r.caseId, r]))
+      for (const r of results) byCase.set(r.caseId, r)
+      const allRows = [...byCase.values()]
+      const m = computeMetrics(allRows)
       const cost = totalSpendUsd - before
-      console.log(`n=${results.length} F1=${m.f1.toFixed(3)} fpRecall=${m.fpRecall.toFixed(3)} fpPrecision=${m.fpPrecision.toFixed(3)} tpRetention=${m.tpRetention.toFixed(3)} unknown=${m.unknownRate.toFixed(3)} cost=$${cost.toFixed(4)} ${(Date.now() - t0) / 1000}s`)
+      console.log(`n=${allRows.length} (${results.length} new) F1=${m.f1.toFixed(3)} fpRecall=${m.fpRecall.toFixed(3)} fpPrecision=${m.fpPrecision.toFixed(3)} tpRetention=${m.tpRetention.toFixed(3)} unknown=${m.unknownRate.toFixed(3)} cost=$${cost.toFixed(4)} ${(Date.now() - t0) / 1000}s`)
       const stopped = {}
       for (const r of results) stopped[r.stopped] = (stopped[r.stopped] ?? 0) + 1
       console.log(`stopped: ${JSON.stringify(stopped)} session total $${client.totalSpendUsd.toFixed(4)}`)
