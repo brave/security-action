@@ -25,7 +25,7 @@ const ENV_HINTS = {
  * paper's make_task.py build_task_markdown). readFile(path) returns file
  * contents or throws; failures degrade to a placeholder line.
  */
-export function formatTask ({ caseJson, repoRoot, readFile, agent = 'generic' }) {
+export function formatTask ({ caseJson, repoRoot, readFile, agent = 'generic', tools = null }) {
   const cid = stableCaseId(caseJson)
   let tool = caseJson.tool
   if (typeof tool === 'string') tool = [tool]
@@ -38,6 +38,11 @@ export function formatTask ({ caseJson, repoRoot, readFile, agent = 'generic' })
     raw_output: caseJson.raw_output
   }
   const envHint = ENV_HINTS[agent] ?? ENV_HINTS.generic
+
+  const schemas = tools && typeof tools.schema === 'function' ? tools.schema() : []
+  const toolsSection = schemas.length
+    ? `\n## Available tools\nCall these by name (function calling). They are the ONLY tools you have:\n${schemas.map((s) => `- **${s.function?.name ?? s.name}**: ${(s.function?.description ?? s.description ?? '').split('\n')[0]}`).join('\n')}\nUse \`done\` as the final step to submit your verdict JSON.\n`
+    : ''
 
   let fileBody
   try {
@@ -55,6 +60,7 @@ export function formatTask ({ caseJson, repoRoot, readFile, agent = 'generic' })
 
 ## Environment notes
 ${envHint}
+${toolsSection}
 ## Your task
 You are a **security-oriented code reviewer**. You are given **one or more SAST findings**.
 Treat the SAST tools' message and raw output as hints only; base your decision on what the code actually does and what it is meant to do.

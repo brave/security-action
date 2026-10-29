@@ -44,3 +44,11 @@ Feature: Triage task formatting
     Given the repo has no file "src/App.java"
     When the task is formatted with agent "generic"
     Then the task contains "<file content unavailable>"
+
+  Scenario: Registry tools are nudged inside the prompt
+    Given the repo has file "src/App.java" containing "class App {}"
+    When the task is formatted with agent "swe-agent" and a tool registry
+    Then the task contains "## Available tools"
+    And the task contains "**view**:"
+    And the task contains "**grep**:"
+    And the task contains "**done**:"

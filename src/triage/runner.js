@@ -56,7 +56,8 @@ export async function runBenchmark ({
         caseJson: item.caseJson,
         repoRoot: item.repoRoot,
         readFile: fsi ? fsi.readFileSync : () => { throw new Error('no fs') },
-        agent
+        agent,
+        tools
       })
       outcome = await runAgent({
         chat, model, task, caseId: item.caseId, agent, tools, maxTurns

@@ -2,6 +2,17 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import assert from 'node:assert/strict'
 import { formatTask } from '../../src/triage/task.js'
 import { stableCaseId } from '../../src/triage/verdict.js'
+import { createToolRegistry } from '../../src/triage/harness/tools.js'
+
+Given('the repo has file {string} containing {string}', function (file, content) {
+  this.params.repoRoot = '/repo'
+  this.fsFiles = this.fsFiles ?? {}
+  this.fsFiles[`/repo/${file}`] = content
+  this.readFile = (path) => {
+    if (!(path in this.fsFiles)) throw new Error(`ENOENT: ${path}`)
+    return this.fsFiles[path]
+  }
+})
 
 Given('a repo root {string} with file {string} containing:', function (root, file, content) {
   this.params.repoRoot = root
@@ -49,6 +60,17 @@ When('the task is formatted with agent {string}', function (agent) {
     repoRoot: this.params.repoRoot,
     readFile: this.readFile,
     agent
+  })
+})
+
+When('the task is formatted with agent {string} and a tool registry', function (agent) {
+  const tools = createToolRegistry({ root: this.params.repoRoot, fsi: { readFileSync: this.readFile, readdirSync: () => [] } })
+  this.params.task = formatTask({
+    caseJson: this.params.case,
+    repoRoot: this.params.repoRoot,
+    readFile: this.readFile,
+    agent,
+    tools
   })
 })
 
