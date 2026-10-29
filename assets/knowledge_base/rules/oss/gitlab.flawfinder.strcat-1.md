@@ -1,0 +1,24 @@
+---
+name: oss/gitlab.flawfinder.strcat-1
+rubric: safety
+severity: should_fix
+languages: [c, cpp]
+---
+
+**Rule.** The `strcat` family of functions are unable to limit how many bytes are copied to the destination buffer. It is recommended to use more secure alternatives such as `snprintf`. For more information please see: https://linux.die.net/man/3/snprintf If developing for C Runtime Library (CRT), more secure versions of these functions should be used, see: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strcat-s-wcscat-s-mbscat-s?view=msvc-170
+
+**Why.** Reported as CWE-120. Ported from opengrep rule `gitlab.flawfinder.strcat-1` (generated/oss/audit.yaml).
+
+## Examples
+
+Bad:
+
+```cpp
+// no static pattern; see Detection hints
+```
+
+## Detection hints
+
+Literal patterns from opengrep rule `gitlab.flawfinder.strcat-1` (metavariables start with `$`):
+
+- `strcat(...)`
