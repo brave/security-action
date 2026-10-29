@@ -155,6 +155,25 @@ When('the client completes a chat request for model {string} with temperature {i
   }
 })
 
+When('the client completes a chat request for model {string} with reasoning effort {string}', async function (model, effort) {
+  try {
+    this.lastResult = await this.client.chat({
+      model,
+      messages: [{ role: 'user', content: 'hi' }],
+      maxTokens: 2000,
+      temperature: 0,
+      reasoning: { effort }
+    })
+  } catch (err) {
+    this.lastError = err
+  }
+})
+
+Then('the request body contains reasoning {string}', function (expected) {
+  const body = JSON.parse(this.transport.__requests[0].init.body)
+  assert.deepEqual(body.reasoning, JSON.parse(expected))
+})
+
 When('the client receives a completion with null content and finish reason {string}', async function (_reason) {
   this.transport = makeTransport([{ kind: 'ok', body: LENGTH_BODY }])
   this.client = createOpenRouterClient({

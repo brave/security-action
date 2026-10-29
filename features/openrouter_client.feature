@@ -28,6 +28,10 @@ Feature: OpenRouter client
     Then a ProviderError is thrown with message "Reasoning is mandatory for this endpoint and cannot be disabled."
     And the transport received exactly 1 request
 
+  Scenario: Reasoning effort is forwarded in the request body
+    When the client completes a chat request for model "z-ai/glm-5.3-flash" with reasoning effort "low"
+    Then the request body contains reasoning '{"effort":"low"}'
+
   Scenario: Rate limit 429 is retried and then succeeds
     When the transport answers 429 once and then a successful completion
     Then the transport received exactly 2 requests

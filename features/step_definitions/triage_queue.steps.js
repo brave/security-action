@@ -141,6 +141,22 @@ When('the queue is rebuilt after shuffling fixture file listings', function () {
   this.params.queue2 = buildQueue({ ...build, sampleFp: 0, sampleTp: 0, seed: 42 })
 })
 
+When('the queue is built with only owasp, seed {int}, sampling {int} FP and {int} TP', function (seed, sampleFp, sampleTp) {
+  const { build } = queueArgs(this)
+  const { vul4jCaseDir, vul4jManifestPath, vul4jCheckoutRoot, vul4jDatasetCsv, ossfuzzTaskDir, ossfuzzLabelsPath, ossfuzzSnapshotDir, ...owaspOnly } = build
+  this.params.queue = buildQueue({ ...owaspOnly, sampleFp, sampleTp, seed })
+})
+
+When('the queue is built with only ossfuzz', function () {
+  const { build } = queueArgs(this)
+  const { owaspFpDir, owaspTpDir, owaspRepoRoot, owaspExpectedResultsCsv, vul4jCaseDir, vul4jManifestPath, vul4jCheckoutRoot, vul4jDatasetCsv, ...ossOnly } = build
+  this.params.queue = buildQueue({ ...ossOnly, sampleFp: 0, sampleTp: 0, seed: 42 })
+})
+
+Then('every item has dataset {string}', function (dataset) {
+  for (const item of this.params.queue.items) assert.equal(item.dataset, dataset)
+})
+
 Then('the queue has {int} items', function (n) {
   assert.equal(this.params.queue.items.length, n)
 })

@@ -139,22 +139,37 @@ export function buildQueue (args) {
     listDir, readFile
   } = args
 
-  const expectedResults = parseOwaspExpectedResults(readFile(owaspExpectedResultsCsv))
-  const datasetCwe = parseVul4jDatasetCsv(readFile(vul4jDatasetCsv))
-  const labels = parseOssfuzzLabels(readFile(ossfuzzLabelsPath))
+  const items = []
+  let skipped = []
 
-  const fp = loadOwasp({ dir: owaspFpDir, label: 'FP', repoRoot: owaspRepoRoot, expectedResults, listDir, readFile })
-  const tp = loadOwasp({ dir: owaspTpDir, label: 'TP', repoRoot: owaspRepoRoot, expectedResults, listDir, readFile })
+  if (owaspFpDir || owaspTpDir) {
+    const expectedResults = parseOwaspExpectedResults(readFile(owaspExpectedResultsCsv))
+    const load = (dir, label) => dir
+      ? loadOwasp({ dir, label, repoRoot: owaspRepoRoot, expectedResults, listDir, readFile })
+      : []
+    const fp = load(owaspFpDir, 'FP')
+    const tp = load(owaspTpDir, 'TP')
 
-  const rng = mulberry32(seed)
-  const fpSample = sampleFp > 0 ? seededShuffle(fp, rng).slice(0, sampleFp) : fp
-  const tpSample = sampleTp > 0 ? seededShuffle(tp, rng).slice(0, sampleTp) : tp
+    const rng = mulberry32(seed)
+    const fpSample = sampleFp > 0 ? seededShuffle(fp, rng).slice(0, sampleFp) : fp
+    const tpSample = sampleTp > 0 ? seededShuffle(tp, rng).slice(0, sampleTp) : tp
+    items.push(...fpSample, ...tpSample)
+  }
 
-  const vul = loadVul4j({ caseDir: vul4jCaseDir, manifest: JSON.parse(readFile(vul4jManifestPath)), checkoutRoot: vul4jCheckoutRoot, datasetCwe, listDir, readFile })
-  const oss = loadOssfuzz({ taskDir: ossfuzzTaskDir, labels, snapshotDir: ossfuzzSnapshotDir, listDir, readFile })
+  if (vul4jCaseDir) {
+    const datasetCwe = parseVul4jDatasetCsv(readFile(vul4jDatasetCsv))
+    const vul = loadVul4j({ caseDir: vul4jCaseDir, manifest: JSON.parse(readFile(vul4jManifestPath)), checkoutRoot: vul4jCheckoutRoot, datasetCwe, listDir, readFile })
+    items.push(...vul.items)
+    skipped = vul.skipped
+  }
 
-  const items = [...fpSample, ...tpSample, ...vul.items, ...oss.items]
-    .sort((a, b) => (a.dataset + a.caseId).localeCompare(b.dataset + b.caseId))
+  if (ossfuzzTaskDir) {
+    const labels = parseOssfuzzLabels(readFile(ossfuzzLabelsPath))
+    const oss = loadOssfuzz({ taskDir: ossfuzzTaskDir, labels, snapshotDir: ossfuzzSnapshotDir, listDir, readFile })
+    items.push(...oss.items)
+  }
 
-  return { items, skipped: vul.skipped }
+  items.sort((a, b) => (a.dataset + a.caseId).localeCompare(b.dataset + b.caseId))
+
+  return { items, skipped }
 }

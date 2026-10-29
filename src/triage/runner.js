@@ -42,7 +42,7 @@ export async function runBenchmark ({
         usage: { promptTokens: 0, completionTokens: 0, cost: 0 }
       }
     } else if (mode === 'vanilla') {
-      outcome = await runVanilla({ chat, model, item, agent, caseId: item.caseId })
+      outcome = await runVanilla({ chat, model, item, agent, caseId: item.caseId, fsi })
     } else {
       const tools = createToolRegistry({ root: item.repoRoot, fsi })
       const task = formatTask({
@@ -76,8 +76,13 @@ export async function runBenchmark ({
   return { results, totalSpendUsd: spend }
 }
 
-async function runVanilla ({ chat, model, item, agent, caseId }) {
-  const task = formatTask({ caseJson: item.caseJson, repoRoot: item.repoRoot, readFile: () => { throw new Error('no fs') }, agent: 'llm' })
+async function runVanilla ({ chat, model, item, agent, caseId, fsi }) {
+  const task = formatTask({
+    caseJson: item.caseJson,
+    repoRoot: item.repoRoot,
+    readFile: fsi ? fsi.readFileSync : () => { throw new Error('no fs') },
+    agent: 'llm'
+  })
   const usage = { promptTokens: 0, completionTokens: 0, cost: 0 }
   try {
     const res = await chat({ model, messages: [{ role: 'user', content: task }] })

@@ -75,6 +75,22 @@ Given('a scripted model that answers a plain-content verdict', function () {
   }
 })
 
+Given('a scripted model that answers invalid content', function () {
+  this.params.chatCalls = []
+  this.chat = async () => {
+    this.params.chatCalls.push(1)
+    return { content: 'not a verdict at all', finishReason: 'stop', usage: { prompt_tokens: 50, completion_tokens: 10, cost: 0.0002 } }
+  }
+})
+
+Given('a scripted model that answers a camelCase-usage verdict', function () {
+  this.params.chatCalls = []
+  this.chat = async () => {
+    this.params.chatCalls.push(1)
+    return { content: GOOD_VERDICT, finishReason: 'stop', usage: { promptTokens: 150, completionTokens: 40, costUsd: 0.005 } }
+  }
+})
+
 Given('a scripted model that raises provider error on item {int}', function (itemNo) {
   this.params.chatCalls = []
   this.chat = async () => {
@@ -112,6 +128,25 @@ Given('a model budget of {float} usd', function (budgetUsd) {
   this.params.budgetUsd = budgetUsd
 })
 
+Given('a repo file {string} containing {string}', function (p, content) {
+  this.params.fsFiles = { [`/repo${p}`]: content }
+})
+
+Then('the first request content contains {string}', function (needle) {
+  const body = this.params.firstRequestBody
+  assert.ok(String(body).includes(needle), `request content should include ${needle}`)
+})
+
+Then('the run result usage is {int} prompt token(s) and {int} completion token(s)', function (p, c) {
+  const usage = this.params.run.results[0].usage
+  assert.equal(usage.promptTokens, p)
+  assert.equal(usage.completionTokens, c)
+})
+
+Then('the run result cost is {float} usd', function (cost) {
+  assert.ok(Math.abs(this.params.run.results[0].usage.cost - cost) < 1e-9)
+})
+
 Given('an agentic runner with max turns {int}', function (maxTurns) {
   this.params.maxTurns = maxTurns
   this.params.mode = 'agentic'
@@ -134,9 +169,14 @@ When('the runner executes the queue', async function () {
       return ['src']
     }
   })
+  const origChat = this.chat
+  const wrappedChat = async (arg) => {
+    if (this.params.chatCalls.length === 0) this.params.firstRequestBody = JSON.stringify(arg.messages)
+    return origChat(arg)
+  }
   this.params.run = await runBenchmark({
     queue: this.params.queue,
-    chat: this.chat,
+    chat: wrappedChat,
     model: 'fake-model',
     mode: this.params.mode ?? 'agentic',
     maxTurns: this.params.maxTurns ?? 8,

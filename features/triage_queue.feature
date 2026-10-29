@@ -51,3 +51,13 @@ Feature: Benchmark queue builder
     When the queue is built with seed 42, sampling 0 FP and 0 TP
     And the queue is rebuilt after shuffling fixture file listings
     Then the two queues are identical
+
+  Scenario: Queue builds with only the OWASP dataset configured
+    When the queue is built with only owasp, seed 42, sampling 2 FP and 1 TP
+    Then the queue has 3 items
+    And every item has dataset "owasp"
+
+  Scenario: Queue builds with only OSS-Fuzz configured
+    When the queue is built with only ossfuzz
+    Then the queue has 2 items
+    And every item has dataset "ossfuzz"
