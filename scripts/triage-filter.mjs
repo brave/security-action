@@ -94,6 +94,25 @@ async function main () {
     readdirSync: (d) => fs.readdirSync(d)
   })
 
+  let exec = null
+  if (args['mock-exec']) {
+    const outputs = JSON.parse(fs.readFileSync(args['mock-exec'], 'utf8'))
+    let j = 0
+    exec = async () => outputs[j++ % outputs.length]
+  } else {
+    const { createExecTool } = await import('../src/triage/execTool.js')
+    const { mkdtempSync } = await import('node:fs')
+    const { tmpdir } = await import('node:os')
+    const pathMod = await import('node:path')
+    const actionPath = pathMod.resolve(new URL('.', import.meta.url).pathname, '..')
+    exec = createExecTool({
+      repoRoot: workspace,
+      actionPath,
+      scratchDir: mkdtempSync(pathMod.join(tmpdir(), 'triage-exec-')),
+      timeoutMs: 30000
+    })
+  }
+
   const { results, totalSpendUsd } = await runBenchmark({
     queue: { items: capped },
     chat,
@@ -102,6 +121,7 @@ async function main () {
     maxTurns: 16,
     budgetUsd: config.budgetUsd ?? 1,
     makeFsi,
+    exec,
     agent: 'swe-agent'
   })
 

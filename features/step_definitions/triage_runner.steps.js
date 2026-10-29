@@ -195,6 +195,49 @@ Then('the reach tool bound to the queue item', function () {
   assert.equal(this.params.reachItem?.caseId, 'case_0')
 })
 
+Given('a scripted model that calls exec then done', function () {
+  this.params.chatCalls = []
+  this.chat = async ({ messages }) => {
+    this.params.chatCalls.push(JSON.stringify(messages))
+    if (this.params.chatCalls.length === 1) {
+      return {
+        content: null,
+        finishReason: 'tool_calls',
+        usage: { prompt_tokens: 100, completion_tokens: 10, cost: 0.0005 },
+        toolCalls: [{ id: 'e1', name: 'exec', arguments: JSON.stringify({ command: 'python3 -c "print(42)"' }) }]
+      }
+    }
+    return {
+      content: null,
+      finishReason: 'tool_calls',
+      usage: { prompt_tokens: 100, completion_tokens: 20, cost: 0.0005 },
+      toolCalls: [{ id: 'd1', name: 'done', arguments: GOOD_VERDICT }]
+    }
+  }
+  this.params.fsFiles = { '/repo/src/case_0.java': 'class A {}' }
+})
+
+Given('an agentic runner with max turns {int} and exec', function (maxTurns) {
+  this.params.maxTurns = maxTurns
+  this.params.mode = 'agentic'
+  this.params.execCalls = []
+  this.params.makeExec = (item) => {
+    this.params.execItem = item
+    return async (command) => {
+      this.params.execCalls.push(command)
+      return '42'
+    }
+  }
+})
+
+Then('the exec fake was called with command {string}', function (command) {
+  assert.equal(this.params.execCalls[0], command)
+})
+
+Then('the exec tool bound to the queue item', function () {
+  assert.equal(this.params.execItem?.caseId, 'case_0')
+})
+
 Then('the later request bodies contain {string}', function (needle) {
   const later = this.params.chatCalls.slice(1).join('\n')
   assert.ok(later.includes(needle), `later requests should include ${needle}`)
@@ -232,6 +275,7 @@ When('the runner executes the queue', async function () {
     budgetUsd: this.params.budgetUsd,
     makeFsi,
     makeReach: this.params.makeReach ?? null,
+    makeExec: this.params.makeExec ?? null,
     agent: 'swe-agent',
     outPath: this.params.outPath
   })

@@ -126,6 +126,19 @@ async function main () {
     }).run
     console.log(`reach tool on: ${Object.keys(ogRules).length} opengrep rules`)
   }
+  let makeExec = null
+  if (args.exec !== undefined) {
+    const { createExecTool } = await import(path.join(ROOT, 'src/triage/execTool.js'))
+    const os = await import('node:os')
+    const actionPath = path.resolve(ROOT, '.')
+    makeExec = (item) => createExecTool({
+      repoRoot: item.repoRoot,
+      actionPath,
+      scratchDir: fs.mkdtempSync(path.join(os.tmpdir(), 'bench-exec-')),
+      timeoutMs: 30000
+    })
+    console.log('exec tool on (landrun sandbox, no network)')
+  }
 
   fs.mkdirSync(outDir, { recursive: true })
   const queue = buildQueue({
@@ -141,7 +154,7 @@ async function main () {
 
   for (const model of models) {
     for (const mode of modes) {
-      const suffix = makeReach ? '-reach' : ''
+      const suffix = `${makeReach ? '-reach' : ''}${makeExec ? '-exec' : ''}`
       const outFile = path.join(outDir, `${model.replace(/\//g, '__')}-${mode}${suffix}.jsonl`)
       let pending = items
       let priorRows = []
@@ -168,6 +181,7 @@ async function main () {
         initialSpendUsd: client.totalSpendUsd,
         makeFsi,
         makeReach: mode === 'agentic' ? makeReach : null,
+        makeExec: mode === 'agentic' ? makeExec : null,
         agent: mode === 'agentic' ? 'swe-agent' : 'llm',
         outPath: outFile
       })

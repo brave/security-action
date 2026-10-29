@@ -86,3 +86,14 @@ Feature: Benchmark runner
     And the reach fake was called with rule "java/xss"
     And the reach tool bound to the queue item
     And the later request bodies contain "enclosing function doPost"
+
+  Scenario: Agentic run with exec exposes the sandboxed exec tool to the agent
+    Given a queue with 1 item rooted at "/repo"
+    And a scripted model that calls exec then done
+    And an agentic runner with max turns 8 and exec
+    When the runner executes the queue
+    Then the run yields 1 result
+    And the result verdict label is "FP"
+    And the exec fake was called with command "python3 -c \"print(42)\""
+    And the exec tool bound to the queue item
+    And the later request bodies contain "42"
