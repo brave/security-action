@@ -120,6 +120,15 @@ async function main () {
     console.log('websearch tool on (Brave API)')
   }
 
+  if (args['postfilter-only']) {
+    if (!args['gen-file']) { console.error('usage: --postfilter-only --gen-file <gen.jsonl>'); process.exit(1) }
+    const genRows = fs.readFileSync(path.resolve(ROOT, args['gen-file']), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l))
+    for (const model of models) {
+      await postfilter(args, genRows, model, { chat, client, budgetUsd, outDir, repoRoot: rel(DEFAULTS.owaspRepoRoot), makeExec, websearch })
+    }
+    return
+  }
+
   const queue = buildQueue({
     owaspFpDir: rel(DEFAULTS.owaspFpDir),
     owaspTpDir: rel(DEFAULTS.owaspTpDir),
@@ -240,10 +249,14 @@ async function postfilter (args, genRows, model, ctx) {
   // findings that need triage: every generated finding, labeled against the oracle
   const lines = []
   const labelBy = new Map()
+  const seen = new Set()
   for (const r of genRows) {
     for (const f of r.findings) {
+      const key = `${f.file}:${f.line}`
+      if (seen.has(key)) continue
+      seen.add(key)
       lines.push(f.logLine)
-      labelBy.set(`${f.file}:${f.line}`, { label: f.label, cweNum: f.cweNum })
+      labelBy.set(key, { label: f.label, cweNum: f.cweNum })
     }
   }
   const { items } = logLinesToQueue(lines, { repoRoot: ctx.repoRoot })
