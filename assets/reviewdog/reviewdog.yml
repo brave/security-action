@@ -27,7 +27,7 @@ runner:
         --quiet \
         $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
         --json \
-      | jq -c '.results[] | {check_id: .check_id, path: .path, line: (.end.line // .start.line // 0), severity: (.extra.severity // ""), message: (.extra.message // ""), cwe: (.extra.metadata.cwe // ""), source: (.extra.metadata.source // ""), category: (.extra.metadata.category // "correctness"), assignees: (.extra.metadata.assignees // "null")}' \
+      | jq -c '.results[] | {check_id: .check_id, path: .path, line: (.end.line // .start.line // 0), severity: (.extra.severity // ""), message: (.extra.message // ""), cwe: ((.extra.metadata.cwe // []) | if type == "array" then (.[0] // "") else . end), source: (.extra.metadata.source // ""), category: (.extra.metadata.category // "correctness"), assignees: (.extra.metadata.assignees // "null")}' \
       | tee "${RUNNER_TEMP:-/tmp}/security-action/opengrep-slim.jsonl" \
       | jq -r '. as $r | "\($r.severity[0:1]):\($r.path):\($r.line) \($r.message | sub("\n";"<br/>";"g"))<br><br>Source: \($r.source)<br><br><!-- Category: \($r.category) -->,\($r.assignees | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --opengrep --assignees) 2> reviewdog.opengrep.stderr.log
@@ -104,7 +104,7 @@ runner:
         '--include=*.extractedscript.js' \
         '--include=*.extractedscript.html' \
         "$SG_TMP" \
-      | jq -c '.results[] | {check_id: .check_id, path: .path, line: (.end.line // .start.line // 0), severity: (.extra.severity // ""), message: (.extra.message // ""), cwe: (.extra.metadata.cwe // ""), source: (.extra.metadata.source // ""), category: (.extra.metadata.category // "correctness"), assignees: (.extra.metadata.assignees // "null")}' \
+      | jq -c '.results[] | {check_id: .check_id, path: .path, line: (.end.line // .start.line // 0), severity: (.extra.severity // ""), message: (.extra.message // ""), cwe: ((.extra.metadata.cwe // []) | if type == "array" then (.[0] // "") else . end), source: (.extra.metadata.source // ""), category: (.extra.metadata.category // "correctness"), assignees: (.extra.metadata.assignees // "null")}' \
       | tee "${RUNNER_TEMP:-/tmp}/security-action/sveltegrep-slim.jsonl" \
       | jq -r '. as $r | "\($r.severity[0:1]):\($r.path):\($r.line) \($r.message | sub("\n";"<br/>";"g"))<br><br>Source: \($r.source)<br><br><!-- Category: \($r.category) -->,\($r.assignees | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep) 2> reviewdog.sveltegrep.stderr.log

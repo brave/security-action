@@ -26,6 +26,11 @@ Feature: Triage findings adapter
     Then item 1 cwe is "79"
     And item 2 cwe is "null"
 
+  Scenario: Cwe metadata as plain string is extracted
+    Given a slim opengrep capture with a string-cwe finding
+    When the findings are converted to a triage queue
+    Then item 1 cwe is "79"
+
   Scenario: Records with missing path are skipped
     Given a slim opengrep capture with a finding missing its path
     When the findings are converted to a triage queue

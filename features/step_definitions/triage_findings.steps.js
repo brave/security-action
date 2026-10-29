@@ -22,9 +22,13 @@ function makeSlimCapture (records) {
 
 Given('a slim opengrep capture with 2 findings', function () {
   this.params.rawJson = makeSlimCapture([
-    SLIM(),
+    SLIM({ cwe: ['CWE-79: Cross-site Scripting'] }),
     SLIM({ check_id: 'javascript/sqli/query', path: 'app/db.js', line: 7, cwe: '' })
   ])
+})
+
+Given('a slim opengrep capture with a string-cwe finding', function () {
+  this.params.rawJson = makeSlimCapture([SLIM()])
 })
 
 Given('a slim opengrep capture with a finding missing its path', function () {

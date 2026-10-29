@@ -53,6 +53,7 @@ export function opengrepFindingsToQueue (slimJsonl, { repoRoot, scanRoot = '.' }
 }
 
 export function extractCwe (metadata) {
+  if (Array.isArray(metadata)) metadata = metadata[0]
   if (typeof metadata !== 'string') return null
   const m = /CWE-(\d+)/.exec(metadata)
   return m ? m[1] : null
