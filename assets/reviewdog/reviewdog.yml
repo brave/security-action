@@ -5,7 +5,7 @@ runner:
       set -e
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
       OG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opengrep-scan.XXXXXX")"
-      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "${RUNNER_TEMP:-/tmp}/security-action"
       touch "$HOME/.opengrep/semgrep.log"
       (TMPDIR="$OG_TMP" GIT_OPTIONAL_LOCKS=0 SEMGREP_SEND_METRICS=off \
       SANDBOX_ENV_EXTRA="SEMGREP_SEND_METRICS" \
@@ -27,6 +27,7 @@ runner:
         --quiet \
         $([ -n "${GITHUB_BASE_REF+set}" ] && echo "--baseline-commit origin/${GITHUB_BASE_REF:-main}") \
         --json \
+      | tee "${RUNNER_TEMP:-/tmp}/security-action/opengrep-raw.json" \
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --opengrep --assignees) 2> reviewdog.opengrep.stderr.log
       rm -rf "$OG_TMP"
@@ -39,7 +40,7 @@ runner:
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
       SG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sveltegrep-scan.XXXXXX")"
       trap 'rm -rf "$SG_TMP"' EXIT
-      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "${RUNNER_TEMP:-/tmp}/security-action"
       # --ignore-glob: skip test fixture / scraped third-party content entirely.
       # Keep in sync with the path globs in opengrep_rules/blocklist.txt.
       # Extracted scripts are written to a temp mirror so the workspace
@@ -102,6 +103,7 @@ runner:
         '--include=*.extractedscript.js' \
         '--include=*.extractedscript.html' \
         "$SG_TMP" \
+      | tee "${RUNNER_TEMP:-/tmp}/security-action/sveltegrep-raw.json" \
       | jq -r '.results[] | "\(.extra.severity[0:1]):\(.path):\(.end.line) \(.extra.message | sub("\n";"<br/>";"g"))<br><br>Source: \(.extra.metadata.source)<br><br><!-- Category: \(.extra.metadata.category // "correctness") -->,\(if .extra.metadata.assignees then .extra.metadata.assignees else "null" end | sub("\n";" ";"g"))"' \
       | $SCRIPTPATH/cleaner.rb --assignees --sveltegrep) 2> reviewdog.sveltegrep.stderr.log
     errorformat:
