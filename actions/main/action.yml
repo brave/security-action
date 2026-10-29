@@ -77,7 +77,7 @@ inputs:
     description: Max USD spend per triage run (default 1.00)
     required: false
   triage_max_findings:
-    description: Max findings triaged per run (default 50)
+    description: Max findings triaged per run (default 300)
     required: false
 outputs:
   reviewdog-findings:

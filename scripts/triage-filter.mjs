@@ -74,7 +74,7 @@ async function main () {
       .map((m) => `${m[2]}:${Number(m[3])}`)
   )
   const inLog = items.filter((i) => loggedLocations.has(`${i.file}:${i.line}`))
-  const capped = inLog.slice(0, config.maxFindings ?? 50)
+  const capped = inLog.slice(0, config.maxFindings ?? 300)
   if (capped.length === 0) return passthrough({ logPath, outPath, reason: 'no findings' })
 
   let chat

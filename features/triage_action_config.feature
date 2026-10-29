@@ -9,7 +9,7 @@ Feature: Triage action config plumbing
     Then the triage config is disabled
     And the triage model is "z-ai/glm-5.3-flash"
     And the triage budget is 1 usd
-    And the triage max findings is 50
+    And the triage max findings is 300
 
   Scenario: Options enable and parameterize the filter
     Given action options with triage enabled model "deepseek/deepseek-v4.1-flash-1017" budget "2.50" max findings "20"
