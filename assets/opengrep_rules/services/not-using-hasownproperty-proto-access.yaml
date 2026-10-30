@@ -12,6 +12,8 @@ rules:
       - ts
     severity: WARNING
     metadata:
+      cwe:
+        - 'CWE-1321: Improperly Controlled Modification of Object Prototype Attributes (''Prototype Pollution'')'
       author: Andrea Brancaleoni
       category: security
       references:

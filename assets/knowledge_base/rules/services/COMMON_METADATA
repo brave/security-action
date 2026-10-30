@@ -1,0 +1,53 @@
+agentic_review {
+  capability_groups {
+    path_expression: ".*\.html"
+    rules: "rules/services/template-unescaped-with-safe-noclean.md"
+    rules: "rules/services/missing-integrity.md"
+  }
+  capability_groups {
+    path_expression: ".*\.mustache|.*\.html|.*\.erb|.*\.hbs|.*\.cc|.*\.cpp|.*\.mustache\.patch|.*\.html\.patch|.*\.erb\.patch|.*\.hbs\.patch|.*\.js\.patch|.*\.ts\.patch|.*\.tsx\.patch|.*\.cc\.patch|.*\.cpp\.patch"
+    rules: "rules/services/missing-noopener-window-open.md"
+  }
+  capability_groups {
+    path_expression: ".*\.server\.ts|.*\.server\.js|path-travesal-by-string-interpolation\.ts|path-travesal-by-string-interpolation\.svelte"
+    rules: "rules/services/path-travesal-by-string-interpolation.md"
+  }
+  capability_groups {
+    path_expression: ".*\.svelte"
+    rules: "rules/services/svelte-html-usages.md"
+  }
+  capability_groups {
+    path_expression: ".*\.svelte|.*\.ts|.*\.js"
+    rules: "rules/services/svelte-purifyConfig-usages.md"
+  }
+  capability_groups {
+    path_expression: ".*\.html|.*\.mustache|.*\.hbs"
+    rules: "rules/services/var-in-href.md"
+  }
+  capability_groups {
+    path_expression: ".*\.mustache|.*\.hbs|.*\.html"
+    rules: "rules/services/var-in-script-tag.md"
+  }
+  capability_groups {
+    path_expression: ".*"
+    rules: "rules/services/activerecord-sanitize-sql-noop.md"
+    rules: "rules/services/brave-third-party-action-not-pinned-to-commit-sha.md"
+    rules: "rules/services/detected-aws-access-key-id-value.md"
+    rules: "rules/services/docker-compose-no-new-privileges.md"
+    rules: "rules/services/find-links-without-no-index.md"
+    rules: "rules/services/github-workflow-missing-permissions.md"
+    rules: "rules/services/http-parse-multipart-dos.md"
+    rules: "rules/services/go-insecure-templates.md"
+    rules: "rules/services/internal-digest-call.md"
+    rules: "rules/services/io-readall-dos.md"
+    rules: "rules/services/missing-noopener-window-open-native.md"
+    rules: "rules/services/no-backticks-in-js-handlers.md"
+    rules: "rules/services/nodejs-insecure-url-parse.md"
+    rules: "rules/services/not-using-hasownproperty-proto-access.md"
+    rules: "rules/services/pip-extra-index-url.md"
+    rules: "rules/services/react-href-var.md"
+    rules: "rules/services/go-ssti.md"
+    rules: "rules/services/starts-with-partial-host-py.md"
+    rules: "rules/services/url-constructor-base.md"
+  }
+}

@@ -20,6 +20,8 @@ rules:
       - ruby
     severity: INFO
     metadata:
+      cwe:
+        - 'CWE-89: Improper Neutralization of Special Elements used in an SQL Command (''SQL Injection'')'
       author: Ben Caller
       references:
         - https://api.rubyonrails.org/classes/ActiveRecord/Sanitization/ClassMethods.html

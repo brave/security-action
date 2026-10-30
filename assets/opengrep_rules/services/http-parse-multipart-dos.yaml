@@ -1,6 +1,8 @@
 rules:
   - id: http-parse-multipart-dos
     metadata:
+      cwe:
+        - 'CWE-400: Uncontrolled Resource Consumption'
       author: Ben Caller
       confidence: LOW
       references:

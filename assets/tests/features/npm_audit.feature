@@ -52,7 +52,7 @@ Feature: npm audit scanner
     When the audit runs
     Then the output matches the finding pattern
       """
-      H:.+:2 Prototype pollution<br /><br />See https://example.com/advisory
+      H:.+:2 Prototype pollution<br /><br />See https://example.com/advisory<!-- Category: security, CWE: , Rule: npm-advisory-unknown -->
       """
 
   Scenario: Vulnerabilities without a URL omit the reference
@@ -65,7 +65,7 @@ Feature: npm audit scanner
     When the audit runs
     Then the output matches the finding pattern
       """
-      M:.+:2 Timing attack
+      M:.+:2 Timing attack<!-- Category: security, CWE: , Rule: npm-advisory-unknown -->
       """
 
   Scenario: Vulnerabilities reported via a string are skipped
@@ -88,6 +88,48 @@ Feature: npm audit scanner
     When the audit runs
     Then the audit aborts with StopIteration
     And stderr mentions the node "missing"
+
+  Scenario: Advisories carry CWE and rule metadata in the finding line
+    Given a lock file containing
+      """
+      "lodash": {
+        "version": "1.0.0"
+      """
+    And the lock file is among the changed files
+    And a "high" vulnerability in "lodash" titled "Prototype pollution" with url "https://example.com/advisory" and cwe "CWE-1321" and source 1000
+    When the audit runs
+    Then the output matches the finding pattern
+      """
+      H:.+:2 Prototype pollution<br /><br />See https://example.com/advisory<!-- Category: security, CWE: CWE-1321, Rule: npm-advisory-lodash -->
+      """
+
+  Scenario: Advisories without CWE metadata leave the CWE cell empty
+    Given a lock file containing
+      """
+      "lodash": {
+        "version": "1.0.0"
+      """
+    And the lock file is among the changed files
+    And a "moderate" vulnerability in "lodash" titled "Timing attack" without a url
+    When the audit runs
+    Then the output matches the finding pattern
+      """
+      M:.+:2 Timing attack<!-- Category: security, CWE: , Rule: npm-advisory-unknown -->
+      """
+
+  Scenario: Advisories with a numeric source fall back to it for the rule
+    Given a lock file containing
+      """
+      "lodash": {
+        "version": "1.0.0"
+      """
+    And the lock file is among the changed files
+    And a "high" vulnerability in "lodash" titled "Prototype pollution" with url "https://example.com/advisory" and cwe "CWE-1321" and source 1000 without a name
+    When the audit runs
+    Then the output matches the finding pattern
+      """
+      H:.+:2 Prototype pollution<br /><br />See https://example.com/advisory<!-- Category: security, CWE: CWE-1321, Rule: npm-advisory-1000 -->
+      """
 
   Scenario: The temp directory defaults to the system temp space
     Given a lock file containing

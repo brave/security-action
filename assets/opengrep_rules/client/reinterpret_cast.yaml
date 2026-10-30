@@ -1,6 +1,8 @@
 rules:
   - id: reinterpret_cast
     metadata:
+      cwe:
+        - 'CWE-704: Incorrect Type Conversion or Cast'
       author: Artem Chaikin
       category: security
       references:

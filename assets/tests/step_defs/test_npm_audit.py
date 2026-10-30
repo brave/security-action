@@ -79,6 +79,26 @@ def vulnerability_without_url(context, severity, node, title):
     }
 
 
+@given(parsers.parse('a "{severity}" vulnerability in "{node}" titled "{title}" with url "{url}"'
+                     ' and cwe "{cwe}" and source {source:d}'))
+def vulnerability_with_cwe_and_source(context, severity, node, title, url, cwe, source):
+    context.setdefault("vulnerabilities", {})[node] = {
+        "severity": severity,
+        "via": [{"title": title, "url": url, "name": node, "cwe": [cwe], "source": source}],
+        "nodes": [node],
+    }
+
+
+@given(parsers.parse('a "{severity}" vulnerability in "{node}" titled "{title}" with url "{url}"'
+                     ' and cwe "{cwe}" and source {source:d} without a name'))
+def vulnerability_cwe_source_no_name(context, severity, node, title, url, cwe, source):
+    context.setdefault("vulnerabilities", {})[node] = {
+        "severity": severity,
+        "via": [{"title": title, "url": url, "cwe": [cwe], "source": source}],
+        "nodes": [node],
+    }
+
+
 @given(parsers.parse('a "{severity}" vulnerability in "{node}" reported via a string'))
 def vulnerability_via_string(context, severity, node):
     context.setdefault("vulnerabilities", {})[node] = {

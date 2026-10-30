@@ -1,0 +1,33 @@
+---
+name: oss/gitlab.find-sec-bugs-kotlin.NORMALIZATION-AFTER-VALIDATION-1
+rubric: safety
+severity: should_fix
+languages: [kotlin]
+cwe: [CWE-180]
+---
+
+**Rule.** IDS01-J. Normalize strings before validating them
+
+**Why.** Reported as CWE-180. Ported from opengrep rule `gitlab.find_sec_bugs_kotlin.NORMALIZATION_AFTER_VALIDATION-1` (generated/oss/audit.yaml).
+
+## Examples
+
+Bad:
+
+```text
+$Y = java.util.regex.Pattern.compile("[<>]");
+...
+$Y.matcher($VAR);
+...
+java.text.Normalizer.normalize($VAR, ...);
+```
+
+## Detection hints
+
+Literal patterns from opengrep rule `gitlab.find_sec_bugs_kotlin.NORMALIZATION_AFTER_VALIDATION-1` (metavariables start with `$`):
+
+- `$Y = java.util.regex.Pattern.compile("[<>]");
+...
+$Y.matcher($VAR);
+...
+java.text.Normalizer.normalize($VAR, ...);`

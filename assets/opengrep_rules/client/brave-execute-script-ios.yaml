@@ -1,6 +1,8 @@
 rules:
   - id: brave-execute-script-ios
     metadata:
+      cwe:
+        - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
       author: Artem Chaikin
       references:
         - https://github.com/brave/brave-browser/wiki/Security-reviews
