@@ -3,6 +3,12 @@ brave_chrome_browser_sources = [
   "//brave/browser/brave_browser_features.cc",
   # ruleid:sources_gni
   "brave_browser_features.h",
+  # ruleid:sources_gni
+  "brave_browser_features.mm",
+  # ruleid:sources_gni
+  "brave_browser_features.cpp",
+  # ruleid:sources_gni
+  "brave_browser_features.hpp",
 ]
 
 brave_settings_ts_files = [
@@ -16,3 +22,17 @@ brave_chrome_browser_deps = [
   # ok:sources_gni
   "//brave/app:brave_generated_resources_grit",
 ]
+
+# Java sources and source-list additions are allowed.
+brave_java_sources = [
+  # ok:sources_gni
+  "../../brave/android/java/org/chromium/chrome/browser/BraveAdFreeCalloutDialogFragment.java",
+  # ok:sources_gni
+  "BraveAppHooks.java",
+]
+
+# ok:sources_gni
+brave_java_sources += brave_ads_java_sources
+
+# ok:sources_gni
+brave_java_deps += brave_ads_java_deps
