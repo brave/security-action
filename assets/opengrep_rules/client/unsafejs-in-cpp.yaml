@@ -1,6 +1,8 @@
 rules:
   - id: unsafe-js-in-cpp-strings
     metadata:
+      cwe:
+        - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
       author: Andrea Brancaleoni <abc@pompel.me>
       confidence: LOW
       assignees: |

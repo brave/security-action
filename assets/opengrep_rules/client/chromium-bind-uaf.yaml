@@ -1,6 +1,8 @@
 rules:
   - id: chromium-bind-uaf
     metadata:
+      cwe:
+        - 'CWE-416: Use After Free'
       author: Andrea Brancaleoni <abc@pompel.me>
       category: security
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/chromium-bind-uaf.yaml

@@ -1,6 +1,8 @@
 rules:
   - id: svelte-html-usages
     metadata:
+      cwe:
+        - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site Scripting'')'
       author: Andrea Brancaleoni
       references:
         - https://cwe.mitre.org/data/definitions/546

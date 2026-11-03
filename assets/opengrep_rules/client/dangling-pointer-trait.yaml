@@ -1,6 +1,8 @@
 rules:
   - id: dangling-pointer-trait
     metadata:
+      cwe:
+        - 'CWE-416: Use After Free'
       author: Artem Chaikin
       references:
         - https://chromium.googlesource.com/chromium/src.git/+/main/docs/dangling_ptr.md

@@ -1,6 +1,8 @@
 rules:
   - id: brave-isolated-world-id-content-end
     metadata:
+      cwe:
+        - 'CWE-94: Improper Control of Generation of Code (''Code Injection'')'
       author: Andrea Brancaleoni <abc@pompel.me>
       confidence: LOW
       assignees: |

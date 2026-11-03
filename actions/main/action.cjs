@@ -66,12 +66,18 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     hotwords_enabled: 'false',
     codeowners_min_files: '50',
     codeowners_mode: 'groups',
-    modelscan_enabled: 'all'
+    modelscan_enabled: 'all',
+    triage_enabled: 'false',
+    triage_model: 'z-ai/glm-5.3-flash',
+    triage_budget_usd: '1.00',
+    triage_max_findings: '300',
+    triage_vanilla_cwes: '328,501'
   }, config, properties, inputs)
 
   options.enabled = options.enabled === 'true'
   options.hotwords_enabled = options.hotwords_enabled === 'true'
   options.baseline_scan_only = options.baseline_scan_only === 'true'
+  options.triage_enabled = options.triage_enabled === 'true'
   options.debug = options.debug ? (options.debug === 'true') : debug
 
   const debugLog = options.debug ? console.log : () => {}
@@ -249,6 +255,18 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     }
 
     // run-reviewdog-pr step
+    // triage stage config: the in-reviewdog filter (triage-filter.sh) reads
+    // this file between the local scan and posting. Fail-open throughout.
+    try {
+      const { writeTriageConfig } = await import(`${actionPath}/src/steps/triageConfig.js`)
+      writeTriageConfig({
+        captureDir: `${process.env.RUNNER_TEMP || '/tmp'}/security-action`,
+        options
+      })
+      debugLog('Triage config written, enabled:', options.triage_enabled)
+    } catch (e) {
+      console.error('Triage config write failed:', e.message)
+    }
     const env = {
       ...process.env,
       PATH: `${actionPath}/.venv/bin:${process.env.PATH}`,
@@ -261,6 +279,17 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     }
     await runCommand(`${actionPath}/assets/reviewdog.sh`, { env })
     debugLog('Reviewdog PR step completed')
+
+    // triage summaries for Slack (written by triage-filter.sh, may be absent)
+    let triageLine = ''
+    try {
+      const { readTriageSummaries } = await import(`${actionPath}/src/steps/triageConfig.js`)
+      triageLine = readTriageSummaries({
+        captureDir: `${process.env.RUNNER_TEMP || '/tmp'}/security-action`
+      }).line
+    } catch (e) {
+      debugLog('Triage summary read failed:', e.message)
+    }
 
     // comments-after step
     const { number: commentsAfter, categories } = await commentsNumber({ context, github })
@@ -311,7 +340,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     const channel = options.slack_channel || '#secops-hotspots'
     const repoName = `${context.repo.owner}/${context.repo.repo}`
 
-    const message = `Repository: [${repoName}](https://github.com/${repoName})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}`
+    const message = `Repository: [${repoName}](https://github.com/${repoName})\npull-request: ${context.payload.pull_request.html_url}\nFindings: ${commentsAfter}${triageLine}`
 
     let githubToSlack = {}
     try {
