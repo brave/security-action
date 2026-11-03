@@ -22,7 +22,7 @@
     "@octokit/core": "^7.0.0",
     "@slack/web-api": "^8.0.0",
     "@tryfabric/mack": "^1.2.1",
-    "glob": "^13.0.0",
+    "glob": "^14.0.2",
     "js-yaml": "^5.0.0",
     "json5": "^2.2.3",
     "markdown-to-txt": "^2.0.1",
