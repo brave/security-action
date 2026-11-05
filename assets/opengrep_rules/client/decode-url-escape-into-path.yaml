@@ -1,0 +1,33 @@
+rules:
+  - id: decode-url-escape-into-path
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/decode-url-escape-into-path.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+    severity: WARNING
+    message: |
+      URL escape sequences decoded after parsing flow into a file path Append: '..' or
+      '%2F' payloads survive URL canonicalization and compose out-of-base paths (audit
+      finding A1, bug 1917: chrome://custom-wallpaper/..%2Fvictim.png reached
+      base::DeleteFile). Validate the decoded value (basename only / ReferencesParent)
+      before composing file paths.
+    paths:
+      include:
+        - "**/ntp_background/**"
+        - "decode-url-escape-into-path.cpp"
+    mode: taint
+    pattern-sources:
+      - pattern-either:
+          - pattern: url::DecodeUrlEscapeSequences(...)
+          - pattern: DecodeUrlEscapeSequences(...)
+          - pattern: $SRC.DecodeUrlEscapeSequences(...)
+          - pattern: base::UnescapeURLComponent(...)
+    pattern-sinks:
+      - pattern: $PATH.Append($X)

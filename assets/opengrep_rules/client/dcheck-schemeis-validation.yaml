@@ -1,0 +1,28 @@
+rules:
+  - id: dcheck-schemeis-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: HIGH
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/dcheck-schemeis-validation.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+      - c
+    severity: WARNING
+    message: |
+      DCHECK() is compiled out in release builds, so a DCHECK-only scheme/origin check is
+      not a validation at all (audit finding A1, bug 1917: DCHECK-only SchemeIs &&
+      host equality in CustomBackgroundFileManager let chrome://custom-wallpaper/..%2F...
+      reach base::DeleteFile). Make the check load-bearing: if (!url.SchemeIs(...)) reject.
+    patterns:
+      - pattern-either:
+          - pattern: DCHECK($COND);
+          - pattern: DCHECK_EQ($COND, ...);
+          - pattern: DCHECK_EQ(..., $COND);
+      - metavariable-regex:
+          metavariable: $COND
+          regex: .*(SchemeIs|has_host|has_scheme).*

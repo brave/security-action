@@ -139,7 +139,15 @@ Feature: Opengrep rule comparison
     Then the result reports 1 total findings
     And the target repo default branch is "main"
     And the worktrees are cleaned up
+    And the cleanup commands run unsandboxed
     And the target repository clone is removed
+    And the opengrep scan commands grant read access to the rules directory
+
+  Scenario: A failing opengrep scan fails the comparison
+    Given git reports one changed rule file that exists in the base branch
+    And the current opengrep scan fails with "Permission denied"
+    When comparing rules
+    Then the action fails with "Permission denied"
 
   Scenario: Finding paths are stripped of the clone directory
     Given the target repository "brave/brave-browser" is cloned

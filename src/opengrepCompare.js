@@ -87,18 +87,25 @@ async function runOpengrep (rulesPath, targetPath = '.', specificRules = null, e
   console.log(`Running opengrep on: ${targetPath}`)
   // Change working directory to rulesPath so relative paths work correctly.
   // The scan runs sandboxed: read-only rules + scan target, writes confined
-  // to the opengrep cache/log + a private temp dir, zero network.
+  // to the opengrep dirs + a private temp dir, zero network.
   const scanTmp = path.join(os.tmpdir(), `opengrep-compare-${Date.now()}`)
   // Same Landlock constraint as the clone dir: create the private temp dir
   // unsandboxed so its --rwx grant actually binds.
   exec(`mkdir -p ${scanTmp}`)
+  // Landlock checks rights on the objects being opened, not on path
+  // traversal: the rules dir (a worktree under /tmp when scanning a remote
+  // target) and the installed binary (~/.opengrep) both live outside the
+  // read-only action tree, so neither is readable without an explicit
+  // grant — opengrep then dies instantly with an empty stdout that used to
+  // be misread as "0 findings" (2>/dev/null || true hid the real error).
+  // Scan failures must propagate instead of silently reporting zero.
   const command = buildSandboxedCmd({
     actionPath,
-    cmd: `export TMPDIR="${scanTmp}"; cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath} 2>/dev/null || true`,
-    readDirs: [targetPath === '.' ? cwd : targetPath],
+    cmd: `export TMPDIR="${scanTmp}"; cd ${rulesPath} && opengrep --disable-version-check --json ${configArgs} ${targetPath}`,
+    readDirs: [rulesPath, targetPath === '.' ? cwd : targetPath],
     writeDirs: [
+      path.join(os.homedir(), '.opengrep'),
       path.join(os.homedir(), '.cache', 'opengrep'),
-      path.join(os.homedir(), '.opengrep', 'semgrep.log'),
       scanTmp
     ]
   })
@@ -464,30 +471,36 @@ export default async function opengrepCompare (options = {}) {
     }
   }
 
-  // Cleanup
+  // Cleanup is best-effort and unsandboxed. Landlock grants bind to the
+  // granted trees themselves: deleting a top-level temp dir requires write
+  // on its parent (/tmp), which the sandbox must not hand out. These are
+  // disposable dirs created by this run, so removing them outside the
+  // sandbox is safe — and cleanup failures must not mask real results.
   if (currentWorktree) {
     console.log('\nCleaning up current branch worktree...')
-    exec(buildSandboxedCmd({
-      actionPath,
-      cmd: `git worktree remove ${currentWorktree}`,
-      writeDirs: [currentWorktree],
-      git: true
-    }), { cwd: actionPath })
+    try {
+      exec(`git worktree remove ${currentWorktree}`, { cwd: actionPath })
+    } catch (e) {
+      console.warn(`Failed to remove current worktree: ${e.message.split('\n')[0]}`)
+    }
   }
 
   if (baseWorktree) {
     console.log('Cleaning up base branch worktree...')
-    exec(buildSandboxedCmd({
-      actionPath,
-      cmd: `git worktree remove ${baseWorktree}`,
-      writeDirs: [baseWorktree],
-      git: true
-    }), { cwd: actionPath })
+    try {
+      exec(`git worktree remove ${baseWorktree}`, { cwd: actionPath })
+    } catch (e) {
+      console.warn(`Failed to remove base worktree: ${e.message.split('\n')[0]}`)
+    }
   }
 
   if (shouldCleanup && tempDir) {
     console.log('Cleaning up target repository...')
-    exec(buildSandboxedCmd({ actionPath, cmd: `rm -rf ${tempDir}`, writeDirs: [tempDir] }))
+    try {
+      exec(`rm -rf ${tempDir}`)
+    } catch (e) {
+      console.warn(`Failed to remove clone dir: ${e.message.split('\n')[0]}`)
+    }
   }
 
   console.log('\n' + '='.repeat(60))

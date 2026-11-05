@@ -1,0 +1,28 @@
+rules:
+  - id: mojo-addinterface-privileged-interfaces
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/mojo-addinterface-privileged-interfaces.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+    severity: WARNING
+    message: |
+      Privileged mojo interface bound from the content browser client binder map without
+      a frame restriction (audit finding L2, bug 1917: cosmetic_filters::mojom::
+      CosmeticFiltersResources and misc_metrics::mojom::Web3Metrics bound via
+      map->Add<> to ANY web frame in RegisterBrowserInterfaceBindersForFrame,
+      brave_content_browser_client.cc:1048-1051). Any web page's renderer reaches the
+      handler. Restrict the binder to WebUI / trusted frames before binding.
+    patterns:
+      - pattern-either:
+          - pattern: $MAP->Add<$IFACE>(...)
+          - pattern: $REGISTRY.AddInterface<$IFACE>(...)
+      - metavariable-regex:
+          metavariable: $IFACE
+          regex: ^(.*::)?(CosmeticFiltersResources|Web3Metrics)$

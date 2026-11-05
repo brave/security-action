@@ -1,0 +1,29 @@
+rules:
+  - id: commandline-bare-executable-name
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/commandline-bare-executable-name.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+      - c
+    severity: WARNING
+    message: |
+      base::CommandLine constructed with a bare executable name resolves via the PATH
+      search order on Windows (audit finding N2, bug 1917:
+      base::CommandLine power_shell(base::FilePath(L"PowerShell")) in VPN ras_utils.cc).
+      A user-writable directory earlier in PATH (e.g. WindowsApps) enables binary
+      planting. Use an absolute path (GetSystemDirectory / Program Files) instead.
+    patterns:
+      - pattern-either:
+          - pattern: base::CommandLine $VAR(base::FilePath($NAME));
+          - pattern: base::CommandLine(base::FilePath($NAME))
+      - metavariable-regex:
+          metavariable: $NAME
+          # Quoted literal without any path separator => PATH search order applies.
+          regex: ^(L?"[A-Za-z0-9_. -]+"|"[A-Za-z0-9_. -]+")$

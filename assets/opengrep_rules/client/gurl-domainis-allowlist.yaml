@@ -1,0 +1,27 @@
+rules:
+  - id: gurl-domainis-allowlist
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: HIGH
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/gurl-domainis-allowlist.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+    severity: WARNING
+    message: |
+      GURL::DomainIs() is a suffix match on the host: referrer https://a.uphold.com passes
+      DomainIs("uphold.com") (audit finding H1, bug 1917). A hijacked or dangling provider
+      subdomain then satisfies the allowlist and drives RewardsProtocolNavigationThrottle's
+      sourceless re-navigation with attacker query data, leading to auto
+      connectExternalWallet. Use exact-host equality (GURL spec comparison) for allowlist
+      decisions instead of DomainIs.
+    paths:
+      include:
+        - "**/brave_rewards/content/*.cc"
+        - "gurl-domainis-allowlist.cpp"
+    patterns:
+      - pattern: $URL.DomainIs($HOST)

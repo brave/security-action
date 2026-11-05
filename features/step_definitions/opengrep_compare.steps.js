@@ -69,6 +69,10 @@ Given('the current opengrep scan outputs garbage', function () {
   this.execRoutes.push({ test: /cd .*opengrep-rules-current.*opengrep/, out: 'NOT JSON {{{' })
 })
 
+Given('the current opengrep scan fails with {string}', function (message) {
+  this.execRoutes.push({ test: /cd .*opengrep-rules-current.*opengrep/, out: message, throws: true })
+})
+
 Given('rule discovery finds rule files on both branches', function () {
   this.execRoutes.push({ test: /find .*opengrep-rules-base/, out: '/tmp/base-rules/client/foo.yaml\n/tmp/base-rules/client/bar.yaml' })
   this.execRoutes.push({ test: /find .*opengrep-rules-current/, out: '/tmp/current-rules/client/foo.yaml\n/tmp/current-rules/client/bar.yaml' })
@@ -238,5 +242,26 @@ Then('the scan temp directory is created with an unsandboxed mkdir', function ()
   assert.ok(mkdirs.length > 0, `expected plain mkdir for the scan temp dir, got:\n${commands.join('\n')}`)
   for (const c of mkdirs) {
     assert.ok(c.startsWith('mkdir -p '), `scan temp mkdir must not be sandbox-wrapped: ${c}`)
+  }
+})
+
+Then('the cleanup commands run unsandboxed', function () {
+  const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
+  const removals = commands.filter(c => c.includes('git worktree remove') || /rm -rf \/tmp\/opengrep-scan-/.test(c))
+  assert.ok(removals.length > 0, `expected cleanup commands, got:\n${commands.join('\n')}`)
+  for (const c of removals) {
+    assert.ok(!c.includes('with-sandbox.sh'), `cleanup must run unsandboxed: ${c}`)
+  }
+})
+
+Then('the opengrep scan commands grant read access to the rules directory', function () {
+  const commands = this.exec.__recorder.paramsOf('exec').map(p => p.command)
+  const scans = commands.filter(c => /with-sandbox.sh[\s\S]*opengrep --disable-version-check/.test(c))
+  assert.ok(scans.length > 0, `expected sandboxed opengrep scan commands, got:\n${commands.join('\n')}`)
+  for (const c of scans) {
+    const rulesDir = (c.match(/cd (\S+) && opengrep/) || [])[1]
+    assert.ok(rulesDir, `scan must cd into a rules dir: ${c}`)
+    assert.ok(c.includes(`--ro "${rulesDir}"`), `scan must grant read on the rules dir ${rulesDir}:\n${c}`)
+    assert.ok(/--rwx "[^"]*\/\.opengrep"/.test(c), `scan must grant access to the installed opengrep dir:\n${c}`)
   }
 })
