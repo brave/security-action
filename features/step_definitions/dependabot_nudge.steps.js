@@ -167,6 +167,10 @@ Given('alert assignment fails', function () {
   this.assignmentFails = true
 })
 
+Given('the user {string} is not permitted to be assigned', function (user) {
+  this.unpermittedUsers = new Set([...(this.unpermittedUsers || []), user])
+})
+
 Given('repo {string} fails to list alerts', function (name) {
   this.alertFailures = new Set([...(this.alertFailures || []), name])
 })
@@ -183,6 +187,13 @@ When('running the dependabot nudge', async function () {
     }
     if (route.includes('dependabot/alerts')) {
       if (this.assignmentFails) throw new Error('assignment failed')
+      const unpermitted = (params.assignees || [])
+        .find(a => this.unpermittedUsers?.has(a))
+      if (unpermitted) {
+        throw new Error(
+          `User ${unpermitted} is not permitted to be assigned to this alert`
+        )
+      }
       return { status: 204, data: {} }
     }
     return { status: 204, data: {} }
@@ -312,6 +323,37 @@ Then('no alert assignment is requested', function () {
   const patches = this.github.__recorder.find('request')
     .filter(call => call.params.route.includes('dependabot/alerts'))
   assert.equal(patches.length, 0)
+})
+
+Then('each alert is finally assigned to {string}', function (assignees) {
+  const patches = this.github.__recorder.find('request')
+    .filter(call => call.params.route.includes('dependabot/alerts'))
+  const expected = assignees.split(',')
+  const finalByAlert = new Map()
+  for (const call of patches) {
+    finalByAlert.set(call.params.params.alert_number, call.params.params.assignees)
+  }
+  assert.equal(finalByAlert.size, Object.values(this.alertsByRepo).flat().length)
+  for (const got of finalByAlert.values()) {
+    assert.deepEqual(got, expected)
+  }
+})
+
+Then('no assignment is retried without assignees', function () {
+  const patches = this.github.__recorder.find('request')
+    .filter(call => call.params.route.includes('dependabot/alerts'))
+  assert.equal(patches.length, Object.values(this.alertsByRepo).flat().length)
+  for (const call of patches) {
+    assert.ok(call.params.params.assignees.length > 0)
+  }
+})
+
+Then('the unpermitted user {string} is logged as dropped', function (user) {
+  const logs = this.nudgeLogs.join('\n')
+  assert.ok(
+    logs.includes(`Dropping unpermitted assignee ${user}`),
+    `expected logs to mention dropping ${user}: ${logs}`
+  )
 })
 
 Then('the result is a single message string', function () {
