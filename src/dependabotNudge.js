@@ -4,6 +4,7 @@ import {
 } from './dependabotConstants.js'
 import { messageToBlocks } from './sendSlackMessage.js'
 import { parseBlocklist, matchBlocklist } from './blocklistMatcher.js'
+import assignDependabotAlert from './assignDependabotAlert.js'
 
 function alertSeverity (alert) {
   return Severity[alert.security_advisory?.severity || alert.severity]
@@ -282,20 +283,32 @@ export default async function dependabotNudge ({
                   ` in ${org}/${repo.name}`
                 )
               } else {
-                await github.request(
-                  'PATCH /repos/{owner}/{repo}' +
-                  '/dependabot/alerts/{alert_number}',
-                  {
-                    owner: org,
-                    repo: repo.name,
-                    alert_number: alert.number,
-                    assignees: uniqueGithubMaintainers,
-                    headers: {
-                      'X-GitHub-Api-Version':
-                        '2022-11-28'
-                    }
+                const { assigned, dropped } = await assignDependabotAlert({
+                  github,
+                  owner: org,
+                  repo: repo.name,
+                  alertNumber: alert.number,
+                  assignees: uniqueGithubMaintainers,
+                  headers: {
+                    'X-GitHub-Api-Version':
+                      '2022-11-28'
                   }
-                )
+                })
+                if (dropped.length > 0) {
+                  console.log(
+                    'Dropping unpermitted assignee ' +
+                    dropped.join(', ') +
+                    ` from alert #${alert.number}` +
+                    ` in ${org}/${repo.name}`
+                  )
+                }
+                if (assigned.length === 0) {
+                  console.log(
+                    'No permitted assignees remain for' +
+                    ` alert #${alert.number}` +
+                    ` in ${org}/${repo.name}; skipping assignment`
+                  )
+                }
                 // Small delay to avoid hitting
                 // GitHub secondary rate limits.
                 await new Promise(

@@ -101,6 +101,25 @@ Feature: Dependabot nudge
     When running the dependabot nudge
     Then the result has 1 message
 
+  Scenario: An unpermitted assignee is dropped and the rest are assigned
+    Given the repository "brave/foo"
+    And repo "foo" has 1 alert
+    And repo "foo" has maintainers "alice,bob"
+    And the user "bob" is not permitted to be assigned
+    When running the dependabot nudge
+    Then each alert is finally assigned to "alice"
+    And the unpermitted user "bob" is logged as dropped
+
+  Scenario: All maintainers unpermitted leaves no assignment
+    Given the repository "brave/foo"
+    And repo "foo" has 1 alert
+    And repo "foo" has maintainers "bob"
+    And the user "bob" is not permitted to be assigned
+    When running the dependabot nudge
+    Then the result has 1 message
+    And no assignment is retried without assignees
+    And the unpermitted user "bob" is logged as dropped
+
   Scenario: The single output message mode flattens the result
     Given the repository "brave/foo"
     And repo "foo" has 1 alert
