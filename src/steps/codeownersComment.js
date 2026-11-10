@@ -4,6 +4,7 @@
  */
 
 import crypto from 'crypto'
+import { guardWrite, appendJobSummary } from '../githubWriteGuard.js'
 
 const COMMENT_IDENTIFIER = '<!-- security-action:codeowners-summary -->'
 const MAX_FILES_BEFORE_COLLAPSE = 5
@@ -120,15 +121,16 @@ async function findExistingComment ({ context, github }) {
 /**
  * Delete existing codeowners comment if present
  */
-async function deleteExistingComment ({ context, github }) {
+async function deleteExistingComment ({ context, github, core = null }) {
   const existingComment = await findExistingComment({ context, github })
 
   if (existingComment) {
-    await github.rest.issues.deleteComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      comment_id: existingComment.id
-    })
+    await guardWrite(core, 'delete stale codeowners comment', () =>
+      github.rest.issues.deleteComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        comment_id: existingComment.id
+      }))
     return true
   }
 
@@ -144,7 +146,9 @@ export default async function codeownersComment ({
   matchResult,
   debug = false,
   minFiles = 50,
-  mode = 'groups'
+  mode = 'groups',
+  core = null,
+  _summaryEnv
 }) {
   const MAX_COMMENT_LENGTH = 65536
   const TRUNCATION_LIMITS = [100, 50, 20, 10, 5, 2, 1, 0]
@@ -165,7 +169,7 @@ export default async function codeownersComment ({
       console.log('Codeowners mode is "never", skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComment({ context, github, core })
     return null
   }
 
@@ -175,7 +179,7 @@ export default async function codeownersComment ({
       console.log(`PR has ${matchResult.stats.totalFiles} files (< ${MIN_FILES_THRESHOLD}), skipping comment`)
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComment({ context, github, core })
     return null
   }
 
@@ -185,7 +189,7 @@ export default async function codeownersComment ({
       console.log('No files have code owners, skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComment({ context, github, core })
     return null
   }
 
@@ -195,7 +199,7 @@ export default async function codeownersComment ({
       console.log('Mode is "groups" but no teams assigned, only individuals, skipping comment')
     }
     // Still delete any existing comment
-    await deleteExistingComment({ context, github })
+    await deleteExistingComment({ context, github, core })
     return null
   }
 
@@ -248,29 +252,42 @@ export default async function codeownersComment ({
     console.log(body)
   }
 
-  // Update existing comment or create new one
-  let comment
+  // Update existing comment or create new one. Fork PRs run pull_request
+  // events with a read-only GITHUB_TOKEN, so the write fails with
+  // `403 Resource not accessible by integration` — guardWrite treats that
+  // as skip-not-fail and mirrors the body to the job summary instead.
+  // Permission errors are never retried (octokit already exempts 403).
+  const summaryEnv = _summaryEnv || process.env
+  const fallback = () => appendJobSummary(
+    '> Codeowners summary could not be posted as a PR comment (read-only token on fork PR). Content follows.\n\n' +
+    body + '\n',
+    { env: summaryEnv }
+  )
+
+  let comment = null
   if (existingComment) {
-    comment = await github.rest.issues.updateComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      comment_id: existingComment.id,
-      body
-    })
-    if (debug) {
+    comment = await guardWrite(core, 'codeowners summary comment update', () =>
+      github.rest.issues.updateComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        comment_id: existingComment.id,
+        body
+      }), fallback)
+    if (debug && comment) {
       console.log(`Updated codeowners comment: ${comment.data.html_url}`)
     }
   } else {
-    comment = await github.rest.issues.createComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: context.issue.number,
-      body
-    })
-    if (debug) {
+    comment = await guardWrite(core, 'codeowners summary comment', () =>
+      github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number,
+        body
+      }), fallback)
+    if (debug && comment) {
       console.log(`Posted codeowners comment: ${comment.data.html_url}`)
     }
   }
 
-  return comment.data
+  return comment ? comment.data : null
 }
