@@ -12,7 +12,12 @@ permissions:
 jobs:
   full-loop:
     name: full-loop
-    runs-on: ubuntu-latest
+    # ubuntu-latest rolled to 26.04, whose libxml2 2.15 makes xmllint
+    # --dtdvalid print a single summary line instead of per-element
+    # validity errors — safesvg then yields too few findings for the
+    # assertion below. Pin the runner to 24.04 (libxml2 2.9.14, old
+    # output format) until the xmllint step is reworked for new libxml.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
