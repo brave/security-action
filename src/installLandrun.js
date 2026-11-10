@@ -6,12 +6,12 @@
  * used by scripts/with-sandbox.sh to confine untrusted tool runs.
  */
 
-import https from 'https'
 import crypto from 'crypto'
 import { execSync } from 'child_process'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
+import { fetchWithRetry } from './fetchRetry.js'
 
 // landrun v0.1.17 targets Landlock ABI v9 in strict mode; the sandbox wrapper
 // always passes --best-effort so older runner kernels degrade gracefully.
@@ -36,29 +36,13 @@ const DIST_BY_PLATFORM = {
 }
 
 /**
- * Download content from URL
+ * Download content from URL, retrying transient failures (5xx, timeouts,
+ * network errors) with exponential backoff; 4xx fails fast.
+ * The per-attempt fetch is `fetchWithRetry`'s default (redirect-following
+ * https.get), overridable via the `_fetchOnce` test seam.
  */
-function downloadFile (url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (response) => {
-      // GitHub release assets redirect (302) to the CDN — follow, like
-      // updateOpengrepVersion.js does.
-      if (response.statusCode === 301 || response.statusCode === 302) {
-        downloadFile(response.headers.location).then(resolve).catch(reject)
-        return
-      }
-
-      if (response.statusCode !== 200) {
-        reject(new Error(`Failed to download: HTTP ${response.statusCode}`))
-        return
-      }
-
-      const chunks = []
-      response.on('data', (chunk) => chunks.push(chunk))
-      response.on('end', () => resolve(Buffer.concat(chunks)))
-      response.on('error', reject)
-    }).on('error', reject)
-  })
+async function downloadFile (url, fetchOnce, sleep) {
+  return fetchWithRetry(url, { fetchOnce: fetchOnce || undefined, sleep: sleep || undefined })
 }
 
 /**
@@ -113,7 +97,10 @@ function isLandrunInstalled (exec, fsx, bin) {
  *
  * Test seams (all optional, default to real implementations):
  * - _exec: replaces execSync (command -> output)
- * - _download: replaces downloadFile (url -> Buffer)
+ * - _download: replaces the whole download step (url -> Buffer)
+ * - _fetchOnce: replaces the per-attempt fetch inside the retry loop
+ *   ((url, {timeoutMs}) -> Buffer) — fault-injection seam for retries
+ * - _sleep: replaces the inter-attempt backoff delay (ms -> Promise)
  * - _fs: replaces fs (existsSync/mkdirSync/readFileSync/appendFileSync/writeFileSync)
  * - _binPath: overrides the landrun binary path
  * - _binSha256: replaces the pinned binary digest map ({ [dist]: sha })
@@ -122,13 +109,15 @@ function isLandrunInstalled (exec, fsx, bin) {
 export default async function installLandrun ({
   _exec = null,
   _download = null,
+  _fetchOnce = null,
+  _sleep = null,
   _fs = null,
   _binPath = null,
   _binSha256 = null,
   _dist = null
 } = {}) {
   const exec = _exec || execSync
-  const download = _download || downloadFile
+  const download = _download || ((url) => downloadFile(url, _fetchOnce, _sleep))
   const fsx = _fs || fs
   const digestMap = _binSha256 || LANDRUN_BIN_SHA256
 

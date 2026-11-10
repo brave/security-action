@@ -95,6 +95,10 @@ runs:
       id: reviewdog-enabled
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
+        # retries: exponential backoff via @octokit/plugin-retry for transient
+        # 5xx/timeouts. Default retry-exempt-status-codes (400/401/403/404/422)
+        # keeps permission/validation errors fail-fast.
+        retries: 3
         script: return true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install landrun
@@ -103,6 +107,8 @@ runs:
       # dependency-install steps (uv sync / pnpm install are wrapped below).
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
+        # See "Store reviewdog enabled": retries on transient 5xx/timeouts.
+        retries: 3
         script: |-
           const path = require('path')
           const installLandrun = (await import(path.join('${{ github.action_path }}', '../../src/installLandrun.js'))).default
@@ -117,9 +123,14 @@ runs:
       with:
         enable-cache: true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
-      with:
-        reviewdog_version: v0.17.5 # Optional. [latest,nightly,v.X.Y.Z]
+      name: Install reviewdog
+      # Replaces reviewdog/action-setup@v1.5.0: its generated installer makes
+      # a single unretried curl and died on a 504 from the release CDN
+      # (PR #523). Same pinned version, downloaded with curl --retry and
+      # verified against a pinned SHA256 (scripts/install-reviewdog.sh).
+      run: |-
+        bash "${{ github.action_path }}/../../scripts/install-reviewdog.sh" v0.17.5
+      shell: bash
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       id: npm
       env:
@@ -142,24 +153,41 @@ runs:
         # pnpm's self-manager stages its own re-install via a _tmp_<hash>
         # file in the project root — the version already matches
         # packageManager, so switch the behavior off entirely.
-        TMPDIR="$PN_TMP" npm_config_manage_package_manager_versions=false SANDBOX_ENV_EXTRA="npm_config_manage_package_manager_versions" \
-        bash "$ACTION_ROOT/scripts/with-sandbox.sh" \
-          --ignore-missing \
-          --ro "$ACTION_ROOT" \
-          --rw "$ACTION_ROOT/node_modules" \
-          --rw "$PN_TMP" \
-          --rw "$HOME/.local/share/pnpm" \
-          --rw "$HOME/.cache/node/corepack" --rox "$HOME/.cache/node/corepack" \
-          --rw "$HOME/.cache/pnpm" \
-          --rw /dev/null \
-          --rox /opt/hostedtoolcache \
-          --rox /usr \
-          --rox /lib \
-          --rox /lib64 \
-          --ro /etc --ro /run \
-          --connect-tcp 443 \
-          -- corepack pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$HOME/.cache/pnpm/store"
-        rc=$?; cd "$ACTION_ROOT"; rm -rf "$PN_TMP"; exit $rc
+        # Retry loop: corepack's pnpm version lookup (one unretried
+        # registry.npmjs.org request) hard-failed the job during the Oct 22
+        # npmjs outage (PRs #2921, #2939, #2966, #3018, #3025, #3027).
+        # The landrun sandbox wraps every attempt.
+        attempt=1
+        pnpm_rc=0
+        while :; do
+          if TMPDIR="$PN_TMP" npm_config_manage_package_manager_versions=false SANDBOX_ENV_EXTRA="npm_config_manage_package_manager_versions" \
+          bash "$ACTION_ROOT/scripts/with-sandbox.sh" \
+            --ignore-missing \
+            --ro "$ACTION_ROOT" \
+            --rw "$ACTION_ROOT/node_modules" \
+            --rw "$PN_TMP" \
+            --rw "$HOME/.local/share/pnpm" \
+            --rw "$HOME/.cache/node/corepack" --rox "$HOME/.cache/node/corepack" \
+            --rw "$HOME/.cache/pnpm" \
+            --rw /dev/null \
+            --rox /opt/hostedtoolcache \
+            --rox /usr \
+            --rox /lib \
+            --rox /lib64 \
+            --ro /etc --ro /run \
+            --connect-tcp 443 \
+            -- corepack pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$HOME/.cache/pnpm/store"; then
+            break
+          fi
+          pnpm_rc=$?
+          if [ "$attempt" -ge 3 ]; then
+            echo "pnpm install failed after $attempt attempts (last exit $pnpm_rc)" >&2
+            break
+          fi
+          sleep $((15 * 2 ** (attempt - 1))) # 15s, 30s
+          attempt=$((attempt + 1))
+        done
+        cd "$ACTION_ROOT"; rm -rf "$PN_TMP"; exit $pnpm_rc
       shell: bash
     # - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
     #   name: Install tfsec
@@ -178,6 +206,8 @@ runs:
       name: Install opengrep
       uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
+        # See "Store reviewdog enabled": retries on transient 5xx/timeouts.
+        retries: 3
         script: |-
           const path = require('path')
           const installOpengrep = (await import(path.join('${{ github.action_path }}', '../../src/installOpengrep.js'))).default
@@ -188,6 +218,8 @@ runs:
       env:
         DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
       with:
+        # See "Store reviewdog enabled": retries on transient 5xx/timeouts.
+        retries: 3
         script: |-
           const actionPath = '${{ github.action_path }}/../../'
           const inputs = ${{ toJson(inputs) }}

@@ -86,7 +86,11 @@ When('installing landrun', async function () {
     : this.makeMockDownload(this.assetContent || 'binary')
   await this.attempt(() => installLandrun({
     _exec: this.exec,
-    _download: this.download,
+    // When a fetch script is configured, exercise the real retrying
+    // download (built on the _fetchOnce seam) instead of the mock download.
+    _download: this.fetchOnce ? null : this.download,
+    _fetchOnce: this.fetchOnce || null,
+    _sleep: this.sleep || null,
     _fs: this.fsx,
     _binPath: BIN,
     _dist: DIST,
