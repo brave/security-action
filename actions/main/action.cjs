@@ -83,6 +83,18 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   // content is mirrored to the job summary at the call sites.
   const { guardWrite } = await import(`${actionPath}/src/githubWriteGuard.js`)
 
+  // Sanitize the assignees input at the boundary. The raw value has been
+  // observed containing an entire HTML message (a reply pasted into the
+  // workflow input), which used to be split on whitespace into per-word
+  // "logins" and fed verbatim to add-assignees → 404 (brave-experiments/
+  // brave-bot PRs #20/#58/#59). Sanitizing once here means every consumer
+  // (modelscan mentions, reviewdog ASSIGNEES env, slack cc, add-assignees)
+  // sees validated logins only.
+  const { sanitizeAssignees, filterExistingLogins, addAssigneesSafely } = await import(`${actionPath}/src/validateAssignees.js`)
+  const loginCache = new Map()
+  const warnDropped = dropped => core.warning(`assignees: dropped unusable logins: ${dropped.join(', ')}`)
+  options.assignees = sanitizeAssignees(options.assignees, { onDropped: warnDropped }).join('\n')
+
   debugLog('Options: ', options)
 
   if (!options.enabled) { return }
@@ -311,15 +323,27 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
           }))
         debugLog('Added needs-security-review label')
       }
-      // add assignees step
-      await guardWrite(core, 'add assignees', () =>
-        github.rest.issues.addAssignees({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          issue_number: context.issue.number,
-          assignees: assigneesAfterVal.split(/\s+/).filter((str) => str !== '')
-        }))
-      debugLog('Added assignees')
+      // add assignees step — pre-check logins exist, then assign non-fatally:
+      // assignment is auxiliary and must never fail the security job. A
+      // nonexistent (404) or unauthorized (422) login only produces a
+      // warning; on fork PRs guardWrite turns the 403 from the read-only
+      // token into a skip, mirroring the other PR writes.
+      const assigneeCandidates = sanitizeAssignees(assigneesAfterVal, { onDropped: warnDropped })
+      const existingAssignees = assigneeCandidates.length > 0
+        ? await filterExistingLogins(github, assigneeCandidates, { cache: loginCache, onDropped: warnDropped })
+        : []
+      if (existingAssignees.length > 0) {
+        await guardWrite(core, 'add assignees', () =>
+          addAssigneesSafely(github, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            assignees: existingAssignees
+          }, { warn: msg => core.warning(msg) }))
+        debugLog('Added assignees')
+      } else {
+        debugLog('No valid assignees to add')
+      }
     }
 
     const { default: sendSlackMessage } = await import(`${actionPath}/src/sendSlackMessage.js`)

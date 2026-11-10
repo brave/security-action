@@ -1,3 +1,5 @@
+import { sanitizeAssignees } from '../validateAssignees.js'
+
 export default async function assigneesAfter ({
   github,
   githubToken,
@@ -5,7 +7,8 @@ export default async function assigneesAfter ({
   owner,
   repo,
   number,
-  assignees
+  assignees,
+  warn = () => {}
 }) {
   if (!github && githubToken) {
     const { Octokit } = await import('octokit')
@@ -61,9 +64,11 @@ export default async function assigneesAfter ({
   ).flat())]
 
   console.log('assignees: %o', outputAssignees)
-  if (outputAssignees.length > 0) {
-    return outputAssignees.join('\n')
+  const onDropped = dropped => warn(`assignees: dropped invalid logins: ${dropped.join(', ')}`)
+  const validCcAssignees = sanitizeAssignees(outputAssignees.join(' '), { onDropped })
+  if (validCcAssignees.length > 0) {
+    return validCcAssignees.join('\n')
   } else {
-    return assignees.split(/\s+/).filter((str) => str !== '').join('\n')
+    return sanitizeAssignees(assignees ?? '', { onDropped }).join('\n')
   }
 }
