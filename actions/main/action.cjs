@@ -76,6 +76,13 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
   const debugLog = options.debug ? console.log : () => {}
 
+  // Fork PRs run with a read-only GITHUB_TOKEN: every PR write (comments,
+  // labels, assignees, review-comment cleanup) 403s with
+  // "Resource not accessible by integration". guardWrite turns that into a
+  // skip + warning instead of failing an otherwise-green run; comment
+  // content is mirrored to the job summary at the call sites.
+  const { guardWrite } = await import(`${actionPath}/src/githubWriteGuard.js`)
+
   debugLog('Options: ', options)
 
   if (!options.enabled) { return }
@@ -197,7 +204,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
         actionPath,
         assignees: options.assignees,
         debug: options.debug,
-        enabledScanners: modelscanList
+        enabledScanners: modelscanList,
+        core
       })
     }
 
@@ -217,7 +225,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
       matchResult: codeownersMatch,
       debug: options.debug,
       minFiles: options.codeowners_min_files,
-      mode: options.codeowners_mode
+      mode: options.codeowners_mode,
+      core
     })
     debugLog('Posted codeowners comment')
 
@@ -227,7 +236,8 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     debugLog('Comments before:', await commentsNumber({ context, github }))
 
     const { number: commentsBefore } = await commentsNumber({ context, github })
-    await cleanupComments({ context, github })
+    await guardWrite(core, 'cleanup outdated review comments', () =>
+      cleanupComments({ context, github }))
 
     // unverified-commits steps
     const { default: unverifiedCommits } = await import(`${actionPath}/src/steps/unverifiedCommits.js`)
@@ -236,12 +246,13 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     try {
       const unverifiedCommitsSteps = await unverifiedCommits({ context, github })
       if (unverifiedCommitsSteps === 'UNVERIFIED-CHANGED') {
-        await github.rest.issues.addLabels({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          issue_number: context.issue.number,
-          labels: ['unverified-commits']
-        })
+        await guardWrite(core, 'add unverified-commits label', () =>
+          github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['unverified-commits']
+          }))
         debugLog('Added unverified-commits label')
       }
     } catch (e) {
@@ -278,7 +289,7 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
 
     // add description-contains-hotwords step
     const { default: hotwords } = await import(`${actionPath}/src/steps/hotwords.js`)
-    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]' && options.hotwords_enabled) ? await hotwords({ context, github, hotwords: options.hotwords }) : false
+    const descriptionContainsHotwords = (context.actor !== 'renovate[bot]' && options.hotwords_enabled) ? await hotwords({ context, github, hotwords: options.hotwords, core }) : false
     debugLog('Description contains hotwords:', descriptionContainsHotwords)
 
     // add should-trigger label step
@@ -288,21 +299,23 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     if (shouldTrigger) {
       if (categories.includes('security')) {
         // add label step
-        await github.rest.issues.addLabels({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          issue_number: context.issue.number,
-          labels: ['needs-security-review']
-        })
+        await guardWrite(core, 'add needs-security-review label', () =>
+          github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['needs-security-review']
+          }))
         debugLog('Added needs-security-review label')
       }
       // add assignees step
-      await github.rest.issues.addAssignees({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: context.issue.number,
-        assignees: assigneesAfterVal.split(/\s+/).filter((str) => str !== '')
-      })
+      await guardWrite(core, 'add assignees', () =>
+        github.rest.issues.addAssignees({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          assignees: assigneesAfterVal.split(/\s+/).filter((str) => str !== '')
+        }))
       debugLog('Added assignees')
     }
 
@@ -381,12 +394,13 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     }
   } else if (context.actor === 'dependabot[bot]') {
     // if the actor is dependabot[bot], add security label to PR, and nothing more
-    await github.rest.issues.addLabels({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: context.issue.number,
-      labels: ['security', 'P2']
-    })
+    await guardWrite(core, 'add dependabot security labels', () =>
+      github.rest.issues.addLabels({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: context.issue.number,
+        labels: ['security', 'P2']
+      }))
     debugLog('Added security label to PR')
   }
 }

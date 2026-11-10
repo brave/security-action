@@ -1,8 +1,11 @@
+import { guardWrite, appendJobSummary } from '../githubWriteGuard.js'
+
 export default async function hotwords ({
   github,
   githubToken,
   context,
-  hotwords
+  hotwords,
+  core = null
 }) {
   hotwords = hotwords.split('\n').map(s => s.trim()).filter((s) => s !== '')
 
@@ -50,12 +53,15 @@ export default async function hotwords ({
     const messages = (await github.graphql(pullRequestCommentsQuery, variables)).repository.pullRequest.comments.nodes.map(node => node.body)
 
     if (!messages.includes(m)) {
-      await github.rest.issues.createComment({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        issue_number: context.issue.number,
-        body: m
-      })
+      await guardWrite(core, 'hotwords notice comment', () =>
+        github.rest.issues.createComment({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          body: m
+        }), () => appendJobSummary(
+        '> Hotwords notice could not be posted as a PR comment (read-only token on fork PR). Content follows.\n\n' +
+        m + '\n'))
     }
   }
 

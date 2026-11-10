@@ -60,3 +60,17 @@ Feature: Codeowners summary comment
     Then a new comment is created
     And the comment body is under 65536 characters
     And the comment body contains "truncated"
+
+  Scenario: Fork PR read-only token skips the comment without failing
+    Given a PR with 60 changed files owned by "alice"
+    And octokit rejects comment writes with 403 "Resource not accessible by integration"
+    When posting the codeowners comment in mode "always"
+    Then a warning is logged that the token is read-only
+    And no new comment is created
+    And the comment body is written to the job summary
+
+  Scenario: Non-permission comment failures still fail the job
+    Given a PR with 60 changed files owned by "alice"
+    And octokit rejects comment writes with 404 "404 Not Found"
+    When posting the codeowners comment in mode "always"
+    Then the action fails with "404 Not Found"

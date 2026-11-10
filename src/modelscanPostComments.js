@@ -3,6 +3,8 @@ import { mkdtempSync, rmSync } from 'fs'
 import os from 'os'
 import path from 'path'
 
+import { guardWrite, appendJobSummary } from './githubWriteGuard.js'
+
 /**
  * ─────────────────────────────────────────────────────────────────────────────
  * Run modelscan on changed binary files and post file-level review comments.
@@ -36,6 +38,7 @@ export default async function modelscanPostComments ({
   assignees,
   debug = false,
   enabledScanners = 'all',
+  core = null,
   _spawn
 }) {
   const debugLog = debug ? console.log : () => {}
@@ -148,16 +151,19 @@ export default async function modelscanPostComments ({
 
   for (const finding of newFindings) {
     try {
-      await github.rest.pulls.createReviewComment({
-        owner,
-        repo,
-        pull_number: prNumber,
-        path: finding.path,
-        body: _formatComment(finding, assignees),
-        commit_id: commitId,
-        side: 'RIGHT',
-        subject_type: 'file'
-      })
+      await guardWrite(core, `modelscan comment on ${finding.path}`, () =>
+        github.rest.pulls.createReviewComment({
+          owner,
+          repo,
+          pull_number: prNumber,
+          path: finding.path,
+          body: _formatComment(finding, assignees),
+          commit_id: commitId,
+          side: 'RIGHT',
+          subject_type: 'file'
+        }), () => appendJobSummary(
+        '> modelscan finding could not be posted as a PR comment (read-only token on fork PR). ' +
+        `Finding on \`${finding.path}\` follows.\n\n` + _formatComment(finding, assignees) + '\n'))
       debugLog(`Posted modelscan comment on ${finding.path}`)
     } catch (e) {
       if (e.status === 422 && e.message && e.message.includes('is not a valid path')) {
