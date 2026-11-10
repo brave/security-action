@@ -148,7 +148,10 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   // Install xmllint for safesvg. Update first: the runner's stale apt
   // index routinely points at superseded point releases and every
   // mirror 404s; apt update refreshes it before the install attempt.
-  await runCommand('sudo apt-get update -qq && sudo apt-get install -y libxml2-utils', { shell: true })
+  // Acquire::Retries + network timeouts retry transient fetch failures
+  // (packages.microsoft.com 403'd a whole run in PR #3087).
+  const aptRetry = '-o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30'
+  await runCommand(`sudo apt-get update -qq ${aptRetry} && sudo apt-get install -y ${aptRetry} libxml2-utils`, { shell: true })
   debugLog('Installed xmllint')
 
   // debug step

@@ -71,3 +71,19 @@ Feature: Landrun installation
     When installing landrun
     Then GITHUB_PATH receives the landrun directory
     And the install completes without error
+
+  Scenario: Transient 503s during download are retried
+    Given no landrun binary is installed
+    And the downloaded landrun reports the pinned version
+    And the per-attempt fetch returns HTTP 503 twice then succeeds
+    When installing landrun
+    Then the binary is written as executable
+    And the download retried 3 attempts
+    And the install completes without error
+
+  Scenario: A 404 during download is not retried
+    Given no landrun binary is installed
+    And the per-attempt fetch returns HTTP 404 on every attempt
+    When installing landrun
+    Then the download retried 1 attempt
+    And the action fails with "Failed to download: HTTP 404"

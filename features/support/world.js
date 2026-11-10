@@ -382,6 +382,28 @@ export function makeMockDownload (content = 'fixture', { fail = null, routes = [
   return download
 }
 
+/** Fake per-attempt fetch seam for the download retry loop:
+ *  async (url, {timeoutMs}) -> Buffer. `script` is a list consumed in order
+ *  (the last entry repeats): a number is an HTTP status thrown as
+ *  `Failed to download: HTTP <n>` (with statusCode), anything else is Buffer
+ *  content. __count() reports how many attempts were made. */
+export function makeMockFetchOnce (script = [200], content = 'binary') {
+  const rec = new Recorder()
+  let calls = 0
+  const fetchOnce = async (url) => {
+    const step = script[Math.min(calls, script.length - 1)]
+    calls++
+    rec.record('fetchOnce', { url, step: typeof step === 'number' ? step : 'ok' })
+    if (typeof step === 'number' && step !== 200) {
+      throw Object.assign(new Error(`Failed to download: HTTP ${step}`), { statusCode: step })
+    }
+    return Buffer.from(typeof step === 'string' ? step : content)
+  }
+  fetchOnce.__recorder = rec
+  fetchOnce.__count = () => calls
+  return fetchOnce
+}
+
 class CustomWorld extends World {
   constructor (options) {
     super(options)
@@ -410,6 +432,7 @@ Object.assign(CustomWorld.prototype, {
   makeMockExec,
   makeMockFs,
   makeMockDownload,
+  makeMockFetchOnce,
   makeDependabotAlert,
   Recorder
 })

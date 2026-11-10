@@ -6,12 +6,12 @@
  * code that runs on the host is the checksum-verified opengrep binary.
  */
 
-import https from 'https'
 import crypto from 'crypto'
 import { execSync } from 'child_process'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
+import { fetchWithRetry } from './fetchRetry.js'
 
 export const OPENGREP_VERSION = 'v1.32.0'
 // BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)
@@ -37,29 +37,13 @@ const DIST_BY_PLATFORM = {
 }
 
 /**
- * Download content from URL (follows GitHub release redirects)
+ * Download content from URL (follows GitHub release redirects), retrying
+ * transient failures (5xx, timeouts, network errors) with exponential
+ * backoff; 4xx fails fast. Per-attempt fetch is fetchWithRetry's default,
+ * overridable via the `_fetchOnce` test seam.
  */
-function downloadFile (url) {
-  return new Promise((resolve, reject) => {
-    const follow = (target) => {
-      https.get(target, (response) => {
-        if (response.statusCode === 301 || response.statusCode === 302) {
-          response.resume()
-          follow(response.headers.location)
-          return
-        }
-        if (response.statusCode !== 200) {
-          reject(new Error(`Failed to download: HTTP ${response.statusCode}`))
-          return
-        }
-        const chunks = []
-        response.on('data', (chunk) => chunks.push(chunk))
-        response.on('end', () => resolve(Buffer.concat(chunks)))
-        response.on('error', reject)
-      }).on('error', reject)
-    }
-    follow(url)
-  })
+async function downloadFile (url, fetchOnce, sleep) {
+  return fetchWithRetry(url, { fetchOnce: fetchOnce || undefined, sleep: sleep || undefined })
 }
 
 /**
@@ -118,7 +102,10 @@ function verifyInstalledBinary (fsx, binPath, expectedSha256, version, dist) {
  *
  * Test seams (all optional, default to real implementations):
  * - _exec: replaces execSync (command -> output)
- * - _download: replaces downloadFile (url -> Buffer)
+ * - _download: replaces the whole download step (url -> Buffer)
+ * - _fetchOnce: replaces the per-attempt fetch inside the retry loop
+ *   ((url, {timeoutMs}) -> Buffer) — fault-injection seam for retries
+ * - _sleep: replaces the inter-attempt backoff delay (ms -> Promise)
  * - _fs: replaces fs (existsSync/readFileSync/appendFileSync/writeFileSync/mkdirSync)
  * - _binPath: overrides the opengrep binary path (latest symlink)
  * - _binSha256: replaces the pinned binary digest map ({ [dist]: sha })
@@ -127,13 +114,15 @@ function verifyInstalledBinary (fsx, binPath, expectedSha256, version, dist) {
 export default async function installOpengrep ({
   _exec = null,
   _download = null,
+  _fetchOnce = null,
+  _sleep = null,
   _fs = null,
   _binPath = null,
   _binSha256 = null,
   _dist = null
 } = {}) {
   const exec = _exec || execSync
-  const download = _download || downloadFile
+  const download = _download || ((url) => downloadFile(url, _fetchOnce, _sleep))
   const fsx = _fs || fs
   const digestMap = _binSha256 || OPENGREP_BIN_SHA256
 

@@ -74,5 +74,20 @@ Feature: Opengrep installation
     When installing opengrep
     Then GITHUB_PATH receives the opengrep directory
 
+  Scenario: Transient 503s during download are retried
+    Given no opengrep binary is installed
+    And the per-attempt fetch returns HTTP 503 twice then succeeds
+    When installing opengrep
+    Then the opengrep binary is written as executable
+    And the download retried 3 attempts
+    And the install completes without error
+
+  Scenario: A 404 during download is not retried
+    Given no opengrep binary is installed
+    And the per-attempt fetch returns HTTP 404 on every attempt
+    When installing opengrep
+    Then the download retried 1 attempt
+    And the action fails with "Failed to download: HTTP 404"
+
   Scenario: The aarch64 release asset is pinned
     Then the opengrep pins include the aarch64 release asset
