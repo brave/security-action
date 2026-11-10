@@ -36,3 +36,15 @@ Feature: Assignees after Cc comments
     Given a review thread comment by "github-actions" with body "found something<br>Cc @alice\n<!-- id-1 -->\n"
     When resolving assignees for PR "42" with fallback "carol"
     Then the assignees are "alice"
+
+  Scenario: HTML-polluted fallback keeps only the logins before the first tag
+    When resolving assignees after review with fallback "thypon <br><br>Please consider an alternative approach that avoids this security concern, or request a review from the sec-team on slack."
+    Then the assignees are "thypon"
+
+  Scenario: Fallback tokens that are not logins are dropped
+    When resolving assignees after review with fallback "carol this..that dave"
+    Then the assignees are "carol\ndave"
+
+  Scenario: Markup-only fallback yields no assignees
+    When resolving assignees after review with fallback "<br><br>Please consider an alternative approach."
+    Then the assignees are ""
