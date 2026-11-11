@@ -1,6 +1,8 @@
 rules:
   - id: raptor-typos
     metadata:
+      cwe:
+        - 'CWE-480: Use of Incorrect Operator'
       author: Andrea Brancaleoni <abc@pompel.me>
       original_author: Marco Ivaldi <raptor@0xdeadbeef.info>
       references:

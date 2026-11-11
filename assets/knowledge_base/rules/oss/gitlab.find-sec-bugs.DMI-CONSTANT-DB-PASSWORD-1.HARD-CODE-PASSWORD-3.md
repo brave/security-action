@@ -1,0 +1,25 @@
+---
+name: oss/gitlab.find-sec-bugs.DMI-CONSTANT-DB-PASSWORD-1.HARD-CODE-PASSWORD-3
+rubric: safety
+severity: should_fix
+languages: [java]
+cwe: [CWE-259]
+---
+
+**Rule.** A potential hard-coded password was identified in a database connection string. Passwords should not be stored directly in code but loaded from secure locations such as a Key Management System (KMS). The purpose of using a Key Management System is so access can be audited and keys easily rotated in the event of a breach. By hardcoding passwords, it will be extremely difficult to determine when or if, a key is compromised. The recommendation on which KMS to use depends on the environment the application is running in: - For Google Cloud Platform consider [Cloud Key Management](https://cloud.google.com/kms/docs) - For Amazon Web Services consider [AWS Key Management](https://aws.amazon.com/kms/) - For on premise or other alternatives to cloud providers, consider [Hashicorp's Vault](https://www.vaultproject.io/) - For other cloud providers, please see their documentation
+
+**Why.** Reported as CWE-259. Ported from opengrep rule `gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3` (generated/oss/audit.yaml).
+
+## Examples
+
+Bad:
+
+```java
+java.sql.DriverManager.getConnection($URI, $USR, "...");
+```
+
+## Detection hints
+
+Literal patterns from opengrep rule `gitlab.find_sec_bugs.DMI_CONSTANT_DB_PASSWORD-1.HARD_CODE_PASSWORD-3` (metavariables start with `$`):
+
+- `java.sql.DriverManager.getConnection($URI, $USR, "...");`

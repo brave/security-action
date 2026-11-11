@@ -1,6 +1,8 @@
 rules:
   - id: raptor-signed-unsigned-conversion
     metadata:
+      cwe:
+        - 'CWE-195: Signed to Unsigned Conversion Error'
       author: Marco Ivaldi <raptor@0xdeadbeef.info>
       references:
         - https://cwe.mitre.org/data/definitions/195

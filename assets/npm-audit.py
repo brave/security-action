@@ -66,7 +66,10 @@ def main(_run=subprocess.run, _which=shutil.which, _mkdtemp=tempfile.TemporaryDi
                         raise
                     if source:
                         source = f"<br /><br />See {source}"
-                    print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}")
+                    cwe = (via.get("cwe") or [""])[0]
+                    rule_id = via.get("name") or via.get("source") or "unknown"
+                    comment = f"<!-- Category: security, CWE: {cwe}, Rule: npm-advisory-{rule_id} -->"
+                    print(f"{severity}:{lock_path}:{line} {via.get('title')}{source}{comment}")
 
 
 if __name__ == "__main__":

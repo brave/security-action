@@ -1,0 +1,65 @@
+agentic_review {
+  capability_groups {
+    path_expression: ".*\.c|.*\.cpp|.*\.cc|.*\.h|.*\.hh|.*\.hcc"
+    rules: "rules/client/brave-isolated-world-id-content-end.md"
+  }
+  capability_groups {
+    path_expression: ".*\.gn|.*\.gni"
+    rules: "rules/client/brave.gni-includes.md"
+  }
+  capability_groups {
+    path_expression: ".*\.c|.*\.cpp|.*\.cc|.*\.h|.*\.hh|.*\.hcc|.*\.mm"
+    rules: "rules/client/dangling-pointer-trait.md"
+    rules: "rules/client/refcounted-usage.md"
+  }
+  capability_groups {
+    path_expression: ".*\.cc|.*\.h"
+    rules: "rules/client/in-process-browser-test.md"
+    rules: "rules/client/web-contents-user-data.md"
+  }
+  capability_groups {
+    path_expression: ".*\.html|.*\.md|.*\.grd|.*\.grdp"
+    rules: "rules/client/privacy.md"
+  }
+  capability_groups {
+    path_expression: ".*_sources\.gni|sources\.gni|sources_gni\.gni"
+    rules: "rules/client/sources-gni.md"
+  }
+  capability_groups {
+    path_expression: ".*\.server\.ts|.*\.server\.js|sveltekit-event-fetch-path-traversal\.ts"
+    rules: "rules/client/sveltekit-event-fetch-path-traversal.md"
+  }
+  capability_groups {
+    path_expression: ".*\.cpp|.*\.cc|.*\.c|.*\.h|.*\.hpp|.*\.hh|.*\.mm"
+    rules: "rules/client/unsafe-js-in-cpp-strings.md"
+  }
+  capability_groups {
+    path_expression: ".*\.ts|.*\.js|.*\.tsx"
+    rules: "rules/client/web-ui-origin-encoding.md"
+  }
+  capability_groups {
+    path_expression: ".*"
+    rules: "rules/client/android-profile-original.md"
+    rules: "rules/client/android-profile-static.md"
+    rules: "rules/client/android-resolve-intent.md"
+    rules: "rules/client/brave-execute-script-ios.md"
+    rules: "rules/client/brave-execute-script.md"
+    rules: "rules/client/brave-missing-break-in-switch.md"
+    rules: "rules/client/browser-dependency-inversion.md"
+    rules: "rules/client/cast-signed-to-unsigned.md"
+    rules: "rules/client/chromium-security-dcheck-should-be-check.md"
+    rules: "rules/client/chromium-bind-uaf.md"
+    rules: "rules/client/chromium-insecure-gurl.md"
+    rules: "rules/client/const-cast.md"
+    rules: "rules/client/chromium-crash-vs-dump-without-crashing.md"
+    rules: "rules/client/get-visible-entry.md"
+    rules: "rules/client/glide-library.md"
+    rules: "rules/client/raptor-interesting-api-calls.md"
+    rules: "rules/client/license-nonfree.md"
+    rules: "rules/client/raptor-mismatched-memory-management-cpp.md"
+    rules: "rules/client/reinterpret-cast.md"
+    rules: "rules/client/raptor-signed-unsigned-conversion.md"
+    rules: "rules/client/raptor-typos.md"
+    rules: "rules/client/unsafe-cpp-constructs.md"
+  }
+}

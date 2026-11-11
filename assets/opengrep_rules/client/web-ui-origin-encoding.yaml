@@ -7,6 +7,8 @@ rules:
       prevents passed URLs and other encoded data from causing the WebUI URL
       from being malformed or parsed incorrectly.
     metadata:
+      cwe:
+        - 'CWE-116: Improper Encoding or Escaping of Output'
       author: |
         Kyle Den Hartog <kdenhartog@brave.com>
         Andrea Brancaleoni <abc@pompel.me>

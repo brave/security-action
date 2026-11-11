@@ -1,6 +1,8 @@
 rules:
   - id: no-backticks-in-js-handlers
     metadata:
+      cwe:
+        - 'CWE-79: Improper Neutralization of Input During Web Page Generation (''Cross-site Scripting'')'
       author: Andrea Brancaleoni @ Brave
       source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/services/no-backticks-in-js-handlers.yaml
       category: security

@@ -1,6 +1,8 @@
 rules:
   - id: url-constructor-base
     metadata:
+      cwe:
+        - 'CWE-346: Origin Validation Error'
       author: Ben Caller
       confidence: LOW
       references:

@@ -1,6 +1,8 @@
 rules:
   - id: brave-missing-break-in-switch
     metadata:
+      cwe:
+        - 'CWE-484: Omitted Break Statement in Switch'
       author: Andrea Brancaleoni <abc@pompel.me>
       original_author: Marco Ivaldi <raptor@0xdeadbeef.info>
       references:
