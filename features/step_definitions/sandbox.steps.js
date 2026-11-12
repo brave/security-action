@@ -28,6 +28,7 @@ function stubLandrun (dir) {
     // "landrun --best-effort -- /bin/true". A kernel without Landlock
     // makes the real landrun fail; the stub models that with
     // SANDBOX_STUB_PROBE_RC instead of a kernel.
+    // eslint-disable-next-line no-template-curly-in-string
     'if [ "${SANDBOX_STUB_PROBE_RC:-}" != "" ] && [ "$1" = "--best-effort" ]; then',
     '  for a in "$@"; do [ "$a" = "/bin/true" ] && exit "$SANDBOX_STUB_PROBE_RC"; done',
     'fi',
