@@ -42,6 +42,18 @@ BIN_DIR="${RUNNER_TEMP:-/tmp}/reviewdog/bin"
 STAGE="$(mktemp -d "${RUNNER_TEMP:-/tmp}/reviewdog-install.XXXXXX")"
 trap 'rm -rf "$STAGE"' EXIT
 
+# Prebuilt image (and re-runs within the same job): a reviewdog of the
+# pinned version already on PATH needs no download. Version match is
+# required — a different version falls through to the pinned install.
+if command -v reviewdog >/dev/null 2>&1; then
+  FOUND="$(reviewdog --version)"
+  case "$FOUND" in
+    *"$ASSET_VERSION"*)
+      echo "install-reviewdog: found ${FOUND} on PATH; skipping download"
+      exit 0 ;;
+  esac
+fi
+
 echo "install-reviewdog: downloading ${URL}"
 # --retry-all-errors: also retry 403/429 from the release CDN and 5xx
 # (curl >= 7.71; runners ship far newer).

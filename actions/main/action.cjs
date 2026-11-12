@@ -151,27 +151,44 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
   // uv sync installs PR-controlled lockfiles (and runs build hooks for
   // sdists) — sandbox it: read-only workspace, writable venv + uv caches,
   // TLS-only egress (see scripts/with-sandbox.sh / README threat model).
+  // Prebuilt image: when uv.lock still hashes to the image manifest
+  // value, the baked cache is complete — sync offline.
+  const { readImageManifest, lockHashMatches, commandAvailable } = await import(`${actionPath}/src/systemImage.js`)
+  const offlineUv = lockHashMatches({
+    fsx: fs,
+    manifest: readImageManifest(fs),
+    lockPath: `${actionPath}/uv.lock`,
+    key: 'uv_lock_sha256'
+  })
+  debugLog(`uv sync offline: ${offlineUv}`)
   const { default: buildUvSyncCmd } = await import(`${actionPath}/src/uvSyncSandbox.js`)
   await runCommand(buildUvSyncCmd({
     actionPath,
     cwd: process.cwd(),
     home: os.homedir(),
     groupArgs,
+    offline: offlineUv,
     // setup-uv exports these on runners; honor the overrides.
     uvCacheDir: process.env.UV_CACHE_DIR || `${os.homedir()}/.cache/uv`,
     uvPythonDir: process.env.UV_PYTHON_INSTALL_DIR || `${os.homedir()}/.local/share/uv`
   }), { shell: true })
   debugLog('Synced python dependencies (uv)')
-  // Disable man-db auto-update to speed up apt-get operations
-  await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
-  // Install xmllint for safesvg. Update first: the runner's stale apt
-  // index routinely points at superseded point releases and every
-  // mirror 404s; apt update refreshes it before the install attempt.
-  // Acquire::Retries + network timeouts retry transient fetch failures
-  // (packages.microsoft.com 403'd a whole run in PR #3087).
-  const aptRetry = '-o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30'
-  await runCommand(`sudo apt-get update -qq ${aptRetry} && sudo apt-get install -y ${aptRetry} libxml2-utils`, { shell: true })
-  debugLog('Installed xmllint')
+  // xmllint for safesvg. Baked into the prebuilt image; plain runners
+  // still install it via apt (see the update-first note below).
+  if (commandAvailable('xmllint', { env: process.env, fsx: fs })) {
+    debugLog('xmllint already available; skipping apt install')
+  } else {
+    // Disable man-db auto-update to speed up apt-get operations
+    await runCommand('sudo rm -f /var/lib/man-db/auto-update || echo "Warning: Failed to disable man-db auto-update"', { shell: true })
+    // Install xmllint for safesvg. Update first: the runner's stale apt
+    // index routinely points at superseded point releases and every
+    // mirror 404s; apt update refreshes it before the install attempt.
+    // Acquire::Retries + network timeouts retry transient fetch failures
+    // (packages.microsoft.com 403'd a whole run in PR #3087).
+    const aptRetry = '-o Acquire::Retries=5 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30'
+    await runCommand(`sudo apt-get update -qq ${aptRetry} && sudo apt-get install -y ${aptRetry} libxml2-utils`, { shell: true })
+    debugLog('Installed xmllint')
+  }
 
   // debug step
   if (options.debug) {

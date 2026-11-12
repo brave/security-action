@@ -60,9 +60,19 @@ fi
 
 # Kernel without Landlock (or unknown LSM list): fail closed in CI, degrade
 # locally. An unreadable LSM list counts as unsupported — do not guess.
-if [ ! -r "$SANDBOX_LSM_PATH" ] || ! grep -qw landlock "$SANDBOX_LSM_PATH"; then
+# Job containers do not mount securityfs, so the LSM file is absent even on
+# Landlock-capable kernels: fall back to a landrun self-probe (a trivial
+# sandboxed exec) and let the kernel decide. The probe is the syscall-level
+# truth; the file check stays first because it is free on plain runners.
+sandbox_supported () {
+  if [ -r "$SANDBOX_LSM_PATH" ] && grep -qw landlock "$SANDBOX_LSM_PATH"; then
+    return 0
+  fi
+  "$LANDRUN_BIN" --best-effort -- /bin/true >/dev/null 2>&1
+}
+if ! sandbox_supported; then
   if [ "${CI:-}" = "true" ]; then
-    fail "kernel LSM list at $SANDBOX_LSM_PATH does not include landlock."
+    fail "kernel LSM list at $SANDBOX_LSM_PATH does not include landlock and the landrun self-probe failed."
   fi
   warn "Landlock not enabled on this kernel; running unsandboxed (local mode)."
   exec "$@"
