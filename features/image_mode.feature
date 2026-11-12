@@ -117,3 +117,11 @@ Feature: Prebuilt image runtime guards
     When the shim builds the github-script surface
     Then the github client authenticates with the runner token
     And the github client exposes the rest and paginate surface
+
+  Scenario: The shim octokit configures throttling and retry like github-script
+    Given a runner environment with repository "brave/core" and event "pull_request"
+    And an event payload file describing pull request 42
+    And a GITHUB_TOKEN of "ghs-test"
+    When the shim builds the github-script surface
+    Then the octokit options enable throttling with rate limit handlers
+    And the octokit options enable the retry plugin

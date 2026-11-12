@@ -192,6 +192,7 @@ const OUTPUT_FILE = '/tmp/github-output'
 
 Given('a runner environment with repository {string} and event {string}', function (repo, eventName) {
   this.shimEnv = {
+    GITHUB_ACTIONS: 'true',
     GITHUB_REPOSITORY: repo,
     GITHUB_EVENT_NAME: eventName,
     GITHUB_ACTOR: 'tester',
@@ -285,6 +286,18 @@ Then('the github client exposes the rest and paginate surface', function () {
   assert.ok(this.shimResult.github.rest, 'expected github.rest')
   assert.equal(typeof this.shimResult.github.paginate, 'function', 'expected github.paginate')
   assert.equal(typeof this.shimResult.github.graphql, 'function', 'expected github.graphql')
+})
+
+Then('the octokit options enable throttling with rate limit handlers', function () {
+  const throttle = this.octokitOpts.throttle
+  assert.ok(throttle, 'expected throttle config')
+  assert.equal(throttle.enabled, true, 'expected throttling enabled in runner env')
+  assert.equal(typeof throttle.onRateLimit, 'function', 'expected onRateLimit handler')
+  assert.equal(typeof throttle.onSecondaryRateLimit, 'function', 'expected onSecondaryRateLimit handler')
+})
+
+Then('the octokit options enable the retry plugin', function () {
+  assert.equal(this.octokitOpts.retry?.enabled, true, 'expected retry enabled')
 })
 
 // Re-exported pins so the feature stays honest about what ships.
