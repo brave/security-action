@@ -24,6 +24,14 @@ function stubLandrun (dir) {
   fs.writeFileSync(bin, [
     '#!/usr/bin/env bash',
     `printf '%s\\n' "$@" >> '${log}'`,
+    // Self-probe simulation: the wrapper probes kernel support with
+    // "landrun --best-effort -- /bin/true". A kernel without Landlock
+    // makes the real landrun fail; the stub models that with
+    // SANDBOX_STUB_PROBE_RC instead of a kernel.
+    // eslint-disable-next-line no-template-curly-in-string
+    'if [ "${SANDBOX_STUB_PROBE_RC:-}" != "" ] && [ "$1" = "--best-effort" ]; then',
+    '  for a in "$@"; do [ "$a" = "/bin/true" ] && exit "$SANDBOX_STUB_PROBE_RC"; done',
+    'fi',
     'envs=()',
     'while [ $# -gt 0 ]; do',
     '  if [ "$1" = "--env" ]; then shift',
@@ -37,6 +45,9 @@ function stubLandrun (dir) {
     `echo __ENV__ >> '${log}'`,
     // eslint-disable-next-line no-template-curly-in-string
     `env -i "PWD=$PWD" ${'${envs[@]+"${envs[@]}"}'} env | LC_ALL=C sort >> '${log}'`,
+    // /bin/true does not exist on macOS dev machines; the stub models the
+    // probe's trivial success directly instead of exec'ing it.
+    'if [ "$1" = "/bin/true" ]; then exit 0; fi',
     'exec "$@"'
   ].join('\n'), { mode: 0o755 })
   return { bin, log }
@@ -105,6 +116,10 @@ Given(/the kernel LSM list (includes|does not include|is unavailable)/, function
   this.lsmPath = lsm
 })
 
+Given('the landrun stub fails its self-probe', function () {
+  this.extraEnv.SANDBOX_STUB_PROBE_RC = '1'
+})
+
 Given('the wrapper runs in CI', function () {
   this.ci = true
 })
@@ -140,7 +155,11 @@ Then('the command output is {string}', function (expected) {
 })
 
 Then('the command was not executed', function () {
-  assert.ok(!fs.existsSync(this.stubLog), 'unexpected landrun stub invocation')
+  // The stub records every argv (including the wrapper's self-probe) but
+  // only writes the __ENV__ marker when it actually execs a child command.
+  if (!fs.existsSync(this.stubLog)) return
+  const log = fs.readFileSync(this.stubLog, 'utf-8')
+  assert.ok(!log.includes('__ENV__'), 'unexpected landrun stub invocation')
 })
 
 Then('landrun was invoked with {string} as its first argument', function (expected) {

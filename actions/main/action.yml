@@ -101,23 +101,33 @@ runs:
         retries: 3
         script: return true
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
-      name: Install landrun
-      # Sandbox tool for scripts/with-sandbox.sh; installs the pinned binary
-      # and appends its directory to GITHUB_PATH. Must run before the
-      # dependency-install steps (uv sync / pnpm install are wrapped below).
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-      with:
-        # See "Store reviewdog enabled": retries on transient 5xx/timeouts.
-        retries: 3
-        script: |-
-          const path = require('path')
-          const installLandrun = (await import(path.join('${{ github.action_path }}', '../../src/installLandrun.js'))).default
-          await installLandrun()
+      id: runtime
+      name: Detect prebuilt image runtime
+      # Inside the OCI image (ghcr.io/brave/security-action) the build
+      # manifest exists and every pinned tool is baked onto PATH; the
+      # host-only setup steps below are skipped then.
+      run: |-
+        if [ -f /opt/brave-security/manifest.json ]; then
+          echo "image=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "image=false" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      name: Install landrun
+      # Sandbox tool for scripts/with-sandbox.sh (pinned, sha256-checked).
+      # Must run before the dependency-install steps below, which execute
+      # PR-controlled manifests. Runs through the repo's run.js CLI as a
+      # run: step so it also executes inside the job container
+      # (github-script steps only run on the host); inside the image the
+      # baked binary is reused with no network access.
+      run: node "${{ github.action_path }}/../../run.js" "${{ github.action_path }}/../../src/installLandrun.js"
+      shell: bash
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && steps.runtime.outputs.image != 'true' }}
       uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: '3.12'
-    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && steps.runtime.outputs.image != 'true' }}
       name: Setup uv
       uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
       with:
@@ -141,8 +151,29 @@ runs:
       run: |-
         ACTION_ROOT="${{ github.action_path }}/../.."
         PN_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/pnpm-install.XXXXXX")"
+        # Image mode: inside the prebuilt OCI image pnpm itself is baked
+        # onto PATH (no corepack registry lookup) and the baked store
+        # covers the whole lockfile. When the checked-out pnpm-lock.yaml
+        # still hashes to the value recorded at image build time, install
+        # offline from the baked store; a PR that changed the lockfile
+        # falls back to the online path.
+        IMAGE_MODE="false"
+        PM_OFFLINE_ARGS=""
+        PM_STORE_DIR="$HOME/.cache/pnpm/store"
+        PM_GRANTS=""
+        if [ -f /opt/brave-security/manifest.json ]; then
+          IMAGE_MODE="true"
+          LOCK_SHA="$(sha256sum "$ACTION_ROOT/pnpm-lock.yaml" | cut -d' ' -f1)"
+          BAKED_SHA="$(sed -n 's/.*"pnpm_lock_sha256": *"\([0-9a-f]*\)".*/\1/p' /opt/brave-security/manifest.json)"
+          if [ -n "$BAKED_SHA" ] && [ "$LOCK_SHA" = "$BAKED_SHA" ]; then
+            PM_OFFLINE_ARGS="--offline"
+            PM_STORE_DIR="/opt/pnpm/store"
+            PM_GRANTS="--rw /opt/pnpm/store"
+            mkdir -p /opt/pnpm/store
+          fi
+        fi
         # pre-create grant paths: landlock binds rules to existing paths only
-        mkdir -p "$ACTION_ROOT/node_modules" "$HOME/.local/share/pnpm" "$HOME/.cache/node/corepack" "$HOME/.cache/pnpm/store"
+        mkdir -p "$ACTION_ROOT/node_modules" "$HOME/.local/share/pnpm" "$HOME/.cache/node/corepack" "$HOME/.cache/pnpm/store" "$PN_TMP"
         # Run from the private temp dir: corepack stages the package manager
         # via a _tmp_<hash> file in the CWD, which is denied in a read-only
         # workspace. pnpm -C targets the action checkout instead. corepack
@@ -157,9 +188,16 @@ runs:
         # registry.npmjs.org request) hard-failed the job during the Oct 22
         # npmjs outage (PRs #2921, #2939, #2966, #3018, #3025, #3027).
         # The landrun sandbox wraps every attempt.
+        # Image mode invokes the baked pnpm directly; plain runners go
+        # through corepack for the packageManager pin.
         attempt=1
         pnpm_rc=0
         while :; do
+          if [ "$IMAGE_MODE" = "true" ]; then
+            PM_CMD=(pnpm install --frozen-lockfile $PM_OFFLINE_ARGS -C "$ACTION_ROOT" --store-dir "$PM_STORE_DIR")
+          else
+            PM_CMD=(corepack pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$PM_STORE_DIR")
+          fi
           if TMPDIR="$PN_TMP" npm_config_manage_package_manager_versions=false SANDBOX_ENV_EXTRA="npm_config_manage_package_manager_versions" \
           bash "$ACTION_ROOT/scripts/with-sandbox.sh" \
             --ignore-missing \
@@ -169,6 +207,7 @@ runs:
             --rw "$HOME/.local/share/pnpm" \
             --rw "$HOME/.cache/node/corepack" --rox "$HOME/.cache/node/corepack" \
             --rw "$HOME/.cache/pnpm" \
+            $PM_GRANTS \
             --rw /dev/null \
             --rox /opt/hostedtoolcache \
             --rox /usr \
@@ -176,10 +215,11 @@ runs:
             --rox /lib64 \
             --ro /etc --ro /run \
             --connect-tcp 443 \
-            -- corepack pnpm install --frozen-lockfile -C "$ACTION_ROOT" --store-dir "$HOME/.cache/pnpm/store"; then
+            -- "${PM_CMD[@]}"; then
             break
+          else
+            pnpm_rc=$?
           fi
-          pnpm_rc=$?
           if [ "$attempt" -ge 3 ]; then
             echo "pnpm install failed after $attempt attempts (last exit $pnpm_rc)" >&2
             break
@@ -196,34 +236,36 @@ runs:
     #     repo: aquasecurity/tfsec
     #     tag: v1.28.14
     #     cache: enable
-    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' && steps.runtime.outputs.image != 'true' }}
       name: Cache opengrep
+      # Skipped inside the prebuilt image: opengrep is baked onto PATH and
+      # the container's fresh $HOME makes the cache entry useless there.
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.opengrep
         key: opengrep-v1.32.0-${{ runner.os }}
     - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       name: Install opengrep
-      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-      with:
-        # See "Store reviewdog enabled": retries on transient 5xx/timeouts.
-        retries: 3
-        script: |-
-          const path = require('path')
-          const installOpengrep = (await import(path.join('${{ github.action_path }}', '../../src/installOpengrep.js'))).default
-          await installOpengrep()
-    - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-      if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
+      # Runs through run.js as a run: step so it also executes inside the
+      # job container; inside the image the baked binary is reused with no
+      # network access.
+      run: node "${{ github.action_path }}/../../run.js" "${{ github.action_path }}/../../src/installOpengrep.js"
+      shell: bash
+    - if: ${{ steps.reviewdog-enabled.outputs.result == 'true' }}
       id: script
+      name: Run the security action script
+      # action.cjs used to run through actions/github-script, which only
+      # executes on the host — the job container never saw the main
+      # script, its uv sync or the reviewdog runners. run.cjs is a run:
+      # step: it executes inside the container and rebuilds the
+      # github-script surface (github/context/core) from the standard
+      # runner environment. Inputs arrive on stdin as JSON via a quoted
+      # heredoc, so no YAML quoting pitfalls.
       env:
         DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
-      with:
-        # See "Store reviewdog enabled": retries on transient 5xx/timeouts.
-        retries: 3
-        script: |-
-          const actionPath = '${{ github.action_path }}/../../'
-          const inputs = ${{ toJson(inputs) }}
-
-          const script = require('${{ github.action_path }}/action.cjs')
-          await script({github, context, inputs, actionPath, core,
-            debug: process.env.DEBUG === 'true'})
+        ACTION_PATH: ${{ github.action_path }}/../../
+      run: |-
+        node "${{ github.action_path }}/run.cjs" <<'INPUTS_JSON_EOF'
+        ${{ toJson(inputs) }}
+        INPUTS_JSON_EOF
+      shell: bash

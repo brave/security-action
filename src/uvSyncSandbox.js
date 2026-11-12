@@ -10,7 +10,10 @@ export default function buildUvSyncCmd ({
   groupArgs = '',
   // setup-uv overrides both locations on CI runners — grant what is real.
   uvCacheDir = `${home}/.cache/uv`,
-  uvPythonDir = `${home}/.local/share/uv`
+  uvPythonDir = `${home}/.local/share/uv`,
+  // Prebuilt image: when the checked-out uv.lock still hashes to the
+  // value recorded at image build time, sync from the baked cache only.
+  offline = false
 }) {
   // Landlock rules bind to paths that exist when the sandbox is built:
   // pre-create every writable directory (missing paths would be silently
@@ -39,6 +42,6 @@ export default function buildUvSyncCmd ({
     '--ro /run',
     '--connect-tcp 443',
     '--',
-    `uv sync --frozen${groupArgs} --project ${actionPath}`
+    `uv sync --frozen${offline ? ' --offline' : ''}${groupArgs} --project ${actionPath}`
   ].join(' ')
 }
