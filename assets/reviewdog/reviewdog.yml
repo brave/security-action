@@ -5,7 +5,7 @@ runner:
       set -e
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
       OG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/opengrep-scan.XXXXXX")"
-      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "$HOME/.opengrep"
       touch "$HOME/.opengrep/semgrep.log"
       (TMPDIR="$OG_TMP" GIT_OPTIONAL_LOCKS=0 SEMGREP_SEND_METRICS=off \
       SANDBOX_ENV_EXTRA="SEMGREP_SEND_METRICS" \
@@ -14,7 +14,7 @@ runner:
         --ro "$PWD" --ro "$SCRIPTPATH" \
         --rwx "$OG_TMP" --rw "$HOME/.semgrep" --rwx "$HOME/.cache/opengrep" --rw "$HOME/.opengrep/semgrep.log" --rw /dev/null \
         --rox "$ACTION_ROOT/.venv" \
-        --rox "$HOME/.opengrep" --rox "$HOME/.local/bin" \
+        --rwx "$HOME/.opengrep" --rox "$HOME/.local/bin" \
         --rox /opt/hostedtoolcache --rox /usr --rox /lib --rox /lib64 \
         --ro /etc --ro /run \
         -- opengrep \
@@ -39,7 +39,7 @@ runner:
       ACTION_ROOT="$(dirname "$SCRIPTPATH")"
       SG_TMP="$(mktemp -d "${RUNNER_TEMP:-/tmp}/sveltegrep-scan.XXXXXX")"
       trap 'rm -rf "$SG_TMP"' EXIT
-      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep"
+      mkdir -p "$HOME/.semgrep" "$HOME/.cache/opengrep" "$HOME/.opengrep"
       # --ignore-glob: skip test fixture / scraped third-party content entirely.
       # Keep in sync with the path globs in opengrep_rules/blocklist.txt.
       # Extracted scripts are written to a temp mirror so the workspace
@@ -85,7 +85,7 @@ runner:
         --ro "$PWD" --ro "$SCRIPTPATH" \
         --rwx "$SG_TMP" --rw "$HOME/.semgrep" --rwx "$HOME/.cache/opengrep" --rw "$HOME/.opengrep/semgrep.log" --rw /dev/null \
         --rox "$ACTION_ROOT/.venv" \
-        --rox "$HOME/.opengrep" --rox "$HOME/.local/bin" \
+        --rwx "$HOME/.opengrep" --rox "$HOME/.local/bin" \
         --rox /opt/hostedtoolcache --rox /usr --rox /lib --rox /lib64 \
         --ro /etc --ro /run \
         -- opengrep \

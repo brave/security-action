@@ -45,6 +45,7 @@ Feature: Landlock sandbox wrapper
 
   Scenario: Kernel without landlock fails closed in CI
     Given the landrun stub is available
+    And the landrun stub fails its self-probe
     And the kernel LSM list does not include landlock
     And the wrapper runs in CI
     When running the wrapper with landrun args "--rw {tmpdir}" and command "/bin/echo hi"
@@ -54,6 +55,7 @@ Feature: Landlock sandbox wrapper
 
   Scenario: Kernel without landlock degrades locally with a warning
     Given the landrun stub is available
+    And the landrun stub fails its self-probe
     And the kernel LSM list does not include landlock
     And the wrapper runs locally
     When running the wrapper with landrun args "--rw {tmpdir}" and command "/bin/echo degraded"
@@ -61,8 +63,20 @@ Feature: Landlock sandbox wrapper
     And stderr mentions "unsandboxed"
     And the command output is "degraded"
 
-  Scenario: Missing LSM list fails closed in CI
+  Scenario: Missing LSM list falls back to the landrun self-probe
+    # Job containers do not mount securityfs: no LSM list file, but a
+    # Landlock-capable host kernel. The self-probe is the syscall-level
+    # truth and must let the sandbox run.
     Given the landrun stub is available
+    And the kernel LSM list is unavailable
+    And the wrapper runs in CI
+    When running the wrapper with landrun args "--rw {tmpdir}" and command "/bin/echo sandboxed"
+    Then the exit code is 0
+    And the command output is "sandboxed"
+
+  Scenario: Missing LSM list fails closed when the self-probe fails
+    Given the landrun stub is available
+    And the landrun stub fails its self-probe
     And the kernel LSM list is unavailable
     And the wrapper runs in CI
     When running the wrapper with landrun args "--rw {tmpdir}" and command "/bin/echo hi"

@@ -1,0 +1,293 @@
+name: image
+
+# Builds and pushes the prebuilt runtime image consumed by
+# brave/workflows (.github/workflows/security-action.yml container:):
+#
+#   push to main      → ghcr.io/brave/security-action:{latest,v1,sha-<sha>}
+#   pull_request      → ghcr.io/brave/security-action:pr-<number> (validation tag)
+#   workflow_dispatch → ghcr.io/brave/security-action:branch-<ref-name>
+#
+# Every tool pin is computed from the same files the runtime installers
+# read (src/installLandrun.js, src/installOpengrep.js,
+# scripts/install-reviewdog.sh, package.json) — the Dockerfile receives
+# them as build args and contains no duplicated pins. Rebuilds are
+# triggered by anything that changes the baked toolchain or its lockfiles.
+on:
+  push:
+    branches: [main]
+    paths:
+      - Dockerfile
+      - .github/workflows/image.yml
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - pyproject.toml
+      - uv.lock
+      - src/installLandrun.js
+      - src/installOpengrep.js
+      - scripts/install-reviewdog.sh
+  pull_request:
+    paths:
+      - Dockerfile
+      - .github/workflows/image.yml
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - pyproject.toml
+      - uv.lock
+      - src/installLandrun.js
+      - src/installOpengrep.js
+      - scripts/install-reviewdog.sh
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    outputs:
+      image_tag: ${{ steps.tags.outputs.test_tag }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - name: Compute tool pins from source
+        id: pins
+        run: |
+          set -euo pipefail
+          PIN_JSON="$(node --input-type=module -e "
+            import { LANDRUN_VERSION, LANDRUN_BIN_SHA256 } from './src/installLandrun.js'
+            import { OPENGREP_VERSION, OPENGREP_BIN_SHA256 } from './src/installOpengrep.js'
+            import { readFileSync } from 'fs'
+            const pkg = JSON.parse(readFileSync('package.json', 'utf8'))
+            const pnpmVersion = pkg.packageManager.split('@')[1]
+            console.log(JSON.stringify({
+              landrun_version: LANDRUN_VERSION,
+              landrun_sha256: LANDRUN_BIN_SHA256[LANDRUN_VERSION]['landrun-linux-amd64'],
+              opengrep_version: OPENGREP_VERSION,
+              opengrep_sha256: OPENGREP_BIN_SHA256[OPENGREP_VERSION]['opengrep_manylinux_x86'],
+              pnpm_version: pnpmVersion
+            }))
+          ")"
+          echo "json=$PIN_JSON" >> "$GITHUB_OUTPUT"
+          # Fail closed when any pin is missing — a null build arg would
+          # silently produce an image without that tool.
+          node -e "
+            const pins = JSON.parse(process.argv[1])
+            for (const [k, v] of Object.entries(pins)) {
+              if (!v) { console.error('missing pin: ' + k); process.exit(1) }
+            }
+            console.log(pins)
+          " "$PIN_JSON"
+
+      - name: Extract reviewdog pin and tarball sha256
+        id: reviewdog
+        # Single source: both the version pin and the digest table live in
+        # scripts/install-reviewdog.sh — the action calls the script with
+        # no version argument, so the image build and the runtime install
+        # can never bake different reviewdog releases.
+        run: |
+          set -euo pipefail
+          RV="$(grep -oE 'REVIEWDOG_VERSION_PIN="v[0-9.]+"' scripts/install-reviewdog.sh | grep -oE 'v[0-9.]+')"
+          [ -n "$RV" ] || { echo "reviewdog version pin not found in scripts/install-reviewdog.sh" >&2; exit 1; }
+          SHA="$(awk '/Linux-x86_64\)/{f=1} f && /^    SHA256=/{sub(/SHA256=/, ""); gsub(/[ ;]/, ""); print; exit}' scripts/install-reviewdog.sh)"
+          [ -n "$SHA" ] || { echo "reviewdog Linux-x86_64 sha not found" >&2; exit 1; }
+          echo "version=$RV" >> "$GITHUB_OUTPUT"
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+
+      # PR runs publish a throwaway pr-<number> tag so the image can be
+      # tested end to end without touching latest/v1; forks build only —
+      # their GITHUB_TOKEN cannot write packages.
+      - name: Compute image tags
+        id: tags
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          # Docker tags cannot contain '/' — dispatch-triggered branch
+          # names like "feat/prebuilt-image" must be flattened.
+          SAFE_REF="${REF_NAME//\//-}"
+          case "$EVENT_NAME" in
+            pull_request) TEST_TAG="ghcr.io/brave/security-action:pr-${PR_NUMBER}" ; PUBLISH_TAGS="" ;;
+            push)         TEST_TAG="ghcr.io/brave/security-action:sha-${SHA}" ; PUBLISH_TAGS="$(printf 'ghcr.io/brave/security-action:latest\nghcr.io/brave/security-action:v1')" ;;
+            *)            TEST_TAG="ghcr.io/brave/security-action:branch-${SAFE_REF}" ; PUBLISH_TAGS="" ;;
+          esac
+          # Test-before-publish: only the immutable test tag goes to the
+          # registry here. latest/v1 are promoted by the publish job after
+          # the image-loop self-test passed on exactly this digest.
+          {
+            echo "test_tag=$TEST_TAG"
+            echo "publish_tags<<IMAGE_TAGS_EOF"
+            echo "$PUBLISH_TAGS"
+            echo "IMAGE_TAGS_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: linux/amd64
+          push: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+          tags: ${{ steps.tags.outputs.test_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            LANDRUN_VERSION=${{ fromJson(steps.pins.outputs.json).landrun_version }}
+            LANDRUN_SHA256=${{ fromJson(steps.pins.outputs.json).landrun_sha256 }}
+            OPENGREP_VERSION=${{ fromJson(steps.pins.outputs.json).opengrep_version }}
+            OPENGREP_SHA256=${{ fromJson(steps.pins.outputs.json).opengrep_sha256 }}
+            REVIEWDOG_VERSION=${{ steps.reviewdog.outputs.version }}
+            REVIEWDOG_SHA256=${{ steps.reviewdog.outputs.sha256 }}
+            PNPM_VERSION=${{ fromJson(steps.pins.outputs.json).pnpm_version }}
+
+      # Empirical gate for scripts/with-sandbox.sh: the image runs org
+      # workflow jobs as a container, where /sys/kernel/security/lsm is
+      # not mounted and the sandbox-support decision falls to the landrun
+      # self-probe. Strict probe first, --best-effort fallback, mirroring
+      # sandbox_supported — if this fails, with-sandbox.sh will fail
+      # closed for image-mode jobs too and must be revisited.
+      - name: Landrun sandbox probe smoke inside the image
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+        env:
+          TAGS: ${{ steps.tags.outputs.test_tag }}
+        run: |
+          set -euo pipefail
+          IMAGE_TAG="$(head -n1 <<<"$TAGS")"
+          docker pull "$IMAGE_TAG"
+          # Mirror sandbox_supported in scripts/with-sandbox.sh: --rox /usr
+          # so the probe is not a deny-all EACCES, strict first, then
+          # --best-effort — success there still means a ruleset was
+          # enforced, just at an older Landlock ABI (runners ship ABI v8,
+          # landrun v0.1.17 defaults to strict ABI v9).
+          if docker run --rm "$IMAGE_TAG" landrun --rox /usr -- /bin/true; then
+            echo "landrun strict self-probe passed inside the image"
+          else
+            docker run --rm "$IMAGE_TAG" landrun --best-effort --rox /usr -- /bin/true
+            echo "landrun best-effort self-probe passed inside the image (kernel enforces an older Landlock ABI)"
+          fi
+
+      # Private org repos can only pull the package anonymously when it is
+      # public. GITHUB_TOKEN often lacks admin:packages — best effort; if
+      # this 403s, flip visibility once manually (PR body documents this).
+      - name: Make package public (best effort)
+        if: ${{ github.event_name == 'push' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X PATCH /orgs/brave/packages/container/security-action \
+            -f visibility=public || \
+            echo "::warning::Could not set package visibility — set ghcr.io/brave/security-action to public manually once"
+
+  # Full self-test in the freshly built image, before any mutable tag
+  # exists: the job container makes /opt/brave-security/manifest.json
+  # visible so actions/main takes the image-mode path (baked toolchain +
+  # offline pnpm store, no network installs), and scripts/with-sandbox.sh
+  # resolves sandbox support through the landrun self-probe ladder because
+  # job containers do not mount securityfs. The action code is NOT baked
+  # into the image — checkout provides it — so the branch under test
+  # keeps its own code; only the toolchain comes from the image.
+  image-loop:
+    name: image-loop (self-test in the image)
+    needs: build
+    # Fork PRs do not push the image to the registry (push: false in the
+    # build job), so there is nothing to pull here.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+      # pr-<n>/sha-<sha> images stay private (the make-public step only
+      # runs on push); the job container pulls with the GITHUB_TOKEN.
+      packages: read
+    container:
+      image: ${{ needs.build.outputs.image_tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Show baked manifest
+        run: |
+          cat /opt/brave-security/manifest.json
+        shell: bash
+      - uses: ./actions/main
+        name: Run action on full security-action repo, in the image
+        id: action
+        with:
+          debug: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          baseline_scan_only: false
+          gh_to_slack_user_map: ${{ secrets.GH_TO_SLACK_USER_MAP }}
+      - name: Assert finding counts (same thresholds as full-loop)
+        run: |
+          set -e
+          if ((${{ fromJson(steps.action.outputs.reviewdog-findings) }} < 106)); then
+            echo "Too few reviewdog findings"
+            exit 1
+          fi
+          if ((${{ fromJson(steps.action.outputs.safesvg-count) }} < 2)); then
+            echo "Too few safesvg findings"
+            exit 1
+          fi
+          # tfsec disabled
+          # if ((tfsec_count < 4)); then
+          #   echo "Too few tfsec findings"
+          #   exit 1
+          # fi
+          if ((${{ fromJson(steps.action.outputs.opengrep-count) }} < 97)); then
+            echo "Too few opengrep findings"
+            exit 1
+          fi
+          if ((${{ fromJson(steps.action.outputs.sveltegrep-count) }} < 3)); then
+            echo "Too few sveltegrep findings"
+            exit 1
+          fi
+          if ((${{ fromJson(steps.action.outputs.npm-audit-count) }} < 3)); then
+            echo "Too few npm-audit findings"
+            exit 1
+          fi
+          if ((${{ fromJson(steps.action.outputs.pip-audit-count) }} < 2)); then
+            echo "Too few pip-audit findings"
+            exit 1
+          fi
+        shell: bash
+
+  # Promote the tested digest to the mutable tags — server-side manifest
+  # copy via imagetools, no rebuild. Runs only after image-loop passed on
+  # exactly this digest, so latest/v1 always point at a self-tested image.
+  # Pushes to feature branches build and test but never promote.
+  publish:
+    name: publish (latest, v1)
+    needs: image-loop
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Promote tested digest to latest and v1
+        env:
+          SOURCE: ${{ needs.build.outputs.image_tag }}
+        run: |
+          set -euo pipefail
+          # buildx ships on GH runners; imagetools create retags server-side.
+          docker buildx imagetools create \
+            -t ghcr.io/brave/security-action:latest \
+            -t ghcr.io/brave/security-action:v1 \
+            "$SOURCE"
+          docker buildx imagetools inspect ghcr.io/brave/security-action:latest
+        shell: bash

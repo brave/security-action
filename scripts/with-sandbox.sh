@@ -18,9 +18,13 @@
 #                     (never pass secrets: install scripts can read every
 #                     forwarded variable)
 #
-# The wrapper always injects --best-effort so the sandbox degrades to the
-# best Landlock ABI the kernel supports instead of refusing older kernels.
-# Denying a run entirely is the job of the fail-closed checks below.
+# The wrapper always injects --best-effort into the final exec so the
+# sandbox degrades to the best Landlock ABI the kernel supports instead
+# of refusing older kernels. Denying a run entirely is the job of the
+# fail-closed checks below — including the sandbox-support probe, which
+# deliberately does NOT use --best-effort: a --best-effort probe succeeds
+# on kernels that will not enforce anything, so it cannot be used to
+# decide that sandboxing is available (see sandbox_supported).
 set -u
 
 warn () { echo "with-sandbox: $*" >&2; }
@@ -60,9 +64,29 @@ fi
 
 # Kernel without Landlock (or unknown LSM list): fail closed in CI, degrade
 # locally. An unreadable LSM list counts as unsupported — do not guess.
-if [ ! -r "$SANDBOX_LSM_PATH" ] || ! grep -qw landlock "$SANDBOX_LSM_PATH"; then
+# Job containers do not mount securityfs, so the LSM file is absent even on
+# Landlock-capable kernels: fall back to a landrun self-probe (a trivial
+# sandboxed exec) and let the kernel decide. The probes carry --rox /usr:
+# landrun v0.1.17 applies a default deny-all sandbox when no rules are
+# given, so a bare "-- /bin/true" is EACCES even on fully supporting
+# kernels. The first probe runs STRICT (no --best-effort): it must only
+# succeed when the kernel will actually enforce a ruleset — with
+# --best-effort a kernel that cannot enforce anything still exits 0, which
+# would silently degrade CI to unsandboxed execution of PR-controlled
+# installs. When strict fails (e.g. a kernel older than landrun's compiled
+# ABI, which v0.1.17 targets in strict mode), a --best-effort probe runs
+# second: success there still means a ruleset was enforced, just at an
+# older ABI.
+sandbox_supported () {
+  if [ -r "$SANDBOX_LSM_PATH" ] && grep -qw landlock "$SANDBOX_LSM_PATH"; then
+    return 0
+  fi
+  "$LANDRUN_BIN" --rox /usr -- /bin/true >/dev/null 2>&1 && return 0
+  "$LANDRUN_BIN" --best-effort --rox /usr -- /bin/true >/dev/null 2>&1
+}
+if ! sandbox_supported; then
   if [ "${CI:-}" = "true" ]; then
-    fail "kernel LSM list at $SANDBOX_LSM_PATH does not include landlock."
+    fail "kernel LSM list at $SANDBOX_LSM_PATH does not include landlock and the landrun self-probe failed."
   fi
   warn "Landlock not enabled on this kernel; running unsandboxed (local mode)."
   exec "$@"
@@ -74,7 +98,7 @@ fi
 # SANDBOX_ENV_EXTRA names), so untrusted install scripts can never read
 # exported secrets (REVIEWDOG_GITHUB_API_TOKEN, GITHUB_TOKEN, ...) — and the
 # command still gets PATH/HOME/toolchain variables it needs to run.
-SANDBOX_ENV_ALLOWLIST="PATH HOME LANG LC_ALL TMPDIR TMP TEMP CI GITHUB_ACTIONS GITHUB_BASE_REF GITHUB_WORKSPACE RUNNER_TEMP SCRIPTPATH PIP_AUDIT_VENV_BASE PYPI_INDEX_URL PYPI_INSECURE_HOSTS GIT_OPTIONAL_LOCKS UV_CACHE_DIR UV_PYTHON UV_PYTHON_INSTALL_DIR PNPM_HOME COREPACK_ENABLE_DOWNLOAD_PROMPT NODE_ENV COVERAGE_FILE COVERAGE_JSON"
+SANDBOX_ENV_ALLOWLIST="PATH HOME LANG LC_ALL TMPDIR TMP TEMP CI GITHUB_ACTIONS GITHUB_BASE_REF GITHUB_WORKSPACE RUNNER_TEMP SCRIPTPATH PIP_AUDIT_VENV_BASE PYPI_INDEX_URL PYPI_INSECURE_HOSTS GIT_OPTIONAL_LOCKS UV_CACHE_DIR UV_PYTHON UV_PYTHON_INSTALL_DIR PNPM_HOME COREPACK_ENABLE_DOWNLOAD_PROMPT NODE_ENV COVERAGE_FILE COVERAGE_JSON XDG_CACHE_HOME"
 for var in $SANDBOX_ENV_ALLOWLIST ${SANDBOX_ENV_EXTRA:-}; do
   if [ -n "${!var:-}" ]; then
     LR_ARGS+=("--env" "$var")

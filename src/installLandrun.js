@@ -12,6 +12,7 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import { fetchWithRetry } from './fetchRetry.js'
+import { readImageManifest, bakedBinary } from './systemImage.js'
 
 // landrun v0.1.17 targets Landlock ABI v9 in strict mode; the sandbox wrapper
 // always passes --best-effort so older runner kernels degrade gracefully.
@@ -19,7 +20,7 @@ export const LANDRUN_VERSION = 'v0.1.17'
 const RELEASE_BASE = `https://github.com/Zouuup/landrun/releases/download/${LANDRUN_VERSION}`
 
 // BEGIN landrun binary pins
-const LANDRUN_BIN_SHA256 = {
+export const LANDRUN_BIN_SHA256 = {
   [LANDRUN_VERSION]: {
     'landrun-linux-amd64': '6ada66a06669e8994e174a7271af2db636308e55a0d6ec896cc7d326b46727f6',
     'landrun-linux-arm64': '365d8c8656c732b14d70e621d972cb733e490621fb5b9c0876376bcf457dbb5d'
@@ -132,6 +133,24 @@ export default async function installLandrun ({
   if (!expectedSha256) {
     throw new Error(`No pinned SHA256 digest for landrun ${LANDRUN_VERSION} on ${dist}. ` +
       'Add it to LANDRUN_BIN_SHA256 in src/installLandrun.js.')
+  }
+
+  // Prebuilt image: reuse the binary baked at /usr/local/bin without any
+  // network access. The digest check fails closed on a tampered image;
+  // a stale image (manifest pins a different version) falls back to the
+  // network install below.
+  const manifest = readImageManifest(fsx)
+  const baked = bakedBinary({
+    fsx,
+    manifest,
+    name: 'landrun',
+    version: LANDRUN_VERSION,
+    sha256: expectedSha256,
+    mismatchMessage: 'SHA256 hash mismatch! Landrun binary may have been tampered with.'
+  })
+  if (baked) {
+    console.log(`✓ landrun ${LANDRUN_VERSION} baked into the image at ${baked}, skipping download`)
+    return
   }
 
   if (githubPath) {

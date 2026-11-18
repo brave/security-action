@@ -13,23 +13,46 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - id: runtime
+      name: Detect prebuilt image runtime
+      # Inside the OCI image (ghcr.io/brave/security-action) the build
+      # manifest exists, node is baked and the pnpm store covers the
+      # whole lockfile; the host-only setup steps below are skipped then.
+      run: |-
+        if [ -f /opt/brave-security/manifest.json ]; then
+          echo "image=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "image=false" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
     - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      if: ${{ steps.runtime.outputs.image != 'true' }}
       with:
         node-version: '24.x'
     - id: npm
       env:
         COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
-      run: cd ${{ github.action_path }}/../.. && corepack pnpm install --frozen-lockfile
+      run: |-
+        cd "${{ github.action_path }}/../.."
+        if [ -f /opt/brave-security/manifest.json ] && \
+           [ "$(sha256sum pnpm-lock.yaml | cut -d' ' -f1)" = "$(sed -n 's/.*"pnpm_lock_sha256": *"\([0-9a-f]*\)".*/\1/p' /opt/brave-security/manifest.json)" ]; then
+          pnpm install --frozen-lockfile --offline --store-dir /opt/pnpm/store
+        else
+          corepack pnpm install --frozen-lockfile
+        fi
       shell: bash
-    - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+    - id: script
+      name: Run the action script
+      # action.cjs used to run through actions/github-script, which only
+      # executes on the host — the job container never saw the script.
+      # run.cjs is a run: step: it executes inside the container and
+      # rebuilds the github-script surface (github/context/core) from the
+      # standard runner environment. Inputs arrive on stdin as JSON via a
+      # quoted heredoc, so no YAML quoting pitfalls.
       env:
         DEBUG: ${{ (inputs.debug == 'true' || runner.debug) && 'true' || 'false'}}
-      with:
-        github-token: ${{ inputs.github_token }}
-        script: |
-          const actionPath = '${{ github.action_path }}/../../'
-          const inputs = ${{ toJson(inputs) }}
-
-          const script = require('${{ github.action_path }}/action.cjs')
-          await script({github, context, inputs, actionPath, core,
-            debug: process.env.DEBUG === 'true'})
+        ACTION_PATH: ${{ github.action_path }}/../../
+        INPUTS_JSON: ${{ toJson(inputs) }}
+      run: |-
+        node "${{ github.action_path }}/../main/run.cjs" "${{ github.action_path }}/action.cjs"
+      shell: bash
