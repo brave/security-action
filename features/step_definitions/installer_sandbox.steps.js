@@ -36,8 +36,12 @@ When('the main action script is loaded', function () {
 
 Then('a step imports the landrun installer', function () {
   const steps = this.actionDoc.runs.steps
-  const step = steps.find(s => s.uses && s.uses.startsWith('actions/github-script') &&
-    typeof s.with.script === 'string' && s.with.script.includes('src/installLandrun.js'))
+  const step = steps.find(s =>
+    // Host mode: github-script step importing the installer (legacy shape).
+    (s.uses && s.uses.startsWith('actions/github-script') &&
+      typeof s.with.script === 'string' && s.with.script.includes('src/installLandrun.js')) ||
+    // Image mode / converted step: run.js CLI wrapper importing the installer.
+    (s.run && s.run.includes('src/installLandrun.js')))
   assert.ok(step, 'no step imports src/installLandrun.js')
   this.landrunStep = step
 })
@@ -63,7 +67,9 @@ Then('the pnpm install step wraps the install with the sandbox wrapper', functio
   const step = steps.find(s => s.run && s.run.includes('pnpm install'))
   assert.ok(step, 'no pnpm install step found')
   assert.ok(step.run.includes('scripts/with-sandbox.sh'), `install not wrapped:\n${step.run}`)
-  assert.ok(/--\s+(corepack )?pnpm install --frozen-lockfile( -C)?/.test(step.run), `pnpm not the sandboxed command:\n${step.run}`)
+  assert.ok(/--\s+(corepack )?pnpm install --frozen-lockfile( -C)?/.test(step.run) ||
+    /PM_CMD=\((corepack )?pnpm install --frozen-lockfile/.test(step.run),
+    `pnpm not the sandboxed command:\n${step.run}`)
   this.pnpmStep = step
 })
 

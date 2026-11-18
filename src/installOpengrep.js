@@ -12,6 +12,7 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import { fetchWithRetry } from './fetchRetry.js'
+import { readImageManifest, bakedBinary } from './systemImage.js'
 
 export const OPENGREP_VERSION = 'v1.32.0'
 // BEGIN opengrep binary pins (managed by updateOpengrepVersion.js)
@@ -143,6 +144,23 @@ export default async function installOpengrep ({
   if (!expectedBinSha256) {
     throw new Error(`No pinned SHA256 digest for opengrep ${OPENGREP_VERSION} on ${dist}. ` +
       'Add it to OPENGREP_BIN_SHA256 in src/installOpengrep.js (or run src/updateOpengrepVersion.js).')
+  }
+
+  // Prebuilt image: reuse the binary baked at /usr/local/bin without any
+  // network access. The digest check fails closed on a tampered image;
+  // a stale image falls back to the network install below.
+  const manifest = readImageManifest(fsx)
+  const baked = bakedBinary({
+    fsx,
+    manifest,
+    name: 'opengrep',
+    version: OPENGREP_VERSION,
+    sha256: expectedBinSha256,
+    mismatchMessage: 'SHA256 hash mismatch! Opengrep binary may have been tampered with.'
+  })
+  if (baked) {
+    console.log(`✓ opengrep ${OPENGREP_VERSION} baked into the image at ${baked}, skipping download`)
+    return
   }
 
   if (githubPath) {
