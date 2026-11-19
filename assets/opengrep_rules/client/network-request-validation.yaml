@@ -1,0 +1,35 @@
+rules:
+  - id: chromium-network-request-validation
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://github.com/brave/brave-browser/wiki/Security-reviews
+        - https://chromium.googlesource.com/chromium/src/+/main/docs/security/ipc-reviews.md
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/network-request-validation.yaml
+      assignees: |
+        thypon
+        fmarier
+        cdesouza-chromium
+      category: security
+    languages: [cpp, c]
+    message: |
+      Network requests require security review and proper traffic annotation.
+      All network requests should use net::DefineNetworkTrafficAnnotation to
+      document purpose and data handling. Ensure proper origin validation,
+      URL sanitization, and that requests cannot be abused for SSRF attacks.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: SimpleURLLoader::Create($REQUEST, $ANNOTATION)
+                  - pattern: $LOADER = SimpleURLLoader::Create($REQUEST, $ANNOTATION)
+                  - pattern: std::make_unique<SimpleURLLoader>($REQUEST, $ANNOTATION)
+              - metavariable-regex:
+                  metavariable: $REQUEST
+                  regex: .*(user|external|untrusted).*
+          - patterns:
+              - pattern: net::DefineNetworkTrafficAnnotation($NAME, ...)
+              - metavariable-regex:
+                  metavariable: $NAME
+                  regex: .*(user|external|untrusted).*
