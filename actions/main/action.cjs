@@ -254,22 +254,13 @@ module.exports = async ({ github, context, inputs, actionPath, core, debug = fal
     await guardWrite(core, 'cleanup outdated review comments', () =>
       cleanupComments({ context, github }))
 
-    // unverified-commits steps
+    // unverified-commits step — comments and label lifecycle live in the
+    // step so a force-push that makes every commit verified also removes
+    // the stale unverified-commits label (it used to linger, brave-core#41566).
     const { default: unverifiedCommits } = await import(`${actionPath}/src/steps/unverifiedCommits.js`)
-
-    // add unverified-commits label step
     try {
-      const unverifiedCommitsSteps = await unverifiedCommits({ context, github })
-      if (unverifiedCommitsSteps === 'UNVERIFIED-CHANGED') {
-        await guardWrite(core, 'add unverified-commits label', () =>
-          github.rest.issues.addLabels({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: context.issue.number,
-            labels: ['unverified-commits']
-          }))
-        debugLog('Added unverified-commits label')
-      }
+      const unverifiedCommitsStatus = await unverifiedCommits({ context, github, core })
+      debugLog(`Unverified commits status: ${unverifiedCommitsStatus}`)
     } catch (e) {
       console.error('Unverified commits check failed:', e.message)
     }
