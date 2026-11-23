@@ -1,7 +1,24 @@
+import { guardWrite } from '../githubWriteGuard.js'
+
+const LABEL = 'unverified-commits'
+
+// Comment and label lifecycle for unverified commits on a PR.
+//
+// Returns one of:
+// - 'UNVERIFIED-CHANGED' — unverified commits and the notice changed (label added)
+// - 'UNVERIFIED'         — unverified commits, notice already current (no writes)
+// - 'VERIFIED'           — every commit verified (stale notice + label removed)
+//
+// The step owns the whole label lifecycle: it adds the label when new
+// unverified commits appear and removes it once every commit verifies
+// (e.g. after a force-push of signed commits), where the label used to
+// linger (brave-core#41566). Label writes go through guardWrite so fork
+// PRs with a read-only token skip with a warning instead of failing.
 export default async function unverifiedCommits ({
   github,
   githubToken,
-  context
+  context,
+  core
 }) {
   const commits = await github.rest.pulls.listCommits({
     pull_number: context.issue.number,
@@ -37,9 +54,9 @@ export default async function unverifiedCommits ({
   const actionPreviousComments = previousComments.repository.pullRequest.comments.nodes.filter(
     c => c.author.login === 'github-actions' && c.body.startsWith(commentPrefix)
   )
-  const unverifiedCommits = commits.data.filter(c => c.commit.verification.verified !== true)
-  if (unverifiedCommits.length) {
-    const commitList = unverifiedCommits.map(c => `${c.sha} (${c.commit.verification.reason})`).join('\n')
+  const unverified = commits.data.filter(c => c.commit.verification.verified !== true)
+  if (unverified.length) {
+    const commitList = unverified.map(c => `${c.sha} (${c.commit.verification.reason})`).join('\n')
     const body = commentPrefix + commitList
     let commentExists = false
     for (const comment of actionPreviousComments) {
@@ -59,6 +76,13 @@ export default async function unverifiedCommits ({
         issue_number: context.issue.number,
         body
       })
+      await guardWrite(core, 'add unverified-commits label', () =>
+        github.rest.issues.addLabels({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          labels: [LABEL]
+        }))
       return 'UNVERIFIED-CHANGED' // A new comment was created
     }
     return 'UNVERIFIED'
@@ -68,5 +92,20 @@ export default async function unverifiedCommits ({
       console.log('Deleting', comment)
       await github.graphql(deleteMutation, { comment: comment.id })
     }
+    const labels = await github.rest.issues.listLabelsOnIssue({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      issue_number: context.issue.number
+    })
+    if (labels.data.some(label => label.name === LABEL)) {
+      await guardWrite(core, 'remove unverified-commits label', () =>
+        github.rest.issues.removeLabel({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          issue_number: context.issue.number,
+          name: LABEL
+        }))
+    }
+    return 'VERIFIED'
   }
 }
