@@ -1,0 +1,20 @@
+rules:
+  - id: system-network-context-patch
+    metadata:
+      author: Anthony Tseng <anthony@brave.com>
+      references:
+        - https://github.com/brave/internal/issues/1932
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/system-network-context-patch.yaml
+      assignees: |
+        darkdh
+        diracdeltas
+      category: privacy
+    message: |
+      This patch adds a use of the system network context, which every profile shares and which ignores a profile's own network settings, including the Tor proxy. Requests made for a profile or page must use that profile's storage partition instead. If this request is browser-wide, ignore this finding.
+    severity: WARNING
+    languages:
+      - generic
+    paths:
+      include:
+        - "*.patch"
+    pattern-regex: '(?m)^\+(?!\+\+).*(SystemNetworkContextManager::GetInstance\(\)|system_network_context_manager\(\)|shared_url_loader_factory\(\))'
