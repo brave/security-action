@@ -1,0 +1,16 @@
+diff --git a/chrome/browser/foo/foo_service_factory.cc b/chrome/browser/foo/foo_service_factory.cc
+index 1111111..2222222 100644
+--- a/chrome/browser/foo/foo_service_factory.cc
++++ b/chrome/browser/foo/foo_service_factory.cc
+@@ -10,6 +10,9 @@ std::unique_ptr<KeyedService> BuildService(Profile* profile) {
+   auto* partition = profile->GetDefaultStoragePartition();
+   // ok: system-network-context-patch
+   return SystemNetworkContextManager::GetInstance()->GetContext();
+   // ok: system-network-context-patch
+-  return SystemNetworkContextManager::GetInstance()->GetContext();
+   // ruleid: system-network-context-patch
++  return SystemNetworkContextManager::GetInstance()->GetContext();
+   // ruleid: system-network-context-patch
++  return g_browser_process->shared_url_loader_factory();
+   // ok: system-network-context-patch
++  return partition->GetURLLoaderFactoryForBrowserProcess();
