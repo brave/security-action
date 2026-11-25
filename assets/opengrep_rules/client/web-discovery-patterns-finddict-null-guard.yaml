@@ -1,0 +1,26 @@
+rules:
+  - id: web-discovery-patterns-finddict-null-guard
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: HIGH
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/web-discovery-patterns-finddict-null-guard.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+    severity: WARNING
+    message: |
+      payloads_dict may be null: "payloads" is an optional key in wdp_patterns.json and
+      the required-keys guard does not cover it (audit finding B2b, bug 1917). A planted
+      config without "payloads" then null-derefs the browser process at startup or
+      config update. Null-guard payloads_dict (and any newly added optional dict) before
+      FindDict().
+    paths:
+      include:
+        - "**/web_discovery/browser/patterns.cc"
+        - "web-discovery-patterns-finddict-null-guard.cpp"
+    patterns:
+      - pattern: payloads_dict->FindDict($KEY)

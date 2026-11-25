@@ -1,0 +1,30 @@
+rules:
+  - id: path-appendascii-unvalidated
+    metadata:
+      author: Andrea Brancaleoni <abc@pompel.me>
+      references:
+        - https://blog.orange.tw/posts/2026-10-the-last-proof-of-human-craft-browser-full-chain/
+      confidence: MEDIUM
+      source: https://github.com/brave/security-action/blob/main/assets/opengrep_rules/client/path-appendascii-unvalidated.yaml
+      assignees: |
+        thypon
+      category: security
+    languages:
+      - cpp
+      - c
+    severity: WARNING
+    message: |
+      base::FilePath::AppendASCII() is called with a non-constant argument, building a path
+      segment from caller-controlled data without validation (audit findings A2/A3, bug 1917).
+      If $NAME contains '/' or '..' the resulting path escapes the intended directory,
+      enabling arbitrary file write/read/delete. Validate before use: reject path
+      separators, require ReferencesParent() checks on the composed path, or clamp to the
+      intended base directory before any file operation (CreateDirectory, WriteFile,
+      DeleteFile, ImportantFileWriter, recursive delete).
+    patterns:
+      - pattern: $PATH.AppendASCII($NAME)
+      - metavariable-regex:
+          metavariable: $NAME
+          # Flag identifiers (variables/params); skip string constants (kConstant convention)
+          # and string literals, which contain quotes and cannot match this regex.
+          regex: ^(?!k[A-Z])[A-Za-z_][A-Za-z0-9_]*$
